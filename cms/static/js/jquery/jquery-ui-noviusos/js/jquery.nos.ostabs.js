@@ -836,25 +836,20 @@ define([
 				}
 
 				$li.removeClass( "ui-state-active ui-state-open" );
+				
+				// Remove tab from stack opening
 				for (var i = 0; i < self.stackOpening.length; i++) {
 					if (self.stackOpening[i] === $a.get(0)) {
 						self.stackOpening.splice(i, 1);
 					}
 				}
 				
+				// Open the last tab in stack opening or the 0 index
 				if (self.stackOpening.length) {
 					this.select( this.anchors.index( self.stackOpening[self.stackOpening.length - 1] ) );
 				} else {
 					this.select( 0 );
 				}
-
-				// If selected tab was removed focus tab to the right or
-				// in case the last tab was removed the tab to the left.
-				/*if ( $li.hasClass( "nos-ostabs-selected" ) && this.lis.filter( '.ui-state-open' ).length > 0 ) {
-					this.select( this.lis.index( this.lis.filter( '.ui-state-open' ).eq( 0 ) ) );
-				} else if ( $li.hasClass( "nos-ostabs-selected" )) {
-					this.select( 0 );
-				}*/
 
 				if ( $li.not( '.nos-ostabs-appstab' ).not( '.nos-ostabs-newtab' ).length ) {
 					$( '> *', $panel ).not( '.nos-ostabs-actions' ).remove();
