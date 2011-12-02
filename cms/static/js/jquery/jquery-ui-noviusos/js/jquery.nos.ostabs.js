@@ -123,7 +123,8 @@ define([
 						.addClass( 'ui-widget-header' )
 						.appendTo( this.element );
 
-					this.uiOstabsTabsContainer = $( '<div class="nos-ostabs-tabs"></div>' )
+					this.uiOstabsTabsContainer = $( '<div></div>' )
+						.addClass('nos-ostabs-tabs')
 						.appendTo( this.uiOstabsHeader );
 
 					this.uiOstabsScrollLeft = $( '<a href="#"></a>' )
@@ -555,8 +556,12 @@ define([
 				var li = self.lis.eq(index);
 
 				var actions = $( '<div></div>' )
-					.addClass( 'nos-ostabs-actions' )
+					.addClass( 'nos-ostabs-actions ui-state-active' )
 					.prependTo( $panel );
+					
+				var links = $( '<div></div>' )
+					.addClass( 'nos-ostabs-actions-links' )
+					.prependTo( actions );
 
 				var removable = li.not( '.nos-ostabs-tray' ).not( '.nos-ostabs-appstab' ).not( '.nos-ostabs-newtab' ).length;
 
@@ -566,12 +571,12 @@ define([
 						self.remove( self.lis.index(li) ); // On recalcule l'index au cas où l'onglet est été déplacé
 						return false;
 					})
-					.prependTo( actions );
-				$( '<span></span>' ).text( removable && !$.inArray( index, self.pined ) ? o.texts.removeTab : o.texts.closeTab )
-					.prependTo( close );
+					.appendTo( links );
 				$( '<span></span>' ).addClass( 'ui-icon ui-icon-closethick' )
 					.text( removable && !$.inArray( index, self.pined ) ? o.texts.removeTab : o.texts.closeTab )
-					.prependTo( close );
+					.appendTo( close );
+				$( '<span></span>' ).text( removable && !$.inArray( index, self.pined ) ? o.texts.removeTab : o.texts.closeTab )
+					.appendTo( close );
 
 				if ( removable ) {
 					var pin = $( '<a href="#"></a>' )
@@ -581,10 +586,10 @@ define([
 							return false;
 						})
 						.text( o.texts.pinTab )
-						.prependTo( actions );
+						.appendTo( links );
 					$( '<span></span>' ).addClass( 'ui-icon ui-icon-pin-s' )
 						.text( o.texts.pinTab )
-						.prependTo( pin );
+						.appendTo( pin );
 
 					var unpin = $( '<a href="#"></a>' )
 						.addClass( 'nos-ostabs-unpin' )
@@ -593,10 +598,10 @@ define([
 							return false;
 						})
 						.text( o.texts.unpinTab )
-						.prependTo( actions );
+						.appendTo( links );
 					$( '<span></span>' ).addClass( 'ui-icon ui-icon-pin-w' )
 						.text( o.texts.unpinTab )
-						.prependTo( unpin );
+						.appendTo( unpin );
 				}
 			},
 

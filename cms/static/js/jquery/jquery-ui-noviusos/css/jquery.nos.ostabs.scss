@@ -145,17 +145,17 @@ body {
 
 		ul.nos-ostabs-appstab {
 			left : 0px;
-			top : 0px;
+			top : 1px;
 		}
 
 		ul.nos-ostabs-tray {
 			right : 0px;
-			top : 0px;
+			top : 1px;
 		}
 
 		div.nos-ostabs-tabs {
 			position : absolute;
-			top : 0px;
+			top : 1px;
 			height : 46px;
 
 			div {
@@ -192,8 +192,9 @@ body {
 		border-width: 0;
 		background: none;
 		position : absolute;
+		@include box-sizing(border-box);
 		left : 0px;
-		top : 66px;
+		top : 69px;
 		bottom : 0px;
 		right : 0px;
 
@@ -218,26 +219,36 @@ body {
 
 		.nos-ostabs-actions {
 			position : absolute;
-			top : -20px;
-			right : 2px;
+			top : -59px;
+			width : 100%;
+			left : 0;
+			height : 54px;
+			@include box-shadow(0px 1px 7px 0px rgba(0, 0, 0, 0.3));
 
-			a {
-				position : relative;
-				text-decoration : none;
-				font-size : 0.5em;
-				margin-left : 10px;
-				display : inline;
-
-				.ui-icon {
-					display : inline-block;
+		    .nos-ostabs-actions-links {
+				position : absolute;
+				bottom : 0px;
+				right : 5px;
+				line-height : 18px;
+				z-index : 2;
+			
+				a {
 					position : relative;
-					top : 4px;
+					text-decoration : none;
+					font-size : 0.5em;
+					margin-left : 10px;
+					float : right;
+					display : block;
+	
+					.ui-icon {
+						float : left;
+					}
 				}
-			}
-
-			a.nos-ostabs-unpin {
-				display : none;
-			}
+	
+				a.nos-ostabs-unpin {
+					display : none;
+				}
+		    }
 		}
 	}
 
@@ -264,47 +275,6 @@ body {
 	.ui-widget-header {
 		position : relative;
 		z-index : 1;
-        background : url(../images/tabs-header-right.png) left top no-repeat, url(../images/tabs-header-background.png) right top repeat-x;
-		@include box-sizing(border-box);
-		height : 55px;
-		@include box-shadow(0px 7px 7px 0px rgba(0, 0, 0, 0.3));
-
-		li {
-
-			a {
-				.nos-ostabs-label {
-					color : #FFF;
-					@include text-shadow(none);
-				}
-		    }
-		}
-		
-		li.ui-state-active, li.ui-state-hover, li.ui-state-open {
-			a .nos-ostabs-label {
-				color : #000;
-		    }
-		}
-		
-		li.ui-state-default {
-		    background-color : #b8b8b8;
-			border-color : #b8b8b8;
-		}
-		
-		li.ui-state-hover, li.ui-state-active {
-		    background-image : none;
-		    background-color : #f0f0f0;
-			border-color : #b8b8b8;
-			@include box-shadow(none);
-		}
-
-		li.nos-ostabs-newtab.ui-state-active, li.nos-ostabs-newtab.ui-state-hover {
-		    background : #317088;
-			border-color : #317088;
-		
-			.nos-ostabs-label {
-				color : #fff;
-			}
-		}
 
 		li.nos-ostabs-appstab {
 			margin : 0px 60px 0 0px;
@@ -327,6 +297,8 @@ body {
 		}
 
 		li.nos-ostabs-appstab.ui-state-active, li.nos-ostabs-appstab.ui-state-hover {
+		    @include box-shadow(none);
+			
 			a span.nos-ostabs-icon {
 				background : url(../images/tabs-logo-on.png) no-repeat;
 		    }
@@ -335,28 +307,21 @@ body {
 		ul.nos-ostabs-appstab {
 			height : 55px;
 			padding: 0;
-		}
-		
-		ul.nos-ostabs-tray {
-			top : 1px;
-		}
-		
-		div.nos-ostabs-tabs {
-			top : 1px;
+			top : 0px;
 		}
    }
    
     #noviusospanel {
         background-image : url(../../../../img/wallpapers/circles.jpg);
         background-size : cover;
-        top : 56px;
+        top : 64px;
+
+		.nos-ostabs-actions {
+			top : -54px;
+		}
 
         div.nos-ostabs-panel-content {
             top : 20px;
-        }
-
-        .nos-ostabs-actions {
-            top : 0px;
         }
 
         ul.apps {
