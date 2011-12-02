@@ -95,11 +95,6 @@ body {
 		    margin : 0px 30px 0 30px;
 		}
 
-		li.nos-ostabs-tray {
-			border : 1px solid transparent;
-			border-bottom-width : 0;
-		}
-
 		li.nos-ostabs-appstab, li.nos-ostabs-tray, li.nos-ostabs-newtab, li.nos-ostabs-app {
 			a {
 				.nos-ostabs-label {
@@ -145,17 +140,17 @@ body {
 
 		ul.nos-ostabs-appstab {
 			left : 0px;
-			top : 1px;
+			top : 0px;
 		}
 
 		ul.nos-ostabs-tray {
 			right : 0px;
-			top : 1px;
+			top : 0px;
 		}
 
 		div.nos-ostabs-tabs {
 			position : absolute;
-			top : 1px;
+			top : 0px;
 			height : 46px;
 
 			div {
@@ -235,7 +230,7 @@ body {
 				a {
 					position : relative;
 					text-decoration : none;
-					font-size : 0.5em;
+					font-size : 0.8em;
 					margin-left : 10px;
 					float : right;
 					display : block;
@@ -307,7 +302,6 @@ body {
 		ul.nos-ostabs-appstab {
 			height : 55px;
 			padding: 0;
-			top : 0px;
 		}
    }
    
