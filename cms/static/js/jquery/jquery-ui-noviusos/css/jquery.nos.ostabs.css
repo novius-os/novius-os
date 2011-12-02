@@ -1,0 +1,358 @@
+/*
+ * NOVIUS OS - Web OS for digital communication
+ * 
+ * @copyright  2011 Novius
+ * @license    GNU Affero General Public License v3 or (at your option) any later version
+ *             http://www.gnu.org/licenses/agpl-3.0.html
+ * @link http://www.novius-os.org
+ */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000320}}
+body {
+  overflow: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000324}}
+.nos-ostabs {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000332}}
+.nos-ostabs .ui-widget-header {
+  background-position: 50% 75%;
+  border: 0;
+  height: 46px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000337}}
+.nos-ostabs .ui-widget-header li {
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  -ms-box-sizing: content-box;
+  box-sizing: content-box;
+  white-space: nowrap;
+  bottom: -15px;
+  height: 24px;
+  line-height: 32px;
+  position: relative;
+  margin: 0px 2px 0 0;
+  padding: 0px;
+  list-style: none;
+  float: left;
+  border-bottom-width: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000350}}
+.nos-ostabs .ui-widget-header li a {
+  float: left;
+  padding: 0px 5px;
+  text-decoration: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000355}}
+.nos-ostabs .ui-widget-header li a .nos-ostabs-icon {
+  vertical-align: middle;
+  position: relative;
+  top: 2px;
+  float: left;
+  margin-left: 0px;
+  display: block;
+  text-indent: -99999px;
+  overflow: hidden;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  background-repeat: no-repeat;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000370}}
+.nos-ostabs .ui-widget-header li a .nos-ostabs-label {
+  position: relative;
+  top: -5px;
+  margin-left: 5px;
+  width: 200px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000381}}
+.nos-ostabs .ui-widget-header li a, .nos-ostabs .ui-widget-header li a:active, .nos-ostabs .ui-widget-header li a:visited {
+  color: inherit;
+  font-weight: normal;
+  font-size: 0.8em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000389}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-newtab.ui-state-active .nos-ostabs-label {
+  display: inline-block;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000394}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-appstab {
+  margin: 0px 30px 0 30px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\0000398}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-tray {
+  border: 1px solid transparent;
+  border-bottom-width: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003105}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-appstab a .nos-ostabs-label, .nos-ostabs .ui-widget-header li.nos-ostabs-tray a .nos-ostabs-label, .nos-ostabs .ui-widget-header li.nos-ostabs-newtab a .nos-ostabs-label, .nos-ostabs .ui-widget-header li.nos-ostabs-app a .nos-ostabs-label {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003111}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-selected a, .nos-ostabs .ui-widget-header li.ui-state-disabled a, .nos-ostabs .ui-widget-header li.ui-state-processing a {
+  cursor: text;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003116}}
+.nos-ostabs .ui-widget-header li.ui-state-processing a .nos-ostabs-label {
+  font-style: italic !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003120}}
+.nos-ostabs .ui-widget-header li.ui-state-processing a .ui-state-processing {
+  -moz-background-size: 0%, 0%;
+  -webkit-background-size: 0%, 0%;
+  -o-background-size: 0%, 0%;
+  background-size: 0%, 0%;
+  text-indent: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003126}}
+.nos-ostabs .ui-widget-header li.ui-sortable-helper {
+  background: #000;
+  top: 47px;
+  cursor: move;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003132}}
+.nos-ostabs .ui-widget-header li.ui-sortable-helper a .nos-ostabs-label {
+  color: #FFF;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003138}}
+.nos-ostabs .ui-widget-header ul.nos-ostabs-nav {
+  position: absolute;
+  height: 46px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 6px 0 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003146}}
+.nos-ostabs .ui-widget-header ul.nos-ostabs-appstab {
+  left: 0px;
+  top: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003151}}
+.nos-ostabs .ui-widget-header ul.nos-ostabs-tray {
+  right: 0px;
+  top: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003156}}
+.nos-ostabs .ui-widget-header div.nos-ostabs-tabs {
+  position: absolute;
+  top: 0px;
+  height: 46px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003161}}
+.nos-ostabs .ui-widget-header div.nos-ostabs-tabs div {
+  overflow: hidden;
+  position: relative;
+  height: 46px;
+  left: 0px;
+  top: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003168}}
+.nos-ostabs .ui-widget-header div.nos-ostabs-tabs div ul {
+  left: 0px;
+  top: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003174}}
+.nos-ostabs .ui-widget-header div.nos-ostabs-tabs a.nos-ostabs-scroll-left, .nos-ostabs .ui-widget-header div.nos-ostabs-tabs a.nos-ostabs-scroll-right {
+  margin: 20px 0 0;
+  display: none;
+  padding: 4px 2px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003180}}
+.nos-ostabs .ui-widget-header div.nos-ostabs-tabs a.nos-ostabs-scroll-left {
+  float: left;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003184}}
+.nos-ostabs .ui-widget-header div.nos-ostabs-tabs a.nos-ostabs-scroll-right {
+  float: right;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003190}}
+.nos-ostabs .nos-ostabs-panel {
+  display: block;
+  border-width: 0;
+  background: none;
+  position: absolute;
+  left: 0px;
+  top: 66px;
+  bottom: 0px;
+  right: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003200}}
+.nos-ostabs .nos-ostabs-panel div.nos-ostabs-panel-content {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  padding: 0 5px 5px;
+  overflow: auto;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003210}}
+.nos-ostabs .nos-ostabs-panel iframe.nos-ostabs-panel-content {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003219}}
+.nos-ostabs .nos-ostabs-panel .nos-ostabs-actions {
+  position: absolute;
+  top: -20px;
+  right: 2px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003224}}
+.nos-ostabs .nos-ostabs-panel .nos-ostabs-actions a {
+  position: relative;
+  text-decoration: none;
+  font-size: 0.5em;
+  margin-left: 10px;
+  display: inline;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003231}}
+.nos-ostabs .nos-ostabs-panel .nos-ostabs-actions a .ui-icon {
+  display: inline-block;
+  position: relative;
+  top: 4px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003238}}
+.nos-ostabs .nos-ostabs-panel .nos-ostabs-actions a.nos-ostabs-unpin {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003247}}
+.nos-ostabs .nos-ostabs-panel.ui-state-pined .nos-ostabs-actions a.nos-ostabs-pin {
+  display: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003251}}
+.nos-ostabs .nos-ostabs-panel.ui-state-pined .nos-ostabs-actions a.nos-ostabs-unpin {
+  display: inline;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003257}}
+.nos-ostabs .nos-ostabs-hide {
+  display: none !important;
+}
+
+/* Specifique */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003264}}
+.nos-ostabs .ui-widget-header {
+  position: relative;
+  z-index: 1;
+  background: url(../images/tabs-header-right.png) left top no-repeat, url(../images/tabs-header-background.png) right top repeat-x;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 55px;
+  -moz-box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.3);
+  -o-box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.3);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003275}}
+.nos-ostabs .ui-widget-header li a .nos-ostabs-label {
+  color: #FFF;
+  text-shadow: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003283}}
+.nos-ostabs .ui-widget-header li.ui-state-active a .nos-ostabs-label, .nos-ostabs .ui-widget-header li.ui-state-hover a .nos-ostabs-label, .nos-ostabs .ui-widget-header li.ui-state-open a .nos-ostabs-label {
+  color: #000;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003288}}
+.nos-ostabs .ui-widget-header li.ui-state-default {
+  background-color: #b8b8b8;
+  border-color: #b8b8b8;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003293}}
+.nos-ostabs .ui-widget-header li.ui-state-hover, .nos-ostabs .ui-widget-header li.ui-state-active {
+  background-image: none;
+  background-color: #f0f0f0;
+  border-color: #b8b8b8;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003300}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-newtab.ui-state-active, .nos-ostabs .ui-widget-header li.nos-ostabs-newtab.ui-state-hover {
+  background: #317088;
+  border-color: #317088;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003304}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-newtab.ui-state-active .nos-ostabs-label, .nos-ostabs .ui-widget-header li.nos-ostabs-newtab.ui-state-hover .nos-ostabs-label {
+  color: #fff;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003309}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-appstab {
+  margin: 0px 60px 0 0px;
+  bottom: 0 !important;
+  height: 56px !important;
+  background: none;
+  border: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003316}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-appstab a {
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003319}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-appstab a span.nos-ostabs-icon {
+  width: 78px !important;
+  line-height: 56px !important;
+  height: 56px !important;
+  background: url(../images/tabs-logo-off.png) no-repeat;
+  top: 0px !important;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003330}}
+.nos-ostabs .ui-widget-header li.nos-ostabs-appstab.ui-state-active a span.nos-ostabs-icon, .nos-ostabs .ui-widget-header li.nos-ostabs-appstab.ui-state-hover a span.nos-ostabs-icon {
+  background: url(../images/tabs-logo-on.png) no-repeat;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003335}}
+.nos-ostabs .ui-widget-header ul.nos-ostabs-appstab {
+  height: 55px;
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003340}}
+.nos-ostabs .ui-widget-header ul.nos-ostabs-tray {
+  top: 1px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003344}}
+.nos-ostabs .ui-widget-header div.nos-ostabs-tabs {
+  top: 1px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003349}}
+.nos-ostabs #noviusospanel {
+  background-image: url(../../../../img/wallpapers/circles.jpg);
+  background-size: cover;
+  top: 56px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003354}}
+.nos-ostabs #noviusospanel div.nos-ostabs-panel-content {
+  top: 20px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003358}}
+.nos-ostabs #noviusospanel .nos-ostabs-actions {
+  top: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003362}}
+.nos-ostabs #noviusospanel ul.apps {
+  margin: 40px 30px 15px 60px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.ostabs\.scss}line{font-family:\00003365}}
+.nos-ostabs #noviusospanel ul.apps li {
+  float: left;
+  margin: 0 30px 30px 0;
+}

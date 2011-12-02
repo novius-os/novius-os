@@ -1,0 +1,99 @@
+/**
+ * NOVIUS OS - Web OS for digital communication
+ * 
+ * @copyright  2011 Novius
+ * @license    GNU Affero General Public License v3 or (at your option) any later version
+ *             http://www.gnu.org/licenses/agpl-3.0.html
+ * @link http://www.novius-os.org
+ */
+/* --- STYLES DE BASE --- */
+body {
+    font-family         : Arial, Helvetica, FreeSans, sans-serif;
+    font-size           : 11px;
+}
+h1, h2, h3, h4 {
+    margin              : 0 0 .5em 0; /* Rapproche le titre du texte */
+    line-height         : 1.2;
+    font-weight         : bold;
+    font-style          : normal;
+}
+h1 {
+    font-size 		      : 22px;
+    color     		      : #FFF;
+    -moz-border-radius  : 15px;
+    -webkit-border-radius : 15px;
+    padding             : 3px 12px;
+    background          : #0070D5; /* old browsers */
+    background          : -moz-linear-gradient(top, #0070D5 0%, #00549F 100%); /* firefox */
+    background          : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0070D5), color-stop(100%,#00549F)); /* webkit */
+    filter              : progid:DXImageTransform.Microsoft.gradient( startColorstr='#0070D5', endColorstr='#005CAF',GradientType=0 ); /* ie */
+}
+h2 {
+    font-size           : 16px;
+    color               : #FFF;
+    -moz-border-radius  : 15px;
+    -webkit-border-radius : 15px;
+    padding             : 3px 12px;
+    background          : #F49039; /* old browsers */
+    background          : -moz-linear-gradient(top, #F49039 0%, #D26624 100%); /* firefox */
+    background          : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F49039), color-stop(100%,#D26624)); /* webkit */
+    filter              : progid:DXImageTransform.Microsoft.gradient( startColorstr='#F49039', endColorstr='#D26624',GradientType=0 ); /* ie */
+}
+h3 {
+    font-size           : 14px;
+    color               : #454545;
+}
+h4 {
+    font-size           : 12px;
+    color               : #454545;
+}
+ul, ol {
+    margin              : .75em 0 .75em 32px;
+    padding             : 0;
+}
+li {
+    list-style-image    : url('../images/blog/puce_carre.gif');
+}
+p {
+    margin              : .75em 0; /* Marges plus faibles que par d�faut */
+}
+a {
+    text-decoration     : underline;
+    color               : #474D4D;
+}
+a:hover {
+    color               : #FF6C1F;
+    text-decoration     : underline;
+}
+a img {
+    border              : none;
+}
+form {
+    margin              : 0;
+    padding             : 0;
+    border              : none;
+}
+input, button, select {
+    vertical-align      : middle;
+}
+table {
+	border-collapse       : collapse;
+	border-spacing        : 0;
+}
+code {
+  font                  : 13px Monaco, "Andale Mono","Lucida Console","Bitstream Vera Sans Mono","Courier New", monospace, serif; /* De AListApart.com */
+  line-height           : 1.5em;
+}
+pre {
+  overflow              : auto;  
+  background-color      : #EFF7FF;
+  border                : 1px solid #0055A2;
+  padding               : 0 15px;
+  color                 : #0055A2;
+  -moz-border-radius    : 10px; 
+  border-radius         : 10px; 
+}
+dt {
+  font-weight           : bold;
+  color                 : #0055A2;
+}

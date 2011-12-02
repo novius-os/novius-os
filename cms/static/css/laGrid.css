@@ -1,0 +1,188 @@
+/* laGrid from Novius Labs (Antoine Lefeuvre and Julian Esperat) http://www.novius-labs.com
+   Based on OOCSS,  Nicole Sullivan, http://oocss.org
+        and 1140gs, Andy Taylor,     http://cssgrid.net */
+    
+.page{margin:0 auto;width:100%;max-width:1680px;}
+#lagrid {position:absolute; width: 100%; max-width: 1680px; background: url('../img/1680.png'); background-size: contain; height:90%; z-index: 999;}
+.line:before,.line:after{content:"";display:table;}
+.line:after{clear:both;}
+.line{*zoom:1;}
+.col {margin-right: 3.8%; min-height: 1px;}
+.unit{float:left;}
+.unitRight{float:right;}
+.unitRight.col {margin-left: 3.8%; margin-right: 0 !important;}
+
+/* Percentages */
+.p1of1{float:none;}
+.p1of2{width:50%;}
+.p1of3{width:33.33333%;}
+.p2of3{width:66.66666%;}
+.p1of4{width:25%;}
+.p3of4{width:75%;}
+.p1of5{width:20%;}
+.p2of5{width:40%;}
+.p3of5{width:60%;}
+.p4of5{width:80%;}
+.p1of2 .c1 {width: 9.7%;}
+.p1of2 .c2 {width: 26.9%;}
+.p1of2 .c3 {width: 44.1%;}
+.p1of2 .c4 {width: 61.5%;}
+.p1of2 .c5 {width: 78.9%;}
+.p1of2 .c6 {width: 96%;}
+.p1of2 .col {margin-right:7.6%;}
+.p1of2 .unitRight.col {margin-left:7.6%; margin-right: 0 !important;}
+.p1of3 .c1 {width: 14.55%;}
+.p1of3 .c2 {width: 40.35%;}
+.p1of3 .c3 {width: 66.15%;}
+.p1of3 .c4 {width: 92.25%;}
+.p1of3 .col {margin-right:11.4%;}
+.p1of3 .unitRight.col {margin-left:11.4%; margin-right: 0 !important;}
+.p2of3 .c1 {width: 7.28%;}
+.p2of3 .c2 {width: 20.18%;}
+.p2of3 .c3 {width: 33.08%;}
+.p2of3 .c4 {width: 46.13%;}
+.p2of3 .c5 {width: 59.18%;}
+.p2of3 .c6 {width: 72%;}
+.p2of3 .c7 {width: 85.13%;}
+.p2of3 .c8 {width: 98.1%;}
+.p2of3 .col {margin-right:5.7%;}
+.p2of3 .unitRight.col {margin-left:5.7%; margin-right: 0 !important;}
+.p1of4 .c1 {width: 19.4%;}
+.p1of4 .c2 {width: 53.8%;}
+.p1of4 .c3 {width: 88.2%;}
+.p1of4 .col {margin-right:15.2%;}
+.p1of4 .unitRight.col {margin-left:15.2%; margin-right: 0 !important;}
+.p3of4 .c1 {width: 6.47%;}
+.p3of4 .c2 {width: 17.93%;}
+.p3of4 .c3 {width: 29.4%;}
+.p3of4 .c4 {width: 41%;}
+.p3of4 .c5 {width: 52.6%;}
+.p3of4 .c6 {width: 64%;}
+.p3of4 .c7 {width: 75.67%;}
+.p3of4 .c8 {width: 87.2%;}
+.p3of4 .c9 {width: 98.73%;}
+.p3of4 .col {margin-right:5.07%;}
+.p3of4 .unitRight.col {margin-left:5.07%; margin-right: 0 !important;}
+.p1of5 .c1 {width: 24.25%;}
+.p1of5 .c2 {width: 67.25%;}
+.p1of5 .col {margin-right:19%;}
+.p1of5 .unitRight.col {margin-left:19%; margin-right: 0 !important;}
+.p2of5 .c1 {width: 12.13%;}
+.p2of5 .c2 {width: 33.63%;}
+.p2of5 .c3 {width: 55.13%;}
+.p2of5 .c4 {width: 76.88%;}
+.p2of5 .c5 {width: 98.63%;}
+.p2of5 .col {margin-right:9.5%;}
+.p2of5 .unitRight.col {margin-left:9.5%; margin-right: 0 !important;}
+.p3of5 .c1 {width: 8.08%;}
+.p3of5 .c2 {width: 22.42%;}
+.p3of5 .c3 {width: 36.75%;}
+.p3of5 .c4 {width: 51.25%;}
+.p3of5 .c5 {width: 65.75%;}
+.p3of5 .c6 {width: 80%;}
+.p3of5 .c7 {width: 94.58%;}
+.p3of5 .col {margin-right:6.33%;}
+.p3of5 .unitRight.col {margin-left:6.33%; margin-right: 0 !important;}
+.p4of5 .c1 {width: 6.06%;}
+.p4of5 .c2 {width: 16.81%;}
+.p4of5 .c3 {width: 27.56%;}
+.p4of5 .c4 {width: 38.44%;}
+.p4of5 .c5 {width: 49.31%;}
+.p4of5 .c6 {width: 60%;}
+.p4of5 .c7 {width: 70.94%;}
+.p4of5 .c8 {width: 81.75%;}
+.p4of5 .c9 {width: 92.56%;}
+.p4of5 .col {margin-right:4.75%;}
+.p4of5 .unitRight.col {margin-left:4.75%; margin-right: 0 !important;}
+
+/* Cols */
+.c1 {width: 4.85%;}
+.c2 {width: 13.45%;}
+.c3 {width: 22.05%;}
+.c4 {width: 30.75%;}
+.c5 {width: 39.45%;}
+.c6 {width: 48%;}
+.c7 {width: 56.75%;}
+.c8 {width: 65.4%;}
+.c9 {width: 74.05%;}
+.c10{width: 82.7%;}
+.c11{width: 91.35%;}
+.c1 .col {margin-right:78.35%;}
+.c1 .unitRight.col {margin-left:78.35%; margin-right: 0 !important;}
+.c2 .c1 {width: 36.06%;}
+.c2 .col {margin-right:28.25%;}
+.c2 .unitRight.col {margin-left:28.25%; margin-right: 0 !important;}
+.c3 .c1 {width: 22%;}
+.c3 .c2 {width: 61%;}
+.c3 .col {margin-right:17.23%;}
+.c3 .unitRight.col {margin-left:17.23%; margin-right: 0 !important;}
+.c4 .c1 {width: 15.77%;}
+.c4 .c2 {width: 43.74%;}
+.c4 .c3 {width: 71.71%;}
+.c4 .col {margin-right:12.36%;}
+.c4 .unitRight.col {margin-left:12.36%; margin-right: 0 !important;}
+.c5 .c1 {width: 12.29%;}
+.c5 .c2 {width: 34.09%;}
+.c5 .c3 {width: 55.89%;}
+.c5 .c4 {width: 77.95%;}
+.c5 .col {margin-right:9.63%;}
+.c5 .unitRight.col {margin-left:9.63%; margin-right: 0 !important;}
+.c6 .c1 {width: 10.1%;}
+.c6 .c2 {width: 28.02%;}
+.c6 .c3 {width: 45.94%;}
+.c6 .c4 {width: 64.06%;}
+.c6 .c5 {width: 82.19%;}
+.c6 .col {margin-right:7.92%;}
+.c6 .unitRight.col {margin-left:7.92%; margin-right: 0 !important;}
+.c7 .c1 {width: 8.55%;}
+.c7 .c2 {width: 23.7%;}
+.c7 .c3 {width: 38.85%;}
+.c7 .c4 {width: 54.19%;}
+.c7 .c5 {width: 69.52%;}
+.c7 .c6 {width: 84.58%;}
+.c7 .col {margin-right:6.7%;}
+.c7 .unitRight.col {margin-left:6.7%; margin-right: 0 !important;}
+.c8 .c1 {width: 7.42%;}
+.c8 .c2 {width: 20.57%;}
+.c8 .c3 {width: 33.72%;}
+.c8 .c4 {width: 47.02%;}
+.c8 .c5 {width: 60.32%;}
+.c8 .c6 {width: 73.39%;}
+.c8 .c7 {width: 86.77%;}
+.c8 .col {margin-right:5.81%;}
+.c8 .unitRight.col {margin-left:5.81%; margin-right: 0 !important;}
+.c9 .c1 {width: 6.55%;}
+.c9 .c2 {width: 18.16%;}
+.c9 .c3 {width: 29.78%;}
+.c9 .c4 {width: 41.53%;}
+.c9 .c5 {width: 53.27%;}
+.c9 .c6 {width: 64.82%;}
+.c9 .c7 {width: 76.64%;}
+.c9 .c8 {width: 88.32%;}
+.c9 .col {margin-right:5.13%;}
+.c9 .unitRight.col {margin-left:5.13%; margin-right: 0 !important;}
+.c10 .c1 {width: 5.86%;}
+.c10 .c2 {width: 16.26%;}
+.c10 .c3 {width: 26.66%;}
+.c10 .c4 {width: 37.18%;}
+.c10 .c5 {width: 47.7%;}
+.c10 .c6 {width: 58.04%;}
+.c10 .c7 {width: 68.62%;}
+.c10 .c8 {width: 79.08%;}
+.c10 .c9 {width: 89.54%;}
+.c10 .col {margin-right:4.59%;}
+.c10 .unitRight.col {margin-left:4.59%; margin-right: 0 !important;}
+.c11 .c1 {width: 5.31%;}
+.c11 .c2 {width: 14.72%;}
+.c11 .c3 {width: 24.14%;}
+.c11 .c4 {width: 33.66%;}
+.c11 .c5 {width: 43.19%;}
+.c11 .c6 {width: 52.55%;}
+.c11 .c7 {width: 62.12%;}
+.c11 .c8 {width: 71.59%;}
+.c11 .c9 {width: 81.06%;}
+.c11 .c10 {width: 90.53%;}
+.c11 .col {margin-right:4.16%;}
+.c11 .unitRight.col {margin-left:4.16%; margin-right: 0 !important;}
+
+.lastUnit{float:none;display:block;display:table-cell;width:9999em;*width:auto;*zoom:1;_position:relative;_left:-3px;_margin-right:-3px;}

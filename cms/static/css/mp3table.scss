@@ -1,0 +1,182 @@
+/*
+ * NOVIUS OS - Web OS for digital communication
+ * 
+ * @copyright  2011 Novius
+ * @license    GNU Affero General Public License v3 or (at your option) any later version
+ *             http://www.gnu.org/licenses/agpl-3.0.html
+ * @link http://www.novius-os.org
+ */
+@import "compass/css3/box-sizing";
+@import "compass/css3/border-radius";
+
+.wijmo-wijmenu-icon-left {
+	margin-right : 5px;
+}
+.wijmo-wijgrid-innercell {
+	overflow:hidden;
+	white-space : nowrap;
+	text-overflow : ellipsis;
+	line-height: 18px;
+
+	span {
+		vertical-align: middle;
+	}
+
+	.ui-state-default {
+		display : inline-block;
+	}
+}
+.wijmo-wijmenu, .ui-datepicker {
+	z-index: 9999 !important;
+}
+.ui-datepicker-trigger {
+    vertical-align : middle;
+	margin : 0 5px 0 2px;
+}
+
+.nos-mp3grid {
+	.nos-headerbar {
+		margin : 0px 5px;
+
+		.nos-adds {
+			float : left;
+		}
+		.nos-settings {
+			float : right;
+
+			.wijmo-wijmenu, .wijmo-wijmenu-child {
+				width : 200px;
+
+				input {
+					vertical-align: middle;
+				}
+			}
+		}
+	}
+
+	.nos-splitter-v {
+		position : absolute;
+		top : 40px;
+		left : 0;
+		right : 0;
+		bottom : 0;
+
+		.wijmo-wijsplitter-v-panel1-content, .wijmo-wijsplitter-h-panel1-content, .wijmo-wijsplitter-v-panel2-content, .wijmo-wijsplitter-h-panel2-content {
+			border:0;
+		}
+
+		.wijmo-wijsplitter-v-bar {
+			width : 5px;
+			border-width : 0 1px;
+			margin : 0 -1px;
+			background-color : transparent;
+			background-position: 50% 50%;
+			background-image: url(../img/icons/grip-v.png);
+			background-repeat: no-repeat;
+		}
+
+		.wijmo-wijsplitter-v-panel1 {
+			@include box-sizing(border-box);
+
+			ul.nos-inspectors-v {
+				position : absolute;
+				top : 0;
+				left : 0;
+				right : 0;
+				bottom : 0;
+				padding : 0;
+				margin : 0;
+
+				> li {
+					border-width : 0;
+
+					> .ui-widget-content {
+						border-width : 1px 0 0 0;
+						@include box-sizing(border-box);
+					}
+				}
+			}
+		}
+
+		.wijmo-wijsplitter-v-panel2 {
+			@include box-sizing(border-box);
+
+			.wijmo-wijsplitter-h-bar {
+				height : 5px;
+				border-width : 1px 0;
+				background-color : transparent;
+				background-position: 50% 50%;
+				background-image: url(../img/icons/grip-h.png);
+				background-repeat: no-repeat;
+			}
+
+			.wijmo-wijsplitter-h-panel1 {
+				ul.nos-inspectors-h {
+					position : absolute;
+					top : 0px;
+					left : 0px;
+					bottom : 0px;
+					right : 0px;
+					margin : 0;
+					padding : 0;
+					white-space: nowrap;
+					overflow: hidden;
+
+					> li {
+						float : left;
+						height: 100%;
+						border-width : 0;
+
+						> .ui-widget-content {
+							border-width : 1px 1px 0 0;
+							@include box-sizing(border-box);
+						}
+					}
+				}
+			}
+
+			.wijmo-wijsplitter-h-panel2 {
+
+				.nos-searchbar {
+					margin : 5px;
+					position : relative;
+					z-index : 1;
+
+					.nos-nbresult {
+						display: inline-block;
+						margin-right : 5px;
+					}
+
+					.nos-inspectorsreset {
+						display :inline-block;
+						vertical-align: middle;
+						margin-left : 5px;
+					}
+
+					.nos-inspectorstag {
+						display: inline-block;
+
+						span {
+							display :inline-block;
+							margin-left : 10px;
+							padding : 1px 2px;
+							line-height: 16px;
+
+							a {
+								display :inline-block;
+								vertical-align: top;
+							}
+						}
+					}
+				}
+
+				.wijmo-wijgrid {
+					@include box-sizing(border-box);
+				}
+			}
+		}
+	}
+	ul {
+		list-style-type: none;
+	}
+}

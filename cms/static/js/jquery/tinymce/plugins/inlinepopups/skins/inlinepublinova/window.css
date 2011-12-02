@@ -1,0 +1,98 @@
+/* Reset */
+.inlinepublinova, .inlinepublinova div, .inlinepublinova span, .inlinepublinova a {vertical-align:baseline; text-align:left; position:absolute; border:0; padding:0; margin:0; background:transparent; font-family:Arial,Verdana; font-size:11px; color:#000; text-decoration:none; font-weight:normal; width:auto; height:auto; overflow:hidden; display:block}
+
+/* General */
+.inlinepublinova {position:absolute; direction:ltr}
+.inlinepublinova .mceWrapper {position:static}
+.mceEventBlocker {position:fixed; left:0; top:0; background:url(img/horizontal.gif) no-repeat 0 -75px; width:100%; height:100%}
+.inlinepublinova .mcePlaceHolder {border:1px solid #000; background:#888; top:0; left:0; opacity:0.5; -ms-filter:'alpha(opacity=50)'; filter:alpha(opacity=50)}
+.inlinepublinova_modalBlocker {position:fixed; left:0; top:0; width:100%; height:100%; background:#FFF; opacity:0.6; -ms-filter:'alpha(opacity=60)'; filter:alpha(opacity=60); display:none}
+
+/* Top */
+.inlinepublinova .mceTop, .inlinepublinova .mceTop div {top:0; width:100%; height:23px}
+.inlinepublinova .mceTop .mceLeft {width:6px; background:url(img/corners.gif)}
+.inlinepublinova .mceTop .mceCenter {right:6px; width:100%; height:23px; background:url(img/horizontal.gif) 12px 0; clip:rect(auto auto auto 12px)}
+.inlinepublinova .mceTop .mceRight {right:0; width:6px; height:23px; background:url(img/corners.gif) -12px 0}
+.inlinepublinova .mceTop span {width:100%; text-align:center; vertical-align:middle; line-height:23px; font-weight:bold}
+.inlinepublinova .mceFocus .mceTop .mceLeft {background:url(img/corners.gif) -6px 0}
+.inlinepublinova .mceFocus .mceTop .mceCenter {background:url(img/horizontal.gif) 0 -23px}
+.inlinepublinova .mceFocus .mceTop .mceRight {background:url(img/corners.gif) -18px 0}
+.inlinepublinova .mceFocus .mceTop span {color:#FFF}
+
+/* Middle */
+.inlinepublinova .mceMiddle, .inlinepublinova .mceMiddle div {top:0}
+.inlinepublinova .mceMiddle {width:100%; height:100%; clip:rect(23px auto auto auto)}
+.inlinepublinova .mceMiddle .mceLeft {left:0; width:5px; height:100%; background:url(img/vertical.gif) -5px 0}
+.inlinepublinova .mceMiddle span {top:23px; left:5px; width:100%; height:100%; background:#FFF}
+.inlinepublinova .mceMiddle .mceRight {right:0; width:5px; height:100%; background:url(img/vertical.gif)}
+
+/* Bottom */
+.inlinepublinova .mceBottom, .inlinepublinova .mceBottom div {height:6px}
+.inlinepublinova .mceBottom {left:0; bottom:0; width:100%}
+.inlinepublinova .mceBottom div {top:0}
+.inlinepublinova .mceBottom .mceLeft {left:0; width:5px; background:url(img/corners.gif) -34px -6px}
+.inlinepublinova .mceBottom .mceCenter {left:5px; width:100%; background:url(img/horizontal.gif) 0 -46px}
+.inlinepublinova .mceBottom .mceRight {right:0; width:5px; background: url(img/corners.gif) -34px 0}
+.inlinepublinova .mceBottom span {display:none}
+.inlinepublinova .mceStatusbar .mceBottom, .inlinepublinova .mceStatusbar .mceBottom div {height:23px}
+.inlinepublinova .mceStatusbar .mceBottom .mceLeft {background:url(img/corners.gif) -29px 0}
+.inlinepublinova .mceStatusbar .mceBottom .mceCenter {background:url(img/horizontal.gif) 0 -52px}
+.inlinepublinova .mceStatusbar .mceBottom .mceRight {background:url(img/corners.gif) -24px 0}
+.inlinepublinova .mceStatusbar .mceBottom span {display:block; left:7px; font-family:Arial, Verdana; font-size:11px; line-height:23px}
+
+/* Actions */
+.inlinepublinova a {width:29px; height:16px; top:3px;}
+.inlinepublinova .mceClose {right:6px; background:url(img/buttons.gif) -87px 0}
+.inlinepublinova .mceMin {display:none; right:68px; background:url(img/buttons.gif) 0 0}
+.inlinepublinova .mceMed {display:none; right:37px; background:url(img/buttons.gif) -29px 0}
+.inlinepublinova .mceMax {display:none; right:37px; background:url(img/buttons.gif) -58px 0}
+.inlinepublinova .mceMove {display:none;width:100%;cursor:move;background:url(img/corners.gif) no-repeat -100px -100px}
+.inlinepublinova .mceMovable .mceMove {display:block}
+.inlinepublinova .mceFocus .mceClose {right:6px; background:url(img/buttons.gif) -87px -16px}
+.inlinepublinova .mceFocus .mceMin {right:68px; background:url(img/buttons.gif) 0 -16px}
+.inlinepublinova .mceFocus .mceMed {right:37px; background:url(img/buttons.gif) -29px -16px}
+.inlinepublinova .mceFocus .mceMax {right:37px; background:url(img/buttons.gif) -58px -16px}
+.inlinepublinova .mceFocus .mceClose:hover {right:6px; background:url(img/buttons.gif) -87px -32px}
+.inlinepublinova .mceFocus .mceClose:hover {right:6px; background:url(img/buttons.gif) -87px -32px}
+.inlinepublinova .mceFocus .mceMin:hover {right:68px; background:url(img/buttons.gif) 0 -32px}
+.inlinepublinova .mceFocus .mceMed:hover {right:37px; background:url(img/buttons.gif) -29px -32px}
+.inlinepublinova .mceFocus .mceMax:hover {right:37px; background:url(img/buttons.gif) -58px -32px}
+
+/* Resize */
+.inlinepublinova .mceResize {top:auto; left:auto; display:none; width:5px; height:5px; background:url(img/horizontal.gif) no-repeat 0 -75px}
+.inlinepublinova .mceResizable .mceResize {display:block}
+.inlinepublinova .mceResizable .mceMin, .inlinepublinova .mceMax {display:none}
+.inlinepublinova .mceMinimizable .mceMin {display:block}
+.inlinepublinova .mceMaximizable .mceMax {display:block}
+.inlinepublinova .mceMaximized .mceMed {display:block}
+.inlinepublinova .mceMaximized .mceMax {display:none}
+.inlinepublinova a.mceResizeN {top:0; left:0; width:100%; cursor:n-resize}
+.inlinepublinova a.mceResizeNW {top:0; left:0; cursor:nw-resize}
+.inlinepublinova a.mceResizeNE {top:0; right:0; cursor:ne-resize}
+.inlinepublinova a.mceResizeW {top:0; left:0; height:100%; cursor:w-resize;}
+.inlinepublinova a.mceResizeE {top:0; right:0; height:100%; cursor:e-resize}
+.inlinepublinova a.mceResizeS {bottom:0; left:0; width:100%; cursor:s-resize}
+.inlinepublinova a.mceResizeSW {bottom:0; left:0; cursor:sw-resize}
+.inlinepublinova a.mceResizeSE {bottom:0; right:0; cursor:se-resize}
+
+/* Alert/Confirm */
+.inlinepublinova .mceButton, .inlinepublinova .mceButton:hover, .inlinepublinova .mceButton:active, .inlinepublinova .mceButton:focus {font-weight:bold; bottom:10px; width:80px; height:30px; background:url(img/button.gif); line-height:30px; vertical-align:middle; text-align:center; outline:0}
+.inlinepublinova .mceMiddle .mceIcon {left:15px; top:35px; width:32px; height:32px}
+.inlinepublinova .mceAlert .mceMiddle span, .inlinepublinova .mceConfirm .mceMiddle span {background:transparent;left:60px; top:35px; width:320px; height:50px; font-weight:bold; overflow:auto; white-space:normal}
+.inlinepublinova a:hover, .inlinepublinova a:active, .inlinepublinova a:focus {font-weight:bold;text-decoration: none;color:#000000;}
+.inlinepublinova .mceAlert .mceMiddle, .inlinepublinova .mceConfirm .mceMiddle {background:#F3F3F3}
+.inlinepublinova .mceAlert .mceOk {left:50%; top:auto; margin-left: -40px}
+.inlinepublinova .mceAlert .mceIcon {background:url(img/alert.gif)}
+.inlinepublinova .mceConfirm .mceOk {left:50%; top:auto; margin-left: -90px}
+.inlinepublinova .mceConfirm .mceCancel {left:50%; top:auto}
+.inlinepublinova .mceConfirm .mceIcon {background:url(img/confirm.gif)}
+
+/* IE9 fixes */
+.inlinepublinova.ie9 .mceTop .mceCenter {clip:auto;}
+.inlinepublinova.ie9 .mceMiddle {clip:auto;}
+.inlinepublinova.ie9 .mceMiddle .mceLeft, .inlinepublinova.ie9 .mceMiddle .mceRight {top: 23px;}
+.inlinepublinova.ie9 .mceAlert .mceMiddle span, .inlinepublinova.ie9 .mceConfirm .mceMiddle span {top:13px;}
+.inlinepublinova.ie9 .mceModal .mceMiddle {top:23px}
+.inlinepublinova.ie9 .mceModal .mceMiddle .mceLeft, .inlinepublinova.ie9 .mceModal .mceMiddle .mceRight {top: 0}
+.inlinepublinova.ie9 .mceMiddle .mceIcon {top:13px}
+.inlinepublinova.ie9 .mceTop .mceCenter {top:0; right:auto; left:6px; width:calc(100%-12px)}

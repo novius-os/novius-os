@@ -1,0 +1,172 @@
+/********/
+/*  U.I */
+/********/
+/* The container */
+span.inputFileThumb {
+    display         : inline-block; /* to be IE6-compliant, display inline-block must be applied on a native inline element */
+    margin-right    : 10px;
+    color           : #FFF;
+    font-size       : 12px;
+    vertical-align  : top;
+}
+/* The file input */
+span.inputFileThumb input {
+    display     : block !important;
+    opacity     : 0; /* All browsers but IE */
+    filter      : alpha(opacity=0); /* IE */
+    position    : absolute;
+    right       : 0px;
+    top         : 0px;
+    font-size   : 200px;
+    cursor      : pointer !important;
+}
+/* The thumbnail's container */
+span.inputFileThumb .thumb {
+    display             : block;
+    text-align          : right;
+    width               : 58px;
+    height              : 58px;
+    background          : #EAEAEA; /* Old browsers */
+    background          : -moz-linear-gradient(top, #EAEAEA 0%, #D8D8D8 100%); /* Firefox */
+    background          : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#EAEAEA), color-stop(100%,#D8D8D8)); /* Webkit */
+    background          : linear-gradient(top, #EAEAEA 0%, #D8D8D8 100%); /* Will-be standard */
+    filter              : progid:DXImageTransform.Microsoft.gradient( startColorstr='#EAEAEA', endColorstr='#D8D8D8',GradientType=0 ); /* IE */
+    border              : 1px solid #bebebe;
+    -moz-border-radius  : 5px; /* Firefox */
+    border-radius       : 5px; /* Webkit and will-be standard */
+    color               : #FFF;
+    text-decoration     : none !important;
+    overflow            : hidden;
+}
+/* When the existing file is an image: the image in the thumbnail */
+span.inputFileThumb .thumb img {
+    margin              : 0px;
+    border              : 0px;
+}
+/* When the existing file is not an image or there's no existing file: the span with background in the thumbnail */
+span.inputFileThumb .thumb span.bg {
+    display             : block;
+    width               : 58px;
+    height              : 58px;
+    background-image    : url(images/file.png);
+    background-repeat   : no-repeat;
+    background-position : center center;
+    -moz-border-radius  : 5px;
+    border-radius       : 5px;
+    opacity             : 0.5;
+    filter              : alpha(opacity=50);
+}
+/* When a file is selected: the span in the thumbnail */
+span.inputFileThumb .thumb span.on {
+    opacity             : 1;
+    filter              : none;
+}
+/* The span which shows the file extension (required or effective) */
+span.inputFileThumb .thumb span.bg span {
+    display             : inline;
+    text-transform      : uppercase;
+    font-family         : Franklin Gothic Medium, arial, verdana, helvetica, sans-serif;
+    font-size           : 11px;
+    font-weight         : bold;
+    padding             : 1px 5px;
+    background-color    : #bebebe;
+    -moz-border-radius  : 10px;
+    border-radius       : 10px;
+    position            : relative;
+    top                 : 5px;
+    right               : 5px;
+}
+
+/* The details layer (the layer displayed when the mouse is over the thumbnail) */
+span.inputFileThumb div.hover {
+    position            : absolute;
+    display             : none;
+    padding             : 7px;
+    background          : #8c9292;
+    background          : -moz-linear-gradient(top, #8c9292 0%, #737a7b 100%);
+    background          : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8c9292), color-stop(100%,#737a7b));
+    background          : linear-gradient(top, #8c9292 0%, #737a7b 100%);
+    filter              : progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c9292', endColorstr='#737a7b',GradientType=0 );
+    -moz-border-radius  : 5px;
+    border-radius       : 5px;
+    overflow            : hidden;
+    text-align          : left;
+    z-index             : 1000;
+}
+/* The thumbnail in the details layer */
+span.inputFileThumb .fileThumb {
+    display : inline-block;
+}
+/* The file description in the details layer */
+span.inputFileThumb .fileDesc {
+    display         : inline-block;
+    font-size       : 11px;
+    margin-bottom   : 20px;
+}
+/* The file title in the the details layer */
+span.inputFileThumb .fileDesc .fileTitle {
+    font-size : 12px;
+    display   : block;
+}
+/* The file informations in the the details layer */
+span.inputFileThumb .fileDesc .fileInfo {
+    display   : block;
+}
+/* The line including the action links in the details layer */
+span.inputFileThumb .fileActions {
+    margin-left     : 10px;
+    white-space     : nowrap;
+}
+/* The action links in the details layer */
+span.inputFileThumb .fileActions span {
+    display         : inline-block;
+    line-height     : 16px;
+    padding-left    : 20px;
+    margin-right    : 10px;
+    font-weight     : normal;
+    color           : #FFF;
+    cursor          : pointer;
+    vertical-align  : middle;
+}
+/* The "Add file" link in the details layer */
+span.inputFileThumb .fileActions span.addFile {
+    background  : url(images/add.png) no-repeat left center;
+}
+/* The "Edit file" link in the details layer */
+span.inputFileThumb .fileActions span.editFile {
+    position    : relative; /* Hack for act like de input file in */
+    background  : url(images/edit.png) no-repeat left center;
+    overflow    : hidden;
+}
+/* The "Delete file" link in the details layer */
+span.inputFileThumb .fileActions span.deleteFile {
+    background  : url(images/delete.png) no-repeat left center;
+}
+
+
+/*************************/
+/*  CUSTOM CONFIGURATION */
+/*************************/
+/* You may create custom classes to change the thumbnail's default style. See JS file for futher details on how to call your classes.
+Use the following selector for your custom classes: span.inputFileThumb .thumb span.myCustomClass
+Here is the native class image */
+span.inputFileThumb .thumb span.image {
+    background-image    : url(images/apn.png);
+}
+/* You may change the colours associated to each extension (only shows when a file is selected). The default colour is set below. */
+span.inputFileThumb .thumb span.on span {
+    background-color    : #8c9292;
+}
+/* To set the colour for a specific extension, use the following selector:  span.inputFileThumb .thumb span.on span.yourExtension */
+span.inputFileThumb .thumb span.on span.gif {
+    background-color    : #107c40;
+}
+span.inputFileThumb .thumb span.on span.jpg, span.inputFileThumb .thumb span.on span.jpeg {
+    background-color    : #bb0706;
+}
+span.inputFileThumb .thumb span.on span.png {
+    background-color    : #f09724;
+}
+span.inputFileThumb .thumb span.on span.bmp {
+    background-color    : #f09724;
+}

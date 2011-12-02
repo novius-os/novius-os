@@ -1,0 +1,86 @@
+/*
+ * NOVIUS OS - Web OS for digital communication
+ * 
+ * @copyright  2011 Novius
+ * @license    GNU Affero General Public License v3 or (at your option) any later version
+ *             http://www.gnu.org/licenses/agpl-3.0.html
+ * @link http://www.novius-os.org
+ */ 
+#search {
+	display: inline-block;
+	margin: 20px auto 60px;
+	width: 40%;
+	position:relative;
+}
+
+#search input {
+	font-size: 1.4em;
+	padding: 6px;
+	text-indent: 42px;
+	color: #888;
+	width: 100%;
+	
+	border-radius: 10px;
+	border: 1px solid #fff;
+	box-shadow: inset 1px 1px 0px 1px #b9b9b9;
+	background-image: -webkit-linear-gradient(top, #d0d0d0 0%, #ffffff 100%);
+	background-image:    -moz-linear-gradient(top, #d0d0d0 0%, #ffffff 100%);
+	background-image:     -ms-linear-gradient(top, #d0d0d0 0%, #ffffff 100%);
+	background-image:      -o-linear-gradient(top, #d0d0d0 0%, #ffffff 100%);
+	background-image:         linear-gradient(top, #d0d0d0 0%, #ffffff 100%);
+}
+
+#magnifier {
+	background: url(../img/icons/magnifier.png) no-repeat left center;
+	height: 16px;
+	width: 16px;
+	position:absolute;
+	top: 9px;
+	left: 16px;
+}
+
+
+#apps .icon {
+	width: 90px;
+	height: 90px;
+	background: rgba(255, 255, 255, 0.4) url(../img/apps-64/background.png) no-repeat top center;
+	display: block;
+	margin: 0 auto;
+	border-radius: 45px;
+	overflow:hidden;
+	box-shadow: 0 0 5px 0px #888;
+	margin-bottom: 6px;
+	position:relative;
+}
+
+#apps .icon img {
+	position:absolute;
+	top: 13px;
+	left: 13px;
+	z-index: 1;
+}
+#apps .icon img.gloss {
+	z-index: 2;
+	border-radius: 45px 45px 0 0;
+	overflow: hidden;
+	top: 0; /* Need to keep 0 for the radius/hidden to operate properly */
+	left: 0;
+}
+#apps a {
+	vertical-align: top;
+}
+#apps .text {
+	display: inline-block;
+	background: rgba(255, 255, 255, 0.6);
+	color: #333;
+	font-weight: bold;
+	margin-top: 4px;
+	padding: 2px 5px;
+	border-radius: 4px;
+}
+#apps .app {
+	display: inline-block;
+	text-align: center;
+	margin: 0 45px;
+	width: 90px;
+}

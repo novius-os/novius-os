@@ -1,0 +1,11 @@
+msgid "User"
+msgstr "Utilisateur fr"
+
+msgid "fr"
+msgstr "Disponible uniquement en fr"
+
+msgid "fr_CA_fr"
+msgstr "Disponible en fr_CA et *fr* tout court"
+
+msgid "fr_FR_fr"
+msgstr "Disponible en fr_FR et *fr* tout court"
