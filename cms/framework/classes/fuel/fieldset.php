@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -9,17 +9,17 @@
  */
 
 class Fieldset extends \Fuel\Core\Fieldset {
-	
+
 	protected $append = array();
-	
+
 	public function build($action = null) {
 		return parent::build($action).implode('', $this->append);
 	}
-	
+
 	public function append($content) {
 		$this->append[] = $content;
 	}
-	
+
 	public function open($action = null) {
 		$attributes = $this->get_config('form_attributes');
 		if ($action and ($this->fieldset_tag == 'form' or empty($this->fieldset_tag)))
@@ -30,16 +30,16 @@ class Fieldset extends \Fuel\Core\Fieldset {
 		$open = ($this->fieldset_tag == 'form' or empty($this->fieldset_tag))
 			? $this->form()->open($attributes).PHP_EOL
 			: $this->form()->{$this->fieldset_tag.'_open'}($attributes);
-			
+
 		return $open;
 	}
-	
+
 	public function close() {
-		
+
 		$close = ($this->fieldset_tag == 'form' or empty($this->fieldset_tag))
 			? $this->form()->close($attributes).PHP_EOL
 			: $this->form()->{$this->fieldset_tag.'_close'}($attributes);
-			
+
 		return $close.implode('', $this->append);
 	}
 
@@ -53,7 +53,7 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	/**
 	 *
 	 * @param   \Fuel\Core\Fieldset_Field  $field  A field instance
-	 * @return  \Fuel\Core\Fieldset_Field 
+	 * @return  \Fuel\Core\Fieldset_Field
 	 */
 	public function add_field(\Fuel\Core\Fieldset_Field $field) {
 		$name = $field->name;
@@ -99,7 +99,7 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	 *
 	 * @param   array|object  input for initial population of fields, this is deprecated - you should use populate() instea
 	 * @return  Fieldset  this, to allow chaining
-	 */ 
+	 */
 	public function repopulate($repopulate = false) {
 
 		$input = strtolower($this->form()->get_attribute('method', 'post')) == 'get' ? \Input::get() : \Input::post();
@@ -130,10 +130,12 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	public function value($name = null) {
 		if ($name === null)
 		{
-			$values = array();
+			$values = \Input::post();
 			foreach ($this->fields as $f)
 			{
-				$values[$f->name] = $f->value;
+				if (substr(strtolower(\Inflector::denamespace(get_class($f))), 0, 6) == 'widget') {
+					$values[$f->name] = $f->value;
+				}
 			}
 			return $values;
 		}
@@ -205,27 +207,27 @@ class Fieldset extends \Fuel\Core\Fieldset {
 			}
 		}
 	}
-	
+
 	public function format_js_validation($name, $args) {
-		
+
 		static $i = 1;
 
 		if ($name == 'required') {
 			return array('required', true);
 		}
-		
+
 		if ($name == 'min_length') {
 			return array('minlength', $args[0]);
 		}
-		
+
 		if ($name == 'max_length') {
 			return array('maxlength', $args[0]);
 		}
-		
+
 		if ($name == 'exact_length') {
 			return array('length', $args[0]);
 		}
-		
+
 		if ($name == 'match_field') {
 			$field_id = $this->field($args[0])->get_attribute('id');
 			if (empty($field_id)) {
@@ -234,48 +236,48 @@ class Fieldset extends \Fuel\Core\Fieldset {
 			}
 			return array('equalTo', '#'.$field_id);
 		}
-		
+
 		if ($name == 'valid_email') {
 			return array('email', true);
 		}
-		
-		return false;		
+
+		return false;
 		return array($name, $args);
 	}
-	
+
 	public function js_validation() {
-		
+
 		static $i = 1;
-		
+
 		$form_attributes = $this->get_config('form_attributes', array());
 		if (empty($form_attributes['id'])) {
 			$form_attributes['id'] = 'form_id_'.$i++;
 		}
 		$this->set_config('form_attributes', $form_attributes);
-		
+
 		$json = array();
 		foreach ($this->fields as $f) {
-			
+
 			$rules = $f->js_validation();
-			
+
 			if (empty($rules)) {
 				continue;
 			}
-			
+
 			foreach ($rules as $rule) {
 				if (empty($rule)) {
 					continue;
 				}
-				
+
 				list($name, $args) = $rule;
 				is_array($name) and $name = reset($name);
-				
+
 				list($js_name, $js_args) = $this->format_js_validation($name, $args);
 				if (empty($js_name)) {
 					continue;
 				}
-				$json['rules'][$f->name][$js_name] = $js_args; 
-				
+				$json['rules'][$f->name][$js_name] = $js_args;
+
 				// Computes the error message, replacing :args placeholders with {n}
 				$error = new \Validation_Error($f, '', array($name => ''), array());
 				$error = $error->get_message();
@@ -336,9 +338,9 @@ require(['jquery', 'static/cms/js/jquery/jquery-validation/jquery.validate.min']
 JS
 		);
 	}
-	
+
 	public static function build_from_config($config, $model = null, $options = array()) {
-		
+
 		if (is_object($model)) {
 			$instance = $model;
 			$class = get_class($instance);
@@ -352,7 +354,7 @@ JS
 			$class = null;
 			$instance = null;
 		}
-		
+
 		$fieldset = \Fieldset::forge(uniqid(), array(
 			'inline_errors'  => true,
 			'auto_id'		 => true,
@@ -370,7 +372,7 @@ JS
 			'type' => 'submit',
 			'value' => 'Save',
 		));
-		
+
 		if (!empty($options['extend']) && is_callable($options['extend'])) {
 			call_user_func($options['extend'], $fieldset);
 		}
@@ -380,13 +382,13 @@ JS
 			$fieldset->repopulate();
 			if ($fieldset->validation()->run($fieldset->value())) {
 				$data = array();
-				foreach ($fieldset->field() as $f) {
-					if (strtolower(\Inflector::denamespace(get_class($f))) == 'widget_empty' || $f->type == 'submit') {
-						continue;
-					}
-					$data[$f->get_name()] = $f->get_value();
-				}
-				//$data = $fieldset->validated(); // ?
+				//foreach ($fieldset->field() as $f) {
+				//	if (strtolower(\Inflector::denamespace(get_class($f))) == 'widget_empty' || $f->type == 'submit') {
+				//		continue;
+				//	}
+				//	$data[$f->get_name()] = $f->get_value();
+				//}
+				$data = $fieldset->validated();
 				if (!empty($options['complete']) && is_callable($options['complete'])) {
 					call_user_func($options['complete'], $data);
 				}

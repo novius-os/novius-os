@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -49,9 +49,9 @@ require(['jquery-nos'], function($) {
 			</table>
 			<div class="fieldset">
 				<h3>Content</h3>
-				
+
 				<div id="wysiwyg"></div>
-				
+
 			</div>
 			<p><?= $fieldset->field('save')->build(); ?> or <a href="#" onclick="javascript:$.nos.tabs.close();return false;">Cancel</a></p>
 		</div>
@@ -62,9 +62,25 @@ require(['jquery-nos'], function($) {
 			 <div id="accordion">
 				<div>
 					<h3>
+						<a href="#">Publication</a></h3>
+					<div>
+						<p><?= $fieldset->field('page_publier')->set_template('{field} {label}')->build(); ?></p>
+					</div>
+				</div>
+				<div>
+					<h3>
+						<a href="#">Menu</a></h3>
+					<div>
+						<p><?= $fieldset->field('page_menu')->set_template('{field} {label}')->build(); ?></p>
+						<p><?= $fieldset->field('page_titre_menu')->build(); ?></p>
+					</div>
+				</div>
+				<div>
+					<h3>
 						<a href="#">SEO</a></h3>
 					<div>
 						<p><?= $fieldset->field('page_nom_virtuel')->build(); ?>.html</p>
+						<p><?= $fieldset->field('page_noindex')->set_template('{field} {label}')->build(); ?></p>
 						<p><?= $fieldset->field('page_titre_reference')->build(); ?></p>
 						<p><?= $fieldset->field('page_description')->build(); ?></p>
 						<p><?= $fieldset->field('page_keywords')->build(); ?></p>
@@ -84,6 +100,16 @@ require([
 	'jquery-nos'
 ], function(a,b,$) {
 	$(function() {
+
+		$('input[name=page_noindex]').change(function() {
+			$(this).closest('p').nextAll()[$(this).is(':checked') ? 'hide' : 'show']();
+		}).change();
+
+
+		$('input[name=page_menu]').change(function() {
+			$(this).closest('p').nextAll()[$(this).is(':checked') ? 'show' : 'hide']();
+		}).change();
+
 		$('select[name=page_gab_id]').change(function() {
 			$.ajax({
 				url: 'admin/cms_page/ajax/wysiwyg/<?= $page->page_id ?>',
@@ -92,7 +118,7 @@ require([
 				},
 				dataType: 'json',
 				success: function(data) {
-					
+
 					var ratio = $('#wysiwyg').width() * 3 / 4;
 					$('#wysiwyg').empty().css({
 						height: ratio,

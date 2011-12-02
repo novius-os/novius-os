@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -14,13 +14,13 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 
 	public function before() {
 		parent::before();
-		
+
 		$logged_user = \Session::get('logged_user', false);
 		if (empty($logged_user)) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
 		}
-		
+
 		$this->auto_render = false;
 	}
 
@@ -89,7 +89,15 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 	public function action_appstab()
 	{
 		\Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
-		$apps = \Config::get('app_installed', array());
+		$app_installed = \Config::get('app_installed', array());
+
+		$apps = array();
+		foreach ($app_installed as $app) {
+			if (!empty($app['href']) && !empty($app['icon64'])) {
+				$apps[] = $app;
+			}
+		}
+
 		$view = \View::forge('noviusos/appstab', array(
 			'apps' => $apps,
 		));
