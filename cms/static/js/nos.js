@@ -136,7 +136,7 @@ define([
 					tabs : {
 						index : function() {
 							if (window.parent != window && window.parent.$nos) {
-								return window.parent.$nos(window.frameElement).data('ui-ostabs-index');
+								return window.parent.$nos(window.frameElement).data('nos-ostabs-index');
 							}
 							return false;
 						},

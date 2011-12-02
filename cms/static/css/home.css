@@ -43,7 +43,7 @@
 #apps .icon {
 	width: 90px;
 	height: 90px;
-	background: rgba(255, 255, 255, 0.4) url(../img/apps-64/background.png) no-repeat top center;
+	background: rgba(255, 255, 255, 0.4);
 	display: block;
 	margin: 0 auto;
 	border-radius: 45px;

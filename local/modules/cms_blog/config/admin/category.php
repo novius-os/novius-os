@@ -9,7 +9,9 @@
  */
 
 return array(
-	'model' => 'Cms\Blog\Model_Category',
+	'query' => array(
+		'model' => 'Cms\Blog\Model_Category',
+	),
 	'columns' => array(
 		array(
 			'headerText' => 'Category',
