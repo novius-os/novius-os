@@ -45,6 +45,7 @@ define([
 
 			tabId : 0,
 			pined: [],
+			stackOpening: [],
 
 			_create: function() {
 				this._tabify( true );
@@ -519,6 +520,7 @@ define([
 							});
 						}
 						self.element.queue( "tabs", function() {
+							self.stackOpening.push(el);
 							showTab( el, $show );
 						});
 
@@ -566,20 +568,23 @@ define([
 					.prependTo( actions );
 
 				var removable = li.not( '.nos-ostabs-tray' ).not( '.nos-ostabs-appstab' ).not( '.nos-ostabs-newtab' ).length;
+				var closable = li.not( '.nos-ostabs-appstab' ).length;
 				var reloadable = !a.data( "ajax.tabs" );
 
-				var close = $( '<a href="#"></a>' )
-					.addClass( 'nos-ostabs-close' )
-					.click(function( event ) {
-						self.remove( self.lis.index(li) ); // On recalcule l'index au cas où l'onglet est été déplacé
-						return false;
-					})
-					.appendTo( links );
-				$( '<span></span>' ).addClass( 'ui-icon ui-icon-closethick' )
-					.text( removable && !$.inArray( index, self.pined ) ? o.texts.removeTab : o.texts.closeTab )
-					.appendTo( close );
-				$( '<span></span>' ).text( removable && !$.inArray( index, self.pined ) ? o.texts.removeTab : o.texts.closeTab )
-					.appendTo( close );
+				if ( closable ) {
+					var close = $( '<a href="#"></a>' )
+						.addClass( 'nos-ostabs-close' )
+						.click(function( event ) {
+							self.remove( self.lis.index(li) ); // On recalcule l'index au cas où l'onglet est été déplacé
+							return false;
+						})
+						.appendTo( links );
+					$( '<span></span>' ).addClass( 'ui-icon ui-icon-closethick' )
+						.text( removable && !$.inArray( index, self.pined ) ? o.texts.removeTab : o.texts.closeTab )
+						.appendTo( close );
+					$( '<span></span>' ).text( removable && !$.inArray( index, self.pined ) ? o.texts.removeTab : o.texts.closeTab )
+						.appendTo( close );
+				}
 
 				if ( removable ) {
 					var pin = $( '<a href="#"></a>' )
@@ -815,6 +820,7 @@ define([
 				var self = this,
 					o = this.options,
 					$li = this.lis.eq( index ),
+					$a = this.anchors.eq( index ),
 					$panel = self.element.find( self._sanitizeSelector( self.anchors[ index ].hash ) );
 
 				if ( index == 0 && !$li.hasClass( "nos-ostabs-selected" ) ) {
@@ -830,14 +836,25 @@ define([
 				}
 
 				$li.removeClass( "ui-state-active ui-state-open" );
+				for (var i = 0; i < self.stackOpening.length; i++) {
+					if (self.stackOpening[i] === $a.get(0)) {
+						self.stackOpening.splice(i, 1);
+					}
+				}
+				
+				if (self.stackOpening.length) {
+					this.select( this.anchors.index( self.stackOpening[self.stackOpening.length - 1] ) );
+				} else {
+					this.select( 0 );
+				}
 
 				// If selected tab was removed focus tab to the right or
 				// in case the last tab was removed the tab to the left.
-				if ( $li.hasClass( "nos-ostabs-selected" ) && this.lis.filter( '.ui-state-open' ).length > 0 ) {
+				/*if ( $li.hasClass( "nos-ostabs-selected" ) && this.lis.filter( '.ui-state-open' ).length > 0 ) {
 					this.select( this.lis.index( this.lis.filter( '.ui-state-open' ).eq( 0 ) ) );
 				} else if ( $li.hasClass( "nos-ostabs-selected" )) {
 					this.select( 0 );
-				}
+				}*/
 
 				if ( $li.not( '.nos-ostabs-appstab' ).not( '.nos-ostabs-newtab' ).length ) {
 					$( '> *', $panel ).not( '.nos-ostabs-actions' ).remove();
