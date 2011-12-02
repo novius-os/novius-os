@@ -30,6 +30,7 @@ define([
 					closeTab: 'Close tab',
 					pinTab: 'Pin tab',
 					unpinTab: 'Unpin tab',
+					reloadTab: 'Reload tab',
 					spinner: 'Loading...'
 				},
 
@@ -553,7 +554,8 @@ define([
 				var self = this,
 					o = this.options;
 
-				var li = self.lis.eq(index);
+				var li = self.lis.eq(index),
+					a =  self.anchors.eq(index);
 
 				var actions = $( '<div></div>' )
 					.addClass( 'nos-ostabs-actions ui-state-active' )
@@ -564,6 +566,7 @@ define([
 					.prependTo( actions );
 
 				var removable = li.not( '.nos-ostabs-tray' ).not( '.nos-ostabs-appstab' ).not( '.nos-ostabs-newtab' ).length;
+				var reloadable = !a.data( "ajax.tabs" );
 
 				var close = $( '<a href="#"></a>' )
 					.addClass( 'nos-ostabs-close' )
@@ -603,6 +606,24 @@ define([
 						.text( o.texts.unpinTab )
 						.appendTo( unpin );
 				}
+
+				if ( reloadable ) {
+					var reload = $( '<a href="#"></a>' )
+						.addClass( 'nos-ostabs-reload' )
+						.click(function( event ) {
+							var fr = $panel.find( 'iframe.nos-ostabs-panel-content' );
+							if (fr !== undefined) {
+								fr.attr("src", fr.attr("src"));
+							}
+							return false;
+						})
+						.text( o.texts.reloadTab )
+						.appendTo( links );
+					$( '<span></span>' ).addClass( 'ui-icon ui-icon-refresh' )
+						.text( o.texts.pinTab )
+						.appendTo( reload );
+				}
+
 			},
 
 			_tabsWidth: function() {
