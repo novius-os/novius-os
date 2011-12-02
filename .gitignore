@@ -3,6 +3,7 @@
 /local/cache
 /local/config/crypt.php
 /local/config/db.php
+/local/data
 /local/logs
 /local/media
 /logs/
