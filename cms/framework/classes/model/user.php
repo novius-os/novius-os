@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -17,7 +17,7 @@ use Fuel\Core\Uri;
 class Model_User extends Model {
     protected static $_table_name = 'os_user';
     protected static $_primary_key = array('user_id');
-	
+
 	protected static $_delete;
 
     protected static $_many_many = array(
@@ -32,16 +32,16 @@ class Model_User extends Model {
             'cascade_delete' => false,
         ),
     );
-    
+
     protected static $_observers = array('Orm\\Observer_Self' => array(
 		'events' => array('before_save', 'after_save', 'before_delete', 'after_delete'),
 	));
-    
+
     public function check_password($password) {
         $ph = new \PasswordHash(8, false);
         return $ph->CheckPassword($password, $this->user_password);
     }
-    
+
     public function _event_before_save() {
 		// Don't hash twice
         if ($this->is_changed('user_password')) {
@@ -49,7 +49,7 @@ class Model_User extends Model {
             $this->user_password = $ph->HashPassword($this->user_password);
         }
     }
-    
+
     public function _event_after_save() {
 		// Don't trigger the event in a loop, because we call save() and this will trigger _event_after_save()
 		static $already_saved = array();
@@ -57,7 +57,7 @@ class Model_User extends Model {
 			return;
 		}
 		$already_saved[$this->user_id] = true;
-		
+
 		if (empty($this->groups)) {
 			$group = new Model_Group();
 			$group->group_user_id = $this->user_id;
@@ -68,7 +68,7 @@ class Model_User extends Model {
 		$this->groups[] = $group;
 		$this->save(array('groups'));
     }
-	
+
 	public function _event_before_delete() {
 		// Load the groups to delete
 		static::$_delete['groups'] = $this->groups;
@@ -78,7 +78,7 @@ class Model_User extends Model {
 			$group->delete();
 		}
 	}
-    
+
     public static function hash_password($password) {
         return substr($password, 0, 1).$password.substr($password, -1);
     }
@@ -108,7 +108,7 @@ class Model_User extends Model {
             'extra' => 'auto_increment',
             'key' => 'PRI',
             'privileges' => 'select,insert,update,references',
-            
+
             'label' => 'ID',
             'widget' => array(
                 'hide_add'   => true,
@@ -128,7 +128,7 @@ class Model_User extends Model {
             'extra' => '',
             'key' => '',
             'privileges' => 'select,insert,update,references',
-            
+
             'label' => 'Full name',
             'widget' => array(
             ),
@@ -146,7 +146,7 @@ class Model_User extends Model {
             'extra' => '',
             'key' => '',
             'privileges' => 'select,insert,update,references',
-            
+
             'label' => 'Email',
             'widget' => array(
             ),
@@ -167,7 +167,7 @@ class Model_User extends Model {
             'extra' => '',
             'key' => '',
             'privileges' => 'select,insert,update,references',
-            
+
             'label' => 'Password',
             'widget' => array(
                 'display_as' => 'password',
@@ -188,7 +188,7 @@ class Model_User extends Model {
             'extra' => '',
             'key' => '',
             'privileges' => 'select,insert,update,references',
-            
+
             'label' => 'Last login',
             'widget' => array(
                 'hide_add'   => true,
@@ -196,7 +196,7 @@ class Model_User extends Model {
             ),
         ),
     );
-    
+
     public static function _init() {
         static::$_properties['user_last_connection']['default'] = \DB::expr('NOW()');
     }
