@@ -23,7 +23,7 @@ define([
 				vertical : 'Vertical',
 				horizontal : 'Horizontal',
 				hidden : 'Hidden',
-				showNbItems : 'Show {{x}} items',
+				showNbItems : 'Showing {{x}} out of {{y}} items',
 				showOneItem : 'Show 1 item',
 				showNoItem : 'No item',
 				showAll : 'Show all items'
@@ -437,7 +437,7 @@ define([
 							} else if (dataSource.data.totalRows === 0) {
 								self.uiShowNbItems.text(o.texts.showOneItem);
 							} else {
-								self.uiShowNbItems.text(o.texts.showNbItems.replace('{{x}}', dataSource.data.totalRows));
+								self.uiShowNbItems.text(o.texts.showNbItems.replace('{{x}}', dataSource.data.length).replace('{{y}}', dataSource.data.totalRows));
 							}
 							self.uiShowNbItems.show();
 
