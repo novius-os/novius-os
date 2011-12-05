@@ -35,6 +35,7 @@ define([
 		showFilter : false,
 		gridRendered : false,
 		resizing : true,
+		init : false,
 
 		_create: function() {
 			var self = this,
@@ -95,6 +96,8 @@ define([
 				._uiGrid()
 				._uiSettings()
 				._listeners();
+
+			self.init = true;
 
 			$(window).resize(function() {
 				if (self.resizing) {
@@ -187,8 +190,7 @@ define([
 		},
 
 		_uiSettingsMenuAdd : function(item, ul) {
-			var self = this,
-				o = self.options;
+			var self = this;
 
 			li = $('<li></li>').appendTo(ul)
 				.append(item.content.clone(true));
@@ -204,9 +206,8 @@ define([
 		},
 
 		_uiSettingsMenuCheckbox : function(name, id, checked, click, label) {
-			var self = this,
-				span = $('<span></span>');
-				
+			var span = $('<span></span>');
+
 			$('<input type="checkbox" name="' + name + '" id="' + id + '" ' + (checked ? 'checked' : '') + ' />')
 				.click(click)
 				.appendTo(span);
@@ -218,8 +219,7 @@ define([
 		},
 
 		_uiSettingsMenu : function() {
-			var self = this,
-				o = self.options;
+			var self = this;
 
 			$.each(self.menuInspectors, function() {
 				self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
@@ -238,7 +238,6 @@ define([
 
 		_uiSplitters : function() {
 			var self = this,
-				o = self.options
 				refreshV = function() {
 					self.uiSplitterHorizontal.wijsplitter("refresh");
 					self._resizeInspectorsV()
@@ -263,13 +262,13 @@ define([
 						minSize : 200,
 						scrollBars : 'hidden'
 					},
-					expanded: function (e) {
+					expanded: function () {
 						refreshV();
 					},
-					collapsed: function (e) {
+					collapsed: function () {
 						refreshV();
 					},
-					sized: function (e) {
+					sized: function () {
 						self.resizing = true;
 						refreshV();
 					}
@@ -292,13 +291,13 @@ define([
 						minSize : 200,
 						scrollBars : 'hidden'
 					},
-					expanded: function (e) {
+					expanded: function () {
 						refreshH();
 					},
-					collapsed: function (e) {
+					collapsed: function () {
 						refreshH();
 					},
-					sized: function (e) {
+					sized: function () {
 						self.resizing = true;
 						refreshH();
 					}
@@ -337,7 +336,7 @@ define([
 					start : function() {
 						self.resizing = false;
 					},
-					stop: function(e, ui) {
+					stop: function() {
 						self.resizing = true;
 						self._resizeInspectorsV()
 							._resizeInspectorsH();
@@ -348,14 +347,13 @@ define([
 		},
 
 		_loadInspector : function($li) {
-			var self = this,
-				o = self.options;
+			var self = this;
 
 			$.ajax({
 				url: $li.data('inspectorurl'),
 				dataType: 'html'
 			})
-			.done(function(data, textStatus, jqXHR) {
+			.done(function(data) {
 				$(data).appendTo($li); // appendTo for embed javascript work
 			})
 			.fail(function(jqXHR, textStatus, errorThrown) {
@@ -368,8 +366,7 @@ define([
 		},
 
 		_uiSearchBar : function() {
-			var self = this,
-				o = self.options;
+			var self = this;
 
 			self.uiSearchInput.bind("keypress", function( event ) {
 					var keyCode = $.ui.keyCode;
@@ -402,7 +399,7 @@ define([
 			var self = this,
 				o = self.options,
 				position = self.uiGrid.offset(),
-				height = $(window).height() - position.top
+				height = $(window).height() - position.top,
 				heights = $.nos.grid.getHeights();
 
 			self.uiGrid.css('height', height)
@@ -454,7 +451,7 @@ define([
 							}
 						}
 					}),
-					currentCellChanged: function (e) {
+					currentCellChanged: function () {
 						self.uiGrid.wijgrid("currentCell", -1, -1);
 					},
 					rendering : function() {
@@ -484,8 +481,7 @@ define([
 			});
 
 			$nos.nos.listener.add('inspector.showFilter', false, function(widget_id, change, checked) {
-				var inspector;
-				if ((inspector = self.menuInspectors[widget_id])) {
+				if (self.menuInspectors[widget_id]) {
 					self._addSettingsMenu(widget_id, 'showFilters', {
 							content : self._uiSettingsMenuCheckbox('showFilter' + widget_id, 'showFilter' + widget_id, checked, function() {
 									change($(this).is(':checked'));
@@ -497,8 +493,7 @@ define([
 			});
 
 			$nos.nos.listener.add('inspector.declareColumns', false, function(widget_id, columns) {
-				var inspector;
-				if ((inspector = self.menuInspectors[widget_id]) && columns.length > 1) {
+				if (self.menuInspectors[widget_id] && columns.length > 1) {
 					var childs = [];
 
 					$.each(columns, function(i) {
@@ -569,7 +564,6 @@ define([
 
 		_jsonInspectors : function() {
 			var self = this,
-				o = self.options,
 				inspectors = {};
 
 			self.uiSearchBar.find('input').each(function() {
@@ -598,8 +592,7 @@ define([
 		},
 
 		_resizeInspectorsV : function() {
-			var self = this,
-				o = self.options;
+			var self = this;
 
 		    if (self.resizing) {
 				var inspectors = self.uiInspectorsVertical.find('> li').css({
@@ -619,8 +612,7 @@ define([
 		},
 
 		_resizeInspectorsH : function() {
-			var self = this,
-				o = self.options;
+			var self = this;
 
 		    if (self.resizing) {
 				var inspectors = self.uiInspectorsHorizontal.find('> li').css({
@@ -662,8 +654,7 @@ define([
 		},
 
 		_refreshSettingsMenu : function() {
-			var self = this,
-				o = self.options;
+			var self = this;
 
 			self.uiSettingsMenu.wijmenu('destroy')
 				.empty();
@@ -775,8 +766,7 @@ define([
 										._resizeInspectorsH();
 								}
 							} else {
-								var target = orientation === 'v' ? self.uiInspectorsVertical : self.uiInspectorsHorizontal,
-									refresh = self['_resizeInspectors' + orientation.toUpperCase()];
+								var target = orientation === 'v' ? self.uiInspectorsVertical : self.uiInspectorsHorizontal;
 								if ( widget.length ) {
 									if ( !target.has(widget).length ) {
 										widget.closest('li.ui-widget-content')
@@ -837,12 +827,13 @@ define([
 		},
 
 		gridRefresh : function() {
-			var self = this,
-				o = self.options;
+			var self = this;
 
-			self.uiGrid.wijgrid('destroy')
-				.empty();
-			self._uiGrid();
+			if (self.init) {
+				self.uiGrid.wijgrid('destroy')
+					.empty();
+				self._uiGrid();
+			}
 
 			return self;
 		}
