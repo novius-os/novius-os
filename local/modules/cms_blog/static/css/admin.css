@@ -7,17 +7,9 @@
  * @link http://www.novius-os.org
  */
 
- .cms_blog-icon16 { width: 16px; height: 16px; }
+.cms_blog-icon16 { width: 16px; height: 16px; }
 .cms_blog-icon32 { width: 32px; height: 32px; }
 
-.cms_blog-icon16-author { background-image: url(../img/16/author.png) !important; }
 .cms_blog-icon16-blog { background-image: url(../img/16/blog.png) !important; }
-.cms_blog-icon16-category { background-image: url(../img/16/category.png) !important; }
-.cms_blog-icon16-date { background-image: url(../img/16/date.png) !important; }
-.cms_blog-icon16-tag { background-image: url(../img/16/tag.png) !important; }
 
-.cms_blog-icon32-author { background-image: url(../img/32/author.png) !important; }
 .cms_blog-icon32-blog { background-image: url(../img/32/blog.png) !important; }
-.cms_blog-icon32-category { background-image: url(../img/32/category.png) !important; }
-.cms_blog-icon32-date { background-image: url(../img/32/date.png) !important; }
-.cms_blog-icon32-tag { background-image: url(../img/32/tag.png) !important; }
