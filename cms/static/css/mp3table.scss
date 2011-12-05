@@ -133,6 +133,10 @@
 						}
 					}
 				}
+				
+				.ui-resizable-handle {
+				    z-index : 1000;
+				}
 			}
 
 			.wijmo-wijsplitter-h-panel2 {

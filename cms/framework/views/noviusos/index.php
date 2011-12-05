@@ -9,12 +9,11 @@
  */
 
 ?>
-<div id="noviusos" data-init-tabs="<?= $initTabs ?>" data-tray-tabs="<?= $trayTabs ?>" data-apps-tab="<?= $appsTab ?>" data-new-tab="<?= $newTab ?>"></div>
+<div id="noviusos"></div>
 <script type="text/javascript">
 require(['static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.ostabs'], function( $ ) {
 		$(function() {
-			var noviusos = $('#noviusos');
-			noviusos.ostabs(noviusos.data());
+			$('#noviusos').ostabs(<?= $ostabs ?>);
 		});
 	});
 </script>

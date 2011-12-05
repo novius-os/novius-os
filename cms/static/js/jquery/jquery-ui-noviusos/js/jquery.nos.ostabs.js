@@ -450,7 +450,6 @@ define([
 								// Gilles : Bug avec effet la class hide réapparait, sans doute à cause de la double création de panel au add
 								//$( this ).removeClass( "nos-ostabs-hide" );
 								resetStyle( $show, showFx );
-								self._trigger( "show", null, self._ui( $li[ 0 ], $show[ 0 ] ) );
 							});
 					}
 					: function( clicked, $show ) {
@@ -461,7 +460,6 @@ define([
 						self._scrollTo( $li );
 						$li.addClass( "nos-ostabs-selected ui-state-active" ).removeClass( 'ui-state-pined' );
 						$show.removeClass( "nos-ostabs-hide" );
-						self._trigger( "show", null, self._ui( $li[ 0 ], $show[ 0 ] ) );
 					};
 
 				// Hide a tab, $show is optional...
@@ -477,7 +475,7 @@ define([
 							self.element.dequeue( "tabs" );
 						});
 					}
-					: function( clicked, $hide, $show ) {
+					: function( clicked, $hide ) {
 						if ( self.uiOstabsNewTab.hasClass( 'ui-state-active' ) ) {
 							self._tabsWidth();
 						}
@@ -514,6 +512,8 @@ define([
 
 					// show new tab
 					if ( $show.length ) {
+						self._trigger( "show", null, self._ui( $li[ 0 ], $show[ 0 ] ) );
+						
 						if ( $hide.length ) {
 							self.element.queue( "tabs", function() {
 								hideTab( el, $hide );

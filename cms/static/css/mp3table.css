@@ -151,47 +151,51 @@
   -ms-box-sizing: border-box;
   box-sizing: border-box;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003140}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003137}}
+.nos-mp3grid .nos-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel1 .ui-resizable-handle {
+  z-index: 1000;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003144}}
 .nos-mp3grid .nos-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel2 .nos-searchbar {
   margin: 5px;
   position: relative;
   z-index: 1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003145}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003149}}
 .nos-mp3grid .nos-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel2 .nos-searchbar .nos-nbresult {
   display: inline-block;
   margin-right: 5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003150}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003154}}
 .nos-mp3grid .nos-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel2 .nos-searchbar .nos-inspectorsreset {
   display: inline-block;
   vertical-align: middle;
   margin-left: 5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003156}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003160}}
 .nos-mp3grid .nos-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel2 .nos-searchbar .nos-inspectorstag {
   display: inline-block;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003159}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003163}}
 .nos-mp3grid .nos-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel2 .nos-searchbar .nos-inspectorstag span {
   display: inline-block;
   margin-left: 10px;
   padding: 1px 2px;
   line-height: 16px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003165}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003169}}
 .nos-mp3grid .nos-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel2 .nos-searchbar .nos-inspectorstag span a {
   display: inline-block;
   vertical-align: top;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003173}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003177}}
 .nos-mp3grid .nos-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel2 .wijmo-wijgrid {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003179}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003183}}
 .nos-mp3grid ul {
   list-style-type: none;
 }

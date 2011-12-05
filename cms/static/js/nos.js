@@ -18,43 +18,72 @@ define([
 			$(function() {
 				var noviusos = $('#noviusos');
 				$.nos = {
-					listener : {
-						_list : {},
-						get: function( id, alltabs ) {
-							alltabs = alltabs === undefined ? true : alltabs;
-							if (alltabs && window.parent != window && window.parent.$nos) {
-								return window.parent.$nos.nos.listener.get(id, alltabs);
-							}
-							var listener = id && this._list[id];
-
-							if ( !listener ) {
-								listener = $.Callbacks();
-								if ( id ) {
-									this._list[id] = listener;
+					listener : (function() {
+						var _list = {},
+							_get = function(id) {
+								var listener = id && _list[id];
+	
+								if ( !listener ) {
+									listener = $.Callbacks();
+									if ( id ) {
+										_list[id] = listener;
+									}
+								}
+								return listener;
+							};
+							
+						return {
+							add: function(id, alltabs, fn) {
+								if (fn === undefined) {
+									fn = alltabs
+									alltabs = true;
+								}
+								if (alltabs && window.parent != window && window.parent.$nos) {
+									$(window).unload(function() {
+										window.parent.$nos.nos.listener.remove(id, fn);
+									});
+									return window.parent.$nos.nos.listener.add(id, true, fn);
+								}
+								_get(id).add(fn);
+							},
+							remove: function(id, alltabs, fn) {
+								if (fn === undefined) {
+									fn = alltabs
+									alltabs = true;
+								}
+								if (alltabs && window.parent != window && window.parent.$nos) {
+									return window.parent.$nos.nos.listener.remove(id, true, fn);
+								}
+								_get(id).remove(fn);
+							},
+							fire: function(id, alltabs, args) {
+								if (args === undefined) {
+									args = alltabs
+									alltabs = true;
+								}
+								if (!$.isArray(args)) {
+									args = [args];
+								}
+								if (alltabs && window.parent != window && window.parent.$nos) {
+									return window.parent.$nos.nos.listener.fire(id, true, args);
+								}
+								if (id.substring(id.length - 1) == '!') {
+									triggerName = id.substring(0, id.length - 1);
+									_get(triggerName).fire.apply(null, args);
+									return;
+								}
+								var queue = id.split( "." );
+								var triggerName = "";
+								for (var i=0; i<queue.length ; i++) {
+									if (i > 0) {
+										triggerName += ".";
+									}
+									triggerName += queue[i];
+									_get(triggerName).fire.apply(null, args);
 								}
 							}
-							return listener;
-						},
-						add: function( id, alltabs, fn) {
-							this.get(id, alltabs).add(fn);
-						},
-						fire: function(id, alltabs, args) {
-							if (id.substring(id.length - 1) == '!') {
-								triggerName = id.substring(0, id.length - 1);
-								this.get(triggerName, alltabs).fire.apply(null, args);
-								return;
-							}
-							var queue = id.split( "." );
-							var triggerName = "";
-							for (var i=0; i<queue.length ; i++) {
-								if (i > 0) {
-									triggerName += ".";
-								}
-								triggerName += queue[i];
-								this.get(triggerName, alltabs).fire.apply(null, args);
-							}
-						}
-					},
+						};
+					})(),
 
 					dataStore : {},
 					data : function (id, json) {

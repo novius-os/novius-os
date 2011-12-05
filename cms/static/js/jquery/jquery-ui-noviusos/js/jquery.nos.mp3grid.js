@@ -34,6 +34,7 @@ define([
 		menuInspectors : {},
 		showFilter : false,
 		gridRendered : false,
+		resizing : true,
 
 		_create: function() {
 			var self = this,
@@ -96,11 +97,13 @@ define([
 				._listeners();
 
 			$(window).resize(function() {
-				self.uiSplitterVertical.add(self.uiSplitterHorizontal)
-					.wijsplitter('refresh');
-				self._resizeInspectorsV()
-					._resizeInspectorsH();
-				self.gridRefresh();
+				if (self.resizing) {
+				    self.uiSplitterVertical.add(self.uiSplitterHorizontal)
+						.wijsplitter('refresh');
+					self._resizeInspectorsV()
+						._resizeInspectorsH()
+						.gridRefresh();
+				}
 			});
 		},
 
@@ -239,12 +242,12 @@ define([
 				refreshV = function() {
 					self.uiSplitterHorizontal.wijsplitter("refresh");
 					self._resizeInspectorsV()
-						._resizeInspectorsH();
-					self.uiGrid.wijgrid('doRefresh');
+						._resizeInspectorsH()
+						.gridRefresh();
 				},
 				refreshH = function() {
-					self._resizeInspectorsH();
-					self.uiGrid.wijgrid('doRefresh');
+					self._resizeInspectorsH()
+						.gridRefresh();
 				};
 
 			self.uiSplitterVertical.wijsplitter({
@@ -267,8 +270,13 @@ define([
 						refreshV();
 					},
 					sized: function (e) {
+						self.resizing = true;
 						refreshV();
 					}
+				})
+				.find('.ui-resizable-handle')
+				.mousedown(function() {
+				    self.resizing = false;
 				});
 
 			self.uiSplitterHorizontal.wijsplitter({
@@ -291,8 +299,13 @@ define([
 						refreshH();
 					},
 					sized: function (e) {
+						self.resizing = true;
 						refreshH();
 					}
+				})
+				.find('.ui-resizable-handle')
+				.mousedown(function() {
+				    self.resizing = false;
 				});
 
 			return self;
@@ -321,7 +334,11 @@ define([
 
 			self.uiInspectorsVertical.add(self.uiInspectorsHorizontal).sortable({
 					connectWith: ".nos-inspectors",
+					start : function() {
+						self.resizing = false;
+					},
 					stop: function(e, ui) {
+						self.resizing = true;
 						self._resizeInspectorsV()
 							._resizeInspectorsH();
 					}
@@ -456,7 +473,17 @@ define([
 			var self = this,
 				o = self.options;
 
-			$nos.nos.listener.get('inspector.showFilter', false).add(function(widget_id, change, checked) {
+			$nos.nos.listener.add('ostabs.show', function(index) {
+				if ($.nos.tabs.index() === index) {
+				    setTimeout(function() {
+						self.resizing = true;						
+					}, 500);						
+				} else {
+				    self.resizing = false;
+				}
+			});
+
+			$nos.nos.listener.add('inspector.showFilter', false, function(widget_id, change, checked) {
 				var inspector;
 				if ((inspector = self.menuInspectors[widget_id])) {
 					self._addSettingsMenu(widget_id, 'showFilters', {
@@ -469,7 +496,7 @@ define([
 				}
 			});
 
-			$nos.nos.listener.get('inspector.declareColumns', false).add(function(widget_id, columns) {
+			$nos.nos.listener.add('inspector.declareColumns', false, function(widget_id, columns) {
 				var inspector;
 				if ((inspector = self.menuInspectors[widget_id]) && columns.length > 1) {
 					var childs = [];
@@ -493,7 +520,7 @@ define([
 				}
 			});
 
-			$nos.nos.listener.get('inspector.selectionChanged', false).add(function(input_name, value, label) {
+			$nos.nos.listener.add('inspector.selectionChanged', false, function(input_name, value, label) {
 				var multiple = false,
 					name = input_name;
 
@@ -572,18 +599,20 @@ define([
 
 		_resizeInspectorsV : function() {
 			var self = this,
-				o = self.options,
+				o = self.options;
 
-				inspectors = self.uiInspectorsVertical.find('> li').css({
-					width: '100%',
-					height: 'auto'
-				});
-
-			if (inspectors.length) {
-				inspectors.css('height', ( self.uiInspectorsVertical.height() / inspectors.length )  + 'px')
-					.trigger('inspectorResize');
-			} else {
-				self._hideSplitterV();
+		    if (self.resizing) {
+				var inspectors = self.uiInspectorsVertical.find('> li').css({
+						width: '100%',
+						height: 'auto'
+					});
+	
+				if (inspectors.length) {
+					inspectors.css('height', ( self.uiInspectorsVertical.height() / inspectors.length )  + 'px')
+						.trigger('inspectorResize');
+				} else {
+					self._hideSplitterV();
+				}
 			}
 
 			return self;
@@ -591,18 +620,20 @@ define([
 
 		_resizeInspectorsH : function() {
 			var self = this,
-				o = self.options,
+				o = self.options;
 
-				inspectors = self.uiInspectorsHorizontal.find('> li').css({
-					width: 'auto',
-					height: '100%'
-				});
-
-			if (inspectors.length) {
-				inspectors.css('width', ( self.uiInspectorsHorizontal.width() / inspectors.length )  + 'px')
-					.trigger('inspectorresize');
-			} else {
-				self._hideSplitterH();
+		    if (self.resizing) {
+				var inspectors = self.uiInspectorsHorizontal.find('> li').css({
+						width: 'auto',
+						height: '100%'
+					});
+	
+				if (inspectors.length) {
+					inspectors.css('width', ( self.uiInspectorsHorizontal.width() / inspectors.length )  + 'px')
+						.trigger('inspectorResize');
+				} else {
+					self._hideSplitterH();
+				}
 			}
 
 			return self;

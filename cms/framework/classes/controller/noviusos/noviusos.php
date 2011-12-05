@@ -38,49 +38,56 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 	public function action_index()
 	{
 		$view = \View::forge('noviusos/index');
+		
+		$ostabs = array(
+			'initTabs' => self::getTabs(),
+			'trayTabs' => array(
+				array(
+					'url' => 'admin/tray/plugins',
+					'iconClasses' => 'nos-icon24 nos-icon24-noviusstore',
+					'label' => 'Novius store',
+					'iconSize' => 24,
+				),
+				array(
+					'url' => 'generator/model',
+					'iconClasses' => 'nos-icon24 nos-icon24-help',
+					'label' => 'Help',
+					'iconSize' => 24,
+				),
+				array(
+					'url' => 'generator/model',
+					'iconClasses' => 'nos-icon24 nos-icon24-settings',
+					'label' => 'Settings',
+					'iconSize' => 24,
+				),
+				array(
+					'url' => 'admin/tray/account',
+					'iconClasses' => 'nos-icon24 nos-icon24-account',
+					'label' => 'Account',
+					'iconSize' => 24,
+				),
+			),
+			'appsTab' => array(
+				'panelId' => 'noviusospanel',
+				'url' => 'admin/noviusos/noviusos/appstab',
+				'iconClasses' => 'nos-icon32',
+				'iconSize' => 32,
+				'label' => 'Novius OS',
+				'ajax' => true,
+			),
+			'newTab' => array(
+				'panelId' => 'noviusospanel',
+				'url' => 'admin/noviusos/noviusos/appstab',
+				'iconClasses' => 'nos-icon16 nos-icon16-add',
+				'iconSize' => 16,
+				'ajax' => true,
+			),
+			'show' => 'function(e, tab) {
+				$nos.nos.listener.fire(\'ostabs.show\', false, [tab.index]);
+			}',
+		);
 
-		$view->set('initTabs', \Format::forge(self::getTabs())->to_json());
-		$view->set('trayTabs', \Format::forge(array(
-			array(
-				'url' => 'admin/tray/plugins',
-				'iconClasses' => 'nos-icon24 nos-icon24-noviusstore',
-				'label' => 'Novius store',
-				'iconSize' => 24,
-			),
-			array(
-				'url' => 'generator/model',
-				'iconClasses' => 'nos-icon24 nos-icon24-help',
-				'label' => 'Help',
-				'iconSize' => 24,
-			),
-			array(
-				'url' => 'generator/model',
-				'iconClasses' => 'nos-icon24 nos-icon24-settings',
-				'label' => 'Settings',
-				'iconSize' => 24,
-			),
-			array(
-				'url' => 'admin/tray/account',
-				'iconClasses' => 'nos-icon24 nos-icon24-account',
-				'label' => 'Account',
-				'iconSize' => 24,
-			),
-		))->to_json());
-		$view->set('appsTab', \Format::forge(array(
-			'panelId' => 'noviusospanel',
-			'url' => 'admin/noviusos/noviusos/appstab',
-			'iconClasses' => 'nos-icon32',
-			'iconSize' => 32,
-			'label' => 'Novius OS',
-			'ajax' => true,
-		))->to_json());
-		$view->set('newTab', \Format::forge(array(
-			'panelId' => 'noviusospanel',
-			'url' => 'admin/noviusos/noviusos/appstab',
-			'iconClasses' => 'nos-icon16 nos-icon16-add',
-			'iconSize' => 16,
-			'ajax' => true,
-		))->to_json());
+		$view->set('ostabs', \Format::forge($ostabs)->to_json(), false);
 
 		$this->template->body = $view;
 		return $this->template;
