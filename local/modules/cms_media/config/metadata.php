@@ -12,7 +12,7 @@ return array(
     'name'    => 'Media centre',
     'version' => '0.9-alpha',
 	'href' => 'admin/cms_media/list',
-	'icon64'  => 'static/modules/cms_media/img/media.png',
+	'icon64'  => 'static/modules/cms_media/img/64/media.png',
     'provider' => array(
         'name' => 'Novius OS',
     ),

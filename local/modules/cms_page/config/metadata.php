@@ -12,7 +12,7 @@ return array(
     'name'    => 'Pages',
     'version' => '0.9-alpha',
 	'href' => 'admin/cms_page/list',
-	'icon64'  => 'static/modules/cms_page/img/page.png',
+	'icon64'  => 'static/modules/cms_page/img/64/page.png',
     'provider' => array(
         'name' => 'Novius OS',
     ),

@@ -15,7 +15,7 @@ return array(
 	),
 	'tab' => array(
 		'label' => 'Users',
-		'iconUrl' => 'static/modules/cms_blog/img/32/author.png',
+		'iconUrl' => 'static/cms/img/32/user.png',
 	),
 	'ui' => array(
 		'label' => 'Users',
