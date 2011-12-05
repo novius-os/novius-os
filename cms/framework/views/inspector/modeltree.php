@@ -96,7 +96,8 @@ require([
 									marginLeft : (args.row.data.level * 20) + 'px'
 								})
 								.addClass('ui-icon ui-icon-triangle-1-e')
-								.click(function() {
+								.click(function(e) {
+									e.stopImmediatePropagation();
 									tr.nextAll().each(function() {
 										var self = $(this),
 											level = self.data('tree-level');
