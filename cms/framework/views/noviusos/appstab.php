@@ -32,7 +32,7 @@
 	?>
 	<a class="app" href="<?= $app['href'] ?>">
 		<span class="icon">
-			<img class="gloss" src="static/cms/img/app-64/gloss.png" />
+			<img class="gloss" src="static/cms/img/64/gloss.png" />
 			<img width="64" src="<?= $app['icon64'] ?>" />
 		</span>
 		<span class="text"><?= $app['name'] ?></span>
@@ -42,8 +42,8 @@
 	?>
 	<a class="app" href="admin/user/list">
 		<span class="icon">
-			<img class="gloss" src="static/cms/img/app-64/gloss.png" />
-			<img width="64" src="static/cms/img/app-64/user.png" />
+			<img class="gloss" src="static/cms/img/64/gloss.png" />
+			<img width="64" src="static/cms/img/64/user.png" />
 		</span>
 		<span class="text">Users</span>
 	</a>
