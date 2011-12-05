@@ -149,7 +149,7 @@ define([
 							$( scroll ).data( 'nos-ostabs-hover', true );
 							var inter = setInterval(function() {
 								if ( self.sorting && $( scroll ).data( 'nos-ostabs-hover' ) ) {
-									self._scroll( scroll === self.uiOstabsScrollRight.get(0) ? false : true );
+									self._scroll( scroll !== self.uiOstabsScrollRight.get(0) );
 								} else {
 									clearInterval( inter );
 								}
@@ -162,8 +162,8 @@ define([
 							self.uiOstabsScrollRight.addClass( 'ui-state-focus' );
 						}).blur(function() {
 							self.uiOstabsScrollRight.removeClass( 'ui-state-focus' );
-						}).click(function( event ) {
-							self._scroll(this === self.uiOstabsScrollRight.get(0) ? false : true);
+						}).click(function() {
+							self._scroll(this !== self.uiOstabsScrollRight.get(0));
 							return false;
 						}).appendTo( this.uiOstabsTabsContainer );
 
@@ -221,7 +221,7 @@ define([
 						stop: function() {
 							self.sorting = false;
 						},
-						update: function(event, ui) {
+						update: function() {
 							self.lis = self.uiOstabsAppsTab
 								.add( self.uiOstabsTray )
 								.add( self.uiOstabsTabs )
@@ -574,7 +574,7 @@ define([
 				if ( closable ) {
 					var close = $( '<a href="#"></a>' )
 						.addClass( 'nos-ostabs-close' )
-						.click(function( event ) {
+						.click(function() {
 							self.remove( self.lis.index(li) ); // On recalcule l'index au cas où l'onglet est été déplacé
 							return false;
 						})
@@ -589,7 +589,7 @@ define([
 				if ( removable ) {
 					var pin = $( '<a href="#"></a>' )
 						.addClass( 'nos-ostabs-pin' )
-						.click(function( event ) {
+						.click(function() {
 							self.pin( self.lis.index(li) );
 							return false;
 						})
@@ -601,7 +601,7 @@ define([
 
 					var unpin = $( '<a href="#"></a>' )
 						.addClass( 'nos-ostabs-unpin' )
-						.click(function( event ) {
+						.click(function() {
 							self.unpin( self.lis.index(li) );
 							return false;
 						})
@@ -615,7 +615,7 @@ define([
 				if ( reloadable ) {
 					var reload = $( '<a href="#"></a>' )
 						.addClass( 'nos-ostabs-reload' )
-						.click(function( event ) {
+						.click(function() {
 							var fr = $panel.find( 'iframe.nos-ostabs-panel-content' );
 							if (fr !== undefined) {
 								fr.attr("src", fr.attr("src"));
@@ -640,10 +640,11 @@ define([
 					});
 				this.uiOstabsTabs.width( width );
 
-				var nbLabel = this.uiOstabsTabs.find( '.nos-ostabs-label:visible' ).length;
+				var nbLabel = this.uiOstabsTabs.find( '.nos-ostabs-label:visible' ).length,
+					add;
 				if ( this.tabsWidth < this.uiOstabsTabs.width() ) {
 					while ( this.tabsWidth < this.uiOstabsTabs.width() && this.labelWidth > this.options.labelMinWidth ) {
-						var add = this.labelWidth - this.options.labelMinWidth;
+						add = this.labelWidth - this.options.labelMinWidth;
 						add = add > 10 ? 10 : add;
 						width = width - nbLabel * add;
 						this.uiOstabsTabs.width( width );
@@ -653,7 +654,7 @@ define([
 					}
 				} else {
 					do {
-						var add = this.options.labelMaxWidth - this.labelWidth;
+						add = this.options.labelMaxWidth - this.labelWidth;
 						add = add > 10 ? 10 : add;
 						if ( this.tabsWidth > (width + nbLabel * 10) ) {
 							width = width + nbLabel * add;
@@ -680,7 +681,7 @@ define([
 					var p = $( this ).position();
 					if ( (left + p.left) >= 0 ) {
 						if ( (!back && i < (lis.length - 1)) || (back && i > 0) ) {
-							var p = lis.eq( back ? i -1 : i + 1 ).position();
+							p = lis.eq( back ? i -1 : i + 1 ).position();
 							left = p.left * -1;
 							self.uiOstabsTabs.animate( {left : left + 'px'}, 200, function() {
 								self._scrollState();
@@ -699,7 +700,7 @@ define([
 					return true;
 				}
 				var lis = this.uiOstabsTabs.find( 'li' );
-				lis.each(function(i, el) {
+				lis.each(function() {
 					var p = $( this ).position();
 					if ( (pos.left + li.outerWidth( true ) - p.left) < self.uiOstabsTabsWrap.width() ) {
 						left = p.left * -1;
@@ -881,7 +882,7 @@ define([
 
 				this._trigger( "open", null, this._ui( this.lis[ index ] ) );
 
-				return this;
+				return self;
 			},
 
 			title: function( index, title ) {
@@ -900,7 +901,7 @@ define([
 
 					this._trigger( "title", null, this._ui( $li[ 0 ] ) );
 
-					return this;
+					return self;
 				}
 			},
 
@@ -953,6 +954,11 @@ define([
 				var label = $( '<span></span>' ).addClass( 'nos-ostabs-label' )
 					.text( tab.label )
 					.appendTo( $a );
+
+				if ( this.options.selected == index ) {
+					$( 'title' ).text( tab.label );
+				}
+
 				if ( !tab.labelDisplay ) {
 					label.hide();
 				}
@@ -1090,14 +1096,14 @@ define([
 				if (ajax) {
 					this.xhr = $.ajax({
 						url: url,
-						success: function( r, s ) {
+						success: function( r ) {
 							$( '<div></div>' ).addClass( 'nos-ostabs-panel-content' )
 								.prependTo( panel )
 								.html( r );
 
 							$.data( a, "cache.tabs", true );
 						},
-						complete: function( xhr, s, e ) {
+						complete: function() {
 							// take care of tab labels
 							self._cleanup();
 
