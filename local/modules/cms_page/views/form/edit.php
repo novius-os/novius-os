@@ -145,9 +145,9 @@ require([
 								boxShadow: 'inset 0px 0px 2px 2px  #888'
 							}));
 						$('#wysiwyg').append(bloc);
-						// The bottom row from TinyMCE is roughly 20px
+						// The bottom row from TinyMCE is roughly 21px
 						$('#wysiwyg [name="wysiwyg[' + i + ']"]').wysiwyg({
-							height: (coords[3] / data.rows * ratio) - 20
+							height: (coords[3] / data.rows * ratio) - 21
 						});
 					});
 				}
