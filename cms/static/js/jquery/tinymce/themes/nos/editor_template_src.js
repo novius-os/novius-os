@@ -55,14 +55,14 @@
 			anchor : ['anchor_desc', 'mceInsertAnchor'],
 			newdocument : ['newdocument_desc', 'mceNewDocument'],
 			blockquote : ['blockquote_desc', 'mceBlockQuote'],
-            module : ['module_desc', 'nosModule'],
+            module : ['module_desc', 'nosModule']
 		},
 
 		stateControls : ['bold', 'italic', 'underline', 'strikethrough', 'bullist', 'numlist', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'sub', 'sup', 'blockquote'],
 
 		init : function(ed, url) {
 			var t = this, s, v, o;
-	
+
 			t.editor = ed;
 			t.url = url;
 			t.onResolveName = new tinymce.util.Dispatcher(this);
@@ -89,11 +89,7 @@
 				theme_nos_font_sizes : "1,2,3,4,5,6,7",
 				theme_nos_font_selector : "span",
 				theme_nos_show_current_color: 0,
-				theme_nos_modules : [{
-					'title' : 'Test',
-					'id'    : 'test',
-					'desc'  : 'Test',
-				}],
+				theme_nos_modules : [],
 				readonly : ed.settings.readonly
 			}, ed.settings);
 
@@ -205,7 +201,7 @@
 
 				case "backcolor":
 					return this._createBackColorMenu();
-		
+
                 case "module":
                     return this._createModule();
 
@@ -265,7 +261,7 @@
 					// Toggle off the current format
 					matches = ed.formatter.matchAll(formatNames);
 					if (!name || matches[0] == name) {
-						if (matches[0]) 
+						if (matches[0])
 							ed.formatter.remove(matches[0]);
 					} else
 						ed.formatter.apply(name);
@@ -574,7 +570,7 @@
 			if (DOM.get(ed.id + '_path_row')) {
 				Event.add(ed.id + '_tbl', 'mouseover', function(e) {
 					var re;
-	
+
 					e = e.target;
 
 					if (e.nodeName == 'SPAN' && DOM.hasClass(e.parentNode, 'mceButton')) {
@@ -873,7 +869,7 @@
 			var n, t = this, ed = t.editor, s = t.settings, r, mf, me, td;
 
 			n = DOM.add(tb, 'tr');
-			n = td = DOM.add(n, 'td', {'class' : 'mceStatusbar'}); 
+			n = td = DOM.add(n, 'td', {'class' : 'mceStatusbar'});
 			n = DOM.add(n, 'div', {id : ed.id + '_path_row', 'role': 'group', 'aria-labelledby': ed.id + '_path_voice'});
 			if (s.theme_nos_path) {
 				DOM.add(n, 'span', {id: ed.id + '_path_voice'}, ed.translate('nos.path'));
@@ -881,7 +877,7 @@
 			} else {
 				DOM.add(n, 'span', {}, '&#160;');
 			}
-			
+
 
 			if (s.theme_nos_resizing) {
 				DOM.add(td, 'a', {id : ed.id + '_resize', href : 'javascript:;', onclick : "return false;", 'class' : 'mceResize', tabIndex:"-1"});
@@ -1036,7 +1032,7 @@
 
 					if (!fn && n.style.fontFamily)
 						fn = n.style.fontFamily.replace(/[\"\']+/g, '').replace(/^([^,]+).*/, '$1').toLowerCase();
-					
+
 					if (!fc && n.style.color)
 						fc = n.style.color;
 
@@ -1067,7 +1063,7 @@
 						return true;
 				});
 			}
-			
+
 			if (s.theme_nos_show_current_color) {
 				function updateColor(controlId, color) {
 					if (c = cm.get(controlId)) {
@@ -1375,38 +1371,38 @@
                 cmd : 'nosModule'
             });
 
-            c.onRenderMenu.add(function(c, m) {
-                m.settings.max_height = 300;
-                m.add({
-                    title : 'nos.module_desc',
+			c.onRenderMenu.add(function(c, m) {
+				m.settings.max_height = 300;
+				m.add({
+					title : 'nos.module_desc',
                     'class' : 'mceMenuItemTitle'
-                }).setDisabled(1);
+				}).setDisabled(1);
 
                 each(s.theme_nos_modules, function(f) {
-                    m.add({
-                        title : f.title,
-                        icon : f.id,
-                        id : 'module_' + f.id,
-                        onclick : function() {
-                            t.editor.execCommand('nosModule', false, f);
-                        }
-                    });
-                });
-            });
+					m.add({
+						title : f.title,
+						icon : f.id,
+						id : 'module_' + f.id,
+						onclick : function() {
+							t.editor.execCommand('nosModule', false, f);
+						}
+					});
+				});
+			});
 
-            return c;
+			return c;
         },
 
         _nosModule : function(ui, val) {
             var ed = tinyMCE.activeEditor;
 
             el = ed.selection.getNode();
-			
+
             ed.execCommand("mceBeginUndoLevel");
 			ed.execCommand('mceInsertContent', false, '<div id="__mce_tmp" class="mceNonEditable nosModule"><a href="#" class="nosModuleDel" onclick="parent.$(this).parent().remove();return false;">Del.</a><h1>' + val.title + '</h1></div>', {skip_undo : 1});
             ed.dom.setAttribs('__mce_tmp', {
 				'data-module' : val.id
-			});			
+			});
 			ed.dom.setAttrib('__mce_tmp', 'id', '');
 			ed.undoManager.add();
             ed.execCommand("mceEndUndoLevel");
