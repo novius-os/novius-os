@@ -100,13 +100,18 @@ define([
 			self.init = true;
 
 			$(window).resize(function() {
-				if (self.resizing) {
-				    self.uiSplitterVertical.add(self.uiSplitterHorizontal)
-						.wijsplitter('refresh');
-					self._resizeInspectorsV()
-						._resizeInspectorsH()
-						.gridRefresh();
+				if ( self.timeoutResize ) {
+					clearTimeout(self.timeoutResize);
 				}
+				self.timeoutResize = setTimeout(function() {
+					if (self.resizing) {
+					    self.uiSplitterVertical.add(self.uiSplitterHorizontal)
+							.wijsplitter('refresh');
+						self._resizeInspectorsV()
+							._resizeInspectorsH()
+							.gridRefresh();
+					}
+				}, 100)
 			});
 
 			$(window).bind({
