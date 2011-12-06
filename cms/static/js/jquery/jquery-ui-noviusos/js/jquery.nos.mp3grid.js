@@ -108,6 +108,17 @@ define([
 						.gridRefresh();
 				}
 			});
+
+			$(window).bind({
+				blur : function() {
+					self.resizing = false;
+				},
+				focus : function() {
+					$('html').focus();
+					self.resizing = true;
+				}
+			});
+			$(window).focus();
 		},
 
 		_uiAdds : function() {
@@ -472,11 +483,9 @@ define([
 
 			$nos.nos.listener.add('ostabs.show', function(index) {
 				if ($.nos.tabs.index() === index) {
-				    setTimeout(function() {
-						self.resizing = true;						
-					}, 500);						
+					$(window).focus();
 				} else {
-				    self.resizing = false;
+					$(window).blur();
 				}
 			});
 
