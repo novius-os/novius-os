@@ -87,8 +87,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
     {
         $offset = intval(Input::get('offset', 0));
         $limit = intval(Input::get('limit', $this->config['query']['limit']));
-        $sorting = Input::get('sorting', array());
-        $filtering = Input::get('filtering', array());
+
 
 
 
@@ -127,8 +126,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
             $keys = array();
         }
 
-        $this->applySorting($query, $sorting);
-        $this->applyFiltering($query, $filtering);
+        Filter::apply($query, $this->config);
 
         $count = $query->count();
 
@@ -155,8 +153,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
         if (!empty($objects)) {
             $query = $model::find()->where(array($select, 'in', array_keys($objects)));
 
-            $this->applySorting($query, $sorting);
-            $this->applyFiltering($query, $filtering);
+            Filter::apply($query, $this->config);
 
             foreach ($query->get() as $object) {
                 $item = array();
@@ -258,105 +255,6 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 	}
 
 
-
-    /** Get the database column from a configuration key and join
-     *  the table containing the value if necessary
-     *
-     * @param $query : Query instanciation
-     * @param $key : configuration key
-     * @return column name (string)
-     */
-    public function getColumnFromKey($query, $key) {
-        if (is_array($this->config['dataset'][$key])) {
-            if ($this->config['dataset'][$key]['search_relation']) {
-                $query->related($this->config['dataset'][$key]['search_relation']);
-            }
-            $column = $this->config['dataset'][$key]['search_column'];
-        } else {
-            $column = $this->config['dataset'][$key];
-        }
-        return $column;
-    }
-
-    /** Apply sorting on list from parameters sent by wijmo grid
-     *
-     * @param $query : Query instanciation
-     * @param $sorting : sorting parameters sent by wijmo
-     */
-    public function applySorting($query, $sorting) {
-        for ($i = 0; $i < count($sorting); $i++) {
-            $key = $sorting[$i]['dataKey'];
-            $column = $this->getColumnFromKey($query, $key);
-            $query->order_by($column, $sorting[$i]['sortDirection'] == 'ascending' ? 'ASC' : 'DESC');
-        }
-    }
-
-    /** Apply filtering on list from parameters sent by wijmo grid
-     *
-     * @param $query : Query instanciation
-     * @param $filtering : filtering parameters sent by wijmo
-     */
-    public function applyFiltering($query, $filtering) {
-        for ($i = 0; $i < count($filtering); $i++) {
-            $key = $filtering[$i]['dataKey'];
-            $column = $this->getColumnFromKey($query, $key);
-            $value = $filtering[$i]['filterValue'];
-            $operator = '=';
-            $mustFilter = true;
-            switch ($filtering[$i]['filterOperator']) {
-                case 'Contains':
-                    $operator = 'LIKE';
-                    $value = '%'.$value.'%';
-                    break;
-                case 'NotContains':
-                    $operator = 'NOT LIKE';
-                    $value = '%'.$value.'%';
-                    break;
-                case 'BeginsWith':
-                    $operator = 'LIKE';
-                    $value = '%'.$value;
-                    break;
-                case 'EndsWith':
-                    $operator = 'LIKE';
-                    $value = '%'.$value;
-                    break;
-                case 'Equals':
-                    $operator = '=';
-                    $value = $value;
-                    break;
-                case 'Greater':
-                    $operator = '>';
-                    $value = $value;
-                    break;
-                case 'Less':
-                    $operator = '<';
-                    $value = $value;
-                    break;
-                case 'GreaterOrEqual':
-                    $operator = '>=';
-                    $value = $value;
-                    break;
-                case 'LessOrEqual':
-                    $operator = '<=';
-                    $value = $value;
-                    break;
-                case 'IsEmpty':
-                    $operator = 'IS NULL';
-                    $value = '';
-                    break;
-                case 'NotIsEmpty':
-                    $operator = 'IS NOT NULL';
-                    $value = '';
-                    break;
-                default:
-                    $mustFilter = false;
-                    break;
-            }
-            if ($mustFilter) {
-                $query->where($column, $operator, $value);
-            }
-        }
-    }
 
 }
 
