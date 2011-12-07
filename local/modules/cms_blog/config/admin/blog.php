@@ -57,6 +57,24 @@ return array(
 					'headerText' => 'Date',
 					'dataKey' => 'date',
 				),
+                array(
+                    'headerText' => 'Actions',
+                    'cellFormatter' => 'function(args) {
+						if ($.isPlainObject(args.row.data)) {
+							args.$container.css("text-align", "center");
+                            // wijmenu
+							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
+								.addClass("ui-state-default")
+								.append("<span class=\"ui-icon ui-icon-pencil\"></span>")
+								.appendTo(args.$container);
+
+							return true;
+						}
+					}',
+                    'allowSizing' => false,
+                    'width' => 20,
+                    'showFilter' => false,
+                ),
 				array(
 					'headerText' => 'Up.',
 					'cellFormatter' => 'function(args) {
@@ -133,15 +151,28 @@ return array(
 		),
 	),
 	'dataset' => array(
-		'id' => 'blog_id',
+        'id' => 'blog_id',
 		'title' => 'blog_titre',
-		'author' => function($object) {
-			return $object->author->user_fullname;
-		},
-		'date' => function($object) {
-			return \Date::create_from_string($object->blog_date_creation, 'mysql')->format();
-		},
+		'author' => array(
+            'search_relation' => 'author',
+            'search_column'   => 'author.user_fullname',
+            'value' =>  function($object) {
+                            return $object->author->user_fullname;
+                        },
+        ),
+		'date' => array(
+            'search_column'    =>  'blog_date_creation',
+            'value'     =>  function($object) {
+                            return \Date::create_from_string($object->blog_date_creation, 'mysql')->format();
+                        },
+        ),
 	),
+    'datatype' => array(
+
+        'id' => 'blog_id',
+        'title' => 'blog_title',
+
+    ),
 	'inputs' => array(
 		'blgc_id' => function($value, $query) {
 			if ( is_array($value) && count($value) && $value[0]) {
