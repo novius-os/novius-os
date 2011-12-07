@@ -151,40 +151,11 @@ define([
 					});
 				});
 
-			self.uiAddsDropDown.button({
-					text: false,
-					icons: {
-						primary: "ui-icon-triangle-1-s"
-					}
-				});
-
-			self.uiAdds.buttonset();
-
-			$.each(o.adds, function() {
-				var li = $('<li></li>').appendTo(self.uiAddsMenu),
-					a = $('<a href="#"></a>').click(function() {
-							$.nos.tabs.openInNewTab({
-								url : this.url,
-								label : this.label
-							});
-						}).appendTo(li);
-
-				$('<span></span>').text(this.label)
-					.appendTo(a);
-			});
-			self.uiAddsMenu.wijmenu({
-					trigger : self.uiAddsDropDown,
-					triggerEvent : 'mouseenter',
-					orientation : 'vertical',
-					showAnimation : {Animated:"slide", duration: 50, easing: null},
-					hideAnimation : {Animated:"hide", duration: 0, easing: null},
-					position : {
-						my        : 'right top',
-						at        : 'right bottom',
-						collision : 'flip',
-						offset    : '0 0'
-					}
-				});
+            self.uiAdds.dropdownButton({
+                items: o.adds,
+                uiButton: self.uiAddsDropDown,
+                uiDropDown: self.uiAddsMenu
+            });
 
 			return self;
 		},

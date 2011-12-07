@@ -63,10 +63,22 @@ return array(
 						if ($.isPlainObject(args.row.data)) {
 							args.$container.css("text-align", "center");
                             // wijmenu
-							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-								.addClass("ui-state-default")
-								.append("<span class=\"ui-icon ui-icon-pencil\"></span>")
-								.appendTo(args.$container);
+							$(\'<div></div>\')
+							    .dropdownButton({
+                                    items: [
+                                        {
+                                            icon: \'ui-icon ui-icon-pencil\',
+                                            url: \'admin/cms_blog/form?id=\' + args.row.data.id,
+                                            label:\'Update\'
+                                        },
+                                        {
+                                            icon: \'ui-icon ui-icon-close\',
+                                            url: \'admin/cms_blog/form?id=\' + args.row.data.id,
+                                            label:\'Delete\'
+                                        }
+                                    ]
+                                })
+                                .appendTo(args.$container);
 
 							return true;
 						}
@@ -75,42 +87,6 @@ return array(
                     'width' => 20,
                     'showFilter' => false,
                 ),
-				array(
-					'headerText' => 'Up.',
-					'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-
-							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-								.addClass("ui-state-default")
-								.append("<span class=\"ui-icon ui-icon-pencil\"></span>")
-								.appendTo(args.$container);
-
-							return true;
-						}
-					}',
-					'allowSizing' => false,
-					'width' => 1,
-					'showFilter' => false,
-				),
-				array(
-					'headerText' => 'Del.',
-					'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-
-							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-								.addClass("ui-state-default")
-								.append("<span class=\"ui-icon ui-icon-close\"></span>")
-								.appendTo(args.$container);
-
-							return true;
-						}
-					}',
-					'allowSizing' => false,
-					'width' => 1,
-					'showFilter' => false,
-				),
 			),
 			'proxyurl' => 	'admin/cms_blog/list/json',
 		),
@@ -153,6 +129,7 @@ return array(
 	'dataset' => array(
         'id' => 'blog_id',
 		'title' => 'blog_titre',
+        'lang' => 'blog_lang',
 		'author' => array(
             'search_relation' => 'author',
             'search_column'   => 'author.user_fullname',
@@ -160,6 +137,7 @@ return array(
                             return $object->author->user_fullname;
                         },
         ),
+
 		'date' => array(
             'search_column'    =>  'blog_date_creation',
             'value'     =>  function($object) {
@@ -167,12 +145,6 @@ return array(
                         },
         ),
 	),
-    'datatype' => array(
-
-        'id' => 'blog_id',
-        'title' => 'blog_title',
-
-    ),
 	'inputs' => array(
 		'blgc_id' => function($value, $query) {
 			if ( is_array($value) && count($value) && $value[0]) {

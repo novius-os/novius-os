@@ -183,4 +183,18 @@
 	ul {
 		list-style-type: none;
 	}
+
+    td.wijgridtd {
+        button {
+            height: 18px;
+        }
+    }
+}
+
+.nos-adds {
+    .ui-icon {
+        display: inline-block;
+        vertical-align: -1px;
+        margin-right: 6px;
+    }
 }

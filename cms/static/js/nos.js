@@ -251,6 +251,81 @@ define([
 					}
 				};
 				window.$nos = $;
+
+
+                /** Drop down button initially implemented on jquery.nos.mp3grid.js
+                 *
+                 *
+                 * @param o : options sent to the drop down menu
+                 *      - o.items : array of items in the menu. Each item has a title (o.title)
+                 *      and a link (o.url)
+                 */
+                $.fn.dropdownButton = function(o) {
+                    var self = $(this);
+                    uiAdds = self.addClass('nos-adds');
+                    if (!o.uiButton) {
+                        o.uiButton = $('<button type="button"></button>')
+                            .appendTo(uiAdds);
+                    }
+
+                    if (!o.uiDropDown) {
+                        o.uiDropDown = $('<ul></ul>').appendTo(uiAdds);
+                    }
+
+                    if (!$.isArray(o.items) || !o.items.length) {
+                        self.uiAdds.hide();
+                        return self;
+                    }
+
+
+
+
+                    o.uiButton.button({
+                        text: false,
+                        icons: {
+                            primary: "ui-icon-triangle-1-s"
+                        }
+                    });
+
+                    uiAdds.buttonset();
+
+                    $.each(o.items, function() {
+                        var item = this;
+                        var li = $('<li></li>').appendTo(o.uiDropDown),
+                            a = $('<a href="#"></a>').click(function() {
+                                $.nos.tabs.openInNewTab({
+                                    url     : item.url,
+                                    label   : item.label
+                                });
+                                return false;
+                            }).appendTo(li);
+
+                        var textZone = $('<span></span>').text(item.label);
+                        if (this.icon) {
+                            textZone.prepend($('<span></span>').addClass(item.icon));
+                        }
+                        textZone.appendTo(a);
+                    });
+
+                    o.uiDropDown.wijmenu({
+                        trigger : o.uiButton,
+                        triggerEvent : 'mouseenter',
+                        orientation : 'vertical',
+                        showAnimation : {Animated:"slide", duration: 50, easing: null},
+                        hideAnimation : {Animated:"hide", duration: 0, easing: null},
+                        position : {
+                            my        : 'right top',
+                            at        : 'right bottom',
+                            collision : 'flip',
+                            offset    : '0 0'
+                        }
+                    });
+
+
+                    return self;
+                }
+
+
 			});
 			return $;
 		})(window.jQuery);
