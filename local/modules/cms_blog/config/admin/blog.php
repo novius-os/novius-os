@@ -137,9 +137,9 @@ return array(
                             return $object->author->user_fullname;
                         },
         ),
-
 		'date' => array(
             'search_column'    =>  'blog_date_creation',
+            'dataType'         => 'datetime',
             'value'     =>  function($object) {
                             return \Date::create_from_string($object->blog_date_creation, 'mysql')->format();
                         },

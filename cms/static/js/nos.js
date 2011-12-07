@@ -259,6 +259,10 @@ define([
                  * @param o : options sent to the drop down menu
                  *      - o.items : array of items in the menu. Each item has a title (o.title)
                  *      and a link (o.url)
+                 *      - o.uiButton : drop down button (generally with an arrow).
+                 *          default: <button type="button"></button>
+                 *      - o.uiDropDown: drop down list (where items will be displayed)
+                 *          default: <ul></ul>
                  */
                 $.fn.dropdownButton = function(o) {
                     var self = $(this);
