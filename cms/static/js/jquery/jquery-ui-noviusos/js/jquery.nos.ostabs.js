@@ -590,7 +590,7 @@ define([
 					var pin = $( '<a href="#"></a>' )
 						.addClass( 'nos-ostabs-pin' )
 						.click(function() {
-							self.pin( self.lis.index(li) );
+							self._pin( self.lis.index(li) );
 							return false;
 						})
 						.text( o.texts.pinTab )
@@ -602,7 +602,7 @@ define([
 					var unpin = $( '<a href="#"></a>' )
 						.addClass( 'nos-ostabs-unpin' )
 						.click(function() {
-							self.unpin( self.lis.index(li) );
+							self._unpin( self.lis.index(li) );
 							return false;
 						})
 						.text( o.texts.unpinTab )
@@ -874,17 +874,6 @@ define([
 				return this;
 			},
 
-			open: function( index ) {
-				index = this._getIndex( index );
-				var self = this, o = this.options;
-
-				this.lis.eq( index ).addClass( "ui-state-open" ).removeClass( 'ui-state-pined' );
-
-				this._trigger( "open", null, this._ui( this.lis[ index ] ) );
-
-				return self;
-			},
-
 			title: function( index, title ) {
 				index = this._getIndex( index );
 				var self = this, o = this.options;
@@ -905,73 +894,39 @@ define([
 				}
 			},
 
-			icon: function( index, icon ) {
-				index = this._getIndex( index );
-
-				var $li = this.lis.eq( index );
-				if ( icon === undefined ) {
-					return {
-						icon : $.trim( $li.find( '.nos-ostabs-icon' ).attr( 'class' ).replace( 'nos-ostabs-icon', '' ).replace( /ui-icon-\d\d/, '' ) ),
-						app : $li.find( '.nos-ostabs-icon' ).hasClass( 'ui-icon-32' ) ? true : false
-					};
-				} else {
-					if ( !$.isPlainObject( icon ) ) {
-						icon = {iconUrl : icon};
-					}
-
-					var tab = $li.data('ui-ostab');
-					$.extend(tab, {
-						iconClasses: '',
-						iconUrl: ''
-					}, icon);
-					$li.data('ui-ostab', tab);
-
-					$li.find( '.nos-ostabs-icon' ).replaceWith( this._icon( tab ) );
-
-					this._trigger( "icon", null, this._ui( $li[ 0 ] ) );
-
-					return this;
-				}
-			},
-
 			update: function(index, tab) {
-				index = this._getIndex( index );
+				var self = this;
+
+				index = self._getIndex( index );
 
 				if ( !$.isPlainObject(tab) ) {
 					return false;
 				}
 
-				var $li = this.lis.eq( index ),
-					$a = $li.find( 'a' );
+				var $li = self.lis.eq( index );
 
 				tab = $.extend( {}, $li.data( 'ui-ostab' ), tab );
-				$li.data( 'ui-ostab', tab );
 
-				$a.find( 'span' ).remove();
-
-				var icon = this._icon( tab ).appendTo( $a );
-
-				var label = $( '<span></span>' ).addClass( 'nos-ostabs-label' )
-					.text( tab.label )
-					.appendTo( $a );
-
-				if ( this.options.selected == index ) {
+				if ( self.options.selected == index ) {
 					$( 'title' ).text( tab.label );
 				}
 
-				if ( !tab.labelDisplay ) {
-					label.hide();
-				}
+				var $newLi = self._add(tab),
+					$newA = $newLi.find('a');
 
-				if ( !isNaN( tab.iconSize ) && tab.iconSize !== 16) {
-					$li.css({
-						height: ( tab.iconSize + 4 ) + 'px',
-						bottom: ( tab.iconSize - 35 ) + 'px'
-					});
-					icon.css( 'top', '2px' );
-				}
+				$li.data( 'ui-ostab', tab )
+					.addClass($newLi.attr('class'))
+					.css({
+						height: $newLi.css('height'),
+						bottom: $newLi.css('bottom')
+					})
+					.find('a')
+					.empty()
+					.append($newA.children());
 
-				return $li;
+				$newLi.remove();
+
+				return self;
 			},
 
 			_icon: function( tab ) {
@@ -992,7 +947,7 @@ define([
 				return icon;
 			},
 
-			unpin: function( index ) {
+			_unpin: function( index ) {
 				var self = this,
 					o = this.options;
 				index = self._getIndex( index );
@@ -1015,7 +970,7 @@ define([
 				return this;
 			},
 
-			pin: function( index ) {
+			_pin: function( index ) {
 				var self = this,
 					o = this.options;
 
