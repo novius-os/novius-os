@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -39,10 +39,38 @@ class Controller_Inspector_Modeltree extends \Controller {
 
     public function action_list()
     {
-
         $view = View::forge('inspector/modeltree');
 
-        $view->set('columns', \Format::forge($this->config['columns'])->to_json(), false);
+		$view->set('inspector_css', \Format::forge()->to_json(\Arr::merge(array(
+			'height' => '100%',
+			'width' => '100%',
+		), \Arr::get($this->config, 'inspector_css', array()))), false);
+
+		$view->set('wijgrid', \Format::forge()->to_json(\Arr::merge(array(
+			'columnsAutogenerationMode' => 'none',
+			'scrollMode' => 'auto',
+			'allowColSizing' => true,
+			'allowColMoving' => true,
+			'staticRowIndex' => 0,
+			'currentCellChanged' =>  'function(e) {
+				var row = $(e.target).wijgrid("currentCell").row(),
+					data = row ? row.data : false;
+
+				if (data && rendered) {
+					$nos.nos.listener.fire("inspector.selectionChanged." + widget_id, false, ["'.$this->config['input_name'].'", data.id, data.title]);
+				}
+				inspector.wijgrid("currentCell", -1, -1);
+			}',
+			'rendering' => 'function() {
+				rendered = false;
+			}',
+			'rendered' => 'function() {
+				rendered = true;
+				inspector.css("height", "auto");
+			}',
+		), \Arr::get($this->config, 'wijgrid', array()))), false);
+
+        $view->set('columns', \Format::forge()->to_json($this->config['columns']), false);
         $view->set('input_name', $this->config['input_name']);
         $view->set('urljson', $this->config['urljson']);
         $view->set('widget_id', $this->config['widget_id']);
