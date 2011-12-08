@@ -56,6 +56,7 @@ return array(
 				array(
 					'headerText' => 'Date',
 					'dataKey' => 'date',
+                    'dataFormatString'  => 'MM/dd/yyyy HH:mm:ss',
 				),
                 array(
                     'actions' => array(
@@ -131,9 +132,10 @@ return array(
 		'date' => array(
             'search_column'    =>  'blog_date_creation',
             'dataType'         => 'datetime',
-            'value'             =>  function($object) {
-                            return \Date::create_from_string($object->blog_date_creation, 'mysql')->format();
+            'value'             => function($object) {
+                            return \Date::create_from_string($object->blog_date_creation, 'mysql')->format('%m/%d/%Y %H:%M:%S'); //%m/%d/%Y %H:%i:%s
                         },
+
         ),
 	),
 	'inputs' => array(

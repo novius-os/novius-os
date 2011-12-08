@@ -64,6 +64,11 @@ class ConfigProcessor {
             if (!$col['dataType'] && is_array($config['dataset'][$col['dataKey']]) && $config['dataset'][$col['dataKey']]['dataType']) {
                 $col['dataType'] = $config['dataset'][$col['dataKey']]['dataType'];
             }
+            /*
+            if (!$col['dataFormatString'] && is_array($config['dataset'][$col['dataKey']]) && $config['dataset'][$col['dataKey']]['dataFormatString']) {
+                $col['dataFormatString'] = $config['dataset'][$col['dataKey']]['dataFormatString'];
+            }
+            */
             if (!$col['dataType']) {
                 $col['dataType'] = 'string';
             }
