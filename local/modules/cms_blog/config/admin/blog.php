@@ -57,42 +57,27 @@ return array(
 					'headerText' => 'Date',
 					'dataKey' => 'date',
 				),
-				array(
-					'headerText' => 'Up.',
-					'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-
-							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-								.addClass("ui-state-default")
-								.append("<span class=\"ui-icon ui-icon-pencil\"></span>")
-								.appendTo(args.$container);
-
-							return true;
-						}
-					}',
-					'allowSizing' => false,
-					'width' => 1,
-					'showFilter' => false,
-				),
-				array(
-					'headerText' => 'Del.',
-					'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-
-							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-								.addClass("ui-state-default")
-								.append("<span class=\"ui-icon ui-icon-close\"></span>")
-								.appendTo(args.$container);
-
-							return true;
-						}
-					}',
-					'allowSizing' => false,
-					'width' => 1,
-					'showFilter' => false,
-				),
+                array(
+                    'actions' => array(
+                        array(
+                            'icon'      => 'ui-icon ui-icon-pencil',
+                            'action'   =>  'function(args) {
+                                                $.nos.tabs.openInNewTab({
+                                                    url     : "admin/cms_blog/form?id=" + args.row.data.id,
+                                                    label   : "Update"
+                                                });
+                                            }',
+                            'label'     => 'Update',
+                        ),
+                        array(
+                            'icon'  => 'ui-icon ui-icon-close',
+                            'action'   =>  'function(args) {
+                                                alert("La suppression d\'un élément n\'est pas encore implémentée !\n Id de l\'élément : " + args.row.data.id);
+                                            }',
+                            'label' => 'Delete',
+                        ),
+                    )
+                ),
 			),
 			'proxyurl' => 	'admin/cms_blog/list/json',
 		),
@@ -133,14 +118,23 @@ return array(
 		),
 	),
 	'dataset' => array(
-		'id' => 'blog_id',
+        'id' => 'blog_id',
 		'title' => 'blog_titre',
-		'author' => function($object) {
-			return $object->author->user_fullname;
-		},
-		'date' => function($object) {
-			return \Date::create_from_string($object->blog_date_creation, 'mysql')->format();
-		},
+        'lang' => 'blog_lang',
+		'author' => array(
+            'search_relation' => 'author',
+            'search_column'   => 'author.user_fullname',
+            'value' =>  function($object) {
+                            return $object->author->user_fullname;
+                        },
+        ),
+		'date' => array(
+            'search_column'    =>  'blog_date_creation',
+            'dataType'         => 'datetime',
+            'value'             =>  function($object) {
+                            return \Date::create_from_string($object->blog_date_creation, 'mysql')->format();
+                        },
+        ),
 	),
 	'inputs' => array(
 		'blgc_id' => function($value, $query) {

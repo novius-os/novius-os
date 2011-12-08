@@ -31,6 +31,8 @@ class Controller_Inspector_Model extends \Controller {
 
         $view = View::forge('inspector/model');
 
+        $this->config = ConfigProcessor::process($this->config);
+
         $view->set('columns', \Format::forge($this->config['columns'])->to_json(), false);
         $view->set('input_name', $this->config['input_name']);
         $view->set('urljson', $this->config['urljson']);
@@ -48,6 +50,7 @@ class Controller_Inspector_Model extends \Controller {
     	$model = $this->config['query']['model'];
 
     	$query = $model::find();
+        Filter::apply($query, $this->config);
     	if ($this->config['query']['related'] && is_array($this->config['query']['related'])) {
 	    	foreach ($this->config['query']['related'] as $related) {
 	    		$query->related($related);

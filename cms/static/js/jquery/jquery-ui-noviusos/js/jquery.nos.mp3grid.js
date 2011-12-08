@@ -23,7 +23,7 @@ define([
 				vertical : 'Vertical',
 				horizontal : 'Horizontal',
 				hidden : 'Hidden',
-				showNbItems : 'Show {{x}} items',
+				showNbItems : 'Showing {{x}} out of {{y}} items',
 				showOneItem : 'Show 1 item',
 				showNoItem : 'No item',
 				showAll : 'Show all items'
@@ -100,14 +100,30 @@ define([
 			self.init = true;
 
 			$(window).resize(function() {
-				if (self.resizing) {
-				    self.uiSplitterVertical.add(self.uiSplitterHorizontal)
-						.wijsplitter('refresh');
-					self._resizeInspectorsV()
-						._resizeInspectorsH()
-						.gridRefresh();
+				if ( self.timeoutResize ) {
+					clearTimeout(self.timeoutResize);
+				}
+				self.timeoutResize = setTimeout(function() {
+					if (self.resizing) {
+					    self.uiSplitterVertical.add(self.uiSplitterHorizontal)
+							.wijsplitter('refresh');
+						self._resizeInspectorsV()
+							._resizeInspectorsH()
+							.gridRefresh();
+					}
+				}, 100)
+			});
+
+			$(window).bind({
+				blur : function() {
+					self.resizing = false;
+				},
+				focus : function() {
+					$('html').focus();
+					self.resizing = true;
 				}
 			});
+			$(window).focus();
 		},
 
 		_uiAdds : function() {
@@ -135,40 +151,11 @@ define([
 					});
 				});
 
-			self.uiAddsDropDown.button({
-					text: false,
-					icons: {
-						primary: "ui-icon-triangle-1-s"
-					}
-				});
-
-			self.uiAdds.buttonset();
-
-			$.each(o.adds, function() {
-				var li = $('<li></li>').appendTo(self.uiAddsMenu),
-					a = $('<a href="#"></a>').click(function() {
-							$.nos.tabs.openInNewTab({
-								url : this.url,
-								label : this.label
-							});
-						}).appendTo(li);
-
-				$('<span></span>').text(this.label)
-					.appendTo(a);
-			});
-			self.uiAddsMenu.wijmenu({
-					trigger : self.uiAddsDropDown,
-					triggerEvent : 'mouseenter',
-					orientation : 'vertical',
-					showAnimation : {Animated:"slide", duration: 50, easing: null},
-					hideAnimation : {Animated:"hide", duration: 0, easing: null},
-					position : {
-						my        : 'right top',
-						at        : 'right bottom',
-						collision : 'flip',
-						offset    : '0 0'
-					}
-				});
+            self.uiAdds.dropdownButton({
+                items: o.adds,
+                uiButton: self.uiAddsDropDown,
+                uiDropDown: self.uiAddsMenu
+            });
 
 			return self;
 		},
@@ -437,7 +424,7 @@ define([
 							} else if (dataSource.data.totalRows === 0) {
 								self.uiShowNbItems.text(o.texts.showOneItem);
 							} else {
-								self.uiShowNbItems.text(o.texts.showNbItems.replace('{{x}}', dataSource.data.totalRows));
+								self.uiShowNbItems.text(o.texts.showNbItems.replace('{{x}}', dataSource.data.length).replace('{{y}}', dataSource.data.totalRows));
 							}
 							self.uiShowNbItems.show();
 
@@ -472,11 +459,9 @@ define([
 
 			$nos.nos.listener.add('ostabs.show', function(index) {
 				if ($.nos.tabs.index() === index) {
-				    setTimeout(function() {
-						self.resizing = true;						
-					}, 500);						
+					$(window).focus();
 				} else {
-				    self.resizing = false;
+					$(window).blur();
 				}
 			});
 

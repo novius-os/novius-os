@@ -12,3 +12,4 @@
 <h1>Administration</h1>
 
 <h2>404 Not Found</h2>
+Le développement de Novius-OS est en cours et cette partie n'a probablement pas encore été implémentée. Désolé !

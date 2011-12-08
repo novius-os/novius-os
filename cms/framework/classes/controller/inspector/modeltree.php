@@ -41,6 +41,8 @@ class Controller_Inspector_Modeltree extends \Controller {
     {
         $view = View::forge('inspector/modeltree');
 
+        $this->config = ConfigProcessor::process($this->config);
+
 		$view->set('inspector_css', \Format::forge()->to_json(\Arr::merge(array(
 			'height' => '100%',
 			'width' => '100%',
@@ -71,6 +73,7 @@ class Controller_Inspector_Modeltree extends \Controller {
 		), \Arr::get($this->config, 'wijgrid', array()))), false);
 
         $view->set('columns', \Format::forge()->to_json($this->config['columns']), false);
+
         $view->set('input_name', $this->config['input_name']);
         $view->set('urljson', $this->config['urljson']);
         $view->set('widget_id', $this->config['widget_id']);
