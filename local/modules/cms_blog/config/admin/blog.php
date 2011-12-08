@@ -58,34 +58,25 @@ return array(
 					'dataKey' => 'date',
 				),
                 array(
-                    'headerText' => 'Actions',
-                    'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-                            // wijmenu
-							$(\'<div></div>\')
-							    .dropdownButton({
-                                    items: [
-                                        {
-                                            icon: \'ui-icon ui-icon-pencil\',
-                                            url: \'admin/cms_blog/form?id=\' + args.row.data.id,
-                                            label:\'Update\'
-                                        },
-                                        {
-                                            icon: \'ui-icon ui-icon-close\',
-                                            url: \'admin/cms_blog/form?id=\' + args.row.data.id,
-                                            label:\'Delete\'
-                                        }
-                                    ]
-                                })
-                                .appendTo(args.$container);
-
-							return true;
-						}
-					}',
-                    'allowSizing' => false,
-                    'width' => 20,
-                    'showFilter' => false,
+                    'actions' => array(
+                        array(
+                            'icon'      => 'ui-icon ui-icon-pencil',
+                            'action'   =>  'function(args) {
+                                                $.nos.tabs.openInNewTab({
+                                                    url     : "admin/cms_blog/form?id=" + args.row.data.id,
+                                                    label   : "Update"
+                                                });
+                                            }',
+                            'label'     => 'Update',
+                        ),
+                        array(
+                            'icon'  => 'ui-icon ui-icon-close',
+                            'action'   =>  'function(args) {
+                                                alert("La suppression d\'un élément n\'est pas encore implémentée !\n Id de l\'élément : " + args.row.data.id);
+                                            }',
+                            'label' => 'Delete',
+                        ),
+                    )
                 ),
 			),
 			'proxyurl' => 	'admin/cms_blog/list/json',

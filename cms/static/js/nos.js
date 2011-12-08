@@ -297,10 +297,15 @@ define([
                         var item = this;
                         var li = $('<li></li>').appendTo(o.uiDropDown),
                             a = $('<a href="#"></a>').click(function() {
-                                $.nos.tabs.openInNewTab({
-                                    url     : item.url,
-                                    label   : item.label
-                                });
+                                if (item.action && $.isFunction(item.action)) {
+                                    item.action(o.args);
+                                }
+                                if (item.url) {
+                                    $.nos.tabs.openInNewTab({
+                                        url     : item.url,
+                                        label   : item.label
+                                    });
+                                }
                                 return false;
                             }).appendTo(li);
 

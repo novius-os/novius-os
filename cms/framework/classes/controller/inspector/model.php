@@ -31,6 +31,8 @@ class Controller_Inspector_Model extends \Controller {
 
         $view = View::forge('inspector/model');
 
+        $this->config = ConfigProcessor::process($this->config);
+
         $view->set('columns', \Format::forge($this->config['columns'])->to_json(), false);
         $view->set('input_name', $this->config['input_name']);
         $view->set('urljson', $this->config['urljson']);

@@ -54,28 +54,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 	{
 		$view = View::forge('mp3table/list');
 
-		foreach ($this->config['ui']['grid']['columns'] as &$col) {
-			if ($col === 'lang') {
-				$col = array(
-					'headerText' => 'Languages',
-					'dataKey'   => 'lang',
-                    'showFilter' => false,
-					'cellFormatter' => 'function(args) {
-						if (args.row.type & $.wijmo.wijgrid.rowType.data) {
-							args.$container.css("text-align", "center").html(args.row.data.lang);
-							return true;
-						}
-					}',
-					'width' => 1,
-				);
-			}
-            if (!$col['dataType'] && is_array($this->config['dataset'][$col['dataKey']]) && $this->config['dataset'][$col['dataKey']]['dataType']) {
-                $col['dataType'] = $this->config['dataset'][$col['dataKey']]['dataType'];
-            }
-            if (!$col['dataType']) {
-                $col['dataType'] = 'string';
-            }
-		}
+		$this->config = ConfigProcessor::process($this->config);
 
 		$view->set('mp3grid', \Format::forge($this->config['ui'])->to_json(), false);
 		$view->set('tab', \Format::forge($this->config['tab'])->to_json(), false);
