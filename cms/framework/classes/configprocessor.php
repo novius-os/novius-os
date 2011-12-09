@@ -25,9 +25,9 @@ class ConfigProcessor {
         } else {
             $columns = &$config['columns'];
         }
-        foreach ($columns as &$col) {
-            if ($col === 'lang') {
-                $col = array(
+        for ($i = 0; $i < count($columns); $i++) {
+            if ($columns[$i] === 'lang') {
+                $columns[$i] = array(
                     'headerText' => 'Languages',
                     'dataKey'   => 'lang',
                     'showFilter' => false,
@@ -40,15 +40,16 @@ class ConfigProcessor {
                     'width' => 1,
                 );
             }
-            if ($col['actions']) {
-                $col = array(
-                    'headerText' => 'Actions',
+            if (is_array($columns[$i]) && $columns[$i]['actions']) {
+                $actions = $columns[$i]['actions'];
+                $columns[$i] = array(
+                    'headerText' => '',
                     'cellFormatter' => 'function(args) {
 						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-							$(\'<div></div>\')
+							args.$container.parent().addClass("full-occupation");
+							$(\'<div class="in_cell"></div>\')
 							    .dropdownButton({
-                                    items: '.$format->to_json($col['actions']).',
+                                    items: '.$format->to_json($actions).',
                                     args: args
                                 })
                                 .appendTo(args.$container);
@@ -60,17 +61,35 @@ class ConfigProcessor {
                     'width' => 20,
                     'showFilter' => false,
                 );
+                $main_column = array(
+                    'headerText' => $actions[0]['label'],
+                    'cellFormatter' => 'function(args) {
+  						if ($.isPlainObject(args.row.data)) {
+  						    console.log(args.column);
+  						    args.$container.parent()
+  						    .addClass("full-occupation");
+                            button = $(\'<button type="button" />\').button({
+                                label: '.json_encode($actions[0]['label']).',
+                            });
+                            button.appendTo(args.$container);
+
+                            return true;
+                        }
+                    }',
+                    'allowSizing' => false,
+                    'width' => 20,
+                    'showFilter' => false,
+                );
+                //print_r($columns);
+                array_splice($columns, $i, 0, array($main_column));
+                //print_r($columns);
             }
-            if (!$col['dataType'] && is_array($config['dataset'][$col['dataKey']]) && $config['dataset'][$col['dataKey']]['dataType']) {
-                $col['dataType'] = $config['dataset'][$col['dataKey']]['dataType'];
+            if (!$columns[$i]['dataType'] && is_array($config['dataset'][$columns[$i]['dataKey']]) && $config['dataset'][$columns[$i]['dataKey']]['dataType']) {
+                $columns[$i]['dataType'] = $config['dataset'][$columns[$i]['dataKey']]['dataType'];
             }
-            /*
-            if (!$col['dataFormatString'] && is_array($config['dataset'][$col['dataKey']]) && $config['dataset'][$col['dataKey']]['dataFormatString']) {
-                $col['dataFormatString'] = $config['dataset'][$col['dataKey']]['dataFormatString'];
-            }
-            */
-            if (!$col['dataType']) {
-                $col['dataType'] = 'string';
+            if (!$columns[$i]['dataType']) {
+                //print_r($columns[$i]);
+                $columns[$i]['dataType'] = 'string';
             }
         }
         return $config;
