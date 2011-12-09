@@ -72,7 +72,7 @@ class ConfigProcessor {
                             }).click(function() {
                                 fct = '.$actions[0]['action'].';
                                 fct(args);
-                            });;
+                            });
                             button.appendTo(args.$container);
 
                             return true;

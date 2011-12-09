@@ -234,7 +234,6 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 	}
 
 
-
 }
 
 /* End of file list.php */

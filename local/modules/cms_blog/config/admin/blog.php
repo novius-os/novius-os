@@ -74,7 +74,11 @@ return array(
                         array(
                             'icon'  => 'ui-icon ui-icon-close',
                             'action'   =>  'function(args) {
-                                                alert("La suppression d\'un élément n\'est pas encore implémentée !\n Id de l\'élément : " + args.row.data.id);
+                                                $.nos.ajax({
+                                                    url: "admin/cms_blog/list/delete/" + args.row.data.id,
+                                                    data: {},
+                                                    success: function() { $.nos.notify("Suppression non opérationnel encore ! Désolé !"); }
+                                                });
                                             }',
                             'label' => 'Delete',
                         ),

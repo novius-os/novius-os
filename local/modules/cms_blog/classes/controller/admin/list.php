@@ -32,5 +32,17 @@ class Controller_Admin_List extends Controller_Mp3table_List {
 	}
 
 
+    public function action_delete($id) {
+        $json = array('success' => 1);
+
+        $response = \Response::forge(
+            \Format::forge()->to_json($json)
+            , 200, array(
+                'Content-Type' => 'application/json',
+            ));
+        $response->send(true);
+        exit();
+    }
+
 
 }
