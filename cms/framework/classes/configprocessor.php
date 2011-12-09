@@ -13,7 +13,7 @@ namespace Cms;
 use Format;
 
 class ConfigProcessor {
-    /** Process the configuration files (replace language and actions column)
+    /** Process the configuration files (process language and actions column)
      *
      * @static
      * @param $config : configuration file content
@@ -62,27 +62,39 @@ class ConfigProcessor {
                     'showFilter' => false,
                 );
                 $main_column = array(
-                    'headerText' => $actions[0]['label'],
+                    'headerText' => '',
                     'cellFormatter' => 'function(args) {
   						if ($.isPlainObject(args.row.data)) {
-  						    console.log(args.column);
   						    args.$container.parent()
   						    .addClass("full-occupation");
                             button = $(\'<button type="button" />\').button({
                                 label: '.json_encode($actions[0]['label']).',
-                            });
+                            }).click(function() {
+                                fct = '.$actions[0]['action'].';
+                                fct(args);
+                            });;
                             button.appendTo(args.$container);
 
                             return true;
                         }
                     }',
                     'allowSizing' => false,
-                    'width' => 20,
+                    'width' => $actions[0]['width'] ? $actions[0]['width'] : 60,
                     'showFilter' => false,
                 );
-                //print_r($columns);
                 array_splice($columns, $i, 0, array($main_column));
-                //print_r($columns);
+                /* It is possible to merge the two columns by using wijgrid bands...
+                Disabled for ui choice...
+
+                $columns[$i] = array(
+                    'headerText' => 'Actions',
+                    'height'     => '15',
+                    'columns' => array(
+                        $main_column,
+                        $columns[$i],
+                    )
+                );
+                */
             }
             if (!$columns[$i]['dataType'] && is_array($config['dataset'][$columns[$i]['dataKey']]) && $config['dataset'][$columns[$i]['dataKey']]['dataType']) {
                 $columns[$i]['dataType'] = $config['dataset'][$columns[$i]['dataKey']]['dataType'];

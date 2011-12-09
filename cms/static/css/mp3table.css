@@ -226,8 +226,8 @@
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003212}}
 .nos-mp3grid td.wijgridtd.full-occupation button .ui-button-text {
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding: 0px;
+  text-align: center;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003222}}

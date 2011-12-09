@@ -57,6 +57,7 @@ return array(
 					'headerText' => 'Date',
 					'dataKey' => 'date',
                     'dataFormatString'  => 'MM/dd/yyyy HH:mm:ss',
+                    'showFilter' => false,
 				),
                 array(
                     'actions' => array(
