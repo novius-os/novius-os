@@ -42,6 +42,12 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 
 	public static function fieldset($id) {
 
+		\Config::load('app::templates', true);
+		$templates = array();
+		foreach (\Config::get('app::templates', array()) as $tpl_id => $template) {
+			$templates[(int) substr($tpl_id, 3)] = $template['title'];
+		}
+
         $fields = array (
             'page_id' => array (
                 'label' => 'ID',
@@ -49,18 +55,15 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
             ),
             'page_titre' => array (
                 'label' => 'Title',
-                'type' => 'text',
+				'form' => array(
+					'type' => 'text',
+				),
             ),
 			'page_gab_id' => array(
 				'label' => 'Template',
 				'form' => array(
 					'type' => 'select',
-					'options' => array(
-						1 => 'Gabarit 1',
-						2 => 'Gabarit 2',
-						3 => 'Gabarit 3',
-						4 => 'Gabarit 4',
-					),
+					'options' => $templates,
 				),
 			),
 			'page_publier' => array(
@@ -130,12 +133,16 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 			),
         );
 
-		$template_id = \Input::post('page_gab_id', null);
-		\Config::load('templates', true);
-		$template_id and $data = \Config::get('templates.id-'.$template_id, null);
-		$data and Model_Page::set_wysiwyg(array_keys($data['layout']));
-
         $page = Model_Page::find($id);
+
+		$template_id = \Input::post('page_gab_id', $page->page_gab_id);
+		if (!empty($template_id)) {
+			\Config::load('templates', true);
+			$template_id and $data = \Config::get('templates.id-'.$template_id, array(
+				'layout' => array(),
+			));
+			$data['layout'] and Model_Page::set_wysiwyg(array_keys($data['layout']));
+		}
 
 		$fieldset = \Fieldset::build_from_config($fields, $page, array(
 			'complete' => function($data) use ($page, $fields) {
@@ -151,13 +158,14 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 							$page->$name = 0;
 						}
 					}
+					$page->save();
+
+					// Save wysiwyg after the page->save(), because we need page_id on creation too
 					foreach (\Input::post('wysiwyg', array()) as $name => $content) {
 						$wysiwyg = $page->wysiwyg($name);
 						$wysiwyg->wysiwyg_text = $content;
 						$wysiwyg->save();
 					}
-
-					$page->save();
 
 					$body = array(
 						'notify' => 'Page edited successfully.',

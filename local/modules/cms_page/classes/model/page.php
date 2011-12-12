@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -25,8 +25,8 @@ class Model_Page extends \Orm\Model {
 			'cascade_delete' => false,
 		),
 	);
-	
-	protected static $_has_one = array();
+
+	public static $_has_one = array();
 
 	protected static $_belongs_to = array(
 		'parent' => array(
@@ -44,9 +44,9 @@ class Model_Page extends \Orm\Model {
 			'cascade_delete' => false,
 		),
 	);
-	
+
 	public $wysiwyg_key;
-	
+
 	const TYPE_CLASSIC       = 0;
 	const TYPE_POPUP         = 1;
 	const TYPE_FOLDER        = 2;
@@ -95,7 +95,7 @@ class Model_Page extends \Orm\Model {
         }
         return $url;
     }
-	
+
 	public static function set_wysiwyg($names) {
 		foreach ($names as $name) {
 			$relation = 'wysiwyg_'.$name;
@@ -103,17 +103,17 @@ class Model_Page extends \Orm\Model {
 				'key_from' => array('page_id', 'wysiwyg_key'),
 				'model_to' => 'Cms\Page\Model_Wysiwyg',
 				'key_to' => array('wysiwyg_foreign_id', 'wysiwyg_key'),
-				'cascade_save' => true,
+				'cascade_save' => false,
 				'cascade_delete' => false,
-				'conditions' => array(
-					'where' => array(
-						'wysiwyg_key' => 'cms_page.'.$name,
-					),
-				),
+				//'conditions' => array(
+				//	'where' => array(
+				//		'wysiwyg_key' => 'cms_page.'.$name,
+				//	),
+				//),
 			);
 		}
 	}
-	
+
 	public function wysiwyg($wysiwyg_name) {
 		$this->wysiwyg_key = 'cms_page.'.$wysiwyg_name;
 		$relation = 'wysiwyg_'.$wysiwyg_name;

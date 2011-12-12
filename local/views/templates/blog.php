@@ -44,11 +44,12 @@
 
   <div id="main">
     <div id="sidebar">
-      <?php echo Cms::hmvc('cms_blog/front/links'); ?>
+      <?php // echo Cms::hmvc('cms_blog/front/links'); ?>
+      <?php echo $wysiwyg_right ?>
       <?php echo Cms::hmvc('cms_blog/front/insert_tags'); ?>
     </div>
     <div id="content<?= CONTENU_EDITORIAL ? '_editorial':'' ?>">
-      <?= $page_contenu ?>
+      <?= $wysiwyg_content ?>
     </div>
     <br class="clearfloat"/>
   </div>

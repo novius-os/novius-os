@@ -119,7 +119,7 @@ require([
 				dataType: 'json',
 				success: function(data) {
 
-					var ratio = $('#wysiwyg').width() * 3 / 4;
+					var ratio = $('#wysiwyg').width() * 3 / 5;
 					$('#wysiwyg').empty().css({
 						height: ratio,
 						overflow: 'visible'

@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -19,14 +19,14 @@ class Module {
             return static::$config_items[$module];
         }
 
-        
+
 
         static::$config_items[$module] = $config;
         return $config;
     }
 
     public static function save_config($module, $config) {
-        
+
     }
 
     public static function generate_merged_config() {
@@ -56,7 +56,7 @@ class Module {
             'repository' => array('not_installed', 'installed'),
             'available'  => array('installed', 'site'),
         );
-        
+
         // Aliases
         if (isset($aliases[$where])) {
             $list = array();
@@ -71,7 +71,7 @@ class Module {
         } else if (isset($from[$where])) {
             return $from[$where];
         }
-        
+
         // Fetch all the modules
         $list = array(
             'not_installed' => array(),
@@ -117,29 +117,29 @@ class Module {
 
         return $from[$where];
     }
-	
+
 	public static function forge($module_name) {
 		return new static($module_name);
 	}
-	
+
 	public $name;
-	
+
 	public function __construct($module_name) {
 		$this->name = $module_name;
 	}
-	
+
 	public function install() {
 		return $this->check_install() ||
 			($this->symlink('static') && $this->symlink('htdocs') && $this->symlink('data') && $this->symlink('cache'));
 	}
-	
+
 	public function uninstall() {
 		return $this->unsymlink('static')
 		&& $this->unsymlink('htdocs')
 		&& $this->unsymlink('data')
 		&& $this->unsymlink('cache');
 	}
-	
+
 	public function check_install() {
 		return is_dir(APPPATH.'modules'.DS.$this->name)
 		&& $this->is_link('static')
@@ -147,17 +147,19 @@ class Module {
 		&& $this->is_link('data')
 		&& $this->is_link('cache');
 	}
-	
+
 	protected function symlink($folder) {
-		$private = APPPATH.'modules'.DS.$this->name.DS.$folder;
-		if (is_dir($private)) {
-			$public = DOCROOT.$folder.DS.'modules'.DS.$this->name;
-			\Debug::dump(array($private, $public));
-			return symlink($private, $public);
+		if (!$this->is_link($folder)) {
+			$private = APPPATH.'modules'.DS.$this->name.DS.$folder;
+			if (is_dir($private)) {
+				$public = DOCROOT.$folder.DS.'modules'.DS.$this->name;
+				\Debug::dump(array($private, $public));
+				return symlink($private, $public);
+			}
 		}
 		return true;
 	}
-	
+
 	protected function unsymlink($folder) {
 		$public = DOCROOT.$folder.DS.'modules'.DS.$this->name;
 		if (file_exists($public)) {
@@ -165,11 +167,11 @@ class Module {
 		}
 		return true;
 	}
-	
+
 	protected function is_link($folder) {
 		$private = APPPATH.'modules'.DS.$this->name.DS.$folder;
-		$public = DOCROOT.$folder.DS.'modules'.DS.$this->name;
 		if (file_exists($private)) {
+			$public = DOCROOT.$folder.DS.'modules'.DS.$this->name;
 			return is_link($public);
 		}
 		return true;

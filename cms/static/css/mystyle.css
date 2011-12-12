@@ -1,11 +1,11 @@
 /*
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
- */ 
+ */
 body {
   font: 62.5% Verdana, sans-serif;
 }
@@ -24,7 +24,7 @@ input.title {
 }
 
 .fieldset.wijmo-wijexpander {
-  margin-top: 2em;
+  /*margin-top: 2em;*/
 }
 .fieldset .ui-widget-content {
   padding: 0;
@@ -37,8 +37,8 @@ input.title {
 	padding-bottom: 0.5em;
 }
 .fieldset th {
-  /* @include .c7 .c2 */
-  width: 30.4% !important; /* = .c7 .c2 + .c7 .col */
+	/* @include .c7 .c2 */
+	width: 30.4% !important; /* = .c7 .c2 + .c7 .col */
 	padding-right: 6.7%; /* = .c7 .col */
 }
 .fieldset th {

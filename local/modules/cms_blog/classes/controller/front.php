@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -44,7 +44,10 @@ class Controller_Front extends Controller {
 
     public function action_main($args = array()) {
 
-        $this->default_config = \Config::get('cms_blog::config');
+        $this->default_config = \Arr::merge(\Config::get('cms_blog::config'), array(
+			'config' => (array) $args,
+		));
+
         $this->merge_config('config');
 
         $rewrites =& $this->rewrites;
@@ -89,8 +92,7 @@ class Controller_Front extends Controller {
 
     public function display_list_main($params) {
 
-        $this->default_config = \Config::get('cms_blog::config');
-        $this->merge_config('config');
+        //$this->merge_config('config');
 
         $list = $this->_display_list('list_main');
 
@@ -212,7 +214,7 @@ class Controller_Front extends Controller {
                 ->related('author')
                 ->related('media_thumbnail')
                 ->related('media_thumbnail.path');
-		
+
 		$query->where(array('blog_lang', 'fr'));
 
         if (!empty($this->category)) {
@@ -229,7 +231,7 @@ class Controller_Front extends Controller {
 
         $this->pagination->set_config(array(
             'total_items'    => $query->count(),
-            'per_page'       => 10,
+            'per_page'       => $this->config['item_per_page'],
             'current_page'   => $this->current_page,
         ));
 
@@ -449,7 +451,7 @@ class Controller_Front extends Controller {
 
     static function EncartTags() {
         //$nb = \Cms\Blog\Model_Tag::query();
-        //$nb->select(\Db::expr('COUNT(blgt_tag) as nb'));	
+        //$nb->select(\Db::expr('COUNT(blgt_tag) as nb'));
         $query = \Db::select(\Db::expr('tag_label AS tag'), \Db::expr('COUNT(tag_label) AS sizeof'))
                 ->distinct()
                 ->from('cms_blog_tag')

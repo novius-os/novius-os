@@ -13,7 +13,7 @@ namespace Cms\Blog;
 use Cms\Controller;
 use Fuel\Core\View;
 
-class Controller_Admin_Config extends \Cms\Controller_Generic_Admin {
+class Controller_Admin_Popup extends \Cms\Controller_Generic_Admin {
 
 	public function after($response) {
 		\Asset::add_path('static/cms/');
@@ -30,7 +30,7 @@ class Controller_Admin_Config extends \Cms\Controller_Generic_Admin {
 	}
 
 	public function action_index() {
-		$this->template->body = View::forge('cms_blog::config', array(
+		$this->template->body = View::forge('cms_blog::popup', array(
 			'category_inpsector' => 'admin/cms_blog/config/category/list',
 		));
 		return $this->template;
