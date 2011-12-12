@@ -56,6 +56,8 @@ return array(
 				array(
 					'headerText' => 'Date',
 					'dataKey' => 'date',
+                    'dataFormatString'  => 'MM/dd/yyyy HH:mm:ss',
+                    'showFilter' => false,
 				),
                 array(
                     'actions' => array(
@@ -72,7 +74,11 @@ return array(
                         array(
                             'icon'  => 'ui-icon ui-icon-close',
                             'action'   =>  'function(args) {
-                                                alert("La suppression d\'un élément n\'est pas encore implémentée !\n Id de l\'élément : " + args.row.data.id);
+                                                $.nos.ajax({
+                                                    url: "admin/cms_blog/list/delete/" + args.row.data.id,
+                                                    data: {},
+                                                    success: function() { $.nos.notify("Suppression non opérationnel encore ! Désolé !"); }
+                                                });
                                             }',
                             'label' => 'Delete',
                         ),
@@ -131,9 +137,10 @@ return array(
 		'date' => array(
             'search_column'    =>  'blog_date_creation',
             'dataType'         => 'datetime',
-            'value'             =>  function($object) {
-                            return \Date::create_from_string($object->blog_date_creation, 'mysql')->format();
+            'value'             => function($object) {
+                            return \Date::create_from_string($object->blog_date_creation, 'mysql')->format('%m/%d/%Y %H:%M:%S'); //%m/%d/%Y %H:%i:%s
                         },
+
         ),
 	),
 	'inputs' => array(

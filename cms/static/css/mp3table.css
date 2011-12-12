@@ -203,8 +203,34 @@
 .nos-mp3grid td.wijgridtd button {
   height: 18px;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003192}}
+.nos-mp3grid td.wijgridtd.full-occupation {
+  position: relative;
+  overflow: visible;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003196}}
+.nos-mp3grid td.wijgridtd.full-occupation .wijmo-wijgrid-innercell {
+  overflow: visible;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003200}}
+.nos-mp3grid td.wijgridtd.full-occupation button {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  border-radius: 0px;
+  border: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003212}}
+.nos-mp3grid td.wijgridtd.full-occupation button .ui-button-text {
+  padding: 0px;
+  text-align: center;
+}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003195}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/css\/mp3table\.scss}line{font-family:\00003222}}
 .nos-adds .ui-icon {
   display: inline-block;
   vertical-align: -1px;

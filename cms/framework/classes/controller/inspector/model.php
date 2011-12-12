@@ -28,7 +28,6 @@ class Controller_Inspector_Model extends \Controller {
 
     public function action_list()
     {
-
         $view = View::forge('inspector/model');
 
         $this->config = ConfigProcessor::process($this->config);

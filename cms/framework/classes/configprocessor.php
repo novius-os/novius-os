@@ -13,7 +13,7 @@ namespace Cms;
 use Format;
 
 class ConfigProcessor {
-    /** Process the configuration files (replace language and actions column)
+    /** Process the configuration files (process language and actions column)
      *
      * @static
      * @param $config : configuration file content
@@ -25,9 +25,9 @@ class ConfigProcessor {
         } else {
             $columns = &$config['columns'];
         }
-        foreach ($columns as &$col) {
-            if ($col === 'lang') {
-                $col = array(
+        for ($i = 0; $i < count($columns); $i++) {
+            if ($columns[$i] === 'lang') {
+                $columns[$i] = array(
                     'headerText' => 'Languages',
                     'dataKey'   => 'lang',
                     'showFilter' => false,
@@ -40,15 +40,16 @@ class ConfigProcessor {
                     'width' => 1,
                 );
             }
-            if ($col['actions']) {
-                $col = array(
-                    'headerText' => 'Actions',
+            if (is_array($columns[$i]) && $columns[$i]['actions']) {
+                $actions = $columns[$i]['actions'];
+                $columns[$i] = array(
+                    'headerText' => '',
                     'cellFormatter' => 'function(args) {
 						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-							$(\'<div></div>\')
+							args.$container.parent().addClass("full-occupation");
+							$(\'<div class="in_cell"></div>\')
 							    .dropdownButton({
-                                    items: '.$format->to_json($col['actions']).',
+                                    items: '.$format->to_json($actions).',
                                     args: args
                                 })
                                 .appendTo(args.$container);
@@ -60,12 +61,47 @@ class ConfigProcessor {
                     'width' => 20,
                     'showFilter' => false,
                 );
+                $main_column = array(
+                    'headerText' => '',
+                    'cellFormatter' => 'function(args) {
+  						if ($.isPlainObject(args.row.data)) {
+  						    args.$container.parent()
+  						    .addClass("full-occupation");
+                            button = $(\'<button type="button" />\').button({
+                                label: '.json_encode($actions[0]['label']).',
+                            }).click(function() {
+                                fct = '.$actions[0]['action'].';
+                                fct(args);
+                            });
+                            button.appendTo(args.$container);
+
+                            return true;
+                        }
+                    }',
+                    'allowSizing' => false,
+                    'width' => $actions[0]['width'] ? $actions[0]['width'] : 60,
+                    'showFilter' => false,
+                );
+                array_splice($columns, $i, 0, array($main_column));
+                /* It is possible to merge the two columns by using wijgrid bands...
+                Disabled for ui choice...
+
+                $columns[$i] = array(
+                    'headerText' => 'Actions',
+                    'height'     => '15',
+                    'columns' => array(
+                        $main_column,
+                        $columns[$i],
+                    )
+                );
+                */
             }
-            if (!$col['dataType'] && is_array($config['dataset'][$col['dataKey']]) && $config['dataset'][$col['dataKey']]['dataType']) {
-                $col['dataType'] = $config['dataset'][$col['dataKey']]['dataType'];
+            if (!$columns[$i]['dataType'] && is_array($config['dataset'][$columns[$i]['dataKey']]) && $config['dataset'][$columns[$i]['dataKey']]['dataType']) {
+                $columns[$i]['dataType'] = $config['dataset'][$columns[$i]['dataKey']]['dataType'];
             }
-            if (!$col['dataType']) {
-                $col['dataType'] = 'string';
+            if (!$columns[$i]['dataType']) {
+                //print_r($columns[$i]);
+                $columns[$i]['dataType'] = 'string';
             }
         }
         return $config;
