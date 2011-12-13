@@ -12,6 +12,7 @@ return array(
 	'query' => array(
 		'model' => 'Cms\Media\Model_Media',
 		'related' => array(),
+		'limit' => 10,
 	),
 	'tab' => array(
 		'label' => 'Media centre',
@@ -48,6 +49,39 @@ return array(
 			),
 			'proxyurl' => 'admin/cms_media/list/json',
 		),
+		'thumbnails' => array(
+			'dataParser' => "function(size, item) {
+				var data = {
+					title : item.title,
+					thumbnail : (item.image ? item.thumbnail : item.thumbnailAlternate).replace('64', size),
+					thumbnailAlternate : (item.image ? item.thumbnailAlternate : '').replace('64', size),
+					actions : [
+						{
+							label : 'Edit',
+							action : function() {
+								$.nos.tabs.openInNewTab({
+									url : 'admin/cms_media/form?id=' + item.id,
+									label : item.title
+								});
+							}
+						},
+						{
+							label : 'Delete',
+							action : function() {
+								if (confirm('Are you sure ?')) {
+									$.nos.tabs.openInNewTab({
+										url : 'admin/cms_media/form?id=' + item.id,
+										label : item.title
+									});
+								}
+							}
+						}
+					]
+				};
+				return data;
+			}"
+		),
+		'defaultView' => 'thumbnails',
 		'inspectors' => array(
 			array(
 				'vertical' => true,
@@ -68,6 +102,48 @@ return array(
 		'id' => 'media_id',
 		'title' => 'media_title',
 		'extension' => 'media_ext',
+		'image' => function($object) {
+            return $object->is_image();
+        },
+		'thumbnail' => function($object) {
+            return $object->is_image() ? $object->get_public_path_resized(64, 64) : '';
+        },
+		'thumbnailAlternate' => function($object) {
+			$extensions = array(
+				'gif' => 'image.png',
+				'png' => 'image.png',
+				'jpg' => 'image.png',
+				'jpeg' => 'image.png',
+				'bmp' => 'image.png',
+				'doc' => 'document.png',
+				'xls' => 'document.png',
+				'ppt' => 'document.png',
+				'docx' => 'document.png',
+				'xlsx' => 'document.png',
+				'pptx' => 'document.png',
+				'odt' => 'document.png',
+				'odf' => 'document.png',
+				'odp' => 'document.png',
+				'pdf' => 'document.png',
+				'mp3' => 'music.png',
+				'wav' => 'music.png',
+				'avi' => 'video.png',
+				'mkv' => 'video.png',
+				'mpg' => 'video.png',
+				'mpeg' => 'video.png',
+				'mov' => 'video.png',
+				'zip' => 'archive.png',
+				'rar' => 'archive.png',
+				'tar' => 'archive.png',
+				'gz' => 'archive.png',
+				'7z' => 'archive.png',
+				'txt' => 'text.png',
+				'xml' => 'text.png',
+				'htm' => 'text.png',
+				'html' => 'text.png',
+			);
+			return $extensions[$object->media_ext] ? 'static/cms/img/64/'.$extensions[$object->media_ext] : '';
+		},
 	),
 	'inputs' => array(
 		'folder_id' => function($value, $query) {

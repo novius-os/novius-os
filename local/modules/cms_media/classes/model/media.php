@@ -72,7 +72,7 @@ class Model_Media extends \Orm\Model {
     }
 
     public function is_image() {
-        return array($this->media_ext, array('jpg', 'png', 'gif', 'jpg', 'bmp'));
+        return in_array($this->media_ext, array('jpg', 'png', 'gif', 'jpg', 'bmp'));
     }
 
     public function get_public_path_resized($max_width = 0, $max_height = 0) {
