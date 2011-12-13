@@ -299,7 +299,8 @@ define([
 		_viewSettingsMenu : function() {
 			var self = this,
 				o = self.options,
-				views = {};
+				views = {}
+				nbViews = 0;
 
 			self.menuSettings.grid = {
 				content : o.label,
@@ -307,6 +308,7 @@ define([
 			};
 
 			if (o.grid) {
+				nbViews++;
 				views['grid'] = {
 						content : {
 							name : 'view',
@@ -327,6 +329,7 @@ define([
 			if (o.thumbnails) {
 				var sizes = [32, 64];
 				$.each(sizes, function(i, size) {
+					nbViews++;
 					views['thumbnails' + size] = {
 							content : {
 								name : 'view',
@@ -347,13 +350,15 @@ define([
 						};
 				})
 			}
-			if ($.isPlainObject(views)) {
+			if (nbViews > 1) {
 				self.menuSettings.grid.childs = {
 					views : {
 						content : o.texts.views,
 						childs : views
 					}
 				};
+			} else {
+				delete self.menuSettings.grid;
 			}
 
 			return self;
