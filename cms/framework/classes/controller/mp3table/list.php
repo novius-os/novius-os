@@ -39,13 +39,12 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 	public function after($response) {
 		\Asset::add_path('static/cms/');
 		\Asset::add_path('static/cms/js/jquery/wijmo/');
-		//\Asset::add_path('static/cms/js/jquery/jquery-ui/');
+		\Asset::add_path('static/cms/js/jquery/jquery-ui-noviusos/');
 		\Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-		//\Asset::css('start/jquery-ui-1.8.16.custom.css', array(), 'css');
 		\Asset::css('jquery.wijmo-open.1.5.0.css', array(), 'css');
 		\Asset::css('jquery.wijmo-complete.1.5.0.css', array(), 'css');
 		\Asset::css('base.css', array(), 'css');
-		\Asset::css('mp3table.css', array(), 'css');
+		\Asset::css('jquery.nos.mp3grid.css', array(), 'css');
 
 		return parent::after($response);
 	}
