@@ -56,61 +56,34 @@ return array(
 				array(
 					'headerText' => 'Date',
 					'dataKey' => 'date',
+                    'dataFormatString'  => 'MM/dd/yyyy HH:mm:ss',
+                    'showFilter' => false,
 				),
                 array(
-                    'headerText' => 'Actions',
-                    'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-                            // wijmenu
-							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-								.addClass("ui-state-default")
-								.append("<span class=\"ui-icon ui-icon-pencil\"></span>")
-								.appendTo(args.$container);
-
-							return true;
-						}
-					}',
-                    'allowSizing' => false,
-                    'width' => 20,
-                    'showFilter' => false,
+                    'actions' => array(
+                        array(
+                            'icon'      => 'ui-icon ui-icon-pencil',
+                            'action'   =>  'function(args) {
+                                                $.nos.tabs.openInNewTab({
+                                                    url     : "admin/cms_blog/form?id=" + args.row.data.id,
+                                                    label   : "Update"
+                                                });
+                                            }',
+                            'label'     => 'Update',
+                        ),
+                        array(
+                            'icon'  => 'ui-icon ui-icon-close',
+                            'action'   =>  'function(args) {
+                                                $.nos.ajax({
+                                                    url: "admin/cms_blog/list/delete/" + args.row.data.id,
+                                                    data: {},
+                                                    success: function() { $.nos.notify("Suppression non opérationnel encore ! Désolé !"); }
+                                                });
+                                            }',
+                            'label' => 'Delete',
+                        ),
+                    )
                 ),
-				array(
-					'headerText' => 'Up.',
-					'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-
-							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-								.addClass("ui-state-default")
-								.append("<span class=\"ui-icon ui-icon-pencil\"></span>")
-								.appendTo(args.$container);
-
-							return true;
-						}
-					}',
-					'allowSizing' => false,
-					'width' => 1,
-					'showFilter' => false,
-				),
-				array(
-					'headerText' => 'Del.',
-					'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.css("text-align", "center");
-
-							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-								.addClass("ui-state-default")
-								.append("<span class=\"ui-icon ui-icon-close\"></span>")
-								.appendTo(args.$container);
-
-							return true;
-						}
-					}',
-					'allowSizing' => false,
-					'width' => 1,
-					'showFilter' => false,
-				),
 			),
 			'proxyurl' => 	'admin/cms_blog/list/json',
 		),
@@ -153,6 +126,7 @@ return array(
 	'dataset' => array(
         'id' => 'blog_id',
 		'title' => 'blog_titre',
+        'lang' => 'blog_lang',
 		'author' => array(
             'search_relation' => 'author',
             'search_column'   => 'author.user_fullname',
@@ -162,17 +136,13 @@ return array(
         ),
 		'date' => array(
             'search_column'    =>  'blog_date_creation',
-            'value'     =>  function($object) {
-                            return \Date::create_from_string($object->blog_date_creation, 'mysql')->format();
+            'dataType'         => 'datetime',
+            'value'             => function($object) {
+                            return \Date::create_from_string($object->blog_date_creation, 'mysql')->format('%m/%d/%Y %H:%M:%S'); //%m/%d/%Y %H:%i:%s
                         },
+
         ),
 	),
-    'datatype' => array(
-
-        'id' => 'blog_id',
-        'title' => 'blog_title',
-
-    ),
 	'inputs' => array(
 		'blgc_id' => function($value, $query) {
 			if ( is_array($value) && count($value) && $value[0]) {
