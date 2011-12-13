@@ -11,7 +11,8 @@
 ?>
 <script type="text/javascript">
 require([
-		'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.mp3grid.js'
+		'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.mp3grid.js',
+		'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.thumbnails.js'
 	], function( $ ) {
 		$(function() {
 			$.nos.tabs.updateTab(<?= $tab ?>);

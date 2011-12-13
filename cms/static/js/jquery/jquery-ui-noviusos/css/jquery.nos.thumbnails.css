@@ -1,0 +1,103 @@
+/*
+ * NOVIUS OS - Web OS for digital communication
+ * 
+ * @copyright  2011 Novius
+ * @license    GNU Affero General Public License v3 or (at your option) any later version
+ *             http://www.gnu.org/licenses/agpl-3.0.html
+ * @link http://www.novius-os.org
+ */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000313}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 10px 10px 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000317}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb {
+  position: relative;
+  float: left;
+  width: 100px;
+  margin: 10px 0 0 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000323}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid {
+  width: 100%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000326}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td {
+  border-width: 0;
+  height: 105px;
+  vertical-align: top;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000331}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  margin: 3px auto 0;
+  padding: 0px;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000340}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img .nos-thumbnails-thumb-img-default {
+  width: 64px;
+  height: 64px;
+  background: url(../images/thumbnail-64-default.png) no-repeat;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000346}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img .nos-thumbnails-thumb-img {
+  position: relative;
+  top: 50%;
+  margin-top: -32px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000354}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-title {
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  -ms-box-sizing: content-box;
+  box-sizing: content-box;
+  display: block;
+  white-space: normal;
+  padding: 3px;
+  line-height: 16px;
+  max-height: 32px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000367}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid th {
+  border-width: 1px 1px 0 0;
+  text-align: center;
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000373}}
+.nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid th:last-child {
+  border-width: 1px 0 0 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000388}}
+.nos-thumbnails-size-32 .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td {
+  height: 73px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000391}}
+.nos-thumbnails-size-32 .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img {
+  width: 32px;
+  height: 32px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000395}}
+.nos-thumbnails-size-32 .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img .nos-thumbnails-thumb-img-default {
+  width: 32px;
+  height: 32px;
+  background: url(../images/thumbnail-32-default.png) no-repeat;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\00003101}}
+.nos-thumbnails-size-32 .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img .nos-thumbnails-thumb-img {
+  margin-top: -16px;
+}
