@@ -46,14 +46,50 @@ class ConfigProcessor {
                     'headerText' => '',
                     'cellFormatter' => 'function(args) {
 						if ($.isPlainObject(args.row.data)) {
-							args.$container.parent().addClass("full-occupation");
-							$(\'<div class="in_cell"></div>\')
-							    .dropdownButton({
-                                    items: '.$format->to_json($actions).',
-                                    args: args
-                                })
-                                .appendTo(args.$container);
+						    var dropDown = args.$container.parent()
+                            .addClass("buttontd ui-state-default")
+                            .hover(
+                                function() {
+                                    dropDown.parent().addClass("ui-state-hover");
+                                },
+                                function() {
+                                    dropDown.parent().removeClass("ui-state-hover");
+                                }
+                            )
+                            .find("div");
 
+                        $("<span></span>")
+                            .addClass("ui-icon ui-icon-triangle-1-s")
+                            .appendTo(dropDown);
+
+                        var ul = $("<ul></ul>").appendTo("body");
+                        items = '.$format->to_json($actions).';
+
+                        $.each(items, function() {
+                            var action = this;
+                            $("<li><a href=\"#\"></a></li>")
+                                .appendTo(ul)
+                                .find("a")
+                                .text(action.label)
+                                .click(function(e) {
+                                    e.preventDefault();
+                                    action.action(args);
+                                })
+                        });
+
+                        ul.wijmenu({
+                            trigger : dropDown,
+                            triggerEvent : "mouseenter",
+                            orientation : "vertical",
+                            showAnimation : {Animated:"slide", duration: 50, easing: null},
+                            hideAnimation : {Animated:"hide", duration: 0, easing: null},
+                            position : {
+                                my        : "right top",
+                                at        : "right bottom",
+                                collision : "flip",
+                                offset    : "0 0"
+                            }
+                        });
 							return true;
 						}
 					}',
@@ -66,14 +102,21 @@ class ConfigProcessor {
                     'cellFormatter' => 'function(args) {
   						if ($.isPlainObject(args.row.data)) {
   						    args.$container.parent()
-  						    .addClass("full-occupation");
-                            button = $(\'<button type="button" />\').button({
-                                label: '.json_encode($actions[0]['label']).',
-                            }).click(function() {
+  						    .addClass("buttontd ui-state-default")
+                            .hover(
+                                function() {
+                                    args.$container.parent().addClass("ui-state-hover");
+                                },
+                                function() {
+                                    args.$container.parent().removeClass("ui-state-hover");
+                                }
+                            )
+                            .click(function(e) {
                                 fct = '.$actions[0]['action'].';
                                 fct(args);
-                            });
-                            button.appendTo(args.$container);
+                            })
+                            .find("div")
+                            .text('.json_encode($actions[0]['label']).');
 
                             return true;
                         }
