@@ -6,8 +6,13 @@
 # @link http://www.novius-os.org
 
 Options +FollowSymLinks
-XSendFile On
-XSendFileAllowAbove on
+
+ErrorDocument 404 /htdocs/cms/404.php
+
+<IfModule xsendfile_module>
+	XSendFile On
+	XSendFileAllowAbove on
+</IfModule>
 
 <IfModule mod_rewrite.c>
     RewriteEngine   on
