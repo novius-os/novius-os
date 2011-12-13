@@ -8,6 +8,7 @@
  */
 @import "compass/css3/box-sizing";
 @import "compass/css3/border-radius";
+@import "jquery.nos.thumbnails.css";
 
 .wijmo-wijmenu-icon-left {
 	margin-right : 5px;
@@ -24,6 +25,10 @@
 
 	.ui-state-default {
 		display : inline-block;
+	}
+
+	a {
+		color: inherit !important;
 	}
 }
 .wijmo-wijmenu, .ui-datepicker {
@@ -71,7 +76,7 @@
 			margin : 0 -1px;
 			background-color : transparent;
 			background-position: 50% 50%;
-			background-image: url(../img/icons/grip-v.png);
+			background-image: url(../../../../img/icons/grip-v.png);
 			background-repeat: no-repeat;
 		}
 
@@ -106,7 +111,7 @@
 				border-width : 1px 0;
 				background-color : transparent;
 				background-position: 50% 50%;
-				background-image: url(../img/icons/grip-h.png);
+				background-image: url(../../../../img/icons/grip-h.png);
 				background-repeat: no-repeat;
 			}
 
@@ -174,7 +179,7 @@
 					}
 				}
 
-				.wijmo-wijgrid {
+				.wijmo-wijgrid, .nos-thumbnails {
 					@include box-sizing(border-box);
 				}
 			}
