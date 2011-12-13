@@ -724,6 +724,7 @@ define([
 			var self = this,
 				o = self.options;
 
+			self.gridRendered = false;
 			self.uiThumbnail.thumbnails('destroy')
 				.empty()
 				.hide();
@@ -803,16 +804,30 @@ define([
 							}
 						}
 					}),
+					cellStyleFormatter: function(args) {
+						if (args.$cell.is('th')) {
+			                args.$cell.removeClass("ui-state-active");
+					    }
+				        if (args.state & $.wijmo.wijgrid.renderState.selected && args.$cell.hasClass('ui-state-default')) {
+				            args.$cell.removeClass("ui-state-highlight");
+				        }
+						if (args.state & $.wijmo.wijgrid.renderState.selected) {
+			                args.$cell.removeClass("wijmo-wijgrid-current-cell");
+					    }
+				    },
 					currentCellChanging : function () {
 						return self.gridRendered;
 					},
-					currentCellChanged: function () {
-						var row = $(e.target).wijgrid("currentCell").row(),
-							data = row ? row.data : false;
+					currentCellChanged: function (e) {
+						if (e) {
+							var row = $(e.target).wijgrid("currentCell").row(),
+								data = row ? row.data : false;
 
-						if (data) {
-							$nos.nos.listener.fire('grid.selectionChanged', false, [data]);
+							if (data) {
+								$nos.nos.listener.fire('grid.selectionChanged', false, [data]);
+							}
 						}
+						return true;
 					},
 					rendering : function() {
 						self.gridRendered = false;
