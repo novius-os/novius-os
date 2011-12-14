@@ -14,6 +14,8 @@ define([
 		options: {
 			adds : [],
 			inspectors : [],
+			thumbnails : false,
+			defaultView : 'grid',
 			texts : {
 				addDropDown : 'Select an action',
 				columns : 'Columns',
@@ -26,12 +28,15 @@ define([
 				showNbItems : 'Showing {{x}} out of {{y}} items',
 				showOneItem : 'Show 1 item',
 				showNoItem : 'No item',
-				showAll : 'Show all items'
+				showAll : 'Show all items',
+				views : 'Views',
+				viewGrid : 'Grid',
+				viewThumbnails : 'Thumbnails'
 			}
 		},
 
 		pageIndex : 0,
-		menuInspectors : {},
+		menuSettings : {},
 		showFilter : false,
 		gridRendered : false,
 		resizing : true,
@@ -84,16 +89,27 @@ define([
 				.hide();
 
 			self.uiGrid = $('<table></table>').appendTo(self.uiSplitterHorizontalBottom);
+
+			self.uiThumbnail = $('<div></div>').appendTo(self.uiSplitterHorizontalBottom);
 		},
 
 		_init: function() {
-			var self = this;
+			var self = this,
+				o = self.options;
+
+			if (!$.isPlainObject(o.thumbnails)) {
+				o.thumbnails = false;
+			} else {
+				o.thumbnails = $.extend({
+					thumbnailSize : 64
+				}, o.thumbnails);
+			}
 
 			self._uiAdds()
 				._uiSplitters()
 				._uiInspectors()
 				._uiSearchBar()
-				._uiGrid()
+				._uiList()
 				._uiSettings()
 				._listeners();
 
@@ -151,11 +167,40 @@ define([
 					});
 				});
 
-            self.uiAdds.dropdownButton({
-                items: o.adds,
-                uiButton: self.uiAddsDropDown,
-                uiDropDown: self.uiAddsMenu
-            });
+			self.uiAddsDropDown.button({
+					text: false,
+					icons: {
+						primary: "ui-icon-triangle-1-s"
+					}
+				});
+
+			self.uiAdds.buttonset();
+
+			$.each(o.adds, function() {
+				var li = $('<li></li>').appendTo(self.uiAddsMenu),
+					a = $('<a href="#"></a>').click(function() {
+							$.nos.tabs.openInNewTab({
+								url : this.url,
+								label : this.label
+							});
+						}).appendTo(li);
+
+				$('<span></span>').text(this.label)
+					.appendTo(a);
+			});
+			self.uiAddsMenu.wijmenu({
+					trigger : self.uiAddsDropDown,
+					triggerEvent : 'mouseenter',
+					orientation : 'vertical',
+					showAnimation : {Animated:"slide", duration: 50, easing: null},
+					hideAnimation : {Animated:"hide", duration: 0, easing: null},
+					position : {
+						my        : 'right top',
+						at        : 'right bottom',
+						collision : 'flip',
+						offset    : '0 0'
+					}
+				});
 
 			return self;
 		},
@@ -169,9 +214,27 @@ define([
 				 icons : {primary : 'ui-icon-gear'}
 			});
 
-			self._gridSettingsMenu()
+			self._viewSettingsMenu()
 				._inspectorsSettingsMenu()
 				._uiSettingsMenu();
+
+			return self;
+		},
+
+		_uiSettingsMenu : function() {
+			var self = this;
+
+			$.each(self.menuSettings, function() {
+				self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
+			});
+
+			self.uiSettingsMenu.wijmenu({
+					trigger : self.uiSettingsButton,
+					triggerEvent : 'mouseenter',
+					orientation : 'vertical',
+					showAnimation : {Animated:"slide", duration: 50, easing: null},
+					hideAnimation : {Animated:"hide", duration: 0, easing: null}
+				});
 
 			return self;
 		},
@@ -180,7 +243,7 @@ define([
 			var self = this;
 
 			li = $('<li></li>').appendTo(ul)
-				.append(item.content.clone(true));
+				.append(self._uiSettingsMenuRow(item.content));
 
 			if ($.isArray(item.childs) || $.isPlainObject(item.childs)) {
 				ul = $('<ul></ul>').appendTo(li);
@@ -192,33 +255,308 @@ define([
 			return self;
 		},
 
-		_uiSettingsMenuCheckbox : function(name, id, checked, click, label) {
+		_uiSettingsMenuRow : function(args) {
+			if (!$.isPlainObject(args)) {
+				args = {
+					label : args
+				};
+			}
+			args = $.extend({
+				name : '',
+				id : '',
+				value : '',
+				checked : false,
+				click : $.noop,
+				label : '',
+				radio : false
+			}, args);
+
 			var span = $('<span></span>');
+			if (args.name) {
+				var checked = args.checked;
+				if ($.isFunction(checked)) {
+					checked = checked();
+				}
 
-			$('<input type="checkbox" name="' + name + '" id="' + id + '" ' + (checked ? 'checked' : '') + ' />')
-				.click(click)
-				.appendTo(span);
+				$('<input type="' + (args.radio ? 'radio' : 'checkbox') + '" name="' + args.name + '" id="' + args.id + '" value="' + args.value + '" ' + (checked ? 'checked' : '') + ' />')
+					.click(function(e) {
+						args.click.call(this, e);
+					})
+					.appendTo(span);
 
-			$('<label for="' + id + '"></label>').text(label)
-				.appendTo(span);
+				$('<label for="' + args.id + '"></label>').text(args.label)
+					.appendTo(span);
+			} else {
+				$('<span></span>').text(args.label)
+					.appendTo(span);
+			}
 
 			return span;
 		},
 
-		_uiSettingsMenu : function() {
-			var self = this;
+		_viewSettingsMenu : function() {
+			var self = this,
+				o = self.options,
+				views = {}
+				nbViews = 0;
 
-			$.each(self.menuInspectors, function() {
-				self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
+			self.menuSettings.grid = {
+				content : o.label,
+				childs : {}
+			};
+
+			if (o.grid) {
+				nbViews++;
+				views['grid'] = {
+						content : {
+							name : 'view',
+							id : 'view_grid',
+							checked : function() {
+								return o.defaultView === 'grid';
+							},
+							click : function() {
+								o.defaultView = 'grid';
+								self.gridRefresh();
+								self.uiSettingsMenu.wijmenu('hideAllMenus');
+							},
+							label : o.texts.viewGrid,
+							radio : true
+						}
+					};
+			}
+			if (o.thumbnails) {
+				var sizes = [32, 64];
+				$.each(sizes, function(i, size) {
+					nbViews++;
+					views['thumbnails' + size] = {
+							content : {
+								name : 'view',
+								id : 'view_thumbnails_' + size,
+								checked : function() {
+									return o.defaultView === 'thumbnails' && o.thumbnails.thumbnailSize === size;
+								},
+								click : function() {
+									o.defaultView = 'thumbnails';
+									o.thumbnails.thumbnailSize = size;
+									self.gridRefresh();
+									self.uiSettingsMenu.wijmenu('hideAllMenus');
+									return true;
+								},
+								label : o.texts.viewThumbnails + ' ' + size + 'px',
+								radio : true
+							}
+						};
+				})
+			}
+			if (nbViews > 1) {
+				self.menuSettings.grid.childs = {
+					views : {
+						content : o.texts.views,
+						childs : views
+					}
+				};
+			} else {
+				delete self.menuSettings.grid;
+			}
+
+			return self;
+		},
+
+		_gridSettingsMenu : function() {
+			var self = this,
+				o = self.options,
+				keys = ['columns', 'showFilters'];
+
+			if (!self.menuSettings.grid) {
+				self.menuSettings.grid = {
+					content : o.label,
+					childs : {}
+				};
+			}
+
+			$.each(keys, function(i, key) {
+				if (self.menuSettings.grid.childs[key]) {
+					delete self.menuSettings.grid.childs[key];
+				}
+			})
+
+			if (o.defaultView === 'thumbnails') {
+
+			} else {
+				var nbColumns = 0,
+					columns = {},
+					showFilter = self.showFilter;
+
+			    o.grid.columns = self.uiGrid.wijgrid("option", "columns");
+
+				$.each(o.grid.columns, function (index, column) {
+					if (column.showFilter === undefined || column.showFilter) {
+						showFilter = true;
+					}
+					nbColumns++;
+					columns[index] = {
+							content : {
+								name : 'columnsGrid',
+								id : 'columnsGrid_' + index,
+								checked : column.visible,
+								click : function() {
+									o.grid.columns[index].visible = $(this).is(':checked');
+									self.uiGrid.wijgrid('doRefresh');
+									self.uiSettingsMenu.wijmenu('hideAllMenus');
+								},
+								label : column.headerText
+							}
+						};
+	            });
+				if (nbColumns > 1) {
+					self.menuSettings.grid.childs['columns'] = {
+							content : o.texts.columns,
+							childs : columns
+						};
+				}
+				if (showFilter) {
+					self.menuSettings.grid.childs['showFilters'] = {
+							content : {
+								name : 'showFilterGrid',
+								id : 'showFilterGrid',
+								checked : self.showFilter,
+								click : function() {
+									self.showFilter = $(this).is(':checked');
+									self.gridRefresh()
+										.uiSettingsMenu.wijmenu('hideAllMenus');
+								},
+								label : o.texts.showFiltersColumns
+							}
+						};
+				}
+			}
+
+			if ($.isEmptyObject(self.menuSettings.grid.childs)) {
+				delete self.menuSettings.grid;
+			}
+
+			self._refreshSettingsMenu();
+
+			return self;
+		},
+
+		_inspectorsSettingsMenu : function() {
+			var self = this,
+				o = self.options,
+				states = ['v', 'h', ''];
+
+			$.each(o.inspectors, function() {
+				var inspector = this,
+					childs = {};
+
+				$.each(states, function(i, value) {
+					var label,
+						checked = false;
+
+					switch (value) {
+						case 'v' :
+							label = o.texts.vertical;
+							checked = function() {
+								return !inspector.hide && inspector.vertical ? true : false;
+							}
+							break;
+						case 'h' :
+							label = o.texts.horizontal;
+							checked = function() {
+								return !inspector.hide && !inspector.vertical ? true : false;
+							}
+							break;
+						case '' :
+							label = o.texts.hidden;
+							checked = function() {
+								return inspector.hide || false;
+							}
+							break;
+					}
+
+					childs[label] = {
+						content : {
+							name : inspector.widget_id,
+							id : 'radio' + inspector.widget_id + '_' + value,
+							value : value,
+							checked : checked,
+							click : function() {
+								var input = $(this),
+									widget_id = input.attr('name'),
+									orientation = input.val(),
+									widget = $('#' + widget_id);
+
+								if (!orientation) {
+									inspector.hide = true;
+									if (widget.length) {
+										var menu = self.menuSettings[inspector.widget_id];
+										if ($.isPlainObject(menu) && $.isPlainObject(menu.childs) && $.isPlainObject(menu.childs.visibility)) {
+											menu.childs = menu.childs.visibility.childs;
+											self._refreshSettingsMenu();
+										}
+										widget.closest('li.ui-widget-content')
+											.remove();
+										self._resizeInspectorsV()
+											._resizeInspectorsH();
+									}
+								} else {
+									inspector.hide = false;
+									var target = orientation === 'v' ? self.uiInspectorsVertical : self.uiInspectorsHorizontal;
+									inspector.vertical = orientation === 'v';
+									if ( widget.length ) {
+										if ( !target.has(widget).length ) {
+											widget.closest('li.ui-widget-content')
+												.find("script")
+												.remove()
+												.end()
+												.css({ width: '100%', height: 'auto' })
+												.appendTo(target);
+											self._resizeInspectorsV()
+												._resizeInspectorsH();
+										}
+									} else {
+										var $li = $('<li></li>').addClass('ui-widget-content')
+											.data('inspectorurl', inspector.url)
+											.appendTo(target);
+										self['_resizeInspectors' + orientation.toUpperCase()]()
+											._loadInspector($li);
+									}
+								}
+								self.uiSettingsMenu.wijmenu('hideAllMenus');
+							},
+							label : label,
+							radio : true
+						}
+					};
+				});
+
+
+				self.menuSettings[inspector.widget_id] = {
+					content : inspector.label,
+					childs : childs
+				};
 			});
 
-			self.uiSettingsMenu.wijmenu({
-					trigger : self.uiSettingsButton,
-					triggerEvent : 'mouseenter',
-					orientation : 'vertical',
-					showAnimation : {Animated:"slide", duration: 50, easing: null},
-					hideAnimation : {Animated:"hide", duration: 0, easing: null} 
-				});
+			return self;
+		},
+
+		_addSettingsInspectorMenu : function(widget_id, key, item) {
+			var self = this,
+				o = self.options,
+				inspector = self.menuSettings[widget_id];
+
+			if (inspector) {
+				if (!inspector.childs.visibility) {
+					self.menuSettings[widget_id].childs = {
+						visibility : {
+							content : o.texts.visibility,
+							childs : inspector.childs
+						}
+					};
+				}
+				self.menuSettings[widget_id].childs[key] = item;
+				self._refreshSettingsMenu();
+			}
 
 			return self;
 		},
@@ -382,6 +720,30 @@ define([
 			return self;
 		},
 
+		_uiList : function() {
+			var self = this,
+				o = self.options;
+
+			self.gridRendered = false;
+			self.uiThumbnail.thumbnails('destroy')
+				.empty()
+				.hide();
+			self.uiGrid.wijgrid('destroy')
+				.empty()
+				.hide();
+			if (o.defaultView === 'thumbnails') {
+				self.uiThumbnail.show();
+				self._uiThumbnail();
+			} else {
+				self.uiGrid.show();
+				self._uiGrid();
+			}
+
+			self._gridSettingsMenu();
+
+			return self;
+		},
+
 		_uiGrid : function() {
 			var self = this,
 				o = self.options,
@@ -392,6 +754,7 @@ define([
 			self.uiGrid.css('height', height)
 				.wijgrid($.extend({
 					columnsAutogenerationMode : 'none',
+					selectionMode: 'singleRow',
 					showFilter: self.showFilter,
 					allowSorting: true,
 					scrollMode : 'auto',
@@ -414,6 +777,9 @@ define([
 						loading: function (dataSource, userData) {
 							var r = userData.data.paging;
 							self.pageIndex = r.pageIndex;
+							if (self.gridRendered) {
+								self.uiGrid.wijgrid("currentCell", -1, -1);
+							}
 							dataSource.proxy.options.data.inspectors = self._jsonInspectors();
 							dataSource.proxy.options.data.offset = r.pageIndex * r.pageSize;
 							dataSource.proxy.options.data.limit = r.pageSize;
@@ -438,8 +804,30 @@ define([
 							}
 						}
 					}),
-					currentCellChanged: function () {
-						self.uiGrid.wijgrid("currentCell", -1, -1);
+					cellStyleFormatter: function(args) {
+						if (args.$cell.is('th')) {
+			                args.$cell.removeClass("ui-state-active");
+					    }
+				        if (args.state & $.wijmo.wijgrid.renderState.selected && args.$cell.hasClass('ui-state-default')) {
+				            args.$cell.removeClass("ui-state-highlight");
+				        }
+						if (args.state & $.wijmo.wijgrid.renderState.selected) {
+			                args.$cell.removeClass("wijmo-wijgrid-current-cell");
+					    }
+				    },
+					currentCellChanging : function () {
+						return self.gridRendered;
+					},
+					currentCellChanged: function (e) {
+						if (e) {
+							var row = $(e.target).wijgrid("currentCell").row(),
+								data = row ? row.data : false;
+
+							if (data) {
+								$nos.nos.listener.fire('grid.selectionChanged', false, [data]);
+							}
+						}
+						return true;
 					},
 					rendering : function() {
 						self.gridRendered = false;
@@ -449,6 +837,48 @@ define([
 						self.uiGrid.css('height', 'auto');
 					}
 				}, o.grid));
+
+			return self;
+		},
+
+		_uiThumbnail : function() {
+			var self = this,
+				o = self.options,
+				position = self.uiThumbnail.offset(),
+				height = $(window).height() - position.top,
+				heights = $.nos.grid.getHeights();
+
+			self.uiThumbnail.css('height', height)
+				.thumbnails($.extend({
+					pageIndex: 0,
+					url: o.grid.proxyurl,
+					loading: function (dataSource, userData) {
+						var r = userData.data.paging;
+						self.pageIndex = r.pageIndex;
+						dataSource.proxy.options.data.inspectors = self._jsonInspectors();
+						dataSource.proxy.options.data.offset = r.pageIndex * r.pageSize;
+						dataSource.proxy.options.data.limit = r.pageSize;
+					},
+					loaded: function(dataSource, data) {
+						if (dataSource.data.totalRows === 0) {
+							self.uiShowNbItems.text(o.texts.showNoItem);
+						} else if (dataSource.data.totalRows === 0) {
+							self.uiShowNbItems.text(o.texts.showOneItem);
+						} else {
+							self.uiShowNbItems.text(o.texts.showNbItems.replace('{{x}}', dataSource.data.length).replace('{{y}}', dataSource.data.totalRows));
+						}
+						self.uiShowNbItems.show();
+
+						self.uiShowAll[self.uiInspectorsTags.find('span').length ? 'show' : 'hide']();
+					},
+					reader: {
+						read: function (dataSource) {
+							var count = parseInt(dataSource.data.total, 10);
+							dataSource.data = dataSource.data.items;
+							dataSource.data.totalRows = count;
+						}
+					}
+				}, o.thumbnails));
 
 			return self;
 		},
@@ -466,37 +896,45 @@ define([
 			});
 
 			$nos.nos.listener.add('inspector.showFilter', false, function(widget_id, change, checked) {
-				if (self.menuInspectors[widget_id]) {
-					self._addSettingsMenu(widget_id, 'showFilters', {
-							content : self._uiSettingsMenuCheckbox('showFilter' + widget_id, 'showFilter' + widget_id, checked, function() {
-									change($(this).is(':checked'));
-									self.uiSettingsMenu.wijmenu('hideAllMenus');
-								}, o.texts.showFiltersColumns)
-						})
-						._refreshSettingsMenu();
-				}
+				self._addSettingsInspectorMenu(widget_id, 'showFilters', {
+						content : {
+							name : 'showFilter' + widget_id,
+							id : 'showFilter' + widget_id,
+							checked : checked,
+							click : function() {
+								change($(this).is(':checked'));
+								self.uiSettingsMenu.wijmenu('hideAllMenus');
+							},
+							label : o.texts.showFiltersColumns
+						}
+					})
 			});
 
 			$nos.nos.listener.add('inspector.declareColumns', false, function(widget_id, columns) {
-				if (self.menuInspectors[widget_id] && columns.length > 1) {
-					var childs = [];
+				if (columns.length > 1) {
+					var childs = {};
 
 					$.each(columns, function(i) {
 						var column = this;
 
-						childs.push({
-								content : self._uiSettingsMenuCheckbox('columns' + widget_id, 'column' + widget_id + '_' + i, column.visible, function() {
+						childs[i] = {
+								content : {
+									name : 'columns' + widget_id,
+									id : 'column' + widget_id + '_' + i,
+									checked : column.visible,
+									click : function() {
 										column.change($(this).is(':checked'));
 										self.uiSettingsMenu.wijmenu('hideAllMenus');
-									}, column.label)
-							});
+									},
+									label : column.label
+								}
+							};
 					});
 
-					self._addSettingsMenu(widget_id, 'column', {
-							content : $('<span></span>').text(o.texts.columns),
+					self._addSettingsInspectorMenu(widget_id, 'column', {
+							content : o.texts.columns,
 							childs : childs
-						})
-						._refreshSettingsMenu();
+						});
 				}
 			});
 
@@ -648,176 +1086,12 @@ define([
 			return self;
 		},
 
-		_gridSettingsMenu : function() {
-			var self = this,
-				o = self.options,
-				span = $('<span></span>'),
-				columns = [],
-				showFilter = self.showFilter;
-				
-		    o.grid.columns = self.uiGrid.wijgrid("option", "columns");
-
-			$('<span></span>').text(o.label)
-				.appendTo(span);
-				
-			self.menuInspectors['grid'] = {
-				content : span,
-				childs : []
-			};
-				
-			$.each(o.grid.columns, function (index, column) {
-				if (column.showFilter === undefined || column.showFilter) {
-					showFilter = true;
-				}
-				columns.push({
-					content : self._uiSettingsMenuCheckbox('columnsGrid', 'columnsGrid_' + index, column.visible, function() {
-							o.grid.columns[index].visible = $(this).is(':checked');
-							self.uiGrid.wijgrid('doRefresh');
-							self.uiSettingsMenu.wijmenu('hideAllMenus');
-						}, column.headerText)
-					});
-            });
-			if (columns.length > 1) {
-				self.menuInspectors['grid'].childs.push({
-						content : $('<span></span>').text(o.texts.columns),
-						childs : columns
-					});
-			}
-			if (showFilter) {
-				self.menuInspectors['grid'].childs.push({
-						content : self._uiSettingsMenuCheckbox('showFilterGrid', 'showFilterGrid', self.showFilter, function() {
-								self.showFilter = $(this).is(':checked');
-								self.gridRefresh()
-									.uiSettingsMenu.wijmenu('hideAllMenus');
-							}, o.texts.showFiltersColumns)
-					});
-			}
-			if (!showFilter && columns.length <= 1) {
-				delete self.menuInspectors['grid'];
-			}
-
-			return self;
-		},
-
-		_inspectorsSettingsMenu : function() {
-			var self = this,
-				o = self.options,
-				states = ['v', 'h', ''];
-
-			$.each(o.inspectors, function() {
-				var inspector = this,
-					span = $('<span></span>'),
-					childs = [];
-
-				$('<span></span>').text(inspector.label)
-					.appendTo(span);
-
-				$.each(states, function(i, value) {
-					var span = $('<span></span>'),
-						label, checked;
-
-					switch (value) {
-						case 'v' :
-							label = o.texts.vertical;
-							checked = !inspector.hide && inspector.vertical ? 'checked' : '';
-							break;
-						case 'h' :
-							label = o.texts.horizontal;
-							checked = !inspector.hide && !inspector.vertical ? 'checked' : '';
-							break;
-						case '' :
-							label = o.texts.hidden;
-							checked = inspector.hide ? 'checked' : '';
-							break;
-					}
-
-					$('<input type="radio" name="' + inspector.widget_id + '" id="radio' + inspector.widget_id + '_' + value + '" value="' + value + '" ' + checked + ' />')
-						.click(function() {
-							var input = $(this),
-								widget_id = input.attr('name'),
-								orientation = input.val(),
-								widget = $('#' + widget_id);
-
-							if (!orientation) {
-								if (widget.length) {
-									var menu = self.menuInspectors[inspector.widget_id];
-									if ($.isPlainObject(menu) && $.isPlainObject(menu.childs) && $.isPlainObject(menu.childs.visibility)) {
-										menu.childs = menu.childs.visibility.childs;
-										self._refreshSettingsMenu();
-									}
-									widget.closest('li.ui-widget-content')
-										.remove();
-									self._resizeInspectorsV()
-										._resizeInspectorsH();
-								}
-							} else {
-								var target = orientation === 'v' ? self.uiInspectorsVertical : self.uiInspectorsHorizontal;
-								if ( widget.length ) {
-									if ( !target.has(widget).length ) {
-										widget.closest('li.ui-widget-content')
-											.find("script")
-											.remove()
-											.end()
-											.css({ width: '100%', height: 'auto' })
-											.appendTo(target);
-										self._resizeInspectorsV()
-											._resizeInspectorsH();
-									}
-								} else {
-									var $li = $('<li></li>').addClass('ui-widget-content')
-										.data('inspectorurl', inspector.url)
-										.appendTo(target);
-									self['_resizeInspectors' + orientation.toUpperCase()]()
-										._loadInspector($li);
-								}
-							}
-							self.uiSettingsMenu.wijmenu('hideAllMenus');
-						})
-						.appendTo(span);
-
-					$('<label for="radio' + inspector.widget_id + '_' + value + '"></label>').text(label)
-						.appendTo(span);
-
-					childs.push({content : span});
-				});
-
-
-				self.menuInspectors[inspector.widget_id] = {
-					content : span,
-					childs : childs
-				};
-			});
-
-			return self;
-		},
-
-		_addSettingsMenu : function(widget_id, key, item) {
-			var self = this,
-				o = self.options,
-				inspector = self.menuInspectors[widget_id];
-
-			if (inspector) {
-				if (!inspector.childs.visibility) {
-					self.menuInspectors[widget_id].childs = {
-						visibility : {
-							content : $('<span></span>').text(o.texts.visibility),
-							childs : inspector.childs
-						}
-					};
-				}
-				self.menuInspectors[widget_id].childs[key] = item;
-			}
-
-			return self;
-		},
-
 		gridRefresh : function() {
-			var self = this;
+			var self = this,
+				o = self.options;
 
 			if (self.init) {
-				self.uiGrid.wijgrid('destroy')
-					.empty();
-				self._uiGrid();
+				self._uiList();
 			}
 
 			return self;
