@@ -301,7 +301,7 @@ define([
 					}
 				};
 				window.$nos = $;
-                
+
 			});
 			return $;
 		})(window.jQuery);

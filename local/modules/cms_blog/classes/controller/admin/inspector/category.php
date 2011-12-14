@@ -21,4 +21,24 @@ class Controller_Admin_Inspector_Category extends \Cms\Controller_Inspector_Mode
 
 		parent::before();
 	}
+
+    public function action_delete($id) {
+        $success = false;
+
+        $category = Model_Category::find_by_blgc_id($id);
+        if ($category) {
+            $category->delete();
+            $success = true;
+        }
+
+        $json = array('success' => $success);
+
+        $response = \Response::forge(
+            \Format::forge()->to_json($json)
+            , 200, array(
+                'Content-Type' => 'application/json',
+            ));
+        $response->send(true);
+        exit();
+    }
 }
