@@ -224,8 +224,6 @@ define([
 		_uiSettingsMenu : function() {
 			var self = this;
 
-			log('_uiSettingsMenu', self.menuSettings);
-
 			$.each(self.menuSettings, function() {
 				self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
 			});
@@ -299,7 +297,8 @@ define([
 		_viewSettingsMenu : function() {
 			var self = this,
 				o = self.options,
-				views = {};
+				views = {}
+				nbViews = 0;
 
 			self.menuSettings.grid = {
 				content : o.label,
@@ -307,6 +306,7 @@ define([
 			};
 
 			if (o.grid) {
+				nbViews++;
 				views['grid'] = {
 						content : {
 							name : 'view',
@@ -327,6 +327,7 @@ define([
 			if (o.thumbnails) {
 				var sizes = [32, 64];
 				$.each(sizes, function(i, size) {
+					nbViews++;
 					views['thumbnails' + size] = {
 							content : {
 								name : 'view',
@@ -347,13 +348,15 @@ define([
 						};
 				})
 			}
-			if ($.isPlainObject(views)) {
+			if (nbViews > 1) {
 				self.menuSettings.grid.childs = {
 					views : {
 						content : o.texts.views,
 						childs : views
 					}
 				};
+			} else {
+				delete self.menuSettings.grid;
 			}
 
 			return self;
@@ -721,6 +724,7 @@ define([
 			var self = this,
 				o = self.options;
 
+			self.gridRendered = false;
 			self.uiThumbnail.thumbnails('destroy')
 				.empty()
 				.hide();
@@ -750,6 +754,7 @@ define([
 			self.uiGrid.css('height', height)
 				.wijgrid($.extend({
 					columnsAutogenerationMode : 'none',
+					selectionMode: 'singleRow',
 					showFilter: self.showFilter,
 					allowSorting: true,
 					scrollMode : 'auto',
@@ -772,6 +777,9 @@ define([
 						loading: function (dataSource, userData) {
 							var r = userData.data.paging;
 							self.pageIndex = r.pageIndex;
+							if (self.gridRendered) {
+								self.uiGrid.wijgrid("currentCell", -1, -1);
+							}
 							dataSource.proxy.options.data.inspectors = self._jsonInspectors();
 							dataSource.proxy.options.data.offset = r.pageIndex * r.pageSize;
 							dataSource.proxy.options.data.limit = r.pageSize;
@@ -796,8 +804,30 @@ define([
 							}
 						}
 					}),
-					currentCellChanged: function () {
-						self.uiGrid.wijgrid("currentCell", -1, -1);
+					cellStyleFormatter: function(args) {
+						if (args.$cell.is('th')) {
+			                args.$cell.removeClass("ui-state-active");
+					    }
+				        if (args.state & $.wijmo.wijgrid.renderState.selected && args.$cell.hasClass('ui-state-default')) {
+				            args.$cell.removeClass("ui-state-highlight");
+				        }
+						if (args.state & $.wijmo.wijgrid.renderState.selected) {
+			                args.$cell.removeClass("wijmo-wijgrid-current-cell");
+					    }
+				    },
+					currentCellChanging : function () {
+						return self.gridRendered;
+					},
+					currentCellChanged: function (e) {
+						if (e) {
+							var row = $(e.target).wijgrid("currentCell").row(),
+								data = row ? row.data : false;
+
+							if (data) {
+								$nos.nos.listener.fire('grid.selectionChanged', false, [data]);
+							}
+						}
+						return true;
 					},
 					rendering : function() {
 						self.gridRendered = false;

@@ -264,7 +264,7 @@ define([
 						.addClass('ui-icon ui-icon-triangle-1-s')
 						.appendTo(dropDown);
 
-					var ul = $('<ul></ul>').appendTo('body');
+					var ul = $('<ul></ul>').appendTo(self.element);
 					$.each(item.actions, function() {
 						var action = this;
 						$('<li><a href="#"></a></li>')
