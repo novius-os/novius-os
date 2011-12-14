@@ -124,6 +124,54 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 					'size' => 26,
 				),
 			),
+			'page_lien_externe' => array(
+				'label' => 'URL',
+				'form' => array(
+					'type' => 'text',
+					'size' => 60
+				),
+			),
+			'page_lien_externe_type' => array(
+				'label' => 'Target',
+				'form' => array(
+					'type' => 'select',
+					'options' => array(
+						0 => 'New window',
+						1 => 'Popup',
+						2 => 'Same window',
+					),
+				),
+			),
+			'page_type' => array(
+				'label' => 'Type',
+				'form' => array(
+					'type' => 'select',
+					'options' => array(
+						Model_Page::TYPE_CLASSIC => 'Page',
+						Model_Page::TYPE_FOLDER => 'Folder / Chapter',
+						Model_Page::TYPE_INTERNAL_LINK => 'Internal link',
+						Model_Page::TYPE_EXTERNAL_LINK => 'External link',
+					),
+				),
+			),
+			'page_verrou' => array(
+				'label' => 'Lock status',
+				'form' => array(
+					'type' => 'select',
+					'options' => array(
+						0 => 'Unlocked',
+						1 => 'Deletion',
+						2 => 'Modification',
+					),
+				),
+			),
+			'page_duree_vie' => array(
+				'label' => 'Regenerate every',
+				'form' => array(
+					'type' => 'text',
+					'size' => 4,
+				),
+			),
 			'save' => array(
 				'label' => '',
 				'form' => array(
@@ -135,6 +183,8 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 
         $page = Model_Page::find($id);
 
+		$editable_fields = array_diff(array_keys(Model_Page::properties()), Model_Page::primary_key());
+
 		$template_id = \Input::post('page_gab_id', $page->page_gab_id);
 		if (!empty($template_id)) {
 			\Config::load('templates', true);
@@ -145,11 +195,11 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 		}
 
 		$fieldset = \Fieldset::build_from_config($fields, $page, array(
-			'complete' => function($data) use ($page, $fields) {
+			'complete' => function($data) use ($page, $fields, $editable_fields) {
 
 				try {
 					foreach ($data as $name => $value) {
-						if (substr($name, 0, 5) == 'page_' && $name != 'page_id') {
+						if (in_array($name, $editable_fields)) {
 							$page->$name = $value;
 						}
 					}

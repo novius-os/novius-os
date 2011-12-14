@@ -19,7 +19,7 @@ body {
   font-size: 1.3em;
 }
 
-input.title {
+input.title.ui-widget {
 	font-size: 1.5em;
 }
 
@@ -29,7 +29,7 @@ input.title {
 .fieldset .ui-widget-content {
   padding: 0;
 }
-.fieldset table {
+.fieldset table, table.fieldset {
 	width: 100%;
 }
 .fieldset td , .fieldset th {
