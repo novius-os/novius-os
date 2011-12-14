@@ -32,7 +32,18 @@ return array(
                 array(
                     'icon'  => 'ui-icon ui-icon-close',
                     'action'   =>  'function(args) {
-                                                alert("La suppression d\'un élément n\'est pas encore implémentée !\n Id de l\'élément : " + args.row.data.id);
+                                                $.nos.ajax({
+                                                    url: "admin/cms_blog/inspector/category/delete/" + args.row.data.id,
+                                                    data: {},
+                                                    success: function(response) {
+                                                        if (response.success) {
+                                                            $.nos.notify("Suppression réalisée !");
+                                                            $("#mp3grid").mp3grid("gridRefreshAll");
+                                                        } else {
+                                                            $.nos.notify("Erreur lors de la suppression !", "error");
+                                                        }
+                                                    }
+                                                });
                                             }',
                     'label' => 'Delete',
                 ),

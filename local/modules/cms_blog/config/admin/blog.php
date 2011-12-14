@@ -77,7 +77,14 @@ return array(
                                                 $.nos.ajax({
                                                     url: "admin/cms_blog/list/delete/" + args.row.data.id,
                                                     data: {},
-                                                    success: function() { $.nos.notify("Suppression non opérationnel encore ! Désolé !"); }
+                                                    success: function(response) {
+                                                        if (response.success) {
+                                                            $.nos.notify("Suppression réalisée !");
+                                                            $("#mp3grid").mp3grid("gridRefresh");
+                                                        } else {
+                                                            $.nos.notify("Erreur lors de la suppression !", "error");
+                                                        }
+                                                    }
                                                 });
                                             }',
                             'label' => 'Delete',

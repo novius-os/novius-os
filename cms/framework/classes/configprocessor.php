@@ -112,6 +112,7 @@ class ConfigProcessor {
                                 }
                             )
                             .click(function(e) {
+                                e.preventDefault();
                                 fct = '.$actions[0]['action'].';
                                 fct(args);
                             })
