@@ -105,6 +105,11 @@ define([
 				}, o.thumbnails);
 			}
 
+			self.menuSettings.grid = {
+				content : o.label,
+				childs : {}
+			};
+
 			self._uiAdds()
 				._uiSplitters()
 				._uiInspectors()
@@ -225,7 +230,9 @@ define([
 			var self = this;
 
 			$.each(self.menuSettings, function() {
-				self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
+				if ($.isPlainObject(this.childs)) {
+					self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
+				}
 			});
 
 			self.uiSettingsMenu.wijmenu({
@@ -300,11 +307,6 @@ define([
 				views = {}
 				nbViews = 0;
 
-			self.menuSettings.grid = {
-				content : o.label,
-				childs : {}
-			};
-
 			if (o.grid) {
 				nbViews++;
 				views['grid'] = {
@@ -349,14 +351,10 @@ define([
 				})
 			}
 			if (nbViews > 1) {
-				self.menuSettings.grid.childs = {
-					views : {
-						content : o.texts.views,
-						childs : views
-					}
+				self.menuSettings.grid.childs.views = {
+					content : o.texts.views,
+					childs : views
 				};
-			} else {
-				delete self.menuSettings.grid;
 			}
 
 			return self;
@@ -365,14 +363,8 @@ define([
 		_gridSettingsMenu : function() {
 			var self = this,
 				o = self.options,
+				nbColumn = 0,
 				keys = ['columns', 'showFilters'];
-
-			if (!self.menuSettings.grid) {
-				self.menuSettings.grid = {
-					content : o.label,
-					childs : {}
-				};
-			}
 
 			$.each(keys, function(i, key) {
 				if (self.menuSettings.grid.childs[key]) {
@@ -383,8 +375,7 @@ define([
 			if (o.defaultView === 'thumbnails') {
 
 			} else {
-				var nbColumns = 0,
-					columns = {},
+				var columns = {},
 					showFilter = self.showFilter;
 
 			    o.grid.columns = self.uiGrid.wijgrid("option", "columns");
@@ -393,7 +384,7 @@ define([
 					if (column.showFilter === undefined || column.showFilter) {
 						showFilter = true;
 					}
-					nbColumns++;
+					nbColumn++;
 					columns[index] = {
 							content : {
 								name : 'columnsGrid',
@@ -408,14 +399,14 @@ define([
 							}
 						};
 	            });
-				if (nbColumns > 1) {
-					self.menuSettings.grid.childs['columns'] = {
+				if (nbColumn > 1) {
+					self.menuSettings.grid.childs.columns = {
 							content : o.texts.columns,
 							childs : columns
 						};
 				}
 				if (showFilter) {
-					self.menuSettings.grid.childs['showFilters'] = {
+					self.menuSettings.grid.childs.showFilters = {
 							content : {
 								name : 'showFilterGrid',
 								id : 'showFilterGrid',
@@ -429,10 +420,6 @@ define([
 							}
 						};
 				}
-			}
-
-			if ($.isEmptyObject(self.menuSettings.grid.childs)) {
-				delete self.menuSettings.grid;
 			}
 
 			self._refreshSettingsMenu();
