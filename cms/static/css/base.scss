@@ -39,3 +39,18 @@ a:hover {
 .nos-icon24-help { background-image: url(../img/24/tabs-help.png); }
 
 .nos-icon32-language { background-image: url(../img/32/language.png); }
+
+
+.wijmo-wijmenu, .wijmo-wijmenu-child {
+	width : auto;
+
+	.wijmo-wijmenu-link {
+
+		span, label {
+			white-space: nowrap;
+		}
+	}
+	input {
+		vertical-align: middle;
+	}
+}

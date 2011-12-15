@@ -169,3 +169,16 @@ a:hover {
 .nos-icon32-language {
   background-image: url(../img/32/language.png);
 }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000344}}
+.wijmo-wijmenu, .wijmo-wijmenu-child {
+  width: auto;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000349}}
+.wijmo-wijmenu .wijmo-wijmenu-link span, .wijmo-wijmenu .wijmo-wijmenu-link label, .wijmo-wijmenu-child .wijmo-wijmenu-link span, .wijmo-wijmenu-child .wijmo-wijmenu-link label {
+  white-space: nowrap;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000353}}
+.wijmo-wijmenu input, .wijmo-wijmenu-child input {
+  vertical-align: middle;
+}

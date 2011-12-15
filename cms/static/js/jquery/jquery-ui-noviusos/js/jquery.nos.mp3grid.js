@@ -285,14 +285,16 @@ define([
 					checked = checked();
 				}
 
+				var span2 = $('<span></span>').appendTo(span);
+
 				$('<input type="' + (args.radio ? 'radio' : 'checkbox') + '" name="' + args.name + '" id="' + args.id + '" value="' + args.value + '" ' + (checked ? 'checked' : '') + ' />')
 					.click(function(e) {
 						args.click.call(this, e);
 					})
-					.appendTo(span);
+					.appendTo(span2);
 
 				$('<label for="' + args.id + '"></label>').text(args.label)
-					.appendTo(span);
+					.appendTo(span2);
 			} else {
 				$('<span></span>').text(args.label)
 					.appendTo(span);
