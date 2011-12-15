@@ -42,6 +42,12 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 
 	public static function fieldset($id) {
 
+		\Config::load('app::templates', true);
+		$templates = array();
+		foreach (\Config::get('app::templates', array()) as $tpl_id => $template) {
+			$templates[(int) substr($tpl_id, 3)] = $template['title'];
+		}
+
         $fields = array (
             'page_id' => array (
                 'label' => 'ID',
@@ -49,18 +55,15 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
             ),
             'page_titre' => array (
                 'label' => 'Title',
-                'type' => 'text',
+				'form' => array(
+					'type' => 'text',
+				),
             ),
 			'page_gab_id' => array(
 				'label' => 'Template',
 				'form' => array(
 					'type' => 'select',
-					'options' => array(
-						1 => 'Gabarit 1',
-						2 => 'Gabarit 2',
-						3 => 'Gabarit 3',
-						4 => 'Gabarit 4',
-					),
+					'options' => $templates,
 				),
 			),
 			'page_publier' => array(
@@ -121,6 +124,54 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 					'size' => 26,
 				),
 			),
+			'page_lien_externe' => array(
+				'label' => 'URL',
+				'form' => array(
+					'type' => 'text',
+					'size' => 60
+				),
+			),
+			'page_lien_externe_type' => array(
+				'label' => 'Target',
+				'form' => array(
+					'type' => 'select',
+					'options' => array(
+						0 => 'New window',
+						1 => 'Popup',
+						2 => 'Same window',
+					),
+				),
+			),
+			'page_type' => array(
+				'label' => 'Type',
+				'form' => array(
+					'type' => 'select',
+					'options' => array(
+						Model_Page::TYPE_CLASSIC => 'Page',
+						Model_Page::TYPE_FOLDER => 'Folder / Chapter',
+						Model_Page::TYPE_INTERNAL_LINK => 'Internal link',
+						Model_Page::TYPE_EXTERNAL_LINK => 'External link',
+					),
+				),
+			),
+			'page_verrou' => array(
+				'label' => 'Lock status',
+				'form' => array(
+					'type' => 'select',
+					'options' => array(
+						0 => 'Unlocked',
+						1 => 'Deletion',
+						2 => 'Modification',
+					),
+				),
+			),
+			'page_duree_vie' => array(
+				'label' => 'Regenerate every',
+				'form' => array(
+					'type' => 'text',
+					'size' => 4,
+				),
+			),
 			'save' => array(
 				'label' => '',
 				'form' => array(
@@ -130,19 +181,25 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 			),
         );
 
-		$template_id = \Input::post('page_gab_id', null);
-		\Config::load('templates', true);
-		$template_id and $data = \Config::get('templates.id-'.$template_id, null);
-		$data and Model_Page::set_wysiwyg(array_keys($data['layout']));
-
         $page = Model_Page::find($id);
 
+		$editable_fields = array_diff(array_keys(Model_Page::properties()), Model_Page::primary_key());
+
+		$template_id = \Input::post('page_gab_id', $page->page_gab_id);
+		if (!empty($template_id)) {
+			\Config::load('templates', true);
+			$template_id and $data = \Config::get('templates.id-'.$template_id, array(
+				'layout' => array(),
+			));
+			$data['layout'] and Model_Page::set_wysiwyg(array_keys($data['layout']));
+		}
+
 		$fieldset = \Fieldset::build_from_config($fields, $page, array(
-			'complete' => function($data) use ($page, $fields) {
+			'complete' => function($data) use ($page, $fields, $editable_fields) {
 
 				try {
 					foreach ($data as $name => $value) {
-						if (substr($name, 0, 5) == 'page_' && $name != 'page_id') {
+						if (in_array($name, $editable_fields)) {
 							$page->$name = $value;
 						}
 					}
@@ -151,13 +208,14 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 							$page->$name = 0;
 						}
 					}
+					$page->save();
+
+					// Save wysiwyg after the page->save(), because we need page_id on creation too
 					foreach (\Input::post('wysiwyg', array()) as $name => $content) {
 						$wysiwyg = $page->wysiwyg($name);
 						$wysiwyg->wysiwyg_text = $content;
 						$wysiwyg->save();
 					}
-
-					$page->save();
 
 					$body = array(
 						'notify' => 'Page edited successfully.',

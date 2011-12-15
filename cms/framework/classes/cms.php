@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -105,17 +105,14 @@ class Cms {
 
         \Fuel::$profiling && Profiler::mark('Recherche des fonctions dans la page');
 
-        // Find all the functions
-        preg_match_all('`<img id="fct_id_(\d+)" [^>]+>`', $content, $matches);
-        foreach ($matches[1] as $match_id => $fct_id) {
-            $function = Cms\Model_Function::find('first', array(
-                'where' => array(
-                    array('fct_id', $fct_id),
-                ),
-            ));
+		preg_match_all('`<(\w+)\s[^>]+data-module="([^"]+)" data-config="([^"]+)">.*?</\\1>`', $content, $matches);
+        foreach ($matches[2] as $match_id => $fct_id) {
+			$args = json_decode(strtr($matches[3][$match_id], array(
+				'&quot;' => '"',
+			)));
 
             // Check if the function exists
-            $name   = $function->fct_nom;
+            $name   = $fct_id;
             $config = Config::get("front.$name", false);
             $found  = $config !== false;
 
@@ -127,17 +124,17 @@ class Cms {
 
             if ($found) {
                 $function_content = self::hmvc($config['target'].'/main', array(
-                    'args'     => array(unserialize($function->fct_parametres)),
-                    'module'   => $config['name'],
+                    'args'     => array($args),
+                    'module'   => $config['rewrite_prefix'] ?: $name,
                     'inline'   => true,
                 ));
             } else {
                 $function_content = '';
                 \Fuel::$profiling && Console::logError(new Exception(), 'Function '.$name.' not found in '.get_class($controller).'.');
             }
-            // Replace the content with
-            $content = str_replace($matches[0][$match_id], $function_content, $content);
-        }
+
+			$content = str_replace($matches[0][$match_id], $function_content, $content);
+		}
         return strtr($content, array(
             'http://virtuel_url_data' => Uri::base(false).'data/',
         ));

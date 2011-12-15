@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -53,6 +53,14 @@ class Controller_Front extends Controller {
         $cache_path = (empty($this->url) ? 'index/' : $this->url).$cache_path;
         $cache_path = rtrim($cache_path, '/');
 
+		if ($nocache = true) {
+			$this->_generate_cache();
+			ob_start();
+            echo $this->_view->render();
+			$content = ob_get_clean();
+            return $this->_handle_head($content);
+		}
+
         $publi_cache = PubliCache::forge('pages'.DS.$cache_path);
         try {
             $content = $publi_cache->execute($this);
@@ -65,7 +73,9 @@ class Controller_Front extends Controller {
                 // Cannot generate cache: fatal error...
                 exit($e->getMessage());
             }
+			ob_start();
             echo $this->_view->render();
+			$content = ob_get_clean();
             $publi_cache->save(CACHE_DURATION_PAGE, $this);
             \Fuel\Core\Event::trigger('page_save_cache', $publi_cache->get_path());
             $content = $publi_cache->execute();
@@ -171,13 +181,15 @@ class Controller_Front extends Controller {
 
         \Fuel::$profiling && \Profiler::console('page_id = ' . $this->page->page_id);
 
+		Page\Model_Page::set_wysiwyg(array_keys($this->template['layout']));
+
         // Scan all wysiwyg
-        foreach ($this->template['wysiwyg'] as $wysiwyg => $name) {
-            $content = \Cms::parse_wysiwyg($this->page->{$wysiwyg}, $this);
+        foreach ($this->template['layout'] as $wysiwyg_name => $layout) {
+            $content = \Cms::parse_wysiwyg($this->page->wysiwyg($wysiwyg_name)->wysiwyg_text, $this);
 
             $this->page_title = $this->page->page_titre;
 
-            $this->_view->set($wysiwyg, $content, false);
+            $this->_view->set('wysiwyg_'.$wysiwyg_name, $content, false);
         }
     }
 
@@ -192,8 +204,9 @@ class Controller_Front extends Controller {
             $where[] = array('page_url_virtuel', $this->url);
         }
 
+		\Fuel::add_module('cms_page');
         // Liste toutes les pages ayant le bon nom
-        $pages = Model_Page::find('all', array(
+        $pages = Page\Model_Page::find('all', array(
             'where' => $where,
         ));
 
@@ -220,6 +233,9 @@ class Controller_Front extends Controller {
         }
 
         $this->template = $templates['id-'.$this->page->page_gab_id];
+		if (empty($this->template['file'])) {
+			throw new \Exception('The template file for '. ($this->template['title'] ?: $this->page->page_gab_id ).' is not defined.');
+		}
 
         try {
 			// @todo : always load fromt the template directory?
@@ -227,6 +243,7 @@ class Controller_Front extends Controller {
             $this->_view = View::forge($this->template['file']);
         } catch (\FuelException $e) {
             $template_file = implode(DS, array(rtrim(APPPATH, DS), 'views', 'templates', $this->template['file'].'.php'));
+
             if (!is_file($template_file)) {
                 throw new \Exception('The template '.$this->template['file'].' cannot be found.');
             }
@@ -244,7 +261,7 @@ class Controller_Front extends Controller {
     }
 
     public function rebuild_cache($cache) {
-        $this->page = new Model_Page();
+        $this->page = new Page\Model_Page();
         foreach ($cache['page'] as $field => $value) {
             $this->page->{'page_'.$field} = $value;
         }

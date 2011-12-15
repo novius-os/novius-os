@@ -143,6 +143,85 @@
 				}
 			});
 
+			var self = this;
+
+			ed.onInit.add(function(ed) {
+				var $body = $(ed.getBody());
+				// Rebuilds the module, as if we just inserted them (adds the action links like delete)
+				$body.find('.nosModule, .nosModuleDel').each(function() {
+					var module = $(this);
+					module.html('Loading...');
+
+					var module_id = $(this).data('module');
+					var metadata  = self.settings.theme_nos_modules[module_id];
+					var data      = $(this).data('config');
+					$.ajax({
+						url: metadata.previewUrl,
+						type: 'POST',
+						dataType: 'json',
+						data: data,
+						success: function(json) {
+							module.html(json.preview);
+							self.onModuleAdd(module);
+						},
+						error: function() {
+							module.html('Error when loading the preview of the module');
+						}
+					});
+				});
+			});
+
+			// Global onClick handlers to execute actions from the modules
+			// We need that to play nicefully with undo/redo
+			ed.onClick.add(function(ed, e) {
+				var target = $(e.target);
+				var action = target.data('action');
+
+				// Modules are non-editable, so we can't add new paragraphs by pressing "Enter"
+				// This allow insertion before or after the display:block module
+
+				// Add a new paragraph before a display:block module
+				if (action == 'addParagraphBefore') {
+					var p = $('<p>New paragraph</p>');
+					target.closest('.nosModule, .nosModuleInline').before(p);
+					// All 3 commands are needed to select the node and focus the editor
+					ed.selection.select(p.get(0), true);
+					ed.focus(false);
+					ed.execCommand('mceSelectNode', false, p.get(0), {skip_undo : 1});
+					// Tell undoManager to add a checkpoint
+					ed.execCommand("mceEndUndoLevel");
+					e.preventDefault();
+				}
+
+				// Add a new paragraph after a display:block module
+				if (action == 'addParagraphAfter') {
+					var p = $('<p>New paragraph</p>');
+					target.closest('.nosModule, .nosModuleInline').after(p);
+					// All 3 commands are needed to select the node and focus the editor
+					ed.selection.select(p.get(0), true);
+					ed.focus(false);
+					ed.execCommand('mceSelectNode', false, p.get(0), {skip_undo : 1});
+					// Tell undoManager to add a checkpoint
+					ed.execCommand("mceEndUndoLevel");
+					e.preventDefault();
+				}
+
+				if (action == 'removeModule') {
+					target.closest('.nosModule, .nosModuleInline').remove();
+					// Tell undoManager to add a checkpoint
+					ed.execCommand("mceEndUndoLevel");
+					e.preventDefault();
+				}
+			});
+
+			ed.onGetContent.add(function(ed, o) {
+				var content = $(o.content);
+				// Empty module previews (data and useful informations are stored as html attributes on the higest div)
+				content.filter('.nosModule, .nosModuleInline').empty();
+				content.find('.nosModule, .nosModuleInline').empty();
+				o.content = $('<div></div>').append(content).html();
+			});
+
 			ed.onSetProgressState.add(function(ed, b, ti) {
 				var co, id = ed.id, tb;
 
@@ -1396,17 +1475,85 @@
         _nosModule : function(ui, val) {
             var ed = tinyMCE.activeEditor;
 
-            el = ed.selection.getNode();
+			// Keep reference to the wijdialog node, so we can close the popup manually
+			var dialog = null;
 
-            ed.execCommand("mceBeginUndoLevel");
-			ed.execCommand('mceInsertContent', false, '<div id="__mce_tmp" class="mceNonEditable nosModule"><a href="#" class="nosModuleDel" onclick="parent.$(this).parent().remove();return false;">Del.</a><h1>' + val.title + '</h1></div>', {skip_undo : 1});
-            ed.dom.setAttribs('__mce_tmp', {
-				'data-module' : val.id
+			var self=  this;
+
+			// The popup will trigger this event when done
+			$.nos.listener.add('wysiwyg.module.save', true, function(json) {
+
+				var pr = $(json.preview);
+				// We set a temporary ID so we can fetch the node later
+				pr.attr({
+					'id': '__mce_tmp',
+					'data-config': json.config,
+					'data-module': val.id
+				}).addClass('mceNonEditable');
+
+				// Close the popup (if we have one)
+				dialog && dialog.wijdialog('close');
+
+				// And self-remove from the listener
+				$.nos.listener.remove('wysiwyg.module.save', true, arguments.callee);
+
+				ed.execCommand('mceInsertContent', false, $('<div></div>').append(pr).html(), {skip_undo : 1});
+
+				// Retrieve the preview node from the tinyMce document context, or we get this error:
+				// "Node cannot be used in a document other than the one in which it was created"
+				preview = $(ed.dom.get('__mce_tmp'));
+				// We don't need the id anymore now
+				preview.attr('id', '');
+
+				// Add special links (this is also called onInit())
+				self.onModuleAdd(preview);
+
+				// @todo search why this doesn't work
+				// This is an uncessfull attempt to refocus the editor after the nonEditable block content has been added
+				// Right now, the undo/redo buttons are disabled after insertion, which is a bug
+				ed.selection.select(preview.get(0), true);
+				ed.selection.collapse(true);
+				ed.focus(false);
+				ed.execCommand('mceSelectNode', false, preview.get(0), {skip_undo : 1});
+				ed.execCommand('mceStartTyping');
+
+				// mceAddUndoLevel has been removed in 3.3, we don't need it anymore
+				// mceEndUndoLevel calls mceAddUndoLevel
+				ed.execCommand("mceEndUndoLevel");
 			});
-			ed.dom.setAttrib('__mce_tmp', 'id', '');
-			ed.undoManager.add();
-            ed.execCommand("mceEndUndoLevel");
+
+			// Open the dialog popup (it returns the node inserted in the body)
+			dialog = $.nos.dialog({
+				contentUrl: val.popupUrl,
+				title: val.title
+			});
         },
+
+		onModuleAdd: function(container) {
+
+            var ed = tinyMCE.activeEditor;
+			container = $(container);
+
+			// Don't bind click handlers here, it will mess up when using undo/redo, which only tracks the HTML content
+			// Instead, use a global click handler and detect the action using data-action="..."
+			// Ctrf + F using an action name (removeModule or addParagraphAfter) to find where this is :)
+			var deleteLink = $('<a href="#" data-action="removeModule">Delete</a>');
+			var insertAfter = $('<a href="#" data-action="addParagraphAfter">New paragraph after</a>');
+			var insertBefore = $('<a href="#" data-action="addParagraphBefore">New paragraph before</a>');
+
+			if (container.is('span')) {
+				container.addClass('nosModuleInline')
+				container.append(document.createTextNode(' '));
+				container.append(deleteLink);
+				container.before($('<span> </span>'));
+				container.after($('<span> </span>'));
+			} else {
+				container.addClass('nosModule');
+				container.prepend(insertBefore.addClass('nosModuleActionBlock'));
+				container.prepend(insertAfter.addClass('nosModuleActionBlock'));
+				container.prepend(deleteLink.addClass('nosModuleActionBlock'));
+			}
+		},
 
 		_ufirst : function(s) {
 			return s.substring(0, 1).toUpperCase() + s.substring(1);

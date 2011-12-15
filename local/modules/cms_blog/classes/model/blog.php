@@ -18,7 +18,7 @@ class Model_Blog extends Model {
     protected static $_table_name = 'os_blog';
     protected static $_primary_key = array('blog_id');
 
-    protected static $_has_one = array(
+    protected static $_belongs_to = array(
         'author' => array(
             'key_from' => 'blog_auteur_id',
             'model_to' => 'Cms\Model_User',

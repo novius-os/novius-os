@@ -1,6 +1,6 @@
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -19,19 +19,19 @@ define([
 				var noviusos = $('#noviusos');
 				$.nos = {
 					listener : (function() {
-						var _list = {},
-							_get = function(id) {
-								var listener = id && _list[id];
-	
-								if ( !listener ) {
-									listener = $.Callbacks();
-									if ( id ) {
-										_list[id] = listener;
-									}
+						var _list = {};
+						function _get(id) {
+							var listener = id && _list[id];
+
+							if ( !listener ) {
+								listener = $.Callbacks();
+								if ( id ) {
+									_list[id] = listener;
 								}
-								return listener;
-							};
-							
+							}
+							return listener;
+						}
+
 						return {
 							add: function(id, alltabs, fn) {
 								if (fn === undefined) {
@@ -39,11 +39,12 @@ define([
 									alltabs = true;
 								}
 								if (alltabs && window.parent != window && window.parent.$nos) {
-									$(window).unload(function() {
-										window.parent.$nos.nos.listener.remove(id, fn);
-									});
 									return window.parent.$nos.nos.listener.add(id, true, fn);
 								}
+								$(window).unload(function() {
+									window.parent.$nos.nos.listener.remove(id, fn);
+								});
+								//log('listener.add', id, window);
 								_get(id).add(fn);
 							},
 							remove: function(id, alltabs, fn) {
@@ -79,6 +80,7 @@ define([
 										triggerName += ".";
 									}
 									triggerName += queue[i];
+									//log('listener.fire', triggerName, window);
 									_get(triggerName).fire.apply(null, args);
 								}
 							}
@@ -301,7 +303,7 @@ define([
 					}
 				};
 				window.$nos = $;
-                
+
 			});
 			return $;
 		})(window.jQuery);

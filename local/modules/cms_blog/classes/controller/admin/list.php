@@ -33,7 +33,15 @@ class Controller_Admin_List extends Controller_Mp3table_List {
 
 
     public function action_delete($id) {
-        $json = array('success' => 1);
+        $success = false;
+
+        $billet = Model_Blog::find_by_blog_id($id);
+        if ($billet) {
+            $billet->delete();
+            $success = true;
+        }
+
+        $json = array('success' => $success);
 
         $response = \Response::forge(
             \Format::forge()->to_json($json)

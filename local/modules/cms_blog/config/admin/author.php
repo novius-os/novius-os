@@ -31,13 +31,6 @@ return array(
                                             }',
                     'label'     => 'Update',
                 ),
-                array(
-                    'icon'  => 'ui-icon ui-icon-close',
-                    'action'   =>  'function(args) {
-                                                alert("La suppression d\'un élément n\'est pas encore implémentée !\n Id de l\'élément : " + args.row.data.id);
-                                            }',
-                    'label' => 'Delete',
-                ),
             )
         ),
 	),
