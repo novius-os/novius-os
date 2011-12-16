@@ -1,5 +1,5 @@
 # NOVIUS OS - Web OS for digital communication
-# 
+#
 # @copyright  2011 Novius
 # @license    GNU Affero General Public License v3 or (at your option) any later version
 #             http://www.gnu.org/licenses/agpl-3.0.html
@@ -18,6 +18,7 @@ ErrorDocument 404 /htdocs/cms/404.php
     RewriteEngine   on
 
     RewriteRule ^/?(static|data|htdocs|media|cache)/(.*) - [L]
+    RewriteRule ^install.php - [L]
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
