@@ -54,3 +54,10 @@ a:hover {
 		vertical-align: middle;
 	}
 }
+
+.ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
+	padding : 0.2em 1em 0.2em 2.1em;
+}
+.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
+	padding : 0.2em;
+}
