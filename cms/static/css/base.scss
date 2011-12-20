@@ -39,3 +39,25 @@ a:hover {
 .nos-icon24-help { background-image: url(../img/24/tabs-help.png); }
 
 .nos-icon32-language { background-image: url(../img/32/language.png); }
+
+
+.wijmo-wijmenu, .wijmo-wijmenu-child {
+	width : auto;
+
+	.wijmo-wijmenu-link {
+
+		span, label {
+			white-space: nowrap;
+		}
+	}
+	input {
+		vertical-align: middle;
+	}
+}
+
+.ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
+	padding : 0.2em 1em 0.2em 2.1em;
+}
+.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
+	padding : 0.2em;
+}
