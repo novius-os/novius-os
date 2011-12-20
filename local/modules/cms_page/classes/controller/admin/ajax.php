@@ -23,11 +23,10 @@ class Controller_Admin_Ajax extends \Controller {
 		$id = $_GET['template_id'];
 		$data = \Config::get('templates.id-'.$id, array());
 		$data['layout'] = (array) $data['layout'];
-		Model_Page::set_wysiwyg(array_keys($data['layout']));
 
 		$page = Model_Page::find($page_id);
 		foreach ($data['layout'] as $wysiwyg => $coords) {
-			$data['content'][$wysiwyg] = $page->wysiwyg($wysiwyg)->wysiwyg_text;
+			$data['content'][$wysiwyg] = $page->{'wysiwyg->'.$wysiwyg.'->wysiwyg_text'};
 		}
 
 		$response = \Response::forge(\Format::forge()->to_json($data), 200, array(

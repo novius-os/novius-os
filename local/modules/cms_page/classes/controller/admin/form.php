@@ -191,7 +191,6 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 			$template_id and $data = \Config::get('templates.id-'.$template_id, array(
 				'layout' => array(),
 			));
-			$data['layout'] and Model_Page::set_wysiwyg(array_keys($data['layout']));
 		}
 
 		$fieldset = \Fieldset::build_from_config($fields, $page, array(
@@ -208,14 +207,14 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 							$page->$name = 0;
 						}
 					}
-					$page->save();
+
 
 					// Save wysiwyg after the page->save(), because we need page_id on creation too
 					foreach (\Input::post('wysiwyg', array()) as $name => $content) {
-						$wysiwyg = $page->wysiwyg($name);
-						$wysiwyg->wysiwyg_text = $content;
-						$wysiwyg->save();
+						$page->{'wysiwyg->'.$name.'->wysiwyg_text'} = $content;
 					}
+
+                    $page->save();
 
 					$body = array(
 						'notify' => 'Page edited successfully.',

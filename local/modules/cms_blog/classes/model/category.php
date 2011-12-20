@@ -145,4 +145,26 @@ class Model_Category extends \Orm\Model {
     {
         return parent::query($options + array('order_by' => array('blgc_rang')));
     }
+
+    public static function findOrdered() {
+        $objects = static::find('all', array('where' => array(array('blgc_parent_id', 'IS', \DB::expr('NULL')))));
+        /*
+        $obj_by_id = array();
+        for ($i = 0; $i < count($objects); $i++) {
+            $obj_by_id[$objects[$i]->id] = $i;
+        }
+        for ($i = 0; $i < count($objects); $i++) {
+            if ($objects[$i]->blgc_parent_id) {
+                $iParent = $obj_by_id[$objects[$i]->blgc_patent_id];
+                if (!$objects[$iParent]->children) {
+                    $objects[$iParent]->children = array();
+                }
+                $objects[$iParent]->children[] = $objects[$i];
+                array_splice($objects, $i, 1);
+                $i--;
+            }
+        }
+        */
+        return $objects;
+    }
 }

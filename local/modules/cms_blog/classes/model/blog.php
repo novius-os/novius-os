@@ -9,7 +9,7 @@
  */
 
 namespace Cms\Blog;
-use \Orm\Model;
+use \Cms\Model;
 
 
 \Fuel::add_module('cms_media');
@@ -18,18 +18,13 @@ class Model_Blog extends Model {
     protected static $_table_name = 'os_blog';
     protected static $_primary_key = array('blog_id');
 
+    protected static $_has_one = array();
+
     protected static $_belongs_to = array(
         'author' => array(
             'key_from' => 'blog_auteur_id',
             'model_to' => 'Cms\Model_User',
             'key_to' => 'user_id',
-            'cascade_save' => false,
-            'cascade_delete' => false,
-        ),
-        'wysiwyg' => array(
-            'key_from' => 'blog_contenu_wysiwyg_id',
-            'model_to' => 'Cms\Model_Wysiwyg',
-            'key_to' => 'wys_id',
             'cascade_save' => false,
             'cascade_delete' => false,
         ),
@@ -49,7 +44,7 @@ class Model_Blog extends Model {
 			'single_id_property' => 'blog_lang_single_id',
 		),
 	);
-	
+
     /*
     protected static $_has_many = array(
         'tags' => array(
@@ -83,4 +78,26 @@ class Model_Blog extends Model {
             'cascade_delete'   => false,
         ),
     );
+
+    protected static $_has_wysiwygs = true;
+
+
+
+    function updateCategoriesById($ids) {
+        $deleteIds = array();
+        for ($i = 0; $i < count($this->categories); $i++) {
+            $searched = array_search($this->categories[$i]->blgc_id, $ids);
+            if ($searched !== false) {
+                array_splice($ids, $searched, 1);
+            } else {
+                array_splice($this->categories, $i, 1);
+                $i--;
+            }
+        }
+        foreach ($ids as $id) {
+            $this->categories[] = Model_Category::find($id);
+        }
+    }
+
+
 }

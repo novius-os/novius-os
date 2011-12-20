@@ -130,16 +130,16 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	public function value($name = null) {
 		if ($name === null)
 		{
-			$values = \Input::post();
-			foreach ($this->fields as $f)
+            $values = \Input::post();
+            foreach ($this->fields as $f)
 			{
 				if (substr(strtolower(\Inflector::denamespace(get_class($f))), 0, 6) == 'widget') {
-					$values[$f->name] = $f->value;
+					$values[$f->name] = $f->get_value();
 				}
-			}
+            }
 			return $values;
 		}
-		return $this->field($name)->value;
+		return $this->field($name)->get_value();
 	}
 
 	/**
@@ -391,7 +391,9 @@ JS
 				$data = $fieldset->validated();
 				if (!empty($options['complete']) && is_callable($options['complete'])) {
 					call_user_func($options['complete'], $data);
-				}
+				} else {
+                    self::defaultComplete($data, $model, $config, $options);
+                }
 			} else {
 				$response = \Response::forge(\Format::forge()->to_json(array(
 					'error' => (string) current($fieldset->error()),
@@ -404,4 +406,43 @@ JS
 		}
 		return $fieldset;
 	}
+
+    public static function defaultComplete ($data, $object, $fields, $options) {
+
+        //try {
+
+            foreach ($data as $name => $value) {
+                if ($fields[$name]['editable']) {
+                    $object->$name = $value;
+                }
+            }
+            foreach ($fields as $name => $f) {
+                if (empty($data[$name]) && \Arr::get($f, 'form.type', null) == 'checkbox') {
+                    $object->$name = 0;
+                }
+            }
+            if (!empty($options['save']) && is_callable($options['save'])) {
+                call_user_func($options['save'], $data);
+            }
+            $object->save();
+
+
+            $body = array(
+                'notify' => 'Edition successful.',
+                'listener_fire' => array('cms_page.refresh' => true),
+            );
+            /*
+        } catch (\Exception $e) {
+            $body = array(
+                'error' => \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.',
+            );
+        }
+            */
+
+            $response = \Response::forge(\Format::forge()->to_json($body), 200, array(
+                'Content-Type' => 'application/json',
+            ));
+            $response->send(true);
+            exit();
+        }
 }
