@@ -181,11 +181,9 @@ class Controller_Front extends Controller {
 
         \Fuel::$profiling && \Profiler::console('page_id = ' . $this->page->page_id);
 
-		Page\Model_Page::set_wysiwyg(array_keys($this->template['layout']));
-
         // Scan all wysiwyg
         foreach ($this->template['layout'] as $wysiwyg_name => $layout) {
-            $content = \Cms::parse_wysiwyg($this->page->wysiwyg($wysiwyg_name)->wysiwyg_text, $this);
+            $content = \Cms::parse_wysiwyg($this->page->{'wysiwyg->'.$wysiwyg_name.'->wysiwyg_text'}, $this);
 
             $this->page_title = $this->page->page_titre;
 

@@ -65,7 +65,7 @@ return array(
                             'icon'      => 'ui-icon ui-icon-pencil',
                             'action'   =>  'function(args) {
                                                 $.nos.tabs.openInNewTab({
-                                                    url     : "admin/cms_blog/form?id=" + args.row.data.id,
+                                                    url     : "admin/cms_blog/form/edit/" + args.row.data.id,
                                                     label   : "Update"
                                                 });
                                             }',

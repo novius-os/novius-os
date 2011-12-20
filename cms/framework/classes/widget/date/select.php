@@ -53,14 +53,41 @@ class Widget_Date_Select extends \Fieldset_Field {
         $this->parts = \Fieldset::forge($name.uniqid());
         
         // Build the fields used by the widget
-        $this->day = $this->parts->add($name.'_day', '', array('size' => '2'));
-        $this->month = $this->parts->add($name.'_month', '', array(
+
+        // Day
+        if (!$attributes['day']) {
+            $attributes['day'] = array();
+        }
+        $attrs = array_merge(array('size' => '2', 'style' => 'width: 20px;'), $attributes['day']);
+
+        $this->day = $this->parts->add($name.'_day', '', $attrs);
+
+
+        // Month
+        if (!$attributes['month']) {
+            $attributes['month'] = array();
+        }
+        $attrs = array_merge(array(
             'type'    => 'select',
             'options' => static::_get_month_names(),
-        ));
-        $this->year = $this->parts->add($name.'_year', '', array('size' => '6'));
+            'style' => 'width: 50px;',
+        ), $attributes['month']);
+        $this->month = $this->parts->add($name.'_month', '', $attrs);
+
+        // Year
+        if (!$attributes['year']) {
+            $attributes['year'] = array();
+        }
+        $attrs = array_merge(array('size' => '6', 'style' => 'width: 40px;'), $attributes['year']);
+        $this->year = $this->parts->add($name.'_year', '', $attrs);
+
+        // Time
+        if (!$attributes['time']) {
+            $attributes['time'] = array();
+        }
+        $attrs = array_merge(array('type' => 'hidden'), $attributes['time']);
         
-        $this->time = $this->parts->add($name.'_time', '', array('type' => 'hidden'));
+        $this->time = $this->parts->add($name.'_time', '', $attrs);
         
         $this->add_rule(array('valid_date' => function($value) {
             list($date, $time) = explode(' ', $value.' ');

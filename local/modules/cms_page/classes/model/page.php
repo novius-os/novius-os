@@ -12,9 +12,11 @@ namespace Cms\Page;
 
 use Fuel\Core\Uri;
 
-class Model_Page extends \Orm\Model {
+class Model_Page extends \Cms\Model {
     protected static $_table_name = 'cms_page';
     protected static $_primary_key = array('page_id');
+
+    protected static $_has_wysiwygs = true;
 
 	protected static $_has_many = array(
 		'childrens' => array(
@@ -96,6 +98,8 @@ class Model_Page extends \Orm\Model {
         return $url;
     }
 
+    /*
+
 	public static function set_wysiwyg($names) {
 		foreach ($names as $name) {
 			$relation = 'wysiwyg_'.$name;
@@ -126,6 +130,7 @@ class Model_Page extends \Orm\Model {
 		}
 		return $this->$relation;
 	}
+    */
 
 
 

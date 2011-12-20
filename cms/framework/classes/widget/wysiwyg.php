@@ -26,27 +26,31 @@ class Widget_Wysiwyg extends \Fieldset_Field {
 		$this->wysiwyg->set_value(\Security::xss_clean($text));
 	}
 
+    public function get_value() {
+        return $this->wysiwyg->get_value();
+    }
+
     /**
      * How to display the field
      * @return type
      */
     public function build() {
 
-		static::form_append($this->fieldset());
+	    static::form_append($this->fieldset());
         return (string) $this->wysiwyg;
     }
 
 	public function form_append($fieldset) {
 		$fieldset->append(<<<JS
 <script type="text/javascript">
-	require([
-	'static/cms/js/jquery/tinymce/jquery.tinymce_src',
-	'static/cms/js/jquery/tinymce/jquery.wysiwyg'
-	], function() {
-		$('textarea.tinymce').wysiwyg({
-
-		});
-	});
+    require([
+    'static/cms/js/jquery/tinymce/jquery.tinymce_src',
+    'static/cms/js/jquery/tinymce/jquery.wysiwyg'
+    ], function() {
+            texts = $('textarea.tinymce:not(.processed)');
+            texts.wysiwyg();
+            texts.addClass('processed');
+    });
 </script>
 JS
 		);
