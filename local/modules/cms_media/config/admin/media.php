@@ -53,8 +53,8 @@ return array(
 			'dataParser' => "function(size, item) {
 				var data = {
 					title : item.title,
-					thumbnail : (item.image ? item.thumbnail : item.thumbnailAlternate).replace('64', size),
-					thumbnailAlternate : (item.image ? item.thumbnailAlternate : '').replace('64', size),
+					thumbnail : (item.image ? item.thumbnail : item.thumbnailAlternate).replace(/64/g, size),
+					thumbnailAlternate : (item.image ? item.thumbnailAlternate : '').replace(/64/g, size),
 					actions : [
 						{
 							label : 'Edit',
@@ -75,25 +75,90 @@ return array(
 									});
 								}
 							}
-						}
+						},
+						{
+							label : 'Visualize',
+							action : function() {
+								window.open(item.image);
+							}
+						},
 					]
 				};
 				return data;
-			}"
+			}",
 		),
 		'defaultView' => 'thumbnails',
+		'preview' => array(
+			'hide' => false,
+			'vertical' => true,
+			'options' => array(
+				'dataParser' => "function(item) {
+					var data = {
+						title : item.title,
+						thumbnail : (item.image ? item.thumbnail.replace(/64/g, 256) : item.thumbnailAlternate),
+						thumbnailAlternate : (item.image ? item.thumbnailAlternate : ''),
+						meta : [
+							{
+								label : 'Id',
+								value : item.id
+							},
+							{
+								label : 'Extension',
+								value : item.extension
+							},
+							{
+								label : 'File name',
+								value : item.file_name
+							},
+							{
+								label : 'Path',
+								value : item.path
+							}
+						],
+						actions : [
+							{
+								label : 'Edit',
+								action : function() {
+									$.nos.tabs.openInNewTab({
+										url : 'admin/cms_media/form?id=' + item.id,
+										label : item.title
+									});
+								}
+							},
+							{
+								label : 'Delete',
+								action : function() {
+									if (confirm('Are you sure ?')) {
+										$.nos.tabs.openInNewTab({
+											url : 'admin/cms_media/form?id=' + item.id,
+											label : item.title
+										});
+									}
+								}
+							},
+							{
+								label : 'Visualize',
+								button : true,
+								action : function() {
+									window.open(item.image);
+								}
+							},
+						]
+					};
+					return data;
+				}",
+			)
+		),
 		'inspectors' => array(
 			array(
 				'vertical' => true,
 				'label' => 'Folders',
-				'iconClasses' => 'cms_media-icon16 cms_media-icon16-folder',
 				'url' => 'admin/cms_media/inspector/folder/list',
 				'widget_id' => 'inspector-folder',
 			),
 			array(
 				'widget_id' => 'inspector-extension',
 				'label' => 'Type of file',
-				'iconClasses' => 'cms_media-icon16 cms_media-icon16-folder',
 				'url' => 'admin/cms_media/inspector/extension/list',
 			),
 		),
@@ -102,6 +167,8 @@ return array(
 		'id' => 'media_id',
 		'title' => 'media_title',
 		'extension' => 'media_ext',
+		'file_name' => 'media_file',
+		'path' => 'media_path',
 		'image' => function($object) {
             return $object->is_image();
         },
