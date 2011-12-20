@@ -54,7 +54,13 @@ define([
 			}
 
 			self.uiPager.wijpager({
+				pageIndexChanging : function(sender, args) {
+					self._trigger('pageIndexChanging', null, args);
+					o.pageIndex = args.newPageIndex;
+					self._load();
+				},
 				pageIndexChanged : function(sender, args) {
+					self._trigger('pageIndexChanged');
 					o.pageIndex = args.newPageIndex;
 					self._load();
 				}
@@ -142,16 +148,28 @@ define([
 				var data = this;
 
 				if ($.isFunction(o.dataParser)) {
-					data = o.dataParser(o.thumbnailSize, data, i);
+					data = {
+						item : o.dataParser(o.thumbnailSize, data, i),
+						noParseData : data
+					};
+				} else {
+					data = {
+						item : data,
+						noParseData : data
+					};
 				}
 				self._displayItem(data, i);
 			});
+
+			self._trigger('rendered');
+
 			return self;
 		},
 
-		_displayItem : function(item, index) {
+		_displayItem : function(data, index) {
 			var self = this,
-				o = self.options;
+				o = self.options,
+				item = data.item;
 
 			item = $.extend({
 				title : '',
@@ -162,6 +180,10 @@ define([
 
 			var container = $('<div></div>')
 				.addClass('nos-thumbnails-thumb wijmo-wijgrid ui-widget-content')
+				.data('thumbnail', {
+					data : data,
+					index : index
+				})
 				.appendTo(self.uiContainer),
 
 				td = $('<table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td></td></tr></tbody></table>')
@@ -179,18 +201,8 @@ define([
 							td.parent().removeClass('ui-state-hover');
 						}
 					)
-					.focus(function() {
-						if (grid.find('td').is('wijmo-wijgrid-current-cell')) {
-							self._trigger( "select", null, {item : {
-													data : item,
-													index : index
-												}} );
-						}
-					})
 					.click(function() {
-						self.uiContainer.find('td').removeClass('wijmo-wijgrid-current-cell ui-state-highlight');
-						td.addClass('wijmo-wijgrid-current-cell ui-state-highlight');
-						td.focus();
+						self.select(index);
 					})
 					.appendTo(container)
 					.find('tbody')
@@ -242,7 +254,7 @@ define([
 						.appendTo(tr)
 						.find('div')
 						.text(item.actions[0].label)
-						.addClass('nos-thumbnails-thumb-container-img wijmo-wijgrid-innercell');
+						.addClass('wijmo-wijgrid-innercell');
 
 				if (item.actions.length > 1) {
 					var dropDown = $('<th><div></div></th>')
@@ -258,7 +270,7 @@ define([
 						)
 						.appendTo(tr)
 						.find('div')
-						.addClass('nos-thumbnails-thumb-container-img wijmo-wijgrid-innercell');
+						.addClass('wijmo-wijgrid-innercell');
 
 					$('<span></span>')
 						.addClass('ui-icon ui-icon-triangle-1-s')
@@ -351,8 +363,40 @@ define([
 				.prependTo(container);
 
 			return self;
-		}
+		},
 
+		select : function(index) {
+			var self = this,
+				o = self.options;
+
+			if (index === undefined) {
+				var sel = self.uiContainer.find('.nos-thumbnails-thumb:has(wijmo-wijgrid-current-cell)');
+				if (sel.length) {
+					var data = sel.data('thumbnail');
+					return data.index;
+				}
+
+				return null;
+			} else {
+				self.uiContainer.find('td').removeClass('wijmo-wijgrid-current-cell ui-state-highlight');
+
+				var sel = self.uiContainer.find('.nos-thumbnails-thumb').eq(index);
+				if (sel.length) {
+					var data = sel.data('thumbnail');
+
+					sel.find('.wijgridtd')
+						.eq(0)
+						.addClass('wijmo-wijgrid-current-cell ui-state-highlight');
+
+					self._trigger('selectionChanged', null, {item : data});
+				} else {
+					self._trigger('selectionChanged');
+					return false
+				}
+			}
+
+			return self;
+		}
 	});
 	return $;
 });
