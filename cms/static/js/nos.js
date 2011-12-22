@@ -174,6 +174,7 @@ define([
                             url: options['url'],
                             dataType: 'json',
                             data: options['data'],
+                            type: 'POST',
                             success: function(json) {
                                 //console.log(json);
                                 if (json.error) {
@@ -214,6 +215,36 @@ define([
                         });
                     },
 
+                    saveUserConfiguration: function(key, configuration) {
+                        this.ajax({
+                            url: '/admin/noviusos/noviusos/save_user_configuration',
+                            data: {
+                                key: key,
+                                configuration: configuration
+                            }
+                        });
+                    },
+
+                    initialize: function(configuration) {
+                        nosObject = this;
+                        fct = function(e) {
+                            nosObject.tabs.saveTabs();
+                        };
+                        $.extend(configuration, {
+                            add: fct,
+                            pin: fct,
+                            unpin: fct,
+                            remove: fct,
+                            select: fct,
+                            show: fct,
+                            drag: fct
+                        });
+                        $('#noviusos').ostabs(configuration);
+                        if (configuration['user_configuration']['tabs']) {
+                            noviusos.ostabs('setConfiguration', configuration['user_configuration']['tabs']);
+                        }
+                    },
+
 					tabs : {
 						index : function() {
 							if (window.parent != window && window.parent.$nos) {
@@ -250,7 +281,8 @@ define([
 							}
 							if (noviusos.length) {
 								index = noviusos.ostabs('add', tab, index);
-								return noviusos.ostabs('select', index);
+								$tabIt = noviusos.ostabs('select', index);
+                                return $tabIt;
 							} else if (tab.url) {
 								window.open(tab.url);
 							}
@@ -273,7 +305,17 @@ define([
 								noviusos.ostabs('remove', index);
 							}
 							return true;
-						}
+						},
+                        /** Save tabs in user configuration file
+                         */
+                        saveTabs: function() {
+                            if (window.parent != window && window.parent.$nos) {
+                                return window.parent.$nos.nos.tabs.updateTab(this.index(), index);
+                            }
+                            if (noviusos.length) {
+                                $nos.nos.saveUserConfiguration('tabs', noviusos.ostabs('getConfiguration'));
+                            }
+                        }
 					},
 					grid : {
 						getHeights : function() {

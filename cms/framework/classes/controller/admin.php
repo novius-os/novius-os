@@ -46,4 +46,5 @@ class Controller_Admin extends Controller {
 		// $request should never be empty, because the route cms/404/admin should exists
 		return $request->execute()->response();
 	}
+
 }

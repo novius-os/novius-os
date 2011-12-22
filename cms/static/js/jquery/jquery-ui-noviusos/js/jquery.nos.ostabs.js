@@ -40,7 +40,8 @@ define([
 				unpin: null,
 				remove: null,
 				select: null,
-				show: null
+				show: null,
+                drag: null
 			},
 
 			tabId : 0,
@@ -222,6 +223,7 @@ define([
 							self.sorting = false;
 						},
 						update: function() {
+                            self._trigger( "drag", null );
 							self.lis = self.uiOstabsAppsTab
 								.add( self.uiOstabsTray )
 								.add( self.uiOstabsTabs )
@@ -760,7 +762,7 @@ define([
 					self.select(0);
 				}
 
-				this._trigger( "add", null, this._ui( $li[ 0 ] ) );
+				this._trigger( "add", tab, this._ui( $li[ 0 ] ) );
 				return index;
 			},
 
@@ -784,36 +786,36 @@ define([
 				}, tab);
 
 
-				var a = $( '<a href="' + tab.url + '"></a>' );
-				if (tab.ajax) {
-					a.data( "ajax.tabs", true );
-				}
-				if (tab.panelId) {
-					a.data( "panelid.tabs", tab.panelId );
-				}
+                var a = $( '<a href="' + tab.url + '"></a>' );
+                if (tab.ajax) {
+                    a.data( "ajax.tabs", true );
+                }
+                if (tab.panelId) {
+                    a.data( "panelid.tabs", tab.panelId );
+                }
 
-				var icon = this._icon( tab ).appendTo( a );
+                var icon = this._icon( tab ).appendTo( a );
 
-				var label = $( '<span></span>' ).addClass( 'nos-ostabs-label' )
-					.text( tab.label )
-					.appendTo( a );
-				if ( !tab.labelDisplay ) {
-					label.hide();
-				}
+                var label = $( '<span></span>' ).addClass( 'nos-ostabs-label' )
+                    .text( tab.label )
+                    .appendTo( a );
+                if ( !tab.labelDisplay ) {
+                    label.hide();
+                }
 
-				var li = $( '<li></li>' ).append( a )
-					.addClass( 'ui-corner-top ui-state-default' + (tab.pined ? ' ui-state-pined' : '') ).data( 'ui-ostab', tab )
-					.appendTo( target );
+                var li = $( '<li></li>' ).append( a )
+                    .addClass( 'ui-corner-top ui-state-default' + (tab.pined ? ' ui-state-pined' : '') ).data( 'ui-ostab', tab )
+                    .appendTo( target );
 
-				if ( !isNaN( tab.iconSize ) && tab.iconSize !== 16 && target !== this.uiOstabsTabs) {
-					li.css({
-						height: ( tab.iconSize + 4 ) + 'px',
-						bottom: ( tab.iconSize - 35 ) + 'px'
-					});
-					icon.css( 'top', '2px' );
-				}
+                if ( !isNaN( tab.iconSize ) && tab.iconSize !== 16 && target !== this.uiOstabsTabs) {
+                    li.css({
+                        height: ( tab.iconSize + 4 ) + 'px',
+                        bottom: ( tab.iconSize - 35 ) + 'px'
+                    });
+                    icon.css( 'top', '2px' );
+                }
 
-				return li;
+                return li;
 			},
 
 			remove: function( index ) {
@@ -1105,7 +1107,22 @@ define([
 						tabs.push( $(this).data('ui-ostab') );
 					});
 				return tabs;
-			}
+			},
+
+            getConfiguration: function() {
+                configuration = {
+                    tabs: this.tabs(),
+                    selected: this.options.selected
+                };
+                return configuration;
+            },
+
+            setConfiguration: function(configuration) {
+                for (var i = 0; i < configuration['tabs'].length; i++) {
+                    this.add(configuration['tabs'][i], false);
+                }
+                this.select(configuration['selected']);
+            }
 		});
 	})();
 	return $;

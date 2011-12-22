@@ -14,6 +14,13 @@ class Controller_Generic_Admin extends \Fuel\Core\Controller_Template {
 
     public $template = 'cms::templates/html5';
 
+
+
+    public function before($response = null) {
+        return parent::before($response);
+    }
+
+
 	public function after($response) {
 		foreach (array(
 			'title' => 'Administration',

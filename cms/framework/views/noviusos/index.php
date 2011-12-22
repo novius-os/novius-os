@@ -13,7 +13,7 @@
 <script type="text/javascript">
 require(['static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.ostabs'], function( $ ) {
 		$(function() {
-			$('#noviusos').ostabs(<?= $ostabs ?>);
+            $.nos.initialize(<?= $ostabs ?>);
 		});
 	});
 </script>

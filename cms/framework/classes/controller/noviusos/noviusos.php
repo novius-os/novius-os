@@ -15,11 +15,15 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 	public function before() {
 		parent::before();
 
+        // Might be great to add some additional verifications here !
 		$logged_user = \Session::get('logged_user', false);
 		if (empty($logged_user)) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
-		}
+		} else {
+            $logged_user = Model_User::find_by_user_id($logged_user->id); // We reload the user
+            \Session::set('logged_user', $logged_user);
+        }
 
 		$this->auto_render = false;
 	}
@@ -38,6 +42,8 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 	public function action_index()
 	{
 		$view = \View::forge('noviusos/index');
+
+        $user = \Session::get('logged_user', false);
 		
 		$ostabs = array(
 			'initTabs' => self::getTabs(),
@@ -85,6 +91,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 			'show' => 'function(e, tab) {
 				$nos.nos.listener.fire(\'ostabs.show\', false, [tab.index]);
 			}',
+            'user_configuration' => unserialize($user->user_configuration),
 		);
 
 		$view->set('ostabs', \Format::forge($ostabs)->to_json(), false);
@@ -118,6 +125,53 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 			//array("url"=>"admin/user/list", "iconUrl" => "static/modules/cms_blog/img/32/author.png", "label" => "User management", "iconSize" => 32, 'labelDisplay'=> false, 'pined' => true),
 		);
 	}
+
+    public function action_save_user_configuration() {
+        $key            = \Input::post('key');
+        $configuration  = \Input::post('configuration');
+        if (!$configuration) {
+            $configuration = array();
+        }
+        $configuration  = $this->convertFromPost($configuration);
+
+
+        $json = array(
+            'success'       => true,
+        );
+
+        $user = \Session::get('logged_user', false);
+        if ($user) {
+            if (!$user->user_configuration) {
+                $user_configuration = array();
+            } else {
+                $user_configuration = unserialize($user->user_configuration);
+            }
+            $user_configuration[$key] = $configuration;
+            $user->user_configuration = serialize($user_configuration);
+            $user->save();
+        }
+
+
+
+
+        $response = \Response::forge(\Format::forge()->to_json($json), 200, array(
+            'Content-Type' => 'application/json',
+        ));
+        $response->send(true);
+        exit();
+    }
+
+    public function convertFromPost($arr) {
+        foreach ($arr as $key => $value) {
+            if (is_array($value)) {
+                $arr[$key] = $this->convertFromPost($arr[$key]);
+            } else {
+                $arr[$key] = $arr[$key] == 'true' ? true : ($arr[$key] == 'false' ? false : $arr[$key]);
+                $arr[$key] = is_numeric($arr[$key]) ? floatval($arr[$key]) : $arr[$key];
+            }
+        }
+        return $arr;
+    }
 }
 
 /* End of file desktop.php */

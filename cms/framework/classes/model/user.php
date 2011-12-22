@@ -195,10 +195,31 @@ class Model_User extends Model {
                 'display_as' => 'date_select',
             ),
         ),
+        'user_configuration' => array (
+            'type' => 'string',
+            'name' => 'user_configuration',
+            'default' => null,
+            'data_type' => 'text',
+            'null' => true,
+            'ordinal_position' => 6,
+            'comment' => '',
+            'extra' => '',
+            'key' => '',
+            'privileges' => 'select,insert,update,references',
+
+            'label' => 'User configuration',
+            'widget' => array(
+            ),
+        ),
     );
 
     public static function _init() {
         static::$_properties['user_last_connection']['default'] = \DB::expr('NOW()');
+    }
+
+
+    public function __get($name) {
+        return parent::__get($name);
     }
 }
 
