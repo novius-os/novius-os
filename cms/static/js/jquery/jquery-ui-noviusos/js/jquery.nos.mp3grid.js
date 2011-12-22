@@ -31,7 +31,8 @@ define([
 				showAll : 'Show all items',
 				views : 'Views',
 				viewGrid : 'Grid',
-				viewThumbnails : 'Thumbnails'
+				viewThumbnails : 'Thumbnails',
+				preview : 'Preview'
 			}
 		},
 
@@ -41,6 +42,7 @@ define([
 		gridRendered : false,
 		resizing : true,
 		init : false,
+		itemSelected : null,
 
 		_create: function() {
 			var self = this,
@@ -97,6 +99,30 @@ define([
 			var self = this,
 				o = self.options;
 
+			if (o.preview) {
+				o.preview = $.extend({
+					hide : true,
+					vertical : true,
+					label : o.texts.preview,
+					widget_id : 'mp3grid-preview',
+					options : {},
+					url : function($li) {
+						var widget = $('<div id="' + this.options.preview.widget_id + '"></div>')
+							.appendTo($li)
+							.inspectorPreview(this.options.preview.options)
+							.parent()
+							.on({
+								inspectorResize: function() {
+									widget.inspectorPreview('refresh');
+								}
+							})
+							.end();
+					}
+				}, $.isPlainObject(o.preview) ? o.preview : {});
+
+				o.inspectors = $.merge(o.inspectors, [o.preview]);
+			}
+
 			if (!$.isPlainObject(o.thumbnails)) {
 				o.thumbnails = false;
 			} else {
@@ -137,7 +163,7 @@ define([
 				}
 			});
 
-			$(window).bind({
+			$(window).on({
 				blur : function() {
 					self.resizing = false;
 				},
@@ -434,7 +460,8 @@ define([
 		_inspectorsSettingsMenu : function() {
 			var self = this,
 				o = self.options,
-				states = ['v', 'h', ''];
+				states = ['v', 'h', ''],
+				inspectors = o.inspectors;
 
 			$.each(o.inspectors, function() {
 				var inspector = this,
@@ -663,20 +690,25 @@ define([
 		},
 
 		_loadInspector : function($li) {
-			var self = this;
+			var self = this,
+				url = $li.data('inspectorurl');
 
-			$.ajax({
-				url: $li.data('inspectorurl'),
-				dataType: 'html'
-			})
-			.done(function(data) {
-				$(data).appendTo($li); // appendTo for embed javascript work
-			})
-			.fail(function(jqXHR, textStatus, errorThrown) {
-				log('error');
-				log(textStatus);
-				log(errorThrown);
-			});
+			if ($.isFunction(url)) {
+				url.call(this, $li);
+			} else {
+				$.ajax({
+					url: $li.data('inspectorurl'),
+					dataType: 'html'
+				})
+				.done(function(data) {
+					$(data).appendTo($li); // appendTo for embed javascript work
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					log('error');
+					log(textStatus);
+					log(errorThrown);
+				});
+			}
 
 			return self;
 		},
@@ -684,7 +716,7 @@ define([
 		_uiSearchBar : function() {
 			var self = this;
 
-			self.uiSearchInput.bind("keypress", function( event ) {
+			self.uiSearchInput.on('keypress', function( event ) {
 					var keyCode = $.ui.keyCode;
 
 					self.pageIndex = 0;
@@ -795,6 +827,9 @@ define([
 							}
 						}
 					}),
+					pageIndexChanging: function() {
+						$nos.nos.listener.fire('mp3grid.selectionChanged', false);
+					},
 					cellStyleFormatter: function(args) {
 						if (args.$cell.is('th')) {
 			                args.$cell.removeClass("ui-state-active");
@@ -815,7 +850,8 @@ define([
 								data = row ? row.data : false;
 
 							if (data) {
-								$nos.nos.listener.fire('grid.selectionChanged', false, [data]);
+								self.itemSelected = row.dataRowIndex;
+								$nos.nos.listener.fire('mp3grid.selectionChanged', false, [data]);
 							}
 						}
 						return true;
@@ -826,6 +862,11 @@ define([
 					rendered : function() {
 						self.gridRendered = true;
 						self.uiGrid.css('height', 'auto');
+						if (self.itemSelected !== null) {
+							var sel = self.uiGrid.wijgrid("selection");
+							sel.clear();
+							sel.addRange(0, self.itemSelected, 1, self.itemSelected);
+						}
 					}
 				}, o.grid));
 
@@ -862,11 +903,31 @@ define([
 
 						self.uiShowAll[self.uiInspectorsTags.find('span').length ? 'show' : 'hide']();
 					},
+					rendered : function() {
+						if (self.itemSelected !== null) {
+							if (!self.uiThumbnail.thumbnails('select', self.itemSelected)) {
+								self.itemSelected = null;
+							}
+						}
+					},
 					reader: {
 						read: function (dataSource) {
 							var count = parseInt(dataSource.data.total, 10);
 							dataSource.data = dataSource.data.items;
 							dataSource.data.totalRows = count;
+						}
+					},
+					pageIndexChanging: function() {
+						self.itemSelected = null;
+						$nos.nos.listener.fire('mp3grid.selectionChanged', false);
+					},
+					selectionChanged : function(e, data) {
+						if (!data || $.isEmptyObject(data)) {
+							self.itemSelected = null;
+							$nos.nos.listener.fire('mp3grid.selectionChanged', false);
+						} else {
+							self.itemSelected = data.item.index;
+							$nos.nos.listener.fire('mp3grid.selectionChanged', false, [data.item.data.noParseData]);
 						}
 					}
 				}, o.thumbnails));

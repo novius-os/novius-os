@@ -17,51 +17,50 @@ require([
 		$(function() {
 			var widget_id = "<?= $widget_id ?>",
 				inspector = $('#' + widget_id),
-				rendered = false,				
-				parent = inspector.parent();
-
-			inspector.css({
-					height : parent.height(),
-					width : parent.width()
-				})
-				.wijgrid({
-					showFilter: false,
-					allowSorting: false,
-					scrollMode : 'auto',
-					allowPaging : false,
-					allowColSizing : false,
-					allowColMoving : false,
-					staticRowIndex : 0,
-					columns : <?= $columns ?>,
-					data: <?= $data ?>,
-					currentCellChanged: function (e) {
-						var row = $(e.target).wijgrid("currentCell").row(),
-							data = row ? row.data : false;
-							
-						if (data && rendered) {
-							$nos.nos.listener.fire('inspector.selectionChanged' + widget_id, false, ["<?= $input_name ?>", data.id, data.title]);
+				rendered = false,
+				parent = inspector.parent()
+					.bind({
+						inspectorResize: function() {
+							inspector.wijgrid('destroy')
+								.empty();
+							init();
 						}
-						inspector.wijgrid("currentCell", -1, -1);
-					},
-					rendering : function() {
-						rendered = false;
-					},
-					rendered : function() {
-						rendered = true;
-						inspector.css('height', 'auto');
-					}
-				})
-				.parents()
-				.bind({
-					inspectorResize: function() {
-						inspector
-							.css({
-								height : parent.height(),
-								width : parent.width()
-							})
-							.wijgrid('doRefresh');
-					}
-				});
+					}),
+				rendered = false,
+				init = function() {
+					inspector.css({
+							height : '100%',
+							width : '100%'
+						})
+						.wijgrid({
+							showFilter: false,
+							allowSorting: false,
+							scrollMode : 'auto',
+							allowPaging : false,
+							allowColSizing : false,
+							allowColMoving : false,
+							staticRowIndex : 0,
+							columns : <?= $columns ?>,
+							data: <?= $data ?>,
+							currentCellChanged: function (e) {
+								var row = $(e.target).wijgrid("currentCell").row(),
+									data = row ? row.data : false;
+
+								if (data && rendered) {
+									$nos.nos.listener.fire('inspector.selectionChanged' + widget_id, false, ["<?= $input_name ?>", data.id, data.title]);
+								}
+								inspector.wijgrid("currentCell", -1, -1);
+							},
+							rendering : function() {
+								rendered = false;
+							},
+							rendered : function() {
+								rendered = true;
+								inspector.css('height', 'auto');
+							}
+						});
+				};
+			init();
 		});
 	});
 </script>
