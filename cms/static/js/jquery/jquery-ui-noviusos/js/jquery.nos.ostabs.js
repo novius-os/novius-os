@@ -1109,19 +1109,8 @@ define([
 				return tabs;
 			},
 
-            getConfiguration: function() {
-                configuration = {
-                    tabs: this.tabs(),
-                    selected: this.options.selected
-                };
-                return configuration;
-            },
-
-            setConfiguration: function(configuration) {
-                for (var i = 0; i < configuration['tabs'].length; i++) {
-                    this.add(configuration['tabs'][i], false);
-                }
-                this.select(configuration['selected']);
+            getSelected: function() {
+                return this.options.selected;
             }
 		});
 	})();

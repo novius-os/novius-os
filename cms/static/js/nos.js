@@ -176,7 +176,6 @@ define([
                             data: options['data'],
                             type: 'POST',
                             success: function(json) {
-                                //console.log(json);
                                 if (json.error) {
                                     $.nos.notify(json.error, 'error');
                                 }
@@ -239,10 +238,20 @@ define([
                             show: fct,
                             drag: fct
                         });
+
+                        if (configuration['user_configuration']['tabs']) {
+                            if (!configuration['options']) {
+                                configuration['options'] = {};
+                            }
+                            configuration['initTabs'] = configuration['user_configuration']['tabs']['tabs'];
+                            configuration['selected'] = configuration['user_configuration']['tabs']['selected'];
+                        }
                         $('#noviusos').ostabs(configuration);
+                        /*
                         if (configuration['user_configuration']['tabs']) {
                             noviusos.ostabs('setConfiguration', configuration['user_configuration']['tabs']);
                         }
+                        */
                     },
 
 					tabs : {
@@ -313,7 +322,7 @@ define([
                                 return window.parent.$nos.nos.tabs.updateTab(this.index(), index);
                             }
                             if (noviusos.length) {
-                                $nos.nos.saveUserConfiguration('tabs', noviusos.ostabs('getConfiguration'));
+                                $nos.nos.saveUserConfiguration('tabs', {selected: noviusos.ostabs('getSelected'), tabs: noviusos.ostabs('tabs')});
                             }
                         }
 					},
