@@ -134,6 +134,10 @@ require([
 					});
             });
 			$nos.nos.listener.fire('inspector.declareColumns', false, [widget_id, menuColumns]);
+
+			$nos.nos.listener.add(widget_id + '.refresh', true, function() {
+				parent.triggerHandler('inspectorResize');
+			});
 		});
 	});
 </script>
