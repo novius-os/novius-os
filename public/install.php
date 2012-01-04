@@ -212,14 +212,14 @@ $tests = array(
 
 	'public.htdocs.cms.valid' => array(
 		'title'        => 'DOCROOT/htdocs/cms links to CMSPATH/htdocs',
-		'passed'       => is_link(DOCROOT.'htdocs'.DS.'cms') && readlink(DOCROOT.'htdocs'.DS.'cms') == CMSROOT.'htdocs',
+		'passed'       => is_link(DOCROOT.'htdocs'.DS.'cms') && realpath(DOCROOT.'htdocs'.DS.'cms') == CMSROOT.'htdocs',
 		'command_line' => 'ln -s '.CMSROOT.'htdocs '.DOCROOT.'htdocs'.DS.'cms',
 		'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'cms'),
 	),
 
 	'public.static.cms.valid' => array(
 		'title'        => 'DOCROOT/static/cms links to CMSPATH/static',
-		'passed'       => is_link(DOCROOT.'static'.DS.'cms') && readlink(DOCROOT.'static'.DS.'cms') == CMSROOT.'static',
+		'passed'       => is_link(DOCROOT.'static'.DS.'cms') && realpath(DOCROOT.'static'.DS.'cms') == CMSROOT.'static',
 		'command_line' => 'ln -s '.CMSROOT.'static '.DOCROOT.'static'.DS.'cms',
 		'run_only_if'  => file_exists(DOCROOT.'static'.DS.'cms'),
 	),
@@ -478,7 +478,8 @@ if ($step == 2) {
 
 if ($step == 3) {
 	if (Cms\Model_User::count() > 0) {
-		//
+		header('Location: install.php?step=4');
+		exit();
 	}
 	if (\Input::method() == 'POST') {
 		try {
@@ -513,7 +514,7 @@ if ($step == 3) {
 		<p><label>Login / email: <input type="text" name="login" value="<?= Input::post('login', 'admin') ?>" /></label></p>
 		<p><label>Password: <input type="password" name="password" /></label></p>
 		<p><label>Password (confirmation): <input type="password" name="password_confirmation" /></label></p>
-		<p><input type="submit" value="Check and save DB config" /></p>
+		<p><input type="submit" value="Create the new account" /></p>
 	</form>
 	<?php
 }
