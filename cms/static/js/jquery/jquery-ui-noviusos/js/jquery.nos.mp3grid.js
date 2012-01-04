@@ -1,6 +1,6 @@
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -993,6 +993,10 @@ define([
 				}
 			});
 
+			$nos.nos.listener.add('mp3grid.' + self.options.grid.id + '.refresh', true, function() {
+				self.gridRefresh();
+			});
+
 			$nos.nos.listener.add('inspector.selectionChanged', false, function(input_name, value, label) {
 				var multiple = false,
 					name = input_name;
@@ -1077,7 +1081,7 @@ define([
 						width: '100%',
 						height: 'auto'
 					});
-	
+
 				if (inspectors.length) {
 					inspectors.css('height', ( self.uiInspectorsVertical.height() / inspectors.length )  + 'px')
 						.trigger('inspectorResize');
@@ -1097,7 +1101,7 @@ define([
 						width: 'auto',
 						height: '100%'
 					});
-	
+
 				if (inspectors.length) {
 					inspectors.css('width', ( self.uiInspectorsHorizontal.width() / inspectors.length )  + 'px')
 						.trigger('inspectorResize');

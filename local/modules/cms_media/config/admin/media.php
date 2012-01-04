@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -33,6 +33,8 @@ return array(
 			),
 		),
 		'grid' => array(
+			'id' => 'cms_media',
+			'proxyurl' => 'admin/cms_media/list/json',
 			'columns' => array(
 				array(
 					'headerText' => 'Ext.',
@@ -47,7 +49,6 @@ return array(
 				),
 				//'lang',
 			),
-			'proxyurl' => 'admin/cms_media/list/json',
 		),
 		'thumbnails' => array(
 			'dataParser' => "function(size, item) {
