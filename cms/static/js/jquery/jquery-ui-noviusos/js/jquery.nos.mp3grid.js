@@ -33,7 +33,9 @@ define([
 				viewGrid : 'Grid',
 				viewThumbnails : 'Thumbnails',
 				preview : 'Preview'
-			}
+			},
+            //callbabks
+            columnVisibilityChange : null
 		},
 
 		pageIndex : 0,
@@ -424,7 +426,8 @@ define([
 									o.grid.columns[index].visible = $(this).is(':checked');
 									self.uiGrid.wijgrid('doRefresh');
 									self.uiSettingsMenu.wijmenu('hideAllMenus');
-								},
+                                    self._trigger('columnVisibilityChange', null, { index : index, column : o.grid.columns[index]});
+                                },
 								label : column.headerText
 							}
 						};

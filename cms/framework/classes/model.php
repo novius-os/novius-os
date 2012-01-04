@@ -67,6 +67,13 @@ class Model extends \Orm\Model {
                         return $this->wysiwygs[$i]->{implode('->', $arr_name)} = $value;
                     }
                 }
+                $wysiwyg                        = new Model_Wysiwyg();
+                $wysiwyg->wysiwyg_text          = $value;
+                $wysiwyg->wysiwyg_join_table    = static::$_table_name;
+                $wysiwyg->wysiwyg_key           = $key;
+                $wysiwyg->wysiwyg_foreign_id    = $this->id;
+                $wysiwyg->save();
+                $this->wysiwygs[] = $wysiwyg;
             }
             $obj = $this;
             for ($i = 0; $i < count($arr_name); $i++) {
@@ -93,7 +100,7 @@ class Model extends \Orm\Model {
                         return $this->wysiwygs[$i]->{implode('->', $arr_name)};
                     }
                 }
-                exit();
+                return '';
             }
             $obj = $this;
             for ($i = 0; $i < count($arr_name); $i++) {

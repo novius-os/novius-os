@@ -29,8 +29,12 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
         return parent::after($response);
     }
 
-    public function action_edit($id) {
-        $object = Model_Blog::find('first', array('related' => array('wysiwygs'), 'where' => array('blog_id' => $id)));
+    public function action_edit($id = false) {
+        if ($id === false) {
+            $object = new Model_Blog();
+        } else {
+            $object = Model_Blog::find('first', array('related' => array('wysiwygs'), 'where' => array('blog_id' => $id)));
+        }
         $body = \View::forge('cms_blog::form/edit', array(
             'object'   => $object,
             'fieldset' => static::fieldset($object)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),

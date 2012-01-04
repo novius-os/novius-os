@@ -24,7 +24,7 @@ return array(
 		'adds' => array(
 			array(
 				'label' => 'Add a post',
-				'url' => 'admin/cms_blog/blogform',
+				'url' => 'admin/cms_blog/form/edit',
 			),
 			array(
 				'label' => 'Add a category',
