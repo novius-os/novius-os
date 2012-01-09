@@ -129,6 +129,11 @@ return array(
 				),
 			),
 		),
+        'splitters' => array(
+            'vertical' => array(
+                'splitterDistance' => 0.2,
+            ),
+        ),
 	),
 	'dataset' => array(
         'id' => 'blog_id',

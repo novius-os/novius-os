@@ -35,7 +35,12 @@ define([
 				preview : 'Preview'
 			},
             //callbabks
-            columnVisibilityChange : null
+            columnVisibilityChange : null,
+            slidersChange : null,
+            splitters: {
+                vertical: null,
+                horizontal: null
+            }
 		},
 
 		pageIndex : 0,
@@ -595,59 +600,66 @@ define([
 						.gridRefresh();
 				};
 
-			self.uiSplitterVertical.wijsplitter({
-					orientation: "vertical",
-					splitterDistance: 300,
-					showExpander: false,
-					fullSplit: false,
-					panel1 : {
-						minSize : 150,
-						scrollBars : 'hidden'
-					},
-					panel2 : {
-						minSize : 200,
-						scrollBars : 'hidden'
-					},
-					expanded: function () {
-						refreshV();
-					},
-					collapsed: function () {
-						refreshV();
-					},
-					sized: function () {
-						self.resizing = true;
-						refreshV();
-					}
-				})
+            verticalSplitter = $.extend({
+                orientation: "vertical",
+                splitterDistance: 0.2,
+                showExpander: false,
+                fullSplit: false,
+                panel1 : {
+                    minSize : 150,
+                    scrollBars : 'hidden'
+                },
+                panel2 : {
+                    minSize : 200,
+                    scrollBars : 'hidden'
+                },
+                expanded: function () {
+                    refreshV();
+                },
+                collapsed: function () {
+                    refreshV();
+                },
+                sized: function () {
+                    self.resizing = true;
+                    refreshV();
+                }
+            }, self.options.splitters.vertical);
+
+            horizontalSplitter = $.extend({
+                orientation: "horizontal",
+                fullSplit: true,
+                splitterDistance: 0.35,
+                showExpander: false,
+                panel1 : {
+                    minSize : 200,
+                    scrollBars : 'hidden'
+                },
+                panel2 : {
+                    minSize : 200,
+                    scrollBars : 'hidden'
+                },
+                expanded: function () {
+                    refreshH();
+                },
+                collapsed: function () {
+                    refreshH();
+                },
+                sized: function () {
+                    self.resizing = true;
+                    refreshH();
+                }
+            }, self.options.splitters.horizontal);
+
+            verticalSplitter.splitterDistance *= $(window).width();
+            horizontalSplitter.splitterDistance *= $(window).height(); //too bad self.element.height() is not initialized...
+
+			self.uiSplitterVertical.wijsplitter(verticalSplitter)
 				.find('.ui-resizable-handle')
 				.mousedown(function() {
 				    self.resizing = false;
 				});
 
-			self.uiSplitterHorizontal.wijsplitter({
-					orientation: "horizontal",
-					fullSplit: true,
-					splitterDistance: 300,
-					showExpander: false,
-					panel1 : {
-						minSize : 200,
-						scrollBars : 'hidden'
-					},
-					panel2 : {
-						minSize : 200,
-						scrollBars : 'hidden'
-					},
-					expanded: function () {
-						refreshH();
-					},
-					collapsed: function () {
-						refreshH();
-					},
-					sized: function () {
-						self.resizing = true;
-						refreshH();
-					}
-				})
+			self.uiSplitterHorizontal.wijsplitter(horizontalSplitter)
 				.find('.ui-resizable-handle')
 				.mousedown(function() {
 				    self.resizing = false;
@@ -1110,6 +1122,10 @@ define([
 				}
 			}
 
+            this.uiSplitterVertical.wijsplitter('option', 'splitterDistance');
+
+            self._trigger('slidersChange', null, this.slidersSettings());
+
 			return self;
 		},
 
@@ -1154,7 +1170,20 @@ define([
 			}
 
 			return self;
-		}
+		},
+
+        slidersSettings : function() {
+            return {
+                vertical: {
+                    splitterDistance: this.uiSplitterVertical.wijsplitter('option', 'splitterDistance') / $(window).width()
+                },
+                horizontal: {
+                    splitterDistance: this.uiSplitterHorizontal.wijsplitter('option', 'splitterDistance') / $(window).height()
+                }
+            }
+        }
+
+
 	});
 	return $;
 });

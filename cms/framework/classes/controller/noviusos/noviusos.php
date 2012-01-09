@@ -128,11 +128,12 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 
     public function action_save_user_configuration() {
         $key            = \Input::post('key');
-        $configuration  = \Input::post('configuration');
-        if (!$configuration) {
-            $configuration = array();
+        $new_config     = \Input::post('configuration');
+
+        if (!$new_config) {
+            $new_config = array();
         }
-        $configuration  = $this->convertFromPost($configuration);
+        $new_config  = $this->convertFromPost($new_config);
 
 
         $json = array(
@@ -146,9 +147,12 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
             } else {
                 $user_configuration = unserialize($user->user_configuration);
             }
-            $user_configuration[$key] = $configuration;
+            $configuration = &$user_configuration;
+            \Arr::set($configuration, $key, $new_config);
+
             $user->user_configuration = serialize($user_configuration);
             $user->save();
+            \Session::set('logged_user', $user);
         }
 
 

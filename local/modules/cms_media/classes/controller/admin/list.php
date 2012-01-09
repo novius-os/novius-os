@@ -17,7 +17,7 @@ class Controller_Admin_List extends Controller_Mp3table_List {
 
 	public function before() {
 		Config::load('cms_media::admin/media', true);
-		$this->config = Config::get('cms_media::admin/media', array());
+		$this->config = \Config::getFromUser('cms_media::admin/media', array());
 
 		parent::before();
 	}
