@@ -18,7 +18,7 @@ class Controller_Admin_List extends Controller_Mp3table_List {
 
 	public function before() {
 		Config::load('cms_page::admin/page', true);
-		$this->config = Config::get('cms_page::admin/page', array());
+		$this->config = \Config::getFromUser('cms_page::admin/page', array());
 
 		parent::before();
 	}

@@ -355,7 +355,10 @@ define([
 				.load(function() {
 					var img = $(this);
 					img.prependTo(container)
-						.css('margin-top', '-' + (img.width() / 2) + 'px');
+						.css({
+                            marginTop : '-' + (img.height() / 2) + 'px',
+                            marginLeft : '-' + (img.width() / 2) + 'px'
+                        });
 				})
 				.addClass('nos-thumbnails-thumb-img')
 				.attr('src', thumbnail);

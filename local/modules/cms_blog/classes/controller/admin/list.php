@@ -20,9 +20,9 @@ class Controller_Admin_List extends Controller_Mp3table_List {
 
 	public function before() {
 		Config::load('cms_blog::admin/blog', true);
-		$this->config = Config::get('cms_blog::admin/blog', array());
+		$this->config = \Config::getFromUser('cms_blog::admin/blog', array());
 
-		parent::before();
+        parent::before();
 	}
 
 	public function after($response) {

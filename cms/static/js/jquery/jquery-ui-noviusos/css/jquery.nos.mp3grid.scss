@@ -37,19 +37,27 @@
 	margin : 0 5px 0 2px;
 }
 
+.wijmo-wijpager .ui-list .ui-page {
+    line-height: 0.8em;
+    font-size: 0.8em;
+}
+.wijmo-wijgrid .wijmo-wijgrid-header, .wijmo-wijgrid .wijmo-wijgrid-footer {
+    padding : 0.1em;
+}
+
 .nos-mp3grid {
-	.nos-headerbar {
+	.nos-mp3grid-headerbar {
 		margin : 0px 5px;
 
-		.nos-adds {
+		.nos-mp3grid-adds {
 			float : left;
 		}
-		.nos-settings {
+		.nos-mp3grid-settings {
 			float : right;
 		}
 	}
 
-	.nos-splitter-v {
+	.nos-mp3grid-splitter-v {
 		position : absolute;
 		top : 40px;
 		left : 0;
@@ -73,7 +81,16 @@
 		.wijmo-wijsplitter-v-panel1 {
 			@include box-sizing(border-box);
 
-			ul.nos-inspectors-v {
+            .wijmo-wijgrid-row, wijgridtd {
+                border-color:transparent;
+            }
+
+            .wijmo-wijgrid-headertext {
+                padding : 0.1em 1em;
+            }
+
+
+			ul.nos-mp3grid-inspectors-v {
 				position : absolute;
 				top : 0;
 				left : 0;
@@ -106,7 +123,16 @@
 			}
 
 			.wijmo-wijsplitter-h-panel1 {
-				ul.nos-inspectors-h {
+
+                .wijmo-wijgrid-row, wijgridtd {
+                    border-color:transparent;
+                }
+
+                .wijmo-wijgrid-headertext {
+                    padding : 0.1em 1em;
+                }
+
+				ul.nos-mp3grid-inspectors-h {
 					position : absolute;
 					top : 0px;
 					left : 0px;
@@ -135,39 +161,129 @@
 			}
 
 			.wijmo-wijsplitter-h-panel2 {
+			    font-size : 1.05em;
 
-				.nos-searchbar {
-					margin : 5px;
-					position : relative;
+				.nos-mp3grid-searchbar-container {
+				    border-bottom-width: 0;
+		            border-top-width: 0;
 					z-index : 1;
 
-					.nos-nbresult {
-						display: inline-block;
-						margin-right : 5px;
-					}
+	                .nos-mp3grid-title {
+	                    text-transform: uppercase;
+	                }
 
-					.nos-inspectorsreset {
-						display :inline-block;
-						vertical-align: middle;
+	                .view-list {
+	                    background-image: url(../images/view-list.png);
+	                    background-position: 0 0;
+	                }
+	                .view-thumbs-small {
+	                    background-image: url(../images/view-thumbs-small.png);
+	                    background-position: 0 0;
+	                }
+	                .view-thumbs-big {
+	                    background-image: url(../images/view-thumbs-big.png);
+	                    background-position: 0 0;
+	                }
+
+	                .nos-mp3grid-input-container {
+	                    position: relative;
+	                    float: right;
+	                    font-size: 0.8em;
+	                    padding: 1px 2px 1px 18px;
+	                    margin-top: -3px;
+
+                        > * {
+                            vertical-align: middle;
+                        }
+
+	                    .nos-mp3grid-search-icon {
+	                        left: 1px;
+	                    }
+
+                        .nos-mp3grid-search-input {
+                            width: 10em;
+                        }
+
+                        .nos-mp3grid-reset-search {
+                            display: inline-block;
+                            position: relative;
+                            line-height: 1em;
+                            margin-left: 5px;
+                            vertical-align: middle;
+                            width: 16px;
+                            padding : 1px 0;
+                            text-indent: -1000px;
+
+                            span {
+                                margin-top: -9px;
+                                background-image: url(../images/edit-clear-locationbar-rtl.png);
+                                background-position: 0 0;
+                            }
+                        }
+
+                        .nos-mp3grid-inspectorstags {
+                            display: inline-block;
+                            text-align: right;
+                            margin-left: 5px;
+
+                            .nos-mp3grid-inspectorstag {
+                                position: relative;
+                                display :inline-block;
+                                margin-left : 10px;
+                                padding : 1px 18px 1px 2px;
+                                line-height: 1em;
+                                font-weight: normal;
+
+                                a {
+                                }
+                            }
+
+                            .wijmo-wijsuperpanel-button {
+                                @include box-sizing(border-box);
+                                height: 100%;
+                                width: 14px;
+                                padding: 1px;
+
+                                .ui-icon {
+                                    margin-top: -8px;
+                                    margin-left: -8px;
+                                    top: 50%;
+                                    left: 50%;
+                                    position: relative;
+                                    width: 12px;
+                                    height: 100%;
+                                }
+
+                                &.ui-state-disabled {
+                                    display : none;
+                                }
+                            }
+                        }
+	                }
+
+                    .nos-mp3grid-views-button {
+					    float: right;
 						margin-left : 5px;
-					}
+	                    font-size: 0.8em;
+	                    margin-top: -3px;
+                    }
 
-					.nos-inspectorstag {
-						display: inline-block;
-
-						span {
-							display :inline-block;
-							margin-left : 10px;
-							padding : 1px 2px;
-							line-height: 16px;
-
-							a {
-								display :inline-block;
-								vertical-align: top;
-							}
-						}
+					.nos-mp3grid-nbresult {
+					    float: right;
+						margin-left : 5px;
+	                    font-size: 0.8em;
+	                    font-weight: normal;
 					}
 				}
+
+	            .nos-mp3grid-pagination {
+	                float: left;
+	                margin-right: 5px;
+	                font-weight: normal;
+	                font-size: 0.8em;
+	                line-height: 0.8em;
+	                padding: 4px 5px;
+	            }
 
 				.wijmo-wijgrid, .nos-thumbnails {
 					@include box-sizing(border-box);

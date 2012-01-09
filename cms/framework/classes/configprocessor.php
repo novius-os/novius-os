@@ -22,9 +22,13 @@ class ConfigProcessor {
         $format = Format::forge();
         if ($config['ui']) {
             $columns = &$config['ui']['grid']['columns'];
+            $config['ui']['slidersChange'] = 'function(e, rapport) { $.nos.saveUserConfiguration("'.$config['configuration_id'].'.ui.splitters", rapport) }';
+            //$config['ui']['columnVisibilityChange'] = 'function() { console.log($("#mp3grid").mp3grid("exportSettings")); /*$.nos.saveUserConfiguration("cms_blog", {toto: "toto"});*/ }';
         } else {
             $columns = &$config['columns'];
+            //$config['columnVisibilityChange'] = 'function() { console.log($("#mp3grid").mp3grid("exportSettings")); /*$.nos.saveUserConfiguration("cms_blog", {toto: "toto"});*/ }';
         }
+
         for ($i = 0; $i < count($columns); $i++) {
             if ($columns[$i] === 'lang') {
                 $columns[$i] = array(
