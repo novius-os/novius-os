@@ -220,7 +220,8 @@ CREATE TABLE IF NOT EXISTS `os_user` (
   `user_email` varchar(100) NOT NULL,
   `user_password` varchar(64) NOT NULL,
   `user_last_connection` datetime NOT NULL,
-  PRIMARY KEY  (`user_id`)
+  `user_configuration` text,
+  PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -244,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `os_wysiwyg` (
   `wysiwyg_join_table` varchar(255) NOT NULL,
   `wysiwyg_key` varchar(30) NOT NULL,
   `wysiwyg_foreign_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`wysiwyg_id`)
+  PRIMARY KEY (`wysiwyg_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
