@@ -221,5 +221,13 @@ class Model_User extends Model {
     public function __get($name) {
         return parent::__get($name);
     }
+
+    public function getConfiguration() {
+        if (!$this->user_configuration) {
+            return array();
+        } else {
+            return unserialize($this->user_configuration);
+        }
+    }
 }
 
