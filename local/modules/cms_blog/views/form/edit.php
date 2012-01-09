@@ -20,6 +20,83 @@
     });
 </script>
 
+
+<style type="text/css">
+.wijmo-checkbox {
+	display: inline-block;
+	width: inherit;
+	vertical-align: middle;
+}
+.wijmo-checkbox label {
+	width: inherit;
+}
+.ui-helper-clearfix:after {
+	content: '';
+}
+.mceExternalToolbar {
+	z-index:100;
+}
+
+.wijmo-wijaccordion p {
+	margin: 0.5em 0;
+}
+
+/* ? */
+.ui-accordion-content-active {
+	overflow: visible !important;
+}
+</style>
+
+<?php
+
+if (true) {
+?>
+
+<div class="page myPage myBody">
+<?php
+$fieldset->form()->set_config('field_template',  "\t\t<tr><th class=\"{error_class}\">{label}{required}</th><td class=\"{error_class}\">{field} {error_msg}</td></tr>\n");
+
+foreach ($fieldset->field() as $field) {
+	if ($field->type == 'checkbox') {
+		$field->set_template('{field} {label}');
+	}
+}
+
+$fieldset->field('blog_lu')->set_template('{label} {field} times');
+?>
+
+<?= $fieldset->open('admin/cms_blog/form/edit/'.$object->blog_id); ?>
+<?= View::forge('form/layout_standard', array(
+	'fieldset' => $fieldset,
+	'medias' => array('media->thumbnail->medil_media_id'),
+	'title' => 'blog_titre',
+	'id' => 'blog_id',
+
+	'published' => 'blog_date_debut_publication',
+	'save' => 'save',
+
+	'subtitle' => array(),
+
+	'content' => \View::forge('form/expander', array(
+		'title'   => 'Content',
+		'content' => $fieldset->field('wysiwyg->content->wysiwyg_text'),
+	), false),
+
+	'menu' => array(
+		'Meta' => array('author->user_fullname', 'blog_auteur', 'blog_date_creation', 'blog_lu'),
+		'Categories' => array(),
+		'Tags' => array(),
+	),
+), false); ?>
+<?= $fieldset->close(); ?>
+</div>
+
+<?php
+}
+
+if (false) {
+?>
+
 <script type="text/javascript">
     require(['jquery-nos'], function($) {
         $(function() {
@@ -34,29 +111,7 @@
         });
     });
 </script>
-
-<style type="text/css">
-    .wijmo-checkbox {
-        display: inline-block;
-        width: inherit;
-    }
-    .wijmo-checkbox label {
-        width: inherit;
-    }
-    .ui-helper-clearfix:after {
-        content: '';
-    }
-    .mceExternalToolbar {
-        z-index:100;
-    }
-    .ui-accordion-content-active {
-        overflow: visible !important;
-    }
-</style>
-
-
 <?php
-if (true) {
 
     $globals = array(
         'blog_titre' => array(
@@ -136,7 +191,7 @@ if (true) {
     );
 
 
-echo \Cms\Layout::forge($tab, $object, $fieldset, $globals);
+	echo \Cms\Layout::forge($tab, $object, $fieldset, $globals);
 }
 
 if (false) {
@@ -217,22 +272,3 @@ if (false) {
 <?php
 }
 ?>
-
-<script type="text/javascript">
-    require([
-        'static/cms/js/jquery/tinymce/jquery.tinymce_src',
-        'static/cms/js/jquery/tinymce/jquery.wysiwyg',
-        'jquery-nos'
-    ], function(a,b,$) {
-        $(function() {
-
-            $('input[name=page_noindex]').change(function() {
-                $(this).closest('p').nextAll()[$(this).is(':checked') ? 'hide' : 'show']();
-            }).change();
-
-
-            $('input[name=page_menu]').change(function() {
-                $(this).closest('p').nextAll()[$(this).is(':checked') ? 'show' : 'hide']();
-            }).change();
-        });
-    });</script>

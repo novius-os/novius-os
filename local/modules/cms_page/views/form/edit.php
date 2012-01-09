@@ -20,25 +20,12 @@ require(['jquery-nos'], function ($) {
 });
 </script>
 
-<script type="text/javascript">
-require(['jquery-nos'], function($) {
-	$(function() {
-		$(":input[type='text'],:input[type='password'],textarea").wijtextbox();
-		$(":input[type='submit'],button").button();
-		$("select").wijdropdown();
-		$(":input[type=checkbox]").wijcheckbox();
-		$('.expander').wijexpander({expanded: true });
-		$("#accordion").wijaccordion({
-			header: "h3"
-		});
-	});
-});
-</script>
 
 <style type="text/css">
 .wijmo-checkbox {
 	display: inline-block;
 	width: inherit;
+	vertical-align: middle;
 }
 .wijmo-checkbox label {
 	width: inherit;
@@ -49,94 +36,65 @@ require(['jquery-nos'], function($) {
 .mceExternalToolbar {
 	z-index:100;
 }
+
+.wijmo-wijaccordion p {
+	margin: 0.5em 0;
+}
+
+/* ? */
+.ui-accordion-content-active {
+	overflow: visible !important;
+}
 </style>
 
 <div class="page myPage myBody">
-	<?= $fieldset->open('admin/cms_page/form/edit/'.$page->page_id); ?>
-	<div class="line ui-widget">
-		<div class="unit col c1"></div>
-		<div class="unit col c7" id="line_first" style="position:relative;z-index:99;">
-			<div class="line" style="margin-bottom:1em;">
-				<?= $fieldset->field('page_titre')
-					->set_template('{field}')
-					->set_attribute('class', 'title c4');
-				?>
-				<?= $fieldset->field('page_id')->set_template('{label} {field}')->build(); ?>
+<?php
+$fieldset->form()->set_config('field_template',  "\t\t<tr><th class=\"{error_class}\">{label}{required}</th><td class=\"{error_class}\">{field} {error_msg}</td></tr>\n");
 
-				<?php
-				$fieldset->form()->set_config('field_template',  "<p class=\"{error_class}\">{label}{required} {field} {error_msg}</p>");
-				?>
-			</div>
-			<div class="line" style="margin-bottom:1em;overflow:visible;">
-				<div class="unit col"><?= $fieldset->field('page_type')->build(); ?></div>
-				<div class="unit col"><?= $fieldset->field('page_gab_id')->build(); ?></div>
-			</div>
-		</div>
-		<div class="unit col c3" style="position:relative;z-index:98;text-align:center;">
-			<p style="margin: 0 0 1em;"><?= $fieldset->field('page_publier')->set_template('{field} {label}')->build(); ?></p>
-			<p><?= $fieldset->field('save')->set_template('{field}')->build(); ?> &nbsp; or &nbsp; <a href="#" onclick="javascript:$.nos.tabs.close();return false;">Cancel</a></p>
-		</div>
-	</div>
-	<?php
-	$fieldset->form()->set_config('field_template',  "\t\t<tr><th class=\"{error_class}\">{label}{required}</th><td class=\"{error_class}\">{field} {error_msg}</td></tr>\n");
-	?>
-	<div class="line  ui-widget">
-		<div class="unit col c1"></div>
-		<div class="unit col c7" id="line_second" style="position:relative;margin-bottom:1em;">
-			<div class="expander fieldset">
-				<h3>Content</h3>
-				<div style="overflow:visible">
-					<div id="external">
-						<table>
-							<?= $fieldset->field('page_lien_externe')->build(); ?>
-							<?= $fieldset->field('page_lien_externe_type')->build(); ?>
-						</table>
-					</div>
-					<div id="internal" style="display:none;">
-						<p style="padding:1em;">We're sorry, internal links are not supported yet. We need a nice page selector before that.</p>
-					</div>
-					<div id="wysiwyg" style="display:none;"></div>
-				</div>
+foreach ($fieldset->field() as $field) {
+	if ($field->type == 'checkbox') {
+		$field->set_template('{field} {label}');
+	}
+}
 
+$fieldset->field('page_duree_vie')->set_template('{label} {field} seconds');
+$fieldset->field('page_verrou')->set_template('{label} {field}');
+?>
+
+<?= $fieldset->open('admin/cms_page/form/edit/'.$page->page_id); ?>
+<?= View::forge('form/layout_standard', array(
+	'fieldset' => $fieldset,
+	'medias' => array(),
+	'title' => 'page_titre',
+	'id' => 'page_id',
+
+	'published' => 'page_publier',
+	'save' => 'save',
+
+	'subtitle' => array('page_type', 'page_gab_id'),
+
+	'content' => \View::forge('form/expander', array(
+		'title'   => 'Content',
+		'content' => '
+			<div id="external">
+				<table>
+					'.$fieldset->field('page_lien_externe')->build().'
+					'.$fieldset->field('page_lien_externe_type')->build().'
+				</table>
 			</div>
-		</div>
-		<?php
-		$fieldset->form()->set_config('field_template',  "\t\t<span class=\"{error_class}\">{label}{required}</span>\n\t\t<br />\n\t\t<span class=\"{error_class}\">{field} {error_msg}</span>\n");
-		?>
-		<div class="unit col c3" style="position:relative;z-index:98;margin-bottom:1em;">
-			 <div id="accordion">
-				<div>
-					<h3>
-						<a href="#">Menu</a></h3>
-					<div>
-						<p><?= $fieldset->field('page_menu')->set_template('{field} {label}')->build(); ?></p>
-						<p><?= $fieldset->field('page_titre_menu')->build(); ?></p>
-					</div>
-				</div>
-				<div>
-					<h3>
-						<a href="#">SEO</a></h3>
-					<div>
-						<p><?= $fieldset->field('page_nom_virtuel')->build(); ?>.html</p>
-						<p><?= $fieldset->field('page_noindex')->set_template('{field} {label}')->build(); ?></p>
-						<p><?= $fieldset->field('page_titre_reference')->build(); ?></p>
-						<p><?= $fieldset->field('page_description')->build(); ?></p>
-						<p><?= $fieldset->field('page_keywords')->build(); ?></p>
-					</div>
-				</div>
-				<div>
-					<h3>
-						<a href="#">Admin</a></h3>
-					<div style="overflow:visible;">
-						<p><?= $fieldset->field('page_duree_vie')->set_template('{label} {field} seconds')->build(); ?></p>
-						<p><?= $fieldset->field('page_verrou')->set_template('{label} {field}')->build(); ?></p>
-					</div>
-				</div>
-			 </div>
-		 </div>
-		<div class="unit lastUnit"></div>
-	</div>
-	<?= $fieldset->close(); ?>
+			<div id="internal" style="display:none;">
+				<p style="padding:1em;">We\'re sorry, internal links are not supported yet. We need a nice page selector before that.</p>
+			</div>
+			<div id="wysiwyg" style="display:none;"></div>',
+	), false),
+
+	'menu' => array(
+		'Menu' => array('page_menu', 'page_titre_menu'),
+		'SEO' => array('page_nom_virtuel', 'page_noindex', 'page_titre_reference', 'page_description', 'page_keywords'),
+		'Admin' => array('page_duree_vie', 'page_verrou'),
+	),
+), false); ?>
+<?= $fieldset->close(); ?>
 </div>
 
 <script type="text/javascript">
@@ -157,7 +115,6 @@ require([
 		}).change();
 
 		$('select[name=page_gab_id]').bind('change', function() {
-			console.log('change happened');
 			$.ajax({
 				url: 'admin/cms_page/ajax/wysiwyg/<?= $page->page_id ?>',
 				data: {

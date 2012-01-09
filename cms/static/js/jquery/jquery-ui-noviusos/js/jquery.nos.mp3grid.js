@@ -34,6 +34,7 @@ define([
 				viewThumbnails : 'Thumbnails',
 				preview : 'Preview'
 			},
+			values: {},
             //callbabks
             columnVisibilityChange : null
 		},
@@ -887,6 +888,7 @@ define([
 				.thumbnails($.extend({
 					pageIndex: 0,
 					url: o.grid.proxyurl,
+					actions: o.actions,
 					loading: function (dataSource, userData) {
 						var r = userData.data.paging;
 						self.pageIndex = r.pageIndex;
@@ -1046,7 +1048,7 @@ define([
 
 		_jsonInspectors : function() {
 			var self = this,
-				inspectors = {};
+				inspectors = this.options.values || {};
 
 			self.uiSearchBar.find('input').each(function() {
 				var input = $(this),

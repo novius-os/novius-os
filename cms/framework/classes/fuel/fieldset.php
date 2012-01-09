@@ -368,11 +368,6 @@ JS
 		}
 		$fieldset->add_widgets($config, $options);
 
-		$fieldset->add('submit', '', array(
-			'type' => 'submit',
-			'value' => 'Save',
-		));
-
 		if (!empty($options['extend']) && is_callable($options['extend'])) {
 			call_user_func($options['extend'], $fieldset);
 		}
@@ -411,26 +406,36 @@ JS
 
         //try {
 
-            foreach ($data as $name => $value) {
-                if ($fields[$name]['editable']) {
-                    $object->$name = $value;
-                }
-            }
-            foreach ($fields as $name => $f) {
-                if (empty($data[$name]) && \Arr::get($f, 'form.type', null) == 'checkbox') {
-                    $object->$name = 0;
-                }
-            }
-            if (!empty($options['save']) && is_callable($options['save'])) {
-                call_user_func($options['save'], $data);
-            }
-            $object->save();
+		foreach ($data as $name => $value)
+		{
+			if (!isset($fields[$name]['editable']) || $fields[$name]['editable'])
+			{
+				$object->$name = $value;
+			}
+		}
 
+		// Checkbox aren't sent by browsers, we need to set this manually
+		foreach ($fields as $name => $f)
+		{
+			if ((!isset($fields[$name]['editable']) || $fields[$name]['editable']) &&
+			    empty($data[$name]) && \Arr::get($f, 'form.type', null) == 'checkbox')
+			{
+				$object->$name = null;
+			}
+		}
 
-            $body = array(
-                'notify' => 'Edition successful.',
-                'listener_fire' => array('cms_page.refresh' => true),
-            );
+		if (!empty($options['save']) && is_callable($options['save']))
+		{
+			call_user_func($options['save'], $data);
+		}
+
+		// Will trigger cascade_save for media and wysiwyg
+		$object->save();
+
+		$body = array(
+			'notify' => 'Edition successful.',
+			'listener_fire' => array('cms_page.refresh' => true),
+		);
             /*
         } catch (\Exception $e) {
             $body = array(
@@ -439,10 +444,10 @@ JS
         }
             */
 
-            $response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-                'Content-Type' => 'application/json',
-            ));
-            $response->send(true);
-            exit();
-        }
+		$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
+			'Content-Type' => 'application/json',
+		));
+		$response->send(true);
+		exit();
+	}
 }
