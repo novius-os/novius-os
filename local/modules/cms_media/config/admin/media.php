@@ -48,6 +48,35 @@ return array(
 					'dataKey' => 'title',
 				),
 				//'lang',
+				'actions',
+			),
+		),
+		'actions' => array(
+			array(
+				'label' => 'Edit',
+				'action' => 'function(item) {
+					$.nos.tabs.openInNewTab({
+						url : "admin/cms_media/form?id=" + item.id,
+						label : item.title
+					});
+				}',
+			),
+			array(
+				'label' => 'Delete',
+				'action'   =>  'function(item) {
+					if (confirm("Are you sure ?")) {
+						$.nos.tabs.openInNewTab({
+							url : "admin/cms_media/form?id=" + item.id,
+							label : item.title
+						});
+					}
+				}',
+			),
+			array(
+				'label' => 'Visualize',
+				'action' => 'function(item) {
+					window.open(item.image);
+				}',
 			),
 		),
 		'thumbnails' => array(
@@ -56,34 +85,7 @@ return array(
 					title : item.title,
 					thumbnail : (item.image ? item.thumbnail : item.thumbnailAlternate).replace(/64/g, size),
 					thumbnailAlternate : (item.image ? item.thumbnailAlternate : '').replace(/64/g, size),
-					actions : [
-						{
-							label : 'Edit',
-							action : function() {
-								$.nos.tabs.openInNewTab({
-									url : 'admin/cms_media/form?id=' + item.id,
-									label : item.title
-								});
-							}
-						},
-						{
-							label : 'Delete',
-							action : function() {
-								if (confirm('Are you sure ?')) {
-									$.nos.tabs.openInNewTab({
-										url : 'admin/cms_media/form?id=' + item.id,
-										label : item.title
-									});
-								}
-							}
-						},
-						{
-							label : 'Visualize',
-							action : function() {
-								window.open(item.image);
-							}
-						},
-					]
+					actions : []
 				};
 				return data;
 			}",

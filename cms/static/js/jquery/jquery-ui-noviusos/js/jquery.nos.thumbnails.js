@@ -1,6 +1,6 @@
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -177,6 +177,15 @@ define([
 				thumbnailAlternate : null,
 				actions : []
 			}, item);
+
+			$(o.actions).each(function(i,a) {
+
+				// clone a into b
+				var b = $.extend({}, a);
+				// replace the action with noParseData as argument
+				b.action = $.proxy(a.action, a, data.noParseData);
+				item.actions.push(b);
+			});
 
 			var container = $('<div></div>')
 				.addClass('nos-thumbnails-thumb wijmo-wijgrid ui-widget-content')

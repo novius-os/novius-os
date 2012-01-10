@@ -171,9 +171,9 @@ define([
                      */
                     ajax : function(options) {
                         $.ajax({
-                            url: options['url'],
+                            url: options.url,
                             dataType: 'json',
-                            data: options['data'],
+                            data: options.data,
                             type: 'POST',
                             success: function(json) {
                                 if (json.error) {
@@ -352,6 +352,55 @@ define([
 							return this.heights;
 						}
 					}
+				};
+				$.nos.media = function(input, options) {
+
+					var contentUrls = {
+						'all'   : '/admin/cms_media/list',
+						'image' : '/admin/cms_media/mode/image/index'
+					};
+
+					options = $.extend({
+						title: input.attr('title') || 'File',
+						choose: function(e) {
+
+							var dialog = null;
+
+							// The popup will trigger this event when done
+							$.nos.listener.add('media.pick', true, function(item) {
+
+								// Close the popup (if we have one)
+								dialog && dialog.wijdialog('close');
+
+								input.inputFileThumb({
+									file: item.thumbnail
+								});
+								input.val(item.id);
+
+								// And self-remove from the listener
+								$.nos.listener.remove('media.pick', true, arguments.callee);
+							});
+
+							// Open the dialog to choose the file
+							dialog = $.nos.dialog({
+								contentUrl: contentUrls[options.mode],
+								title: 'Choose a media file'
+							});
+						}
+					}, options);
+
+					if (input.data('selected-image')) {
+						options.file = input.data('selected-image');
+					}
+
+					require([
+					'static/cms/js/jquery/jquery-ui-input-file-thumb/js/jquery.input-file-thumb',
+					'link!static/cms/js/jquery/jquery-ui-input-file-thumb/css/jquery.input-file-thumb.css'
+					], function() {
+						$(function() {
+							input.inputFileThumb(options);
+						});
+					});
 				};
 				window.$nos = $;
 

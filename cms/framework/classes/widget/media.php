@@ -10,24 +10,24 @@
 
 namespace Cms;
 
-class Widget_Wysiwyg extends \Fieldset_Field {
+class Widget_Media extends \Fieldset_Field {
 
-	protected $wysiwyg;
+	protected $media;
 
     public function __construct($name, $label = '', array $attributes = array(), array $rules = array(), \Fuel\Core\Fieldset $fieldset) {
         parent::__construct($name, $label, $attributes, $rules, $fieldset);
 
-		$attributes['type'] = 'textarea';
-		$attributes['class'] = 'tinymce';
-        $this->wysiwyg = new \Fieldset_Field($name, $label, $attributes, $rules, $fieldset);
+		$attributes['type'] = 'hidden';
+		$attributes['class'] = 'media';
+        $this->media = new \Fieldset_Field($name, $label, $attributes, $rules, $fieldset);
     }
 
 	public function set_value($text) {
-		$this->wysiwyg->set_value(\Security::xss_clean($text));
+		$this->media->set_value((int) $text);
 	}
 
     public function get_value() {
-        return $this->wysiwyg->get_value();
+        return $this->media->get_value();
     }
 
     /**
@@ -37,20 +37,27 @@ class Widget_Wysiwyg extends \Fieldset_Field {
     public function build() {
 
 	    static::form_append($this->fieldset());
-        return (string) $this->wysiwyg->set_template('{field}');
+		$media_id = $this->media->get_value();
+		if (!empty($media_id)) {
+			\Fuel::add_module('cms_media');
+			$media = \Cms\Media\Model_Media::find($media_id);
+			$this->media->set_attribute('data-selected-image', $media->get_public_path_resized(64, 64));
+		}
+        return (string) $this->media;
     }
 
 	public function form_append($fieldset) {
 		$fieldset->append(<<<JS
 <script type="text/javascript">
-    require([
-    'static/cms/js/jquery/tinymce/jquery.tinymce_src',
-    'static/cms/js/jquery/tinymce/jquery.wysiwyg'
-    ], function() {
-            texts = $('textarea.tinymce:not(.processed)');
-            texts.wysiwyg();
-            texts.addClass('processed');
-    });
+require(['jquery-nos'], function ($) {
+	$(function() {
+		$(':hidden.media').each(function() {
+			$.nos.media($(this), {
+				mode: 'image'
+			});
+		});
+	});
+});
 </script>
 JS
 		);

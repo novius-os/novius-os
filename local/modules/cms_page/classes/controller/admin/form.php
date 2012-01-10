@@ -50,45 +50,45 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 
         $fields = array (
             'page_id' => array (
-                'label' => 'ID',
+                'label' => 'ID: ',
                 'widget' => 'text',
             ),
             'page_titre' => array (
-                'label' => 'Title',
+                'label' => 'Title: ',
 				'form' => array(
 					'type' => 'text',
 				),
             ),
 			'page_gab_id' => array(
-				'label' => 'Template',
+				'label' => 'Template: ',
 				'form' => array(
 					'type' => 'select',
 					'options' => $templates,
 				),
 			),
 			'page_publier' => array(
-				'label' => "Published",
+				'label' => 'Published',
 				'form' => array(
 					'type' => 'checkbox',
 					'value' => '1',
 				),
 			),
 			'page_nom_virtuel' => array(
-				'label' => 'Slug',
+				'label' => 'Slug: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 20,
 				),
 			),
 			'page_titre_reference' => array(
-				'label' => 'SEO title',
+				'label' => 'SEO title: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 26,
 				),
 			),
 			'page_description' => array(
-				'label' => 'Description',
+				'label' => 'Description: ',
 				'form' => array(
 					'type' => 'textarea',
 					'cols' => 26,
@@ -96,7 +96,7 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 				),
 			),
 			'page_keywords' => array(
-				'label' => 'Keywords',
+				'label' => 'Keywords: ',
 				'form' => array(
 					'type' => 'textarea',
 					'cols' => 26,
@@ -118,21 +118,21 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 				),
 			),
 			'page_titre_menu' => array(
-				'label' => 'Menu title',
+				'label' => 'Menu title: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 26,
 				),
 			),
 			'page_lien_externe' => array(
-				'label' => 'URL',
+				'label' => 'URL: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 60
 				),
 			),
 			'page_lien_externe_type' => array(
-				'label' => 'Target',
+				'label' => 'Target: ',
 				'form' => array(
 					'type' => 'select',
 					'options' => array(
@@ -143,7 +143,7 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 				),
 			),
 			'page_type' => array(
-				'label' => 'Type',
+				'label' => 'Type: ',
 				'form' => array(
 					'type' => 'select',
 					'options' => array(
@@ -155,7 +155,7 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 				),
 			),
 			'page_verrou' => array(
-				'label' => 'Lock status',
+				'label' => 'Lock status: ',
 				'form' => array(
 					'type' => 'select',
 					'options' => array(

@@ -54,32 +54,59 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
         }
 
         $fields = array (
+            'blog_id' => array (
+                'label' => 'Id: ',
+				'widget' => 'text',
+				'editable' => false,
+            ),
+            'blog_date_debut_publication' => array (
+				'label' => 'Published',
+				'form' => array(
+					'type' => 'checkbox',
+					'value' => date('Y/m/d'),
+				),
+            ),
             'blog_titre' => array (
-                'label' => 'Titre',
+                'label' => 'Titre: ',
                 'form' => array(
                     'type' => 'text',
                 ),
-                'editable' => true,
             ),
             'blog_auteur' => array(
-                'label' => 'Alias',
+                'label' => 'Alias: ',
                 'form' => array(
                     'type' => 'text',
                 ),
-                'editable' => true,
+            ),
+            'author->user_fullname' => array(
+                'label' => 'Auteur: ',
+				'widget' => 'text',
+				'editable' => false,
             ),
             'wysiwyg->content->wysiwyg_text' => array(
                 'label' => 'Contenu',
                 'widget' => 'wysiwyg',
                 'form' => array(
-                    'style'         => 'width: 100%; height: 500px;',
+                    'style' => 'width: 100%; height: 500px;',
                  ),
-                'editable' => true,
             ),
+			'media->thumbnail->medil_media_id' => array(
+				'label' => '',
+				'widget' => 'media',
+				'form' => array(
+					'title' => 'Thumbnail',
+				),
+			),
             'blog_date_creation' => array(
-                'label' => 'Date création',
+                'label' => 'Created at:',
                 'widget' => 'date_select',
-                'editable' => true,
+            ),
+            'blog_lu' => array(
+                'label' => 'Read',
+                'form' => array(
+                    'type' => 'text',
+					'size' => '4',
+                ),
             ),
             'save' => array(
                 'label' => '',
@@ -87,6 +114,7 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
                     'type' => 'submit',
                     'value' => 'Save',
                 ),
+				'editable' => false,
             ),
         );
 

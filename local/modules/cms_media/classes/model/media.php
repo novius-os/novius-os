@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -24,8 +24,15 @@ class Model_Media extends \Orm\Model {
             'cascade_save'   => false,
             'cascade_delete' => false,
         ),
+		'link' => array(
+			'key_from' => 'media_id',
+			'model_to' => 'Cms\Model_Media_Link',
+			'key_to' => 'medil_media_id',
+			'cascade_save' => false,
+			'cascade_delete' => true,
+		),
     );
-	
+
 	protected static $_observers = array(
 		'\Orm\Observer_Self' => array(
 			'events' => array('before_save'),
@@ -81,13 +88,13 @@ class Model_Media extends \Orm\Model {
         }
         return str_replace('media/', 'cache/media/', static::$public_path).$this->media_path.str_replace('.'.$this->media_ext, '', $this->media_file).'/'.(int) $max_width.'-'.(int) $max_height.'.'.$this->media_ext;
     }
-	
+
 	public function refresh_path() {
 		$folder = Model_Folder::find($this->media_path_id);
 		$this->media_path = $folder->medif_path;
 		$this->media_ext = pathinfo($this->media_file, PATHINFO_EXTENSION);
 	}
-	
+
 	public function _event_before_save() {
 		$is_image = @getimagesize(APPPATH.$this->get_public_path());
 		if ($is_image !== false) {
