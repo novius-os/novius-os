@@ -338,7 +338,7 @@ define([
 											showFilter: true,
 											allowPaging : true,
 											staticRowIndex : 0,
-											data: [ ['<a class="ui-state-default" href="#" style="display:inline-block;"><span class="ui-icon ui-icon-pencil"></span></a>'] ]
+											data: [ ['test'] ]
 										});
 								this.heights = {
 									row : table.height(),
