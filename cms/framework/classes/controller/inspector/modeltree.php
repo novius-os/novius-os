@@ -55,13 +55,13 @@ class Controller_Inspector_Modeltree extends \Controller {
 			'allowColMoving' => true,
 			'staticRowIndex' => 0,
 			'currentCellChanged' =>  'function(e) {
-				var row = $(e.target).wijgrid("currentCell").row(),
+				var row = $(e.target).nosgrid("currentCell").row(),
 					data = row ? row.data : false;
 
 				if (data && rendered) {
 					$nos.nos.listener.fire("inspector.selectionChanged." + widget_id, false, ["'.$this->config['input_name'].'", data.id, data.title]);
 				}
-				inspector.wijgrid("currentCell", -1, -1);
+				inspector.nosgrid("currentCell", -1, -1);
 			}',
 			'rendering' => 'function() {
 				rendered = false;

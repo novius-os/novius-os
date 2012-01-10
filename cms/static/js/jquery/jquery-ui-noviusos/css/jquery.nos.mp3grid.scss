@@ -8,27 +8,10 @@
  */
 @import "compass/css3/box-sizing";
 @import "compass/css3/border-radius";
+@import "jquery.nos.nosgrid.css";
 @import "jquery.nos.thumbnails.css";
 @import "jquery.nos.inspector-preview.css";
 
-.wijmo-wijgrid-innercell {
-	overflow:hidden;
-	white-space : nowrap;
-	text-overflow : ellipsis;
-	line-height: 18px;
-
-	span {
-		vertical-align: middle;
-	}
-
-	.ui-state-default {
-		display : inline-block;
-	}
-
-	a {
-		color: inherit !important;
-	}
-}
 .wijmo-wijmenu, .ui-datepicker {
 	z-index: 9999 !important;
 }
@@ -36,13 +19,9 @@
     vertical-align : middle;
 	margin : 0 5px 0 2px;
 }
-
 .wijmo-wijpager .ui-list .ui-page {
     line-height: 0.8em;
     font-size: 0.8em;
-}
-.wijmo-wijgrid .wijmo-wijgrid-header, .wijmo-wijgrid .wijmo-wijgrid-footer {
-    padding : 0.1em;
 }
 
 .nos-mp3grid {

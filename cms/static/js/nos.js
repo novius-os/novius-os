@@ -333,7 +333,7 @@ define([
 										.appendTo('body');
 									table = $('<table></table>')
 										.appendTo(div)
-										.wijgrid({
+										.nosgrid({
 											scrollMode : 'auto',
 											showFilter: true,
 											allowPaging : true,
@@ -346,7 +346,7 @@ define([
 									header : div.find('.wijmo-wijgrid-headerrow').outerHeight(),
 									filter : div.find('.wijmo-wijgrid-filterrow').outerHeight()
 								};
-								table.wijgrid('destroy');
+								table.nosgrid('destroy');
 								div.remove();
 							}
 							return this.heights;

@@ -20,7 +20,7 @@ require([
 
 				parent = inspector.parent().bind({
 						inspectorResize: function() {
-							inspector.wijgrid('destroy')
+							inspector.nosgrid('destroy')
 								.empty();
 							init();
 						}
@@ -29,7 +29,7 @@ require([
 				rendered = false,
 				init = function() {
 					inspector.css(<?= $inspector_css ?>)
-						.wijgrid($.extend({}, <?= $wijgrid ?>, {
+						.nosgrid($.extend({}, <?= $wijgrid ?>, {
 							columns: columns,
 							data: new wijdatasource({
 								proxy: new wijhttpproxy({
@@ -122,14 +122,14 @@ require([
 
 			init();
 			var menuColumns = [];
-			columns = inspector.wijgrid("option", "columns");
+			columns = inspector.nosgrid("option", "columns");
 			$.each(columns, function (index, col) {
 				menuColumns.push({
 						label : col.headerText,
 						visible : col.visible,
 						change : function (visible) {
 		                    columns[index].visible = visible;
-		                    inspector.wijgrid('doRefresh');
+		                    inspector.nosgrid('doRefresh');
 		                }
 					});
             });

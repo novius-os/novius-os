@@ -9,6 +9,35 @@
 @import "compass/css3/box-sizing";
 
 .nos-thumbnails {
+    position: relative;
+
+    .nos-thumbnails-loading {
+        background: inherit;
+    }
+    .nos-thumbnails-overlay {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 99;
+    }
+    .nos-thumbnails-loadingtext {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -120px;
+        margin-top: -23px;
+        opacity: 1;
+        z-index: 100;
+        padding: 0.4em;
+        font-size: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.25);
+
+        .ui-icon {
+            display: inline-block;
+            margin-right: 0.4em;
+        }
+    }
 
 	.wijmo-wijsuperpanel-contentwrapper {
 		@include box-sizing(border-box);
