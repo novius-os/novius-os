@@ -6,7 +6,41 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
  */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000313}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000311}}
+.nos-thumbnails {
+  position: relative;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000314}}
+.nos-thumbnails .nos-thumbnails-loading {
+  background: inherit;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000317}}
+.nos-thumbnails .nos-thumbnails-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000324}}
+.nos-thumbnails .nos-thumbnails-loadingtext {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -120px;
+  margin-top: -23px;
+  opacity: 1;
+  z-index: 100;
+  padding: 0.4em;
+  font-size: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000336}}
+.nos-thumbnails .nos-thumbnails-loadingtext .ui-icon {
+  display: inline-block;
+  margin-right: 0.4em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000342}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -14,24 +48,24 @@
   box-sizing: border-box;
   padding: 0 10px 10px 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000346}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb {
   position: relative;
   float: left;
   width: 100px;
   margin: 10px 0 0 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000352}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid {
   width: 100%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000326}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000355}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td {
   border-width: 0;
   height: 105px;
   vertical-align: top;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000331}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000360}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -44,19 +78,21 @@
   height: 64px;
   overflow: hidden;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000340}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000369}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img .nos-thumbnails-thumb-img-default {
   width: 64px;
   height: 64px;
   background: url(../images/thumbnail-64-default.png) no-repeat;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000346}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000375}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img .nos-thumbnails-thumb-img {
   position: relative;
   top: 50%;
   margin-top: -32px;
+  left: 50%;
+  margin-left: -32px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000354}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000385}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-title {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
@@ -71,33 +107,34 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000367}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000398}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid th {
   border-width: 1px 1px 0 0;
   text-align: center;
   cursor: pointer;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000373}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\00003104}}
 .nos-thumbnails .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid th:last-child {
   border-width: 1px 0 0 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000388}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\00003119}}
 .nos-thumbnails-size-32 .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td {
   height: 73px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000391}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\00003122}}
 .nos-thumbnails-size-32 .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img {
   width: 32px;
   height: 32px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\0000395}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\00003126}}
 .nos-thumbnails-size-32 .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img .nos-thumbnails-thumb-img-default {
   width: 32px;
   height: 32px;
   background: url(../images/thumbnail-32-default.png) no-repeat;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\00003101}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.thumbnails\.scss}line{font-family:\00003132}}
 .nos-thumbnails-size-32 .wijmo-wijsuperpanel-contentwrapper .nos-thumbnails-thumb .nos-thumbnails-thumb-grid td .nos-thumbnails-thumb-container-img .nos-thumbnails-thumb-img {
   margin-top: -16px;
+  margin-left: -16px;
 }

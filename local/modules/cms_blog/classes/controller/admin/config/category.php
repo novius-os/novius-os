@@ -26,10 +26,10 @@ class Controller_Admin_Config_Category extends \Cms\Controller_Inspector_Modeltr
 			'highlightCurrentCell' => true,
 			'selectionMode' => 'multiRow',
 			'currentCellChanged' => 'function(e) {
-				var row = $(e.target).wijgrid("currentCell").row(),
+				var row = $(e.target).nosgrid("currentCell").row(),
 					data = row ? row.data : false;
 
-				inspector.wijgrid("currentCell", -1, -1);
+				inspector.nosgrid("currentCell", -1, -1);
 			}',
 		);
 		$this->config['columns'] = array($this->config['columns'][0]);

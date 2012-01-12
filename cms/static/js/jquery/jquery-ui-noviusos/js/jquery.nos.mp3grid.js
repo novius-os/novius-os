@@ -25,15 +25,20 @@ define([
 				vertical : 'Vertical',
 				horizontal : 'Horizontal',
 				hidden : 'Hidden',
-				showNbItems : 'Showing {{x}} out of {{y}} items',
+                item : 'item',
+                items : 'items',
+				showNbItems : 'Showing {{x}} items out of {{y}}',
 				showOneItem : 'Show 1 item',
 				showNoItem : 'No item',
 				showAll : 'Show all items',
 				views : 'Views',
 				viewGrid : 'Grid',
 				viewThumbnails : 'Thumbnails',
-				preview : 'Preview'
+				preview : 'Preview',
+                loading : 'Loading...'
 			},
+            actions: [],
+			values: {},
             //callbabks
             columnVisibilityChange : null,
             slidersChange : null,
@@ -57,45 +62,67 @@ define([
 
 			self.element.addClass('nos-mp3grid');
 
-			self.uiHeaderBar = $('<div></div>').addClass('nos-headerbar')
+			self.uiHeaderBar = $('<div></div>').addClass('nos-mp3grid-headerbar')
 				.appendTo(self.element);
 
-			self.uiAdds = $('<div></div>').addClass('nos-adds')
+			self.uiAdds = $('<div></div>').addClass('nos-mp3grid-adds')
 				.appendTo(self.uiHeaderBar);
 			self.uiAddsButton = $('<button type="button"></button>').appendTo(self.uiAdds);
 			self.uiAddsDropDown = $('<button type="button"></button>').text(o.texts.addDropDown)
 				.appendTo(self.uiAdds);
 			self.uiAddsMenu = $('<ul></ul>').appendTo(self.uiAdds);
 
-			self.uiSettings = $('<div></div>').addClass('nos-settings')
+			self.uiSettings = $('<div></div>').addClass('nos-mp3grid-settings')
 				.appendTo(self.uiHeaderBar);
 			self.uiSettingsButton = $('<button type="button"></button>').appendTo(self.uiSettings);
 			self.uiSettingsMenu = $('<ul></ul>').appendTo(self.uiSettings);
 
-			self.uiSplitterVertical = $('<div></div>').addClass('nos-splitter-v')
+			self.uiSplitterVertical = $('<div></div>').addClass('nos-mp3grid-splitter-v')
 				.appendTo(self.element);
 			self.uiSplitterVerticalRight = $('<div></div>').appendTo(self.uiSplitterVertical);
-			self.uiInspectorsVertical = $('<ul></ul>').addClass('nos-inspectors nos-inspectors-v')
+			self.uiInspectorsVertical = $('<ul></ul>').addClass('nos-mp3grid-inspectors nos-mp3grid-inspectors-v')
 				.appendTo(self.uiSplitterVerticalRight);
 			self.uiSplitterVerticalLeft = $('<div></div>').appendTo(self.uiSplitterVertical);
 
 			self.uiSplitterHorizontal = $('<div></div>').appendTo(self.uiSplitterVerticalLeft);
 			self.uiSplitterHorizontalTop = $('<div></div>').appendTo(self.uiSplitterHorizontal);
-			self.uiInspectorsHorizontal = $('<ul></ul>').addClass('nos-inspectors nos-inspectors-h')
+			self.uiInspectorsHorizontal = $('<ul></ul>').addClass('nos-mp3grid-inspectors nos-mp3grid-inspectors-h')
 				.appendTo(self.uiSplitterHorizontalTop);
 			self.uiSplitterHorizontalBottom = $('<div></div>').appendTo(self.uiSplitterHorizontal);
 
-			self.uiSearchBar = $('<form></form>').addClass('nos-searchbar')
-				.appendTo(self.uiSplitterHorizontalBottom);
-			self.uiShowNbItems = $('<span></span>').addClass('nos-nbresult')
+			self.uiSearchBar = $('<div><form><div></div></form></div>')
+                .addClass('nos-mp3grid-searchbar-container wijmo-wijgrid ui-widget ui-widget-header ui-state-default')
+                .appendTo(self.uiSplitterHorizontalBottom)
+                .find('form')
+                .addClass('wijmo-wijgrid-headerrow wijmo-wijgrid-innercell')
+                .find('div')
+                .addClass('nos-mp3grid-searchbar wijmo-wijgrid-headertext');
+
+			self.uiNbResult = $('<div></div>').addClass('nos-mp3grid-nbresult')
 				.appendTo(self.uiSearchBar);
-			self.uiSearchInput = $('<input type="search" name="search" placeholder="Search" value="" />').appendTo(self.uiSearchBar);
-			self.uiInspectorsTags = $('<div></div>').addClass('nos-inspectorstag')
-				.appendTo(self.uiSearchBar);
-			self.uiShowAll = $('<a href="#"></a>').text(o.texts.showAll)
-				.addClass('nos-inspectorsreset')
-				.appendTo(self.uiSearchBar)
-				.hide();
+            self.uiInputContainer = $('<div></div>').addClass('nos-mp3grid-input-container ui-widget-content ui-corner-all')
+                .appendTo(self.uiSearchBar);
+            self.uiViewsButtons = $('<div></div>').addClass('nos-mp3grid-views-button')
+                .appendTo(self.uiSearchBar);
+
+            self.uiSearchIcon = $('<div></div>').addClass('nos-mp3grid-search-icon ui-icon ui-icon-search')
+                .appendTo(self.uiInputContainer);
+			self.uiSearchInput = $('<input type="search" name="search" placeholder="Search" value="" />')
+                .addClass('nos-mp3grid-search-input ui-helper-reset')
+                .appendTo(self.uiInputContainer);
+			self.uiInspectorsTags = $('<div></div>').addClass('nos-mp3grid-inspectorstags')
+				.appendTo(self.uiInputContainer);
+			self.uiResetSearch = $('<a href="#"></a>').text(o.texts.showAll)
+				.addClass('nos-mp3grid-reset-search')
+				.appendTo(self.uiInputContainer);
+            self.uiuiResetSearchIcon = $('<span></span>').text(o.texts.showAll)
+                .addClass('ui-icon')
+                .appendTo(self.uiResetSearch);
+
+            self.uiGridTitle = $('<div></div>').addClass('nos-mp3grid-title')
+                .appendTo(self.uiSearchBar);
+
+            self.uiPaginationLabel = $('<span></span>').addClass('nos-mp3grid-pagination');
 
 			self.uiGrid = $('<table></table>').appendTo(self.uiSplitterHorizontalBottom);
 
@@ -143,7 +170,8 @@ define([
 				childs : {}
 			};
 
-			self._uiAdds()
+			self._css()
+                ._uiAdds()
 				._uiSplitters()
 				._uiInspectors()
 				._uiSearchBar()
@@ -181,6 +209,34 @@ define([
 			});
 			$(window).focus();
 		},
+
+        _css : function() {
+            var self = this,
+                o = self.options;
+
+            if (!$('style#inspectorsGrid').length) {
+                var css = '';
+                for (var u=0, numSheets = document.styleSheets.length; u<numSheets; u++) {
+                    var sheet = document.styleSheets[u];
+                    if (sheet.href && /wijmo/.test(sheet.href)) {
+                        var rules = sheet.rules ? sheet.rules : sheet.cssRules;
+                        for (var o=0, numRules = rules.length; o<numRules; o++) {
+                            if (rules[o].selectorText === '.ui-widget-content') {
+                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel1 .wijmo-wijgrid-alternatingrow {background:' + rules[o].style['background'] + ';}';
+                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel1 .wijmo-wijgrid-alternatingrow {background:' + rules[o].style['background'] + ';}';
+                            }
+                            if (rules[o].selectorText === '.wijmo-wijgrid tr.wijmo-wijgrid-row.ui-state-hover, .wijmo-wijgrid .wijmo-wijgrid-current-cell, .wijmo-wijgrid td.wijmo-wijgrid-rowheader.ui-state-active') {
+                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel1 .wijmo-wijgrid-alternatingrow.ui-state-hover {background:' + rules[o].style['background'] + ';}';
+                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel1 .wijmo-wijgrid-alternatingrow.ui-state-hover {background:' + rules[o].style['background'] + ';}';
+                            }
+                        }
+                    }
+                }
+                $('<style type="text/css" id="inspectorsGrid">' + css + '</style>').appendTo('head');
+            }
+
+            return self;
+        },
 
 		_uiAdds : function() {
 			var self = this,
@@ -254,8 +310,7 @@ define([
 				 icons : {primary : 'ui-icon-gear'}
 			});
 
-			self._viewSettingsMenu()
-				._inspectorsSettingsMenu()
+			self._inspectorsSettingsMenu()
 				._uiSettingsMenu();
 
 			return self;
@@ -338,65 +393,6 @@ define([
 			return span;
 		},
 
-		_viewSettingsMenu : function() {
-			var self = this,
-				o = self.options,
-				views = {}
-				nbViews = 0;
-
-			if (o.grid) {
-				nbViews++;
-				views['grid'] = {
-						content : {
-							name : 'view',
-							id : 'view_grid',
-							checked : function() {
-								return o.defaultView === 'grid';
-							},
-							click : function() {
-								o.defaultView = 'grid';
-								self.gridRefresh();
-								self.uiSettingsMenu.wijmenu('hideAllMenus');
-							},
-							label : o.texts.viewGrid,
-							radio : true
-						}
-					};
-			}
-			if (o.thumbnails) {
-				var sizes = [32, 64];
-				$.each(sizes, function(i, size) {
-					nbViews++;
-					views['thumbnails' + size] = {
-							content : {
-								name : 'view',
-								id : 'view_thumbnails_' + size,
-								checked : function() {
-									return o.defaultView === 'thumbnails' && o.thumbnails.thumbnailSize === size;
-								},
-								click : function() {
-									o.defaultView = 'thumbnails';
-									o.thumbnails.thumbnailSize = size;
-									self.gridRefresh();
-									self.uiSettingsMenu.wijmenu('hideAllMenus');
-									return true;
-								},
-								label : o.texts.viewThumbnails + ' ' + size + 'px',
-								radio : true
-							}
-						};
-				})
-			}
-			if (nbViews > 1) {
-				self.menuSettings.grid.childs.views = {
-					content : o.texts.views,
-					childs : views
-				};
-			}
-
-			return self;
-		},
-
 		_gridSettingsMenu : function() {
 			var self = this,
 				o = self.options,
@@ -409,13 +405,11 @@ define([
 				}
 			})
 
-			if (o.defaultView === 'thumbnails') {
-
-			} else {
+			if (o.defaultView !== 'thumbnails') {
 				var columns = {},
 					showFilter = self.showFilter;
 
-			    o.grid.columns = self.uiGrid.wijgrid("option", "columns");
+			    o.grid.columns = self.uiGrid.nosgrid("option", "columns");
 
 				$.each(o.grid.columns, function (index, column) {
 					if (column.showFilter === undefined || column.showFilter) {
@@ -429,7 +423,7 @@ define([
 								checked : column.visible,
 								click : function() {
 									o.grid.columns[index].visible = $(this).is(':checked');
-									self.uiGrid.wijgrid('doRefresh');
+									self.uiGrid.nosgrid('doRefresh');
 									self.uiSettingsMenu.wijmenu('hideAllMenus');
                                     self._trigger('columnVisibilityChange', null, { index : index, column : o.grid.columns[index]});
                                 },
@@ -598,57 +592,55 @@ define([
 				refreshH = function() {
 					self._resizeInspectorsH()
 						.gridRefresh();
-				};
-
-            verticalSplitter = $.extend({
-                orientation: "vertical",
-                splitterDistance: 0.2,
-                showExpander: false,
-                fullSplit: false,
-                panel1 : {
-                    minSize : 150,
-                    scrollBars : 'hidden'
-                },
-                panel2 : {
-                    minSize : 200,
-                    scrollBars : 'hidden'
-                },
-                expanded: function () {
-                    refreshV();
-                },
-                collapsed: function () {
-                    refreshV();
-                },
-                sized: function () {
-                    self.resizing = true;
-                    refreshV();
-                }
-            }, self.options.splitters.vertical);
-
-            horizontalSplitter = $.extend({
-                orientation: "horizontal",
-                fullSplit: true,
-                splitterDistance: 0.35,
-                showExpander: false,
-                panel1 : {
-                    minSize : 200,
-                    scrollBars : 'hidden'
-                },
-                panel2 : {
-                    minSize : 200,
-                    scrollBars : 'hidden'
-                },
-                expanded: function () {
-                    refreshH();
-                },
-                collapsed: function () {
-                    refreshH();
-                },
-                sized: function () {
-                    self.resizing = true;
-                    refreshH();
-                }
-            }, self.options.splitters.horizontal);
+				},
+                verticalSplitter = $.extend({
+                        orientation: "vertical",
+                        splitterDistance: 0.2,
+                        showExpander: false,
+                        fullSplit: false,
+                        panel1 : {
+                            minSize : 150,
+                            scrollBars : 'hidden'
+                        },
+                        panel2 : {
+                            minSize : 200,
+                            scrollBars : 'hidden'
+                        },
+                        expanded: function () {
+                            refreshV();
+                        },
+                        collapsed: function () {
+                            refreshV();
+                        },
+                        sized: function () {
+                            self.resizing = true;
+                            refreshV();
+                        }
+                    }, self.options.splitters.vertical),
+                horizontalSplitter = $.extend({
+                        orientation: "horizontal",
+                        fullSplit: true,
+                        splitterDistance: 0.35,
+                        showExpander: false,
+                        panel1 : {
+                            minSize : 200,
+                            scrollBars : 'hidden'
+                        },
+                        panel2 : {
+                            minSize : 200,
+                            scrollBars : 'hidden'
+                        },
+                        expanded: function () {
+                            refreshH();
+                        },
+                        collapsed: function () {
+                            refreshH();
+                        },
+                        sized: function () {
+                            self.resizing = true;
+                            refreshH();
+                        }
+                    }, self.options.splitters.horizontal);
 
             verticalSplitter.splitterDistance *= $(window).width();
             horizontalSplitter.splitterDistance *= $(window).height(); //too bad self.element.height() is not initialized...
@@ -690,7 +682,7 @@ define([
 				});
 
 			self.uiInspectorsVertical.add(self.uiInspectorsHorizontal).sortable({
-					connectWith: ".nos-inspectors",
+					connectWith: ".nos-mp3grid-inspectors",
 					start : function() {
 						self.resizing = false;
 					},
@@ -729,7 +721,10 @@ define([
 		},
 
 		_uiSearchBar : function() {
-			var self = this;
+			var self = this,
+                o = self.options;
+
+            self.uiResetSearch.hide();
 
 			self.uiSearchInput.on('keypress', function( event ) {
 					var keyCode = $.ui.keyCode;
@@ -745,15 +740,87 @@ define([
 						return false;
 					}
 
-					self.timeoutSearchInput = setTimeout(self.gridRefresh, 500);
+					self.timeoutSearchInput = setTimeout(function() {
+                        self.gridRefresh();
+                    }, 500);
 				});
 
-			self.uiShowAll.click(function(e) {
+			self.uiResetSearch.click(function(e) {
 					e.preventDefault();
 					self.uiSearchInput.val('');
+                    self.uiInspectorsTags.wijsuperpanel('destroy');
 					self.uiInspectorsTags.empty();
 					self.gridRefresh();
 				});
+
+            self.uiInspectorsTags.height(self.uiInputContainer.height())
+                .width(parseInt(self.uiSearchBar.width() * 0.3))
+                .wijsuperpanel({
+                    showRounder: false,
+                    hScroller: {
+                        scrollMode: 'buttons'
+                    }
+                });
+
+            if (o.grid) {
+                $('<label for="view_grid"></label>')
+                    .text(o.texts.viewGrid)
+                    .appendTo(self.uiViewsButtons);
+                $('<input type="radio" id="view_grid" name="view" checked="' + (o.defaultView === 'grid' ? 'checked="checked"' : '') + '" />')
+                    .appendTo(self.uiViewsButtons)
+                    .button({
+                        text : false,
+                        label: o.texts.viewGrid,
+                        icons : {
+                            primary: 'ui-icon view-list',
+                            secondary: null
+                        }
+                    })
+                    .click(function() {
+                        if (o.defaultView !== 'grid') {
+                            self.uiViewsButtons
+                                .find('button')
+                                .removeClass('ui-state-active');
+                            $(this).addClass('ui-state-active');
+                            o.defaultView = 'grid';
+                            self.gridRefresh();
+                        }
+                    });
+            }
+            if (o.thumbnails) {
+                var sizes = [32, 64];
+                $.each(sizes, function(i, size) {
+                    $('<label for="view_thumbnails_' + size + '"></label>')
+                        .text(o.texts.viewThumbnails + ' ' + size + 'px')
+                        .appendTo(self.uiViewsButtons);
+                    $('<input type="radio" id="view_thumbnails_' + size + '" name="view" ' + (o.defaultView === 'thumbnails' && o.thumbnails.thumbnailSize === size ? 'checked="checked"' : '') + ' />')
+                        .appendTo(self.uiViewsButtons)
+                        .button({
+                            text : false,
+                            label: o.texts.viewThumbnails + ' ' + size + 'px',
+                            icons : {
+                                primary: 'ui-icon ' + (size === 32 ? 'view-thumbs-small' : 'view-thumbs-big'),
+                                secondary: null
+                            }
+                        })
+                        .click(function() {
+                            if (o.defaultView !== 'thumbnails' || o.thumbnails.thumbnailSize !== size) {
+                                self.uiViewsButtons
+                                    .find('button')
+                                    .removeClass('ui-state-active');
+                                $(this).addClass('ui-state-active');
+                                o.defaultView = 'thumbnails';
+                                o.thumbnails.thumbnailSize = size;
+                                self.gridRefresh();
+                            }
+                        });
+                })
+            }
+            if (self.uiViewsButtons.find('input').length > 1) {
+                self.uiViewsButtons.buttonset();
+            } else {
+                self.uiViewsButtons.hide();
+            }
 
 			return self;
 		},
@@ -763,10 +830,12 @@ define([
 				o = self.options;
 
 			self.gridRendered = false;
+            self.uiGridTitle.text(o.texts.item);
+
 			self.uiThumbnail.thumbnails('destroy')
 				.empty()
 				.hide();
-			self.uiGrid.wijgrid('destroy')
+			self.uiGrid.nosgrid('destroy')
 				.empty()
 				.hide();
 			if (o.defaultView === 'thumbnails') {
@@ -790,7 +859,7 @@ define([
 				heights = $.nos.grid.getHeights();
 
 			self.uiGrid.css('height', height)
-				.wijgrid($.extend({
+				.nosgrid($.extend({
 					columnsAutogenerationMode : 'none',
 					selectionMode: 'singleRow',
 					showFilter: self.showFilter,
@@ -816,7 +885,7 @@ define([
 							var r = userData.data.paging;
 							self.pageIndex = r.pageIndex;
 							if (self.gridRendered) {
-								self.uiGrid.wijgrid("currentCell", -1, -1);
+								self.uiGrid.nosgrid("currentCell", -1, -1);
 							}
 							dataSource.proxy.options.data.inspectors = self._jsonInspectors();
 							dataSource.proxy.options.data.offset = r.pageIndex * r.pageSize;
@@ -824,15 +893,18 @@ define([
 						},
 						loaded: function(dataSource, data) {
 							if (dataSource.data.totalRows === 0) {
-								self.uiShowNbItems.text(o.texts.showNoItem);
+								self.uiPaginationLabel.text(o.texts.showNoItem);
+                                self.uiNbResult.text(o.texts.showNoItem);
 							} else if (dataSource.data.totalRows === 0) {
-								self.uiShowNbItems.text(o.texts.showOneItem);
+								self.uiPaginationLabel.text(o.texts.showOneItem);
+                                self.uiNbResult.text('1 ' + o.texts.item);
 							} else {
-								self.uiShowNbItems.text(o.texts.showNbItems.replace('{{x}}', dataSource.data.length).replace('{{y}}', dataSource.data.totalRows));
+								self.uiPaginationLabel.text(o.texts.showNbItems.replace('{{x}}', dataSource.data.length).replace('{{y}}', dataSource.data.totalRows));
+                                self.uiNbResult.text(dataSource.data.totalRows + ' ' + o.texts.items);
 							}
-							self.uiShowNbItems.show();
+                            self.uiNbResult.show();
 
-							self.uiShowAll[self.uiInspectorsTags.find('span').length ? 'show' : 'hide']();
+							self.uiResetSearch[self.uiInspectorsTags.find('.nos-mp3grid-inspectorstag').length || self.uiSearchInput.val() ? 'show' : 'hide']();
 						},
 						reader: {
 							read: function (dataSource) {
@@ -861,7 +933,7 @@ define([
 					},
 					currentCellChanged: function (e) {
 						if (e) {
-							var row = $(e.target).wijgrid("currentCell").row(),
+							var row = $(e.target).nosgrid("currentCell").row(),
 								data = row ? row.data : false;
 
 							if (data) {
@@ -878,11 +950,17 @@ define([
 						self.gridRendered = true;
 						self.uiGrid.css('height', 'auto');
 						if (self.itemSelected !== null) {
-							var sel = self.uiGrid.wijgrid("selection");
+							var sel = self.uiGrid.nosgrid("selection");
 							sel.clear();
 							sel.addRange(0, self.itemSelected, 1, self.itemSelected);
 						}
-					}
+					},
+                    dataLoading: function(e) {
+                        self.uiPaginationLabel.detach();
+                    },
+                    loaded: function() {
+                        self.uiSplitterHorizontalBottom.find('.wijmo-wijgrid-footer').prepend(self.uiPaginationLabel);
+                    }
 				}, o.grid));
 
 			return self;
@@ -899,6 +977,7 @@ define([
 				.thumbnails($.extend({
 					pageIndex: 0,
 					url: o.grid.proxyurl,
+					actions: o.actions,
 					loading: function (dataSource, userData) {
 						var r = userData.data.paging;
 						self.pageIndex = r.pageIndex;
@@ -907,18 +986,23 @@ define([
 						dataSource.proxy.options.data.limit = r.pageSize;
 					},
 					loaded: function(dataSource, data) {
-						if (dataSource.data.totalRows === 0) {
-							self.uiShowNbItems.text(o.texts.showNoItem);
-						} else if (dataSource.data.totalRows === 0) {
-							self.uiShowNbItems.text(o.texts.showOneItem);
-						} else {
-							self.uiShowNbItems.text(o.texts.showNbItems.replace('{{x}}', dataSource.data.length).replace('{{y}}', dataSource.data.totalRows));
-						}
-						self.uiShowNbItems.show();
+                        if (dataSource.data.totalRows === 0) {
+                            self.uiPaginationLabel.text(o.texts.showNoItem);
+                            self.uiNbResult.text(o.texts.showNoItem);
+                        } else if (dataSource.data.totalRows === 0) {
+                            self.uiPaginationLabel.text(o.texts.showOneItem);
+                            self.uiNbResult.text('1 ' + o.texts.item);
+                        } else {
+                            self.uiPaginationLabel.text(o.texts.showNbItems.replace('{{x}}', dataSource.data.length).replace('{{y}}', dataSource.data.totalRows));
+                            self.uiNbResult.text(dataSource.data.totalRows + ' ' + o.texts.items);
+                        }
+                        self.uiNbResult.show();
 
-						self.uiShowAll[self.uiInspectorsTags.find('span').length ? 'show' : 'hide']();
+						self.uiResetSearch[self.uiInspectorsTags.find('.nos-mp3grid-inspectorstag').length || self.uiSearchInput.val() ? 'show' : 'hide']();
 					},
 					rendered : function() {
+                        self.uiSplitterHorizontalBottom.find('.wijmo-wijpager').prepend(self.uiPaginationLabel);
+
 						if (self.itemSelected !== null) {
 							if (!self.uiThumbnail.thumbnails('select', self.itemSelected)) {
 								self.itemSelected = null;
@@ -1034,8 +1118,9 @@ define([
 				}
 
 				self.pageIndex = 0;
+                self.uiInspectorsTags.wijsuperpanel('destroy');
 
-				var span = $('<span></span>').addClass('ui-state-default ui-corner-all ' + name)
+				var span = $('<span></span>').addClass('nos-mp3grid-inspectorstag ui-state-default ui-corner-all ' + name)
 					.text(label)
 					.appendTo(self.uiInspectorsTags);
 
@@ -1050,6 +1135,13 @@ define([
 					})
 					.appendTo(span);
 
+                self.uiInspectorsTags.wijsuperpanel({
+                        showRounder: false,
+                        hScroller: {
+                            scrollMode: 'buttons'
+                        }
+                    });
+
 				self.gridRefresh();
 			});
 
@@ -1058,7 +1150,7 @@ define([
 
 		_jsonInspectors : function() {
 			var self = this,
-				inspectors = {};
+				inspectors = this.options.values || {};
 
 			self.uiSearchBar.find('input').each(function() {
 				var input = $(this),

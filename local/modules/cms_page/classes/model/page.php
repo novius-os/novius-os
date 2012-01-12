@@ -16,8 +16,6 @@ class Model_Page extends \Cms\Model {
     protected static $_table_name = 'cms_page';
     protected static $_primary_key = array('page_id');
 
-    protected static $_has_wysiwygs = true;
-
 	protected static $_has_many = array(
 		'childrens' => array(
 			'key_from'       => 'page_id',
@@ -46,8 +44,6 @@ class Model_Page extends \Cms\Model {
 			'cascade_delete' => false,
 		),
 	);
-
-	public $wysiwyg_key;
 
 	const TYPE_CLASSIC       = 0;
 	const TYPE_POPUP         = 1;

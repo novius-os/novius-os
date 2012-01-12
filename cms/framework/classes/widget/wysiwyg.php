@@ -37,7 +37,7 @@ class Widget_Wysiwyg extends \Fieldset_Field {
     public function build() {
 
 	    static::form_append($this->fieldset());
-        return (string) $this->wysiwyg;
+        return (string) $this->wysiwyg->set_template('{field}');
     }
 
 	public function form_append($fieldset) {
