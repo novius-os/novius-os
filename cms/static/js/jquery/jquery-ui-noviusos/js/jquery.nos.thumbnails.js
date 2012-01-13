@@ -16,6 +16,9 @@ define([
 			pageIndex: 0,
 			pageSize: null,
 			url : '',
+            texts : {
+                loading : 'Loading...'
+            },
 			loading : null,
 			loaded : null,
 			reader : null,
@@ -24,8 +27,7 @@ define([
 		},
 
 		_create: function() {
-			var self = this,
-				o = self.options;
+			var self = this;
 
 			self.uiPager = $('<div></div>').addClass('wijmo-wijsuperpanel-footer  ui-state-default')
 				.appendTo(self.element);
@@ -72,6 +74,22 @@ define([
 				});
 			self.uiContainer = self.element.find('.wijmo-wijsuperpanel-contentwrapper');
 
+            self.uiOverlay = $('<div></div>')
+                .addClass('nos-thumbnails-overlay ui-widget-overlay')
+                .appendTo(self.element);
+            self.uiOverlayText = $('<span><span></span>' + o.texts.loading + '</span>')
+                .addClass('nos-thumbnails-loadingtext ui-widget-content ui-corner-all')
+                .find('span')
+                .addClass('ui-icon ui-icon-clock')
+                .end()
+                .appendTo(self.element);
+
+            self.uiOverlayText.css({
+                marginLeft : (self.uiOverlayText.width() * -1 / 2) + 'px',
+                marginTop : (self.uiOverlayText.height() * -1 / 2) + 'px'
+            });
+
+
 			if (o.pageSize === null) {
 				self._displayItem({
 					title : 'Test',
@@ -82,7 +100,7 @@ define([
 				self.itemDimension = {
 					width : el.outerWidth(true),
 					height : el.outerHeight(true)
-				}
+				};
 				self.uiContainer.empty();
 
 				o.pageSize = Math.floor(self.uiContainer.width() / self.itemDimension.width) * Math.max(1, Math.floor(self.uiContainer.height() / self.itemDimension.height));
@@ -101,6 +119,9 @@ define([
 				loading: function(dataSource, userData) {
 					dataSource.proxy.options.data = $.extend(dataSource.proxy.options.data, userData.data);
 
+                    self.uiOverlay.add(self.uiOverlayText)
+                        .show();
+
 					if ($.isFunction(o.loading)) {
 						o.loading(dataSource, userData)
 					}
@@ -114,6 +135,9 @@ define([
 						pageIndex : data.data.paging.pageIndex
 					});
 					self._display(dataSource.data);
+
+                    self.uiOverlay.add(self.uiOverlayText)
+                        .hide();
 				},
 				reader: o.reader
 			});
@@ -122,7 +146,7 @@ define([
 		},
 
 		_load : function() {
-			var self = this
+			var self = this,
 				o = self.options;
 
 			self.dataSource.load({
@@ -140,7 +164,7 @@ define([
 		},
 
 		_display : function(items) {
-			var self = this
+			var self = this,
 				o = self.options;
 
 			self.uiContainer.empty();

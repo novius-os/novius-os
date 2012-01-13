@@ -20,7 +20,7 @@ require([
 				parent = inspector.parent()
 					.bind({
 						inspectorResize: function() {
-							inspector.wijgrid('destroy')
+							inspector.nosgrid('destroy')
 								.empty();
 							init();
 						}
@@ -36,7 +36,7 @@ require([
 							height : '100%',
 							width : '100%'
 						})
-						.wijgrid({
+						.nosgrid({
 							columnsAutogenerationMode : 'none',
 							showFilter: showFilter,
 							allowSorting: true,
@@ -73,13 +73,13 @@ require([
 								}
 							}),
 							currentCellChanged: function (e) {
-								var row = $(e.target).wijgrid("currentCell").row(),
+								var row = $(e.target).nosgrid("currentCell").row(),
 									data = row ? row.data : false;
 
 								if (data && rendered) {
 									$nos.nos.listener.fire('inspector.selectionChanged.' + widget_id, false, ["<?= $input_name ?>", data.id, data.title]);
 								}
-								inspector.wijgrid("currentCell", -1, -1);
+								inspector.nosgrid("currentCell", -1, -1);
 							},
 							rendering : function() {
 								rendered = false;
@@ -92,8 +92,8 @@ require([
 				};
 			init();
 			var menuColumns = [];
-			columns = inspector.wijgrid("option", "columns"),
-			showFilter = inspector.wijgrid("option", "showFilter");
+			columns = inspector.nosgrid("option", "columns"),
+			showFilter = inspector.nosgrid("option", "showFilter");
 			hasFilters = showFilter;
 			$.each(columns, function (index, col) {
 				if (col.showFilter === undefined || col.showFilter) {
@@ -104,7 +104,7 @@ require([
 						visible : col.visible,
 						change : function (visible) {
 		                    columns[index].visible = visible;
-		                    inspector.wijgrid('doRefresh');
+		                    inspector.nosgrid('doRefresh');
 		                }
 					});
             });
@@ -112,7 +112,7 @@ require([
 			if (hasFilters) {
 				$nos.nos.listener.fire('inspector.showFilter', false, [widget_id, function(visible) {
 					showFilter = visible;
-					inspector.wijgrid('destroy')
+					inspector.nosgrid('destroy')
 						.empty();
 					init();
 				}]);

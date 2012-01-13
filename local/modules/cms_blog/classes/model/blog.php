@@ -30,7 +30,7 @@ class Model_Blog extends Model {
         ),
         'media_thumbnail' => array(
             'key_from' => 'blog__media_thumbnail',
-            'model_to' => 'Cms\Media\Model_Media',
+            'model_to' => 'Cms\Model_Media_Media',
             'key_to' => 'media_id',
             'cascade_save' => false,
             'cascade_delete' => false,

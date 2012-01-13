@@ -336,12 +336,12 @@ define([
 										.appendTo('body');
 									table = $('<table></table>')
 										.appendTo(div)
-										.wijgrid({
+										.nosgrid({
 											scrollMode : 'auto',
 											showFilter: true,
 											allowPaging : true,
 											staticRowIndex : 0,
-											data: [ ['<a class="ui-state-default" href="#" style="display:inline-block;"><span class="ui-icon ui-icon-pencil"></span></a>'] ]
+											data: [ ['test'] ]
 										});
 								this.heights = {
 									row : table.height(),
@@ -349,7 +349,7 @@ define([
 									header : div.find('.wijmo-wijgrid-headerrow').outerHeight(),
 									filter : div.find('.wijmo-wijgrid-filterrow').outerHeight()
 								};
-								table.wijgrid('destroy');
+								table.nosgrid('destroy');
 								div.remove();
 							}
 							return this.heights;

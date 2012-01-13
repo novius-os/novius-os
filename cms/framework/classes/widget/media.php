@@ -40,7 +40,7 @@ class Widget_Media extends \Fieldset_Field {
 		$media_id = $this->media->get_value();
 		if (!empty($media_id)) {
 			\Fuel::add_module('cms_media');
-			$media = \Cms\Media\Model_Media::find($media_id);
+			$media = \Cms\Model_Media_Media::find($media_id);
 			$this->media->set_attribute('data-selected-image', $media->get_public_path_resized(64, 64));
 		}
         return (string) $this->media;

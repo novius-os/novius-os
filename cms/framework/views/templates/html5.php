@@ -32,7 +32,7 @@
 		paths: {
 			'jquery-nos': 'static/cms/js/nos',
 			'jquery': 'static/cms/js/jquery/jquery-1.7.1.min',
-			'jquery-ui' : 'static/cms/js/jquery/jquery-ui/jquery-ui-1.8.16.custom.min',
+			'jquery-ui' : 'static/cms/js/jquery/jquery-ui/jquery-ui-1.8.17.custom.min',
 			'link': 'static/cms/js/requirejs/link',
 			'order': 'static/cms/js/requirejs/order.min',
 			'domReady': 'static/cms/js/requirejs/domReady.min'

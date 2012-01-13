@@ -34,8 +34,10 @@ define([
 				views : 'Views',
 				viewGrid : 'Grid',
 				viewThumbnails : 'Thumbnails',
-				preview : 'Preview'
+				preview : 'Preview',
+                loading : 'Loading...'
 			},
+            actions: [],
 			values: {},
             //callbabks
             columnVisibilityChange : null,
@@ -407,7 +409,7 @@ define([
 				var columns = {},
 					showFilter = self.showFilter;
 
-			    o.grid.columns = self.uiGrid.wijgrid("option", "columns");
+			    o.grid.columns = self.uiGrid.nosgrid("option", "columns");
 
 				$.each(o.grid.columns, function (index, column) {
 					if (column.showFilter === undefined || column.showFilter) {
@@ -421,7 +423,7 @@ define([
 								checked : column.visible,
 								click : function() {
 									o.grid.columns[index].visible = $(this).is(':checked');
-									self.uiGrid.wijgrid('doRefresh');
+									self.uiGrid.nosgrid('doRefresh');
 									self.uiSettingsMenu.wijmenu('hideAllMenus');
                                     self._trigger('columnVisibilityChange', null, { index : index, column : o.grid.columns[index]});
                                 },
@@ -590,57 +592,55 @@ define([
 				refreshH = function() {
 					self._resizeInspectorsH()
 						.gridRefresh();
-				};
-
-            verticalSplitter = $.extend({
-                orientation: "vertical",
-                splitterDistance: 0.2,
-                showExpander: false,
-                fullSplit: false,
-                panel1 : {
-                    minSize : 150,
-                    scrollBars : 'hidden'
-                },
-                panel2 : {
-                    minSize : 200,
-                    scrollBars : 'hidden'
-                },
-                expanded: function () {
-                    refreshV();
-                },
-                collapsed: function () {
-                    refreshV();
-                },
-                sized: function () {
-                    self.resizing = true;
-                    refreshV();
-                }
-            }, self.options.splitters.vertical);
-
-            horizontalSplitter = $.extend({
-                orientation: "horizontal",
-                fullSplit: true,
-                splitterDistance: 0.35,
-                showExpander: false,
-                panel1 : {
-                    minSize : 200,
-                    scrollBars : 'hidden'
-                },
-                panel2 : {
-                    minSize : 200,
-                    scrollBars : 'hidden'
-                },
-                expanded: function () {
-                    refreshH();
-                },
-                collapsed: function () {
-                    refreshH();
-                },
-                sized: function () {
-                    self.resizing = true;
-                    refreshH();
-                }
-            }, self.options.splitters.horizontal);
+				},
+                verticalSplitter = $.extend({
+                        orientation: "vertical",
+                        splitterDistance: 0.2,
+                        showExpander: false,
+                        fullSplit: false,
+                        panel1 : {
+                            minSize : 150,
+                            scrollBars : 'hidden'
+                        },
+                        panel2 : {
+                            minSize : 200,
+                            scrollBars : 'hidden'
+                        },
+                        expanded: function () {
+                            refreshV();
+                        },
+                        collapsed: function () {
+                            refreshV();
+                        },
+                        sized: function () {
+                            self.resizing = true;
+                            refreshV();
+                        }
+                    }, self.options.splitters.vertical),
+                horizontalSplitter = $.extend({
+                        orientation: "horizontal",
+                        fullSplit: true,
+                        splitterDistance: 0.35,
+                        showExpander: false,
+                        panel1 : {
+                            minSize : 200,
+                            scrollBars : 'hidden'
+                        },
+                        panel2 : {
+                            minSize : 200,
+                            scrollBars : 'hidden'
+                        },
+                        expanded: function () {
+                            refreshH();
+                        },
+                        collapsed: function () {
+                            refreshH();
+                        },
+                        sized: function () {
+                            self.resizing = true;
+                            refreshH();
+                        }
+                    }, self.options.splitters.horizontal);
 
             verticalSplitter.splitterDistance *= $(window).width();
             horizontalSplitter.splitterDistance *= $(window).height(); //too bad self.element.height() is not initialized...
@@ -835,7 +835,7 @@ define([
 			self.uiThumbnail.thumbnails('destroy')
 				.empty()
 				.hide();
-			self.uiGrid.wijgrid('destroy')
+			self.uiGrid.nosgrid('destroy')
 				.empty()
 				.hide();
 			if (o.defaultView === 'thumbnails') {
@@ -859,7 +859,7 @@ define([
 				heights = $.nos.grid.getHeights();
 
 			self.uiGrid.css('height', height)
-				.wijgrid($.extend({
+				.nosgrid($.extend({
 					columnsAutogenerationMode : 'none',
 					selectionMode: 'singleRow',
 					showFilter: self.showFilter,
@@ -885,7 +885,7 @@ define([
 							var r = userData.data.paging;
 							self.pageIndex = r.pageIndex;
 							if (self.gridRendered) {
-								self.uiGrid.wijgrid("currentCell", -1, -1);
+								self.uiGrid.nosgrid("currentCell", -1, -1);
 							}
 							dataSource.proxy.options.data.inspectors = self._jsonInspectors();
 							dataSource.proxy.options.data.offset = r.pageIndex * r.pageSize;
@@ -933,7 +933,7 @@ define([
 					},
 					currentCellChanged: function (e) {
 						if (e) {
-							var row = $(e.target).wijgrid("currentCell").row(),
+							var row = $(e.target).nosgrid("currentCell").row(),
 								data = row ? row.data : false;
 
 							if (data) {
@@ -950,12 +950,12 @@ define([
 						self.gridRendered = true;
 						self.uiGrid.css('height', 'auto');
 						if (self.itemSelected !== null) {
-							var sel = self.uiGrid.wijgrid("selection");
+							var sel = self.uiGrid.nosgrid("selection");
 							sel.clear();
 							sel.addRange(0, self.itemSelected, 1, self.itemSelected);
 						}
 					},
-                    dataLoading: function() {
+                    dataLoading: function(e) {
                         self.uiPaginationLabel.detach();
                     },
                     loaded: function() {

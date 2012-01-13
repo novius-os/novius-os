@@ -11,7 +11,7 @@
 namespace Cms\Blog;
 
 use Cms\Controller;
-use Cms\Model_Page;
+use Cms\Model_Page_Page;
 
 use Fuel\Core\Inflector;
 use Fuel\Core\Str;
@@ -419,7 +419,7 @@ class Controller_Front extends Controller {
     }
 
     public function action_menu_execute() {
-        static::$blog_url = \Cms\Model_Page::get_url(2);
+        static::$blog_url = \Cms\Model_Page_Page::get_url(2);
         self::MenuBlog($dossier_menu);
     }
 
@@ -431,7 +431,7 @@ class Controller_Front extends Controller {
     }
 
     public function action_links_execute() {
-        static::$blog_url = \Cms\Model_Page::get_url(2);
+        static::$blog_url = \Cms\Model_Page_Page::get_url(2);
         self::newLiens();
     }
 
@@ -520,7 +520,7 @@ class Controller_Front extends Controller {
 
     static function MenuBlog($dossier_menu = false) {
 
-        $page = \Cms\Model_Page::query()
+        $page = \Cms\Model_Page_Page::query()
                 ->where_open()
                     ->where(array('page_home', '=', '1'))
                     ->or_where(array('page_carrefour', '=', '1'))
@@ -540,7 +540,7 @@ class Controller_Front extends Controller {
 
         //-------Listage des pages du dossier Menu Header
 
-        $list_page = \Cms\Model_Page::query()
+        $list_page = \Cms\Model_Page_Page::query()
                 ->where(array('page_pere_id', DOSSIER_MENU_HEADER))
                 ->where(array('page_publier', 1))
                 ->where(array('page_menu', 1))
@@ -590,7 +590,7 @@ class Controller_Front extends Controller {
 <ul class="sf-menu" style="margin:0;">
   <!-- list-style-image pour IE 7 -->
   <?php
-  $page_newsletters = \Cms\Model_Page::find(PAGE_INSCRIPTION_NEWSLETTER);
+  $page_newsletters = \Cms\Model_Page_Page::find(PAGE_INSCRIPTION_NEWSLETTER);
   ?>
   <li style="list-style-type:none;list-style-image: none;"><a href="<?= $page_newsletters->page_url_virtuel ?>"><img src="static/images/abonner_actualites.png" border="0" alt="s'abonner aux actualités"  title="s'abonner aux actualités" /></a></li>
   <li style="list-style-type:none;list-style-image: none;"><a href="<?= static::$blog_url ?>?todo=rss" ><img src="static/images/abonner_rss.png" border="0" alt="s'abonner au flux RSS" title="s'abonner au flux RSS" /></a></li>

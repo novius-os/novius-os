@@ -21,6 +21,13 @@ class ConfigProcessor {
     static public function process($config) {
         $format = Format::forge();
         if ($config['ui']) {
+            if (is_array($config['ui']['grid']['columns']) && is_array($config['ui']['actions'])) {
+                $key = array_search('actions', $config['ui']['grid']['columns']);
+                if ($key !== false) {
+                    $config['ui']['grid']['columns'][$key] = array('actions' => $config['ui']['actions']);
+                }
+            }
+
             $columns = &$config['ui']['grid']['columns'];
             $config['ui']['slidersChange'] = 'function(e, rapport) { $.nos.saveUserConfiguration("'.$config['configuration_id'].'.ui.splitters", rapport) }';
             //$config['ui']['columnVisibilityChange'] = 'function() { console.log($("#mp3grid").mp3grid("exportSettings")); /*$.nos.saveUserConfiguration("cms_blog", {toto: "toto"});*/ }';

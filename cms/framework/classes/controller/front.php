@@ -202,9 +202,8 @@ class Controller_Front extends Controller {
             $where[] = array('page_url_virtuel', $this->url);
         }
 
-		\Fuel::add_module('cms_page');
         // Liste toutes les pages ayant le bon nom
-        $pages = Page\Model_Page::find('all', array(
+        $pages = Model_Page_Page::find('all', array(
             'where' => $where,
         ));
 
@@ -259,7 +258,7 @@ class Controller_Front extends Controller {
     }
 
     public function rebuild_cache($cache) {
-        $this->page = new Page\Model_Page();
+        $this->page = new Model_Page_Page();
         foreach ($cache['page'] as $field => $value) {
             $this->page->{'page_'.$field} = $value;
         }
