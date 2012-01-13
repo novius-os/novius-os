@@ -8,16 +8,17 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Page;
+namespace Cms;
 
-use Fuel\Core\Arr;
 use Fuel\Core\Config;
 
-class Controller_Admin_Inspector_Lang extends \Cms\Controller_Inspector_Lang {
+use Cms\Controller_Mp3table_List;
+
+class Controller_Admin_Page_List extends Controller_Mp3table_List {
 
 	public function before() {
-		Config::load('cms_page::admin', true);
-		$this->config = Arr::merge($this->config, Config::get('cms_page::admin.page.filters.lang'));
+        Config::load('cms::admin/page/page', true);
+		$this->config = \Config::getFromUser('cms::admin/page/page', array());
 
 		parent::before();
 	}

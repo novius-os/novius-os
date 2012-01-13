@@ -8,16 +8,16 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Page;
+namespace Cms;
 
-class Model_Root extends \Orm\Model {
+class Model_Page_Root extends \Orm\Model {
     protected static $_table_name = 'cms_racine';
     protected static $_primary_key = array('rac_id');
 
 	protected static $_has_many = array(
 		'pages' => array(
 			'key_from'       => 'rac_id',
-			'model_to'       => '\Cms\Page\Model_Page',
+			'model_to'       => '\Cms\Model_Page_Page',
 			'key_to'         => 'page_rac_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,

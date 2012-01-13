@@ -8,11 +8,11 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Page;
+namespace Cms;
 
 use Fuel\Core\Config;
 
-class Controller_Admin_Ajax extends \Controller {
+class Controller_Admin_Page_Ajax extends \Controller {
 
 	public function before() {
 		Config::load('templates', true);
@@ -24,7 +24,7 @@ class Controller_Admin_Ajax extends \Controller {
 		$data = \Config::get('templates.id-'.$id, array());
 		$data['layout'] = (array) $data['layout'];
 
-		$page = Model_Page::find($page_id);
+		$page = Model_Page_Page::find($page_id);
 		foreach ($data['layout'] as $wysiwyg => $coords) {
 			$data['content'][$wysiwyg] = $page->{'wysiwyg->'.$wysiwyg.'->wysiwyg_text'};
 		}

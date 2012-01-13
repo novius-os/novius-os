@@ -11,9 +11,9 @@
 return array(
 	'widget_id' => 'inspector-root',
 	'input_name'   => 'rac_id',
-	'urljson' => 'admin/cms_page/inspector/root/json',
+	'urljson' => 'admin/admin/page/inspector/root/json',
 	'query' => array(
-		'model' => 'Cms\Page\Model_Root',
+		'model' => 'Cms\Model_Page_Root',
 	),
 	'dataset' => array(
 		'id' => 'rac_id',

@@ -11,9 +11,9 @@
 return array(
 	'widget_id' => 'inspector-tree',
 	'input_name'   => 'directory_id',
-	'urljson' => 'admin/cms_page/inspector/tree/json',
+	'urljson' => 'admin/admin/page/inspector/tree/json',
 	'query' => array(
-		'model' => 'Cms\Page\Model_Page',
+		'model' => 'Cms\Model_Page_Page',
 	),
 	'dataset' => array(
 		'id' => 'page_id',

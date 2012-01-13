@@ -8,23 +8,23 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Page;
+namespace Cms;
 
 use Fuel\Core\Arr;
 use Fuel\Core\Config;
 
-class Controller_Admin_Inspector_Tree extends \Cms\Controller_Inspector_Modeltree {
+class Controller_Admin_Page_Inspector_Tree extends \Cms\Controller_Inspector_Modeltree {
 
 	public function before() {
-		Config::load('cms_page::admin/tree', true);
-		$this->config = Arr::merge($this->config, Config::get('cms_page::admin/tree'));
+        Config::load('cms::admin/page/tree', true);
+		$this->config = Arr::merge($this->config, Config::get('cms::admin/page/tree'));
 
 		parent::before();
 	}
 	
 	public function query($parent_id) {
 		$query = parent::query($parent_id);
-		$query->where('page_type', '=', Model_Page::TYPE_FOLDER);
+		$query->where('page_type', '=', Model_Page_Page::TYPE_FOLDER);
 		return $query;
 	}
 }

@@ -14,7 +14,7 @@ require(['jquery-nos'], function ($) {
 	$(function () {
 		$.nos.tabs.updateTab({
 			label : '<?= $page->page_titre ?>',
-			iconUrl : 'static/modules/cms_page/img/16/page.png'
+			iconUrl : 'static/cms/img/16/page.png'
 		});
 	});
 });
@@ -61,7 +61,7 @@ $fieldset->field('page_duree_vie')->set_template('{label} {field} seconds');
 $fieldset->field('page_verrou')->set_template('{label} {field}');
 ?>
 
-<?= $fieldset->open('admin/cms_page/form/edit/'.$page->page_id); ?>
+<?= $fieldset->open('admin/admin/page/form/edit/'.$page->page_id); ?>
 <?= View::forge('form/layout_standard', array(
 	'fieldset' => $fieldset,
 	'medias' => array(),
@@ -116,7 +116,7 @@ require([
 
 		$('select[name=page_gab_id]').bind('change', function() {
 			$.ajax({
-				url: 'admin/cms_page/ajax/wysiwyg/<?= $page->page_id ?>',
+				url: 'admin/admin/page/ajax/wysiwyg/<?= $page->page_id ?>',
 				data: {
 					template_id: $(this).val()
 				},
@@ -161,17 +161,17 @@ require([
 		$('select[name=page_type]').change(function() {
 			var val = $(this).val();
 
-			if (val == <?= Cms\Page\Model_Page::TYPE_CLASSIC ?> || val == <?= Cms\Page\Model_Page::TYPE_FOLDER ?>) {
+			if (val == <?= Cms\Model_Page_Page::TYPE_CLASSIC ?> || val == <?= Cms\Model_Page_Page::TYPE_FOLDER ?>) {
 				$('#wysiwyg').show().siblings().hide();
 				$('select[name=page_gab_id]').closest('div.unit').show().end().change();
 			}
 
-			if (val == <?= Cms\Page\Model_Page::TYPE_EXTERNAL_LINK ?>) {
+			if (val == <?= Cms\Model_Page_Page::TYPE_EXTERNAL_LINK ?>) {
 				$('#external').show().siblings().hide();
 				$('select[name=page_gab_id]').closest('div.unit').hide();
 			}
 
-			if (val == <?= Cms\Page\Model_Page::TYPE_INTERNAL_LINK ?>) {
+			if (val == <?= Cms\Model_Page_Page::TYPE_INTERNAL_LINK ?>) {
 				$('#internal').show().siblings().hide();
 				$('select[name=page_gab_id]').closest('div.unit').hide();
 			}

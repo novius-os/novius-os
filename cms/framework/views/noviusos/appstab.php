@@ -40,13 +40,20 @@
 	<?php
 	}
 	?>
-	<a class="app" href="admin/user/list">
+	<a class="app" href="admin/admin/page/list/index">
+		<span class="icon">
+			<img class="gloss" src="static/cms/img/64/gloss.png" />
+			<img width="64" src="static/cms/img/64/page.png" />
+		</span>
+		<span class="text">Page</span>
+	</a>
+    <a class="app" href="admin/user/list">
 		<span class="icon">
 			<img class="gloss" src="static/cms/img/64/gloss.png" />
 			<img width="64" src="static/cms/img/64/user.png" />
 		</span>
-		<span class="text">Users</span>
-	</a>
+        <span class="text">Users</span>
+    </a>
 </div>
 
 <script type="text/javascript">

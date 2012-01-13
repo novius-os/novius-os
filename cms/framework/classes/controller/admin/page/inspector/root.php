@@ -8,16 +8,16 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Page;
+namespace Cms;
 
 use Fuel\Core\Arr;
 use Fuel\Core\Config;
 
-class Controller_Admin_Inspector_Root extends \Cms\Controller_Inspector_Model {
+class Controller_Admin_Page_Inspector_Root extends \Cms\Controller_Inspector_Model {
 
 	public function before() {
-		Config::load('cms_page::admin/root', true);
-		$this->config = Arr::merge($this->config, Config::get('cms_page::admin/root'));
+        Config::load('cms::admin/page/root', true);
+		$this->config = Arr::merge($this->config, Config::get('cms::admin/page/root'));
 
 		parent::before();
 	}

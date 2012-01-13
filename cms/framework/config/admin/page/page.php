@@ -10,29 +10,28 @@
 
 return array(
 	'query' => array(
-		'model' => 'Cms\Page\Model_Page',
+		'model' => 'Cms\Model_Page_Page',
 		'related' => array(),
 	),
 	'tab' => array(
 		'label' => 'Pages',
-		'iconUrl' => 'static/modules/cms_page/img/32/page.png',
+		'iconUrl' => 'static/cms/img/32/page.png',
 	),
 	'ui' => array(
 		'label' => 'Pages',
 		'adds' => array(
 			array(
 				'label' => 'Add a Page',
-				//'iconClasses' => 'cms_page-icon16 cms_page-icon16-page',
-				'url' => 'admin/cms_page/page/add',
+				'url' => 'admin/admin/page/page/add',
 			),
 			array(
 				'label' => 'Add a root',
-				'iconClasses' => 'cms_page-icon16 cms_page-icon16-root',
-				'url' => 'admin/cms_page/root/add',
+				'iconClasses' => 'nos-icon16 nos-icon16-root',
+				'url' => 'admin/admin/page/root/add',
 			),
 		),
 		'grid' => array(
-			'proxyurl' => 'admin/cms_page/list/json',
+			'proxyurl' => 'admin/admin/page/list/json',
 			'columns' => array(
 				array(
 					'headerText' => 'Title 2',
@@ -41,7 +40,7 @@ return array(
 						if ($.isPlainObject(args.row.data)) {
 							args.$container.closest("td").attr("title", args.row.data.title);
 
-							$("<a href=\"admin/cms_page/form/edit/" + args.row.data.id + "\"></a>")
+							$("<a href=\"admin/admin/page/form/edit/" + args.row.data.id + "\"></a>")
 								.text(args.row.data.title)
 								.appendTo(args.$container)
 								.click(function(e) {
@@ -63,15 +62,15 @@ return array(
 				'widget_id' => 'inspector-root',
 				'vertical' => true,
 				'label' => 'Roots',
-				'iconClasses' => 'cms_page-icon16 cms_page-icon16-root',
-				'url' => 'admin/cms_page/inspector/root/list',
+				'iconClasses' => 'nos-icon16 nos-icon16-root',
+				'url' => 'admin/admin/page/inspector/root/list',
 			),
 			array(
 				'widget_id' => 'inspector-tree',
 				'vertical' => true,
 				'label' => 'Directories',
-				'iconClasses' => 'cms_page-icon16 cms_page-icon16-root',
-				'url' => 'admin/cms_page/inspector/tree/list',
+				'iconClasses' => 'nos-icon16 nos-icon16-root',
+				'url' => 'admin/admin/page/inspector/tree/list',
 			),
 		),
 	),
@@ -90,7 +89,7 @@ return array(
 		},
 		'directory_id' => function($value, $query) {
 			$query->where(array('page_niveau', '>', 0));
-			$query->where(array('page_type', '!=', Cms\Page\Model_Page::TYPE_FOLDER));
+			$query->where(array('page_type', '!=', Cms\Model_Page_Page::TYPE_FOLDER));
 			if ($value) {
 				$query->where(array('page_pere_id', '=', $value));
 			}

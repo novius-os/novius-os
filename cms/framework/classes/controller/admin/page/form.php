@@ -8,9 +8,9 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Page;
+namespace Cms;
 
-class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
+class Controller_Admin_Page_Form extends \Cms\Controller_Generic_Admin {
 
 	public function after($response) {
 
@@ -30,8 +30,8 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 	}
 
     public function action_edit($id) {
-        $body = \View::forge('cms_page::form/edit', array(
-			'page' => Model_Page::find($id),
+        $body = \View::forge('cms::admin/page/form/edit', array(
+			'page' => Model_Page_Page::find($id),
 			'fieldset' => static::fieldset($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 		), false);
 
@@ -147,10 +147,10 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 				'form' => array(
 					'type' => 'select',
 					'options' => array(
-						Model_Page::TYPE_CLASSIC => 'Page',
-						Model_Page::TYPE_FOLDER => 'Folder / Chapter',
-						Model_Page::TYPE_INTERNAL_LINK => 'Internal link',
-						Model_Page::TYPE_EXTERNAL_LINK => 'External link',
+						Model_Page_Page::TYPE_CLASSIC => 'Page',
+                        Model_Page_Page::TYPE_FOLDER => 'Folder / Chapter',
+                        Model_Page_Page::TYPE_INTERNAL_LINK => 'Internal link',
+                        Model_Page_Page::TYPE_EXTERNAL_LINK => 'External link',
 					),
 				),
 			),
@@ -181,9 +181,9 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 			),
         );
 
-        $page = Model_Page::find($id);
+        $page = Model_Page_Page::find($id);
 
-		$editable_fields = array_diff(array_keys(Model_Page::properties()), Model_Page::primary_key());
+		$editable_fields = array_diff(array_keys(Model_Page_Page::properties()), Model_Page_Page::primary_key());
 
 		$template_id = \Input::post('page_gab_id', $page->page_gab_id);
 		if (!empty($template_id)) {

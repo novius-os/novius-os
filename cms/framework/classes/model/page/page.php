@@ -8,18 +8,18 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Page;
+namespace Cms;
 
 use Fuel\Core\Uri;
 
-class Model_Page extends \Cms\Model {
+class Model_Page_Page extends \Cms\Model {
     protected static $_table_name = 'cms_page';
     protected static $_primary_key = array('page_id');
 
 	protected static $_has_many = array(
 		'childrens' => array(
 			'key_from'       => 'page_id',
-			'model_to'       => '\Cms\Page\Model_Page',
+			'model_to'       => '\Cms\Model_Page_Page',
 			'key_to'         => 'page_pere_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
@@ -31,14 +31,14 @@ class Model_Page extends \Cms\Model {
 	protected static $_belongs_to = array(
 		'parent' => array(
 			'key_from'       => 'page_pere_id',
-			'model_to'       => '\Cms\Page\Model_Page',
+			'model_to'       => '\Cms\Model_Page_Page',
 			'key_to'         => 'page_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
 		'racine' => array(
 			'key_from'       => 'page_rac_id',
-			'model_to'       => '\Cms\Page\Model_Root',
+			'model_to'       => '\Cms\Model_Page_Root',
 			'key_to'         => 'rac_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
