@@ -8,16 +8,16 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Media;
+namespace Cms;
 
 use Fuel\Core\Arr;
 use Fuel\Core\Config;
 
-class Controller_Admin_Inspector_Extension extends \Cms\Controller_Inspector_Data {
+class Controller_Admin_Media_Inspector_Extension extends Controller_Inspector_Data {
 
 	public function before() {
-		Config::load('cms_media::admin/extension', true);
-		$this->config = Arr::merge($this->config, Config::get('cms_media::admin/extension'));
+		Config::load('cms::admin/media/extension', true);
+		$this->config = Arr::merge($this->config, Config::get('cms::admin/media/extension'));
 
 		parent::before();
 	}

@@ -19,7 +19,7 @@ return array(
 				if ($.isPlainObject(args.row.data)) {
 					var text = "";
 					if (args.row.data.icon) {
-						text += "<img style=\"vertical-align:middle\" src=\"static/modules/cms_media/img/16/" + args.row.data.icon + "\"> ";
+						text += "<img style=\"vertical-align:middle\" src=\"static/cms/img/16/" + args.row.data.icon + "\"> ";
 					}
 					text += args.row.data.title;
 

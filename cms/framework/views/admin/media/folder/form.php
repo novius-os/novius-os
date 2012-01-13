@@ -8,7 +8,7 @@
  * @link http://www.novius-os.org
  */
 ?>
-<form method="POST" action="admin/cms_media/folder/do">
+<form method="POST" action="admin/admin/media/folder/do">
 	<input type="hidden" name="medif_parent_id" value="<?= $folder->medif_id ?>" />
 	<p><label>Title: <input type="text" name="medif_title" /></label></p>
 	<p><label>Path: <?= $folder->medif_path ?><input type="text" name="medif_path" /></label></p>

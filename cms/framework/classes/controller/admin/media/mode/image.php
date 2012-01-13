@@ -8,16 +8,15 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Media;
+namespace Cms;
 
 use Fuel\Core\Config;
-use Cms\Controller_Mp3table_List;
 
-class Controller_Admin_Mode_Image extends Controller_Mp3table_List {
+class Controller_Admin_Media_Mode_Image extends Controller_Mp3table_List {
 
 	public function before() {
-		Config::load('cms_media::admin/media', true);
-		$this->config = Config::get('cms_media::admin/media', array());
+		Config::load('cms::admin/media/media', true);
+		$this->config = Config::get('cms::admin/media/media', array());
 
 		// Add the "Choose" action button
 		if (isset($this->config['ui']['actions'])) {
@@ -44,11 +43,5 @@ class Controller_Admin_Mode_Image extends Controller_Mp3table_List {
 		);
 
 		parent::before();
-	}
-
-	public function after($response) {
-		\Asset::add_path('static/modules/cms_media/');
-		\Asset::css('admin.css', array(), 'css');
-		return parent::after($response);
 	}
 }

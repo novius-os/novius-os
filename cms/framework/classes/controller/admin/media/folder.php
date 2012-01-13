@@ -8,14 +8,14 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Media;
+namespace Cms;
 
-class Controller_Admin_Folder extends \Cms\Controller_Noviusos_Noviusos {
+class Controller_Admin_Media_Folder extends Controller_Noviusos_Noviusos {
 
 	public function action_form($id) {
 
-		$folder = Model_Folder::find($id);
-		$this->template->body = \View::forge('cms_media::folder/form', array(
+		$folder = Model_Media_Folder::find($id);
+		$this->template->body = \View::forge('cms::admin/media/folder/form', array(
 			'folder' => $folder,
 		));
 		return $this->template;
@@ -42,10 +42,10 @@ class Controller_Admin_Folder extends \Cms\Controller_Noviusos_Noviusos {
 				throw new \Exception('Please provide a title or a path.');
 			}
 
-			$folder = new Model_Folder();
+			$folder = new Model_Media_Folder();
 			$folder->medif_parent_id = \Input::post('medif_parent_id');
 
-			$parent = Model_Folder::find($folder->medif_parent_id);
+			$parent = Model_Media_Folder::find($folder->medif_parent_id);
 			$folder->medif_path  = $parent->medif_path.$path.'/';
 			$folder->medif_title = $title;
 

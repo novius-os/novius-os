@@ -11,9 +11,9 @@
 return array(
 	'widget_id' => 'inspector-folder',
 	'input_name'   => 'folder_id',
-	'urljson' => 'admin/cms_media/inspector/folder/json',
+	'urljson' => 'admin/admin/media/inspector/folder/json',
 	'query' => array(
-		'model' => 'Cms\Media\Model_Folder',
+		'model' => 'Cms\Model_Media_Folder',
 	),
 	'columns' => array(
 		array(
@@ -26,7 +26,7 @@ return array(
 				if ($.isPlainObject(args.row.data)) {
 					args.$container.css("text-align", "center");
 
-					$("<a href=\"admin/cms_media/upload/form/" + args.row.data.id + "\"></a>")
+					$("<a href=\"admin/admin/media/upload/form/" + args.row.data.id + "\"></a>")
 						.addClass("ui-state-default")
 						.append("<span class=\"ui-icon ui-icon-transferthick-e-w\"></span>")
 						.appendTo(args.$container)
@@ -40,7 +40,7 @@ return array(
 							e.preventDefault();
 						});
 
-					$("<a href=\"admin/cms_media/folder/form/" + args.row.data.id + "\"></a>")
+					$("<a href=\"admin/admin/media/folder/form/" + args.row.data.id + "\"></a>")
 						.addClass("ui-state-default")
 						.append("<span class=\"ui-icon ui-icon-folder-collapsed\"></span>")
 						.appendTo(args.$container)

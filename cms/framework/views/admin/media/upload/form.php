@@ -8,7 +8,7 @@
  * @link http://www.novius-os.org
  */
 ?>
-<form method="POST" action="admin/cms_media/upload/do" enctype="multipart/form-data">
+<form method="POST" action="admin/admin/media/upload/do" enctype="multipart/form-data">
 	<input type="hidden" name="media_path_id" value="<?= $folder->medif_id ?>" />
 	<p><label>Name: <input type="text" name="media_title" /></label></p>
 	<p><label>Choose a file: <input type="file" name="media" /></label></p>

@@ -47,6 +47,13 @@
 		</span>
 		<span class="text">Page</span>
 	</a>
+    <a class="app" href="admin/admin/media/list/index">
+		<span class="icon">
+			<img class="gloss" src="static/cms/img/64/gloss.png" />
+			<img width="64" src="static/cms/img/64/media.png" />
+		</span>
+        <span class="text">Media center</span>
+    </a>
     <a class="app" href="admin/user/list">
 		<span class="icon">
 			<img class="gloss" src="static/cms/img/64/gloss.png" />

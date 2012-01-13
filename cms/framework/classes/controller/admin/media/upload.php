@@ -8,14 +8,14 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Media;
+namespace Cms;
 
-class Controller_Admin_Upload extends \Cms\Controller_Noviusos_Noviusos {
+class Controller_Admin_Media_Upload extends Controller_Noviusos_Noviusos {
 
 	public function action_form($id) {
 
-		$folder = Model_Folder::find($id);
-		$this->template->body = \View::forge('cms_media::upload/form', array(
+		$folder = Model_Media_Folder::find($id);
+		$this->template->body = \View::forge('cms::admin/media/upload/form', array(
 			'folder' => $folder,
 		));
 		return $this->template;
@@ -23,7 +23,7 @@ class Controller_Admin_Upload extends \Cms\Controller_Noviusos_Noviusos {
 
 	public function action_do() {
 
-		$media = new Model_Media();
+		$media = new Model_Media_Media();
 
 		$media->media_path_id = \Input::post('media_path_id');
 		$media->media_file    = $_FILES['media']['name'];

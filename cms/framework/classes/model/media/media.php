@@ -8,9 +8,9 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Media;
+namespace Cms;
 
-class Model_Media extends \Orm\Model {
+class Model_Media_Media extends \Orm\Model {
     protected static $_table_name = 'cms_media';
     protected static $_primary_key = array('media_id');
 
@@ -19,7 +19,7 @@ class Model_Media extends \Orm\Model {
     protected static $_has_one = array(
         'path' => array(
             'key_from'       => 'media_path_id',
-            'model_to'       => 'Cms\Media\Model_Folder',
+            'model_to'       => 'Cms\Model_Media_Folder',
             'key_to'         => 'medif_id',
             'cascade_save'   => false,
             'cascade_delete' => false,
@@ -90,7 +90,7 @@ class Model_Media extends \Orm\Model {
     }
 
 	public function refresh_path() {
-		$folder = Model_Folder::find($this->media_path_id);
+		$folder = Model_Media_Folder::find($this->media_path_id);
 		$this->media_path = $folder->medif_path;
 		$this->media_ext = pathinfo($this->media_file, PATHINFO_EXTENSION);
 	}

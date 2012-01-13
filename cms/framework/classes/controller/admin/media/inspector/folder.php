@@ -8,16 +8,16 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Media;
+namespace Cms;
 
 use Fuel\Core\Arr;
 use Fuel\Core\Config;
 
-class Controller_Admin_Inspector_Folder extends \Cms\Controller_Inspector_Modeltree {
+class Controller_Admin_Media_Inspector_Folder extends Controller_Inspector_Modeltree {
 
 	public function before() {
-		Config::load('cms_media::admin/folder', true);
-		$this->config = Arr::merge($this->config, Config::get('cms_media::admin/folder'));
+		Config::load('cms::admin/media/folder', true);
+		$this->config = Arr::merge($this->config, Config::get('cms::admin/media/folder'));
 
 		parent::before();
 	}

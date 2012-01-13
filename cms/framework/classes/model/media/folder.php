@@ -8,18 +8,18 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Media;
+namespace Cms;
 
 use Fuel\Core\Uri;
 
-class Model_Folder extends \Orm\Model {
+class Model_Media_Folder extends \Orm\Model {
     protected static $_table_name = 'cms_media_folder';
     protected static $_primary_key = array('medif_id');
 
 	protected static $_has_many = array(
 		'childrens' => array(
 			'key_from'       => 'medif_id',
-			'model_to'       => '\Cms\Media\Model_Folder',
+			'model_to'       => '\Cms\Model_Media_Folder',
 			'key_to'         => 'medif_parent_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
@@ -29,7 +29,7 @@ class Model_Folder extends \Orm\Model {
 	protected static $_belongs_to = array(
 		'parent' => array(
 			'key_from'       => 'medif_parent_id',
-			'model_to'       => '\Cms\Media\Model_Folder',
+			'model_to'       => '\Cms\Model_Media_Folder',
 			'key_to'         => 'medif_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,

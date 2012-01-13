@@ -10,31 +10,30 @@
 
 return array(
 	'query' => array(
-		'model' => 'Cms\Media\Model_Media',
+		'model' => 'Cms\Model_Media_Media',
 		'related' => array(),
 		'limit' => 10,
 	),
 	'tab' => array(
 		'label' => 'Media centre',
-		'iconUrl' => 'static/modules/cms_media/img/32/media.png',
+		'iconUrl' => 'static/cms/img/32/media.png',
 	),
 	'ui' => array(
 		'label' => 'Medias',
 		'adds' => array(
 			array(
 				'label' => 'Add a media',
-				//'iconClasses' => '',
-				'url' => 'admin/cms_media/media/add',
+				'url' => 'admin/admin/media/add',
 			),
 			array(
 				'label' => 'Add a folder',
-				'iconClasses' => 'cms_media-icon16 cms_media-icon16-folder',
-				'url' => 'admin/cms_media/folder/add',
+				'iconClasses' => 'nos-icon16 nos-icon16-folder',
+				'url' => 'admin/admin/media/folder/add',
 			),
 		),
 		'grid' => array(
 			'id' => 'cms_media',
-			'proxyurl' => 'admin/cms_media/list/json',
+			'proxyurl' => 'admin/admin/media/list/json',
 			'columns' => array(
 				array(
 					'headerText' => 'Ext.',
@@ -56,7 +55,7 @@ return array(
 				'label' => 'Edit',
 				'action' => 'function(item) {
 					$.nos.tabs.openInNewTab({
-						url : "admin/cms_media/form?id=" + item.id,
+						url : "admin/admin/media/form?id=" + item.id,
 						label : item.title
 					});
 				}',
@@ -66,7 +65,7 @@ return array(
 				'action'   =>  'function(item) {
 					if (confirm("Are you sure ?")) {
 						$.nos.tabs.openInNewTab({
-							url : "admin/cms_media/form?id=" + item.id,
+							url : "admin/admin/media/form?id=" + item.id,
 							label : item.title
 						});
 					}
@@ -123,7 +122,7 @@ return array(
 								label : 'Edit',
 								action : function() {
 									$.nos.tabs.openInNewTab({
-										url : 'admin/cms_media/form?id=' + item.id,
+										url : 'admin/admin/media/form?id=' + item.id,
 										label : item.title
 									});
 								}
@@ -133,7 +132,7 @@ return array(
 								action : function() {
 									if (confirm('Are you sure ?')) {
 										$.nos.tabs.openInNewTab({
-											url : 'admin/cms_media/form?id=' + item.id,
+											url : 'admin/admin/media/form?id=' + item.id,
 											label : item.title
 										});
 									}
@@ -156,13 +155,13 @@ return array(
 			array(
 				'vertical' => true,
 				'label' => 'Folders',
-				'url' => 'admin/cms_media/inspector/folder/list',
+				'url' => 'admin/admin/media/inspector/folder/list',
 				'widget_id' => 'inspector-folder',
 			),
 			array(
 				'widget_id' => 'inspector-extension',
 				'label' => 'Type of file',
-				'url' => 'admin/cms_media/inspector/extension/list',
+				'url' => 'admin/admin/media/inspector/extension/list',
 			),
 		),
 	),
