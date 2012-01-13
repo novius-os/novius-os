@@ -171,13 +171,17 @@ return array(
 		'title' => 'media_title',
 		'extension' => 'media_ext',
 		'file_name' => 'media_file',
-		'path' => 'media_path',
+		'path' => function($object) {
+            return $object->get_public_path();
+        },
 		'image' => function($object) {
             return $object->is_image();
         },
 		'thumbnail' => function($object) {
             return $object->is_image() ? $object->get_public_path_resized(64, 64) : '';
         },
+		'height' => 'media_height',
+		'width' => 'media_width',
 		'thumbnailAlternate' => function($object) {
 			$extensions = array(
 				'gif' => 'image.png',

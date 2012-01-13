@@ -38,7 +38,7 @@
 			redo : ['redo_desc', 'Redo'],
 			link : ['link_desc', 'mceLink'],
 			unlink : ['unlink_desc', 'unlink'],
-			image : ['image_desc', 'mceImage'],
+			image : ['image_desc', 'nosImage'],
 			cleanup : ['cleanup_desc', 'mceCleanup'],
 			help : ['help_desc', 'mceHelp'],
 			code : ['code_desc', 'mceCodeEditor'],
@@ -145,22 +145,25 @@
 
 			var self = this;
 
-			ed.onInit.add(function(ed) {
+			function makeItNice(ed) {
+
 				var $body = $(ed.getBody());
 				// Rebuilds the module, as if we just inserted them (adds the action links like delete)
-				$body.find('.nosModule, .nosModuleDel').each(function() {
+				$body.find('.nosModule, .nosModuleInline').each(function() {
 					var module = $(this);
 					module.html('Loading...');
 
 					var module_id = $(this).data('module');
 					var metadata  = self.settings.theme_nos_modules[module_id];
 					var data      = $(this).data('config');
+					console.log(metadata);
 					$.ajax({
 						url: metadata.previewUrl,
 						type: 'POST',
 						dataType: 'json',
 						data: data,
 						success: function(json) {
+							console.log(json);
 							module.html(json.preview);
 							self.onModuleAdd(module);
 						},
@@ -169,6 +172,58 @@
 						}
 					});
 				});
+			}
+
+			ed.onInit.add(function(ed) {
+
+				makeItNice(ed);
+			});
+
+			// When editing HTML content, we clean up module preview, we'll make them nice again after
+			ed.onGetContent.add(function(ed, o) {
+				var content = $(o.content);
+				// Empty module previews (data and useful informations are stored as html attributes on the higest div)
+				content.filter('.nosModule, .nosModuleInline').empty();
+				content.find('.nosModule, .nosModuleInline').empty();
+				o.content = $('<div></div>').append(content).html();
+			});
+
+			ed.onSetContent.add(function(ed, o) {
+				var content = $(o.content);
+
+				content.find('img').filter(function() {
+					return $(this).data('media-id');
+				}).addClass('nosMedia');
+
+				o.content = $('<div></div>').append(content).html();
+
+				setTimeout(function() {
+					makeItNice(ed);
+				}, 1);
+			});
+
+			ed.onSaveContent.add(function(ed, o) {
+				var content = o.content
+				content.find('img.nosMedia').replaceWith(function() {
+					var $img = $(this);
+					var media = $img.data('media');
+					var src = 'nos://media/';
+					if (media && media.id) {
+						src += media.id;
+					} else {
+						src += $img.data('media-id');
+					}
+					if ($img.attr('width') && $img.attr('height')) {
+						src += '/' + $img.attr('width') + '/' + $img.attr('height');
+					}
+					return $('<img></img>').attr({
+						src:    src,
+						title:  $img.attr('title'),
+						alt:    $img.attr('alt'),
+						style:  $img.attr('style')
+					})
+				});
+				o.content = $('<div></div>').append(content).html();
 			});
 
 			// Global onClick handlers to execute actions from the modules
@@ -212,14 +267,6 @@
 					ed.execCommand("mceEndUndoLevel");
 					e.preventDefault();
 				}
-			});
-
-			ed.onGetContent.add(function(ed, o) {
-				var content = $(o.content);
-				// Empty module previews (data and useful informations are stored as html attributes on the higest div)
-				content.filter('.nosModule, .nosModuleInline').empty();
-				content.find('.nosModule, .nosModuleInline').empty();
-				o.content = $('<div></div>').append(content).html();
 			});
 
 			ed.onSetProgressState.add(function(ed, b, ti) {
@@ -1477,7 +1524,6 @@
 
 			// Keep reference to the wijdialog node, so we can close the popup manually
 			var dialog = null;
-
 			var self=  this;
 
 			// The popup will trigger this event when done
@@ -1528,6 +1574,48 @@
 				title: val.title
 			});
         },
+
+		_nosImage : function(ui, val) {
+			var ed = this.editor;
+
+			// Internal image object like a flash placeholder
+			if (ed.dom.getAttrib(ed.selection.getNode(), 'class').indexOf('mceItem') != -1)
+				return;
+
+			var dialog = null;
+
+			$.nos.data('tinymce', this);
+
+			dialog = $.nos.dialog({
+				contentUrl: 'admin/tinymce/image',
+				title: 'Insert an image'
+			});
+
+			var clean = function() {
+				dialog && dialog.wijdialog('close');
+				$.nos.listener.remove('tinymce.image_close', close);
+				$.nos.listener.remove('tinymce.image_save', save);
+			};
+
+			var close = function() {
+				clean();
+			};
+
+			var save = function(img) {
+				close();
+
+				var html = $('<div></div>').append(img.addClass('nosMedia')).html();
+				if (ed.selection.getNode().nodeName == 'IMG') {
+					ed.execCommand('mceReplaceContent', false, html, {skip_undo : 1});
+				} else {
+					ed.execCommand('mceInsertContent', false, html, {skip_undo : 1});
+				}
+				ed.execCommand("mceEndUndoLevel");
+			}
+
+			$.nos.listener.add('tinymce.image_close', true, close);
+			$.nos.listener.add('tinymce.image_save',  true, save);
+		},
 
 		onModuleAdd: function(container) {
 
