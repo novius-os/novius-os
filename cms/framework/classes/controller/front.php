@@ -223,24 +223,29 @@ class Controller_Front extends Controller {
     protected function _find_template() {
 
         // Find the template
-        Config::load('templates', true);
+        Config::load(APPPATH.'data'.DS.'config'.DS.'templates.php', 'templates');
         $templates = Config::get('templates', array());
 
-        if (!isset($templates['id-'.$this->page->page_gab_id])) {
-            throw new \Exception('The template id-'.$this->page->page_gab_id.' cannot be found.');
+        if (!isset($templates[$this->page->page_gab])) {
+            throw new \Exception('The template '.$this->page->page_gab.' cannot be found.');
         }
 
-        $this->template = $templates['id-'.$this->page->page_gab_id];
+        $this->template = $templates[$this->page->page_gab];
 		if (empty($this->template['file'])) {
-			throw new \Exception('The template file for '. ($this->template['title'] ?: $this->page->page_gab_id ).' is not defined.');
+			throw new \Exception('The template file for '. ($this->template['title'] ?: $this->page->page_gab ).' is not defined.');
 		}
 
         try {
-			// @todo : always load fromt the template directory?
+			// @todo : always load from the template directory?
             // Try normal loading
             $this->_view = View::forge($this->template['file']);
         } catch (\FuelException $e) {
-            $template_file = implode(DS, array(rtrim(APPPATH, DS), 'views', 'templates', $this->template['file'].'.php'));
+
+            $path = array(rtrim(APPPATH, DS), $this->template['file'].'.php');
+
+            array_splice($path, 1, 0, array('modules', $this->template['module'], 'templates'));
+
+            $template_file = implode(DS, $path);
 
             if (!is_file($template_file)) {
                 throw new \Exception('The template '.$this->template['file'].' cannot be found.');

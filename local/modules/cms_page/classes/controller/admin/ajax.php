@@ -15,13 +15,15 @@ use Fuel\Core\Config;
 class Controller_Admin_Ajax extends \Controller {
 
 	public function before() {
-		Config::load('templates', true);
+        \Config::load(APPPATH.'data'.DS.'config'.DS.'templates.php', 'templates');
 		parent::before();
 	}
 
 	public function action_wysiwyg($page_id) {
 		$id = $_GET['template_id'];
-		$data = \Config::get('templates.id-'.$id, array());
+		$data = \Config::get('templates', array());
+        $data = $data[$id];
+
 		$data['layout'] = (array) $data['layout'];
 
 		$page = Model_Page::find($page_id);

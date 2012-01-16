@@ -71,7 +71,7 @@ $fieldset->field('page_verrou')->set_template('{label} {field}');
 	'published' => 'page_publier',
 	'save' => 'save',
 
-	'subtitle' => array('page_type', 'page_gab_id'),
+	'subtitle' => array('page_type', 'page_gab'),
 
 	'content' => \View::forge('form/expander', array(
 		'title'   => 'Content',
@@ -114,7 +114,7 @@ require([
 			$(this).closest('p').nextAll()[$(this).is(':checked') ? 'show' : 'hide']();
 		}).change();
 
-		$('select[name=page_gab_id]').bind('change', function() {
+		$('select[name=page_gab]').bind('change', function() {
 			$.ajax({
 				url: 'admin/cms_page/ajax/wysiwyg/<?= $page->page_id ?>',
 				data: {
@@ -163,17 +163,17 @@ require([
 
 			if (val == <?= Cms\Page\Model_Page::TYPE_CLASSIC ?> || val == <?= Cms\Page\Model_Page::TYPE_FOLDER ?>) {
 				$('#wysiwyg').show().siblings().hide();
-				$('select[name=page_gab_id]').closest('div.unit').show().end().change();
+				$('select[name=page_gab]').closest('div.unit').show().end().change();
 			}
 
 			if (val == <?= Cms\Page\Model_Page::TYPE_EXTERNAL_LINK ?>) {
 				$('#external').show().siblings().hide();
-				$('select[name=page_gab_id]').closest('div.unit').hide();
+				$('select[name=page_gab]').closest('div.unit').hide();
 			}
 
 			if (val == <?= Cms\Page\Model_Page::TYPE_INTERNAL_LINK ?>) {
 				$('#internal').show().siblings().hide();
-				$('select[name=page_gab_id]').closest('div.unit').hide();
+				$('select[name=page_gab]').closest('div.unit').hide();
 			}
 		}).change();
 	});
