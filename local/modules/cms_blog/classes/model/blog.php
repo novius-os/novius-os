@@ -11,9 +11,6 @@
 namespace Cms\Blog;
 use \Cms\Model;
 
-
-\Fuel::add_module('cms_media');
-
 class Model_Blog extends Model {
     protected static $_table_name = 'os_blog';
     protected static $_primary_key = array('blog_id');
