@@ -14,7 +14,7 @@
         $(function () {
             $.nos.tabs.updateTab({
                 label : '<?= $object->blog_titre ?>',
-                iconUrl : 'static/modules/cms_page/img/16/page.png'
+                iconUrl : 'static/modules/cms_blog/img/16/blog.png'
             });
         });
     });

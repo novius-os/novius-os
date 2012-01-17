@@ -39,11 +39,12 @@ define([
 									alltabs = true;
 								}
 								if (alltabs && window.parent != window && window.parent.$nos) {
+									$(window).unload(function() {
+									//log('listener.remove', id, window);
+										window.parent.$nos.nos.listener.remove(id, fn);
+									});
 									return window.parent.$nos.nos.listener.add(id, true, fn);
 								}
-								$(window).unload(function() {
-									window.parent.$nos.nos.listener.remove(id, fn);
-								});
 								//log('listener.add', id, window);
 								_get(id).add(fn);
 							},
@@ -68,8 +69,10 @@ define([
 								if (alltabs && window.parent != window && window.parent.$nos) {
 									return window.parent.$nos.nos.listener.fire(id, true, args);
 								}
+								//log('listener.fire.args', args);
 								if (id.substring(id.length - 1) == '!') {
 									triggerName = id.substring(0, id.length - 1);
+									//log('listener.fire', triggerName + '!', args, window);
 									_get(triggerName).fire.apply(null, args);
 									return;
 								}
@@ -80,7 +83,7 @@ define([
 										triggerName += ".";
 									}
 									triggerName += queue[i];
-									//log('listener.fire', triggerName, window);
+									//log('listener.fire', triggerName, args, window);
 									_get(triggerName).fire.apply(null, args);
 								}
 							}

@@ -32,6 +32,10 @@ a:hover {
 .nos-icon16-empty { background-image: none; }
 .nos-icon16-language { background-image: url(../img/16/language.png); }
 .nos-icon16-add { background-image: url(../img/16/tabs-add.png); }
+.nos-icon16-page { background-image: url(../img/16/page.png); }
+.nos-icon16-root { background-image: url(../img/16/root.png); }
+.nos-icon16-media { background-image: url(../img/16/media.png) !important; }
+.nos-icon16-root { background-image: url(../img/16/root.png) !important; }
 
 .nos-icon24-noviusstore { background-image: url(../img/24/tabs-store.png); }
 .nos-icon24-settings { background-image: url(../img/24/tabs-settings.png); }
@@ -39,7 +43,10 @@ a:hover {
 .nos-icon24-help { background-image: url(../img/24/tabs-help.png); }
 
 .nos-icon32-language { background-image: url(../img/32/language.png); }
-
+.nos-icon32-page { background-image: url(../img/32/page.png); }
+.nos-icon32-root { background-image: url(../img/32/root.png); }
+.nos-icon32-media { background-image: url(../img/32/media.png) !important; }
+.nos-icon32-root { background-image: url(../img/32/root.png) !important; }
 
 .wijmo-wijmenu, .wijmo-wijmenu-child {
 	width : auto;

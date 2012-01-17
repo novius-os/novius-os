@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -37,17 +37,18 @@ if ($resized) {
     $media_url = str_replace("/$max_width-$max_height-$verification", '', $path);
     $media_url = str_replace("/$max_width-$max_height", '', $media_url);
 } else {
-    $media_url = str_replace('/media/', '', $_SERVER['REDIRECT_URL']);
+	$redirect_url = $_SERVER['REDIRECT_SCRIPT_URL'] ?: $_SERVER['REDIRECT_URL'];
+    $media_url    = str_replace('/media/', '', $redirect_url);
 }
 
 $media = false;
 
-$res = \DB::select()->from(\Cms\Model_Media::table())->where(array(
+$res = \DB::select()->from(\Cms\Model_Media_Media::table())->where(array(
     array(DB::expr('CONCAT(media_path, media_file)'), '=', $media_url),
 ))->execute()->as_array();
 
 if ($res) {
-    $media = \Cms\Model_Media::forge(reset($res));
+    $media = \Cms\Model_Media_Media::forge(reset($res));
     $media->freeze();
 }
 
@@ -88,6 +89,7 @@ if (false === $media) {
 }
 
 if (false !== $send_file && is_file($send_file)) {
+	//Cms\Tools_File::$use_xsendfile = false;
     Cms\Tools_File::send($send_file);
 }
 

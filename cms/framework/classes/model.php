@@ -235,8 +235,8 @@ class Model_Media_Provider
 	public function __set($property, $value)
 	{
 		// Check existence of the media, the ORM will throw an exception anyway upon save if it doesn't exists
-		$media_id = (string) ($value instanceof \Cms\Media\Model_Media ? $value->media_id : $value);
-		$media = \Cms\Media\Model_Media::find($media_id);
+		$media_id = (string) ($value instanceof \Cms\Model_Media_Media ? $value->media_id : $value);
+		$media = \Cms\Model_Media_Media::find($media_id);
 		if (is_null($media))
 		{
 			$pk = $this->parent->primary_key();
