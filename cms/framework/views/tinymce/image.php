@@ -189,7 +189,7 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 		<li><a href="#library">Media library</a></li>
 		<li><a href="#properties">Properties</a></li>
 	</ul>
-	<iframe id="library" data-src="admin/cms_media/mode/tinymce/index"></iframe>
+	<iframe id="library" data-src="admin/admin/media/mode/tinymce/index"></iframe>
 	<div id="properties">
 		<form action="#">
 			<table class="fieldset">
