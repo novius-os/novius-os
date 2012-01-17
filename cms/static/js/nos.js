@@ -182,7 +182,7 @@ define([
 
 							// Internal callbacks for JSON dataType
 							if (options.dataType == 'json') {
-								if (isFunction(options.success)) {
+								if ($.isFunction(options.success)) {
 									var old_success = options.success;
 									options.success = function(json) {
 										json.user_success = old_success;
