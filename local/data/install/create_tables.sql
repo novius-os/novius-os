@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `cms_page` (
   `page_id` int(11) NOT NULL auto_increment,
   `page_rac_id` char(2) collate latin1_general_ci NOT NULL default '',
   `page_pere_id` int(11) default NULL,
-  `page_gab_id` int(11) NOT NULL default '0',
+  `page_gab` varchar(255) collate latin1_general_ci NOT NULL default '',
   `page_niveau` tinyint(4) NOT NULL default '0',
   `page_titre` varchar(255) collate latin1_general_ci NOT NULL default '',
   `page_titre_menu` varchar(255) collate latin1_general_ci default NULL,
