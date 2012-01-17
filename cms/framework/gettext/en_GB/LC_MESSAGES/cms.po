@@ -1,2 +1,0 @@
-msgid "User"
-msgstr "User"

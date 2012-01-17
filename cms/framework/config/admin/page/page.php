@@ -8,24 +8,28 @@
  * @link http://www.novius-os.org
  */
 
+use Cms\I18n;
+
+I18n::load('page', 'cms_page');
+
 return array(
 	'query' => array(
 		'model' => 'Cms\Model_Page_Page',
 		'related' => array(),
 	),
 	'tab' => array(
-		'label' => 'Pages',
+		'label' => __('Pages'),
 		'iconUrl' => 'static/cms/img/32/page.png',
 	),
 	'ui' => array(
 		'label' => 'Pages',
 		'adds' => array(
 			array(
-				'label' => 'Add a Page',
+				'label' => __('Add a Page'),
 				'url' => 'admin/admin/page/page/add',
 			),
 			array(
-				'label' => 'Add a root',
+				'label' => __('Add a root'),
 				'iconClasses' => 'nos-icon16 nos-icon16-root',
 				'url' => 'admin/admin/page/root/add',
 			),
@@ -34,7 +38,7 @@ return array(
 			'proxyurl' => 'admin/admin/page/list/json',
 			'columns' => array(
 				array(
-					'headerText' => 'Title 2',
+					'headerText' => __('Title 2'),
 					'dataKey' => 'title',
 					'cellFormatter' => 'function(args) {
 						if ($.isPlainObject(args.row.data)) {
@@ -61,14 +65,14 @@ return array(
 			array(
 				'widget_id' => 'inspector-root',
 				'vertical' => true,
-				'label' => 'Roots',
+				'label' => __('Roots'),
 				'iconClasses' => 'nos-icon16 nos-icon16-root',
 				'url' => 'admin/admin/page/inspector/root/list',
 			),
 			array(
 				'widget_id' => 'inspector-tree',
 				'vertical' => true,
-				'label' => 'Directories',
+				'label' => __('Directories'),
 				'iconClasses' => 'nos-icon16 nos-icon16-root',
 				'url' => 'admin/admin/page/inspector/tree/list',
 			),

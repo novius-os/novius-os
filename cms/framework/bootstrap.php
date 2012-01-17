@@ -29,6 +29,11 @@ Autoloader::add_classes(array(
 	'Cms\Orm\Query'  => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'orm'.DIRECTORY_SEPARATOR.'query.php',
 ));
 
+function __($_message, $default = null)
+{
+    return \Cms\I18n::get($_message, $default);
+}
+
 // Register the autoloader
 Autoloader::register();
 
