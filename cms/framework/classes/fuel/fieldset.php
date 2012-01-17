@@ -184,6 +184,7 @@ class Fieldset extends \Fuel\Core\Fieldset {
 			$attributes  = isset($settings['form']) ? $settings['form'] : array();
 			if (!empty($settings['widget'])) {
 				 $class = Inflector::words_to_upper('Cms\Widget_'.$settings['widget']);
+				 $attributes['widget_options'] = $settings['widget_options'] ?: array();
 				 $field = new $class($p, $label, $attributes, array(), $this);
 				 $this->add_field($field);
 			} else {
@@ -301,29 +302,7 @@ require(['jquery', 'static/cms/js/jquery/jquery-validation/jquery.validate.min']
 				$(form).ajaxSubmit({
 					dataType: 'json',
 					success: function(json) {
-						console.log(json);
-						if (json.error) {
-							$.nos.notify(json.error, 'error');
-						}
-						if (json.notify) {
-							$.nos.notify(json.notify);
-						}
-						if (json.listener_fire) {
-							if ($.isPlainObject(json.listener_fire)) {
-								$.each(json.listener_fire, function(listener_name, bubble) {
-									$.nos.listener.fire(listener_name, bubble);
-								});
-							} else {
-								$.nos.listener.fire(json.listener_fire);
-							}
-						}
-						if (json.redirect) {
-							document.location = json.redirect;
-						}
-						// Close at the end!
-						if (json.closeTab) {
-							$.nos.tabs.close();
-						}
+						$.nos.ajax.success(json);
 					},
 					error: function() {
 						$.nos.notify('An error occured', 'error');
