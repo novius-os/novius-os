@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -24,7 +24,7 @@ require(['jquery-nos'], function ($nos) {
 	});
 });
 </script>
-<h1><?= Cms\Gettext::cms('Plugins management'); ?></h1>
+<h1><?= Cms\I18n::get('Plugins management'); ?></h1>
 
 <style type="text/css">
   table.borderized {
@@ -39,12 +39,12 @@ require(['jquery-nos'], function ($nos) {
   }
 </style>
 
-  <h2><?= Cms\Gettext::cms('Installed') ?></h2>
-  
+  <h2><?= Cms\I18n::get('Installed') ?></h2>
+
   <?php if (empty($installed)) { ?>
-  <em><?php echo Cms\Gettext::cms('No plugins found') ?>.</em>
+  <em><?php echo Cms\I18n::get('No plugins found') ?>.</em>
   <?php } ?>
-  
+
   <?php foreach ($installed as $app => $metadata) { ?>
     <li>
 		<?= isset($metadata['name']) ? $metadata['name'] : $app ?>
@@ -53,18 +53,18 @@ require(['jquery-nos'], function ($nos) {
 	</li>
   <?php } ?>
 
-  
-  <h2><?= Cms\Gettext::cms('Available') ?></h2>
-  
+
+  <h2><?= Cms\I18n::get('Available') ?></h2>
+
   <?php if (empty($others)) { ?>
-  <em><?= Cms\Gettext::cms('No plugins found') ?></em>
+  <em><?= Cms\I18n::get('No plugins found') ?></em>
   <?php } ?>
-  
+
   <?php foreach ($others as $app => $metadata) { ?>
     <li><?= isset($metadata['name']) ? $metadata['name'] : $app ?> [<a href="admin/tray/plugins/add/<?= $app ?>">add</a>]</li>
   <?php } ?>
 
-<h2><?= Cms\Gettext::cms('Install from a .zip file') ?></h2>
+<h2><?= Cms\I18n::get('Install from a .zip file') ?></h2>
 
 <form method="post" action="/admin/tray/plugins/upload" enctype="multipart/form-data">
 	<input type="file" name="zip" />

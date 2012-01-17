@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 return array(
 	'blog' => 
 	array(
@@ -14,3 +15,6 @@ return array(
 		'module' => 'tpl_default',
 	),
 );
+=======
+return array();
+>>>>>>> 333ab6d22cbe968b802693a3c01ec67d08a40ea9
