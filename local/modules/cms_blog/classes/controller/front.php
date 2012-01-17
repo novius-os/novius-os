@@ -444,7 +444,7 @@ class Controller_Front extends Controller {
 
     public function action_insert_tags_execute() {
 
-        static::$blog_url = \Cms\Model_Page::get_url(2);
+        static::$blog_url = \Cms\Model_Page_Page::get_url(2);
         self::EncartTags();
     }
 
