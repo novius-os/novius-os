@@ -42,10 +42,10 @@ class Controller_Admin_Page_Form extends \Cms\Controller_Generic_Admin {
 
 	public static function fieldset($id) {
 
-		\Config::load('app::templates', true);
+        \Config::load(APPPATH.'data'.DS.'config'.DS.'templates.php', 'templates');
 		$templates = array();
-		foreach (\Config::get('app::templates', array()) as $tpl_id => $template) {
-			$templates[(int) substr($tpl_id, 3)] = $template['title'];
+		foreach (\Config::get('templates', array()) as $tpl_key => $template) {
+			$templates[$tpl_key] = $template['title'];
 		}
 
         $fields = array (
@@ -59,7 +59,7 @@ class Controller_Admin_Page_Form extends \Cms\Controller_Generic_Admin {
 					'type' => 'text',
 				),
             ),
-			'page_gab_id' => array(
+			'page_gab' => array(
 				'label' => 'Template: ',
 				'form' => array(
 					'type' => 'select',
@@ -185,10 +185,10 @@ class Controller_Admin_Page_Form extends \Cms\Controller_Generic_Admin {
 
 		$editable_fields = array_diff(array_keys(Model_Page_Page::properties()), Model_Page_Page::primary_key());
 
-		$template_id = \Input::post('page_gab_id', $page->page_gab_id);
+		$template_key = \Input::post('page_gab', $page->page_gab);
 		if (!empty($template_id)) {
-			\Config::load('templates', true);
-			$template_id and $data = \Config::get('templates.id-'.$template_id, array(
+            $templates = \Config::get('templates', array());
+            $template_key and $data = \Config::get('templates.'.$template_key, array(
 				'layout' => array(),
 			));
 		}

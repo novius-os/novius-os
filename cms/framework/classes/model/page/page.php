@@ -176,7 +176,7 @@ class Model_Page_Page extends \Cms\Model {
 			'key' => 'MUL',
 			'privileges' => 'select,insert,update,references',
 		),
-		'page_gab_id' => array (
+		//'page_gab_id' => array (
 			'type' => 'int',
 			'min' => '-2147483648',
 			'max' => '2147483647',
