@@ -7,26 +7,29 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
  */
-
+/*
 return array(
-    'id-3' => array(
+    'blog_editorial' => array(
         'file' => 'blog_editorial',
         'title' => 'Blog éditorial',
-		'cols' => 3,
-		'rows' => 1,
-		'layout' => array(
-			'content' => '0,0,2,1',
-			'right' => '2,0,1,1',
-		),
+        'module' => 'tpl_template',
+        'cols' => 3,
+        'rows' => 1,
+        'layout' => array(
+            'content' => '0,0,2,1',
+            'right' => '2,0,1,1',
+        ),
     ),
-    'id-4' => array(
+    'blog' => array(
         'file' => 'blog',
         'title' => 'Blog',
-		'cols' => 3,
-		'rows' => 1,
-		'layout' => array(
-			'content' => '0,0,2,1',
-			'right' => '2,0,1,1',
-		),
+        'module' => 'tpl_default',
+        'cols' => 3,
+        'rows' => 1,
+        'layout' => array(
+            'content' => '0,0,2,1',
+            'right' => '2,0,1,1',
+        ),
     ),
 );
+*/
