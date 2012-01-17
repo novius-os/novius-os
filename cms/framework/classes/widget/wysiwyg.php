@@ -12,48 +12,47 @@ namespace Cms;
 
 class Widget_Wysiwyg extends \Fieldset_Field {
 
-	protected $wysiwyg;
+	protected $options = array();
 
-    public function __construct($name, $label = '', array $attributes = array(), array $rules = array(), \Fuel\Core\Fieldset $fieldset) {
+    public function __construct($name, $label = '', array $attributes = array(), array $rules = array(), \Fuel\Core\Fieldset $fieldset = null) {
+
+        $attributes['type']   = 'textarea';
+		$attributes['class'] .= ' tinymce';
+
+		if (empty($attributes['id'])) {
+			$attributes['id'] = uniqid();
+		}
+		if (!empty($attributes['widget_options'])) {
+			$this->options = $attributes['widget_options'];
+		}
+
         parent::__construct($name, $label, $attributes, $rules, $fieldset);
-
-		$attributes['type'] = 'textarea';
-		$attributes['class'] = 'tinymce';
-        $this->wysiwyg = new \Fieldset_Field($name, $label, $attributes, $rules, $fieldset);
-    }
-
-	public function set_value($text) {
-		$this->wysiwyg->set_value(\Security::xss_clean($text));
-	}
-
-    public function get_value() {
-        return $this->wysiwyg->get_value();
     }
 
     /**
      * How to display the field
-     * @return type
+     * @return string
      */
     public function build() {
 
-	    static::form_append($this->fieldset());
-        return (string) $this->wysiwyg->set_template('{field}');
+	    $this->fieldset()->append($this->js_init());
+
+		$this->set_attribute('data-wysiwyg-options', htmlspecialchars(\Format::forge()->to_json($this->options)));
+        return (string) parent::build();
     }
 
-	public function form_append($fieldset) {
-		$fieldset->append(<<<JS
+	public function js_init() {
+		$id = $this->get_attribute('id');
+		return <<<JS
 <script type="text/javascript">
     require([
     'static/cms/js/jquery/tinymce/jquery.tinymce_src',
     'static/cms/js/jquery/tinymce/jquery.wysiwyg'
     ], function() {
-            texts = $('textarea.tinymce:not(.processed)');
-            texts.wysiwyg();
-            texts.addClass('processed');
+        $('textarea#$id').wysiwyg($('textarea#$id').data('wysiwyg-options'));
     });
 </script>
-JS
-		);
+JS;
 	}
 
 }
