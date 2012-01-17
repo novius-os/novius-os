@@ -1,8 +1,0 @@
-msgid "User"
-msgstr "Utilisateur fr_CA"
-
-msgid "fr_CA"
-msgstr "Disponible uniquement en fr_CA"
-
-msgid "fr_CA_fr"
-msgstr "Disponible en *fr_CA* et fr tout court"
