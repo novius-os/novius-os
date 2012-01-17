@@ -1,6 +1,6 @@
 <?php
 
-define('DOCROOT', $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR);
+define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
 
 define('APPPATH',   realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
 define('PKGPATH',   realpath(DOCROOT.'../cms/packages/').DIRECTORY_SEPARATOR);

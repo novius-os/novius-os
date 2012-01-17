@@ -118,11 +118,11 @@ define([
 							height: window.innerHeight - 100,
 							modal: true,
 							captionButtons: {
-								pin: { visible: false },
-								refresh: { visible: wijdialog_options.contentUrl != null },
-								toggle: { visible: false },
-								minimize: { visible: false },
-								maximize: { visible: false }
+								pin: {visible: false},
+								refresh: {visible: wijdialog_options.contentUrl != null},
+								toggle: {visible: false},
+								minimize: {visible: false},
+								maximize: {visible: false}
 							}
 						}, wijdialog_options);
 
@@ -144,10 +144,10 @@ define([
 							return window.parent.$nos.nos.notify( options, type );
 						}
 						if ( !$.isPlainObject( options ) ) {
-							options = { title : options };
+							options = {title : options};
 						}
 						if ( type !== undefined ) {
-							$.extend(options, $.isPlainObject( type ) ? type : { type : type } );
+							$.extend(options, $.isPlainObject( type ) ? type : {type : type} );
 						}
 						if ( $.isPlainObject( options ) ) {
 							require([
@@ -172,53 +172,73 @@ define([
                      * @param url
                      * @param data
                      */
-                    ajax : function(options) {
-                        $.ajax({
-                            url: options.url,
-                            dataType: 'json',
-                            data: options.data,
-                            type: 'POST',
-                            success: function(json) {
-                                if (json.error) {
-                                    $.nos.notify(json.error, 'error');
-                                }
-                                if (json.notify) {
-                                    $.nos.notify(json.notify);
-                                }
-                                if (json.listener_fire) {
-                                    if ($.isPlainObject(json.listener_fire)) {
-                                        $.each(json.listener_fire, function(listener_name, bubble) {
-                                            $.nos.listener.fire(listener_name, bubble);
-                                        });
-                                    } else {
-                                        $.nos.listener.fire(json.listener_fire);
-                                    }
-                                }
-                                if (json.redirect) {
-                                    document.location = json.redirect;
-                                }
-                                // Close at the end!
-                                if (json.closeTab) {
-                                    $.nos.tabs.close();
-                                }
+                    ajax : {
+						request : function(options) {
+							options = $.extend({
+								dataType : 'json',
+								type     : 'POST',
+								data     : {}
+							}, options);
 
-                                if (typeof options['success'] === 'function') {
-                                    options['success'](json);
-                                }
-                            },
-                            error: function(e) {
-                                if (e.status != 0) {
-                                    $.nos.notify("Connexion error !", "error");
-                                }
-                                if (typeof options['error'] === 'function') {
-                                    options['error'](json);
-                                }
-                            }
-                        });
-                    },
+							// Internal callbacks for JSON dataType
+							if (options.dataType == 'json') {
+								if (isFunction(options.success)) {
+									var old_success = options.success;
+									options.success = function(json) {
+										json.user_success = old_success;
+										$.nos.ajax.success(json);
+									}
+								}
+
+								if ($.isFunction(options.error)) {
+									var old_error = options.error;
+									options.error = function(json) {
+										$.nos.ajax.error(json);
+										old_error.apply(this, arguments);
+									}
+								}
+							}
+
+							$.ajax(options);
+						},
+						success : function(json) {
+							if (json.error) {
+								$.nos.notify(json.error, 'error');
+							}
+							if (json.notify) {
+								$.nos.notify(json.notify);
+							}
+							if (json.listener_fire) {
+								if ($.isPlainObject(json.listener_fire)) {
+									$.each(json.listener_fire, function(listener_name, bubble) {
+										$.nos.listener.fire(listener_name, bubble);
+									});
+								} else {
+									$.nos.listener.fire(json.listener_fire);
+								}
+							}
+							// Call user callback
+							if ($.isFunction(json.user_success)) {
+								json.user_success.apply(this, arguments);
+							}
+
+							// Close at the end!
+							if (json.redirect) {
+								document.location = json.redirect;
+							}
+							if (json.closeTab) {
+								$.nos.tabs.close();
+							}
+						},
+						error: function(e) {
+							if (e.status != 0) {
+								$.nos.notify('Connection error!', 'error');
+							}
+						}
+					},
 
                     saveUserConfiguration: function(key, configuration) {
-                        this.ajax({
+                        this.ajax.request({
                             url: '/admin/noviusos/noviusos/save_user_configuration',
                             data: {
                                 key: key,

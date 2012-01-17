@@ -1,2 +1,0 @@
-msgid "Website"
-msgstr "Site internet"

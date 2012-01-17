@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -74,19 +74,19 @@ return array(
                         array(
                             'icon'  => 'ui-icon ui-icon-close',
                             'action'   =>  'function(args) {
-                                                $.nos.ajax({
-                                                    url: "admin/cms_blog/list/delete/" + args.row.data.id,
-                                                    data: {},
-                                                    success: function(response) {
-                                                        if (response.success) {
-                                                            $.nos.notify("Suppression réalisée !");
-                                                            $("#mp3grid").mp3grid("gridRefresh");
-                                                        } else {
-                                                            $.nos.notify("Erreur lors de la suppression !", "error");
-                                                        }
-                                                    }
-                                                });
-                                            }',
+								$.nos.ajax.request({
+									url: "admin/cms_blog/list/delete/" + args.row.data.id,
+									data: {},
+									success: function(response) {
+										if (response.success) {
+											$.nos.notify("Suppression réalisée !");
+											$("#mp3grid").mp3grid("gridRefresh");
+										} else {
+											$.nos.notify("Erreur lors de la suppression !", "error");
+										}
+									}
+								});
+							}',
                             'label' => 'Delete',
                         ),
                     )

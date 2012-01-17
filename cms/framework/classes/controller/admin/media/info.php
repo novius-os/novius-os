@@ -8,17 +8,17 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Media;
+namespace Cms;
 
-class Controller_Admin_Info extends \Cms\Controller_Noviusos_Noviusos {
+class Controller_Admin_Media_Info extends \Cms\Controller_Noviusos_Noviusos {
 
 	public function action_media($id)
 	{
-		$media = Model_Media::find($id);
-		
+		$media = Model_Media_Media::find($id);
+
 		if ($media) {
-			\Config::load('cms_media::admin/media', true);
-			$dataset = \Config::get('cms_media::admin/media.dataset', array());
+			\Config::load('cms:admin/media/media', true);
+			$dataset = \Config::get('cms::admin/media/media.dataset', array());
 			$item = array();
 			foreach ($dataset as $key => $data)
 			{
