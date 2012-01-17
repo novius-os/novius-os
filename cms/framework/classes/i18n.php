@@ -61,15 +61,15 @@ class I18n
 		{
 			if ($path = \Finder::search('lang/'.$lang, $file, '.php', true))
 			{
-                if (array_key_exists($path, static::$_loaded_files))
-                {
-                    break;
-                }
 				foreach ($path as $p)
 				{
+                    if (array_key_exists($p, static::$_loaded_files))
+                    {
+                        break;
+                    }
 					$_messages = \Arr::merge(\Fuel::load($p), $_messages);
 				}
-                static::$_loaded_files[$path] = true;
+                static::$_loaded_files[$p] = true;
 				break;
 			}
 		}
