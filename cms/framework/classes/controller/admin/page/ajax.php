@@ -25,13 +25,7 @@ class Controller_Admin_Page_Ajax extends \Controller {
         $data = $data[$id];
 
         $data['layout'] = (array) $data['layout'];
-
-        $response = \Response::forge(\Format::forge()->to_json($data), 200, array(
-            'Content-Type' => 'application/json',
-        ));
-        $response->send(true);
-
-
+		
 		$page = Model_Page_Page::find($page_id);
 		foreach ($data['layout'] as $wysiwyg => $coords)
 		{

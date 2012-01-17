@@ -253,7 +253,7 @@ class Module {
         // we check that deleted templates are not used on the page
 
         if ($deleted_templates) {
-            $nb = Model_Page::count(array('where' => array(array('page_gab', 'IN', $deleted_templates))));
+            $nb = Model_Page_Page::count(array('where' => array(array('page_gab', 'IN', $deleted_templates))));
             if ($nb > 0) {
                 throw new \Exception('Some page include those partials and can therefore not be deleted !');
             }
