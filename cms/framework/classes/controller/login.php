@@ -42,8 +42,8 @@ class Controller_Login extends Controller_Generic_Admin {
 
 	protected function post_login() {
 
-		if (\Cms\Auth::login($_POST['login'], $_POST['password'])) {
-			Response::redirect(urldecode(\Input::get('redirect', '/admin/')));
+		if (\Cms\Auth::login($_POST['email'], $_POST['password'])) {
+			\Response::redirect(urldecode(\Input::get('redirect', '/admin/')));
 			exit();
 		}
 		return 'Access denied';

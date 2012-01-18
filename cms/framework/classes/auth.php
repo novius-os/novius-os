@@ -8,6 +8,8 @@
  * @link http://www.novius-os.org
  */
 
+namespace Cms;
+
 class Auth {
 
 	public static function login($login, $password) {
