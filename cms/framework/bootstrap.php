@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -94,7 +94,9 @@ define('PHP_END', ' ?>');
 require_once CMSPATH.'classes'.DS.'cms.php';
 
 // Site bootstrap
-require_once APPPATH.'bootstrap.php';
+if (is_file(APPPATH.'bootstrap.php')) {
+	require_once APPPATH.'bootstrap.php';
+}
 
 define('CACHE_DURATION_PAGE',     30);
 define('CACHE_DURATION_FUNCTION', 30);
