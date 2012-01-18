@@ -94,6 +94,10 @@ return array(
 			),
 			'proxyurl' => 	'admin/cms_blog/list/json',
 		),
+        'texts' => array(
+            'items' => 'posts',
+            'item' => 'Blog posts'
+        ),
 		'inspectors' => array(
 			array(
 				'widget_id' => 'inspector-category',

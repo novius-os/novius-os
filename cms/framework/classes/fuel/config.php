@@ -12,9 +12,13 @@
 class Config extends \Fuel\Core\Config {
 
     public static function getFromUser($item, $default = null) {
-        $config = static::get($item, $default);
+        return static::mergeWithUser($item, static::get($item, $default));
+    }
 
+    public static function mergeWithUser($item, $config) {
         $user = Session::user();
+
+
 
         $item = str_replace('::', '/', $item);
         $item = explode('/', $item);
@@ -23,11 +27,9 @@ class Config extends \Fuel\Core\Config {
 
         $item = implode('.', $item);
 
-        Arr::set($config, 'configuration_id', $item);
+        //Arr::set($config, 'configuration_id', $item);
 
-        $config = \Arr::merge($config, \Arr::get($user->getConfiguration(), $item, array()));
-
-        return $config;
+        return \Arr::merge($config, \Arr::get($user->getConfiguration(), $item, array()));
     }
 
 }

@@ -10,7 +10,7 @@
 
 return array(
     'namespace' => 'Cms\TplDefault',
-
+    'display' => false,
     'templates' => array(
         'blog' => array(
             'file' => 'blog',

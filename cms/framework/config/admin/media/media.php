@@ -19,7 +19,11 @@ return array(
 		'iconUrl' => 'static/cms/img/32/media.png',
 	),
 	'ui' => array(
-		'label' => 'Medias',
+		'label' => 'Media',
+        'texts' => array(
+            'items' => 'media',
+            'item' => 'Media'
+        ),
 		'adds' => array(
 			array(
 				'label' => 'Add a media',
