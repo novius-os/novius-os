@@ -10,6 +10,8 @@
 
 namespace Cms;
 
+use Str;
+
 class Controller_Login extends Controller_Generic_Admin {
 
     public function action_login() {
@@ -43,6 +45,7 @@ class Controller_Login extends Controller_Generic_Admin {
 	protected function post_login() {
 
 		if (\Cms\Auth::login($_POST['email'], $_POST['password'])) {
+			\Event::trigger('user_login');
 			\Response::redirect(urldecode(\Input::get('redirect', '/admin/')));
 			exit();
 		}

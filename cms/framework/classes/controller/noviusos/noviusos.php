@@ -16,7 +16,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 		parent::before();
 
 		if (!\Cms\Auth::check()) {
-			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
+			\Response::redirect('/admin/login' . ($_SERVER['REDIRECT_URL'] ? 'redirect='.urlencode($_SERVER['REDIRECT_URL']) : ''));
 			exit();
 		}
 

@@ -70,7 +70,12 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
     {
 
 		if (!\Cms\Auth::check()) {
-			Response::forge(null, 403)->send(true);
+			$json = \Format::forge()->to_json(array(
+				'login_page' => \Uri::base(false).'admin/login',
+			));
+			\Response::forge($json, 403, array(
+				'Content-Type' => 'application/json',
+			))->send(true);
 			exit();
 		}
 
