@@ -445,7 +445,7 @@ if ($step == 2) {
 			$sql_create_tables = \File::read(APPPATH.'data'.DS.'install'.DS.'create_tables.sql', true );
 
 			foreach(explode(';', $sql_create_tables) as $sql) {
-				if (!empty($sql)) {
+				if (!empty($sql) && trim($sql) != '') {
 					$connection->query(null, $sql, false);
 				}
 			}
