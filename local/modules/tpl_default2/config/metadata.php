@@ -9,7 +9,7 @@
  */
 
 return array(
-    'name'    => 'Default template',
+    'name'    => 'GG template',
     'version' => '0.9-alpha',
 	'icon64'  => 'static/modules/cms_blog/img/64/blog.png',
     'provider' => array(

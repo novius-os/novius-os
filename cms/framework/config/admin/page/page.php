@@ -23,6 +23,10 @@ return array(
 	),
 	'ui' => array(
 		'label' => 'Pages',
+        'texts' => array(
+            'items' => 'pages',
+            'item' => 'Pages'
+        ),
 		'adds' => array(
 			array(
 				'label' => __('Add a Page'),

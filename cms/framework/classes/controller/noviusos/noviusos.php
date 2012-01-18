@@ -100,6 +100,15 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 		\Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
 		$app_installed = \Config::get('app_installed', array());
 
+        \Config::load('cms::admin/app_default', true);
+        $app_default = \Config::get('cms::admin/app_default', array());
+        $app_installed = array_merge($app_installed, $app_default);
+        $app_installed = \Config::mergeWithUser('cms::admin/app', $app_installed);
+
+        $app_installed = \Arr::sort($app_installed, 'order', 'asc');
+
+
+
 		$apps = array();
 		foreach ($app_installed as $app) {
 			if (!empty($app['href']) && !empty($app['icon64'])) {

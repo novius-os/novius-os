@@ -8,11 +8,6 @@
  * @link http://www.novius-os.org
  */
 
-return array(
-    'name'    => 'Default template',
-    'version' => '0.9-alpha',
-	'icon64'  => 'static/modules/cms_blog/img/64/blog.png',
-    'provider' => array(
-        'name' => 'Novius OS',
-    ),
-);
+define('CONTENU_EDITORIAL', true);
+
+require_once 'blog.php';
