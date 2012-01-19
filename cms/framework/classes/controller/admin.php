@@ -30,7 +30,6 @@ class Controller_Admin extends Controller {
 			"$first/admin/$controller/$action",
 			"cms/$first/$controller/$action",
 			"cms/admin/$first/$controller/$action",
-			'cms/404/admin',
 		);
 
 		$request = false;
@@ -44,8 +43,10 @@ class Controller_Admin extends Controller {
 			} catch (\Exception $e) {}
 		}
 
-		// $request should never be empty, because the route cms/404/admin should exists
-		return $request->execute()->response();
+		try {
+			return $request->execute()->response();
+		} catch (\Request404Exception $e) {
+			return \Request::forge('cms/404/admin')->execute()->response();
+		}
 	}
-
 }
