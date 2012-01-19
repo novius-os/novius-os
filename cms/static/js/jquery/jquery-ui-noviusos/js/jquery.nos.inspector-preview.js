@@ -12,6 +12,8 @@ define([
 ], function( $, undefined ) {
 	$.widget( "nos.inspectorPreview", {
 		options: {
+            meta : {},
+            actions : [],
 			data : null,
 			dataParser : null,
 			texts : {
@@ -76,12 +78,12 @@ define([
 			return self;
 		},
 
-		_uiFooter : function(actions) {
+		_uiFooter : function() {
 			var self = this,
 				o = self.options,
 				hasDropDown = false;
 
-			if (actions.length > 0) {
+			if (o.actions.length > 0) {
 
 				self.uiFooter = $('<div></div>')
 					.addClass('nos-inspector-preview-footer wijmo-wijsuperpanel-footer wijmo-wijgrid')
@@ -102,7 +104,7 @@ define([
 
 					ul = $('<ul></ul>');
 
-				$.each(actions, function(i) {
+				$.each(o.actions, function(i) {
 					var action = this;
 
 					if (action.button || i === 0) {
@@ -118,7 +120,7 @@ define([
 							)
 							.click(function(e) {
 								e.preventDefault();
-								action.action();
+								action.action(data);
 							})
 							.appendTo(tr)
 							.find('div')
@@ -134,7 +136,7 @@ define([
 						.text(action.label)
 						.click(function(e) {
 							e.preventDefault();
-							action.action();
+							action.action(data);
 						})
 				})
 
@@ -158,7 +160,7 @@ define([
 						.addClass('ui-icon ui-icon-triangle-1-s')
 						.appendTo(dropDown);
 
-					ul.appendTo(self.uiFooter)
+					ul.appendTo('body')
 						.wijmenu({
 							trigger : dropDown,
 							triggerEvent : 'mouseenter',
@@ -224,9 +226,10 @@ define([
 			return self;
 		},
 
-		_uiMetaData : function(meta) {
+		_uiMetaData : function(data) {
 			var self = this,
-				o = self.options;
+				o = self.options,
+                i = 0;
 
 			var table = $('<table cellspacing="0" cellpadding="0" border="0"><tbody></tbody></table>')
 					.addClass('nos-inspector-preview-metadata wijmo-wijgrid-root wijmo-wijgrid-table')
@@ -238,23 +241,24 @@ define([
 					.find('tbody')
 					.addClass('ui-widget-content wijmo-wijgrid-data');
 
-			$.each(meta, function(i) {
-				var data = this,
-					tr = $('<tr></tr>').addClass('wijmo-wijgrid-row ui-widget-content wijmo-wijgrid-datarow' + (i%2 ? ' wijmo-wijgrid-alternatingrow' : ''))
+			$.each(o.meta, function(key, meta) {
+				var tr = $('<tr></tr>').addClass('wijmo-wijgrid-row ui-widget-content wijmo-wijgrid-datarow' + (i%2 ? ' wijmo-wijgrid-alternatingrow' : ''))
 					.appendTo(table);
 
 				$('<td><div></div></td>').addClass('wijgridtd wijdata-type-string')
 					.appendTo(tr)
 					.find('div')
 					.addClass('wijmo-wijgrid-innercell')
-					.text(data.label || '');
+					.text(meta.label || '');
 
+                log(self.data);
 				$('<td><div></div></td>').addClass('wijgridtd wijdata-type-string')
 					.appendTo(tr)
 					.find('div')
 					.addClass('wijmo-wijgrid-innercell')
-					.text(data.value || '');
-			})
+					.text(data[key] || '');
+                i++;
+			});
 
 			return self;
 		},
@@ -298,7 +302,7 @@ define([
 					.css('height', '100%');
 
 				self._uiHeader(data.title)
-					._uiFooter(data.actions);
+					._uiFooter();
 
 				self.uiContainer = $('<div></div>')
 					.addClass('nos-inspector-preview-container')

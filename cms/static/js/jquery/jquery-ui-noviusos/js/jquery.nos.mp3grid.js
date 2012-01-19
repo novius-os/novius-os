@@ -37,7 +37,6 @@ define([
 				preview : 'Preview',
                 loading : 'Loading...'
 			},
-            actions: [],
 			values: {},
             //callbabks
             columnVisibilityChange : null,
@@ -595,7 +594,7 @@ define([
 				},
                 verticalSplitter = $.extend({
                         orientation: "vertical",
-                        splitterDistance: 0.2,
+                        splitterDistance: 200,
                         showExpander: false,
                         fullSplit: false,
                         panel1 : {
@@ -620,7 +619,7 @@ define([
                 horizontalSplitter = $.extend({
                         orientation: "horizontal",
                         fullSplit: true,
-                        splitterDistance: 0.35,
+                        splitterDistance: 200,
                         showExpander: false,
                         panel1 : {
                             minSize : 200,
@@ -641,9 +640,6 @@ define([
                             refreshH();
                         }
                     }, self.options.splitters.horizontal);
-
-            verticalSplitter.splitterDistance *= $(window).width();
-            horizontalSplitter.splitterDistance *= $(window).height(); //too bad self.element.height() is not initialized...
 
 			self.uiSplitterVertical.wijsplitter(verticalSplitter)
 				.find('.ui-resizable-handle')
@@ -977,7 +973,6 @@ define([
 				.thumbnails($.extend({
 					pageIndex: 0,
 					url: o.grid.proxyurl,
-					actions: o.actions,
 					loading: function (dataSource, userData) {
 						var r = userData.data.paging;
 						self.pageIndex = r.pageIndex;

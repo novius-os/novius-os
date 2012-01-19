@@ -17,70 +17,39 @@ return array(
 		'model' => 'Cms\Model_Page_Page',
 		'related' => array(),
 	),
-	'tab' => array(
-		'label' => __('Pages'),
-		'iconUrl' => 'static/cms/img/32/page.png',
-	),
-	'ui' => array(
-		'label' => 'Pages',
-		'adds' => array(
-			array(
-				'label' => __('Add a Page'),
-				'url' => 'admin/admin/page/page/add',
-			),
-			array(
-				'label' => __('Add a root'),
-				'iconClasses' => 'nos-icon16 nos-icon16-root',
-				'url' => 'admin/admin/page/root/add',
-			),
-		),
-		'grid' => array(
-			'proxyurl' => 'admin/admin/page/list/json',
-			'columns' => array(
-				array(
-					'headerText' => __('Title 2'),
-					'dataKey' => 'title',
-					'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.closest("td").attr("title", args.row.data.title);
+    'urljson' => 'static/cms/js/admin/page/page.js',
+    'i18n' => array(
+        'Pages' => __('Pages'),
+        'Add a Page' => __('Add a Page'),
+        'Add a root' => __('Add a root'),
+        'Title' => __('Title'),
+        'Roots' => __('Roots'),
+        'Directories' => __('Directories'),
 
-							$("<a href=\"admin/admin/page/form/edit/" + args.row.data.id + "\"></a>")
-								.text(args.row.data.title)
-								.appendTo(args.$container)
-								.click(function(e) {
-									$.nos.tabs.openInNewTab({
-										url : this.href
-									});
-									e.preventDefault();
-								});
-
-							return true;
-						}
-					}',
-				),
-				//'lang',
-			),
-		),
-		'inspectors' => array(
-			array(
-				'widget_id' => 'inspector-root',
-				'vertical' => true,
-				'label' => __('Roots'),
-				'iconClasses' => 'nos-icon16 nos-icon16-root',
-				'url' => 'admin/admin/page/inspector/root/list',
-			),
-			array(
-				'widget_id' => 'inspector-tree',
-				'vertical' => true,
-				'label' => __('Directories'),
-				'iconClasses' => 'nos-icon16 nos-icon16-root',
-				'url' => 'admin/admin/page/inspector/tree/list',
-			),
-		),
-	),
+        'addDropDown' => __('Select an action'),
+        'columns' => __('Columns'),
+        'showFiltersColumns' => __('Filters column header'),
+        'visibility' => __('Visibility'),
+        'settings' => __('Settings'),
+        'vertical' => __('Vertical'),
+        'horizontal' => __('Horizontal'),
+        'hidden' => __('Hidden'),
+        'item' => __('page'),
+        'items' => __('pages'),
+        'showNbItems' => __('Showing {{x}} pages out of {{y}}'),
+        'showOneItem' => __('Show 1 page'),
+        'showNoItem' => __('No page'),
+        'showAll' => __('Show all pages'),
+        'views' => __('Views'),
+        'viewGrid' => __('Grid'),
+        'viewThumbnails' => __('Thumbnails'),
+        'preview' => __('Preview'),
+        'loading' => __('Loading...'),
+    ),
 	'dataset' => array(
 		'id' => 'page_id',
 		'title' => 'page_titre',
+        'url' => 'page_url_virtuel',
 	),
 	'inputs' => array(							
 		'rac_id' => function($value, $query) {

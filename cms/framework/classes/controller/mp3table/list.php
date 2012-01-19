@@ -31,11 +31,6 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 		'searchmenu' => array(),
 	);
 
-	public function before()
-	{
-		parent::before();
-	}
-
 	public function after($response) {
 		\Asset::add_path('static/cms/');
 		\Asset::add_path('static/cms/js/jquery/wijmo/');
@@ -53,10 +48,8 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 	{
 		$view = View::forge('mp3table/list');
 
-		$this->config = ConfigProcessor::process($this->config);
-
-		$view->set('mp3grid', \Format::forge($this->config['ui'])->to_json(), false);
-		$view->set('tab', \Format::forge($this->config['tab'])->to_json(), false);
+        $view->set('urljson', $this->config['urljson'], false);
+		$view->set('i18n', \Format::forge($this->config['i18n'])->to_json(), false);
 
 		$this->template->body = $view;
 	}

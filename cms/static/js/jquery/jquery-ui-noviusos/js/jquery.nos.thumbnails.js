@@ -19,6 +19,7 @@ define([
             texts : {
                 loading : 'Loading...'
             },
+            actions : [],
 			loading : null,
 			loaded : null,
 			reader : null,
@@ -89,11 +90,9 @@ define([
                 marginTop : (self.uiOverlayText.height() * -1 / 2) + 'px'
             });
 
-
 			if (o.pageSize === null) {
 				self._displayItem({
-					title : 'Test',
-					actions : [{label : 'Test'}, {label : 'Test'}]
+					title : 'Test'
 				});
 
 				var el = self.uiContainer.find('.nos-thumbnails-thumb');
@@ -193,23 +192,14 @@ define([
 		_displayItem : function(data, index) {
 			var self = this,
 				o = self.options,
-				item = data.item;
+				item = data.item,
+                noParseData = data.noParseData;
 
 			item = $.extend({
 				title : '',
 				thumbnail : null,
-				thumbnailAlternate : null,
-				actions : []
+				thumbnailAlternate : null
 			}, item);
-
-			$(o.actions).each(function(i,a) {
-
-				// clone a into b
-				var b = $.extend({}, a);
-				// replace the action with noParseData as argument
-				b.action = $.proxy(a.action, a, data.noParseData);
-				item.actions.push(b);
-			});
 
 			var container = $('<div></div>')
 				.addClass('nos-thumbnails-thumb wijmo-wijgrid ui-widget-content')
@@ -257,7 +247,7 @@ define([
 
 			self._itemThumbnail(imgContainer, item, index);
 
-			if (item.actions.length > 0) {
+			if (o.actions.length > 0) {
 				var tr = $('<table cellspacing="0" cellpadding="0" border="0"><tbody><tr></tr></tbody></table>')
 						.addClass('nos-thumbnails-thumb-grid wijmo-wijgrid-root wijmo-wijgrid-table')
 						.css({
@@ -282,14 +272,14 @@ define([
 						)
 						.click(function(e) {
 							e.preventDefault();
-							item.actions[0].action();
+							o.actions[0].action(noParseData);
 						})
 						.appendTo(tr)
 						.find('div')
-						.text(item.actions[0].label)
+						.text(o.actions[0].label)
 						.addClass('wijmo-wijgrid-innercell');
 
-				if (item.actions.length > 1) {
+				if (o.actions.length > 1) {
 					var dropDown = $('<th><div></div></th>')
 						.css('width', '1px')
 						.addClass('nos-thumbnails-thumb-dropdown wijgridtd ui-state-default')
@@ -310,7 +300,7 @@ define([
 						.appendTo(dropDown);
 
 					var ul = $('<ul></ul>').appendTo(self.element);
-					$.each(item.actions, function() {
+					$.each(o.actions, function() {
 						var action = this;
 						$('<li><a href="#"></a></li>')
 							.appendTo(ul)
@@ -318,7 +308,7 @@ define([
 							.text(action.label)
 							.click(function(e) {
 								e.preventDefault();
-								action.action();
+								action.action(noParseData);
 							})
 					});
 					ul.wijmenu({
