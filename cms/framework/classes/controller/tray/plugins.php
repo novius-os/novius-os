@@ -60,6 +60,7 @@ class Controller_Tray_Plugins extends Controller_Generic_Admin {
 
         $this->template->body->set('installed', $app_installed);
         $this->template->body->set('others', $app_others);
+        $this->template->body->set('allow_upload', \Config::get('allow_plugin_upload', false));
 
 		return $this->template;
     }
@@ -92,6 +93,11 @@ class Controller_Tray_Plugins extends Controller_Generic_Admin {
 	}
 
 	public function action_upload() {
+
+		if (\Config::get('allow_plugin_upload', false) == false) {
+			Response::redirect('admin/tray/plugins');
+		}
+
 		if (empty($_FILES['zip'])) {
 			\Response::redirect('admin/tray/plugins');
 		}

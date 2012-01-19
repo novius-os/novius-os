@@ -424,7 +424,7 @@ define([
 									o.grid.columns[index].visible = $(this).is(':checked');
 									self.uiGrid.nosgrid('doRefresh');
 									self.uiSettingsMenu.wijmenu('hideAllMenus');
-                                    self._trigger('columnVisibilityChange', null, { index : index, column : o.grid.columns[index]});
+                                    self._trigger('columnVisibilityChange', null, {index : index, column : o.grid.columns[index]});
                                 },
 								label : column.headerText
 							}
@@ -528,7 +528,7 @@ define([
 												.find("script")
 												.remove()
 												.end()
-												.css({ width: '100%', height: 'auto' })
+												.css({width: '100%', height: 'auto'})
 												.appendTo(target);
 											self._resizeInspectorsV()
 												._resizeInspectorsH();

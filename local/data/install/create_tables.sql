@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `cms_page` (
   `page_id` int(11) NOT NULL auto_increment,
   `page_rac_id` char(2) collate latin1_general_ci NOT NULL default '',
   `page_pere_id` int(11) default NULL,
-  `page_gab_id` int(11) NOT NULL default '0',
+  `page_gab` varchar(255) collate latin1_general_ci NOT NULL default '',
   `page_niveau` tinyint(4) NOT NULL default '0',
   `page_titre` varchar(255) collate latin1_general_ci NOT NULL default '',
   `page_titre_menu` varchar(255) collate latin1_general_ci default NULL,
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `cms_page` (
   UNIQUE KEY `page_url_virtuel` (`page_url_virtuel`),
   KEY `page_rac_id` (`page_rac_id`),
   KEY `page_pere_id` (`page_pere_id`),
-  KEY `page_gab_id` (`page_gab_id`),
+  KEY `page_gab` (`page_gab`),
   KEY `page_demandeur_id` (`page_demandeur_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci PACK_KEYS=0 AUTO_INCREMENT=1 ;
 

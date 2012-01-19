@@ -15,15 +15,10 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 	public function before() {
 		parent::before();
 
-        // Might be great to add some additional verifications here !
-		$logged_user = \Session::get('logged_user', false);
-		if (empty($logged_user)) {
-			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
+		if (!\Cms\Auth::check()) {
+			\Response::redirect('/admin/login' . ($_SERVER['REDIRECT_URL'] ? '?redirect='.urlencode($_SERVER['REDIRECT_URL']) : ''));
 			exit();
-		} else {
-            $logged_user = Model_User_User::find_by_user_id($logged_user->id); // We reload the user
-            \Session::set('logged_user', $logged_user);
-        }
+		}
 
 		$this->auto_render = false;
 	}
@@ -44,7 +39,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 		$view = \View::forge('noviusos/index');
 
         $user = \Session::get('logged_user', false);
-		
+
 		$ostabs = array(
 			'initTabs' => array(),
 			'trayTabs' => array(
@@ -105,6 +100,15 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 		\Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
 		$app_installed = \Config::get('app_installed', array());
 
+        \Config::load('cms::admin/app_default', true);
+        $app_default = \Config::get('cms::admin/app_default', array());
+        $app_installed = array_merge($app_installed, $app_default);
+        $app_installed = \Config::mergeWithUser('cms::admin/app', $app_installed);
+
+        $app_installed = \Arr::sort($app_installed, 'order', 'asc');
+
+
+
 		$apps = array();
 		foreach ($app_installed as $app) {
 			if (!empty($app['href']) && !empty($app['icon64'])) {
@@ -129,7 +133,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 
 
         $json = array(
-            'success'       => true,
+            'success' => true,
         );
 
         $user = \Session::get('logged_user', false);
@@ -169,5 +173,3 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
         return $arr;
     }
 }
-
-/* End of file desktop.php */

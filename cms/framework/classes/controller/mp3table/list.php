@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -46,6 +46,11 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 
 	public function action_index()
 	{
+		if (!\Cms\Auth::check()) {
+			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
+			exit();
+		}
+
 		$view = View::forge('mp3table/list');
 
         $view->set('urljson', $this->config['urljson'], false);
@@ -56,9 +61,19 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 
     public function action_json()
     {
+
+		if (!\Cms\Auth::check()) {
+			$json = \Format::forge()->to_json(array(
+				'login_page' => \Uri::base(false).'admin/login',
+			));
+			\Response::forge($json, 403, array(
+				'Content-Type' => 'application/json',
+			))->send(true);
+			exit();
+		}
+
         $offset = intval(Input::get('offset', 0));
         $limit = intval(Input::get('limit', $this->config['query']['limit']));
-
 
 
 

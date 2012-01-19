@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -9,6 +9,16 @@
  */
 
 class Finder extends Fuel\Core\Finder {
+
+	public static function instance()
+	{
+		if ( ! static::$instance)
+		{
+			static::$instance = static::forge(array(APPPATH, CMSPATH, COREPATH));
+		}
+
+		return static::$instance;
+	}
 
 	protected static function normalize_namespace($name) {
 		return implode('\\', array_map(function($a) {
@@ -28,12 +38,12 @@ class Finder extends Fuel\Core\Finder {
 	public function locate($directory, $file, $ext = '.php', $multiple = false, $cache = true)
 	{
 		list($section,) = explode('/', $directory,  2);
-		
+
 		// Do we need to override the default behaviour?
 		if ($file[0] === '/' or $file[1] === ':' or !in_array($section, array('views', 'config', 'lang'))) {
 			return parent::locate($directory, $file, $ext, $multiple, $cache);
 		}
-		
+
 		$context = false;
 		if ($directory == 'config') {
 			// DEBUG_BACKTRACE_IGNORE_ARGS, 5
