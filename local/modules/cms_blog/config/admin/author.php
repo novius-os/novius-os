@@ -11,7 +11,7 @@
 
 return array(
 	'query' => array(
-		'model' => 'Cms\Model_User',
+		'model' => 'Cms\Model_User_User',
 		'order_by' => 'user_fullname',
 	),
 	'columns' => array(

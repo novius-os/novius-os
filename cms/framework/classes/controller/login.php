@@ -42,7 +42,7 @@ class Controller_Login extends Controller_Generic_Admin {
 
 	protected function post_login() {
 
-		$user = Model_User::find('all', array(
+		$user = Model_User_User::find('all', array(
 			'where' => array(
 				'user_email' => $_POST['email'],
 			),

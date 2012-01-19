@@ -18,7 +18,7 @@ class Controller_Tray_Account extends Controller_Noviusos_Noviusos {
     public function action_index() {
 
 		$user = \Session::get('logged_user');
-		$fieldset_password = Controller_User_Form::fieldset_password($user->user_id);
+		$fieldset_password = Controller_Admin_User_Form::fieldset_password($user->user_id);
         $this->template->body = View::forge('tray/account', array(
 			'logged_user' => $user,
 			'fieldset_password' => $fieldset_password,

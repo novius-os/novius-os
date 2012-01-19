@@ -14,7 +14,7 @@ use Fuel\Core\Uri;
 
 \Autoloader::add_class('PasswordHash', CMSPATH.'vendor'.DS.'phpass'.DS.'PasswordHash.php');
 
-class Model_User extends Model {
+class Model_User_User extends Model {
     protected static $_table_name = 'os_user';
     protected static $_primary_key = array('user_id');
 
@@ -26,7 +26,7 @@ class Model_User extends Model {
             'key_through_from' => 'user_id', // column 1 from the table in between, should match a posts.id
             'table_through' => 'os_user_group', // both models plural without prefix in alphabetical order
             'key_through_to' => 'group_id', // column 2 from the table in between, should match a users.id
-            'model_to' => 'Cms\Model_Group',
+            'model_to' => 'Cms\Model_User_Group',
             'key_to' => 'group_id',
             'cascade_save' => false,
             'cascade_delete' => false,
@@ -59,7 +59,7 @@ class Model_User extends Model {
 		$already_saved[$this->user_id] = true;
 
 		if (empty($this->groups)) {
-			$group = new Model_Group();
+			$group = new Model_User_Group();
 			$group->group_user_id = $this->user_id;
 		} else {
 			$group = reset($this->groups);

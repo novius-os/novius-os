@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_Admin_Page_Form extends \Cms\Controller_Generic_Admin {
+class Controller_Admin_Page_Form extends Controller_Generic_Admin {
 
 	public function after($response) {
 

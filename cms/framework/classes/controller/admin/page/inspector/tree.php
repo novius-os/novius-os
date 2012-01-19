@@ -13,7 +13,7 @@ namespace Cms;
 use Fuel\Core\Arr;
 use Fuel\Core\Config;
 
-class Controller_Admin_Page_Inspector_Tree extends \Cms\Controller_Inspector_Modeltree {
+class Controller_Admin_Page_Inspector_Tree extends Controller_Inspector_Modeltree {
 
 	public function before() {
         Config::load('cms::admin/page/tree', true);

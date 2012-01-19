@@ -12,8 +12,6 @@ namespace Cms;
 
 use Fuel\Core\Config;
 
-use Cms\Controller_Mp3table_List;
-
 class Controller_Admin_Page_List extends Controller_Mp3table_List {
 
 	public function before() {

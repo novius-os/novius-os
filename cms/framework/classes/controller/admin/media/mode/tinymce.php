@@ -11,7 +11,6 @@
 namespace Cms;
 
 use Fuel\Core\Config;
-use Cms\Controller_Mp3table_List;
 
 class Controller_Admin_Media_Mode_Tinymce extends Controller_Mp3table_List {
 

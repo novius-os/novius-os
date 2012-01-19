@@ -40,7 +40,7 @@ class Permission_Select extends Permission_Driver {
 	
 	public function save($group, $data) {
 		
-		$perms = Model_Permission::find('all', array(
+		$perms = Model_User_Permission::find('all', array(
             'where' => array(
                 array('perm_group_id', $group->group_id),
 				array('perm_module', $this->module),
@@ -55,7 +55,7 @@ class Permission_Select extends Permission_Driver {
 		
 		// Add appropriates one
         foreach ($data as $permitted) {
-			$p = new Model_Permission();
+			$p = new Model_User_Permission();
 			$p->perm_group_id   = $group->group_id;
 			$p->perm_module     = $this->module;
 			$p->perm_identifier = $this->identifier;
@@ -70,10 +70,10 @@ class Permission_Select extends Permission_Driver {
 		}
 		
         $group_ids = array();
-        foreach (Model_Group::find('all') as $g) {
+        foreach (Model_User_Group::find('all') as $g) {
             $group_ids[] = $g->group_id;
         }
-        $data = Model_Permission::find('all', array(
+        $data = Model_User_Permission::find('all', array(
             'where' => array(
                 array('perm_group_id', 'IN', $group_ids),
             ),

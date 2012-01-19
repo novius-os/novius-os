@@ -21,7 +21,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
 		} else {
-            $logged_user = Model_User::find_by_user_id($logged_user->id); // We reload the user
+            $logged_user = Model_User_User::find_by_user_id($logged_user->id); // We reload the user
             \Session::set('logged_user', $logged_user);
         }
 
@@ -46,7 +46,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
         $user = \Session::get('logged_user', false);
 		
 		$ostabs = array(
-			'initTabs' => self::getTabs(),
+			'initTabs' => array(),
 			'trayTabs' => array(
 				array(
 					'url' => 'admin/tray/plugins',
@@ -116,14 +116,6 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 			'apps' => $apps,
 		));
 		return $view;
-	}
-
-	protected static function getTabs() {
-		return array(
-			//array("url"=>"admin/cms_blog/list", "iconUrl" => "static/modules/cms_blog/img/32/blog.png", "label" => "Blog", "iconSize" => 32, 'labelDisplay'=> false, 'pined' => true),
-			//array("url"=>"admin/generator/model", "iconClasses" => "ui-icon-16 ui-icon-settings", "label" => "Model générator", 'pined' => true),
-			//array("url"=>"admin/user/list", "iconUrl" => "static/modules/cms_blog/img/32/author.png", "label" => "User management", "iconSize" => 32, 'labelDisplay'=> false, 'pined' => true),
-		);
 	}
 
     public function action_save_user_configuration() {

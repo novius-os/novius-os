@@ -13,13 +13,12 @@
 require(['jquery-nos'], function ($) {
 	$(function () {
 		$.nos.tabs.updateTab({
-			label : '<?= $user->user_fullname ?>',
+			label : 'Add a new user',
 			iconUrl : 'static/modules/cms_blog/img/16/author.png'
 		});
 	});
 });
 </script>
-
 <script type="text/javascript">
 require(['jquery-nos'], function($) {
 	$(function() {
@@ -35,46 +34,21 @@ require(['jquery-nos'], function($) {
 	<div class="line myBody">
 		<div class="unit col c1"></div>
 		<div class="unit col c7 ui-widget">
-			<?= $fieldset_edit->open('admin/user/form/edit/'.$user->user_id); ?>
-			<?= $fieldset_edit->field('user_fullname')
-				->set_template('{field}')
-				->set_attribute('class', 'title c4');
-			?>
+			<?= $fieldset_add->open('admin/admin/user/form/add/'); ?>
 			<div class="fieldset">
-				<h3>Change details</h3>
+				<h3>Add a new user</h3>
 				<div>
 				<table>
 					<?php
-					foreach ($fieldset_edit->field() as $f) {
-						if ($f->name == 'user_fullname') {
-							continue;
-						}
+					foreach ($fieldset_add->field() as $f) {
 						echo $f->build();
 					}
 					?>
 				</table>
 				</div>
 			</div>
-			<?= $fieldset_edit->close(); ?>
-			
-			
-			<div class="fieldset">
-				<h3>Change password</h3>
-				<div>
-				<?= $fieldset_password->open('admin/user/form/edit/'.$user->user_id); ?>
-					<table>
-						<?php
-						foreach ($fieldset_password->field() as $f) {
-							echo $f->build();
-						}
-						?>
-					</table>
-				<?= $fieldset_password->close(); ?>
-				</div>
-			</div>
-			
+			<?= $fieldset_add->close(); ?>
 		</div>
-		<div class="unit col c3"></div>
-		<div class="unit lastUnit"></div>
 	</div>
 </div>
+

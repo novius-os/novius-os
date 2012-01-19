@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_User_Form extends Controller_Noviusos_Noviusos {
+class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
 
 	public function after($response) {
 
@@ -31,7 +31,7 @@ class Controller_User_Form extends Controller_Noviusos_Noviusos {
 
     public function action_add() {
 
-		$body = \View::forge('user/form/add', array(
+		$body = \View::forge('admin/user/form/add', array(
 			'fieldset_add' => static::fieldset_add()->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 		), false);
 
@@ -42,8 +42,8 @@ class Controller_User_Form extends Controller_Noviusos_Noviusos {
 
     public function action_edit($id) {
 
-        $body = \View::forge('user/form/edit', array(
-			'user' => Model_User::find($id),
+        $body = \View::forge('admin/user/form/edit', array(
+			'user' => Model_User_User::find($id),
 			'fieldset_edit'     => static::fieldset_edit($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 			'fieldset_password' => static::fieldset_password($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 		), false);
@@ -56,12 +56,12 @@ class Controller_User_Form extends Controller_Noviusos_Noviusos {
 	public static function fieldset_add() {
 
 
-        \Config::load('cms::user/form', true);
-		$fields = \Config::get('cms::user/form.fields', array());
+        \Config::load('cms::admin/user/form', true);
+		$fields = \Config::get('cms::admin/user/form.fields', array());
 
 		$form = \Fieldset::build_from_config($fields, '\Cms\Model_User', array(
 			'complete' => function($data) {
-				$user = new \Cms\Model_User();
+				$user = new \Cms\Model_User_User();
 				foreach ($data as $name => $value) {
 					if (substr($name, 0, 5) == 'user_') {
 						$user->$name = $value;
@@ -72,7 +72,7 @@ class Controller_User_Form extends Controller_Noviusos_Noviusos {
 					$user->save();
 					$body = array(
 						'notify' => 'User saved successfully.',
-						'redirect' => 'admin/user/form/edit/'.$user->user_id,
+						'redirect' => 'admin/admin/user/form/edit/'.$user->user_id,
 						'listener_fire' => array('cms_user.refresh' => true),
 					);
 				} catch (\Exception $e) {
@@ -94,10 +94,10 @@ class Controller_User_Form extends Controller_Noviusos_Noviusos {
 	}
 
 	public static function fieldset_edit($id) {
-        $user = Model_User::find($id);
+        $user = Model_User_User::find($id);
 
-        \Config::load('cms::user/form', true);
-		$fields = \Config::get('cms::user/form.fields', array());
+        \Config::load('cms::admin/user/form', true);
+		$fields = \Config::get('cms::admin/user/form.fields', array());
 
 		$fieldset_edit = \Fieldset::build_from_config($fields, $user, array(
 			'complete' => function($data) use ($user) {
@@ -162,7 +162,7 @@ class Controller_User_Form extends Controller_Noviusos_Noviusos {
             ),
         );
 
-        $user = Model_User::find($id);
+        $user = Model_User_User::find($id);
 
 		$fieldset_password = \Fieldset::build_from_config($fields, $user, array(
 			'form_name' => 'edit_user_passwd',

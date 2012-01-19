@@ -14,7 +14,7 @@ class Controller_Admin_User extends \Cms\Controller_Noviusos_Noviusos {
 
 	public function action_delete($user_id) {
 		
-		$user = \Cms\Model_User::find($user_id);
+		$user = \Cms\Model_User_User::find($user_id);
 		$user->delete();
 		return $this->template;
 		\Debug::dump($user);

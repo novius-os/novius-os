@@ -54,7 +54,7 @@
 		</span>
         <span class="text">Media center</span>
     </a>
-    <a class="app" href="admin/user/list">
+    <a class="app" href="admin/admin/user/list/index">
 		<span class="icon">
 			<img class="gloss" src="static/cms/img/64/gloss.png" />
 			<img width="64" src="static/cms/img/64/user.png" />

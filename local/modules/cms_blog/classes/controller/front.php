@@ -172,7 +172,7 @@ class Controller_Front extends Controller {
 
         list(,,$user_id, $page) = $this->rewrites;
 
-        $this->author = \Cms\Model_User::find($user_id);
+        $this->author = \Cms\Model_User_User::find($user_id);
         $list = $this->_display_list('author');
 
         $class = get_called_class();
