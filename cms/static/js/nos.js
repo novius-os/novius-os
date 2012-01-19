@@ -17,15 +17,15 @@ define([
         var undefined = arguments[100];
 
         $.nos = {
-            Mp3Grid : function(params) {
+            mp3GridSetup : function(params) {
                 var messages = {},
-                    self = this;
+                    self = {};
 
                 objectToArray = function(val, i) {
                     return val;
                 };
 
-                $.extend(this, {
+                $.extend(self, {
                     proxyUrl : '',
                     tab : null,
                     adds : {},
@@ -241,6 +241,7 @@ define([
                         return params;
                     }
                 }, params || {});
+                return self;
             },
 
             listener : (function() {

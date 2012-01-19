@@ -10,7 +10,7 @@
 define([
     'jquery-nos'
 ], function($) {
-    return new $.nos.Mp3Grid({
+    return $.nos.mp3GridSetup({
         tab : {
             label : 'Users',
             iconUrl : 'static/cms/img/32/user.png'
