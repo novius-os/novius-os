@@ -218,7 +218,7 @@ class Model_User_User extends Model {
     }
 
 
-    public function __get($name) {
+    public function & __get($name) {
         return parent::__get($name);
     }
 

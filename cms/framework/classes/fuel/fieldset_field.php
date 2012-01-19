@@ -28,15 +28,18 @@ class Fieldset_Field extends \Fuel\Core\Fieldset_Field {
         // Don't repopulate the CSRF field
         if ($this->name === \Config::get('security.csrf_token_key', 'fuel_csrf_token'))
         {
-            continue;
+            return;
         }
         if (($value = \Arr::get($input, $this->name, null)) !== null)
         {
            $this->set_value($value, true);
         }
     }
-    
-    
+
+    public function get_fieldset() {
+        return $this->fieldset;
+    }
+
     public function get_name() {
         return $this->name;
     }

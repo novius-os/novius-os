@@ -65,7 +65,7 @@ class Controller_Inspector_Model extends \Controller {
 
     	$query = $model::find();
         Filter::apply($query, $this->config);
-    	if ($this->config['query']['related'] && is_array($this->config['query']['related'])) {
+    	if (isset($this->config['query']['related']) && is_array($this->config['query']['related'])) {
 	    	foreach ($this->config['query']['related'] as $related) {
 	    		$query->related($related);
 	    	}

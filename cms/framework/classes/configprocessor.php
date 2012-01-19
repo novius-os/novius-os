@@ -20,7 +20,7 @@ class ConfigProcessor {
      */
     static public function process($config) {
         $format = Format::forge();
-        if ($config['ui']) {
+        if (isset($config['ui'])) {
             if (is_array($config['ui']['grid']['columns']) && is_array($config['ui']['actions'])) {
                 $key = array_search('actions', $config['ui']['grid']['columns']);
                 if ($key !== false) {
@@ -51,7 +51,7 @@ class ConfigProcessor {
                     'width' => 1,
                 );
             }
-            if (is_array($columns[$i]) && $columns[$i]['actions']) {
+            if (is_array($columns[$i]) && isset($columns[$i]['actions'])) {
                 $actions = $columns[$i]['actions'];
                 $columns[$i] = array(
                     'headerText' => '',
@@ -134,7 +134,7 @@ class ConfigProcessor {
                         }
                     }',
                     'allowSizing' => false,
-                    'width' => $actions[0]['width'] ? $actions[0]['width'] : 60,
+                    'width' => isset($actions[0]['width']) ? $actions[0]['width'] : 60,
                     'showFilter' => false,
                 );
                 array_splice($columns, $i, 0, array($main_column));
@@ -150,13 +150,6 @@ class ConfigProcessor {
                     )
                 );
                 */
-            }
-            if (!$columns[$i]['dataType'] && is_array($config['dataset'][$columns[$i]['dataKey']]) && $config['dataset'][$columns[$i]['dataKey']]['dataType']) {
-                $columns[$i]['dataType'] = $config['dataset'][$columns[$i]['dataKey']]['dataType'];
-            }
-            if (!$columns[$i]['dataType']) {
-                //print_r($columns[$i]);
-                $columns[$i]['dataType'] = 'string';
             }
         }
         return $config;

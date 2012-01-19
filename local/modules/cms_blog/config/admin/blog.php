@@ -98,7 +98,7 @@ return array(
 			return $query;
 		},
 		'blog_date_creation' => function($value, $query) {
-			list($begin, $end) = explode('|', $value);
+			list($begin, $end) = explode('|', $value.'|');
 			if ($begin) {
 				if ($begin = Date::create_from_string($begin, '%Y-%m-%d')) {
 					$query->where(array('blog_date_creation', '>=', $begin->format('mysql')));

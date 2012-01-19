@@ -49,7 +49,7 @@ return array(
 		'fullname' => 'user_fullname',
 		'email' => 'user_email',
 		'id_permission' => function($object) {
-			return reset($object->groups)->group_id ?: $object->user_id;
+			return $object->groups && reset($object->groups)->group_id ?: $object->user_id;
 		}
 	),
 	'inputs' => array(),

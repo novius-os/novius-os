@@ -15,10 +15,10 @@ use Fuel\Core\Config;
 
 class Controller_Admin_Page_Inspector_Root extends Controller_Inspector_Model {
 
-	public function before() {
+	public function before($response = null) {
         Config::load('cms::admin/page/root', true);
 		$this->config = Arr::merge($this->config, Config::get('cms::admin/page/root'));
 
-		parent::before();
+		parent::before($response);
 	}
 }

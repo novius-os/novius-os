@@ -15,7 +15,7 @@ class Controller_Admin extends Controller {
 	// Admin entry point
 	public function action_dispatch() {
 		$uri = implode('/', func_get_args());
-		list($first, $controller, $action) = explode('/', ltrim($uri.'///', '/'), 3);
+		list($first, $controller, $action) = explode('/', ltrim($uri, '/').'///', 3);
 
 		$first = $first ?: 'noviusos';
 		if (!$controller) {

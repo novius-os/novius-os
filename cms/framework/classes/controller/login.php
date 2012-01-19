@@ -16,7 +16,7 @@ class Controller_Login extends Controller_Generic_Admin {
 
     public function action_login() {
 
-		(\Input::method() == 'POST') and $error = $this->post_login();
+        $error = (\Input::method() == 'POST') ? $this->post_login() : '';
 
 		\Asset::add_path('static/cms/');
 		\Asset::css('login.css', array(), 'css');

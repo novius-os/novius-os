@@ -15,11 +15,11 @@ use Fuel\Core\Config;
 
 class Controller_Admin_Inspector_Category extends \Cms\Controller_Inspector_Modeltree {
 
-	public function before() {
+	public function before($response = null) {
 		Config::load('cms_blog::admin/category', true);
 		$this->config = Arr::merge($this->config, Config::get('cms_blog::admin/category'));
 
-		parent::before();
+		parent::before($response);
 	}
 
     public function action_delete($id) {

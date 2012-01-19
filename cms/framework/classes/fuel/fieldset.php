@@ -37,15 +37,15 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	public function close() {
 
 		$close = ($this->fieldset_tag == 'form' or empty($this->fieldset_tag))
-			? $this->form()->close($attributes).PHP_EOL
-			: $this->form()->{$this->fieldset_tag.'_close'}($attributes);
+			? $this->form()->close().PHP_EOL
+			: $this->form()->{$this->fieldset_tag.'_close'}();
 
 		return $close.implode('', $this->append);
 	}
 
 	public function form_name($value) {
 		if ($field = $this->field('form_name')) {
-			return $field->value == $value;
+			return $field->get_value() == $value;
 		}
 		$this->add('form_name', '', array('type' => 'hidden', 'value' => $value));
 	}
@@ -56,7 +56,7 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	 * @return  \Fuel\Core\Fieldset_Field
 	 */
 	public function add_field(\Fuel\Core\Fieldset_Field $field) {
-		$name = $field->name;
+		$name = $field->get_name();
 		if (empty($name))
 		{
 			throw new \InvalidArgumentException('Cannot create field without name.');
@@ -65,12 +65,12 @@ class Fieldset extends \Fuel\Core\Fieldset {
 		// Check if it exists already, if so: return and give notice
 		if ($existing = static::field($name))
 		{
-			\Error::notice('Field with this name exists already, cannot be overwritten through add().');
+			\Error::notice('Field with this name "'.$name.'" exists already, cannot be overwritten through add().');
 			return $existing;
 		}
 
 		// Make sure fieldset is current
-		if ($field->fieldset != $this) {
+		if ($field->get_fieldset() != $this) {
 			\Error::notice('A field added through add() must have the correct parent fieldset.');
 			return false;
 		}
@@ -184,7 +184,7 @@ class Fieldset extends \Fuel\Core\Fieldset {
 			$attributes  = isset($settings['form']) ? $settings['form'] : array();
 			if (!empty($settings['widget'])) {
 				 $class = Inflector::words_to_upper('Cms\Widget_'.$settings['widget']);
-				 $attributes['widget_options'] = $settings['widget_options'] ?: array();
+				 $attributes['widget_options'] = isset($settings['widget_options']) ? $settings['widget_options'] : array();
 				 $field = new $class($p, $label, $attributes, array(), $this);
 				 $this->add_field($field);
 			} else {

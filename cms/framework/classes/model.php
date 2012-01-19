@@ -209,7 +209,7 @@ class Model extends \Orm\Model {
 		// Special getter for ID without prefix
         if ($name == 'id')
 		{
-            return $this->{static::$_primary_key[0]};
+            $name = static::$_primary_key[0];
         }
 
         return parent::__get($name);

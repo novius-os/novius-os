@@ -37,7 +37,7 @@ if ($resized) {
     $media_url = str_replace("/$max_width-$max_height-$verification", '', $path);
     $media_url = str_replace("/$max_width-$max_height", '', $media_url);
 } else {
-	$redirect_url = $_SERVER['REDIRECT_SCRIPT_URL'] ?: $_SERVER['REDIRECT_URL'];
+	$redirect_url = Input::server('REDIRECT_SCRIPT_URL', Input::server('REDIRECT_URL'));
     $media_url    = str_replace('/media/', '', $redirect_url);
 }
 

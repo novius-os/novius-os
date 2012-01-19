@@ -14,10 +14,10 @@ use Fuel\Core\Config;
 
 class Controller_Admin_Media_List extends Controller_Mp3table_List {
 
-	public function before() {
+	public function before($response = null) {
 		Config::load('cms::admin/media/media', true);
 		$this->config = \Config::getFromUser('cms::admin/media/media', array());
 
-		parent::before();
+		parent::before($response);
 	}
 }

@@ -104,7 +104,7 @@ return array(
 				'htm' => 'text.png',
 				'html' => 'text.png',
 			);
-			return $extensions[$object->media_ext] ? 'static/cms/img/64/'.$extensions[$object->media_ext] : '';
+			return isset($extensions[$object->media_ext]) ? 'static/cms/img/64/'.$extensions[$object->media_ext] : '';
 		},
 	),
 	'inputs' => array(

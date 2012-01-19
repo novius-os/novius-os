@@ -15,10 +15,10 @@ use Fuel\Core\Config;
 
 class Controller_Admin_Media_Inspector_Folder extends Controller_Inspector_Modeltree {
 
-	public function before() {
+	public function before($response = null) {
 		Config::load('cms::admin/media/folder', true);
 		$this->config = Arr::merge($this->config, Config::get('cms::admin/media/folder'));
 
-		parent::before();
+		parent::before($response);
 	}
 }

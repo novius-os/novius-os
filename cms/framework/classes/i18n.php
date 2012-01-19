@@ -37,9 +37,9 @@ class I18n
             static::$_locale_stack[] = static::$_locale;
         }
 
-        list($remaining, $variant) = explode('@', $locale);
-        list($remaining, $encoding) = explode('.', $remaining);
-        list($language, $country) = explode('_', $remaining);
+        list($remaining, $variant) = explode('@', $locale.'@');
+        list($remaining, $encoding) = explode('.', $remaining.'.');
+        list($language, $country) = explode('_', $remaining.'_');
         if (!$country) {
             $country = strtoupper($language);
         }
@@ -96,8 +96,7 @@ class I18n
 
     public static function gget($group, $_message, $default = null)
     {
-        $result = static::$_messages[static::$_locale][$group][$_message];
-        $result = $result ? : $default;
+        $result = isset(static::$_messages[static::$_locale][$group][$_message]) ? static::$_messages[static::$_locale][$group][$_message] : $default;
         $result = $result ? : $_message;
         return $result;
     }

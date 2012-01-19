@@ -14,9 +14,9 @@ use Fuel\Core\Config;
 
 class Controller_Admin_Page_List extends Controller_Mp3table_List {
 
-	public function before() {
+	public function before($response = null) {
 
-		parent::before();
+		parent::before($response);
         Config::load('cms::admin/page/page', true);
 		$this->config = \Config::getFromUser('cms::admin/page/page', array());
 	}

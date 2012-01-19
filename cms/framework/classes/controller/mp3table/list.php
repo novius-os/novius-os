@@ -73,9 +73,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 		}
 
         $offset = intval(Input::get('offset', 0));
-        $limit = intval(Input::get('limit', $this->config['query']['limit']));
-
-
+        $limit = intval(Input::get('limit', \Arr::get($this->config['query'], 'limit')));
 
         $items = array();
 
@@ -116,9 +114,8 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 
         $count = $query->count();
 
-
         // Copied over and adapted from $query->count()
-        $select = $column ?: \Arr::get($model::primary_key(), 0);
+        $select = \Arr::get($model::primary_key(), 0);
         $select = (strpos($select, '.') === false ? $query->alias().'.'.$select : $select);
 
         // Get the columns

@@ -15,10 +15,10 @@ use Fuel\Core\Config;
 
 class Controller_Admin_Inspector_Tag extends \Cms\Controller_Inspector_Model {
 
-	public function before() {
+	public function before($response = null) {
 		Config::load('cms_blog::admin/tag', true);
 		$this->config = Arr::merge($this->config, Config::get('cms_blog::admin/tag'));
 
-		parent::before();
+		parent::before($response);
 	}
 }
