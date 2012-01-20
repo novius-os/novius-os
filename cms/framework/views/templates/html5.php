@@ -51,8 +51,7 @@
 <?= $js ?>
 <style type="text/css">
     .nos-ostabs #noviusospanel {
-        background-image: <?= $background ? 'url("'.Uri::create($background->get_public_path()).'")' : 'inherit' ?> !important;
-        background-size : cover;
+        <?= $background ? 'background-image: url("'.Uri::create($background->get_public_path()).'") !important;' : '' ?>
     }
 </style>
 </head>
