@@ -57,7 +57,6 @@ require(['jquery-nos'], function($) {
 			</div>
 			<?= $fieldset_edit->close(); ?>
 			
-			
 			<div class="fieldset">
 				<h3>Change password</h3>
 				<div>

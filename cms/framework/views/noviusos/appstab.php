@@ -14,6 +14,15 @@
 (function($) {
 	$(function() {
 		//$('#switcher').themeswitcher();
+        $('#apps').sortable({
+            update: function() {
+                orders = {};
+                $('.app').each(function(i) {
+                    orders[$(this).data('key')] = {order: i};
+                });
+                $.nos.saveUserConfiguration('misc.apps', orders);
+            }
+        });
 	});
 })(jQuery);
 </script>
@@ -30,7 +39,7 @@
 	<?php
 	foreach ($apps as $app) {
 	?>
-	<a class="app" href="<?= $app['href'] ?>">
+	<a class="app" href="<?= $app['href'] ?>" data-key="<?= $app['key'] ?>">
 		<span class="icon">
 			<img class="gloss" src="static/cms/img/64/gloss.png" />
 			<img width="64" src="<?= $app['icon64'] ?>" />

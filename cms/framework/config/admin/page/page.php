@@ -42,7 +42,7 @@ return array(
 			'proxyurl' => 'admin/admin/page/list/json',
 			'columns' => array(
 				array(
-					'headerText' => __('Title 2'),
+					'headerText' => __('Title'),
 					'dataKey' => 'title',
 					'cellFormatter' => 'function(args) {
 						if ($.isPlainObject(args.row.data)) {

@@ -379,8 +379,8 @@ define([
 				$.nos.media = function(input, options) {
 
 					var contentUrls = {
-						'all'   : '/admin/cms_media/list',
-						'image' : '/admin/cms_media/mode/image/index'
+						'all'   : '/admin/admin/media/list',
+						'image' : '/admin/admin/media/mode/image/index'
 					};
 
 					options = $.extend({

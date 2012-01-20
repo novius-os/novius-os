@@ -26,6 +26,10 @@ return array(
 				'url'     => 'admin/user/form/add',
 			),
 		),
+        'texts' => array(
+            'items' => 'users',
+            'item' => 'Users'
+        ),
 		'grid' => array(
 			'columns' => array(
 				array(

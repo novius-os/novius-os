@@ -12,5 +12,30 @@
 <h1><?= $logged_user->user_fullname; ?></h1>
 
 <a href="admin/tray/account/disconnect">Disconnect</a>
+<div id="tabs" style="width: 100%;">
+    <ul style="width: 10%;">
+        <li><a href="#password"><?= __('Password') ?></a></li>
+        <li><a href="#display"><?= __('Display') ?></a></li>
+    </ul>
+    <div id="password" style="width: 85%;">
+        <?= $fieldset_password ?>
+    </div>
+    <div id="display" style="width: 85%;">
+        <?= $fieldset_display ?>
+    </div>
+</div>
+<SCRIPT LANGUAGE="JAVAScript">
+    require(['jquery-nos'], function($) {
+        $(function() {
+            //$.nos.media($('#background'), {mode: 'image'});
+        });
 
-<?= $fieldset_password ?>
+        require(['static/cms/js/jquery/wijmo/js/jquery.wijmo.wijtabs.js'],
+            function() {
+                $('#tabs').wijtabs({
+                    alignment: 'left'
+                });
+            }
+        );
+    });
+</SCRIPT>

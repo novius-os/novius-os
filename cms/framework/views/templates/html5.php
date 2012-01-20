@@ -49,9 +49,17 @@
 </script>
 <script src="<?= $require ?>" type="text/javascript"></script>
 <?= $js ?>
+<style type="text/css">
+    .nos-ostabs #noviusospanel {
+        background-image: <?= $background ? 'url("'.Uri::create($background->get_public_path()).'")' : 'inherit' ?> !important;
+        background-size : cover;
+    }
+</style>
 </head>
 
+
 <body>
+
 	<?= $body ?>
 </body>
 </html>

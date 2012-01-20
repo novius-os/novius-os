@@ -146,7 +146,9 @@ class Controller_User_Form extends Controller_Noviusos_Noviusos {
             'old_password' => array (
                 'label' => 'Old password',
                 'widget' => '',
-                'type' => 'password',
+                'form' => array(
+                    'type' => 'password',
+                ),
                 'validation' => array(
                     'required',
                     'min_length' => array(6),
@@ -158,6 +160,13 @@ class Controller_User_Form extends Controller_Noviusos_Noviusos {
                 'validation' => array(
                     'required',
                     'min_length' => array(6),
+                ),
+            ),
+            'save' => array(
+                'label' => '',
+                'form' => array(
+                    'type' => 'submit',
+                    'value' => 'Save',
                 ),
             ),
         );

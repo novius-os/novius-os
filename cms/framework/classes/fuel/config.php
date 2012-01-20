@@ -18,16 +18,8 @@ class Config extends \Fuel\Core\Config {
     public static function mergeWithUser($item, $config) {
         $user = Session::user();
 
-
-
-        $item = str_replace('::', '/', $item);
-        $item = explode('/', $item);
-
-        array_splice($item, 1, 0, 'config');
-
-        $item = implode('.', $item);
-
-        //Arr::set($config, 'configuration_id', $item);
+        $item = str_replace('::', '/config/', $item);
+        $item = str_replace('/', '.', $item);
 
         return \Arr::merge($config, \Arr::get($user->getConfiguration(), $item, array()));
     }

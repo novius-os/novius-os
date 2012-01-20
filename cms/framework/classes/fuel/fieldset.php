@@ -87,7 +87,7 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	 */
 	public function populate($input, $repopulate = false) {
 		foreach ($this->fields as $f) {
-			if (substr(strtolower(\Inflector::denamespace(get_class($f))), 0, 6) == 'widget') {
+			if (substr(strtolower(\Inflector::denamespace(get_class($f))), 0, 6) == 'widget' && isset($input->{$f->name})) {
 				$f->populate($input);
 			}
 		}
@@ -320,6 +320,8 @@ JS
 
 	public static function build_from_config($config, $model = null, $options = array()) {
 
+
+
 		if (is_object($model)) {
 			$instance = $model;
 			$class = get_class($instance);
@@ -387,7 +389,7 @@ JS
 
 		foreach ($data as $name => $value)
 		{
-			if (!isset($fields[$name]['editable']) || $fields[$name]['editable'])
+			if ((!isset($fields[$name]['editable']) || $fields[$name]['editable']) && is_object($object))
 			{
 				$object->$name = $value;
 			}
@@ -397,7 +399,7 @@ JS
 		foreach ($fields as $name => $f)
 		{
 			if ((!isset($fields[$name]['editable']) || $fields[$name]['editable']) &&
-			    empty($data[$name]) && \Arr::get($f, 'form.type', null) == 'checkbox')
+			    empty($data[$name]) && \Arr::get($f, 'form.type', null) == 'checkbox' && is_object($object))
 			{
 				$object->$name = null;
 			}
@@ -409,7 +411,9 @@ JS
 		}
 
 		// Will trigger cascade_save for media and wysiwyg
-		$object->save();
+        if (is_object($object)) {
+		    $object->save();
+        }
 
 		$body = array(
 			'notify' => 'Edition successful.',
