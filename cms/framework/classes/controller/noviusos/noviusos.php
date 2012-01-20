@@ -49,24 +49,28 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 			'initTabs' => array(),
 			'trayTabs' => array(
 				array(
+                    'iframe' => true,
 					'url' => 'admin/tray/plugins',
 					'iconClasses' => 'nos-icon24 nos-icon24-noviusstore',
 					'label' => 'Novius store',
 					'iconSize' => 24,
 				),
 				array(
+                    'iframe' => true,
 					'url' => 'generator/model',
 					'iconClasses' => 'nos-icon24 nos-icon24-help',
 					'label' => 'Help',
 					'iconSize' => 24,
 				),
 				array(
+                    'iframe' => true,
 					'url' => 'generator/model',
 					'iconClasses' => 'nos-icon24 nos-icon24-settings',
 					'label' => 'Settings',
 					'iconSize' => 24,
 				),
 				array(
+                    'iframe' => true,
 					'url' => 'admin/tray/account',
 					'iconClasses' => 'nos-icon24 nos-icon24-account',
 					'label' => 'Account',
