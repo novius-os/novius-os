@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -28,6 +28,11 @@ class Controller_Inspector_Model extends \Controller {
 
     public function action_list()
     {
+		if (!\Cms\Auth::check()) {
+			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
+			exit();
+		}
+
         $view = View::forge('inspector/model');
 
         $this->config = ConfigProcessor::process($this->config);
@@ -42,6 +47,16 @@ class Controller_Inspector_Model extends \Controller {
 
     public function action_json()
     {
+		if (!\Cms\Auth::check()) {
+			$json = \Format::forge()->to_json(array(
+				'login_page' => \Uri::base(false).'admin/login',
+			));
+			\Response::forge($json, 403, array(
+				'Content-Type' => 'application/json',
+			))->send(true);
+			exit();
+		}
+
     	$offset = intval(Input::get('offset', 0));
     	$limit = intval(Input::get('limit', $this->config['limit']));
     	$items = array();
@@ -50,7 +65,7 @@ class Controller_Inspector_Model extends \Controller {
 
     	$query = $model::find();
         Filter::apply($query, $this->config);
-    	if ($this->config['query']['related'] && is_array($this->config['query']['related'])) {
+    	if (isset($this->config['query']['related']) && is_array($this->config['query']['related'])) {
 	    	foreach ($this->config['query']['related'] as $related) {
 	    		$query->related($related);
 	    	}

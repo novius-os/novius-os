@@ -10,11 +10,13 @@
 
 namespace Cms;
 
+use Str;
+
 class Controller_Login extends Controller_Generic_Admin {
 
     public function action_login() {
 
-		(\Input::method() == 'POST') and $error = $this->post_login();
+        $error = (\Input::method() == 'POST') ? $this->post_login() : '';
 
 		\Asset::add_path('static/cms/');
 		\Asset::css('login.css', array(), 'css');
@@ -42,17 +44,8 @@ class Controller_Login extends Controller_Generic_Admin {
 
 	protected function post_login() {
 
-		$user = Model_User::find('all', array(
-			'where' => array(
-				'user_email' => $_POST['email'],
-			),
-		));
-		if (empty($user)) {
-			return 'Access denied';
-		}
-		$user = current($user);
-		if ($user->check_password($_POST['password'])) {
-			\Session::set('logged_user', $user);
+		if (\Cms\Auth::login($_POST['email'], $_POST['password'])) {
+			\Event::trigger('user_login');
 			\Response::redirect(urldecode(\Input::get('redirect', '/admin/')));
 			exit();
 		}

@@ -12,7 +12,7 @@ namespace Cms;
 
 use View;
 
-class Controller_User_Group_Permission extends Controller_Noviusos_Noviusos {
+class Controller_Admin_User_Group_Permission extends Controller_Noviusos_Noviusos {
 
     public function action_edit() {
         if (!empty($_POST)) {
@@ -20,16 +20,16 @@ class Controller_User_Group_Permission extends Controller_Noviusos_Noviusos {
         }
 
         if (!empty($_GET['user_id'])) {
-            $user = Model_User::find($_GET['user_id']);
+            $user = Model_User_User::find($_GET['user_id']);
             $group = reset($user->groups);
         } else {
-            $group = Model_Group::find($_GET['id']);
+            $group = Model_User_Group::find($_GET['id']);
         }
 
         \Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
         $apps = \Config::get('app_installed', array());
 
-        $this->template->body = View::forge('user/permission', array(
+        $this->template->body = View::forge('admin/user/permission', array(
             'user' => !empty($user) ? $user : null,
             'group' => $group,
             'apps' => $apps,
@@ -40,10 +40,10 @@ class Controller_User_Group_Permission extends Controller_Noviusos_Noviusos {
 
     protected function post_edit() {
 		
-        $group = Model_Group::find($_POST['group_id']);
+        $group = Model_User_Group::find($_POST['group_id']);
 		
 		$module = $_POST['module'];
-		$access = Model_Permission::find('first', array('where' => array(
+		$access = Model_User_Permission::find('first', array('where' => array(
 			array('perm_group_id', $group->group_id),
 			array('perm_module', 'access'),
 			array('perm_key', $module),
@@ -54,7 +54,7 @@ class Controller_User_Group_Permission extends Controller_Noviusos_Noviusos {
 			$access->delete();
 		}
 		if (!empty($_POST['access'][$module]) && empty($access)) {
-			$access = new Model_Permission();
+			$access = new Model_User_Permission();
 			$access->perm_group_id   = $group->group_id;
 			$access->perm_module     = 'access';
 			$access->perm_identifier = '';
@@ -70,6 +70,6 @@ class Controller_User_Group_Permission extends Controller_Noviusos_Noviusos {
 			$driver = $group->get_permission_driver($module, $identifier);
 			$driver->save($group, (array) $_POST['permission'][$module][$identifier]);
 		}
-		\Response::redirect('/admin/user/group/permission/edit?id='.$group->group_id);
+		\Response::redirect('/admin/admin/user/group/permission/edit?id='.$group->group_id);
     }
 }

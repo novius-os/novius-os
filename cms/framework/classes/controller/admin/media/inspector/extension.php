@@ -15,10 +15,10 @@ use Fuel\Core\Config;
 
 class Controller_Admin_Media_Inspector_Extension extends Controller_Inspector_Data {
 
-	public function before() {
+	public function before($response = null) {
 		Config::load('cms::admin/media/extension', true);
 		$this->config = Arr::merge($this->config, Config::get('cms::admin/media/extension'));
 
-		parent::before();
+		parent::before($response);
 	}
 }

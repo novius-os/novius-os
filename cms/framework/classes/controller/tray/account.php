@@ -27,7 +27,7 @@ class Controller_Tray_Account extends Controller_Generic_Admin {
 
 
 		$user = \Session::get('logged_user');
-		$fieldset_password = Controller_User_Form::fieldset_password($user->user_id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>');
+		$fieldset_password = Controller_Admin_User_Form::fieldset_password($user->user_id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>');
         $fieldset_display = static::fieldset_display($user)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>');
         $this->template->body = View::forge('tray/account', array(
 			'logged_user' => $user,

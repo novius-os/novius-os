@@ -14,7 +14,12 @@ require(['jquery-nos'], function($) {
 	$(function() {
 		$(":input[type=text],:input[type='password'],textarea").wijtextbox();
 		$(":input[type=submit],button").button();
-		$('#email').attr('type', 'email').select();
+		var $email = $('#email');
+		try {
+			// Most browsers don't authorize to change the type of an input, but it's still good if it works
+			$email.attr('type', 'email');
+		} catch (e) {}
+		$email.select();
 	});
 });
 </script>

@@ -12,18 +12,13 @@ namespace Cms;
 
 class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 
-	public function before() {
-		parent::before();
+	public function before($response = null) {
+		parent::before($response);
 
-        // Might be great to add some additional verifications here !
-		$logged_user = \Session::get('logged_user', false);
-		if (empty($logged_user)) {
-			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
+		if (!\Cms\Auth::check()) {
+			\Response::redirect('/admin/login' . ($_SERVER['REDIRECT_URL'] ? '?redirect='.urlencode($_SERVER['REDIRECT_URL']) : ''));
 			exit();
-		} else {
-            $logged_user = Model_User::find_by_user_id($logged_user->id); // We reload the user
-            \Session::set('logged_user', $logged_user);
-        }
+		}
 
 		$this->auto_render = false;
 	}
@@ -44,9 +39,9 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 		$view = \View::forge('noviusos/index');
 
         $user = \Session::get('logged_user', false);
-		
+
 		$ostabs = array(
-			'initTabs' => self::getTabs(),
+			'initTabs' => array(),
 			'trayTabs' => array(
 				array(
 					'url' => 'admin/tray/plugins',
@@ -96,14 +91,16 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 
 		$view->set('ostabs', \Format::forge($ostabs)->to_json(), false);
 
-        $this->template->background = Model_Media_Media::find(\Arr::get($user->getConfiguration(), 'misc.display.background'));
+        $background_id = \Arr::get($user->getConfiguration(), 'misc.display.background');
+        $background = $background_id ? Model_Media_Media::find($background_id) : false;
+        $this->template->set('background', $background, false);
 		$this->template->body = $view;
 		return $this->template;
 	}
 
 	public function action_appstab()
 	{
-        $user = \Session::get('logged_user');
+
 
 
 		\Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
@@ -112,7 +109,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
         \Config::load('cms::admin/app_default', true);
         $app_default = \Config::get('cms::admin/app_default', array());
         $app_installed = array_merge($app_installed, $app_default);
-        $app_installed = \Config::mergeWithUser('misc.apps', $app_installed);
+        //$app_installed = \Config::mergeWithUser('misc.apps', $app_installed);
 
         $apps = array();
         foreach ($app_installed as $key => $app) {
@@ -122,6 +119,8 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
             }
         }
 
+        //\Debug::dump($apps);
+        //exit();
         $apps = \Arr::sort($apps, 'order', 'asc');
 
 
@@ -129,14 +128,6 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 			'apps'          => $apps,
 		));
 		return $view;
-	}
-
-	protected static function getTabs() {
-		return array(
-			//array("url"=>"admin/cms_blog/list", "iconUrl" => "static/modules/cms_blog/img/32/blog.png", "label" => "Blog", "iconSize" => 32, 'labelDisplay'=> false, 'pined' => true),
-			//array("url"=>"admin/generator/model", "iconClasses" => "ui-icon-16 ui-icon-settings", "label" => "Model générator", 'pined' => true),
-			//array("url"=>"admin/user/list", "iconUrl" => "static/modules/cms_blog/img/32/author.png", "label" => "User management", "iconSize" => 32, 'labelDisplay'=> false, 'pined' => true),
-		);
 	}
 
     public function action_save_user_configuration() {
@@ -150,7 +141,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 
 
         $json = array(
-            'success'       => true,
+            'success' => true,
         );
 
         $user = \Session::get('logged_user', false);
@@ -189,5 +180,3 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
         return $arr;
     }
 }
-
-/* End of file desktop.php */

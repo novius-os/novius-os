@@ -46,6 +46,36 @@ define([
                 }
             };
 
+
+            if ($.isFunction(o.dataLoaded)) {
+                var old_ajaxError = o.ajaxError;
+            }
+            o.ajaxError = function(e, args) {
+                var jqXHR = args.XMLHttpRequest;
+				if (jqXHR.status == 403) {
+
+					var notify = {
+						title: "You've been inactive for too long",
+						text: "Please log-in again.",
+						type: 'error'
+					}
+
+					try {
+						var json = $.parseJSON(jqXHR.responseText);
+						if (json.login_page) {
+							notify.text = notify.text.replace('log-in again', "<a href=\"" + json.login_page + "\">log-in again</a>");
+						}
+					} catch (e) {}
+					$.nos.notify(notify);
+				}
+				self._overlayHide();
+                if ($.isFunction(old_ajaxError)) {
+                    old_ajaxError.apply(this, arguments);
+                }
+            };
+
+
+
             $.wijmo.wijgrid.prototype._init.call(self);
 		},
 

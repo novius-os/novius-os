@@ -20,7 +20,7 @@ class Model_Blog extends Model {
     protected static $_belongs_to = array(
         'author' => array(
             'key_from' => 'blog_auteur_id',
-            'model_to' => 'Cms\Model_User',
+            'model_to' => 'Cms\Model_User_User',
             'key_to' => 'user_id',
             'cascade_save' => false,
             'cascade_delete' => false,

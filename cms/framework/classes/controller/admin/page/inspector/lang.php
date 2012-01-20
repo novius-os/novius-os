@@ -13,12 +13,12 @@ namespace Cms;
 use Fuel\Core\Arr;
 use Fuel\Core\Config;
 
-class Controller_Admin_Page_Inspector_Lang extends \Cms\Controller_Inspector_Lang {
+class Controller_Admin_Page_Inspector_Lang extends Controller_Inspector_Lang {
 
-	public function before() {
+	public function before($response = null) {
         Config::load('cms::admin/page', true);
 		$this->config = Arr::merge($this->config, Config::get('cms::admin.page.page.filters.lang'));
 
-		parent::before();
+		parent::before($response);
 	}
 }

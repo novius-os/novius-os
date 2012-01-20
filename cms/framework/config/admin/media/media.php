@@ -7,6 +7,9 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
  */
+use Cms\I18n;
+
+I18n::load('media', 'cms_media');
 
 return array(
 	'query' => array(
@@ -14,161 +17,43 @@ return array(
 		'related' => array(),
 		'limit' => 10,
 	),
-	'tab' => array(
-		'label' => 'Media centre',
-		'iconUrl' => 'static/cms/img/32/media.png',
-	),
-	'ui' => array(
-		'label' => 'Media',
-        'texts' => array(
-            'items' => 'media',
-            'item' => 'Media'
-        ),
-		'adds' => array(
-			array(
-				'label' => 'Add a media',
-				'url' => 'admin/admin/media/add',
-			),
-			array(
-				'label' => 'Add a folder',
-				'iconClasses' => 'nos-icon16 nos-icon16-folder',
-				'url' => 'admin/admin/media/folder/add',
-			),
-		),
-		'grid' => array(
-			'id' => 'cms_media',
-			'proxyurl' => 'admin/admin/media/list/json',
-			'columns' => array(
-				array(
-					'headerText' => 'Ext.',
-					'dataKey' => 'extension',
-					'width' => 1,
-					'allowSizing' => false,
+    'urljson' => 'static/cms/js/admin/media/media.js',
+    'i18n' => array(
+        'Media center' => __('Media center'),
+        'Add a media' => __('Add a media'),
+        'Add a folder' => __('Add a folder'),
+        'Title' => __('Title'),
+        'Ext.' => __('Ext.'),
+        'Edit' => __('Edit'),
+        'Delete' => __('Delete'),
+        'Visualize' => __('Visualize'),
+        'Folders' => __('Folders'),
+        'Type of file' => __('Type of file'),
+        'Id' => __('Id'),
+        'Extension' => __('Extension'),
+        'File name' => __('File name'),
+        'Path' => __('Path'),
 
-				),
-				array(
-					'headerText' => 'Title',
-					'dataKey' => 'title',
-				),
-				//'lang',
-				'actions',
-			),
-		),
-		'actions' => array(
-			array(
-				'label' => 'Edit',
-				'action' => 'function(item) {
-					$.nos.tabs.openInNewTab({
-						url : "admin/admin/media/form?id=" + item.id,
-						label : item.title
-					});
-				}',
-			),
-			array(
-				'label' => 'Delete',
-				'action'   =>  'function(item) {
-					if (confirm("Are you sure ?")) {
-						$.nos.tabs.openInNewTab({
-							url : "admin/admin/media/form?id=" + item.id,
-							label : item.title
-						});
-					}
-				}',
-			),
-			array(
-				'label' => 'Visualize',
-				'action' => 'function(item) {
-					window.open(item.image);
-				}',
-			),
-		),
-		'thumbnails' => array(
-			'dataParser' => "function(size, item) {
-				var data = {
-					title : item.title,
-					thumbnail : (item.image ? item.thumbnail : item.thumbnailAlternate).replace(/64/g, size),
-					thumbnailAlternate : (item.image ? item.thumbnailAlternate : '').replace(/64/g, size),
-					actions : []
-				};
-				return data;
-			}",
-		),
-		'defaultView' => 'thumbnails',
-		'preview' => array(
-			'hide' => false,
-			'vertical' => true,
-			'options' => array(
-				'dataParser' => "function(item) {
-					var data = {
-						title : item.title,
-						thumbnail : (item.image ? item.thumbnail.replace(/64/g, 256) : item.thumbnailAlternate),
-						thumbnailAlternate : (item.image ? item.thumbnailAlternate : ''),
-						meta : [
-							{
-								label : 'Id',
-								value : item.id
-							},
-							{
-								label : 'Extension',
-								value : item.extension
-							},
-							{
-								label : 'File name',
-								value : item.file_name
-							},
-							{
-								label : 'Path',
-								value : item.path
-							}
-						],
-						actions : [
-							{
-								label : 'Edit',
-								action : function() {
-									$.nos.tabs.openInNewTab({
-										url : 'admin/admin/media/form?id=' + item.id,
-										label : item.title
-									});
-								}
-							},
-							{
-								label : 'Delete',
-								action : function() {
-									if (confirm('Are you sure ?')) {
-										$.nos.tabs.openInNewTab({
-											url : 'admin/admin/media/form?id=' + item.id,
-											label : item.title
-										});
-									}
-								}
-							},
-							{
-								label : 'Visualize',
-								button : true,
-								action : function() {
-									window.open(item.image);
-								}
-							},
-						]
-					};
-					return data;
-				}",
-			)
-		),
-		'inspectors' => array(
-			array(
-				'vertical' => true,
-				'label' => 'Folders',
-				'url' => 'admin/admin/media/inspector/folder/list',
-				'widget_id' => 'inspector-folder',
-			),
-			array(
-				'widget_id' => 'inspector-extension',
-				'label' => 'Type of file',
-				'url' => 'admin/admin/media/inspector/extension/list',
-			),
-		),
-	),
+        'addDropDown' => __('Select an action'),
+        'columns' => __('Columns'),
+        'showFiltersColumns' => __('Filters column header'),
+        'visibility' => __('Visibility'),
+        'settings' => __('Settings'),
+        'vertical' => __('Vertical'),
+        'horizontal' => __('Horizontal'),
+        'hidden' => __('Hidden'),
+        'item' => __('media'),
+        'items' => __('medias'),
+        'showNbItems' => __('Showing {{x}} medias out of {{y}}'),
+        'showOneItem' => __('Show 1 media'),
+        'showNoItem' => __('No media'),
+        'showAll' => __('Show all medias'),
+        'views' => __('Views'),
+        'viewGrid' => __('Grid'),
+        'viewThumbnails' => __('Thumbnails'),
+        'preview' => __('Preview'),
+        'loading' => __('Loading...'),
+    ),
 	'dataset' => array(
 		'id' => 'media_id',
 		'title' => 'media_title',
@@ -219,7 +104,7 @@ return array(
 				'htm' => 'text.png',
 				'html' => 'text.png',
 			);
-			return $extensions[$object->media_ext] ? 'static/cms/img/64/'.$extensions[$object->media_ext] : '';
+			return isset($extensions[$object->media_ext]) ? 'static/cms/img/64/'.$extensions[$object->media_ext] : '';
 		},
 	),
 	'inputs' => array(

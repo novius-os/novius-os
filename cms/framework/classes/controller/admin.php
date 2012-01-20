@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -15,7 +15,7 @@ class Controller_Admin extends Controller {
 	// Admin entry point
 	public function action_dispatch() {
 		$uri = implode('/', func_get_args());
-		list($first, $controller, $action) = explode('/', ltrim($uri.'///', '/'), 3);
+		list($first, $controller, $action) = explode('/', ltrim($uri, '/').'///', 3);
 
 		$first = $first ?: 'noviusos';
 		if (!$controller) {
@@ -29,7 +29,7 @@ class Controller_Admin extends Controller {
 		$tries = array(
 			"$first/admin/$controller/$action",
 			"cms/$first/$controller/$action",
-			'cms/404/admin',
+			"cms/admin/$first/$controller/$action",
 		);
 
 		$request = false;
@@ -43,8 +43,10 @@ class Controller_Admin extends Controller {
 			} catch (\Exception $e) {}
 		}
 
-		// $request should never be empty, because the route cms/404/admin should exists
-		return $request->execute()->response();
+		try {
+			return $request->execute()->response();
+		} catch (\Request404Exception $e) {
+			return \Request::forge('cms/404/admin')->execute()->response();
+		}
 	}
-
 }

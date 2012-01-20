@@ -12,7 +12,7 @@ namespace Cms;
 
 use Fuel\Core\Uri;
 
-class Model_Group extends Model {
+class Model_User_Group extends Model {
     protected static $_table_name = 'os_group';
     protected static $_primary_key = array('group_id');
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -20,6 +20,8 @@ class Config extends \Fuel\Core\Config {
 
         $item = str_replace('::', '/config/', $item);
         $item = str_replace('/', '.', $item);
+
+        Arr::set($config, 'configuration_id', $item);
 
         return \Arr::merge($config, \Arr::get($user->getConfiguration(), $item, array()));
     }

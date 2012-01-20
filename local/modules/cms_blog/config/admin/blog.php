@@ -7,6 +7,9 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
  */
+use Cms\I18n;
+
+I18n::load('cms_blog::blog');
 
 return array(
 	'query' => array(
@@ -14,131 +17,42 @@ return array(
 		'related' => array('author'),
 		'limit' => 20,
 	),
-	'tab' => array(
-		'label' => 'Blog',
-		'iconUrl' => 'static/modules/cms_blog/img/32/blog.png',
-	),
-	'ui' => array(
-		'label' => 'Blog',
-		'iconClasses' => 'cms_blog-icon16 cms_blog-icon16-blog',
-		'adds' => array(
-			array(
-				'label' => 'Add a post',
-				'url' => 'admin/cms_blog/form/edit',
-			),
-			array(
-				'label' => 'Add a category',
-				'url' => 'admin/cms_blog/categoryform',
-			),
-		),
-		'grid' => array(
-			'columns' => array(
-				array(
-					'headerText' => 'Title',
-					'cellFormatter' => 'function(args) {
-						if ($.isPlainObject(args.row.data)) {
-							args.$container.closest("td").attr("title", args.row.data.title);
+    'urljson' => 'static/modules/cms_blog/js/admin/blog.js',
+    'i18n' => array(
+        'Blog' => __('Blog'),
+        'Add a post' => __('Add a post'),
+        'Add a category' => __('Add a category'),
+        'Title' => __('Title'),
+        'Author' => __('Author'),
+        'Date' => __('Date'),
+        'Delete' => __('Delete'),
+        'Update' => __('Update'),
+        'Categories' => __('Categories'),
+        'Tags' => __('Tags'),
+        'Authors' => __('Authors'),
+        'Publish date' => __('Publish date'),
+        'Language' => __('Language'),
 
-							$("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-								.text(args.row.data.title)
-								.appendTo(args.$container);
-
-							return true;
-						}
-					}',
-					'dataKey' => 'title',
-				),
-				'lang',
-				array(
-					'headerText' => 'Author',
-					'dataKey' => 'author',
-				),
-				array(
-					'headerText' => 'Date',
-					'dataKey' => 'date',
-                    'dataFormatString'  => 'MM/dd/yyyy HH:mm:ss',
-                    'showFilter' => false,
-				),
-                array(
-                    'actions' => array(
-                        array(
-                            'icon'      => 'ui-icon ui-icon-pencil',
-                            'action'   =>  'function(args) {
-                                                $.nos.tabs.openInNewTab({
-                                                    url     : "admin/cms_blog/form/edit/" + args.row.data.id,
-                                                    label   : "Update"
-                                                });
-                                            }',
-                            'label'     => 'Update',
-                        ),
-                        array(
-                            'icon'  => 'ui-icon ui-icon-close',
-                            'action'   =>  'function(args) {
-								$.nos.ajax.request({
-									url: "admin/cms_blog/list/delete/" + args.row.data.id,
-									data: {},
-									success: function(response) {
-										if (response.success) {
-											$.nos.notify("Suppression réalisée !");
-											$("#mp3grid").mp3grid("gridRefresh");
-										} else {
-											$.nos.notify("Erreur lors de la suppression !", "error");
-										}
-									}
-								});
-							}',
-                            'label' => 'Delete',
-                        ),
-                    )
-                ),
-			),
-			'proxyurl' => 	'admin/cms_blog/list/json',
-		),
-        'texts' => array(
-            'items' => 'posts',
-            'item' => 'Blog posts'
-        ),
-		'inspectors' => array(
-			array(
-				'widget_id' => 'inspector-category',
-				'label' => 'Categories',
-				'vertical' => true,
-				'url' => 'admin/cms_blog/inspector/category/list',
-			),
-			array(
-				'widget_id' => 'inspector-tag',
-				'hide' => true,
-				'label' => 'Tags',
-				'url' => 'admin/cms_blog/inspector/tag/list',
-			),
-			array(
-				'widget_id' => 'inspector-author',
-				'label' => 'Authors',
-				'url' => 'admin/cms_blog/inspector/author/list',
-			),
-			array(
-				'widget_id' => 'inspector-publishdate',
-				'vertical' => true,
-				'label' => 'Publish date',
-				'url' => 'admin/cms_blog/inspector/date/list',
-			),
-			array(
-				'widget_id' => 'inspector-lang',
-				'vertical' => true,
-				'label' => 'Language',
-				'url' => 'admin/cms_blog/inspector/lang/list',
-				'languages' => array(
-					'fr' => 'Français',
-					'en' => 'Anglais',
-				),
-			),
-		),
-        'splitters' => array(
-            'vertical' => array(
-                'splitterDistance' => 0.2,
-            ),
-        ),
-	),
+        'addDropDown' => __('Select an action'),
+        'columns' => __('Columns'),
+        'showFiltersColumns' => __('Filters column header'),
+        'visibility' => __('Visibility'),
+        'settings' => __('Settings'),
+        'vertical' => __('Vertical'),
+        'horizontal' => __('Horizontal'),
+        'hidden' => __('Hidden'),
+        'item' => __('post'),
+        'items' => __('posts'),
+        'showNbItems' => __('Showing {{x}} posts out of {{y}}'),
+        'showOneItem' => __('Show 1 post'),
+        'showNoItem' => __('No post'),
+        'showAll' => __('Show all posts'),
+        'views' => __('Views'),
+        'viewGrid' => __('Grid'),
+        'viewThumbnails' => __('Thumbnails'),
+        'preview' => __('Preview'),
+        'loading' => __('Loading...'),
+    ),
 	'dataset' => array(
         'id' => 'blog_id',
 		'title' => 'blog_titre',
@@ -184,7 +98,7 @@ return array(
 			return $query;
 		},
 		'blog_date_creation' => function($value, $query) {
-			list($begin, $end) = explode('|', $value);
+			list($begin, $end) = explode('|', $value.'|');
 			if ($begin) {
 				if ($begin = Date::create_from_string($begin, '%Y-%m-%d')) {
 					$query->where(array('blog_date_creation', '>=', $begin->format('mysql')));

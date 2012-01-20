@@ -11,13 +11,12 @@
 namespace Cms;
 
 use Fuel\Core\Config;
-use Cms\Controller_Mp3table_List;
 
 class Controller_Admin_Media_Mode_Tinymce extends Controller_Mp3table_List {
 
     public $template = 'cms::templates/html5';
 
-	public function before() {
+	public function before($response = null) {
 		Config::load('cms::admin/media/media', true);
 		$this->config = Config::get('cms::admin/media/media', array());
 
@@ -33,17 +32,19 @@ class Controller_Admin_Media_Mode_Tinymce extends Controller_Mp3table_List {
 		}
 
 		// Remove the choices for the extension
-		foreach ($this->config['ui']['inspectors'] as $id => $inspector) {
-			if ($inspector['widget_id'] == 'inspector-extension') {
-				unset($this->config['ui']['inspectors'][$id]);
-			}
-		}
+        if (isset($this->config['ui']['inspectors'])) {
+            foreach ($this->config['ui']['inspectors'] as $id => $inspector) {
+                if ($inspector['widget_id'] == 'inspector-extension') {
+                    unset($this->config['ui']['inspectors'][$id]);
+                }
+            }
+        }
 
 		// Force only images to be displayed
 		$this->config['ui']['values'] = array(
 			'media_extension' => array('image'),
 		);
 
-		parent::before();
+		parent::before($response);
 	}
 }

@@ -12,18 +12,18 @@ namespace Cms;
 
 use View;
 
-class Controller_User_Permission_Basic extends Controller {
+class Controller_Admin_User_Permission_Basic extends Controller {
 
     public function action_edit($group_id, $app) {
 
-        $group = Model_Group::find($group_id);
+        $group = Model_User_Group::find($group_id);
 
         \Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
         $apps = \Config::get('app_installed', array());
         \Config::load("$app::permissions", true);
         $permissions = \Config::get("$app::permissions", array());
 
-        return View::forge('user/permission/basic', array(
+        return View::forge('admin/user/permission/basic', array(
             'group' => $group,
             'app'   => $app,
             'permissions' => $permissions,
@@ -31,7 +31,7 @@ class Controller_User_Permission_Basic extends Controller {
     }
 
     protected function post_edit() {
-        $perms = Model_Permission::find('all', array(
+        $perms = Model_User_Permission::find('all', array(
             'where' => array(
                 array('perm_group_id', $_POST['group_id']),
             ),
@@ -48,7 +48,7 @@ class Controller_User_Permission_Basic extends Controller {
                 continue;
             }
             foreach ($keys as $key) {
-                $p = new Model_Permission();
+                $p = new Model_User_Permission();
                 $p->perm_group_id = $_POST['group_id'];
                 $p->perm_module = $app;
                 $p->perm_key = $key;

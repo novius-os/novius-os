@@ -35,7 +35,7 @@ return array(
     array(
         'name' => 'Users',
         'version' => '0.9-alpha',
-        'href' => 'admin/user/list',
+        'href' => 'admin/admin/user/list/index',
         'icon64' => 'static/cms/img/64/user.png',
         'provider' =>
         array(

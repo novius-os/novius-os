@@ -18,8 +18,8 @@ class Widget_Media extends \Fieldset_Field {
 
     public function __construct($name, $label = '', array $attributes = array(), array $rules = array(), \Fuel\Core\Fieldset $fieldset = null) {
 
-		$attributes['type']   = 'hidden';
-		$attributes['class'] .= 'media';
+		//$attributes['type']   = 'hidden';
+		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').'media';
 
 		if (empty($attributes['id'])) {
 			$attributes['id'] = uniqid();

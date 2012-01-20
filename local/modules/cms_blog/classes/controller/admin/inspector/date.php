@@ -15,10 +15,10 @@ use Fuel\Core\Config;
 
 class Controller_Admin_Inspector_Date extends \Cms\Controller_Inspector_Date {
 
-	public function before() {
+	public function before($response = null) {
 		Config::load('cms_blog::admin/date', true);
 		$this->config = Arr::merge($this->config, Config::get('cms_blog::admin/date'));
 
-		parent::before();
+		parent::before($response);
 	}
 }

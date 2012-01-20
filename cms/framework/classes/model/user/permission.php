@@ -12,7 +12,7 @@ namespace Cms;
 
 use Fuel\Core\Uri;
 
-class Model_Permission extends Model {
+class Model_User_Permission extends Model {
     protected static $_table_name = 'os_group_permission';
     protected static $_primary_key = array('perm_group_id', 'perm_module', 'perm_key');
 }

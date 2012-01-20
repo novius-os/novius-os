@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -12,14 +12,12 @@ namespace Cms;
 
 use Fuel\Core\Config;
 
-use Cms\Controller_Mp3table_List;
-
 class Controller_Admin_Page_List extends Controller_Mp3table_List {
 
-	public function before() {
+	public function before($response = null) {
+
+		parent::before($response);
         Config::load('cms::admin/page/page', true);
 		$this->config = \Config::getFromUser('cms::admin/page/page', array());
-
-		parent::before();
 	}
 }
