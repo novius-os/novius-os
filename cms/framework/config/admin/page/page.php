@@ -25,7 +25,6 @@ return array(
         'Title' => __('Title'),
         'Roots' => __('Roots'),
         'Directories' => __('Directories'),
-
         'addDropDown' => __('Select an action'),
         'columns' => __('Columns'),
         'showFiltersColumns' => __('Filters column header'),

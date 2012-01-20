@@ -10,5 +10,4 @@
 
 return array(
 	'Pages' => 'Pages',
-	'Add a Page' => 'Ajouter une Page',
 );

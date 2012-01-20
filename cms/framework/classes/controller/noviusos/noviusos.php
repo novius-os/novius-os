@@ -94,33 +94,41 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 
 		$view->set('ostabs', \Format::forge($ostabs)->to_json(), false);
 
+        $background_id = \Arr::get($user->getConfiguration(), 'misc.display.background');
+        $background = $background_id ? Model_Media_Media::find($background_id) : false;
+        $this->template->set('background', $background, false);
 		$this->template->body = $view;
 		return $this->template;
 	}
 
 	public function action_appstab()
 	{
+
+
+
 		\Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
 		$app_installed = \Config::get('app_installed', array());
 
         \Config::load('cms::admin/app_default', true);
         $app_default = \Config::get('cms::admin/app_default', array());
         $app_installed = array_merge($app_installed, $app_default);
-        $app_installed = \Config::mergeWithUser('cms::admin/app', $app_installed);
+        //$app_installed = \Config::mergeWithUser('misc.apps', $app_installed);
 
-        $app_installed = \Arr::sort($app_installed, 'order', 'asc');
+        $apps = array();
+        foreach ($app_installed as $key => $app) {
+            if (!empty($app['href']) && !empty($app['icon64'])) {
+                $app['key'] = $key;
+                $apps[] = $app;
+            }
+        }
 
+        //\Debug::dump($apps);
+        //exit();
+        $apps = \Arr::sort($apps, 'order', 'asc');
 
-
-		$apps = array();
-		foreach ($app_installed as $app) {
-			if (!empty($app['href']) && !empty($app['icon64'])) {
-				$apps[] = $app;
-			}
-		}
 
 		$view = \View::forge('noviusos/appstab', array(
-			'apps' => $apps,
+			'apps'          => $apps,
 		));
 		return $view;
 	}
@@ -153,7 +161,6 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
             $user->save();
             \Session::set('logged_user', $user);
         }
-
 
 
 
