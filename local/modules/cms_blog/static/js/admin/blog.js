@@ -58,7 +58,7 @@ define([
         actions : {
             update : {
                 action : function(args) {
-                    $.nos.tabs.openInNewTab({
+                    $.nos.tabs.add({
                         url     : "admin/cms_blog/form/edit/" + args.row.data.id,
                         label   : "Update"
                     });

@@ -22,7 +22,8 @@ return array(
                 array(
                     'icon'      => 'ui-icon ui-icon-pencil',
                     'action'   =>  'function(args) {
-                                                $.nos.tabs.openInNewTab({
+                                                $.nos.tabs.add({
+                                                    iframe : true,
                                                     url     : "admin/cms_blog/form?id=" + args.row.data.id,
                                                     label   : "Update"
                                                 });

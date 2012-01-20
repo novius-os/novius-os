@@ -23,26 +23,17 @@ use Asset, Format, Input, Session, View, Uri;
  * @package  app
  * @extends  Controller
  */
-class Controller_Mp3table_List extends Controller_Generic_Admin {
+class Controller_Mp3table_List extends Controller {
 
-	protected $config = array(
-		'tab' => array(),
-		'headers' => array(),
-		'searchmenu' => array(),
+	protected $mp3grid = array(
+        'query' => array(
+            'model' => '',
+        ),
+        'urljson' => '',
+        'i18n' => array(),
+        'dataset' => array(),
+        'inputs' => array(),
 	);
-
-	public function after($response) {
-		\Asset::add_path('static/cms/');
-		\Asset::add_path('static/cms/js/jquery/wijmo/');
-		\Asset::add_path('static/cms/js/jquery/jquery-ui-noviusos/');
-		\Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-		\Asset::css('jquery.wijmo-open.1.5.0.css', array(), 'css');
-		\Asset::css('jquery.wijmo-complete.1.5.0.css', array(), 'css');
-		\Asset::css('base.css', array(), 'css');
-		\Asset::css('jquery.nos.mp3grid.css', array(), 'css');
-
-		return parent::after($response);
-	}
 
 	public function action_index()
 	{
@@ -53,10 +44,10 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 
 		$view = View::forge('mp3table/list');
 
-        $view->set('urljson', $this->config['urljson'], false);
-		$view->set('i18n', \Format::forge($this->config['i18n'])->to_json(), false);
+        $view->set('urljson', $this->mp3grid['urljson'], false);
+		$view->set('i18n', \Format::forge($this->mp3grid['i18n'])->to_json(), false);
 
-		$this->template->body = $view;
+		return $view;
 	}
 
     public function action_json()
@@ -73,18 +64,18 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 		}
 
         $offset = intval(Input::get('offset', 0));
-        $limit = intval(Input::get('limit', \Arr::get($this->config['query'], 'limit')));
+        $limit = intval(Input::get('limit', \Arr::get($this->mp3grid['query'], 'limit')));
 
         $items = array();
 
-        $model = $this->config['query']['model'];
+        $model = $this->mp3grid['query']['model'];
 
         $query = \Cms\Orm\Query::forge($model, $model::connection());
-        foreach ($this->config['query']['related'] as $related) {
+        foreach ($this->mp3grid['query']['related'] as $related) {
             $query->related($related);
         }
 
-        foreach ($this->config['inputs'] as $input => $condition) {
+        foreach ($this->mp3grid['inputs'] as $input => $condition) {
             $value = Input::get('inspectors.'.$input);
             if (is_callable($condition)) {
                 $query = $condition($value, $query);
@@ -110,7 +101,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
             $keys = array();
         }
 
-        Filter::apply($query, $this->config);
+        Filter::apply($query, $this->mp3grid);
 
         $count = $query->count();
 
@@ -136,11 +127,11 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
         if (!empty($objects)) {
             $query = $model::find()->where(array($select, 'in', array_keys($objects)));
 
-            Filter::apply($query, $this->config);
+            Filter::apply($query, $this->mp3grid);
 
             foreach ($query->get() as $object) {
                 $item = array();
-                foreach ($this->config['dataset'] as $key => $data) {
+                foreach ($this->mp3grid['dataset'] as $key => $data) {
                     if (is_array($data)) {
                         $data = $data['value'];
                     }

@@ -34,7 +34,8 @@ define([
                             .text(args.row.data.fullname)
                             .appendTo(args.$container)
                             .click(function(e) {
-                                $.nos.tabs.openInNewTab({
+                                $.nos.tabs.add({
+                                    iframe : true,
                                     url : this.href
                                 });
                                 e.preventDefault();
@@ -62,7 +63,8 @@ define([
                             .append("<img src=\"static/cms/img/icons/tick.png\" />")
                             .appendTo(args.$container)
                             .click(function() {
-                                $.nos.tabs.openInNewTab({
+                                $.nos.tabs.add({
+                                    iframe : true,
                                     url: this.href
                                 });
                                 return false;

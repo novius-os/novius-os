@@ -59,7 +59,7 @@ require(['jquery-nos'], function($) {
 			app: true,
 			iconSize: 32,
 			labelDisplay: false
-		});
+		}, true);
 		e.preventDefault();
 	});
 });

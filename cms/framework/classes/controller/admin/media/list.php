@@ -16,7 +16,7 @@ class Controller_Admin_Media_List extends Controller_Mp3table_List {
 
 	public function before($response = null) {
 		Config::load('cms::admin/media/media', true);
-		$this->config = \Config::getFromUser('cms::admin/media/media', array());
+		$this->mp3grid = \Config::getFromUser('cms::admin/media/media', array());
 
 		parent::before($response);
 	}

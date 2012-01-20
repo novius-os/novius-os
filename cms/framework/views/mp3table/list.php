@@ -21,11 +21,13 @@ require([
         mp3Grid.i18n.load(<?= $i18n ?>);
         var params = mp3Grid.build();
 		$(function() {
+            var current = $.nos.$noviusos.ostabs('current');
+
             if ($.isPlainObject(params.tab)) {
-			    $.nos.tabs.updateTab(params.tab);
+                $.nos.$noviusos.ostabs('update', current.index, params.tab);
             }
-			$('#mp3grid').mp3grid(params.mp3grid);
+            $('<div></div>').appendTo(current.panel.find('.nos-ostabs-panel-content'))
+                .mp3grid(params.mp3grid);
 		});
 	});
 </script>
-<div id="mp3grid"></div>

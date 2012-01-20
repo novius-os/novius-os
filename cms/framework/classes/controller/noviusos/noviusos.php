@@ -27,9 +27,14 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 		\Asset::add_path('static/cms/');
 		\Asset::add_path('static/cms/js/jquery/wijmo/');
 		\Asset::add_path('static/cms/js/jquery/jquery-ui-noviusos/');
-		\Asset::css('rocket/jquery-wijmo.css', array(), 'css');
-		\Asset::css('base.css', array(), 'css');
-		\Asset::css('jquery.nos.ostabs.css', array(), 'css');
+		//\Asset::css('rocket/jquery-wijmo.css', array(), 'css');
+
+        \Asset::css('aristo/jquery-wijmo.css', array(), 'css');
+        \Asset::css('jquery.wijmo-open.1.5.0.css', array(), 'css');
+        \Asset::css('jquery.wijmo-complete.1.5.0.css', array(), 'css');
+        \Asset::css('base.css', array(), 'css');
+        \Asset::css('jquery.nos.ostabs.css', array(), 'css');
+        \Asset::css('jquery.nos.mp3grid.css', array(), 'css');
 
 		return parent::after($response);
 	}
@@ -74,14 +79,12 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 				'iconClasses' => 'nos-icon32',
 				'iconSize' => 32,
 				'label' => 'Novius OS',
-				'ajax' => true,
 			),
 			'newTab' => array(
 				'panelId' => 'noviusospanel',
 				'url' => 'admin/noviusos/noviusos/appstab',
 				'iconClasses' => 'nos-icon16 nos-icon16-add',
 				'iconSize' => 16,
-				'ajax' => true,
 			),
 			'show' => 'function(e, tab) {
 				$nos.nos.listener.fire(\'ostabs.show\', false, [tab.index]);

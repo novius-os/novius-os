@@ -18,6 +18,6 @@ class Controller_Admin_Page_List extends Controller_Mp3table_List {
 
 		parent::before($response);
         Config::load('cms::admin/page/page', true);
-		$this->config = \Config::getFromUser('cms::admin/page/page', array());
+		$this->mp3grid = \Config::getFromUser('cms::admin/page/page', array());
 	}
 }

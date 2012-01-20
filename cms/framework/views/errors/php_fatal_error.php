@@ -65,7 +65,7 @@
 	<script type="text/javascript">
 	require(['jquery-nos'], function($) {
 		$(function() {
-			$.nos.tabs.updateTab({
+			$.nos.tabs.update({
 				label : 'Error - We\'re working on it'
 				//iconUrl : 'static/cms/img/icons/exclamation--frame.png'
 			});
