@@ -179,34 +179,6 @@ define([
 				._listeners();
 
 			self.init = true;
-
-			$(window).resize(function() {
-				if (self.resizing) {
-					if ( self.timeoutResize ) {
-						clearTimeout(self.timeoutResize);
-					}
-					self.timeoutResize = setTimeout(function() {
-						if (self.resizing) {
-						    self.uiSplitterVertical.add(self.uiSplitterHorizontal)
-								.wijsplitter('refresh');
-							self._resizeInspectorsV()
-								._resizeInspectorsH()
-								.gridRefresh();
-						}
-					}, 100)
-				}
-			});
-
-			$(window).on({
-				blur : function() {
-					self.resizing = false;
-				},
-				focus : function() {
-					$('html').focus();
-					self.resizing = true;
-				}
-			});
-			$(window).focus();
 		},
 
         _css : function() {
@@ -598,14 +570,14 @@ define([
                         orientation: "vertical",
                         splitterDistance: 200,
                         showExpander: false,
-                        fullSplit: false,
+                        fullSplit: true,
                         panel1 : {
                             minSize : 150,
-                            scrollBars : 'hidden'
+                            scrollBars : 'auto'
                         },
                         panel2 : {
                             minSize : 200,
-                            scrollBars : 'hidden'
+                            scrollBars : 'auto'
                         },
                         expanded: function () {
                             refreshV();
@@ -625,11 +597,11 @@ define([
                         showExpander: false,
                         panel1 : {
                             minSize : 200,
-                            scrollBars : 'hidden'
+                            scrollBars : 'auto'
                         },
                         panel2 : {
                             minSize : 200,
-                            scrollBars : 'hidden'
+                            scrollBars : 'auto'
                         },
                         expanded: function () {
                             refreshH();
@@ -1034,14 +1006,6 @@ define([
 		_listeners : function() {
 			var self = this,
 				o = self.options;
-
-			$nos.nos.listener.add('ostabs.show', function(index) {
-				if ($.nos.tabs.current() === index) {
-					$(window).focus();
-				} else {
-					$(window).blur();
-				}
-			});
 
 			$nos.nos.listener.add('inspector.showFilter', false, function(widget_id, change, checked) {
 				self._addSettingsInspectorMenu(widget_id, 'showFilters', {
