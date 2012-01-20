@@ -12,7 +12,7 @@
 <script type="text/javascript">
     require(['jquery-nos'], function ($) {
         $(function () {
-            $.nos.tabs.updateTab({
+            $.nos.tabs.update({
                 label : '<?= $object->blog_titre ?>',
                 iconUrl : 'static/modules/cms_blog/img/16/blog.png'
             });

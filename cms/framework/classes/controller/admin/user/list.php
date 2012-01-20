@@ -16,7 +16,7 @@ class Controller_Admin_User_List extends Controller_Mp3table_List {
 
     public function before($response = null) {
         Config::load('cms::admin/user/user', true);
-        $this->config = \Config::getFromUser('cms::admin/user/user', array());
+        $this->mp3grid = \Config::getFromUser('cms::admin/user/user', array());
 
         parent::before($response);
     }

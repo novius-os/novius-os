@@ -44,7 +44,8 @@ define([
             edit : {
                 label : 'Edit',
                 action : function(item) {
-                    $.nos.tabs.openInNewTab({
+                    $.nos.tabs.add({
+                        iframe : true,
                         url : "admin/admin/media/form?id=" + item.id,
                         label : item.title
                     });
@@ -54,7 +55,8 @@ define([
                 label : 'Delete',
                 action : function(item) {
                     if (confirm("Are you sure ?")) {
-                        $.nos.tabs.openInNewTab({
+                        $.nos.tabs.add({
+                            iframe : true,
                             url : "admin/admin/media/form?id=" + item.id,
                             label : item.title
                         });

@@ -20,7 +20,7 @@ class Controller_Admin_List extends Controller_Mp3table_List {
 
 	public function before($response = null) {
 		Config::load('cms_blog::admin/blog', true);
-		$this->config = \Config::getFromUser('cms_blog::admin/blog', array());
+		$this->mp3grid = \Config::getFromUser('cms_blog::admin/blog', array());
 
         parent::before($response);
 	}

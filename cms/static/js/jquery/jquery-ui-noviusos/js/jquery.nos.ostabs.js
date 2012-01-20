@@ -15,12 +15,13 @@ define([
 		$.widget( "nos.ostabs", {
 			options: {
 				initTabs: [], // e.g. [{"url":"http://www.google.com","iconUrl":"img/google-32.png","label":"Google","iconSize":32,"labelDisplay":false,"pined":true},{"url":"http://www.twitter.com","iconClasses":"ui-icon ui-icon-signal-diag","label":"Twitter","pined":true}]
-				newTab: 'appsTab', // e.g. {"url":"applications.htm","label":"Open a new tab","ajax":true} or "appsTab" or false
+				newTab: 'appsTab', // e.g. {"url":"applications.htm","label":"Open a new tab","iframe":true} or "appsTab" or false
 				trayTabs: [], // e.g. [{"url":"account.php","iconClasses":"ui-icon ui-icon-contact","label":"Account"},{"url":"customize.htm","iconClasses":"ui-icon ui-icon-gear","label":"Customization"}]
-				appsTab: {}, // e.g. {"panelId":"ospanel","url":"applications.htm","iconUrl":"os.png","label":"My OS","ajax":true} or false
+				appsTab: {}, // e.g. {"panelId":"ospanel","url":"applications.htm","iconUrl":"os.png","label":"My OS","iframe":true} or false
 				fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
 				labelMinWidth: 100,
 				labelMaxWidth: 200,
+                selected : null,
 
 				texts : {
 					scrollLeft : 'Scroll left',
@@ -231,7 +232,7 @@ define([
 							self.anchors = self.lis.map(function(i) {
 								var anchor = $( "a", this )[ 0 ];
 								self.element.find( self._sanitizeSelector( anchor.hash ) )
-									.find( 'iframe.nos-ostabs-panel-content' )
+									.find( '.nos-ostabs-panel-content' )
 									.data( 'nos-ostabs-index', i );
 								return anchor;
 							});
@@ -571,7 +572,7 @@ define([
 
 				var removable = li.not( '.nos-ostabs-tray' ).not( '.nos-ostabs-appstab' ).not( '.nos-ostabs-newtab' ).length;
 				var closable = li.not( '.nos-ostabs-appstab' ).length;
-				var reloadable = !a.data( "ajax.tabs" );
+				var reloadable = a.data( "iframe.tabs" );
 
 				if ( closable ) {
 					var close = $( '<a href="#"></a>' )
@@ -775,7 +776,7 @@ define([
 
 				tab = $.extend({
 					url: '',
-					ajax: false,
+					iframe: false,
 					label: '',
 					labelDisplay: true,
 					iconClasses: 'ui-icon ui-icon-document',
@@ -787,8 +788,8 @@ define([
 
 
                 var a = $( '<a href="' + tab.url + '"></a>' );
-                if (tab.ajax) {
-                    a.data( "ajax.tabs", true );
+                if (tab.iframe) {
+                    a.data( "iframe.tabs", true );
                 }
                 if (tab.panelId) {
                     a.data( "panelid.tabs", tab.panelId );
@@ -1014,12 +1015,12 @@ define([
 					o = this.options,
 					a = this.anchors.eq( index )[ 0 ],
 					url = $.data( a, "load.tabs" ),
-					ajax = $.data( a, "ajax.tabs" );
+					iframe = $.data( a, "iframe.tabs" );
 
 				this._abort();
 
 				// not remote or from cache
-				if ( (!url && !ajax) || this.element.queue( "tabs" ).length !== 0 && $.data( a, "cache.tabs" ) ) {
+				if ( (!url && iframe) || this.element.queue( "tabs" ).length !== 0 && $.data( a, "cache.tabs" ) ) {
 					this.element.dequeue( "tabs" );
 					return;
 				}
@@ -1050,11 +1051,12 @@ define([
 					});
 				}
 
-				if (ajax) {
+				if (!iframe) {
 					this.xhr = $.ajax({
 						url: url,
 						success: function( r ) {
 							$( '<div></div>' ).addClass( 'nos-ostabs-panel-content' )
+                                .data( 'nos-ostabs-index', index )
 								.prependTo( panel )
 								.html( r );
 
@@ -1109,8 +1111,15 @@ define([
 				return tabs;
 			},
 
-            getSelected: function() {
-                return this.options.selected;
+            current: function() {
+                var self = this,
+                    o = this.options;
+
+                return {
+                    tab: $(self.lis.get(o.selected)),
+                    panel: $(self.panels.get(o.selected)),
+                    index: o.selected
+                };
             }
 		});
 	})();

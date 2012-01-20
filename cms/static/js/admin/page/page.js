@@ -39,7 +39,8 @@ define([
                             .text(args.row.data.title)
                             .appendTo(args.$container)
                             .click(function(e) {
-                                $.nos.tabs.openInNewTab({
+                                $.nos.tabs.add({
+                                    iframe : true,
                                     url : this.href
                                 });
                                 e.preventDefault();

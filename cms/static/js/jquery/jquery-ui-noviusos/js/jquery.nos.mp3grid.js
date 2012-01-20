@@ -256,7 +256,8 @@ define([
 					}
 				})
 				.click(function() {
-					$.nos.tabs.openInNewTab({
+					$.nos.tabs.add({
+                        iframe : true,
 						url : first.url,
 						label : first.label
 					});
@@ -274,7 +275,8 @@ define([
 			$.each(o.adds, function() {
 				var li = $('<li></li>').appendTo(self.uiAddsMenu),
 					a = $('<a href="#"></a>').click(function() {
-							$.nos.tabs.openInNewTab({
+							$.nos.tabs.add({
+                                iframe : true,
 								url : this.url,
 								label : this.label
 							});
@@ -1034,7 +1036,7 @@ define([
 				o = self.options;
 
 			$nos.nos.listener.add('ostabs.show', function(index) {
-				if ($.nos.tabs.index() === index) {
+				if ($.nos.tabs.current() === index) {
 					$(window).focus();
 				} else {
 					$(window).blur();

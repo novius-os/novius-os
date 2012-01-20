@@ -544,6 +544,8 @@ define([
             var noviusos = $('#noviusos');
 
             $.extend($.nos, {
+                $noviusos : noviusos,
+
                 saveUserConfiguration: function(key, configuration) {
                     this.ajax.request({
                         url: '/admin/noviusos/noviusos/save_user_configuration',
@@ -557,7 +559,7 @@ define([
                 initialize: function(configuration) {
                     nosObject = this;
                     fct = function(e) {
-                        nosObject.tabs.saveTabs();
+                        nosObject.tabs.save();
                     };
                     $.extend(configuration, {
                         add: fct,
@@ -585,38 +587,22 @@ define([
                 },
 
                 tabs : {
-                    index : function() {
+                    current : function() {
                         if (window.parent != window && window.parent.$nos) {
                             return window.parent.$nos(window.frameElement).data('nos-ostabs-index');
                         }
+                        if (noviusos.length) {
+                            return noviusos.ostabs('current').index;
+                        }
                         return false;
                     },
-                    link : function(event, container, data) {
-                        var data = data || {},
-                            a = container.find( 'a' );
-
-                        if ( a.length && !data.sameTab) {
-                            a.click(function(e) {
-                                var a = this;
-                                $.nos.tabs.openInNewTab({
-                                    url : $(a).attr('href'),
-                                    label : $(a).text()
-                                });
-                                e.preventDefault();
-                            });
-                        }
-                        return true;
-                    },
-                    openInNewTab: function(tab) {
+                    add : function(tab, end) {
                         if (window.parent != window && window.parent.$nos) {
-                            this.add(tab, this.index() + 1);
-                        } else {
-                            window.open(tab.url);
+                            return window.parent.$nos.nos.tabs.add(tab, end);
                         }
-                    },
-                    add : function(tab, index) {
-                        if (window.parent != window && window.parent.$nos) {
-                            return window.parent.$nos.nos.tabs.add(tab, index);
+                        var index;
+                        if (!end) {
+                            index = this.current() + 1;
                         }
                         if (noviusos.length) {
                             index = noviusos.ostabs('add', tab, index);
@@ -627,9 +613,12 @@ define([
                         }
                         return false;
                     },
-                    updateTab : function(index, tab) {
+                    update : function(index, tab) {
                         if (window.parent != window && window.parent.$nos) {
-                            return window.parent.$nos.nos.tabs.updateTab(this.index(), index);
+                            return window.parent.$nos.nos.tabs.update(this.current(), index);
+                        }
+                        if (!$.isNumeric(index)) {
+                            index = this.current();
                         }
                         if (noviusos.length) {
                             noviusos.ostabs('update', index, tab);
@@ -638,7 +627,10 @@ define([
                     },
                     close : function(index) {
                         if (window.parent != window && window.parent.$nos) {
-                            return window.parent.$nos.nos.tabs.close(this.index());
+                            return window.parent.$nos.nos.tabs.close(this.current());
+                        }
+                        if (!$.isNumeric(index)) {
+                            index = this.current();
                         }
                         if (noviusos.length) {
                             noviusos.ostabs('remove', index);
@@ -647,12 +639,12 @@ define([
                     },
                     /** Save tabs in user configuration file
                      */
-                    saveTabs: function() {
+                    save: function() {
                         if (window.parent != window && window.parent.$nos) {
-                            return window.parent.$nos.nos.tabs.updateTab(this.index(), index);
+                            return window.parent.$nos.nos.tabs.save();
                         }
                         if (noviusos.length) {
-                            $nos.nos.saveUserConfiguration('tabs', {selected: noviusos.ostabs('getSelected'), tabs: noviusos.ostabs('tabs')});
+                            $nos.nos.saveUserConfiguration('tabs', {selected: noviusos.ostabs('option', 'selected'), tabs: noviusos.ostabs('tabs')});
                         }
                     }
                 }

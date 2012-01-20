@@ -50,7 +50,7 @@
 	<script type="text/javascript">
 	require(['jquery-nos'], function($) {
 		$(function() {
-			$.nos.tabs.updateTab({
+			$.nos.tabs.update({
 				label : 'Not implemented yet'
 			});
 		});

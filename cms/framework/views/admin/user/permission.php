@@ -12,7 +12,7 @@
 <script type="text/javascript">
 require(['domReady'], function (domReady) {
 	domReady(function () {
-		$nos.nos.tabs.updateTab({
+		$nos.nos.tabs.update({
 			label : '<?= !empty($user) ? $user->user_fullname : $group->group_name ?>',
 			iconUrl : 'static/cms/img/icons/tick.png'
 		});

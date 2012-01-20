@@ -29,7 +29,7 @@ body {
 	bottom : 0px;
 	border : 0px;
 
-	.ui-widget-header {
+	> .ui-widget-header {
 		background-position : 50% 75%;
 		border : 0;
 		height : 46px;
@@ -269,7 +269,7 @@ body {
 .nos-ostabs {
     background : none;
 
-	.ui-widget-header {
+	> .ui-widget-header {
 		position : relative;
 		z-index : 1;
 
