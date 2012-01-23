@@ -7,17 +7,15 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
  */
-
+    $id = uniqid('temp_');
 ?>
-<table id="<?= $widget_id ?>"></table>
+<table id="<?= $id ?>"></table>
 <script type="text/javascript">
 require([
-		'jquery-nos',
+		'jquery-nos'
 	], function( $, table, undefined ) {
 		$(function() {
-			var widget_id = "<?= $widget_id ?>",
-				inspector = $('#' + widget_id),
-				rendered = false,
+			var inspector = $('#<?= $id ?>').removeAttr('id'),
 				parent = inspector.parent()
 					.bind({
 						inspectorResize: function() {
@@ -26,6 +24,7 @@ require([
 							init();
 						}
 					}),
+                inspectorData = parent.data('inspector'),
 				rendered = false,
 				init = function() {
 					inspector.css({
@@ -40,14 +39,14 @@ require([
 							allowColSizing : false,
 							allowColMoving : false,
 							staticRowIndex : 0,
-							columns : <?= $columns ?>,
+							columns : inspectorData.grid.columns,
 							data: <?= $data ?>,
 							currentCellChanged: function (e) {
 								var row = $(e.target).nosgrid("currentCell").row(),
 									data = row ? row.data : false;
 
 								if (data && rendered) {
-									$nos.nos.listener.fire('inspector.selectionChanged' + widget_id, false, ["<?= $input_name ?>", data.id, data.title]);
+                                    inspectorData.selectionChanged(data.id, data.title);
 								}
 								inspector.nosgrid("currentCell", -1, -1);
 							},

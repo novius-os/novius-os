@@ -251,7 +251,6 @@ define([
 					.addClass('wijmo-wijgrid-innercell')
 					.text(meta.label || '');
 
-                log(self.data);
 				$('<td><div></div></td>').addClass('wijgridtd wijdata-type-string')
 					.appendTo(tr)
 					.find('div')

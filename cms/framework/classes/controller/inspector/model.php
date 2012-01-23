@@ -19,10 +19,7 @@ class Controller_Inspector_Model extends \Controller {
 
     protected $config = array(
         'model' => '',
-        'columns' => array(),
-    	'input_name'   => '',
         'limit' => 20,
-        'urljson' => '',
         'order_by' => null,
     );
 
@@ -34,13 +31,6 @@ class Controller_Inspector_Model extends \Controller {
 		}
 
         $view = View::forge('inspector/model');
-
-        $this->config = ConfigProcessor::process($this->config);
-
-        $view->set('columns', \Format::forge($this->config['columns'])->to_json(), false);
-        $view->set('input_name', $this->config['input_name']);
-        $view->set('urljson', $this->config['urljson']);
-        $view->set('widget_id', $this->config['widget_id']);
 
         return $view;
     }

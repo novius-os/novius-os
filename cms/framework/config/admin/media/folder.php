@@ -9,58 +9,8 @@
  */
 
 return array(
-	'widget_id' => 'inspector-folder',
-	'input_name'   => 'folder_id',
-	'urljson' => 'admin/admin/media/inspector/folder/json',
 	'query' => array(
 		'model' => 'Cms\Model_Media_Folder',
-	),
-	'columns' => array(
-		array(
-			'headerText' => 'Folder name',
-			'dataKey' => 'title',
-		),
-		array(
-			'headerText' => 'Add',
-			'cellFormatter' => 'function(args) {
-				if ($.isPlainObject(args.row.data)) {
-					args.$container.css("text-align", "center");
-
-					$("<a href=\"admin/admin/media/upload/form/" + args.row.data.id + "\"></a>")
-						.addClass("ui-state-default")
-						.append("<span class=\"ui-icon ui-icon-transferthick-e-w\"></span>")
-						.appendTo(args.$container)
-						.click(function(e) {
-							$.nos.dialog({
-								contentUrl: this.href,
-								title: "Upload a new file in the \"" + args.row.data.title + "\" folder",
-								width: 400,
-								height: 200,
-							});
-							e.preventDefault();
-						});
-
-					$("<a href=\"admin/admin/media/folder/form/" + args.row.data.id + "\"></a>")
-						.addClass("ui-state-default")
-						.append("<span class=\"ui-icon ui-icon-folder-collapsed\"></span>")
-						.appendTo(args.$container)
-						.click(function(e) {
-							$.nos.dialog({
-								contentUrl: this.href,
-								title: "Create a sub-folder in \"" + args.row.data.title + "\"",
-								width: 550,
-								height: 200,
-							});
-							e.preventDefault();
-						});
-
-					return true;
-				}
-			}',
-			'allowSizing' => false,
-			'width' => 1,
-			'showFilter' => false,
-		),
 	),
 	'dataset' => array(
 		'id' => 'medif_id',

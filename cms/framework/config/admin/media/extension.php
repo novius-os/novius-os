@@ -9,33 +9,6 @@
  */
 
 return array(
-	'widget_id' => 'inspector-extension',
-	'input_name'   => 'media_extension[]',
-	'columns' => array(
-		array(
-			'headerText' => 'Type of file',
-			'dataKey' => 'title',
-			'cellFormatter' => 'function(args) {
-				if ($.isPlainObject(args.row.data)) {
-					var text = "";
-					if (args.row.data.icon) {
-						text += "<img style=\"vertical-align:middle\" src=\"static/cms/img/16/" + args.row.data.icon + "\"> ";
-					}
-					text += args.row.data.title;
-
-					args.$container.html(text);
-
-					return true;
-				}
-			}',
-		),
-		array(
-			'visible' => false,
-		),
-		array(
-			'visible' => false,
-		),
-	),
 	'data' => array(
 		array(
 			'id' => 'image',

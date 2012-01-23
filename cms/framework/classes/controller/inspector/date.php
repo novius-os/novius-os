@@ -21,7 +21,6 @@ use Date;
 class Controller_Inspector_Date extends \Controller {
 
 	protected $config = array(
-		'input_name'            => '',
 		'input_begin'           => 'date_begin',
 		'input_end'             => 'date_end',
 		'label_custom'          => 'Custom dates',
@@ -159,11 +158,8 @@ class Controller_Inspector_Date extends \Controller {
 			}
 		}
 
-		$view->set('headers', 'Publish date');
 		$view->set('content', \Format::forge($content)->to_json(), false);
-		$view->set('input_name', $this->config['input_name']);
 		$view->set('label_custom', $this->config['label_custom_inputs']);
-		$view->set('widget_id', $this->config['widget_id']);
 
 		$view->set('date_begin', Request::forge('cms/ui/date/index/'.$this->config['input_begin'])->execute(), false);
 		$view->set('date_end', Request::forge('cms/ui/date/index/'.$this->config['input_end'])->execute(), false);

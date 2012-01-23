@@ -17,230 +17,214 @@ define([
         var undefined = arguments[100];
 
         $.nos = {
-            mp3GridSetup : function(params) {
-                var messages = {},
-                    self = {};
+            mp3GridSetup : function() {
+                var self = {};
 
-                objectToArray = function(val, i) {
-                    return val;
-                };
+                var objectToArray = function(val, i) {
+                        return val;
+                    },
 
-                $.extend(self, {
-                    proxyUrl : '',
-                    tab : null,
-                    adds : {},
-                    columns : {},
-                    inspectors : {},
-                    actions : {},
-                    thumbnails : null,
-                    defaultView : 'grid',
-                    preview : null,
-                    splittersVertical : null,
-                    splittersHorizontal : null,
+                    recursive = function(object) {
+                        $.each(object, function(key, val) {
+                            if ($.isPlainObject(val)) {
+                                if ($.isFunction(val._)) {
+                                    // Translate value
+                                    object[key] = val._();
+                                } else {
+                                    recursive(val);
+                                }
+                            } else if ($.isArray(val)) {
+                                recursive(val);
+                            }
 
-                    i18n : (function() {
-                        return {
-                            load : function(m) {
-                                $.extend(messages, m);
+                            // Build actions columns if any, and translate columns properties
+                            if (key === 'columns') {
+                                object[key] = $.map(val, objectToArray);
+
+                                for (var i = 0; i < object[key].length; i++) {
+                                    if (object[key][i].lang) {
+                                        object[key][i] = {
+                                            headerText : 'Languages',
+                                            dataKey   : 'lang',
+                                            showFilter : false,
+                                            cellFormatter : function(args) {
+                                                if (args.row.type & $.wijmo.wijgrid.rowType.data) {
+                                                    args.$container.css("text-align", "center").html(args.row.data.lang);
+                                                    return true;
+                                                }
+                                            },
+                                            width : 1
+                                        };
+                                    }
+                                    if (object[key][i].actions) {
+                                        var actions = object[key][i].actions;
+                                        // Make the drop-down actions columns
+                                        object[key][i] = {
+                                            headerText : '',
+                                            cellFormatter : function(args) {
+                                                if ($.isPlainObject(args.row.data)) {
+                                                    var dropDown = args.$container.parent()
+                                                        .addClass("buttontd ui-state-default")
+                                                        .hover(
+                                                        function() {
+                                                            dropDown.parent().addClass("ui-state-hover");
+                                                        },
+                                                        function() {
+                                                            dropDown.parent().removeClass("ui-state-hover");
+                                                        }
+                                                    )
+                                                        .find("div");
+
+                                                    $("<span></span>")
+                                                        .addClass("ui-icon ui-icon-triangle-1-s")
+                                                        .appendTo(dropDown);
+
+                                                    var ul = $("<ul></ul>").appendTo("body");
+
+                                                    $.each(actions, function() {
+                                                        var action = this;
+                                                        $("<li><a href=\"#\"></a></li>")
+                                                            .appendTo(ul)
+                                                            .find("a")
+                                                            .text(action.label)
+                                                            .click(function(e) {
+                                                                e.preventDefault();
+                                                                action.action(args);
+                                                            })
+                                                    });
+
+                                                    ul.wijmenu({
+                                                        trigger : dropDown,
+                                                        triggerEvent : "mouseenter",
+                                                        orientation : "vertical",
+                                                        showAnimation : {Animated:"slide", duration: 50, easing: null},
+                                                        hideAnimation : {Animated:"hide", duration: 0, easing: null},
+                                                        position : {
+                                                            my        : "right top",
+                                                            at        : "right bottom",
+                                                            collision : "flip",
+                                                            offset    : "0 0"
+                                                        }
+                                                    });
+                                                    return true;
+                                                }
+                                            },
+                                            allowSizing : false,
+                                            width : 20,
+                                            showFilter : false
+                                        };
+                                        // Make the default action columns
+                                        object[key].splice(i, 0, {
+                                            headerText : '',
+                                            cellFormatter : function(args) {
+                                                if ($.isPlainObject(args.row.data)) {
+                                                    args.$container.parent()
+                                                        .addClass("buttontd ui-state-default")
+                                                        .hover(
+                                                        function() {
+                                                            args.$container.parent().addClass("ui-state-hover");
+                                                        },
+                                                        function() {
+                                                            args.$container.parent().removeClass("ui-state-hover");
+                                                        }
+                                                    )
+                                                        .click(function(e) {
+                                                            e.preventDefault();
+                                                            fct = actions[0].action;
+                                                            fct(args);
+                                                        })
+                                                        .find("div")
+                                                        .text(actions[0].label);
+
+                                                    return true;
+                                                }
+                                            },
+                                            allowSizing : false,
+                                            width : actions[0].width ? actions[0].width : 60,
+                                            showFilter: false
+                                        });
+                                    }
+                                };
+                            }
+                        });
+                    },
+
+                    self = {
+                        tab : null,
+                        mp3grid : {
+                            adds : {},
+                            grid : {
+                                proxyUrl : '',
+                                columns : {}
                             },
-                            _ : function(msgId) {
-                                return messages[msgId] || msgId;
-                            }
-                        }
-                    })(),
-                    build : function() {
-                        // Clone columns
-                        var columns = $.extend({}, self.columns);
+                            thumbnails : null,
+                            defaultView : 'grid',
+                            inspectors : {},
+                            splittersVertical : null,
+                            splittersHorizontal : null
+                        },
 
-                        // Translate actions
-                        $.each(self.actions, function() {
-                            this.label = self.i18n._(this.label);
-                        });
-                        // Recover values in actions properties for actions columns / thumbnails / preview, if defined
-                        $.each([columns, self.thumbnails ? self.thumbnails : {}, self.preview ? self.preview.options : {}], function(o, container) {
-                            if (container.lang) {
-                                container.lang = {
-                                        headerText : 'Languages',
-                                        dataKey   : 'lang',
-                                        showFilter : false,
-                                        cellFormatter : function(args) {
-                                            if (args.row.type & $.wijmo.wijgrid.rowType.data) {
-                                                args.$container.css("text-align", "center").html(args.row.data.lang);
-                                                return true;
-                                            }
-                                        },
-                                        width : 1
-                                };
-                            }
-                            if (container.actions && $.isPlainObject(self.actions)) {
-                                var actions = [];
-                                if ($.isArray(container.actions)) {
-                                    $.each(container.actions, function(i, val) {
-                                        if ($.type(val) === 'string' && self.actions[val]) {
-                                            actions.push(self.actions[val]);
-                                        }
-                                    });
-                                } else if ($.isPlainObject(container.actions)) {
-                                    $.each(container.actions, function(key, param) {
-                                        if ($.isPlainObject(param) && self.actions[key]) {
-                                            actions.push($.extend({}, self.actions[key], param));
-                                        } else {
-                                            actions.push(self.actions[key]);
-                                        }
-                                    });
-                                } else {
-                                    actions = $.map(self.actions, objectToArray);
+                        i18nMessages : {},
+
+                        i18n : function(label) {
+                            var o = {};
+
+                            $.extend(o, {
+                                label : label,
+                                _ : function() {
+                                    return self.i18nMessages[o.label] || o.label;
                                 }
-                                if (container === columns) {
-                                    container.actions = {actions : actions};
-                                } else {
-                                    container.actions = actions;
-                                }
-                            }
-                        });
-
-                        var splitters = {};
-                        if (self.splittersVertical) {
-                            splitters.vertical = {splitterDistance : self.splittersVertical};
-                        }
-                        if (self.splittersHorizontal) {
-                            splitters.horizontal = {splitterDistance : self.splittersHorizontal};
-                        }
-
-                        // Build the Json for return
-                        var params = {
-                            tab : self.tab,
-                            mp3grid : {
-                                texts : messages,
-                                adds : $.map(self.adds, objectToArray),
-                                defaultView : self.defaultView,
-                                grid : {
-                                    proxyurl : self.proxyUrl,
-                                    columns : $.map(columns, objectToArray)
-                                },
-                                thumbnails : self.thumbnails,
-                                preview : self.preview,
-                                inspectors : $.map(self.inspectors, objectToArray),
-                                slidersChange : function(e, rapport) {
-                                    //$nos.saveUserConfiguration("'.$config['configuration_id'].'.ui.splitters", rapport)
-                                },
-                                splitters : splitters
-                            }
-                        };
-
-                        // Translate tab property
-                        if ($.isPlainObject(params.tab)) {
-                            params.tab.label = self.i18n._(params.tab.label);
-                        }
-                        // Translate adds properties
-                        $.each(params.mp3grid.adds, function() {
-                            this.label = self.i18n._(this.label);
-                        });
-                        // Build actions columns if any, and translate columns properties
-                        for (var i = 0; i < params.mp3grid.grid.columns.length; i++) {
-                            if (params.mp3grid.grid.columns[i].actions) {
-                                var actions = params.mp3grid.grid.columns[i].actions;
-                                // Make the drop-down actions columns
-                                params.mp3grid.grid.columns[i] = {
-                                    headerText : '',
-                                    cellFormatter : function(args) {
-                                        if ($.isPlainObject(args.row.data)) {
-                                            var dropDown = args.$container.parent()
-                                                .addClass("buttontd ui-state-default")
-                                                .hover(
-                                                function() {
-                                                    dropDown.parent().addClass("ui-state-hover");
-                                                },
-                                                function() {
-                                                    dropDown.parent().removeClass("ui-state-hover");
-                                                }
-                                            )
-                                                .find("div");
-
-                                            $("<span></span>")
-                                                .addClass("ui-icon ui-icon-triangle-1-s")
-                                                .appendTo(dropDown);
-
-                                            var ul = $("<ul></ul>").appendTo("body");
-
-                                            $.each(actions, function() {
-                                                var action = this;
-                                                $("<li><a href=\"#\"></a></li>")
-                                                    .appendTo(ul)
-                                                    .find("a")
-                                                    .text(action.label)
-                                                    .click(function(e) {
-                                                        e.preventDefault();
-                                                        action.action(args);
-                                                    })
-                                            });
-
-                                            ul.wijmenu({
-                                                trigger : dropDown,
-                                                triggerEvent : "mouseenter",
-                                                orientation : "vertical",
-                                                showAnimation : {Animated:"slide", duration: 50, easing: null},
-                                                hideAnimation : {Animated:"hide", duration: 0, easing: null},
-                                                position : {
-                                                    my        : "right top",
-                                                    at        : "right bottom",
-                                                    collision : "flip",
-                                                    offset    : "0 0"
-                                                }
-                                            });
-                                            return true;
-                                        }
-                                    },
-                                    allowSizing : false,
-                                    width : 20,
-                                    showFilter : false
-                                };
-                                // Make the default action columns
-                                params.mp3grid.grid.columns.splice(i, 0, {
-                                    headerText : '',
-                                    cellFormatter : function(args) {
-                                        if ($.isPlainObject(args.row.data)) {
-                                            args.$container.parent()
-                                                .addClass("buttontd ui-state-default")
-                                                .hover(
-                                                    function() {
-                                                        args.$container.parent().addClass("ui-state-hover");
-                                                    },
-                                                    function() {
-                                                        args.$container.parent().removeClass("ui-state-hover");
-                                                    }
-                                                )
-                                                .click(function(e) {
-                                                    e.preventDefault();
-                                                    fct = actions[0].action;
-                                                    fct(args);
-                                                })
-                                                .find("div")
-                                                .text(actions[0].label);
-
-                                            return true;
-                                        }
-                                    },
-                                    allowSizing : false,
-                                    width : actions[0].width ? actions[0].width : 60,
-                                    showFilter: false
-                                });
-                            }
-                            params.mp3grid.grid.columns[i].headerText = self.i18n._(params.mp3grid.grid.columns[i].headerText);
-                        };
-                        // Translate preview properties
-                        if ($.isPlainObject(params.mp3grid.preview) && params.mp3grid.preview.meta) {
-                            $.each(params.mp3grid.preview.meta, function() {
-                                this.label = self.i18n._(this.label);
                             });
+
+                            return o;
+                        },
+
+                        build : function() {
+                            // Clone object
+                            var params = $.extend(true, {
+                                mp3grid : {
+                                    texts : self.i18nMessages,
+                                    splitters : {},
+                                    slidersChange : function(e, rapport) {
+                                        //$nos.saveUserConfiguration("'.$config['configuration_id'].'.ui.splitters", rapport)
+                                    }
+                                }
+                            }, self);
+
+                            if (params.mp3grid.splittersVertical) {
+                                params.mp3grid.splitters.vertical = {splitterDistance : params.mp3grid.splittersVertical};
+                            }
+                            if (params.mp3grid.splittersHorizontal) {
+                                params.mp3grid.splitters.horizontal = {splitterDistance : params.mp3grid.splittersHorizontal};
+                            }
+                            params.mp3grid.adds = $.map(params.mp3grid.adds, objectToArray);
+                            params.mp3grid.inspectors = $.map(params.mp3grid.inspectors, objectToArray);
+
+                            // Translate clone object
+                            recursive(params);
+
+                            // Build properties for preview inspector
+                            for (var i = 0; i < params.mp3grid.inspectors.length; i++) {
+                                if (params.mp3grid.inspectors[i].preview) {
+                                    params.mp3grid.inspectors[i].url = function($li) {
+                                        var inspectorData = $li.data('inspector'),
+                                            widget = $('<div></div>')
+                                                .appendTo($li)
+                                                .inspectorPreview(inspectorData.options)
+                                                .parent()
+                                                .on({
+                                                    inspectorResize: function() {
+                                                        widget.inspectorPreview('refresh');
+                                                    }
+                                                })
+                                                .end();
+                                    };
+                                }
+                            }
+
+                            return params;
                         }
-                        // Translate inspectors properties
-                        $.each(params.mp3grid.inspectors, function() {
-                            this.label = self.i18n._(this.label);
-                        });
-                        return params;
-                    }
-                }, params || {});
+                    };
                 return self;
             },
 
@@ -587,9 +571,15 @@ define([
                 },
 
                 tabs : {
-                    current : function() {
+                    current : function(index) {
                         if (window.parent != window && window.parent.$nos) {
                             return window.parent.$nos(window.frameElement).data('nos-ostabs-index');
+                        }
+                        if ($.isNumeric(index)) {
+                            return index;
+                        }
+                        if ($.type(index) === 'object' && $.isFunction(index.parents)) {
+                            return index.parents('.nos-ostabs-panel-content').data('nos-ostabs-index');
                         }
                         if (noviusos.length) {
                             return noviusos.ostabs('current').index;
@@ -601,8 +591,8 @@ define([
                             return window.parent.$nos.nos.tabs.add(tab, end);
                         }
                         var index;
-                        if (!end) {
-                            index = this.current() + 1;
+                        if (end !== undefined && end !== true) {
+                            index = this.current(end) + 1;
                         }
                         if (noviusos.length) {
                             index = noviusos.ostabs('add', tab, index);
@@ -617,9 +607,7 @@ define([
                         if (window.parent != window && window.parent.$nos) {
                             return window.parent.$nos.nos.tabs.update(this.current(), index);
                         }
-                        if (!$.isNumeric(index)) {
-                            index = this.current();
-                        }
+                        index = this.current(index);
                         if (noviusos.length) {
                             noviusos.ostabs('update', index, tab);
                         }
@@ -629,9 +617,7 @@ define([
                         if (window.parent != window && window.parent.$nos) {
                             return window.parent.$nos.nos.tabs.close(this.current());
                         }
-                        if (!$.isNumeric(index)) {
-                            index = this.current();
-                        }
+                        index = this.current(index);
                         if (noviusos.length) {
                             noviusos.ostabs('remove', index);
                         }
