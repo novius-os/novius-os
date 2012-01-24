@@ -74,7 +74,7 @@ define([
 			self.uiSettings = $('<div></div>').addClass('nos-mp3grid-settings')
 				.appendTo(self.uiHeaderBar);
 			self.uiSettingsButton = $('<button type="button"></button>').appendTo(self.uiSettings);
-			self.uiSettingsMenu = $('<ul></ul>').appendTo(self.uiSettings);
+			//self.uiSettingsMenu = $('<ul></ul>').appendTo(self.uiSettings);
 
 			self.uiSplitterVertical = $('<div></div>').addClass('nos-mp3grid-splitter-v')
 				.appendTo(self.element);
@@ -310,12 +310,169 @@ define([
 				 label : o.texts.settings,
 				 icons : {primary : 'ui-icon-gear'}
 			});
-
+                        
+                        self.uiSettingsButton.click(function() {
+                            $el = self._uiSettingsMenuPopup();
+                            $window = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
+                            $el.wijtabs({
+                                alignment: 'left'
+                            });
+                            $el.after(
+                                $('<div></div>').css({
+                                    textAlign: 'right'
+                                }).append(
+                                    $('<button />').button({
+                                        label : 'Cancel',
+                                        icons : {primary : 'ui-icon-gear'}
+                                    }).click( function() {$window.wijdialog('close');} )
+                                ).append(
+                                    $('<button />').button({
+                                        label : 'Save',
+                                        icons : {primary : 'ui-icon-gear'}
+                                    }).click( function() {self._uiSettingsMenuPopupSave();$window.wijdialog('close');} )
+                                )
+                            );
+                        }
+                        );
+                        
+/*
 			self._inspectorsSettingsMenu()
 				._uiSettingsMenu();
-
+*/
 			return self;
 		},
+                
+                _uiSettingsMenuPopup : function() {
+                    var self = this,
+				o = self.options;
+                                
+                    $el = $('<div><ul></ul></div>');
+                    self._uiSettingsMenuPopupAddItem($el, "Main view", "toto");
+                    
+                    $layout = $('<form id="layout_settings"></div>');
+                    for (var i = 0; i < o.inspectors.length; i++) {
+                        visible = !o.inspectors[i].hide;
+                        $layout.append($('<h2></h2>').append(o.inspectors[i].label));
+                        $layout.append(
+                            $('<div></div>')
+                                .append($('<input type="checkbox" />')
+                                    .change(function() {
+                                        $when_displayed = $(this).siblings('span');
+                                        if ($(this).is(':checked')) {
+                                            $when_displayed.show()} else {$when_displayed.hide()}
+                                        }
+                                    )
+                                    .attr({
+                                        id: 'visibility_' + i,
+                                        name: 'visibility[' + i + ']',
+                                        checked: visible
+                                    })
+                                )
+                                .append($('<label></label>').append('Visible'))
+                                .append($('<span class="when_displayed"></span')
+                                    .css({display: visible ? '' : 'none'})
+                                    .append($('<input type="radio" value="h" />')
+                                        .attr({
+                                            id: 'orientation_h_' + i,
+                                            name: 'orientation[' + i + ']',
+                                            checked: !o.inspectors[i].vertical
+                                        })
+                                    )
+                                    .append($('<label></label>').append('Horizontal'))
+                                    .append($('<input type="radio" value="v" />')
+                                        .attr({
+                                            id: 'orientation_v_' + i,
+                                            name: 'orientation[' + i + ']',
+                                            checked: o.inspectors[i].vertical
+                                        })
+                                    )
+                                    .append($('<label></label>').append('Verical'))
+                                )
+                            );
+                    }
+                    
+                    
+                    self._uiSettingsMenuPopupAddItem($el, "Layout", $layout);
+                    
+                    
+                    
+                    //<ul style="width: 10%"><li><a href="#password">Main view</a></li></ul><div id="password" style="width: 85%;">password</div>
+                    
+                    
+                    //$el.find('> div').hide();
+                    
+                                
+                    return $el;
+                },
+                
+                _uiSettingsMenuPopupSave : function() {
+                    var self = this,
+				o = self.options;
+                    layoutSettings = $('#layout_settings');
+                    for (var i = 0; i < o.inspectors.length; i++) {
+                        visibility = layoutSettings.find('#visibility_' + i).is(':checked');
+                        console.log('VISIBILITY: ' + visibility);
+                        orientation = layoutSettings.find('#orientation_h_' + i).is(':checked') ? 'h' : 'v';
+                        self._uiChangeInspector(o.inspectors[i], visibility ? orientation : false);
+                        o = self.options;
+                    }
+                    self.uiGrid.nosgrid('doRefresh');
+                },
+                
+                _uiChangeInspector: function(inspector, orientation) {
+                    var widget_id = inspector.widget_id;
+                    var self = this,
+				o = self.options;
+                    widget = $('#' + widget_id);
+                    console.log(widget_id);
+                    console.log(widget);
+                    
+
+                    if (!orientation) {
+                            inspector.hide = true;
+                            if (widget.length) {
+                                    var menu = self.menuSettings[inspector.widget_id];
+                                    if ($.isPlainObject(menu) && $.isPlainObject(menu.childs) && $.isPlainObject(menu.childs.visibility)) {
+                                            menu.childs = menu.childs.visibility.childs;
+                                            self._refreshSettingsMenu();
+                                    }
+                                    widget.closest('li.ui-widget-content')
+                                            .remove();
+                                    self._resizeInspectorsV()
+                                            ._resizeInspectorsH();
+                            }
+                    } else {
+                            inspector.hide = false;
+                            var target = orientation === 'v' ? self.uiInspectorsVertical : self.uiInspectorsHorizontal;
+                            inspector.vertical = orientation === 'v';
+                            if ( widget.length ) {
+                                    if ( !target.has(widget).length ) {
+                                            widget.closest('li.ui-widget-content')
+                                                    .find("script")
+                                                    .remove()
+                                                    .end()
+                                                    .css({width: '100%', height: 'auto'})
+                                                    .appendTo(target);
+                                            self._resizeInspectorsV()
+                                                    ._resizeInspectorsH();
+                                    }
+                            } else {
+                                    var $li = $('<li></li>').addClass('ui-widget-content')
+                                            .appendTo(target);
+                                    $li.data('inspectorurl', inspector.url);
+                                            
+                                    self['_resizeInspectors' + orientation.toUpperCase()]()
+                                            ._loadInspector($li);
+                            }
+                    }
+                },
+                
+                _uiSettingsMenuPopupAddItem : function(element, itemName, content) {
+                    if ( typeof this.idMenu == 'undefined' ) this.idMenu = 0;
+                    element.find('ul').append('<li><a href="#settings_menu_popup_item_' + this.idMenu + '">' + itemName + '</a></li>');
+                    element.append($('<div id="settings_menu_popup_item_' + this.idMenu + '"></div>').append(content));
+                    this.idMenu++;
+                },
 
 		_uiSettingsMenu : function() {
 			var self = this;
@@ -325,7 +482,7 @@ define([
 					self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
 				}
 			});
-
+/*
 			self.uiSettingsMenu.wijmenu({
 					trigger : self.uiSettingsButton,
 					triggerEvent : 'mouseenter',
@@ -333,7 +490,7 @@ define([
 					showAnimation : {Animated:"slide", duration: 50, easing: null},
 					hideAnimation : {Animated:"hide", duration: 0, easing: null}
 				});
-
+*/
 			return self;
 		},
 
@@ -706,6 +863,7 @@ define([
 					dataType: 'html'
 				})
 				.done(function(data) {
+                                        $toto = $li;
 					$(data).appendTo($li); // appendTo for embed javascript work
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
@@ -1242,11 +1400,11 @@ define([
 
 		_refreshSettingsMenu : function() {
 			var self = this;
-
+/*
 			self.uiSettingsMenu.wijmenu('destroy')
 				.empty();
 			self._uiSettingsMenu();
-
+*/
 			return self;
 		},
 

@@ -351,6 +351,10 @@ define([
                 }, wijdialog_options);
 
                 var $dialog = $(document.createElement('div')).appendTo($('body'));
+                
+                if (typeof wijdialog_options['content'] != 'undefined') {
+                    $dialog.append(wijdialog_options.content);
+                }
 
                 require([
                     'link!static/cms/js/jquery/wijmo/css/jquery.wijmo-open.1.5.0.css',
