@@ -33,20 +33,40 @@ return array (
         'user_password' => array (
             'label' => 'Password',
             'edit' => false,
-            'widget' => 'password',
+			'form' => array(
+				'type' => 'password',
+			),
             'validation' => array(
                 'required',
                 'min_length' => array(6),
+            ),
+        ),
+        'password_confirmation' => array (
+            'label' => 'Password (confirmation)',
+            'edit' => false,
+			'form' => array(
+				'type' => 'password',
+			),
+            'validation' => array(
+                'required', // To show the little star
+                'match_field' => array('user_password'),
             ),
         ),
         'user_last_connection' => array (
             'label' => 'Last login',
             'add' => false,
             'widget' => 'date_select',
-            'attributes' => array(
-                'readonly' => false,
-                'date_format' => 'eu_full',
-            ),
+			'form' => array(
+				'readonly' => true,
+				'date_format' => 'eu_full',
+			),
         ),
+		'save' => array(
+			'label' => '',
+			'form' => array(
+				'type' => 'submit',
+				'value' => 'Save',
+			),
+		),
     ),
 );

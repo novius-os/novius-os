@@ -14,7 +14,7 @@ define([
 		'static/cms/js/jquery/wijmo/js/jquery.wijmo-open.1.5.0.min',
 		'static/cms/js/jquery/wijmo/js/jquery.wijmo-complete.1.5.0.min'
 	], function($) {
-        var undefined = arguments[100];
+        var undefined = (function(undefined) { return undefined; })();
 
         $.nos = {
             mp3GridSetup : function(params) {
@@ -343,21 +343,36 @@ define([
                     modal: true,
                     captionButtons: {
                         pin: {visible: false},
-                        refresh: {visible: wijdialog_options.contentUrl != null},
+                        refresh: {visible: wijdialog_options.contentUrl != null && wijdialog_options.ajax != true},
                         toggle: {visible: false},
                         minimize: {visible: false},
                         maximize: {visible: false}
                     }
                 }, wijdialog_options);
 
-                var $dialog = $(document.createElement('div')).appendTo($('body'));
+				log($.nos.$noviusos);
+				var where   = $.nos.$noviusos.ostabs ? $.nos.$noviusos.ostabs('current').panel : $('body');
+				var $dialog = $(document.createElement('div')).appendTo(where);
+
+				$.nos.data('dialog_media', $dialog);
 
                 require([
                     'link!static/cms/js/jquery/wijmo/css/jquery.wijmo-open.1.5.0.css',
                     //'static/cms/js/jquery/wijmo/js/jquery.wijmo.wijutil',
                     'static/cms/js/jquery/wijmo/js/jquery.wijmo.wijdialog'
                 ], function() {
-                    $dialog.wijdialog(wijdialog_options);
+					if (wijdialog_options.ajax) {
+						$dialog.load(wijdialog_options.contentUrl, {}, function(responseText, textStatus, XMLHttpRequest){
+							delete wijdialog_options.contentUrl;
+							$dialog.wijdialog(wijdialog_options);
+						});
+					} else {
+						$dialog.wijdialog(wijdialog_options);
+					}
+					$dialog.bind('wijdialogclose', function(event, ui) {
+						log('Fermeture et destroyage');
+						$dialog.closest('.ui-dialog').hide().appendTo(where);
+					});
                 });
 
                 return $dialog;
@@ -454,10 +469,15 @@ define([
                         $.nos.tabs.close();
                     }
                 },
-                error: function(e) {
-                    if (e.status != 0) {
+                error: function(x, e) {
+					// http://www.maheshchari.com/jquery-ajax-error-handling/
+                    if (x.status != 0) {
                         $.nos.notify('Connection error!', 'error');
-                    }
+                    } else if (e == 'parsererror') {
+						$.nos.notify('Request seemed a success, but we could not read the answer.');
+					} else if (e == 'timeout') {
+						$.nos.notify('Time out (server is busy?). Please try again.');
+					}
                 }
             },
 
@@ -495,32 +515,37 @@ define([
                     'image' : '/admin/admin/media/mode/image/index'
                 };
 
+				var dialog = null;
+
+				// The popup will trigger this event when done
+				$.nos.listener.add('media.pick', true, function(item) {
+
+					// Close the popup (if we have one)
+					dialog && dialog.wijdialog('close');
+
+					input.inputFileThumb({
+						file: item.thumbnail
+					});
+					input.val(item.id);
+
+					// And self-remove from the listener
+					$.nos.listener.remove('media.pick', true, arguments.callee);
+				});
+
                 options = $.extend({
                     title: input.attr('title') || 'File',
                     choose: function(e) {
 
-                        var dialog = null;
-
-                        // The popup will trigger this event when done
-                        $.nos.listener.add('media.pick', true, function(item) {
-
-                            // Close the popup (if we have one)
-                            dialog && dialog.wijdialog('close');
-
-                            input.inputFileThumb({
-                                file: item.thumbnail
-                            });
-                            input.val(item.id);
-
-                            // And self-remove from the listener
-                            $.nos.listener.remove('media.pick', true, arguments.callee);
-                        });
-
                         // Open the dialog to choose the file
-                        dialog = $.nos.dialog({
-                            contentUrl: contentUrls[options.mode],
-                            title: 'Choose a media file'
-                        });
+						if (dialog == null) {
+							dialog = $.nos.dialog({
+								contentUrl: contentUrls[options.mode],
+								ajax: true,
+								title: 'Choose a media file'
+							});
+						} else {
+							dialog.wijdialog('open');
+						}
                     }
                 }, options);
 
@@ -536,7 +561,22 @@ define([
                         input.inputFileThumb(options);
                     });
                 });
-            }
+            },
+			ui : {
+				form : function(context) {
+					$(function() {
+						context = $(context) || null;
+						$(":input[type='text'],:input[type='password'],textarea", context).wijtextbox();
+						$(":input[type='submit'],button", context).button();
+						$("select", context).wijdropdown();
+						$(":input[type=checkbox]", context).wijcheckbox();
+						$('.expander', context).wijexpander({expanded: true });
+						$('.accordion', context).wijaccordion({
+							header: "h3"
+						});
+					});
+				}
+			}
         };
         window.$nos = $;
 

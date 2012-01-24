@@ -24,7 +24,7 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
         \Asset::add_path('static/cms/');
         \Asset::css('base.css', array(), 'css');
         \Asset::css('laGrid.css', array(), 'css');
-        \Asset::css('mystyle.css', array(), 'css');
+        \Asset::css('form.css', array(), 'css');
 
         return parent::after($response);
     }

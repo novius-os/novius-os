@@ -21,12 +21,7 @@ require([
         mp3Grid.i18n.load(<?= $i18n ?>);
         var params = mp3Grid.build();
 		$(function() {
-            var current = $.nos.$noviusos.ostabs('current');
-
-            if ($.isPlainObject(params.tab)) {
-                $.nos.$noviusos.ostabs('update', current.index, params.tab);
-            }
-            $('<div></div>').appendTo(current.panel.find('.nos-ostabs-panel-content'))
+            $('<div></div>').appendTo($.nos.data('dialog_media'))
                 .mp3grid(params.mp3grid);
 		});
 	});

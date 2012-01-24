@@ -133,7 +133,8 @@ class Fieldset extends \Fuel\Core\Fieldset {
             $values = \Input::post();
             foreach ($this->fields as $f)
 			{
-				if (substr(strtolower(\Inflector::denamespace(get_class($f))), 0, 6) == 'widget') {
+				$class = strtolower(\Inflector::denamespace(get_class($f)));
+				if (substr($class, 0, 6) == 'widget') {
 					$values[$f->name] = $f->get_value();
 				}
             }
@@ -357,13 +358,6 @@ JS
 		if (\Input::method() == 'POST' && (empty($options['form_name']) || \Input::post('form_name') == $options['form_name'])) {
 			$fieldset->repopulate();
 			if ($fieldset->validation()->run($fieldset->value())) {
-				$data = array();
-				//foreach ($fieldset->field() as $f) {
-				//	if (strtolower(\Inflector::denamespace(get_class($f))) == 'widget_empty' || $f->type == 'submit') {
-				//		continue;
-				//	}
-				//	$data[$f->get_name()] = $f->get_value();
-				//}
 				$data = $fieldset->validated();
 				if (!empty($options['complete']) && is_callable($options['complete'])) {
 					call_user_func($options['complete'], $data);
@@ -371,13 +365,11 @@ JS
                     self::defaultComplete($data, $model, $config, $options);
                 }
 			} else {
-				$response = \Response::forge(\Format::forge()->to_json(array(
+				 \Response::json(array(
 					'error' => (string) current($fieldset->error()),
-				)), 200, array(
-					'Content-Type' => 'application/json',
+					'_error' => $fieldset->error(),
+					'config' => $config,
 				));
-				$response->send(true);
-				exit();
 			}
 		}
 		return $fieldset;
@@ -385,47 +377,77 @@ JS
 
     public static function defaultComplete ($data, $object, $fields, $options) {
 
-        //try {
+		if (!is_object($object)) {
+			return;
+		}
 
-		foreach ($data as $name => $value)
+		if (empty($options['error'])) {
+			$options['error'] = function(\Exception $e, $object, $data) {
+				return array(
+					'error' => \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.',
+				);
+			};
+		}
+
+		foreach ($fields as $name => $config)
 		{
-			if ((!isset($fields[$name]['editable']) || $fields[$name]['editable']) && is_object($object))
-			{
-				$object->$name = $value;
+			$type = \Arr::get($config, 'form.type', null);
+
+			if (!empty($config['widget']) && in_array($config['widget'], array('widget_text', 'widget_empty'))) {
+				continue;
+			}
+
+			switch($type) {
+				case 'checkbox' :
+					if (empty($data[$name])) {
+						$object->$name = null;
+					}
+					break;
+
+				// Skip submit fields
+				case 'submit' :
+					continue 2;
+					break;
+
+				default :
+					if (isset($data[$name])) {
+						try {
+							$object->$name = $data[$name];
+						} catch (\Exception $e) {
+							$body = array(
+								'error' => $e->getMessage(),
+							);
+						}
+					}
 			}
 		}
 
-		// Checkbox aren't sent by browsers, we need to set this manually
-		foreach ($fields as $name => $f)
+		if (!empty($options['before_save']) && is_callable($options['before_save']))
 		{
-			if ((!isset($fields[$name]['editable']) || $fields[$name]['editable']) &&
-			    empty($data[$name]) && \Arr::get($f, 'form.type', null) == 'checkbox' && is_object($object))
-			{
-				$object->$name = null;
-			}
-		}
-
-		if (!empty($options['save']) && is_callable($options['save']))
-		{
-			call_user_func($options['save'], $data);
+			call_user_func($options['before_save'], $object, $data);
 		}
 
 		// Will trigger cascade_save for media and wysiwyg
-        if (is_object($object)) {
-		    $object->save();
-        }
+		try {
+			$object->save();
 
-		$body = array(
-			'notify' => 'Edition successful.',
-			'listener_fire' => array('cms_page.refresh' => true),
-		);
-            /*
-        } catch (\Exception $e) {
-            $body = array(
-                'error' => \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.',
-            );
-        }
-            */
+			if (!empty($options['success']) && is_callable($options['success']))
+			{
+				$body = call_user_func($options['success'], $object, $data);
+			} else {
+				$body = array(
+					'notify' => 'Operation completed successfully.',
+				);
+			}
+		} catch (Exception $e) {
+			if (empty($options['error']) && is_callable($options['error'])) {
+				$body = call_user_func($options['error'], $e, $object, $data);
+			} else {
+				$body = array(
+					'error' => $e->getMessage(),
+				);
+			}
+		}
 
 		$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
 			'Content-Type' => 'application/json',

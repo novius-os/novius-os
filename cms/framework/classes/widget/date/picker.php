@@ -30,8 +30,8 @@ class Widget_Date_Picker extends \Fieldset_Field {
 
     public function __construct($name, $label = '', array $attributes = array(), array $rules = array(), \Fuel\Core\Fieldset $fieldset) {
 
-        $attributes['type']   = 'text';
-		$attributes['class'] .= ' datepicker';
+        $attributes['type']  = 'text';
+		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').' datepicker';
 
 		if (empty($attributes['id'])) {
 			$attributes['id'] = uniqid();

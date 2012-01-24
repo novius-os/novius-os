@@ -12,40 +12,22 @@ namespace Cms;
 
 use Fuel\Core\Config;
 
-class Controller_Admin_Media_Mode_Image extends Controller_Mp3table_List {
+class Controller_Admin_Media_Mode_Image extends Controller_Admin_Media_List {
 
-	public function before() {
-		Config::load('cms::admin/media/media', true);
-		$this->config = Config::get('cms::admin/media/media', array());
-        $this->config['urljson'] = 'static/cms/js/admin/media/media_image.js';
-
-        /*
-		// Add the "Choose" action button
-		if (isset($this->config['ui']['actions'])) {
-			array_unshift($this->config['ui']['actions'], array(
-				'label' => 'Choose',
-				'action'   =>  'function(item) {
-					console.log(this);
-					console.log(item);
-					$.nos.listener.fire("media.pick", true, [item]);
-				}')
-			);
+	public function action_index()
+	{
+		if (!\Cms\Auth::check()) {
+			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
+			exit();
 		}
+		
+		$this->mp3grid['urljson'] = 'static/cms/js/admin/media/media_image.js';
 
+		$view = \View::forge('admin/media/mp3table/widget');
 
-		// Remove the choices for the extension
-		foreach ($this->config['ui']['inspectors'] as $id => $inspector) {
-			if ($inspector['widget_id'] == 'inspector-extension') {
-				unset($this->config['ui']['inspectors'][$id]);
-			}
-		}
-        */
+        $view->set('urljson', $this->mp3grid['urljson'], false);
+		$view->set('i18n', \Format::forge($this->mp3grid['i18n'])->to_json(), false);
 
-		// Force only images to be displayed
-		$this->config['ui']['values'] = array(
-			'media_extension' => array('image'),
-		);
-
-		parent::before();
+		return $view;
 	}
 }

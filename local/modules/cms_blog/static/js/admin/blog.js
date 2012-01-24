@@ -60,12 +60,13 @@ define([
                 action : function(args) {
                     $.nos.tabs.add({
                         url     : "admin/cms_blog/form/edit/" + args.row.data.id,
-                        label   : "Update"
+                        label   : "Update",
+						iframe  : true
                     });
                 },
                 label : 'Update'
             },
-            delete : {
+            'delete' : {
                 action : function(args) {
                     $.nos.ajax.request({
                         url: "admin/cms_blog/list/delete/" + args.row.data.id,

@@ -11,10 +11,6 @@ define([
     'jquery-nos'
 ], function($) {
     mp3Grid = $.nos.mp3GridSetup({
-        tab : {
-            label : 'Media center',
-            iconUrl : 'static/cms/img/32/media.png'
-        },
         proxyUrl : 'admin/admin/media/list/json',
         adds : {
             media : {

@@ -8,6 +8,22 @@
  * @link http://www.novius-os.org
  */
 ?>
+
+<!--
+<?php echo $type; ?> [ <?php echo $severity; ?> ]: <?php echo $message; ?>
+<?php echo $filepath; ?> @ line <?php echo $error_line; ?>
+
+
+<?php
+	foreach($backtrace as $trace) {
+		$debug_lines = \Debug::file_lines($trace['file'], $trace['line'], false, 0);
+		$line = reset($debug_lines);
+		$line = trim($line, "\n\r\t ");
+		printf("%30s @ line %s\n  %s\n", $trace['file'], $trace['line'], $line);
+	}
+?>
+-->
+<?php if (!$ajax = Input::is_ajax()) { ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,6 +90,7 @@
 	</script>
 </head>
 <body>
+<?php } ?>
 	<div id="wrapper">
 		<h1>Oops, I'm hurt</h1>
 		<a href="#" onclick="javascript:fuel_toggle('error');return false;" style="float:left;text-align: center;"><img src="static/cms/img/wip.png"/><br /><span style="position:relative;top:-2em;">Click me if you're not afraid</span></a>
@@ -149,5 +166,7 @@
 		</p>
 	</div>
 	</div>
+<?php if (!$ajax) { ?>
 </body>
 </html>
+<?php } ?>

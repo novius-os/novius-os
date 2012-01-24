@@ -70,7 +70,6 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 					'iconSize' => 24,
 				),
 				array(
-                    'iframe' => true,
 					'url' => 'admin/tray/account',
 					'iconClasses' => 'nos-icon24 nos-icon24-account',
 					'label' => 'Account',

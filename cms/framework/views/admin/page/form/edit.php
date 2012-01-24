@@ -20,34 +20,7 @@ require(['jquery-nos'], function ($) {
 });
 </script>
 
-
-<style type="text/css">
-.wijmo-checkbox {
-	display: inline-block;
-	width: inherit;
-	vertical-align: middle;
-}
-.wijmo-checkbox label {
-	width: inherit;
-}
-.ui-helper-clearfix:after {
-	content: '';
-}
-.mceExternalToolbar {
-	z-index:100;
-}
-
-.wijmo-wijaccordion p {
-	margin: 0.5em 0;
-}
-
-/* ? */
-.ui-accordion-content-active {
-	overflow: visible !important;
-}
-</style>
-
-<div class="page myPage myBody">
+<div id="<?= $uniqid = ltrim(uniqid(), '123456789') ?>" class="page myPage myBody">
 <?php
 $fieldset->form()->set_config('field_template',  "\t\t<tr><th class=\"{error_class}\">{label}{required}</th><td class=\"{error_class}\">{field} {error_msg}</td></tr>\n");
 
@@ -63,6 +36,8 @@ $fieldset->field('page_verrou')->set_template('{label} {field}');
 
 <?= $fieldset->open('admin/admin/page/form/edit/'.$page->page_id); ?>
 <?= View::forge('form/layout_standard', array(
+	'css_id' => $uniqid,
+
 	'fieldset' => $fieldset,
 	'medias' => array(),
 	'title' => 'page_titre',

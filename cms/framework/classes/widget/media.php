@@ -19,7 +19,7 @@ class Widget_Media extends \Fieldset_Field {
     public function __construct($name, $label = '', array $attributes = array(), array $rules = array(), \Fuel\Core\Fieldset $fieldset = null) {
 
 		//$attributes['type']   = 'hidden';
-		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').'media';
+		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').' media';
 
 		if (empty($attributes['id'])) {
 			$attributes['id'] = uniqid();
@@ -53,7 +53,7 @@ class Widget_Media extends \Fieldset_Field {
 <script type="text/javascript">
 require(['jquery-nos'], function ($) {
 	$(function() {
-		$(':hidden#$id').each(function() {
+		$(':input#$id').each(function() {
 			$.nos.media($(this), $(this).data('media-options'));
 		});
 	});
