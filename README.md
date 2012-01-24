@@ -1,16 +1,8 @@
 # Novius OS
 
-* [French website](http://www.novius-os.org/)
-
-## Description
-
-Novius OS, CMS open-source nouvelle génération, transforme votre back-office en OS web
-
 With Novius OS, a next-generation CMS, turn your back-office into a web OS
 
+Licensed under [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html) or (at your option) any later version
 
-## Installation
-
-We use submodules, so be sure to fetch them properly. The --recursive option does everything you need.
-
-git clone --recursive git://github.com/novius-os/novius-os.git
+* [Website](http://www.novius-os.org/) (only in French at the moment)
+* [Installation and documentation](https://github.com/novius-os/novius-os/wiki)
