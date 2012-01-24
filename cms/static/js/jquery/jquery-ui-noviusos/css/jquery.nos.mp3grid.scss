@@ -39,8 +39,7 @@
 	.nos-mp3grid-splitter-v {
 		@include box-sizing(border-box);
 		position : absolute;
-		padding-top: 40px;
-        top : 0;
+                top : 40px;
 		left : 0;
 		right : 0;
 		bottom : 0;
@@ -284,6 +283,90 @@
             cursor: pointer;
             .ui-icon-triangle-1-s {
                 margin: auto;
+            }
+        }
+    }
+}
+
+#layout_settings {
+    .layout {
+        float: left;
+        width: 300px;
+        height: 200px;
+        border: 1px solid #BBB;
+
+        .layout-inspector {
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+
+            > div {
+                position: absolute;
+                top: 50%;
+                left: 0%;
+                width: 100%;
+                text-align: center;
+                height: 24px;
+                line-height: 24px;
+                margin-top: -12px;
+            }
+
+            &.last {
+                border: 0 !important;
+            }
+/*
+            &.moving {
+                border: 1px solid #EEE !important;
+                width: 100px !important;
+                height: 50px !important;
+            }
+*/
+        }
+
+        .droping {
+            background-color: #DDD;
+            display: inline-block;
+
+            > div {
+                display: none;
+            }
+        }
+
+        .left-panel {
+            position: relative;
+            width: 99px;
+            height: 100%;
+            border-right: 1px solid #DDD;
+            float: left;
+
+            .layout-inspector {
+                border-bottom: 1px solid #EEE;
+                width: 100%;
+            }
+        }
+
+        .top-panel {
+            position: relative;
+            width: 200px;
+            height: 79px;
+            border-bottom: 1px solid #DDD;
+            
+            .layout-inspector {
+                border-right: 1px solid #EEE;
+                height: 100%;
+            }
+        }
+
+        .right-side {
+            float: left;
+            width: 200px;
+            height: 100%;
+
+            .content {
+                width: 200px;
+                height: 120px;
+                background-color: #EEE;
             }
         }
     }

@@ -271,12 +271,12 @@ define([
                                     $('<button />').button({
                                         label : 'Cancel',
                                         icons : {primary : 'ui-icon-gear'}
-                                    }).click( function() {$window.wijdialog('close');} )
+                                    }).click( function() {$window.wijdialog('close');$window.remove();} )
                                 ).append(
                                     $('<button />').button({
                                         label : 'Save',
                                         icons : {primary : 'ui-icon-gear'}
-                                    }).click( function() {self._uiSettingsMenuPopupSave();$window.wijdialog('close');} )
+                                    }).click( function() {self._uiSettingsMenuPopupSave();$window.wijdialog('close');$window.remove();} )
                                 )
                             );
                         }
@@ -296,7 +296,76 @@ define([
                     $el = $('<div><ul></ul></div>');
                     self._uiSettingsMenuPopupAddItem($el, "Main view", "toto");
                     
-                    $layout = $('<form id="layout_settings"></div>');
+                    $layout = $('<form id="layout_settings"></form>');
+                    
+                    $layout.append(
+                        $('<div class="layout"></div>')
+                            .append(
+                                $('<ul class="left-panel panels"></ul>')
+                            )
+                            .append(
+                                $('<div class="right-side"></div>')
+                                .append(
+                                    $('<ul class="top-panel panels"></ul>')
+                                )
+                                .append(
+                                    $('<div class="content"></div>')
+                                )
+                            )
+                    );
+                    self._uiSettingsMenuPopupAddItem($el, "Layout", $layout);    
+                    
+                    $leftPanel = $layout.find('.left-panel');
+                    $topPanel = $layout.find('.top-panel');
+                    
+                    $layout.find('.panels').sortable({
+                            connectWith: ".panels",
+                            update: function() {
+                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                            },
+                            change: function() {
+                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                            },
+                            start: function(event, ui) {
+                                $(ui.item).addClass('moving');
+                            },
+                            stop: function(event, ui) {
+                                $(ui.item).removeClass('moving');
+                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                            },
+                            placeholder: "droping"
+                    });
+                    
+                        
+                    for (var i = 0; i < o.inspectors.length; i++) {
+                        visible = !o.inspectors[i].hide;
+                        vertical = o.inspectors[i].vertical;
+                        if (visible) {
+                            if (vertical) {
+                                $leftPanel.append(
+                                    $('<li class="layout-inspector"></li>')
+                                        .append(
+                                            $('<div></div>')
+                                                .append(o.inspectors[i].label)
+                                        )
+                                );
+                            } else {
+                                $topPanel.append(
+                                    $('<li class="layout-inspector"></li>')
+                                        .append(
+                                            $('<div></div>')
+                                                .append(o.inspectors[i].label)
+                                        )
+                                );
+                            }
+                        }
+                    }
+                    
+                    self._uiSettingsMenuPopupRefreshLayout($layout);
+                    
+                    
+                    
+                    /*
                     for (var i = 0; i < o.inspectors.length; i++) {
                         visible = !o.inspectors[i].hide;
                         $layout.append($('<h2></h2>').append(o.inspectors[i].label));
@@ -337,9 +406,10 @@ define([
                                 )
                             );
                     }
+                    */
                     
                     
-                    self._uiSettingsMenuPopupAddItem($el, "Layout", $layout);
+                    
                     
                     
                     
@@ -352,20 +422,45 @@ define([
                     return $el;
                 },
                 
+                _uiSettingsMenuPopupRefreshLayout : function($layout) {
+                    $leftPanel = $layout.find('.left-panel');
+                    $topPanel = $layout.find('.top-panel');
+                    
+                    $leftLis = $leftPanel.find('li').not('.moving');
+                    $leftLis.css({
+                        height: (200 - $leftLis.length) / $leftLis.length,
+                        width: "inherit"
+                    });
+                    $leftLis.removeClass('last');
+                    $($leftLis[$leftLis.length - 1]).addClass('last');
+                    
+                    
+                    $topLis = $topPanel.find('li').not('.moving');
+                    
+                    $topLis.css({
+                        width: (200 - $topLis.length) / $topLis.length,
+                        height: "inherit"
+                    });
+                    $topLis.removeClass('last');
+                    $($topLis[$topLis.length - 1]).addClass('last');
+                },
+                
                 _uiSettingsMenuPopupSave : function() {
                     var self = this,
 				o = self.options;
                     layoutSettings = $('#layout_settings');
-                    for (var i = 0; i < o.inspectors.length; i++) {
+                    for (var i = 0; i < self.options.inspectors.length; i++) {
                         visibility = layoutSettings.find('#visibility_' + i).is(':checked');
-                        console.log('VISIBILITY: ' + visibility);
                         orientation = layoutSettings.find('#orientation_h_' + i).is(':checked') ? 'h' : 'v';
-                        self._uiChangeInspector(o.inspectors[i], visibility ? orientation : false);
-                        o = self.options;
+                        self.options.inspectors[i].vertical = orientation == 'v';
+                        self.options.inspectors[i].hide = !visibility;
                     }
+                    console.log(self.options);
+                    $('li.ui-widget-content').remove();
+                    self._uiInspectors();
                     self.uiGrid.nosgrid('doRefresh');
                 },
-                
+                /*
                 _uiChangeInspector: function(inspector, orientation) {
                     var widget_id = inspector.widget_id;
                     var self = this,
@@ -413,6 +508,7 @@ define([
                             }
                     }
                 },
+                */
                 
                 _uiSettingsMenuPopupAddItem : function(element, itemName, content) {
                     if ( typeof this.idMenu == 'undefined' ) this.idMenu = 0;
@@ -852,6 +948,7 @@ define([
 
                     self.gridRefresh();
                 };
+                
             $li.data('inspector', inspector);
 
 			if ($.isFunction(inspector.url)) {

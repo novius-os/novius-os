@@ -21,6 +21,7 @@ define([
                 var self = {};
 
                 var objectToArray = function(val, i) {
+                        val['setupkey'] = i;
                         return val;
                     },
 
