@@ -8,15 +8,15 @@
  * @link http://www.novius-os.org
  */
 
+    $id = uniqid('temp_');
 ?>
-<table id="<?= $widget_id ?>"></table>
+<table id="<?= $id ?>"></table>
 <script type="text/javascript">
 require([
-		'jquery-nos',
+		'jquery-nos'
 	], function( $, undefined ) {
 		$(function() {
-			var widget_id = "<?= $widget_id ?>",
-				inspector = $('#' + widget_id),
+			var inspector = $('#<?= $id ?>').removeAttr('id'),
 				parent = inspector.parent()
 					.bind({
 						inspectorResize: function() {
@@ -25,11 +25,10 @@ require([
 							init();
 						}
 					}),
+                inspectorData = parent.data('inspector'),
 				table_heights = $.nos.grid.getHeights(),
 				pageIndex = 0,
-				showFilter = false,
-				hasFilters = false,
-				columns = <?= $columns ?>,
+				showFilter = inspectorData.grid.false,
 				rendered = false,
 				init = function() {
 					inspector.css({
@@ -47,11 +46,11 @@ require([
 							allowColSizing : true,
 							allowColMoving : true,
 							staticRowIndex : 0,
-							columns : columns,
+							columns : inspectorData.grid.columns,
 							data: new wijdatasource({
 								dynamic: true,
 								proxy: new wijhttpproxy({
-									url: "<?= $urljson ?>",
+									url: inspectorData.grid.urlJson,
 									dataType: "json",
 									error: function(jqXHR, textStatus, errorThrown) {
 										log(jqXHR, textStatus, errorThrown);
@@ -77,7 +76,7 @@ require([
 									data = row ? row.data : false;
 
 								if (data && rendered) {
-									$nos.nos.listener.fire('inspector.selectionChanged.' + widget_id, false, ["<?= $input_name ?>", data.id, data.title]);
+                                    inspectorData.selectionChanged(data.id, data.title);
 								}
 								inspector.nosgrid("currentCell", -1, -1);
 							},
@@ -91,35 +90,9 @@ require([
 						});
 				};
 			init();
-			var menuColumns = [];
-			columns = inspector.nosgrid("option", "columns"),
-			showFilter = inspector.nosgrid("option", "showFilter");
-			hasFilters = showFilter;
-			$.each(columns, function (index, col) {
-				if (col.showFilter === undefined || col.showFilter) {
-					hasFilters = true;
-				}
-				menuColumns.push({
-						label : col.headerText,
-						visible : col.visible,
-						change : function (visible) {
-		                    columns[index].visible = visible;
-		                    inspector.nosgrid('doRefresh');
-		                }
-					});
-            });
-			$nos.nos.listener.fire('inspector.declareColumns', false, [widget_id, menuColumns]);
-			if (hasFilters) {
-				$nos.nos.listener.fire('inspector.showFilter', false, [widget_id, function(visible) {
-					showFilter = visible;
-					inspector.nosgrid('destroy')
-						.empty();
-					init();
-				}]);
-			}
 
-			$nos.nos.listener.add(widget_id + '.refresh', true, function() {
-				parent.triggerHandler('inspectorResize');
+			$nos.nos.listener.add(inspectorData.widget_id + '.refresh', true, function() {
+				parent.trigger('inspectorResize');
 			});
 		});
 	});

@@ -10,67 +10,72 @@
 define([
     'jquery-nos'
 ], function($) {
-    return $.nos.mp3GridSetup({
+    var mp3Grid = $.nos.mp3GridSetup(),
+        actions = {
+            edit : {
+                label : mp3Grid.i18n('Edit'),
+                action : function(item) {
+                    $.nos.tabs.add({
+                        iframe : true,
+                        url : 'admin/admin/user/form/edit/' + item.id,
+                        label : item.title
+                    });
+                }
+            }
+        };
+
+    return $.extend(true, mp3Grid, {
         tab : {
-            label : 'Users',
+            label : mp3Grid.i18n('Users'),
             iconUrl : 'static/cms/img/32/user.png'
         },
-        adds : {
-            user : {
-                label : 'Add a user',
-                url : 'admin/admin/user/form/add'
-            }
-        },
-        proxyUrl : 'admin/admin/user/list/json',
-        columns : {
-            user : {
-                headerText : 'User',
-                dataKey : 'fullname',
-                cellFormatter : function(args) {
-                    if ($.isPlainObject(args.row.data)) {
-                        args.$container.closest("td").attr("title", args.row.data.fullname);
-
-                        $("<a href=\"admin/admin/user/form/edit/" + args.row.data.id + "\"></a>")
-                            .text(args.row.data.fullname)
-                            .appendTo(args.$container)
-                            .click(function(e) {
-                                $.nos.tabs.add({
-                                    iframe : true,
-                                    url : this.href
-                                });
-                                e.preventDefault();
-                            });
-
-                        return true;
-                    }
+        mp3grid : {
+            adds : {
+                user : {
+                    label : mp3Grid.i18n('Add a user'),
+                    url : 'admin/admin/user/form/add'
                 }
             },
-            email : {
-                headerText : 'Email',
-                dataKey : 'email'
-            },
-            permissions : {
-                headerText : 'Permissions',
-                allowSizing : false,
-                width : 1,
-                showFilter : false,
-                cellFormatter : function(args) {
-                    if ($.isPlainObject(args.row.data)) {
-                        args.$container.css("text-align", "center");
+            grid : {
+                proxyUrl : 'admin/admin/user/list/json',
+                columns : {
+                    user : {
+                        headerText : mp3Grid.i18n('User'),
+                        dataKey : 'fullname'
+                    },
+                    email : {
+                        headerText : mp3Grid.i18n('Email'),
+                        dataKey : 'email'
+                    },
+                    permissions : {
+                        headerText : mp3Grid.i18n('Permissions'),
+                        allowSizing : false,
+                        width : 1,
+                        showFilter : false,
+                        cellFormatter : function(args) {
+                            if ($.isPlainObject(args.row.data)) {
+                                args.$container.css("text-align", "center");
 
-                        $("<a href=\"admin/admin/user/group/permission/edit/" + args.row.data.id_permission + "\"></a>")
-                            .addClass("ui-state-default")
-                            .append("<img src=\"static/cms/img/icons/tick.png\" />")
-                            .appendTo(args.$container)
-                            .click(function() {
-                                $.nos.tabs.add({
-                                    iframe : true,
-                                    url: this.href
-                                });
-                                return false;
-                            });
+                                $("<a href=\"admin/admin/user/group/permission/edit/" + args.row.data.id_permission + "\"></a>")
+                                    .addClass("ui-state-default")
+                                    .append("<img src=\"static/cms/img/icons/tick.png\" />")
+                                    .appendTo(args.$container)
+                                    .click(function() {
+                                        $.nos.tabs.add({
+                                            iframe : true,
+                                            url: this.href
+                                        });
+                                        return false;
+                                    });
 
-                        return true;
+                                return true;
+                            }
+                        }
+                    },
+                    actions : {
+                        actions : [
+                            actions.edit
+                        ]
                     }
                 }
             }

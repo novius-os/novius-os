@@ -34,7 +34,6 @@ define([
 				views : 'Views',
 				viewGrid : 'Grid',
 				viewThumbnails : 'Thumbnails',
-				preview : 'Preview',
                 loading : 'Loading...'
 			},
 			values: {},
@@ -132,30 +131,6 @@ define([
 			var self = this,
 				o = self.options;
 
-			if (o.preview) {
-				o.preview = $.extend({
-					hide : true,
-					vertical : true,
-					label : o.texts.preview,
-					widget_id : 'mp3grid-preview',
-					options : {},
-					url : function($li) {
-						var widget = $('<div id="' + this.options.preview.widget_id + '"></div>')
-							.appendTo($li)
-							.inspectorPreview(this.options.preview.options)
-							.parent()
-							.on({
-								inspectorResize: function() {
-									widget.inspectorPreview('refresh');
-								}
-							})
-							.end();
-					}
-				}, $.isPlainObject(o.preview) ? o.preview : {});
-
-				o.inspectors = $.merge(o.inspectors, [o.preview]);
-			}
-
 			if (!$.isPlainObject(o.thumbnails)) {
 				o.thumbnails = false;
 			} else {
@@ -179,34 +154,6 @@ define([
 				._listeners();
 
 			self.init = true;
-
-			$(window).resize(function() {
-				if (self.resizing) {
-					if ( self.timeoutResize ) {
-						clearTimeout(self.timeoutResize);
-					}
-					self.timeoutResize = setTimeout(function() {
-						if (self.resizing) {
-						    self.uiSplitterVertical.add(self.uiSplitterHorizontal)
-								.wijsplitter('refresh');
-							self._resizeInspectorsV()
-								._resizeInspectorsH()
-								.gridRefresh();
-						}
-					}, 100)
-				}
-			});
-
-			$(window).on({
-				blur : function() {
-					self.resizing = false;
-				},
-				focus : function() {
-					$('html').focus();
-					self.resizing = true;
-				}
-			});
-			$(window).focus();
 		},
 
         _css : function() {
@@ -320,7 +267,7 @@ define([
 		_uiSettingsMenu : function() {
 			var self = this;
 
-			$.each(self.menuSettings, function() {
+			/*$.each(self.menuSettings, function() {
 				if ($.isPlainObject(this.childs)) {
 					self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
 				}
@@ -333,7 +280,7 @@ define([
 					showAnimation : {Animated:"slide", duration: 50, easing: null},
 					hideAnimation : {Animated:"hide", duration: 0, easing: null}
 				});
-
+*/
 			return self;
 		},
 
@@ -551,7 +498,6 @@ define([
 					};
 				});
 
-
 				self.menuSettings[inspector.widget_id] = {
 					content : inspector.label,
 					childs : childs
@@ -598,14 +544,14 @@ define([
                         orientation: "vertical",
                         splitterDistance: 200,
                         showExpander: false,
-                        fullSplit: false,
+                        fullSplit: true,
                         panel1 : {
                             minSize : 150,
-                            scrollBars : 'hidden'
+                            scrollBars : 'auto'
                         },
                         panel2 : {
                             minSize : 200,
-                            scrollBars : 'hidden'
+                            scrollBars : 'auto'
                         },
                         expanded: function () {
                             refreshV();
@@ -625,11 +571,11 @@ define([
                         showExpander: false,
                         panel1 : {
                             minSize : 200,
-                            scrollBars : 'hidden'
+                            scrollBars : 'auto'
                         },
                         panel2 : {
                             minSize : 200,
-                            scrollBars : 'hidden'
+                            scrollBars : 'auto'
                         },
                         expanded: function () {
                             refreshH();
@@ -665,7 +611,7 @@ define([
 			$.each(o.inspectors, function() {
 				if (!this.hide) {
 					$('<li></li>').addClass('ui-widget-content')
-						.data('inspectorurl', this.url)
+                        .data('inspector', this)
 						.appendTo( this.vertical ? self.uiInspectorsVertical : self.uiInspectorsHorizontal );
 				}
 			});
@@ -696,13 +642,66 @@ define([
 
 		_loadInspector : function($li) {
 			var self = this,
-				url = $li.data('inspectorurl');
+				inspector = $li.data('inspector');
 
-			if ($.isFunction(url)) {
-				url.call(this, $li);
+            inspector.selectionChanged = function(value, label) {
+                    var multiple = false,
+                        name = inspector.inputName;
+
+                    if (inspector.inputName.substr(-2, 2) === '[]') {
+                        name = inspector.inputName.substr(0, inspector.inputName.length - 2);
+                        multiple = true;
+                    }
+
+                    if (!multiple) {
+                        self.uiInspectorsTags.find('span.' + name).remove();
+                    } else {
+                        var already = false;
+                        self.uiInspectorsTags.find('span.' + name).each(function() {
+                            if ($(this).find('input').val() === value) {
+                                already = true;
+                                return false;
+                            }
+                        });
+                        if (already) {
+                            return true;
+                        }
+                    }
+
+                    self.pageIndex = 0;
+                    self.uiInspectorsTags.wijsuperpanel('destroy');
+
+                    var span = $('<span></span>').addClass('nos-mp3grid-inspectorstag ui-state-default ui-corner-all ' + name)
+                        .text(label)
+                        .appendTo(self.uiInspectorsTags);
+
+                    $('<input type="hidden" name="' + inspector.inputName + '" />').val(value)
+                        .appendTo(span);
+
+                    $('<a href="#"></a>').addClass('ui-icon ui-icon-close')
+                        .click(function(e) {
+                            e.preventDefault();
+                            $(this).parent().remove();
+                            self.gridRefresh();
+                        })
+                        .appendTo(span);
+
+                    self.uiInspectorsTags.wijsuperpanel({
+                        showRounder: false,
+                        hScroller: {
+                            scrollMode: 'buttons'
+                        }
+                    });
+
+                    self.gridRefresh();
+                };
+            $li.data('inspector', inspector);
+
+			if ($.isFunction(inspector.url)) {
+                inspector.url.call(self, $li);
 			} else {
 				$.ajax({
-					url: $li.data('inspectorurl'),
+					url: inspector.url,
 					dataType: 'html'
 				})
 				.done(function(data) {
@@ -872,7 +871,7 @@ define([
 					data: new wijdatasource({
 						dynamic: true,
 						proxy: new wijhttpproxy({
-							url: o.grid.proxyurl,
+							url: o.grid.proxyUrl,
 							dataType: "json",
 							error: function(jqXHR, textStatus, errorThrown) {
 								log(jqXHR, textStatus, errorThrown);
@@ -974,7 +973,7 @@ define([
 			self.uiThumbnail.css('height', height)
 				.thumbnails($.extend({
 					pageIndex: 0,
-					url: o.grid.proxyurl,
+					url: o.grid.proxyUrl,
 					loading: function (dataSource, userData) {
 						var r = userData.data.paging;
 						self.pageIndex = r.pageIndex;
@@ -1035,14 +1034,6 @@ define([
 			var self = this,
 				o = self.options;
 
-			$nos.nos.listener.add('ostabs.show', function(index) {
-				if ($.nos.tabs.current() === index) {
-					$(window).focus();
-				} else {
-					$(window).blur();
-				}
-			});
-
 			$nos.nos.listener.add('inspector.showFilter', false, function(widget_id, change, checked) {
 				self._addSettingsInspectorMenu(widget_id, 'showFilters', {
 						content : {
@@ -1087,58 +1078,6 @@ define([
 			});
 
 			$nos.nos.listener.add('mp3grid.' + self.options.grid.id + '.refresh', true, function() {
-				self.gridRefresh();
-			});
-
-			$nos.nos.listener.add('inspector.selectionChanged', false, function(input_name, value, label) {
-				var multiple = false,
-					name = input_name;
-
-				if (input_name.substr(-2, 2) === '[]') {
-					name = input_name.substr(0, input_name.length - 2);
-					multiple = true;
-				}
-
-				if (!multiple) {
-					self.uiInspectorsTags.find('span.' + name).remove();
-				} else {
-					var already = false;
-					self.uiInspectorsTags.find('span.' + name).each(function() {
-						if ($(this).find('input').val() === value) {
-							already = true;
-							return false;
-						}
-					});
-					if (already) {
-						return true;
-					}
-				}
-
-				self.pageIndex = 0;
-                self.uiInspectorsTags.wijsuperpanel('destroy');
-
-				var span = $('<span></span>').addClass('nos-mp3grid-inspectorstag ui-state-default ui-corner-all ' + name)
-					.text(label)
-					.appendTo(self.uiInspectorsTags);
-
-				$('<input type="hidden" name="' + input_name + '" />').val(value)
-					.appendTo(span);
-
-				$('<a href="#"></a>').addClass('ui-icon ui-icon-close')
-					.click(function(e) {
-						e.preventDefault();
-						$(this).parent().remove();
-						self.gridRefresh();
-					})
-					.appendTo(span);
-
-                self.uiInspectorsTags.wijsuperpanel({
-                        showRounder: false,
-                        hScroller: {
-                            scrollMode: 'buttons'
-                        }
-                    });
-
 				self.gridRefresh();
 			});
 

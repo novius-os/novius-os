@@ -47,10 +47,6 @@ class Controller_Inspector_Lang extends \Controller {
 		}
 		
 		$view->set('content', \Format::forge($content)->to_json($content), false);
-		$view->set('columns', \Format::forge()->to_json($this->config['columns']), false);
-		$view->set('input_name', $this->config['input_name']);
-		$view->set('widget_id', $this->config['widget_id']);
-
 		return $view;
 	}
 }

@@ -8,7 +8,9 @@
  * @link http://www.novius-os.org
  */
 
+    $id = uniqid('temp_');
 ?>
+<div id="<?= $id ?>"></div>
 <script type="text/javascript">
 require([
         '<?= $urljson ?>',
@@ -18,15 +20,16 @@ require([
 		'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.inspector-preview.js'
 	], function( mp3Grid, $ ) {
 
-        mp3Grid.i18n.load(<?= $i18n ?>);
-        var params = mp3Grid.build();
+        $.extend(mp3Grid.i18nMessages, <?= $i18n ?>);
+
 		$(function() {
-            var current = $.nos.$noviusos.ostabs('current');
+            var div = $('div#<?= $id ?>'),
+                params = mp3Grid.build();
 
             if ($.isPlainObject(params.tab)) {
-                $.nos.$noviusos.ostabs('update', current.index, params.tab);
+                $.nos.tabs.update(div, params.tab);
             }
-            $('<div></div>').appendTo(current.panel.find('.nos-ostabs-panel-content'))
+            div.removeAttr('id')
                 .mp3grid(params.mp3grid);
 		});
 	});

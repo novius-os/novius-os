@@ -14,32 +14,8 @@ return array(
 		'model' => 'Cms\Model_User_User',
 		'order_by' => 'user_fullname',
 	),
-	'columns' => array(
-		array(
-			'headerText' => 'Author',
-			'dataKey' => 'title',
-		),
-        array(
-            'actions' => array(
-                array(
-                    'icon'      => 'ui-icon ui-icon-pencil',
-                    'action'   =>  'function(args) {
-                                                $.nos.tabs.add({
-                                                    iframe : true,
-                                                    url     : "admin/cms_blog/form?id=" + args.row.data.id,
-                                                    label   : "Update"
-                                                });
-                                            }',
-                    'label'     => 'Update',
-                ),
-            )
-        ),
-	),
 	'dataset' => array(
 		'id' => 'user_id',
 		'title' => 'user_fullname',
 	),
-	'urljson' => 'admin/cms_blog/inspector/author/json',
-	'input_name'   => 'blog_auteur_id[]',
-	'widget_id' => 'inspector-author',
 );

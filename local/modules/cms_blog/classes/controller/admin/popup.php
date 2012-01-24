@@ -30,9 +30,7 @@ class Controller_Admin_Popup extends \Cms\Controller_Generic_Admin {
 	}
 
 	public function action_index() {
-		$this->template->body = View::forge('cms_blog::popup', array(
-			'category_inpsector' => 'admin/cms_blog/config/category/list',
-		));
+		$this->template->body = View::forge('cms_blog::popup');
 		return $this->template;
 	}
 }
