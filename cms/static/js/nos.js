@@ -9,10 +9,8 @@
 
 define([
         'jquery',
-		'static/cms/js/jquery/globalize/globalize.min',
-		'static/cms/js/jquery/mousewheel/jquery.mousewheel.min',
-		'static/cms/js/jquery/wijmo/js/jquery.wijmo-open.1.5.0.min',
-		'static/cms/js/jquery/wijmo/js/jquery.wijmo-complete.1.5.0.min'
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.0b2.min',
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.0b2.min'
 	], function($) {
         var undefined = arguments[100];
 
@@ -111,6 +109,7 @@ define([
                                             },
                                             allowSizing : false,
                                             width : 20,
+                                            ensurePxWidth : true,
                                             showFilter : false
                                         };
                                         // Make the default action columns
@@ -141,6 +140,7 @@ define([
                                             },
                                             allowSizing : false,
                                             width : actions[0].width ? actions[0].width : 60,
+                                            ensurePxWidth : true,
                                             showFilter: false
                                         });
                                     }
@@ -337,9 +337,9 @@ define([
                 var $dialog = $(document.createElement('div')).appendTo($('body'));
 
                 require([
-                    'link!static/cms/js/jquery/wijmo/css/jquery.wijmo-open.1.5.0.css',
+                    'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.1.5.0.css',
                     //'static/cms/js/jquery/wijmo/js/jquery.wijmo.wijutil',
-                    'static/cms/js/jquery/wijmo/js/jquery.wijmo.wijdialog'
+                    'static/cms/js/jquery/vendor/js/jquery.wijmo.wijdialog'
                 ], function() {
                     $dialog.wijdialog(wijdialog_options);
                 });
@@ -456,7 +456,6 @@ define([
                                 scrollMode : 'auto',
                                 showFilter: true,
                                 allowPaging : true,
-                                staticRowIndex : 0,
                                 data: [ ['test'] ]
                             });
                         this.heights = {

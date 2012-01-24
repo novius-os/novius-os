@@ -30,7 +30,7 @@
             //$.nos.media($('#background'), {mode: 'image'});
         });
 
-        require(['static/cms/js/jquery/wijmo/js/jquery.wijmo.wijtabs.js'],
+        require(['static/cms/js/vendor/wijmo/js/jquery.wijmo.wijtabs.js'],
             function() {
                 $('#tabs').wijtabs({
                     alignment: 'left'

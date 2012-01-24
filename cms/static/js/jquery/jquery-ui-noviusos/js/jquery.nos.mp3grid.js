@@ -393,7 +393,7 @@ define([
 								checked : self.showFilter,
 								click : function() {
 									self.showFilter = $(this).is(':checked');
-									self.gridRefresh()
+									self._resizeList(true)
 										.uiSettingsMenu.wijmenu('hideAllMenus');
 								},
 								label : o.texts.showFiltersColumns
@@ -464,8 +464,8 @@ define([
 										}
 										widget.closest('li.ui-widget-content')
 											.remove();
-										self._resizeInspectorsV()
-											._resizeInspectorsH();
+										self._resizeInspectorsV(true)
+											._resizeInspectorsH(true);
 									}
 								} else {
 									inspector.hide = false;
@@ -479,14 +479,14 @@ define([
 												.end()
 												.css({width: '100%', height: 'auto'})
 												.appendTo(target);
-											self._resizeInspectorsV()
-												._resizeInspectorsH();
+											self._resizeInspectorsV(true)
+												._resizeInspectorsH(true);
 										}
 									} else {
 										var $li = $('<li></li>').addClass('ui-widget-content')
 											.data('inspectorurl', inspector.url)
 											.appendTo(target);
-										self['_resizeInspectors' + orientation.toUpperCase()]()
+										self['_resizeInspectors' + orientation.toUpperCase()](true)
 											._loadInspector($li);
 									}
 								}
@@ -532,26 +532,26 @@ define([
 			var self = this,
 				refreshV = function() {
 					self.uiSplitterHorizontal.wijsplitter("refresh");
-					self._resizeInspectorsV()
-						._resizeInspectorsH()
-						.gridRefresh();
+					self._resizeInspectorsV(true)
+						._resizeInspectorsH(true)
+						._resizeList(true);
 				},
 				refreshH = function() {
-					self._resizeInspectorsH()
-						.gridRefresh();
+					self._resizeInspectorsH(true)
+						._resizeList(true);
 				},
-                verticalSplitter = $.extend({
+                verticalSplitter = $.extend(true, {
                         orientation: "vertical",
                         splitterDistance: 200,
                         showExpander: false,
                         fullSplit: true,
                         panel1 : {
                             minSize : 150,
-                            scrollBars : 'auto'
+                            scrollBars : 'none'
                         },
                         panel2 : {
                             minSize : 200,
-                            scrollBars : 'auto'
+                            scrollBars : 'none'
                         },
                         expanded: function () {
                             refreshV();
@@ -564,18 +564,18 @@ define([
                             refreshV();
                         }
                     }, self.options.splitters.vertical),
-                horizontalSplitter = $.extend({
+                horizontalSplitter = $.extend(true, {
                         orientation: "horizontal",
                         fullSplit: true,
                         splitterDistance: 200,
                         showExpander: false,
                         panel1 : {
                             minSize : 200,
-                            scrollBars : 'auto'
+                            scrollBars : 'none'
                         },
                         panel2 : {
                             minSize : 200,
-                            scrollBars : 'auto'
+                            scrollBars : 'none'
                         },
                         expanded: function () {
                             refreshH();
@@ -616,8 +616,8 @@ define([
 				}
 			});
 
-			self._resizeInspectorsV()
-				._resizeInspectorsH();
+			self._resizeInspectorsV(true)
+				._resizeInspectorsH(true);
 
 			self.uiInspectorsVertical.find('> li')
 				.add(self.uiInspectorsHorizontal.find('> li'))
@@ -632,8 +632,8 @@ define([
 					},
 					stop: function() {
 						self.resizing = true;
-						self._resizeInspectorsV()
-							._resizeInspectorsH();
+						self._resizeInspectorsV(true)
+							._resizeInspectorsH(true);
 					}
 				});
 
@@ -855,7 +855,10 @@ define([
 				height = $(window).height() - position.top,
 				heights = $.nos.grid.getHeights();
 
-			self.uiGrid.css('height', height)
+			self.uiGrid.css({
+                    height : height,
+                    width : '100%'
+                })
 				.nosgrid($.extend({
 					columnsAutogenerationMode : 'none',
 					selectionMode: 'singleRow',
@@ -867,7 +870,6 @@ define([
 					pageSize: Math.floor((height - heights.footer - heights.header - (self.showFilter ? heights.filter : 0)) / heights.row),
 					allowColSizing : true,
 					allowColMoving : true,
-					staticRowIndex : 0,
 					data: new wijdatasource({
 						dynamic: true,
 						proxy: new wijhttpproxy({
@@ -949,7 +951,7 @@ define([
 						if (self.itemSelected !== null) {
 							var sel = self.uiGrid.nosgrid("selection");
 							sel.clear();
-							sel.addRange(0, self.itemSelected, 1, self.itemSelected);
+							sel.addRows(self.itemSelected);
 						}
 					},
                     dataLoading: function(e) {
@@ -1113,7 +1115,7 @@ define([
 			return inspectors;
 		},
 
-		_resizeInspectorsV : function() {
+		_resizeInspectorsV : function(refresh) {
 			var self = this;
 
 		    if (self.resizing) {
@@ -1124,7 +1126,7 @@ define([
 
 				if (inspectors.length) {
 					inspectors.css('height', ( self.uiInspectorsVertical.height() / inspectors.length )  + 'px')
-						.trigger('inspectorResize');
+						.trigger('inspectorResize', {refresh : refresh || false});
 				} else {
 					self._hideSplitterV();
 				}
@@ -1133,7 +1135,7 @@ define([
 			return self;
 		},
 
-		_resizeInspectorsH : function() {
+		_resizeInspectorsH : function(refresh) {
 			var self = this;
 
 		    if (self.resizing) {
@@ -1144,7 +1146,7 @@ define([
 
 				if (inspectors.length) {
 					inspectors.css('width', ( self.uiInspectorsHorizontal.width() / inspectors.length )  + 'px')
-						.trigger('inspectorResize');
+						.trigger('inspectorResize', {refresh : refresh || false});
 				} else {
 					self._hideSplitterH();
 				}
@@ -1156,6 +1158,27 @@ define([
 
 			return self;
 		},
+
+        _resizeList : function(refresh) {
+            var self = this,
+                o = self.options;
+
+            if (self.init) {
+                if (o.defaultView === 'thumbnails') {
+                    self.uiThumbnail.show();
+                    self._uiThumbnail();
+                } else {
+                    var height = self.uiSplitterHorizontalBottom.height() - self.uiSearchBar.outerHeight(true),
+                        heights = $.nos.grid.getHeights();
+                    self.uiGrid.nosgrid('setSize', self.uiSplitterHorizontalBottom.width(), height);
+                    if (refresh) {
+                        self.uiGrid.nosgrid('option', 'pageSize', Math.floor((height - heights.footer - heights.header - (self.showFilter ? heights.filter : 0)) / heights.row));
+                    }
+                }
+            }
+
+            return self;
+        },
 
 		_hideSplitterV : function() {
 			var self = this,
@@ -1194,7 +1217,11 @@ define([
 				o = self.options;
 
 			if (self.init) {
-				self._uiList();
+                if (o.defaultView === 'thumbnails') {
+                    self._uiList();
+                } else {
+                    self.uiGrid.nosgrid("ensureControl", true);
+                }
 			}
 
 			return self;

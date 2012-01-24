@@ -16,11 +16,8 @@ class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
 
 		\Asset::css('http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css', array(), 'css');
 
-		\Asset::add_path('static/js/jquery/wijmo/Wijmo-Complete');
-		\Asset::css('jquery.wijmo-complete.1.5.0.css', array(), 'css');
-
-		\Asset::add_path('static/js/jquery/wijmo/Wijmo-Open');
-		\Asset::css('jquery.wijmo-open.1.5.0.css', array(), 'css');
+		\Asset::add_path('static/js/vendor/wijmo');
+		\Asset::css('jquery.wijmo-complete.all.2.0.0b2.min.css', array(), 'css');
 
 		\Asset::add_path('static/cms/');
 		\Asset::css('laGrid.css', array(), 'css');
