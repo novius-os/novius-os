@@ -7,17 +7,15 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
  */
-
+    $id = uniqid('temp_');
 ?>
-<table id="<?= $widget_id ?>"></table>
+<table id="<?= $id ?>"></table>
 <script type="text/javascript">
 require([
 		'jquery-nos'
 	], function( $, table, undefined ) {
 		$(function() {
-			var widget_id = "<?= $widget_id ?>",
-				inspector = $('#' + widget_id),
-
+			var inspector = $('#<?= $id ?>').removeAttr('id'),
 				parent = inspector.parent().bind({
 						inspectorResize: function() {
 							inspector.nosgrid('destroy')
@@ -25,15 +23,39 @@ require([
 							init();
 						}
 					}),
-				columns = <?= $columns ?>,
+                inspectorData = parent.data('inspector'),
 				rendered = false,
 				init = function() {
-					inspector.css(<?= $inspector_css ?>)
-						.nosgrid($.extend({}, <?= $wijgrid ?>, {
-							columns: columns,
+					inspector.css({
+                            height : '100%',
+                            width : '100%'
+                        })
+						.nosgrid({
+                            columnsAutogenerationMode : 'none',
+                            scrollMode : 'auto',
+                            allowColSizing : true,
+                            allowColMoving : true,
+                            staticRowIndex : 0,
+                            currentCellChanged : function(e) {
+                                var row = $(e.target).nosgrid("currentCell").row(),
+                                    data = row ? row.data : false;
+
+                                if (data && rendered) {
+                                    inspectorData.selectionChanged(data.id, data.title);
+                                }
+                                inspector.nosgrid("currentCell", -1, -1);
+                            },
+                            rendering : function() {
+                                rendered = false;
+                            },
+                            rendered : function() {
+                                rendered = true;
+                                inspector.css("height", "auto");
+                            },
+							columns: inspectorData.grid.columns,
 							data: new wijdatasource({
 								proxy: new wijhttpproxy({
-									url: "<?= $urljson ?>",
+									url: inspectorData.grid.urlJson,
 									dataType: "json",
 									error: function(jqXHR, textStatus, errorThrown) {
 										log(jqXHR, textStatus, errorThrown);
@@ -48,7 +70,7 @@ require([
 									}
 								}
 							})
-						}));
+						});
 				};
 
 			function collapseIndentBehaviour(column, options) {
@@ -69,19 +91,19 @@ require([
 							if (args.column.dataKey) {
 								$('<span></span>').text(args.row.data[args.column.dataKey])
 									.appendTo(args.$container);
-							} else if ($.isfunction(args.column.oldCellFormatter)) {
+							} else if ($.isFunction(args.column.oldCellFormatter)) {
 								args.column.oldCellFormatter.call(args);
 							}
 							if (args.row.data.hasChilds) {
 								var toggle = $('<div></div>').css({
-										'float' : 'left',
+										float : 'left',
 										marginLeft : (args.row.data.level * 20) + 'px'
 									})
 								.addClass('ui-icon').addClass(options.allExpanded ? 'ui-icon-triangle-1-se' : 'ui-icon-triangle-1-e');
 								if (options.allowCollapseExpand) {
 									toggle.css({
 										cursor : 'pointer'
-									}).click(function() {
+									}).click(function(e) {
 										tr.nextAll().each(function() {
 											var self = $(this),
 												level = self.data('tree-level');
@@ -94,6 +116,7 @@ require([
 											}
 										});
 										toggle.toggleClass('ui-icon-triangle-1-e ui-icon-triangle-1-se');
+                                        e.stopImmediatePropagation();
 									});
 								};
 								toggle.prependTo(args.$container);
@@ -115,27 +138,14 @@ require([
 				});
 			}
 
-			collapseIndentBehaviour(columns[0], {
+			collapseIndentBehaviour(inspectorData.grid.columns[0], {
 				allExpanded: true,
-				allowCollapseExpand: false
+				allowCollapseExpand: true
 			});
 
 			init();
-			var menuColumns = [];
-			columns = inspector.nosgrid("option", "columns");
-			$.each(columns, function (index, col) {
-				menuColumns.push({
-						label : col.headerText,
-						visible : col.visible,
-						change : function (visible) {
-		                    columns[index].visible = visible;
-		                    inspector.nosgrid('doRefresh');
-		                }
-					});
-            });
-			$nos.nos.listener.fire('inspector.declareColumns', false, [widget_id, menuColumns]);
 
-			$nos.nos.listener.add(widget_id + '.refresh', true, function() {
+			$nos.nos.listener.add(inspectorData.widget_id + '.refresh', true, function() {
 				parent.triggerHandler('inspectorResize');
 			});
 		});

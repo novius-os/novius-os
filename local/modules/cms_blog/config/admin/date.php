@@ -9,8 +9,6 @@
  */
 
 return array(
-	'input_name'   => 'blog_date_creation',
 	'input_begin'  => 'blog_date_creation_begin',
 	'input_end'    => 'blog_date_creation_end',
-	'widget_id' => 'inspector-publishdate',
 );

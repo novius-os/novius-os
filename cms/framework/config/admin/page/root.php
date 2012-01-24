@@ -9,20 +9,11 @@
  */
 
 return array(
-	'widget_id' => 'inspector-root',
-	'input_name'   => 'rac_id',
-	'urljson' => 'admin/admin/page/inspector/root/json',
 	'query' => array(
 		'model' => 'Cms\Model_Page_Root',
 	),
 	'dataset' => array(
 		'id' => 'rac_id',
 		'title' => 'rac_titre',
-	),
-	'columns' => array(
-		array(
-			'headerText' => 'Root',
-			'dataKey' => 'title',
-		),
 	),
 );

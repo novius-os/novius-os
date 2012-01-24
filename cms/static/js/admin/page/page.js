@@ -10,65 +10,87 @@
 define([
     'jquery-nos'
 ], function($) {
-    return $.nos.mp3GridSetup({
+    var mp3Grid = $.nos.mp3GridSetup(),
+        actions = {
+            edit : {
+                label : mp3Grid.i18n('Edit'),
+                action : function(item) {
+                    $.nos.tabs.add({
+                        iframe : true,
+                        url : 'admin/admin/page/form/edit/' + item.id,
+                        label : item.title
+                    });
+                }
+            }
+        };
+
+    return $.extend(true, mp3Grid, {
         tab : {
-            label : 'Pages',
+            label : mp3Grid.i18n('Pages'),
             iconUrl : 'static/cms/img/32/page.png'
         },
-        adds : {
-            page : {
-                label : 'Add a Page',
-                url : 'admin/admin/page/page/add'
+        mp3grid : {
+            adds : {
+                page : {
+                    label : mp3Grid.i18n('Add a Page'),
+                    url : 'admin/admin/page/page/add'
+                },
+                root : {
+                    label : mp3Grid.i18n('Add a root'),
+                    url : 'admin/admin/page/root/add'
+                }
             },
-            root : {
-                label : 'Add a root',
-                iconClasses : 'nos-icon16 nos-icon16-root',
-                url : 'admin/admin/page/root/add'
-            }
-        },
-        proxyUrl : 'admin/admin/page/list/json',
-        columns : {
-            title : {
-                headerText : 'Title',
-                dataKey : 'title',
-                cellFormatter : function(args) {
-                    if ($.isPlainObject(args.row.data)) {
-                        args.$container.closest('td').attr('title', args.row.data.title);
-
-                        $('<a href="admin/admin/page/form/edit/' + args.row.data.id + '"></a>')
-                            .text(args.row.data.title)
-                            .appendTo(args.$container)
-                            .click(function(e) {
-                                $.nos.tabs.add({
-                                    iframe : true,
-                                    url : this.href
-                                });
-                                e.preventDefault();
-                            });
-
-                        return true;
+            grid : {
+                proxyUrl : 'admin/admin/page/list/json',
+                columns : {
+                    title : {
+                        headerText : mp3Grid.i18n('Title'),
+                        dataKey : 'title'
+                    },
+                    url : {
+                        headerText : mp3Grid.i18n('Virtual url'),
+                        dataKey : 'url'
+                    },
+                    actions : {
+                        actions : [
+                            actions.edit
+                        ]
                     }
                 }
             },
-            url : {
-                headerText : 'Virtual url',
-                dataKey : 'url'
-            }
-        },
-        inspectors : {
-            roots : {
-                widget_id : 'inspector-root',
-                vertical : true,
-                label : 'Roots',
-                iconClasses : 'nos-icon16 nos-icon16-root',
-                url : 'admin/admin/page/inspector/root/list'
-            },
-            directories : {
-                widget_id : 'inspector-tree',
-                vertical : true,
-                label : 'Directories',
-                iconClasses : 'nos-icon16 nos-icon16-root',
-                url : 'admin/admin/page/inspector/tree/list'
+            inspectors : {
+                roots : {
+                    widget_id : 'cms_page_roots',
+                    vertical : true,
+                    label : mp3Grid.i18n('Roots'),
+                    url : 'admin/admin/page/inspector/root/list',
+                    inputName : 'rac_id',
+                    grid : {
+                        urlJson : 'admin/admin/page/inspector/root/json',
+                        columns : {
+                            title : {
+                                headerText : mp3Grid.i18n('Root'),
+                                dataKey : 'title'
+                            }
+                        }
+                    }
+                },
+                directories : {
+                    widget_id : 'cms_page_directories',
+                    vertical : true,
+                    label : mp3Grid.i18n('Directories'),
+                    url : 'admin/admin/page/inspector/tree/list',
+                    inputName : 'directory_id',
+                    grid : {
+                        urlJson : 'admin/admin/page/inspector/tree/json',
+                        columns : {
+                            title : {
+                                headerText : mp3Grid.i18n('Directory'),
+                                dataKey : 'title'
+                            }
+                        }
+                    }
+                }
             }
         }
     });

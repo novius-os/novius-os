@@ -40,7 +40,6 @@ require(['jquery-nos', 'static/cms/js/jquery/jquery-form/jquery.form.min'], func
 	<div class="line myBody">
 		<div class="unit col c1"></div>
 		<div class="unit col c5 ui-widget">
-			<!--<?= \Request::forge($category_inpsector)->execute(); ?>-->
 		</div>
 		<div class="unit col c5 ui-widget">
 			<div class="fieldset">

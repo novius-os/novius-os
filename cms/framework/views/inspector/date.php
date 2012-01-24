@@ -8,22 +8,29 @@
  * @link http://www.novius-os.org
  */
 
+    $id = uniqid('temp_');
 ?>
-<table id="<?= $widget_id ?>" data-headers="<?= $headers ?>" data-content="<?= $content ?>" data-radio-name="<?= $input_name ?>"></table>
-<div id="<?= $widget_id ?>custom" style="display:none;"><?= str_replace(array('xxxbeginxxx', 'xxxendxxx'), array($date_begin, $date_end), $label_custom) ?></div>
+<div id="<?= $id ?>" style="display:none;"><?= str_replace(array('xxxbeginxxx', 'xxxendxxx'), array($date_begin, $date_end), $label_custom) ?></div>
 <script type="text/javascript">
 require([
-		'jquery-nos',
+		'jquery-nos'
 	], function( $, undefined ) {
 		$(function() {
-			var widget_id = "<?= $widget_id ?>",
-				input_name = "<?= $input_name ?>",
-				label_custom = $('#' + widget_id + 'custom').css({
-						display : 'inline-block',
-						whiteSpace : 'nowrap'
-					}).hide(),
-				rendered = false;
-
+			var label_custom = $('#<?= $id ?>').removeAttr('id')
+                    .css({
+                        display : 'inline-block',
+                        whiteSpace : 'nowrap'
+                    }).hide(),
+                inspector = $('<table></table>').insertAfter(label_custom),
+                parent = inspector.parent().bind({
+                        inspectorResize: function() {
+                            label_custom.appendTo(parent);
+                            inspector.nosgrid('destroy')
+                                .empty();
+                            init();
+                        }
+                    }),
+                inspectorData = parent.data('inspector'),
 				dates = label_custom.find(':input').datepicker('option', 'onSelect', function( selectedDate ) {
 						var option = this === label_custom.find(':input:first')[0] ? "minDate" : "maxDate",
 							instance = $( this ).data( "datepicker" ),
@@ -45,19 +52,12 @@ require([
 							} else {
 								label = 'Since ' + begin;
 							}
-							$nos.nos.listener.fire('inspector.selectionChanged.' + widget_id, false, [input_name, begin + '|' + end, label]);
+                            if ($.isFunction(inspectorData.selectionChanged)) {
+                                inspectorData.selectionChanged(begin + '|' + end, label);
+                            }
 						}
 					}),
-
-				inspector = $('#' + widget_id),
-				parent = inspector.parent().bind({
-						inspectorResize: function() {
-							label_custom.appendTo(parent);
-							inspector.nosgrid('destroy')
-								.empty();
-							init();
-						}
-					})
+                rendered = false,
 				init = function() {
 					inspector.css({
 							height : '100%',
@@ -80,7 +80,7 @@ require([
 			                        visible : false
 			                    },
 			                    {
-				                    headerText : "<?= $headers ?>",
+				                    headerText : inspectorData.label,
 									cellFormatter: function (args) {
 										if ($.isPlainObject(args.row.data) && args.row.data.value === 'custom') {
 											args.$container.css({
@@ -117,7 +117,7 @@ require([
 									if (data.value === 'custom') {
 										label_custom.show();
 									} else {
-										$nos.nos.listener.fire('inspector.selectionChanged.' + widget_id, false, [input_name, data.value, data.title]);
+                                        inspectorData.selectionChanged(data.value, data.title);
 									}
 								}
 								inspector.nosgrid("currentCell", -1, -1);
@@ -131,6 +131,7 @@ require([
 							}
 						});
 				};
+
 			init();
 		});
 	});

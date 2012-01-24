@@ -9,20 +9,11 @@
  */
 
 return array(
-	'widget_id' => 'inspector-tree',
-	'input_name'   => 'directory_id',
-	'urljson' => 'admin/admin/page/inspector/tree/json',
 	'query' => array(
 		'model' => 'Cms\Model_Page_Page',
 	),
 	'dataset' => array(
 		'id' => 'page_id',
 		'title' => 'page_titre',
-	),
-	'columns' => array(
-		array(
-			'headerText' => 'Directory',
-			'dataKey' => 'title',
-		),
 	),
 );

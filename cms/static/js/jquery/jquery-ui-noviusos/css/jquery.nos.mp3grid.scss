@@ -37,8 +37,10 @@
 	}
 
 	.nos-mp3grid-splitter-v {
+		@include box-sizing(border-box);
 		position : absolute;
-		top : 40px;
+		padding-top: 40px;
+        top : 0;
 		left : 0;
 		right : 0;
 		bottom : 0;
@@ -180,6 +182,7 @@
 	                    }
 
                         .nos-mp3grid-search-input {
+                            -webkit-appearance: initial;
                             width: 10em;
                         }
 
