@@ -88,8 +88,8 @@ define([
                                                             .find("a")
                                                             .text(action.label)
                                                             .click(function(e) {
-                                                                e.preventDefault();
                                                                 action.action(args);
+                                                                e.stopImmediatePropagation();
                                                             })
                                                     });
 
@@ -129,9 +129,9 @@ define([
                                                         }
                                                     )
                                                         .click(function(e) {
-                                                            e.preventDefault();
                                                             fct = actions[0].action;
                                                             fct(args);
+                                                            e.stopImmediatePropagation();
                                                         })
                                                         .find("div")
                                                         .text(actions[0].label);
