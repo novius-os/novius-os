@@ -272,6 +272,7 @@ body {
 	> .ui-widget-header {
 		position : relative;
 		z-index : 1;
+		@include background-image(linear-gradient(#222222, #111111));
 
 		li.nos-ostabs-appstab {
 			margin : 0px 60px 0 0px;
