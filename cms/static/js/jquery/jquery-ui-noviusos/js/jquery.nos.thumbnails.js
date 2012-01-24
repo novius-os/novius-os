@@ -182,9 +182,12 @@ define([
 
 		_display : function(items) {
 			var self = this,
-				o = self.options;
+				o = self.options,
 
-			self.uiContainer.empty();
+			    parent = self.uiContainer.empty()
+                    .parent();
+
+            self.uiContainer.detach();
 			$.each(items, function(i) {
 				var data = this;
 
@@ -201,6 +204,7 @@ define([
 				}
 				self._displayItem(data, i);
 			});
+            self.uiContainer.appendTo(parent);
 
 			self._trigger('rendered');
 
