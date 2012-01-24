@@ -262,7 +262,33 @@ define([
                             $el = self._uiSettingsMenuPopup();
                             $window = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
                             $el.wijtabs({
-                                alignment: 'left'
+                                alignment: 'left',
+                                show: function(e, ui) {
+                                    $(ui.panel).find('.superpanel').wijsuperpanel({
+                                        autoRefresh: true,
+                                        hScroller: {
+                                            scrollMode: 'buttons'
+                                        }
+                                    });
+                                    $layout = $(ui.panel).find('#layout_settings');
+                                    $layout.find('.panels').sortable({
+                                            connectWith: ".panels",
+                                            update: function() {
+                                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                                            },
+                                            change: function() {
+                                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                                            },
+                                            start: function(event, ui) {
+                                                $(ui.item).addClass('moving');
+                                            },
+                                            stop: function(event, ui) {
+                                                $(ui.item).removeClass('moving');
+                                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                                            },
+                                            placeholder: "droping"
+                                    });
+                                }
                             });
                             $el.after(
                                 $('<div></div>').css({
@@ -281,6 +307,8 @@ define([
                             );
                         }
                         );
+                        
+                        /*$notLayout*/
                         
 /*
 			self._inspectorsSettingsMenu()
@@ -313,53 +341,55 @@ define([
                                 )
                             )
                     );
+                        
+                    $notLayout = $('<div class="not-layout superpanel"></div>')
+                            .append(
+                                "<ul class=\"invisible-panel panels\"></ul>"
+                            );
+                    
                     self._uiSettingsMenuPopupAddItem($el, "Layout", $layout);    
                     
                     $leftPanel = $layout.find('.left-panel');
                     $topPanel = $layout.find('.top-panel');
+                    $invisiblePanel = $notLayout.find('.invisible-panel');
                     
-                    $layout.find('.panels').sortable({
-                            connectWith: ".panels",
-                            update: function() {
-                                self._uiSettingsMenuPopupRefreshLayout($layout);
-                            },
-                            change: function() {
-                                self._uiSettingsMenuPopupRefreshLayout($layout);
-                            },
-                            start: function(event, ui) {
-                                $(ui.item).addClass('moving');
-                            },
-                            stop: function(event, ui) {
-                                $(ui.item).removeClass('moving');
-                                self._uiSettingsMenuPopupRefreshLayout($layout);
-                            },
-                            placeholder: "droping"
+                    $layout.find('.not-layout').wijsuperpanel({
+                        hScroller: {
+                            scrollMode: 'buttons'
+                        }
                     });
                     
                         
                     for (var i = 0; i < o.inspectors.length; i++) {
                         visible = !o.inspectors[i].hide;
                         vertical = o.inspectors[i].vertical;
+                        $inspectorEl = $('<li class="layout-inspector"></li>')
+                                        .append(
+                                            $('<div></div>')
+                                                .append(o.inspectors[i].label)
+                                        );
                         if (visible) {
                             if (vertical) {
                                 $leftPanel.append(
-                                    $('<li class="layout-inspector"></li>')
-                                        .append(
-                                            $('<div></div>')
-                                                .append(o.inspectors[i].label)
-                                        )
+                                    $inspectorEl
                                 );
                             } else {
                                 $topPanel.append(
-                                    $('<li class="layout-inspector"></li>')
-                                        .append(
-                                            $('<div></div>')
-                                                .append(o.inspectors[i].label)
-                                        )
+                                    $inspectorEl
                                 );
                             }
+                        } else {
+                            $invisiblePanel.append(
+                                $inspectorEl
+                            );
                         }
                     }
+                    
+                    
+                    
+                    
+                    $layout.append($notLayout);
+                    
                     
                     self._uiSettingsMenuPopupRefreshLayout($layout);
                     
@@ -425,6 +455,7 @@ define([
                 _uiSettingsMenuPopupRefreshLayout : function($layout) {
                     $leftPanel = $layout.find('.left-panel');
                     $topPanel = $layout.find('.top-panel');
+                    $invisiblePanel = $layout.find('.invisible-panel');
                     
                     $leftLis = $leftPanel.find('li').not('.moving');
                     $leftLis.css({
@@ -435,6 +466,8 @@ define([
                     $($leftLis[$leftLis.length - 1]).addClass('last');
                     
                     
+                    
+                    
                     $topLis = $topPanel.find('li').not('.moving');
                     
                     $topLis.css({
@@ -443,6 +476,21 @@ define([
                     });
                     $topLis.removeClass('last');
                     $($topLis[$topLis.length - 1]).addClass('last');
+                    
+                    
+                    
+                    
+                    $invisibleLis = $invisiblePanel.find('li').not('.moving');
+                    
+                    $invisibleLis.css({
+                        width: '',
+                        height: ''
+                    });
+                    $invisibleLis.removeClass('last');
+                    $($invisibleLis[$invisibleLis.length - 1]).addClass('last');
+                    $invisiblePanel.css({
+                        width: $invisibleLis.length * ($invisibleLis.width() + 1)
+                    });
                 },
                 
                 _uiSettingsMenuPopupSave : function() {
