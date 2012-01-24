@@ -18,8 +18,7 @@ require([
 		$(function() {
 			var label_custom = $('#<?= $id ?>').removeAttr('id')
                     .css({
-                        display : 'inline-block',
-                        whiteSpace : 'nowrap'
+                        display : 'inline-block'
                     }).hide(),
                 inspector = $('<table></table>').insertAfter(label_custom),
                 parent = inspector.parent().bind({
