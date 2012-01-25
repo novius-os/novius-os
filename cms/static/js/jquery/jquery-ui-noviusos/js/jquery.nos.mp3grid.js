@@ -25,8 +25,9 @@ define([
 				vertical : 'Vertical',
 				horizontal : 'Horizontal',
 				hidden : 'Hidden',
-                                save : 'Save',
-                                cancel: 'Cancel',
+                save : 'Save',
+                cancel: 'Cancel',
+                mainView: 'Main view',
                 item : 'item',
                 items : 'items',
 				showNbItems : 'Showing {{x}} items out of {{y}}',
@@ -338,7 +339,7 @@ define([
                 _uiSettingsMenuPopupAddMainViewTab: function($el) {
                     var self = this,
                         o = self.options;
-                    self._uiSettingsMenuPopupAddItem($el, "Main view", self._uiSettingsMenuPopupGetWidgetContentSettings('settings-main-view', "Main view", self.options));
+                    self._uiSettingsMenuPopupAddItem($el, o.texts.mainView, self._uiSettingsMenuPopupGetWidgetContentSettings('settings-main-view', o.texts.mainView, self.options));
                 },
                 
                 _uiSettingsMenuPopupAddInspectorsTab: function($el) {
@@ -368,7 +369,7 @@ define([
                     if (settings.grid) {
                         $contentSettings.append(
                             $('<h2></h2>').append(
-                                'Columns'
+                                'Columns' // o.texts.columns ????
                             )
                         );
                         
