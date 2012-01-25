@@ -25,6 +25,8 @@ define([
 				vertical : 'Vertical',
 				horizontal : 'Horizontal',
 				hidden : 'Hidden',
+                                save : 'Save',
+                                cancel: 'Cancel',
                 item : 'item',
                 items : 'items',
 				showNbItems : 'Showing {{x}} items out of {{y}}',
@@ -295,12 +297,12 @@ define([
                                     textAlign: 'right'
                                 }).append(
                                     $('<button />').button({
-                                        label : 'Cancel',
+                                        label : o.texts.cancel,
                                         icons : {primary : 'ui-icon-gear'}
                                     }).click( function() {$window.wijdialog('close');$window.remove();} )
                                 ).append(
                                     $('<button />').button({
-                                        label : 'Save',
+                                        label : o.texts.save,
                                         icons : {primary : 'ui-icon-gear'}
                                     }).click( function() {self._uiSettingsMenuPopupSave();$window.wijdialog('close');$window.remove();} )
                                 )
@@ -322,8 +324,18 @@ define([
 				o = self.options;
                                 
                     $el = $('<div><ul></ul></div>');
-                    self._uiSettingsMenuPopupAddItem($el, "Main view", "toto");
+                    self._uiSettingsMenuPopupAddItem($el, "Main view", "The main view is on todo list ! Coming soon !");
                     
+                    self._uiSettingsMenuPopupAddLayoutTab($el);
+                    
+                                
+                    return $el;
+                },
+                
+                _uiSettingsMenuPopupAddLayoutTab : function($el) {
+                    var self = this,
+				o = self.options;
+                                
                     $layout = $('<form id="layout_settings"></form>');
                     
                     $layout.append(
@@ -393,64 +405,6 @@ define([
                     
                     
                     self._uiSettingsMenuPopupRefreshLayout($layout);
-                    
-                    
-                    
-                    /*
-                    for (var i = 0; i < o.inspectors.length; i++) {
-                        visible = !o.inspectors[i].hide;
-                        $layout.append($('<h2></h2>').append(o.inspectors[i].label));
-                        $layout.append(
-                            $('<div></div>')
-                                .append($('<input type="checkbox" />')
-                                    .change(function() {
-                                        $when_displayed = $(this).siblings('span');
-                                        if ($(this).is(':checked')) {
-                                            $when_displayed.show()} else {$when_displayed.hide()}
-                                        }
-                                    )
-                                    .attr({
-                                        id: 'visibility_' + i,
-                                        name: 'visibility[' + i + ']',
-                                        checked: visible
-                                    })
-                                )
-                                .append($('<label></label>').append('Visible'))
-                                .append($('<span class="when_displayed"></span')
-                                    .css({display: visible ? '' : 'none'})
-                                    .append($('<input type="radio" value="h" />')
-                                        .attr({
-                                            id: 'orientation_h_' + i,
-                                            name: 'orientation[' + i + ']',
-                                            checked: !o.inspectors[i].vertical
-                                        })
-                                    )
-                                    .append($('<label></label>').append('Horizontal'))
-                                    .append($('<input type="radio" value="v" />')
-                                        .attr({
-                                            id: 'orientation_v_' + i,
-                                            name: 'orientation[' + i + ']',
-                                            checked: o.inspectors[i].vertical
-                                        })
-                                    )
-                                    .append($('<label></label>').append('Verical'))
-                                )
-                            );
-                    }
-                    */
-                    
-                    
-                    
-                    
-                    
-                    
-                    //<ul style="width: 10%"><li><a href="#password">Main view</a></li></ul><div id="password" style="width: 85%;">password</div>
-                    
-                    
-                    //$el.find('> div').hide();
-                    
-                                
-                    return $el;
                 },
                 
                 _uiSettingsMenuPopupRefreshLayout : function($layout) {
@@ -508,70 +462,10 @@ define([
                     });
                     self.options.inspectors = newInspectors;
                     
-                    /*
-                    for (var i = 0; i < self.options.inspectors.length; i++) {
-                        visibility = layoutSettings.find('#visibility_' + i).is(':checked');
-                        orientation = layoutSettings.find('#orientation_h_' + i).is(':checked') ? 'h' : 'v';
-                        self.options.inspectors[i].vertical = orientation == 'v';
-                        self.options.inspectors[i].hide = !visibility;
-                    }
-                    console.log(self.options);
-                    $('li.ui-widget-content').remove();
-                    self._uiInspectors();
-                    */
                     $('li.ui-widget-content').remove();
                     self._uiInspectors();
                     self.uiGrid.nosgrid('doRefresh');
                 },
-                /*
-                _uiChangeInspector: function(inspector, orientation) {
-                    var widget_id = inspector.widget_id;
-                    var self = this,
-				o = self.options;
-                    widget = $('#' + widget_id);
-                    console.log(widget_id);
-                    console.log(widget);
-                    
-
-                    if (!orientation) {
-                            inspector.hide = true;
-                            if (widget.length) {
-                                    var menu = self.menuSettings[inspector.widget_id];
-                                    if ($.isPlainObject(menu) && $.isPlainObject(menu.childs) && $.isPlainObject(menu.childs.visibility)) {
-                                            menu.childs = menu.childs.visibility.childs;
-                                            self._refreshSettingsMenu();
-                                    }
-                                    widget.closest('li.ui-widget-content')
-                                            .remove();
-                                    self._resizeInspectorsV()
-                                            ._resizeInspectorsH();
-                            }
-                    } else {
-                            inspector.hide = false;
-                            var target = orientation === 'v' ? self.uiInspectorsVertical : self.uiInspectorsHorizontal;
-                            inspector.vertical = orientation === 'v';
-                            if ( widget.length ) {
-                                    if ( !target.has(widget).length ) {
-                                            widget.closest('li.ui-widget-content')
-                                                    .find("script")
-                                                    .remove()
-                                                    .end()
-                                                    .css({width: '100%', height: 'auto'})
-                                                    .appendTo(target);
-                                            self._resizeInspectorsV()
-                                                    ._resizeInspectorsH();
-                                    }
-                            } else {
-                                    var $li = $('<li></li>').addClass('ui-widget-content')
-                                            .appendTo(target);
-                                    $li.data('inspectorurl', inspector.url);
-                                            
-                                    self['_resizeInspectors' + orientation.toUpperCase()]()
-                                            ._loadInspector($li);
-                            }
-                    }
-                },
-                */
                 
                 _uiSettingsMenuPopupAddItem : function(element, itemName, content) {
                     if ( typeof this.idMenu == 'undefined' ) this.idMenu = 0;
