@@ -364,6 +364,7 @@ define([
                         visible = !o.inspectors[i].hide;
                         vertical = o.inspectors[i].vertical;
                         $inspectorEl = $('<li class="layout-inspector"></li>')
+                                        .data('inspector-id', i)
                                         .append(
                                             $('<div></div>')
                                                 .append(o.inspectors[i].label)
@@ -489,14 +490,25 @@ define([
                     $invisibleLis.removeClass('last');
                     $($invisibleLis[$invisibleLis.length - 1]).addClass('last');
                     $invisiblePanel.css({
-                        width: $invisibleLis.length * ($invisibleLis.width() + 1)
+                        width: Math.max(($invisibleLis.length + 1) * ($invisibleLis.width() + 1), 100)
                     });
                 },
                 
                 _uiSettingsMenuPopupSave : function() {
                     var self = this,
 				o = self.options;
+                    newInspectors = [];
                     layoutSettings = $('#layout_settings');
+                    layoutSettings.find('.layout-inspector').each(function() {
+                        newInspector = self.options.inspectors[$(this).data('inspector-id')];
+                        $panel = $(this).closest('.panels');
+                        newInspector.hide = $panel.hasClass('invisible-panel');
+                        newInspector.vertical = $panel.hasClass('left-panel');
+                        newInspectors.push(newInspector);
+                    });
+                    self.options.inspectors = newInspectors;
+                    
+                    /*
                     for (var i = 0; i < self.options.inspectors.length; i++) {
                         visibility = layoutSettings.find('#visibility_' + i).is(':checked');
                         orientation = layoutSettings.find('#orientation_h_' + i).is(':checked') ? 'h' : 'v';
@@ -504,6 +516,9 @@ define([
                         self.options.inspectors[i].hide = !visibility;
                     }
                     console.log(self.options);
+                    $('li.ui-widget-content').remove();
+                    self._uiInspectors();
+                    */
                     $('li.ui-widget-content').remove();
                     self._uiInspectors();
                     self.uiGrid.nosgrid('doRefresh');
