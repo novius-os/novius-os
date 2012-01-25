@@ -265,6 +265,7 @@ define([
                             $window = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
                             $el.wijtabs({
                                 alignment: 'left',
+                                scrollable: true,
                                 show: function(e, ui) {
                                     $(ui.panel).find('.superpanel').wijsuperpanel({
                                         autoRefresh: true,
@@ -321,15 +322,105 @@ define([
                 
                 _uiSettingsMenuPopup : function() {
                     var self = this,
-				o = self.options;
+                        o = self.options;
                                 
                     $el = $('<div><ul></ul></div>');
-                    self._uiSettingsMenuPopupAddItem($el, "Main view", "The main view is on todo list ! Coming soon !");
+                    self._uiSettingsMenuPopupAddMainViewTab($el);
                     
                     self._uiSettingsMenuPopupAddLayoutTab($el);
                     
+                    self._uiSettingsMenuPopupAddInspectorsTab($el);
+                    
                                 
                     return $el;
+                },
+                
+                _uiSettingsMenuPopupAddMainViewTab: function($el) {
+                    var self = this,
+                        o = self.options;
+                    self._uiSettingsMenuPopupAddItem($el, "Main view", self._uiSettingsMenuPopupGetWidgetContentSettings('settings-main-view', "Main view", self.options));
+                },
+                
+                _uiSettingsMenuPopupAddInspectorsTab: function($el) {
+                    var self = this,
+                        o = self.options;
+                    for (var i = 0; i < o.inspectors.length; i++) {
+                        self._uiSettingsMenuPopupAddItem($el, o.inspectors[i].label, self._uiSettingsMenuPopupGetWidgetContentSettings('settings-inspector-' + i, o.inspectors[i].label, o.inspectors[i]));
+                    }
+                },
+                
+                _uiSettingsMenuPopupGetWidgetContentSettings: function(id, title, settings) {
+                    var self = this,
+                        o = self.options;
+                        
+                    
+                        
+                    $contentSettings = $('<div class="content-settings"></div>')
+                                            .attr({id: id});
+                                            
+                    $contentSettings.append(
+                        $('<h1></h1>').append(
+                            title
+                        )
+                    );
+                                            
+                    
+                    if (settings.grid) {
+                        $contentSettings.append(
+                            $('<h2></h2>').append(
+                                'Columns'
+                            )
+                        );
+                        
+                        $columns = $('<ul class="widget-columns"></ul>');
+
+                        columns = settings.grid.columns;
+
+                        for (var i = 0; i < columns.length; i++) {
+                            $columns.append(
+                                $('<li></li>')
+                                    .data('column-id', i)
+                                    .addClass(columns[i].visible !== false ? '' : 'invisible') //((typeof columns[i].visible == "undefined") || 
+                                    .append(
+                                        $('<div class="handle"></div>')
+                                    )
+                                    .append(
+                                        $('<div class="title-zone"></div>')
+                                            .append (
+                                                columns[i].headerText
+                                            )
+                                    )
+                                    .append(
+                                        $('<div class="visibility-zone"></div>')
+                                            .append (
+                                                $('<input type="checkbox" />')
+                                                    .attr({checked: columns[i].visible !== false})
+                                                    .change(
+                                                        function() {
+                                                            $column = $(this).closest('li');
+                                                            if ($(this).is(':checked')) {
+                                                                $column.removeClass('invisible');
+                                                            } else {
+                                                                $column.addClass('invisible');
+                                                            }
+                                                        }
+                                                    )
+                                                )
+                                            )
+                                    );
+                        }
+
+                        $columns.sortable({
+                            handle: '.handle',
+                            placeholder: 'placeholder'
+                        });
+
+                        $contentSettings.append($columns);
+                    
+                    }
+                    
+                        
+                    return $contentSettings;
                 },
                 
                 _uiSettingsMenuPopupAddLayoutTab : function($el) {
@@ -337,6 +428,12 @@ define([
 				o = self.options;
                                 
                     $layout = $('<form id="layout_settings"></form>');
+                    
+                    $layout.append(
+                        $('<h1></h1>').append(
+                            'Layout'
+                        )
+                    );
                     
                     $layout.append(
                         $('<div class="layout"></div>')
@@ -451,6 +548,29 @@ define([
                 _uiSettingsMenuPopupSave : function() {
                     var self = this,
 				o = self.options;
+                    
+                    
+                    for (var j = 0; j < o.inspectors.length; j++) {
+                        if (o.inspectors[j].grid) {
+                            gridColumns = o.inspectors[j].grid.columns;
+                            newColumns = [];
+                            $('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
+                                $this = $(this);
+                                newColumn = gridColumns[$this.data('column-id')];
+
+                                newColumn.dataIndex = i;
+                                newColumn.leavesIdx = i;
+                                newColumn.linearIdx = i;
+                                newColumn.thX = i;
+                                newColumn.travIdx = i;
+                                newColumn.visLeavesIdx = i;
+                                newColumn.visible = !$this.hasClass('invisible');
+                                newColumns.push(newColumn);
+                            });
+                            o.inspectors[j].grid.columns = newColumns;
+                        }
+                    }
+                    
                     newInspectors = [];
                     layoutSettings = $('#layout_settings');
                     layoutSettings.find('.layout-inspector').each(function() {
@@ -462,14 +582,34 @@ define([
                     });
                     self.options.inspectors = newInspectors;
                     
+                    newColumns = [];
+                    
+                    
+                    $('#settings-main-view .widget-columns > li').each(function(i, el) {
+                       $this = $(this);
+                       newColumn = o.grid.columns[$this.data('column-id')];
+                       
+                       newColumn.dataIndex = i;
+                       newColumn.leavesIdx = i;
+                       newColumn.linearIdx = i;
+                       newColumn.thX = i;
+                       newColumn.travIdx = i;
+                       newColumn.visLeavesIdx = i;
+                       newColumn.visible = !$this.hasClass('invisible');
+                       newColumns.push(newColumn);
+                    });
+                    
+                    self.options.grid.columns = newColumns;
+                    
                     $('li.ui-widget-content').remove();
                     self._uiInspectors();
+                    self.uiGrid.nosgrid('columns', newColumns);
                     self.uiGrid.nosgrid('doRefresh');
                 },
                 
                 _uiSettingsMenuPopupAddItem : function(element, itemName, content) {
                     if ( typeof this.idMenu == 'undefined' ) this.idMenu = 0;
-                    element.find('ul').append('<li><a href="#settings_menu_popup_item_' + this.idMenu + '">' + itemName + '</a></li>');
+                    element.find('> ul').append('<li><a href="#settings_menu_popup_item_' + this.idMenu + '">' + itemName + '</a></li>');
                     element.append($('<div id="settings_menu_popup_item_' + this.idMenu + '"></div>').append(content));
                     this.idMenu++;
                 },
