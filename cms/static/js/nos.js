@@ -14,7 +14,7 @@ define([
 		'static/cms/js/jquery/wijmo/js/jquery.wijmo-open.1.5.0.min',
 		'static/cms/js/jquery/wijmo/js/jquery.wijmo-complete.1.5.0.min'
 	], function($) {
-        var undefined = (function(undefined) { return undefined; })();
+        var undefined = (function(undefined) {return undefined;})();
 
         $.nos = {
             mp3GridSetup : function() {
@@ -60,89 +60,23 @@ define([
                                         var actions = object[key][i].actions;
                                         // Make the drop-down actions columns
                                         object[key][i] = {
-                                            headerText : '',
+                                            headerText : 'Actions',
                                             cellFormatter : function(args) {
                                                 if ($.isPlainObject(args.row.data)) {
-                                                    var dropDown = args.$container.parent()
-                                                        .addClass("buttontd ui-state-default")
-                                                        .hover(
-                                                        function() {
-                                                            dropDown.parent().addClass("ui-state-hover");
-                                                        },
-                                                        function() {
-                                                            dropDown.parent().removeClass("ui-state-hover");
-                                                        }
-                                                    )
-                                                        .find("div");
 
-                                                    $("<span></span>")
-                                                        .addClass("ui-icon ui-icon-triangle-1-s")
-                                                        .appendTo(dropDown);
+													var actionsContainer = $.nos.$noviusos.ostabs ? $.nos.$noviusos.ostabs('current').panel : $('body');
+                                                    var buttons = $.nos.mp3gridActions(actionsContainer, actions, args.row.data);
 
-                                                    var ul = $("<ul></ul>").appendTo("body");
+													buttons.appendTo(args.$container);
+													args.$container.parent().addClass('buttontd').css({width: 81});
 
-                                                    $.each(actions, function() {
-                                                        var action = this;
-                                                        $("<li><a href=\"#\"></a></li>")
-                                                            .appendTo(ul)
-                                                            .find("a")
-                                                            .text(action.label)
-                                                            .click(function(e) {
-                                                                action.action(args);
-                                                                e.stopImmediatePropagation();
-                                                            })
-                                                    });
-
-                                                    ul.wijmenu({
-                                                        trigger : dropDown,
-                                                        triggerEvent : "mouseenter",
-                                                        orientation : "vertical",
-                                                        showAnimation : {Animated:"slide", duration: 50, easing: null},
-                                                        hideAnimation : {Animated:"hide", duration: 0, easing: null},
-                                                        position : {
-                                                            my        : "right top",
-                                                            at        : "right bottom",
-                                                            collision : "flip",
-                                                            offset    : "0 0"
-                                                        }
-                                                    });
                                                     return true;
                                                 }
                                             },
                                             allowSizing : false,
-                                            width : 20,
+                                            width : 80,
                                             showFilter : false
                                         };
-                                        // Make the default action columns
-                                        object[key].splice(i, 0, {
-                                            headerText : '',
-                                            cellFormatter : function(args) {
-                                                if ($.isPlainObject(args.row.data)) {
-                                                    args.$container.parent()
-                                                        .addClass("buttontd ui-state-default")
-                                                        .hover(
-                                                        function() {
-                                                            args.$container.parent().addClass("ui-state-hover");
-                                                        },
-                                                        function() {
-                                                            args.$container.parent().removeClass("ui-state-hover");
-                                                        }
-                                                    )
-                                                        .click(function(e) {
-                                                            fct = actions[0].action;
-                                                            fct(args);
-                                                            e.stopImmediatePropagation();
-                                                        })
-                                                        .find("div")
-                                                        .text(actions[0].label);
-
-                                                    return true;
-                                                }
-                                            },
-                                            allowSizing : false,
-                                            width : actions[0].width ? actions[0].width : 60,
-                                            showFilter: false
-                                        });
                                     }
                                 };
                             }
@@ -227,6 +161,85 @@ define([
                     };
                 return self;
             },
+
+			mp3gridActions : function(containerActions, actions, noParseData) {
+
+				var container = $('<table><tr></tr></table>').addClass('buttontd wijgridtd');
+
+				$.each(actions, function() {
+					var action = this;
+					action._action = function(e) {
+						action.action(noParseData);
+						e.stopImmediatePropagation();
+						e.preventDefault();
+					}
+				});
+
+				var action = $('<th></th>')
+					.addClass("ui-state-default")
+					.text(actions[0].label)
+					.click(actions[0]._action)
+					.hover(
+						function(e) {
+							$(this).addClass("ui-state-hover");
+						},
+						function(e) {
+							$(this).removeClass("ui-state-hover");
+						}
+					);
+
+				action.appendTo(container.find('tr'));
+
+				if (actions.length > 1) {
+
+					var dropDown = $('<th></th>')
+						.addClass("ui-state-default")
+						.css({
+							width: '20px'
+						})
+						.hover(
+							function(e) {
+								$(this).addClass("ui-state-hover");
+							},
+							function(e) {
+								$(this).removeClass("ui-state-hover");
+							}
+						);
+
+
+					$("<span></span>")
+						.addClass("ui-icon ui-icon-triangle-1-s")
+						.appendTo(dropDown);
+
+					dropDown.appendTo(container.find('tr')).click(function(e) {
+						e.stopImmediatePropagation();
+					});
+
+					var ul = $('<ul></ul>').appendTo(containerActions);
+					$.each(actions, function() {
+						var action = this;
+						$('<li><a href="#"></a></li>')
+							.appendTo(ul)
+							.find('a')
+							.text(action.label)
+							.click(action._action)
+					});
+					ul.wijmenu({
+						trigger : dropDown,
+						triggerEvent : 'mouseenter',
+						orientation : 'vertical',
+						showAnimation : {Animated:"slide", duration: 50, easing: null},
+						hideAnimation : {Animated:"hide", duration: 0, easing: null},
+						position : {
+							my        : 'right top',
+							at        : 'right bottom',
+							collision : 'flip',
+							offset    : '0 0'
+						}
+					});
+				}
+				return container;
+			},
 
             listener : (function() {
                 var _list = {};
@@ -554,7 +567,7 @@ define([
 						$(":input[type='submit'],button", context).button();
 						$("select", context).wijdropdown();
 						$(":input[type=checkbox]", context).wijcheckbox();
-						$('.expander', context).wijexpander({expanded: true });
+						$('.expander', context).wijexpander({expanded: true});
 						$('.accordion', context).wijaccordion({
 							header: "h3"
 						});

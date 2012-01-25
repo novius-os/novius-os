@@ -269,7 +269,11 @@ define([
 
 			self._itemThumbnail(imgContainer, item, index);
 
-			if (o.actions.length > 0) {
+			var buttons = $.nos.mp3gridActions(self.element, o.actions, noParseData);
+
+			buttons.appendTo(container);
+
+			if (o.actions.length < 0) {
 				var tr = $('<table cellspacing="0" cellpadding="0" border="0"><tbody><tr></tr></tbody></table>')
 						.addClass('nos-thumbnails-thumb-grid wijmo-wijgrid-root wijmo-wijgrid-table')
 						.css({
@@ -329,8 +333,9 @@ define([
 							.find('a')
 							.text(action.label)
 							.click(function(e) {
-								e.preventDefault();
 								action.action(noParseData);
+								e.stopImmediatePropagation();
+								e.preventDefault();
 							})
 					});
 					ul.wijmenu({

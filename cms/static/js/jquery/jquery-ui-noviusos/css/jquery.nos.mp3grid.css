@@ -1,6 +1,6 @@
 /*
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -297,12 +297,38 @@
 .nos-mp3grid ul {
   list-style-type: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003282}}
-.nos-mp3grid td.wijgridtd.buttontd {
-  text-align: center;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003281}}
+.nos-mp3grid .buttontd {
   cursor: pointer;
+  padding: 0;
+  border: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003285}}
-.nos-mp3grid td.wijgridtd.buttontd .ui-icon-triangle-1-s {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003286}}
+.nos-mp3grid .buttontd .ui-state-default {
+  display: table-cell;
+  font-weight: normal;
+  text-align: center;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003292}}
+.nos-mp3grid .buttontd .ui-icon-triangle-1-s {
   margin: auto;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003295}}
+.nos-mp3grid .buttontd .wijmo-wijgrid-innercell {
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003299}}
+.nos-mp3grid .buttontd.wijgridtd {
+  border-width: 0;
+  height: 21px;
+  width: 100%;
+  margin: 0 0 0 auto;
+  text-align: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003311}}
+.nos-thumbnails-thumb .buttontd th {
+  border-width: 1px 1px 0 0;
+  border-collapse: 'separate';
+  -moz-user-select: 'none';
 }

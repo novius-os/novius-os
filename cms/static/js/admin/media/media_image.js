@@ -52,7 +52,7 @@ define([
                     });
                 }
             },
-            delete : {
+            'delete' : {
                 label : 'Delete',
                 action : function(item) {
                     if (confirm("Are you sure ?")) {
@@ -106,7 +106,7 @@ define([
                     visualize : {
                         button : true
                     },
-                    delete : true
+                    'delete' : true
                 },
                 dataParser : function(item) {
                     var data = {

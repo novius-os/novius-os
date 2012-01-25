@@ -62,17 +62,6 @@ define([
                 columns : {
                     title : {
                         headerText : mp3Grid.i18n('Title'),
-                        cellFormatter : function(args) {
-                            if ($.isPlainObject(args.row.data)) {
-                                args.$container.closest("td").attr("title", args.row.data.title);
-
-                                $("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-                                    .text(args.row.data.title)
-                                    .appendTo(args.$container);
-
-                                return true;
-                            }
-                        },
                         dataKey : 'title'
                     },
                     lang : {
@@ -91,7 +80,7 @@ define([
                     actions : {
                         actions : [
                             actions.update,
-                            actions.delete
+                            actions['delete']
                         ]
                     }
                 }
