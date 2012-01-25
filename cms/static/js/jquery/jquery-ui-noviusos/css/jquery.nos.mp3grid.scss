@@ -23,6 +23,9 @@
     line-height: 0.8em;
     font-size: 0.8em;
 }
+.wijmo-wijgrid {
+	@include box-sizing(border-box);
+}
 
 .nos-mp3grid {
 	.nos-mp3grid-headerbar {

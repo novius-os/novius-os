@@ -19,47 +19,42 @@ require([
 				parent = inspector.parent()
 					.bind({
 						inspectorResize: function() {
-							inspector.nosgrid('destroy')
-								.empty();
-							init();
+                            inspector.nosgrid('setSize', parent.width(), parent.height());
 						}
 					}),
                 inspectorData = parent.data('inspector'),
-				rendered = false,
-				init = function() {
-					inspector.css({
-							height : '100%',
-							width : '100%'
-						})
-						.nosgrid({
-							showFilter: false,
-							allowSorting: false,
-							scrollMode : 'auto',
-							allowPaging : false,
-							allowColSizing : false,
-							allowColMoving : false,
-							staticRowIndex : 0,
-							columns : inspectorData.grid.columns,
-							data: <?= $data ?>,
-							currentCellChanged: function (e) {
-								var row = $(e.target).nosgrid("currentCell").row(),
-									data = row ? row.data : false;
+				rendered = false;
 
-								if (data && rendered) {
-                                    inspectorData.selectionChanged(data.id, data.title);
-								}
-								inspector.nosgrid("currentCell", -1, -1);
-							},
-							rendering : function() {
-								rendered = false;
-							},
-							rendered : function() {
-								rendered = true;
-								inspector.css('height', 'auto');
-							}
-						});
-				};
-			init();
+            inspector.css({
+                    height : '100%',
+                    width : '100%'
+                })
+                .nosgrid({
+                    showFilter: false,
+                    allowSorting: false,
+                    scrollMode : 'auto',
+                    allowPaging : false,
+                    allowColSizing : false,
+                    allowColMoving : false,
+                    columns : inspectorData.grid.columns,
+                    data: <?= $data ?>,
+                    currentCellChanged: function (e) {
+                        var row = $(e.target).nosgrid("currentCell").row(),
+                            data = row ? row.data : false;
+
+                        if (data && rendered) {
+                            inspectorData.selectionChanged(data.id, data.title);
+                        }
+                        inspector.nosgrid("currentCell", -1, -1);
+                    },
+                    rendering : function() {
+                        rendered = false;
+                    },
+                    rendered : function() {
+                        rendered = true;
+                        inspector.css('height', 'auto');
+                    }
+                });
 		});
 	});
 </script>

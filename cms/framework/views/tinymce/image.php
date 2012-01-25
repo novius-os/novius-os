@@ -147,7 +147,7 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 			header: "h3"
 		});
 
-		require(['static/cms/js/jquery/wijmo/js/jquery.wijmo.wijtabs.js'], function() {
+		require(['static/cms/js/vendor/wijmo/js/jquery.wijmo.wijtabs.js'], function() {
 			$('#tabs').wijtabs({
 				alignment: 'left'
 			});

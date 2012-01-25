@@ -18,16 +18,13 @@ require([
 		$(function() {
 			var label_custom = $('#<?= $id ?>').removeAttr('id')
                     .css({
-                        display : 'inline-block',
-                        whiteSpace : 'nowrap'
+                        display : 'inline-block'
                     }).hide(),
                 inspector = $('<table></table>').insertAfter(label_custom),
                 parent = inspector.parent().bind({
                         inspectorResize: function() {
                             label_custom.appendTo(parent);
-                            inspector.nosgrid('destroy')
-                                .empty();
-                            init();
+                            inspector.nosgrid('setSize', parent.width(), parent.height());
                         }
                     }),
                 inspectorData = parent.data('inspector'),
@@ -57,82 +54,78 @@ require([
                             }
 						}
 					}),
-                rendered = false,
-				init = function() {
-					inspector.css({
-							height : '100%',
-							width : '100%'
-						})
-						.nosgrid({
-							columnsAutogenerationMode : 'none',
-							scrollMode : 'auto',
-							staticRowIndex : 0,
-							showGroupArea : false,
-							columns : [
-								{
-			                        dataKey : 'group',
-			                        groupInfo: {
-			        					groupSingleRow : false,
-			                            position: "header",
-			                            outlineMode: "startCollapsed",
-			                            headerText: "<b>{0}</b>"
-			                        },
-			                        visible : false
-			                    },
-			                    {
-				                    headerText : inspectorData.label,
-									cellFormatter: function (args) {
-										if ($.isPlainObject(args.row.data) && args.row.data.value === 'custom') {
-											args.$container.css({
-													'white-space' : 'normal',
-													'padding-left' : '10px'
-												});
-											$('<span></span>').text(args.row.data.title)
-												.css({
-														'white-space' : 'nowrap',
-														'margin-right' : '10px'
-													})
-												.appendTo(args.$container);
-											label_custom.appendTo(args.$container);
-											return true;
-										} else {
-											args.$container.css('padding-left', '30px');
-										}
-									},
-			                        dataKey : 'title'
-				                },
-				                {
-			                        visible : false
-				                }
-							],
-							data: <?= $content ?>,
-							currentCellChanged: function (e) {
-								var row = $(e.target).nosgrid("currentCell").row(),
-									data = row ? row.data : false;
+                rendered = false;
 
-								if (data && rendered) {
-									if (data.value !== 'custom') {
-										label_custom.hide();
-									}
-									if (data.value === 'custom') {
-										label_custom.show();
-									} else {
-                                        inspectorData.selectionChanged(data.value, data.title);
-									}
-								}
-								inspector.nosgrid("currentCell", -1, -1);
-							},
-							rendering : function() {
-								rendered = false;
-							},
-							rendered : function() {
-								rendered = true;
-								inspector.css('height', 'auto');
-							}
-						});
-				};
+            inspector.css({
+                    height : '100%',
+                    width : '100%'
+                })
+                .nosgrid({
+                    columnsAutogenerationMode : 'none',
+                    scrollMode : 'auto',
+                    showGroupArea : false,
+                    columns : [
+                        {
+                            dataKey : 'group',
+                            groupInfo: {
+                                groupSingleRow : false,
+                                position: "header",
+                                outlineMode: "startCollapsed",
+                                headerText: "<b>{0}</b>"
+                            },
+                            visible : false
+                        },
+                        {
+                            headerText : inspectorData.label,
+                            cellFormatter: function (args) {
+                                if ($.isPlainObject(args.row.data) && args.row.data.value === 'custom') {
+                                    args.$container.css({
+                                            'white-space' : 'normal',
+                                            'padding-left' : '10px'
+                                        });
+                                    $('<span></span>').text(args.row.data.title)
+                                        .css({
+                                                'white-space' : 'nowrap',
+                                                'margin-right' : '10px'
+                                            })
+                                        .appendTo(args.$container);
+                                    label_custom.appendTo(args.$container);
+                                    return true;
+                                } else {
+                                    args.$container.css('padding-left', '30px');
+                                }
+                            },
+                            dataKey : 'title'
+                        },
+                        {
+                            visible : false
+                        }
+                    ],
+                    data: <?= $content ?>,
+                    currentCellChanged: function (e) {
+                        var row = $(e.target).nosgrid("currentCell").row(),
+                            data = row ? row.data : false;
 
-			init();
+                        if (data && rendered) {
+                            if (data.value !== 'custom') {
+                                label_custom.hide();
+                            }
+                            if (data.value === 'custom') {
+                                label_custom.show();
+                            } else {
+                                inspectorData.selectionChanged(data.value, data.title);
+                            }
+                        }
+                        inspector.nosgrid("currentCell", -1, -1);
+                    },
+                    rendering : function() {
+                        rendered = false;
+                    },
+                    rendered : function() {
+                        rendered = true;
+                        inspector.css('height', 'auto');
+                    }
+                });
 		});
 	});
 </script>
