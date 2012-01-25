@@ -25,6 +25,8 @@ define([
 				vertical : 'Vertical',
 				horizontal : 'Horizontal',
 				hidden : 'Hidden',
+                                save : 'Save',
+                                cancel: 'Cancel',
                 item : 'item',
                 items : 'items',
 				showNbItems : 'Showing {{x}} items out of {{y}}',
@@ -73,7 +75,7 @@ define([
 			self.uiSettings = $('<div></div>').addClass('nos-mp3grid-settings')
 				.appendTo(self.uiHeaderBar);
 			self.uiSettingsButton = $('<button type="button"></button>').appendTo(self.uiSettings);
-			self.uiSettingsMenu = $('<ul></ul>').appendTo(self.uiSettings);
+			//self.uiSettingsMenu = $('<ul></ul>').appendTo(self.uiSettings);
 
 			self.uiSplitterVertical = $('<div></div>').addClass('nos-mp3grid-splitter-v')
 				.appendTo(self.element);
@@ -257,12 +259,220 @@ define([
 				 label : o.texts.settings,
 				 icons : {primary : 'ui-icon-gear'}
 			});
-
+                        
+                        self.uiSettingsButton.click(function() {
+                            $el = self._uiSettingsMenuPopup();
+                            $window = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
+                            $el.wijtabs({
+                                alignment: 'left',
+                                show: function(e, ui) {
+                                    $(ui.panel).find('.superpanel').wijsuperpanel({
+                                        autoRefresh: true,
+                                        hScroller: {
+                                            scrollMode: 'buttons'
+                                        }
+                                    });
+                                    $layout = $(ui.panel).find('#layout_settings');
+                                    $layout.find('.panels').sortable({
+                                            connectWith: ".panels",
+                                            update: function() {
+                                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                                            },
+                                            change: function() {
+                                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                                            },
+                                            start: function(event, ui) {
+                                                $(ui.item).addClass('moving');
+                                            },
+                                            stop: function(event, ui) {
+                                                $(ui.item).removeClass('moving');
+                                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                                            },
+                                            placeholder: "droping"
+                                    });
+                                }
+                            });
+                            $el.after(
+                                $('<div></div>').css({
+                                    textAlign: 'right'
+                                }).append(
+                                    $('<button />').button({
+                                        label : o.texts.cancel,
+                                        icons : {primary : 'ui-icon-gear'}
+                                    }).click( function() {$window.wijdialog('close');$window.remove();} )
+                                ).append(
+                                    $('<button />').button({
+                                        label : o.texts.save,
+                                        icons : {primary : 'ui-icon-gear'}
+                                    }).click( function() {self._uiSettingsMenuPopupSave();$window.wijdialog('close');$window.remove();} )
+                                )
+                            );
+                        }
+                        );
+                        
+                        /*$notLayout*/
+                        
+/*
 			self._inspectorsSettingsMenu()
 				._uiSettingsMenu();
-
+*/
 			return self;
 		},
+                
+                _uiSettingsMenuPopup : function() {
+                    var self = this,
+				o = self.options;
+                                
+                    $el = $('<div><ul></ul></div>');
+                    self._uiSettingsMenuPopupAddItem($el, "Main view", "The main view is on todo list ! Coming soon !");
+                    
+                    self._uiSettingsMenuPopupAddLayoutTab($el);
+                    
+                                
+                    return $el;
+                },
+                
+                _uiSettingsMenuPopupAddLayoutTab : function($el) {
+                    var self = this,
+				o = self.options;
+                                
+                    $layout = $('<form id="layout_settings"></form>');
+                    
+                    $layout.append(
+                        $('<div class="layout"></div>')
+                            .append(
+                                $('<ul class="left-panel panels"></ul>')
+                            )
+                            .append(
+                                $('<div class="right-side"></div>')
+                                .append(
+                                    $('<ul class="top-panel panels"></ul>')
+                                )
+                                .append(
+                                    $('<div class="content"></div>')
+                                )
+                            )
+                    );
+                        
+                    $notLayout = $('<div class="not-layout superpanel"></div>')
+                            .append(
+                                "<ul class=\"invisible-panel panels\"></ul>"
+                            );
+                    
+                    self._uiSettingsMenuPopupAddItem($el, "Layout", $layout);    
+                    
+                    $leftPanel = $layout.find('.left-panel');
+                    $topPanel = $layout.find('.top-panel');
+                    $invisiblePanel = $notLayout.find('.invisible-panel');
+                    
+                    $layout.find('.not-layout').wijsuperpanel({
+                        hScroller: {
+                            scrollMode: 'buttons'
+                        }
+                    });
+                    
+                        
+                    for (var i = 0; i < o.inspectors.length; i++) {
+                        visible = !o.inspectors[i].hide;
+                        vertical = o.inspectors[i].vertical;
+                        $inspectorEl = $('<li class="layout-inspector"></li>')
+                                        .data('inspector-id', i)
+                                        .append(
+                                            $('<div></div>')
+                                                .append(o.inspectors[i].label)
+                                        );
+                        if (visible) {
+                            if (vertical) {
+                                $leftPanel.append(
+                                    $inspectorEl
+                                );
+                            } else {
+                                $topPanel.append(
+                                    $inspectorEl
+                                );
+                            }
+                        } else {
+                            $invisiblePanel.append(
+                                $inspectorEl
+                            );
+                        }
+                    }
+                    
+                    
+                    
+                    
+                    $layout.append($notLayout);
+                    
+                    
+                    self._uiSettingsMenuPopupRefreshLayout($layout);
+                },
+                
+                _uiSettingsMenuPopupRefreshLayout : function($layout) {
+                    $leftPanel = $layout.find('.left-panel');
+                    $topPanel = $layout.find('.top-panel');
+                    $invisiblePanel = $layout.find('.invisible-panel');
+                    
+                    $leftLis = $leftPanel.find('li').not('.moving');
+                    $leftLis.css({
+                        height: (200 - $leftLis.length) / $leftLis.length,
+                        width: "inherit"
+                    });
+                    $leftLis.removeClass('last');
+                    $($leftLis[$leftLis.length - 1]).addClass('last');
+                    
+                    
+                    
+                    
+                    $topLis = $topPanel.find('li').not('.moving');
+                    
+                    $topLis.css({
+                        width: (200 - $topLis.length) / $topLis.length,
+                        height: "inherit"
+                    });
+                    $topLis.removeClass('last');
+                    $($topLis[$topLis.length - 1]).addClass('last');
+                    
+                    
+                    
+                    
+                    $invisibleLis = $invisiblePanel.find('li').not('.moving');
+                    
+                    $invisibleLis.css({
+                        width: '',
+                        height: ''
+                    });
+                    $invisibleLis.removeClass('last');
+                    $($invisibleLis[$invisibleLis.length - 1]).addClass('last');
+                    $invisiblePanel.css({
+                        width: Math.max(($invisibleLis.length + 1) * ($invisibleLis.width() + 1), 100)
+                    });
+                },
+                
+                _uiSettingsMenuPopupSave : function() {
+                    var self = this,
+				o = self.options;
+                    newInspectors = [];
+                    layoutSettings = $('#layout_settings');
+                    layoutSettings.find('.layout-inspector').each(function() {
+                        newInspector = self.options.inspectors[$(this).data('inspector-id')];
+                        $panel = $(this).closest('.panels');
+                        newInspector.hide = $panel.hasClass('invisible-panel');
+                        newInspector.vertical = $panel.hasClass('left-panel');
+                        newInspectors.push(newInspector);
+                    });
+                    self.options.inspectors = newInspectors;
+                    
+                    $('li.ui-widget-content').remove();
+                    self._uiInspectors();
+                    self.uiGrid.nosgrid('doRefresh');
+                },
+                
+                _uiSettingsMenuPopupAddItem : function(element, itemName, content) {
+                    if ( typeof this.idMenu == 'undefined' ) this.idMenu = 0;
+                    element.find('ul').append('<li><a href="#settings_menu_popup_item_' + this.idMenu + '">' + itemName + '</a></li>');
+                    element.append($('<div id="settings_menu_popup_item_' + this.idMenu + '"></div>').append(content));
+                    this.idMenu++;
+                },
 
 		_uiSettingsMenu : function() {
 			var self = this;
@@ -272,7 +482,7 @@ define([
 					self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
 				}
 			});
-
+/*
 			self.uiSettingsMenu.wijmenu({
 					trigger : self.uiSettingsButton,
 					triggerEvent : 'mouseenter',
@@ -393,7 +603,7 @@ define([
 								checked : self.showFilter,
 								click : function() {
 									self.showFilter = $(this).is(':checked');
-									self.gridRefresh()
+									self._resizeList(true)
 										.uiSettingsMenu.wijmenu('hideAllMenus');
 								},
 								label : o.texts.showFiltersColumns
@@ -464,8 +674,8 @@ define([
 										}
 										widget.closest('li.ui-widget-content')
 											.remove();
-										self._resizeInspectorsV()
-											._resizeInspectorsH();
+										self._resizeInspectorsV(true)
+											._resizeInspectorsH(true);
 									}
 								} else {
 									inspector.hide = false;
@@ -479,14 +689,14 @@ define([
 												.end()
 												.css({width: '100%', height: 'auto'})
 												.appendTo(target);
-											self._resizeInspectorsV()
-												._resizeInspectorsH();
+											self._resizeInspectorsV(true)
+												._resizeInspectorsH(true);
 										}
 									} else {
 										var $li = $('<li></li>').addClass('ui-widget-content')
 											.data('inspectorurl', inspector.url)
 											.appendTo(target);
-										self['_resizeInspectors' + orientation.toUpperCase()]()
+										self['_resizeInspectors' + orientation.toUpperCase()](true)
 											._loadInspector($li);
 									}
 								}
@@ -532,26 +742,26 @@ define([
 			var self = this,
 				refreshV = function() {
 					self.uiSplitterHorizontal.wijsplitter("refresh");
-					self._resizeInspectorsV()
-						._resizeInspectorsH()
-						.gridRefresh();
+					self._resizeInspectorsV(true)
+						._resizeInspectorsH(true)
+						._resizeList(true);
 				},
 				refreshH = function() {
-					self._resizeInspectorsH()
-						.gridRefresh();
+					self._resizeInspectorsH(true)
+						._resizeList(true);
 				},
-                verticalSplitter = $.extend({
+                verticalSplitter = $.extend(true, {
                         orientation: "vertical",
                         splitterDistance: 200,
                         showExpander: false,
                         fullSplit: true,
                         panel1 : {
                             minSize : 150,
-                            scrollBars : 'auto'
+                            scrollBars : 'none'
                         },
                         panel2 : {
                             minSize : 200,
-                            scrollBars : 'auto'
+                            scrollBars : 'none'
                         },
                         expanded: function () {
                             refreshV();
@@ -564,18 +774,18 @@ define([
                             refreshV();
                         }
                     }, self.options.splitters.vertical),
-                horizontalSplitter = $.extend({
+                horizontalSplitter = $.extend(true, {
                         orientation: "horizontal",
                         fullSplit: true,
                         splitterDistance: 200,
                         showExpander: false,
                         panel1 : {
                             minSize : 200,
-                            scrollBars : 'auto'
+                            scrollBars : 'none'
                         },
                         panel2 : {
                             minSize : 200,
-                            scrollBars : 'auto'
+                            scrollBars : 'none'
                         },
                         expanded: function () {
                             refreshH();
@@ -616,8 +826,8 @@ define([
 				}
 			});
 
-			self._resizeInspectorsV()
-				._resizeInspectorsH();
+			self._resizeInspectorsV(true)
+				._resizeInspectorsH(true);
 
 			self.uiInspectorsVertical.find('> li')
 				.add(self.uiInspectorsHorizontal.find('> li'))
@@ -632,8 +842,8 @@ define([
 					},
 					stop: function() {
 						self.resizing = true;
-						self._resizeInspectorsV()
-							._resizeInspectorsH();
+						self._resizeInspectorsV(true)
+							._resizeInspectorsH(true);
 					}
 				});
 
@@ -695,6 +905,7 @@ define([
 
                     self.gridRefresh();
                 };
+                
             $li.data('inspector', inspector);
 
 			if ($.isFunction(inspector.url)) {
@@ -705,6 +916,7 @@ define([
 					dataType: 'html'
 				})
 				.done(function(data) {
+                                        $toto = $li;
 					$(data).appendTo($li); // appendTo for embed javascript work
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
@@ -855,7 +1067,10 @@ define([
 				height = $(window).height() - position.top,
 				heights = $.nos.grid.getHeights();
 
-			self.uiGrid.css('height', height)
+			self.uiGrid.css({
+                    height : height,
+                    width : '100%'
+                })
 				.nosgrid($.extend({
 					columnsAutogenerationMode : 'none',
 					selectionMode: 'singleRow',
@@ -867,7 +1082,6 @@ define([
 					pageSize: Math.floor((height - heights.footer - heights.header - (self.showFilter ? heights.filter : 0)) / heights.row),
 					allowColSizing : true,
 					allowColMoving : true,
-					staticRowIndex : 0,
 					data: new wijdatasource({
 						dynamic: true,
 						proxy: new wijhttpproxy({
@@ -949,7 +1163,7 @@ define([
 						if (self.itemSelected !== null) {
 							var sel = self.uiGrid.nosgrid("selection");
 							sel.clear();
-							sel.addRange(0, self.itemSelected, 1, self.itemSelected);
+							sel.addRows(self.itemSelected);
 						}
 					},
                     dataLoading: function(e) {
@@ -1113,7 +1327,7 @@ define([
 			return inspectors;
 		},
 
-		_resizeInspectorsV : function() {
+		_resizeInspectorsV : function(refresh) {
 			var self = this;
 
 		    if (self.resizing) {
@@ -1124,7 +1338,7 @@ define([
 
 				if (inspectors.length) {
 					inspectors.css('height', ( self.uiInspectorsVertical.height() / inspectors.length )  + 'px')
-						.trigger('inspectorResize');
+						.trigger('inspectorResize', {refresh : refresh || false});
 				} else {
 					self._hideSplitterV();
 				}
@@ -1133,7 +1347,7 @@ define([
 			return self;
 		},
 
-		_resizeInspectorsH : function() {
+		_resizeInspectorsH : function(refresh) {
 			var self = this;
 
 		    if (self.resizing) {
@@ -1144,7 +1358,7 @@ define([
 
 				if (inspectors.length) {
 					inspectors.css('width', ( self.uiInspectorsHorizontal.width() / inspectors.length )  + 'px')
-						.trigger('inspectorResize');
+						.trigger('inspectorResize', {refresh : refresh || false});
 				} else {
 					self._hideSplitterH();
 				}
@@ -1156,6 +1370,27 @@ define([
 
 			return self;
 		},
+
+        _resizeList : function(refresh) {
+            var self = this,
+                o = self.options;
+
+            if (self.init) {
+                if (o.defaultView === 'thumbnails') {
+                    self.uiThumbnail.show();
+                    self._uiThumbnail();
+                } else {
+                    var height = self.uiSplitterHorizontalBottom.height() - self.uiSearchBar.outerHeight(true),
+                        heights = $.nos.grid.getHeights();
+                    self.uiGrid.nosgrid('setSize', self.uiSplitterHorizontalBottom.width(), height);
+                    if (refresh) {
+                        self.uiGrid.nosgrid('option', 'pageSize', Math.floor((height - heights.footer - heights.header - (self.showFilter ? heights.filter : 0)) / heights.row));
+                    }
+                }
+            }
+
+            return self;
+        },
 
 		_hideSplitterV : function() {
 			var self = this,
@@ -1181,11 +1416,11 @@ define([
 
 		_refreshSettingsMenu : function() {
 			var self = this;
-
+/*
 			self.uiSettingsMenu.wijmenu('destroy')
 				.empty();
 			self._uiSettingsMenu();
-
+*/
 			return self;
 		},
 
@@ -1194,7 +1429,11 @@ define([
 				o = self.options;
 
 			if (self.init) {
-				self._uiList();
+                if (o.defaultView === 'thumbnails') {
+                    self._uiList();
+                } else {
+                    self.uiGrid.nosgrid("ensureControl", true);
+                }
 			}
 
 			return self;

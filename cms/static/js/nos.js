@@ -9,10 +9,8 @@
 
 define([
         'jquery',
-		'static/cms/js/jquery/globalize/globalize.min',
-		'static/cms/js/jquery/mousewheel/jquery.mousewheel.min',
-		'static/cms/js/jquery/wijmo/js/jquery.wijmo-open.1.5.0.min',
-		'static/cms/js/jquery/wijmo/js/jquery.wijmo-complete.1.5.0.min'
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.0b2.min',
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.0b2.min'
 	], function($) {
         var undefined = (function(undefined) {return undefined;})();
 
@@ -21,6 +19,7 @@ define([
                 var self = {};
 
                 var objectToArray = function(val, i) {
+                        val['setupkey'] = i;
                         return val;
                     },
 
@@ -75,6 +74,7 @@ define([
                                             },
                                             allowSizing : false,
                                             width : 80,
+                                            ensurePxWidth : true,
                                             showFilter : false
                                         };
                                     }
@@ -347,16 +347,20 @@ define([
                     }
                 }, wijdialog_options);
 
-				log($.nos.$noviusos);
+
 				var where   = $.nos.$noviusos.ostabs ? $.nos.$noviusos.ostabs('current').panel : $('body');
 				var $dialog = $(document.createElement('div')).appendTo(where);
 
 				$.nos.data('dialog_media', $dialog);
 
+                if (typeof wijdialog_options['content'] != 'undefined') {
+                    $dialog.append(wijdialog_options.content);
+                }
+
                 require([
-                    'link!static/cms/js/jquery/wijmo/css/jquery.wijmo-open.1.5.0.css',
+                    'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.1.5.0.css',
                     //'static/cms/js/jquery/wijmo/js/jquery.wijmo.wijutil',
-                    'static/cms/js/jquery/wijmo/js/jquery.wijmo.wijdialog'
+                    'static/cms/js/jquery/vendor/js/jquery.wijmo.wijdialog'
                 ], function() {
 					if (wijdialog_options.ajax) {
 						$dialog.load(wijdialog_options.contentUrl, {}, function(responseText, textStatus, XMLHttpRequest){
@@ -489,7 +493,6 @@ define([
                                 scrollMode : 'auto',
                                 showFilter: true,
                                 allowPaging : true,
-                                staticRowIndex : 0,
                                 data: [ ['test'] ]
                             });
                         this.heights = {

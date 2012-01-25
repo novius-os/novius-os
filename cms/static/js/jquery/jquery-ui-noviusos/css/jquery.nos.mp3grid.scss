@@ -23,6 +23,9 @@
     line-height: 0.8em;
     font-size: 0.8em;
 }
+.wijmo-wijgrid {
+	@include box-sizing(border-box);
+}
 
 .nos-mp3grid {
 	.nos-mp3grid-headerbar {
@@ -39,8 +42,7 @@
 	.nos-mp3grid-splitter-v {
 		@include box-sizing(border-box);
 		position : absolute;
-		padding-top: 40px;
-        top : 0;
+                top : 40px;
 		left : 0;
 		right : 0;
 		bottom : 0;
@@ -314,4 +316,107 @@
 			-moz-user-select: 'none';
 		}
 	}
+}
+
+#layout_settings {
+
+    .layout-inspector {
+        background-color: white;
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        cursor: move;
+
+        > div {
+            position: absolute;
+            top: 50%;
+            left: 0%;
+            width: 100%;
+            text-align: center;
+            height: 24px;
+            line-height: 24px;
+            margin-top: -12px;
+        }
+
+
+    }
+
+    .droping {
+        background-color: #DDD;
+        display: inline-block;
+    }
+
+    .layout {
+        width: 300px;
+        height: 200px;
+        border: 1px solid #BBB;
+
+        .layout-inspector {
+            &.last {
+                border: 0 !important;
+            }
+        }
+
+        .left-panel {
+            position: relative;
+            width: 99px;
+            height: 100%;
+            border-right: 1px solid #DDD;
+            float: left;
+
+            .layout-inspector {
+                border-bottom: 1px solid #EEE;
+                width: 100%;
+            }
+        }
+
+        .top-panel {
+            position: relative;
+            width: 200px;
+            height: 79px;
+            border-bottom: 1px solid #DDD;
+
+            .layout-inspector {
+                border-right: 1px solid #EEE;
+                height: 100%;
+            }
+        }
+
+        .right-side {
+            float: left;
+            width: 200px;
+            height: 100%;
+
+            .content {
+                width: 200px;
+                height: 120px;
+                background-color: #EEE;
+            }
+        }
+    }
+
+    .not-layout {
+        margin-top: 10px;
+        width: 300px;
+        height: 30px;
+        border: 1px solid #BBB;
+        position: relative;
+        overflow: auto;
+
+        .droping {
+            width: 100px;
+            height: 30px;
+        }
+
+        .invisible-panel {
+            height: 30px;
+            position: relative;
+
+            .layout-inspector {
+                border-right: 1px solid #EEE;
+                height: 30px;
+                width: 100px;
+            }
+        }
+    }
 }

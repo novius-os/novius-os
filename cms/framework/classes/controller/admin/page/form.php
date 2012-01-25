@@ -16,10 +16,9 @@ class Controller_Admin_Page_Form extends Controller_Generic_Admin {
 
 		\Asset::css('http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css', array(), 'css');
 
-		\Asset::add_path('static/cms/js/jquery/wijmo/');
+		\Asset::add_path('static/cms/js/vendor/wijmo/');
 		\Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-		\Asset::css('jquery.wijmo-complete.1.5.0.css', array(), 'css');
-		\Asset::css('jquery.wijmo-open.1.5.0.css', array(), 'css');
+		\Asset::css('jquery.wijmo-complete.all.2.0.0b2.min.css', array(), 'css');
 
 		\Asset::add_path('static/cms/');
 		\Asset::css('base.css', array(), 'css');
