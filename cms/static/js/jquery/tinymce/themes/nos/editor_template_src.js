@@ -848,7 +848,12 @@
 					});
 
 					DOM.show(e);
-					DOM.setStyle(e, 'top', 0 - DOM.getRect(ed.id + '_tblext').h - 1);
+					var toolbarRect = DOM.getRect(ed.id + '_tblext');
+					DOM.setStyle(e, 'top', 0 - toolbarRect.h - 1);
+
+					if (toolbarRect.w + toolbarRect.x > window.innerWidth) {
+						DOM.setStyle(e, 'left', window.innerWidth - toolbarRect.w - toolbarRect.x - 1);
+					}
 
 					// Fixes IE rendering bug
 					DOM.hide(e);
@@ -1423,20 +1428,8 @@
 		},
 
 		_mceImage : function(ui, val) {
-			var ed = this.editor;
-
-			// Internal image object like a flash placeholder
-			if (ed.dom.getAttrib(ed.selection.getNode(), 'class').indexOf('mceItem') != -1)
-				return;
-
-			ed.windowManager.open({
-				url : this.url + '/image.htm',
-				width : 355 + parseInt(ed.getLang('nos.image_delta_width', 0)),
-				height : 275 + parseInt(ed.getLang('nos.image_delta_height', 0)),
-				inline : true
-			}, {
-				theme_url : this.url
-			});
+			// Don't use the native image editing. We have our own.
+			return this._nosImage(ui, val);
 		},
 
 		_mceLink : function(ui, val) {
@@ -1588,7 +1581,8 @@
 
 			dialog = $.nos.dialog({
 				contentUrl: 'admin/tinymce/image',
-				title: 'Insert an image'
+				title: 'Insert an image',
+				ajax: true
 			});
 
 			var clean = function() {

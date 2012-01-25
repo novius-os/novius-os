@@ -1,10 +1,74 @@
+<div id="<?= $uniqid = 'tabs_'.uniqid() ?>">
+	<ul>
+		<li><a href="#properties">Properties</a></li>
+		<li><a href="admin/admin/media/mode/tinymce/index">Media library</a></li>
+	</ul>
+	<div id="properties">
+		<form action="#">
+			<table class="fieldset">
+				<tr>
+					<th><label>Title: </label></th>
+					<td><input type="text" name="title" id="title" size="30" /></td>
+				</tr>
+				<tr>
+					<th><label>Description: </label></th>
+					<td><input type="text" name="alt" id="alt" size="30" /> &nbsp; <input type="checkbox" id="same_title_alt" checked> <label for="same_title_alt">&nbsp;Same as title</label></td>
+				</tr>
+				<tr>
+					<th><label>Width: </label></th>
+					<td><input type="text" name="width" id="width" size="5" /> &nbsp; <input type="checkbox" id="proportional" checked> <label for="proportional">&nbsp;Keep proportions</label></td>
+				</tr>
+				<tr>
+					<th><label>Height: </label></th>
+					<td><input type="text" name="height" id="height" size="5" readonly /></td>
+				</tr>
+				<tr>
+					<th><label>Style: </label></th>
+					<td><input type="text" name="style" id="style" size="50" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<p style="position:absolute;width:190px;bottom:20px;left:10px;text-align:center;">
+	<button id="save">Save</button> &nbsp; or &nbsp; <a id="close" href="#">Cancel</a>
+</p>
+
+<style type="text/css">
+#library {
+	width: 100%;
+	padding:0;
+}
+.wijmo-checkbox {
+	display: inline-block;
+	width: inherit;
+	vertical-align: middle;
+}
+.wijmo-checkbox label {
+	width: inherit;
+}
+
+<?= '#'.$uniqid ?> > ul {
+	width : 15%;
+}
+
+<?= '#'.$uniqid ?> > div {
+	width : 83%;
+	margin-right : 1%;
+}
+</style>
+
 <script type="text/javascript">
 require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 	$(function() {
 
-		$('body').height($(window).height());
-		$('#tabs').height($(window).height());
-		$('iframe').height($(window).height());
+		setTimeout(function() {
+			var height = $('#<?= $uniqid ?>').parent().height();
+			$('#<?= $uniqid ?>').height(height);
+			var margin = $('#properties').outerHeight(true) - $('#properties').innerHeight();
+			$('#properties').height(height - margin);
+		}, 1);
 
 		var base_url = '<?= \Uri::base(true) ?>';
 
@@ -34,7 +98,7 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 				$alt.val(media_json.title);
 				$style.val('');
 
-				$($('#tabs li a').get(1)).click();
+				$($('#<?= $uniqid ?> li a').get(1)).click();
 				return;
 			}
 
@@ -148,76 +212,15 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 		});
 
 		require(['static/cms/js/jquery/wijmo/js/jquery.wijmo.wijtabs.js'], function() {
-			$('#tabs').wijtabs({
-				alignment: 'left'
+			$('#<?= $uniqid ?>').wijtabs({
+				alignment: 'left',
+				load: function(e, ui) {
+					log(ui.panel);
+					var margin = $(ui.panel).outerHeight(true) - $(ui.panel).innerHeight();
+					$(ui.panel).height($('#<?= $uniqid ?>').parent().height() - margin);
+				}
 			});
-		});
-
-		$('iframe').each(function() {
-			$(this).attr('src', $(this).data('src'));
 		});
 	});
 });
 </script>
-
-<style type="text/css">
-#library {
-	width: 100%;
-	padding:0;
-}
-.wijmo-checkbox {
-	display: inline-block;
-	width: inherit;
-	vertical-align: middle;
-}
-.wijmo-checkbox label {
-	width: inherit;
-}
-
-#tabs > ul {
-	width : 15%;
-}
-
-#tabs > div {
-	width : 83%;
-	margin-right : 1%;
-}
-</style>
-
-<div id="tabs">
-	<ul>
-		<li><a href="#library">Media library</a></li>
-		<li><a href="#properties">Properties</a></li>
-	</ul>
-	<iframe id="library" data-src="admin/admin/media/mode/tinymce/index"></iframe>
-	<div id="properties">
-		<form action="#">
-			<table class="fieldset">
-				<tr>
-					<th><label>Title: </label></th>
-					<td><input type="text" name="title" id="title" size="30" /></td>
-				</tr>
-				<tr>
-					<th><label>Description: </label></th>
-					<td><input type="text" name="alt" id="alt" size="30" /> &nbsp; <input type="checkbox" id="same_title_alt" checked> <label for="same_title_alt">&nbsp;Same as title</label></td>
-				</tr>
-				<tr>
-					<th><label>Width: </label></th>
-					<td><input type="text" name="width" id="width" size="5" /> &nbsp; <input type="checkbox" id="proportional" checked> <label for="proportional">&nbsp;Keep proportions</label></td>
-				</tr>
-				<tr>
-					<th><label>Height: </label></th>
-					<td><input type="text" name="height" id="height" size="5" readonly /></td>
-				</tr>
-				<tr>
-					<th><label>Style: </label></th>
-					<td><input type="text" name="style" id="style" size="50" /></td>
-				</tr>
-			</table>
-		</form>
-	</div>
-</div>
-
-<p style="position:absolute;width:190px;bottom:20px;left:10px;text-align:center;">
-	<button id="save">Save</button> &nbsp; or &nbsp; <a id="close" href="#">Cancel</a>
-</p>

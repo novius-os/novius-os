@@ -2,7 +2,7 @@
 
 namespace Cms;
 
-class Controller_Tinymce extends Controller_Generic_Admin {
+class Controller_Tinymce extends Controller {
 
 	public function action_image() {
 
@@ -14,7 +14,6 @@ class Controller_Tinymce extends Controller_Generic_Admin {
 		\Asset::css('base.css', array(), 'css');
 		\Asset::css('form.css', array(), 'css');
 
-		$this->template->body = \View::forge('cms::tinymce/image');
-		return $this->template;
+		return \View::forge('cms::tinymce/image');
 	}
 }
