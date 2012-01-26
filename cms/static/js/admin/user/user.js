@@ -41,7 +41,8 @@ define([
                 columns : {
                     user : {
                         headerText : mp3Grid.i18n('User'),
-                        dataKey : 'fullname'
+                        dataKey : 'fullname',
+                        sortDirection : 'ascending'
                     },
                     email : {
                         headerText : mp3Grid.i18n('Email'),

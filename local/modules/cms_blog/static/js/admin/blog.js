@@ -62,7 +62,8 @@ define([
                 columns : {
                     title : {
                         headerText : mp3Grid.i18n('Title'),
-                        dataKey : 'title'
+                        dataKey : 'title',
+                        sortDirection : 'ascending'
                     },
                     lang : {
                         lang : true

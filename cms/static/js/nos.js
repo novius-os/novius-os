@@ -81,6 +81,7 @@ define([
                                                 };
                                             },
                                             allowSizing : false,
+                                            allowSort : false,
                                             width : width,
                                             ensurePxWidth : true,
                                             showFilter : false

@@ -45,7 +45,20 @@ define([
                     old_dataLoaded.apply(this, arguments);
                 }
             };
-
+            if ($.isFunction(o.columnResized)) {
+                var old_columnResized = o.columnResized;
+            }
+            o.columnResized = function(e, args) {
+                var columns = self.option('columns');
+                $.extend(columns[args.column.dataIndex], {
+                    ensurePxWidth : true,
+                    width : args.column.width
+                });
+                self.setSize(self.outerDiv.parent().width());
+                if ($.isFunction(old_columnResized)) {
+                    old_columnResized.apply(this, arguments);
+                }
+            };
 
             if ($.isFunction(o.dataLoaded)) {
                 var old_ajaxError = o.ajaxError;
@@ -73,8 +86,6 @@ define([
                     old_ajaxError.apply(this, arguments);
                 }
             };
-
-
 
             $.wijmo.wijgrid.prototype._init.call(self);
 		},
