@@ -72,7 +72,8 @@ define([
                                 return true;
                             }
                         },
-                        dataKey : 'title'
+                        dataKey : 'title',
+                        sortDirection : 'ascending'
                     },
                     lang : {
                         lang : true

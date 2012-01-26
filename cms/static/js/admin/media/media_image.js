@@ -36,7 +36,8 @@ define([
             },
             title : {
                 headerText : 'Title',
-                dataKey : 'title'
+                dataKey : 'title',
+                sortDirection : 'ascending'
             },
             actions : true
         },
