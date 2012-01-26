@@ -272,7 +272,7 @@ define([
 
 			self._itemThumbnail(imgContainer, item, index);
 
-			var buttons = $.nos.mp3gridActions(self.element, o.actions, noParseData);
+			var buttons = $.nos.mp3gridActions(o.actions, noParseData);
 
 			buttons.appendTo(container);
 

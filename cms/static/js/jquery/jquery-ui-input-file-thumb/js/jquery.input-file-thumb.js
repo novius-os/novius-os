@@ -1,9 +1,9 @@
 /*
  * jQuery inputFileThumb Plugin
  *
- * Copyright (c) 2011 Novius Labs (Gilles FELIX & Antoine LEFEUVRE)
+ * Copyright (c) 2011 Novius Labs (Gilles FELIX & Antoine LEFEUVRE & Julian ESPERAT)
  *
- * version: 2.0.0 (16-DEC-2011)
+ * version: 2.0.1 (26-JAN-2012)
  * @requires jQuery v1.7.1 or later
  * @requires jQuery UI v1.8.16 or later (UI Core, UI Widget, UI Button)
  * @requires A jQuery UI Theme
@@ -29,6 +29,7 @@
 	            'description'           : 'More info about the file (appears in the details layer)',
 	            'extensions'            : [], // Array of allowed extensions for the file, in lowercased
 	            'deleteInput'           : false, // Give the name of a hidden input if you need one to catch the delete action
+	            'allowDelete'           : false, // If true, the delete action will appear and will empty the value of the input
 	            'displayExtension'      : true, // Show the file extension (required or effective) in the thumbnail
 	            'orientation'           : '', // Orientation of the details layer. Leave blank for automatic detection (layer right of the thumbnail when possible). Set to 'rtl' to force the layer on the left.
 	            'classes'               : '', // You may create custom classes to change the thumbnail's default style. See CSS for further details.
@@ -59,6 +60,7 @@
 			description : '',
 			extensions : [],
 			deleteInput : false,
+			allowDelete : false,
 			displayExtension : true,
 			orientation : '', //ltr or rtl
 			classes : '',
@@ -217,7 +219,7 @@
 			self.uiEditFile.button('option', 'label', o.texts.edit);
 			self.uiDeleteInput.attr('name', o.deleteInput || '');
 			self.uiDeleteFile.button('option', 'label', o.texts['delete'])
-				[o.deleteInput ? 'show' : 'hide']();
+				[o.deleteInput || o.allowDelete ? 'show' : 'hide']();
 
 			self.uiWidget[o.disabled ? 'addClass' : 'removeClass']('ui-state-disabled');
 
@@ -273,6 +275,8 @@
 				self.uiEditFile.show();
 				if (o.deleteInput) {
 					self.uiDeleteInput.val('');
+				}
+				if (o.deleteInput || o.allowDelete) {
 					self.uiDeleteFile.show();
 				}
 
@@ -282,7 +286,10 @@
 				}
 			    self.uiAddFile.show();
 			    self.uiEditFile.hide();
-			    if (o.deleteInput) {
+				if (o.allowDelete) {
+					self.element.val('');
+				}
+			    if (o.deleteInput || o.allowDelete) {
 			        self.uiDeleteFile.hide();
 			    }
 			}
@@ -337,7 +344,7 @@
 								height : self.uiThumb.innerHeight()
 							},
 							img = $(this),
-					        width  = img.width();
+					        width  = img.width(),
 					        height = img.height();
 
 					    if (height > width) {
@@ -489,7 +496,7 @@
 				o = self.options;
 
 			if (false === self._trigger('delete', event)) {
-				e.stopImmediatePropagation();
+				event.stopImmediatePropagation();
 				return false;
 			}
 

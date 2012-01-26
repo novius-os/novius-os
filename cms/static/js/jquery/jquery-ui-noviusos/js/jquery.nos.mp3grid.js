@@ -237,7 +237,7 @@ define([
 			});
 			self.uiAddsMenu.wijmenu({
 					trigger : self.uiAddsDropDown,
-					triggerEvent : 'mouseenter',
+					triggerEvent : 'click',
 					orientation : 'vertical',
 					showAnimation : {Animated:"slide", duration: 50, easing: null},
 					hideAnimation : {Animated:"hide", duration: 0, easing: null},
@@ -262,8 +262,8 @@ define([
 			});
 
                         self.uiSettingsButton.click(function() {
-                            $el = self._uiSettingsMenuPopup();
-                            $window = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
+				var $el = self._uiSettingsMenuPopup();
+				var $window = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
                             $el.wijtabs({
                                 alignment: 'left',
                                 scrollable: true,
@@ -274,7 +274,7 @@ define([
                                             scrollMode: 'buttons'
                                         }
                                     });
-                                    $layout = $(ui.panel).find('#layout_settings');
+						var $layout = $(ui.panel).find('#layout_settings');
                                     $layout.find('.panels').sortable({
                                             connectWith: ".panels",
                                             update: function() {
@@ -309,15 +309,8 @@ define([
                                     }).click( function() {self._uiSettingsMenuPopupSave();$window.wijdialog('close');$window.remove();} )
                                 )
                             );
-                        }
-                        );
+			});
 
-                        /*$notLayout*/
-
-/*
-			self._inspectorsSettingsMenu()
-				._uiSettingsMenu();
-*/
 			return self;
 		},
 
@@ -355,9 +348,7 @@ define([
 			var self = this,
 				o = self.options;
 
-
-
-			$contentSettings = $('<div class="content-settings"></div>')
+			var $contentSettings = $('<div class="content-settings"></div>')
 									.attr({id: id});
 
 			$contentSettings.append(
@@ -366,7 +357,6 @@ define([
 				)
 			);
 
-
 			if (settings.grid) {
 				$contentSettings.append(
 					$('<h2></h2>').append(
@@ -374,9 +364,8 @@ define([
 					)
 				);
 
-				$columns = $('<ul class="widget-columns"></ul>');
-
-				columns = settings.grid.columns;
+				var $columns = $('<ul class="widget-columns"></ul>');
+				var columns = settings.grid.columns;
 
 				for (var i = 0; i < columns.length; i++) {
 					$columns.append(
@@ -399,7 +388,7 @@ define([
 											.attr({checked: columns[i].visible !== false})
 											.change(
 												function() {
-													$column = $(this).closest('li');
+													var $column = $(this).closest('li');
 													if ($(this).is(':checked')) {
 														$column.removeClass('invisible');
 													} else {
@@ -421,7 +410,6 @@ define([
 
 			}
 
-
 			return $contentSettings;
 		},
 
@@ -429,7 +417,7 @@ define([
 			var self = this,
 		o = self.options;
 
-			$layout = $('<form id="layout_settings"></form>');
+			var $layout = $('<form id="layout_settings"></form>');
 
 			$layout.append(
 				$('<h1></h1>').append(
@@ -453,11 +441,16 @@ define([
 					)
 			);
 
+			var $notLayout = $('<div class="not-layout superpanel"></div>')
+					.append(
+						'<ul class="invisible-panel panels"></ul>'
+					);
+
             self._uiSettingsMenuPopupAddItem($el, "Layout", $layout);
 
-            $leftPanel = $layout.find('.left-panel');
-            $topPanel = $layout.find('.top-panel');
-            $invisiblePanel = $notLayout.find('.invisible-panel');
+            var $leftPanel = $layout.find('.left-panel');
+            var $topPanel = $layout.find('.top-panel');
+            var $invisiblePanel = $notLayout.find('.invisible-panel');
 
             $layout.find('.not-layout').wijsuperpanel({
                 hScroller: {
@@ -465,11 +458,10 @@ define([
                 }
             });
 
-
             for (var i = 0; i < o.inspectors.length; i++) {
-                visible = !o.inspectors[i].hide;
-                vertical = o.inspectors[i].vertical;
-                $inspectorEl = $('<li class="layout-inspector"></li>')
+                var visible = !o.inspectors[i].hide;
+                var vertical = o.inspectors[i].vertical;
+                var $inspectorEl = $('<li class="layout-inspector"></li>')
                                 .data('inspector-id', i)
                                 .append(
                                     $('<div></div>')
@@ -492,18 +484,17 @@ define([
                 }
             }
 
-
 			$layout.append($notLayout);
 
 			self._uiSettingsMenuPopupRefreshLayout($layout);
 		},
 
 		_uiSettingsMenuPopupRefreshLayout : function($layout) {
-			$leftPanel = $layout.find('.left-panel');
-			$topPanel = $layout.find('.top-panel');
-			$invisiblePanel = $layout.find('.invisible-panel');
+			var $leftPanel = $layout.find('.left-panel');
+			var $topPanel = $layout.find('.top-panel');
+			var $invisiblePanel = $layout.find('.invisible-panel');
 
-			$leftLis = $leftPanel.find('li').not('.moving');
+			var $leftLis = $leftPanel.find('li').not('.moving');
 			$leftLis.css({
 				height: (200 - $leftLis.length) / $leftLis.length,
 				width: "inherit"
@@ -512,9 +503,7 @@ define([
 			$($leftLis[$leftLis.length - 1]).addClass('last');
 
 
-
-
-			$topLis = $topPanel.find('li').not('.moving');
+			var $topLis = $topPanel.find('li').not('.moving');
 
 			$topLis.css({
 				width: (200 - $topLis.length) / $topLis.length,
@@ -524,9 +513,7 @@ define([
 			$($topLis[$topLis.length - 1]).addClass('last');
 
 
-
-
-			$invisibleLis = $invisiblePanel.find('li').not('.moving');
+			var $invisibleLis = $invisiblePanel.find('li').not('.moving');
 
 			$invisibleLis.css({
 				width: '',
@@ -541,16 +528,15 @@ define([
 
 		_uiSettingsMenuPopupSave : function() {
 			var self = this,
-		o = self.options;
-
+		        o = self.options;
 
 			for (var j = 0; j < o.inspectors.length; j++) {
 				if (o.inspectors[j].grid) {
-					gridColumns = o.inspectors[j].grid.columns;
-					newColumns = [];
+					var gridColumns = o.inspectors[j].grid.columns;
+					var newColumns = [];
 					$('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
-						$this = $(this);
-						newColumn = gridColumns[$this.data('column-id')];
+						var $this = $(this);
+						var newColumn = gridColumns[$this.data('column-id')];
 
 						newColumn.dataIndex = i;
 						newColumn.leavesIdx = i;
@@ -565,11 +551,11 @@ define([
 				}
 			}
 
-			newInspectors = [];
-			layoutSettings = $('#layout_settings');
+			var newInspectors = [];
+			var layoutSettings = $('#layout_settings');
 			layoutSettings.find('.layout-inspector').each(function() {
-				newInspector = self.options.inspectors[$(this).data('inspector-id')];
-				$panel = $(this).closest('.panels');
+				var newInspector = self.options.inspectors[$(this).data('inspector-id')];
+				var $panel = $(this).closest('.panels');
 				newInspector.hide = $panel.hasClass('invisible-panel');
 				newInspector.vertical = $panel.hasClass('left-panel');
 				newInspectors.push(newInspector);
@@ -580,8 +566,8 @@ define([
 
 
 			$('#settings-main-view .widget-columns > li').each(function(i, el) {
-			   $this = $(this);
-			   newColumn = o.grid.columns[$this.data('column-id')];
+			   var $this = $(this);
+			   var newColumn = o.grid.columns[$this.data('column-id')];
 
 			   newColumn.dataIndex = i;
 			   newColumn.leavesIdx = i;
@@ -606,26 +592,6 @@ define([
 			element.find('> ul').append('<li><a href="#settings_menu_popup_item_' + this.idMenu + '">' + itemName + '</a></li>');
 			element.append($('<div id="settings_menu_popup_item_' + this.idMenu + '"></div>').append(content));
 			this.idMenu++;
-		},
-
-		_uiSettingsMenu : function() {
-			var self = this;
-
-			/*$.each(self.menuSettings, function() {
-				if ($.isPlainObject(this.childs)) {
-					self._uiSettingsMenuAdd(this, self.uiSettingsMenu);
-				}
-			});
-/*
-			self.uiSettingsMenu.wijmenu({
-					trigger : self.uiSettingsButton,
-					triggerEvent : 'mouseenter',
-					orientation : 'vertical',
-					showAnimation : {Animated:"slide", duration: 50, easing: null},
-					hideAnimation : {Animated:"hide", duration: 0, easing: null}
-				});
-*/
-			return self;
 		},
 
 		_uiSettingsMenuAdd : function(item, ul) {
@@ -1050,7 +1016,6 @@ define([
 					dataType: 'html'
 				})
 				.done(function(data) {
-                                        $toto = $li;
 					$(data).appendTo($li); // appendTo for embed javascript work
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
@@ -1559,11 +1524,7 @@ define([
 
 		_refreshSettingsMenu : function() {
 			var self = this;
-/*
-			self.uiSettingsMenu.wijmenu('destroy')
-				.empty();
-			self._uiSettingsMenu();
-*/
+			// @todo implement
 			return self;
 		},
 

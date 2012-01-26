@@ -57,30 +57,31 @@ define([
                                     }
                                     if (object[key][i].actions) {
                                         var actions = object[key][i].actions;
+										var width = $.nos.grid.getActionWidth(actions[0].label);
+
+										// At least 80px wide
+										if (actions.length > 1) {
+											// Reserve space for the dropdown actions menu
+											width -= 20;
+										}
+										width = Math.max(width, 80);
+
                                         // Make the drop-down actions columns
                                         object[key][i] = {
                                             headerText : 'Actions',
                                             cellFormatter : function(args) {
                                                 if ($.isPlainObject(args.row.data)) {
 
-                                                    // Search the higher ancestor possible
-                                                    // @todo Review this, because when it's called from inspectors, the result is a <table>
-                                                    //       which is not convenient to add <ul>s or <div>s
-													var actionsContainer = $.nos.$noviusos.ostabs
-                                                        ? $.nos.$noviusos.ostabs('current').panel
-                                                        : args.$container.parentsUntil('body').last();
-
-
-                                                    var buttons = $.nos.mp3gridActions(actionsContainer, actions, args.row.data);
+                                                    var buttons = $.nos.mp3gridActions(actions, args.row.data);
 
 													buttons.appendTo(args.$container);
-													args.$container.parent().addClass('buttontd').css({width: 81});
+													args.$container.parent().addClass('buttontd').css({width: width + 1});
 
                                                     return true;
-                                                }
+                                                };
                                             },
                                             allowSizing : false,
-                                            width : 80,
+                                            width : width,
                                             ensurePxWidth : true,
                                             showFilter : false
                                         };
@@ -169,7 +170,7 @@ define([
                 return self;
             },
 
-			mp3gridActions : function(containerActions, actions, noParseData) {
+			mp3gridActions : function(actions, noParseData) {
 
 				var container = $('<table><tr></tr></table>').addClass('buttontd wijgridtd');
 
@@ -184,7 +185,7 @@ define([
 
 				var action = $('<th></th>')
 					.addClass("ui-state-default")
-					.text(actions[0].label)
+					.html(actions[0].label)
 					.click(actions[0]._action)
 					.hover(
 						function() {
@@ -218,36 +219,62 @@ define([
 						.addClass("ui-icon ui-icon-triangle-1-s")
 						.appendTo(dropDown);
 
+					// Keep track of all created menus so we can hide them when
+					if (typeof allMenus == 'undefined') {
+						allMenus = [];
+					}
+
                     // Don't select the line when clicking the "more actions" arrow dropdown
 					dropDown.appendTo(container.find('tr')).click(function(e) {
-						e.stopImmediatePropagation();
-					});
 
-                    var ul = $('<ul></ul>');
-					$.each(actions, function() {
-						var action = this;
-						$('<li><a href="#"></a></li>')
-							.appendTo(ul)
-							.find('a')
-							.text(action.label)
-							.click(action._action)
-					});
+						$.each(allMenus, function() {
+							$(this).wijmenu('hideAllMenus');
+						});
 
-                    ul.appendTo(containerActions);
+						if (!this.created) {
+							var ul = $('<ul></ul>');
+							$.each(actions, function() {
+								var action = this;
+								$('<li><a href="#"></a></li>')
+									.appendTo(ul)
+									.find('a')
+									.text(action.label)
+									.click(action._action)
+							});
 
-					ul.wijmenu({
-						trigger : dropDown,
-						triggerEvent : 'mouseenter',
-						orientation : 'vertical',
-						showAnimation : {Animated:"slide", duration: 50, easing: null},
-						hideAnimation : {Animated:"hide", duration: 0, easing: null},
-						position : {
-							my        : 'right top',
-							at        : 'right bottom',
-							collision : 'flip',
-							offset    : '0 0'
+							// Search the higher ancestor possible
+							// @todo Review this, because when it's called from inspectors, the result is a <table>
+							//       which is not convenient to add <ul>s or <div>s
+							var containerActions = $.nos.$noviusos.ostabs
+								? $.nos.$noviusos.ostabs('current').panel
+								: args.$container.parentsUntil('body').last();
+
+							ul.appendTo(containerActions);
+
+							ul.wijmenu({
+								trigger : dropDown,
+								triggerEvent : 'click',
+								orientation : 'vertical',
+								showAnimation : {Animated:"slide", duration: 50, easing: null},
+								hideAnimation : {Animated:"hide", duration: 0, easing: null},
+								position : {
+									my        : 'right top',
+									at        : 'right bottom',
+									collision : 'flip',
+									offset    : '0 0'
+								}
+							});
+
+							allMenus.push(ul);
+
+							this.created = true;
+
+							// Now the menu is created, trigger the event to show it
+							dropDown.triggerHandler('click');
 						}
+
 					});
+					dropDown.click(false);
 				}
 				return container;
 			},
@@ -496,11 +523,12 @@ define([
             grid : {
                 getHeights : function() {
                     if (this.heights === undefined) {
-                        var div = $('<div></div>')
+                        var $div = $('<div></div>')
                             .appendTo('body');
 
                         var table = $('<table></table>')
-                            .appendTo(div)
+							.addClass('nos-mp3grid')
+                            .appendTo($div)
                             .nosgrid({
                                 scrollMode : 'auto',
                                 showFilter: true,
@@ -509,18 +537,72 @@ define([
                             });
                         this.heights = {
                             row : table.height(),
-                            footer : div.find('.wijmo-wijgrid-footer').outerHeight(),
-                            header : div.find('.wijmo-wijgrid-headerrow').outerHeight(),
-                            filter : div.find('.wijmo-wijgrid-filterrow').outerHeight()
+                            footer : $div.find('.wijmo-wijgrid-footer').outerHeight(),
+                            header : $div.find('.wijmo-wijgrid-headerrow').outerHeight(),
+                            filter : $div.find('.wijmo-wijgrid-filterrow').outerHeight()
                         };
                         table.nosgrid('destroy');
-                        div.remove();
+                        $div.remove();
                     }
                     return this.heights;
-                }
+                },
+				getActionWidth : function(text) {
+
+					this.cache = {};
+					if (null != this.cache[text]) {
+						return this.cache[text];
+					}
+
+					var $div = $('<div></div>')
+						.appendTo('body');
+
+					var table = $('<table></table>')
+						.addClass('nos-mp3grid')
+						.appendTo($div)
+						.nosgrid({
+							scrollMode : 'none',
+							showFilter: true,
+							allowPaging : true,
+							columns : [
+								{
+									headerText : 'Actions',
+									cellFormatter : function(args) {
+										if ($.isPlainObject(args.row.data)) {
+
+											var buttons = $.nos.mp3gridActions([{
+												label : '&nbsp;' + text + '&nbsp;',
+												action: function() {}
+											}], []);
+
+											buttons.appendTo(args.$container);
+											args.$container.parent().addClass('buttontd');
+
+											return true;
+										}
+									},
+									allowSizing : true,
+									showFilter : false,
+									ensurePxWidth : true
+								}
+							],
+							data: [
+								{
+									'key' : 'value'
+								}
+							]
+						});
+					$div.find('table.buttontd.wijgridtd').css({
+						'font-size' : '1.05em',
+						'width' : 'auto'
+					});
+					this.cache[text] = $div.find('.buttontd .buttontd:first').outerWidth();
+					table.nosgrid('destroy');
+					$div.remove();
+					return this.cache[text];
+				}
             },
 
-            media : function(input, options) {
+            media : function(input, data) {
 
                 var contentUrls = {
                     'all'   : '/admin/admin/media/list',
@@ -544,14 +626,15 @@ define([
 					$.nos.listener.remove('media.pick', true, arguments.callee);
 				});
 
-                options = $.extend({
+                var options = $.extend({
                     title: input.attr('title') || 'File',
+					allowDelete : true,
                     choose: function(e) {
 
                         // Open the dialog to choose the file
 						if (dialog == null) {
 							dialog = $.nos.dialog({
-								contentUrl: contentUrls[options.mode],
+								contentUrl: contentUrls[data.mode],
 								ajax: true,
 								title: 'Choose a media file'
 							});
@@ -559,11 +642,7 @@ define([
 							dialog.wijdialog('open');
 						}
                     }
-                }, options);
-
-                if (input.data('selected-image')) {
-                    options.file = input.data('selected-image');
-                }
+                }, data.inputFileThumb);
 
                 require([
                     'static/cms/js/jquery/jquery-ui-input-file-thumb/js/jquery.input-file-thumb',

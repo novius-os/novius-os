@@ -39,7 +39,7 @@ class Widget_Date_Picker extends \Fieldset_Field {
 		if (!empty($attributes['widget_options'])) {
 			$this->options = \Arr::merge($this->options, $attributes['widget_options']);
 		}
-		unset($attributes['date_picker']);
+		unset($attributes['widget_options']);
 
         parent::__construct($name, $label, $attributes, $rules, $fieldset);
     }

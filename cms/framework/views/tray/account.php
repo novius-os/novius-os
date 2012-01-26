@@ -16,9 +16,9 @@
 
 	<div id="tabs" style="width: 100%;">
 		<ul style="width: 15%;">
-			<li><a href="#infos"><?= __('Informations') ?></a></li>
-			<li><a href="#password"><?= __('Password') ?></a></li>
-			<li><a href="#display"><?= __('Display') ?></a></li>
+			<li><a href="#infos"><?= __('Your account') ?></a></li>
+			<li><a href="#password"><?= __('Change password') ?></a></li>
+			<li><a href="#display"><?= __('Theme') ?></a></li>
 		</ul>
 		<div id="infos" style="width: 80%;">
 			<?= $fieldset_infos ?>

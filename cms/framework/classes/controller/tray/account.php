@@ -46,10 +46,14 @@ class Controller_Tray_Account extends \Controller {
 
     public static function fieldset_display($user) {
 
+		$configuration = $user->getConfiguration();
         $fields = array (
             'background' => array (
-                'label' => 'Background',
+                'label' => 'Wallpaper',
                 'widget' => 'media',
+				'form' => array(
+					'value' => \Arr::get($configuration, 'misc.display.background', ''),
+				),
             ),
             'save' => array(
                 'label' => '',
@@ -67,21 +71,34 @@ class Controller_Tray_Account extends \Controller {
                 try {
 
                     $configuration = $user->getConfiguration();
-                    if ($data['background']) {
-                        \Arr::set($configuration, 'misc.display.background', $data['background']);
+					if (!empty($data['background'])) {
+						$media = Model_Media_Media::find($data['background']);
+						if (!empty($media)) {
+							\Arr::set($configuration, 'misc.display.background', $data['background']);
+							$notify = 'Your wallpaper is now "'.$media->media_title.'"';
+						} else {
+							$data['background'] = null;
+							$error = 'The selected image does not exists.';
+						}
                     }
+					if (empty($data['background'])) {
+						\Arr::delete($configuration, 'misc.display.background');
+						$notify = 'Your wallpaper has been removed.';
+					}
 
                     $user->user_configuration = serialize($configuration);
                     $user->save();
-                    $body = array(
-                        'notify' => 'Display settings changed successfully.',
-                        'listener_fire' => array('cms_user.refresh' => true),
-                    );
                 } catch (\Exception $e) {
-                    $body = array(
-                        'error' => \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.',
-                    );
+                    $error = \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.';
                 }
+
+				$body = array();
+				if (!empty($notify)) {
+					$body['notify'] = $notify;
+				}
+				if (!empty($error)) {
+					$body['error'] = $error;
+				}
 
                 \Response::json($body);
             }
