@@ -111,6 +111,7 @@ define([
                                             allowSizing : false,
                                             width : 20,
                                             ensurePxWidth : true,
+                                            allowSort : false,
                                             showFilter : false
                                         };
                                         // Make the default action columns
@@ -142,6 +143,7 @@ define([
                                             allowSizing : false,
                                             width : actions[0].width ? actions[0].width : 60,
                                             ensurePxWidth : true,
+                                            allowSort : false,
                                             showFilter: false
                                         });
                                     }
