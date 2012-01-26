@@ -895,7 +895,7 @@ define([
                         orientation: "vertical",
                         splitterDistance: 200,
                         showExpander: false,
-                        fullSplit: true,
+                        fullSplit: false,
                         panel1 : {
                             minSize : 150,
                             scrollBars : 'none'
@@ -1307,6 +1307,9 @@ define([
 							sel.addRows(self.itemSelected);
 						}
 					},
+                    columnResized : function() {
+                        //self._resizeList();
+                    },
                     dataLoading: function(e) {
                         self.uiPaginationLabel.detach();
                     },
