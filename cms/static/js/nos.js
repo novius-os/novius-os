@@ -19,6 +19,7 @@ define([
                 var self = {};
 
                 var objectToArray = function(val, i) {
+                        val['setupkey'] = i;
                         return val;
                     },
 
@@ -335,6 +336,10 @@ define([
                 }, wijdialog_options);
 
                 var $dialog = $(document.createElement('div')).appendTo($('body'));
+                
+                if (typeof wijdialog_options['content'] != 'undefined') {
+                    $dialog.append(wijdialog_options.content);
+                }
 
                 require([
                     'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.1.5.0.css',
