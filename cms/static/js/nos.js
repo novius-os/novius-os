@@ -63,7 +63,14 @@ define([
                                             cellFormatter : function(args) {
                                                 if ($.isPlainObject(args.row.data)) {
 
-													var actionsContainer = $.nos.$noviusos.ostabs ? $.nos.$noviusos.ostabs('current').panel : $('body');
+                                                    // Search the higher ancestor possible
+                                                    // @todo Review this, because when it's called from inspectors, the result is a <table>
+                                                    //       which is not convenient to add <ul>s or <div>s
+													var actionsContainer = $.nos.$noviusos.ostabs
+                                                        ? $.nos.$noviusos.ostabs('current').panel
+                                                        : args.$container.parentsUntil('body').last();
+
+
                                                     var buttons = $.nos.mp3gridActions(actionsContainer, actions, args.row.data);
 
 													buttons.appendTo(args.$container);
@@ -180,10 +187,10 @@ define([
 					.text(actions[0].label)
 					.click(actions[0]._action)
 					.hover(
-						function(e) {
+						function() {
 							$(this).addClass("ui-state-hover");
 						},
-						function(e) {
+						function() {
 							$(this).removeClass("ui-state-hover");
 						}
 					);
@@ -198,10 +205,10 @@ define([
 							width: '20px'
 						})
 						.hover(
-							function(e) {
+							function() {
 								$(this).addClass("ui-state-hover");
 							},
-							function(e) {
+							function() {
 								$(this).removeClass("ui-state-hover");
 							}
 						);
@@ -211,11 +218,12 @@ define([
 						.addClass("ui-icon ui-icon-triangle-1-s")
 						.appendTo(dropDown);
 
+                    // Don't select the line when clicking the "more actions" arrow dropdown
 					dropDown.appendTo(container.find('tr')).click(function(e) {
 						e.stopImmediatePropagation();
 					});
 
-					var ul = $('<ul></ul>').appendTo(containerActions);
+                    var ul = $('<ul></ul>');
 					$.each(actions, function() {
 						var action = this;
 						$('<li><a href="#"></a></li>')
@@ -224,6 +232,9 @@ define([
 							.text(action.label)
 							.click(action._action)
 					});
+
+                    ul.appendTo(containerActions);
+
 					ul.wijmenu({
 						trigger : dropDown,
 						triggerEvent : 'mouseenter',
@@ -358,9 +369,9 @@ define([
                 }
 
                 require([
-                    'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.1.5.0.css',
-                    //'static/cms/js/jquery/wijmo/js/jquery.wijmo.wijutil',
-                    'static/cms/js/jquery/vendor/js/jquery.wijmo.wijdialog'
+                    //'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.2.0.0b2.css',
+                    //'static/cms/js/wijmo/wijmo/js/jquery.wijmo.wijutil',
+                    'static/cms/js/vendor/wijmo/js/jquery.wijmo.wijdialog'
                 ], function() {
 					if (wijdialog_options.ajax) {
 						$dialog.load(wijdialog_options.contentUrl, {}, function(responseText, textStatus, XMLHttpRequest){
@@ -371,7 +382,7 @@ define([
 						$dialog.wijdialog(wijdialog_options);
 					}
 					$dialog.bind('wijdialogclose', function(event, ui) {
-						log('Fermeture et destroyage');
+						//log('Fermeture et destroyage');
 						$dialog.closest('.ui-dialog').hide().appendTo(where);
 					});
                 });
@@ -487,7 +498,8 @@ define([
                     if (this.heights === undefined) {
                         var div = $('<div></div>')
                             .appendTo('body');
-                        table = $('<table></table>')
+
+                        var table = $('<table></table>')
                             .appendTo(div)
                             .nosgrid({
                                 scrollMode : 'auto',
@@ -565,7 +577,7 @@ define([
 			ui : {
 				form : function(context) {
 					$(function() {
-						context = $(context) || null;
+						context = $(context) || 'body';
 						$(":input[type='text'],:input[type='password'],textarea", context).wijtextbox();
 						$(":input[type='submit'],button", context).button();
 						$("select", context).wijdropdown();
@@ -597,8 +609,8 @@ define([
                 },
 
                 initialize: function(configuration) {
-                    nosObject = this;
-                    fct = function(e) {
+                    var nosObject = this;
+                    var fct = function(e) {
                         nosObject.tabs.save();
                     };
                     $.extend(configuration, {
@@ -652,8 +664,7 @@ define([
                         }
                         if (noviusos.length) {
                             index = noviusos.ostabs('add', tab, index);
-                            $tabIt = noviusos.ostabs('select', index);
-                            return $tabIt;
+                            return noviusos.ostabs('select', index);
                         } else if (tab.url) {
                             window.open(tab.url);
                         }

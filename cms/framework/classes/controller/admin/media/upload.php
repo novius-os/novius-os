@@ -67,6 +67,7 @@ class Controller_Admin_Media_Upload extends Controller_Noviusos_Noviusos {
 			);
 		}
 
+        // @todo Check why there is no "return" and replace this using \Response::json()
 		$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
 			'Content-Type' => 'application/json',
 		));

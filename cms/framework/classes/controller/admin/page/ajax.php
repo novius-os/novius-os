@@ -25,7 +25,7 @@ class Controller_Admin_Page_Ajax extends \Controller {
         $data = $data[$id];
 
         $data['layout'] = (array) $data['layout'];
-		
+
 		$page = Model_Page_Page::find($page_id);
 		foreach ($data['layout'] as $wysiwyg => $coords)
 		{
@@ -57,10 +57,6 @@ class Controller_Admin_Page_Ajax extends \Controller {
 		// @todo replace images
 		// src="nos://media/ID" => src="http://real/url/here" data-media-id="ID"
 
-		$response = \Response::forge(\Format::forge()->to_json($data), 200, array(
-			'Content-Type' => 'application/json',
-		));
-		$response->send(true);
-		exit();
+		\Response::json($data);
 	}
 }

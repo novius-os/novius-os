@@ -25,6 +25,10 @@ class Controller_Admin_Page_Form extends Controller_Generic_Admin {
 		\Asset::css('laGrid.css', array(), 'css');
 		\Asset::css('form.css', array(), 'css');
 
+		\Asset::add_path('static/cms/js/jquery/jquery-ui-noviusos/');
+        \Asset::css('jquery.nos.ostabs.css', array(), 'css');
+        \Asset::css('jquery.nos.mp3grid.css', array(), 'css');
+
 		return parent::after($response);
 	}
 
@@ -225,11 +229,7 @@ class Controller_Admin_Page_Form extends Controller_Generic_Admin {
 					);
 				}
 
-				$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-					'Content-Type' => 'application/json',
-				));
-				$response->send(true);
-				exit();
+				\Response::json($body);
 			}
 		));
 		$fieldset->js_validation();

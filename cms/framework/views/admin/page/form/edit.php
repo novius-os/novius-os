@@ -20,7 +20,7 @@ require(['jquery-nos'], function ($) {
 });
 </script>
 
-<div id="<?= $uniqid = ltrim(uniqid(), '123456789') ?>" class="page myPage myBody">
+<div id="<?= $uniqid = uniqid('id_') ?>" class="page myPage myBody">
 <?php
 $fieldset->form()->set_config('field_template',  "\t\t<tr><th class=\"{error_class}\">{label}{required}</th><td class=\"{error_class}\">{field} {error_msg}</td></tr>\n");
 

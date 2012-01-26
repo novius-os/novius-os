@@ -259,7 +259,7 @@ define([
 				 label : o.texts.settings,
 				 icons : {primary : 'ui-icon-gear'}
 			});
-                        
+
                         self.uiSettingsButton.click(function() {
                             $el = self._uiSettingsMenuPopup();
                             $window = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
@@ -309,170 +309,170 @@ define([
                             );
                         }
                         );
-                        
+
                         /*$notLayout*/
-                        
+
 /*
 			self._inspectorsSettingsMenu()
 				._uiSettingsMenu();
 */
 			return self;
 		},
-                
-                _uiSettingsMenuPopup : function() {
-                    var self = this,
+
+        _uiSettingsMenuPopup : function() {
+            var self = this,
 				o = self.options;
-                                
-                    $el = $('<div><ul></ul></div>');
-                    self._uiSettingsMenuPopupAddItem($el, "Main view", "The main view is on todo list ! Coming soon !");
-                    
-                    self._uiSettingsMenuPopupAddLayoutTab($el);
-                    
-                                
-                    return $el;
-                },
-                
-                _uiSettingsMenuPopupAddLayoutTab : function($el) {
-                    var self = this,
+
+            $el = $('<div><ul></ul></div>');
+            self._uiSettingsMenuPopupAddItem($el, "Main view", "The main view is on todo list ! Coming soon !");
+
+            self._uiSettingsMenuPopupAddLayoutTab($el);
+
+
+            return $el;
+        },
+
+        _uiSettingsMenuPopupAddLayoutTab : function($el) {
+            var self = this,
 				o = self.options;
-                                
-                    $layout = $('<form id="layout_settings"></form>');
-                    
-                    $layout.append(
-                        $('<div class="layout"></div>')
-                            .append(
-                                $('<ul class="left-panel panels"></ul>')
-                            )
-                            .append(
-                                $('<div class="right-side"></div>')
-                                .append(
-                                    $('<ul class="top-panel panels"></ul>')
-                                )
-                                .append(
-                                    $('<div class="content"></div>')
-                                )
-                            )
+
+            $layout = $('<form id="layout_settings"></form>');
+
+            $layout.append(
+                $('<div class="layout"></div>')
+                    .append(
+                        $('<ul class="left-panel panels"></ul>')
+                    )
+                    .append(
+                        $('<div class="right-side"></div>')
+                        .append(
+                            $('<ul class="top-panel panels"></ul>')
+                        )
+                        .append(
+                            $('<div class="content"></div>')
+                        )
+                    )
+            );
+
+            $notLayout = $('<div class="not-layout superpanel"></div>')
+                    .append(
+                        "<ul class=\"invisible-panel panels\"></ul>"
                     );
-                        
-                    $notLayout = $('<div class="not-layout superpanel"></div>')
-                            .append(
-                                "<ul class=\"invisible-panel panels\"></ul>"
-                            );
-                    
-                    self._uiSettingsMenuPopupAddItem($el, "Layout", $layout);    
-                    
-                    $leftPanel = $layout.find('.left-panel');
-                    $topPanel = $layout.find('.top-panel');
-                    $invisiblePanel = $notLayout.find('.invisible-panel');
-                    
-                    $layout.find('.not-layout').wijsuperpanel({
-                        hScroller: {
-                            scrollMode: 'buttons'
-                        }
-                    });
-                    
-                        
-                    for (var i = 0; i < o.inspectors.length; i++) {
-                        visible = !o.inspectors[i].hide;
-                        vertical = o.inspectors[i].vertical;
-                        $inspectorEl = $('<li class="layout-inspector"></li>')
-                                        .data('inspector-id', i)
-                                        .append(
-                                            $('<div></div>')
-                                                .append(o.inspectors[i].label)
-                                        );
-                        if (visible) {
-                            if (vertical) {
-                                $leftPanel.append(
-                                    $inspectorEl
+
+            self._uiSettingsMenuPopupAddItem($el, "Layout", $layout);
+
+            $leftPanel = $layout.find('.left-panel');
+            $topPanel = $layout.find('.top-panel');
+            $invisiblePanel = $notLayout.find('.invisible-panel');
+
+            $layout.find('.not-layout').wijsuperpanel({
+                hScroller: {
+                    scrollMode: 'buttons'
+                }
+            });
+
+
+            for (var i = 0; i < o.inspectors.length; i++) {
+                visible = !o.inspectors[i].hide;
+                vertical = o.inspectors[i].vertical;
+                $inspectorEl = $('<li class="layout-inspector"></li>')
+                                .data('inspector-id', i)
+                                .append(
+                                    $('<div></div>')
+                                        .append(o.inspectors[i].label)
                                 );
-                            } else {
-                                $topPanel.append(
-                                    $inspectorEl
-                                );
-                            }
-                        } else {
-                            $invisiblePanel.append(
-                                $inspectorEl
-                            );
-                        }
+                if (visible) {
+                    if (vertical) {
+                        $leftPanel.append(
+                            $inspectorEl
+                        );
+                    } else {
+                        $topPanel.append(
+                            $inspectorEl
+                        );
                     }
-                    
-                    
-                    
-                    
-                    $layout.append($notLayout);
-                    
-                    
-                    self._uiSettingsMenuPopupRefreshLayout($layout);
-                },
-                
-                _uiSettingsMenuPopupRefreshLayout : function($layout) {
-                    $leftPanel = $layout.find('.left-panel');
-                    $topPanel = $layout.find('.top-panel');
-                    $invisiblePanel = $layout.find('.invisible-panel');
-                    
-                    $leftLis = $leftPanel.find('li').not('.moving');
-                    $leftLis.css({
-                        height: (200 - $leftLis.length) / $leftLis.length,
-                        width: "inherit"
-                    });
-                    $leftLis.removeClass('last');
-                    $($leftLis[$leftLis.length - 1]).addClass('last');
-                    
-                    
-                    
-                    
-                    $topLis = $topPanel.find('li').not('.moving');
-                    
-                    $topLis.css({
-                        width: (200 - $topLis.length) / $topLis.length,
-                        height: "inherit"
-                    });
-                    $topLis.removeClass('last');
-                    $($topLis[$topLis.length - 1]).addClass('last');
-                    
-                    
-                    
-                    
-                    $invisibleLis = $invisiblePanel.find('li').not('.moving');
-                    
-                    $invisibleLis.css({
-                        width: '',
-                        height: ''
-                    });
-                    $invisibleLis.removeClass('last');
-                    $($invisibleLis[$invisibleLis.length - 1]).addClass('last');
-                    $invisiblePanel.css({
-                        width: Math.max(($invisibleLis.length + 1) * ($invisibleLis.width() + 1), 100)
-                    });
-                },
-                
-                _uiSettingsMenuPopupSave : function() {
-                    var self = this,
-				o = self.options;
-                    newInspectors = [];
-                    layoutSettings = $('#layout_settings');
-                    layoutSettings.find('.layout-inspector').each(function() {
-                        newInspector = self.options.inspectors[$(this).data('inspector-id')];
-                        $panel = $(this).closest('.panels');
-                        newInspector.hide = $panel.hasClass('invisible-panel');
-                        newInspector.vertical = $panel.hasClass('left-panel');
-                        newInspectors.push(newInspector);
-                    });
-                    self.options.inspectors = newInspectors;
-                    
-                    $('li.ui-widget-content').remove();
-                    self._uiInspectors();
-                    self.uiGrid.nosgrid('doRefresh');
-                },
-                
-                _uiSettingsMenuPopupAddItem : function(element, itemName, content) {
-                    if ( typeof this.idMenu == 'undefined' ) this.idMenu = 0;
-                    element.find('ul').append('<li><a href="#settings_menu_popup_item_' + this.idMenu + '">' + itemName + '</a></li>');
-                    element.append($('<div id="settings_menu_popup_item_' + this.idMenu + '"></div>').append(content));
-                    this.idMenu++;
-                },
+                } else {
+                    $invisiblePanel.append(
+                        $inspectorEl
+                    );
+                }
+            }
+
+
+
+
+            $layout.append($notLayout);
+
+
+            self._uiSettingsMenuPopupRefreshLayout($layout);
+        },
+
+        _uiSettingsMenuPopupRefreshLayout : function($layout) {
+            $leftPanel = $layout.find('.left-panel');
+            $topPanel = $layout.find('.top-panel');
+            $invisiblePanel = $layout.find('.invisible-panel');
+
+            $leftLis = $leftPanel.find('li').not('.moving');
+            $leftLis.css({
+                height: (200 - $leftLis.length) / $leftLis.length,
+                width: "inherit"
+            });
+            $leftLis.removeClass('last');
+            $($leftLis[$leftLis.length - 1]).addClass('last');
+
+
+
+
+            $topLis = $topPanel.find('li').not('.moving');
+
+            $topLis.css({
+                width: (200 - $topLis.length) / $topLis.length,
+                height: "inherit"
+            });
+            $topLis.removeClass('last');
+            $($topLis[$topLis.length - 1]).addClass('last');
+
+
+
+
+            $invisibleLis = $invisiblePanel.find('li').not('.moving');
+
+            $invisibleLis.css({
+                width: '',
+                height: ''
+            });
+            $invisibleLis.removeClass('last');
+            $($invisibleLis[$invisibleLis.length - 1]).addClass('last');
+            $invisiblePanel.css({
+                width: Math.max(($invisibleLis.length + 1) * ($invisibleLis.width() + 1), 100)
+            });
+        },
+
+        _uiSettingsMenuPopupSave : function() {
+            var self = this,
+        o = self.options;
+            newInspectors = [];
+            layoutSettings = $('#layout_settings');
+            layoutSettings.find('.layout-inspector').each(function() {
+                newInspector = self.options.inspectors[$(this).data('inspector-id')];
+                $panel = $(this).closest('.panels');
+                newInspector.hide = $panel.hasClass('invisible-panel');
+                newInspector.vertical = $panel.hasClass('left-panel');
+                newInspectors.push(newInspector);
+            });
+            self.options.inspectors = newInspectors;
+
+            $('li.ui-widget-content').remove();
+            self._uiInspectors();
+            self.uiGrid.nosgrid('doRefresh');
+        },
+
+        _uiSettingsMenuPopupAddItem : function(element, itemName, content) {
+            if ( typeof this.idMenu == 'undefined' ) this.idMenu = 0;
+            element.find('ul').append('<li><a href="#settings_menu_popup_item_' + this.idMenu + '">' + itemName + '</a></li>');
+            element.append($('<div id="settings_menu_popup_item_' + this.idMenu + '"></div>').append(content));
+            this.idMenu++;
+        },
 
 		_uiSettingsMenu : function() {
 			var self = this;
@@ -905,7 +905,7 @@ define([
 
                     self.gridRefresh();
                 };
-                
+
             $li.data('inspector', inspector);
 
 			if ($.isFunction(inspector.url)) {
@@ -1064,7 +1064,8 @@ define([
 			var self = this,
 				o = self.options,
 				position = self.uiGrid.offset(),
-				height = $(window).height() - position.top,
+                positionContainer = self.element.offset(),
+				height = self.element.height() - position.top + positionContainer.top,
 				heights = $.nos.grid.getHeights();
 
 			self.uiGrid.css({
@@ -1181,7 +1182,8 @@ define([
 			var self = this,
 				o = self.options,
 				position = self.uiThumbnail.offset(),
-				height = $(window).height() - position.top,
+                positionContainer = self.element.offset(),
+				height = self.element.height() - position.top + positionContainer.top,
 				heights = $.nos.grid.getHeights();
 
 			self.uiThumbnail.css('height', height)
@@ -1292,6 +1294,7 @@ define([
 			});
 
 			$nos.nos.listener.add('mp3grid.' + self.options.grid.id + '.refresh', true, function() {
+				log('Refreshing mp3grid.' + self.options.grid.id + '.refresh');
 				self.gridRefresh();
 			});
 

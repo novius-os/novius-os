@@ -156,14 +156,14 @@
 					var module_id = $(this).data('module');
 					var metadata  = self.settings.theme_nos_modules[module_id];
 					var data      = $(this).data('config');
-					console.log(metadata);
+					//console.log(metadata);
 					$.ajax({
 						url: metadata.previewUrl,
 						type: 'POST',
 						dataType: 'json',
 						data: data,
 						success: function(json) {
-							console.log(json);
+							//console.log(json);
 							module.html(json.preview);
 							self.onModuleAdd(module);
 						},
@@ -203,7 +203,8 @@
 			});
 
 			ed.onSaveContent.add(function(ed, o) {
-				var content = o.content
+				var content = $(o.content);
+
 				content.find('img.nosMedia').replaceWith(function() {
 					var $img = $(this);
 					var media = $img.data('media');
@@ -1577,21 +1578,18 @@
 
 			var dialog = null;
 
-			$.nos.data('tinymce', this);
-
-			dialog = $.nos.dialog({
-				contentUrl: 'admin/tinymce/image',
-				title: 'Insert an image',
-				ajax: true
-			});
-
 			var clean = function() {
-				dialog && dialog.wijdialog('close');
+                if (dialog) {
+                    dialog.wijdialog('destroy');
+                    dialog.closest('.ui-dialog').remove();
+                    dialog.remove();
+                }
 				$.nos.listener.remove('tinymce.image_close', close);
 				$.nos.listener.remove('tinymce.image_save', save);
 			};
 
 			var close = function() {
+                dialog.wijdialog('close');
 				clean();
 			};
 
@@ -1606,6 +1604,15 @@
 				}
 				ed.execCommand("mceEndUndoLevel");
 			}
+
+			$.nos.data('tinymce', this);
+
+            dialog = $.nos.dialog({
+				contentUrl: 'admin/tinymce/image',
+				title: 'Insert an image',
+				ajax: true,
+                close: clean
+			});
 
 			$.nos.listener.add('tinymce.image_close', true, close);
 			$.nos.listener.add('tinymce.image_save',  true, save);

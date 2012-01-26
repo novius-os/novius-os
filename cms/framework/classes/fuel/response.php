@@ -10,9 +10,13 @@
 
 class Response extends \Fuel\Core\Response {
 
-	public static function json($data) {
+	public static function json($status, $data = null) {
 
-		static::forge(\Format::forge()->to_json($data), 200, array(
+		if ($data === null) {
+			$data = $status;
+			$status = 200;
+		}
+		static::forge(\Format::forge()->to_json($data), $status, array(
 			'Content-Type' => 'application/json',
 		))->send(true);
 		exit();

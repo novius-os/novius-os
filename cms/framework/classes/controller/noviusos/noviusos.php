@@ -163,12 +163,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
         }
 
 
-
-        $response = \Response::forge(\Format::forge()->to_json($json), 200, array(
-            'Content-Type' => 'application/json',
-        ));
-        $response->send(true);
-        exit();
+        \Response::json($json);
     }
 
     public function convertFromPost($arr) {

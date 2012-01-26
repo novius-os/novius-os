@@ -22,7 +22,7 @@ class Widget_Media extends \Fieldset_Field {
 		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').' media';
 
 		if (empty($attributes['id'])) {
-			$attributes['id'] = uniqid();
+			$attributes['id'] = uniqid('media_');
 		}
 		if (!empty($attributes['widget_options'])) {
 			$this->options = $attributes['widget_options'];

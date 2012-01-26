@@ -83,11 +83,7 @@ class Controller_Tray_Account extends \Controller {
                     );
                 }
 
-                $response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-                    'Content-Type' => 'application/json',
-                ));
-                $response->send(true);
-                exit();
+                \Response::json($body);
             }
         ));
         $fieldset_display->js_validation();

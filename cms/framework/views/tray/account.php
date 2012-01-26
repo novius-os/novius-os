@@ -9,7 +9,7 @@
  */
 
 ?>
-<div id="<?= $uniqid = uniqid(); ?>">
+<div id="<?= $uniqid = uniqid('id_'); ?>">
 	<h1 class="title"><?= $logged_user->user_fullname; ?></h1>
 
 	<a href="admin/tray/account/disconnect"><button>Disconnect</button></a>
@@ -35,7 +35,7 @@
 <script type="text/javascript">
     require(['jquery-nos'], function($) {
 		$.nos.ui.form('#<?= $uniqid ?>');
-        require(['static/cms/js/jquery/wijmo/js/jquery.wijmo.wijtabs.js'],
+        require(['static/cms/js/vendor/wijmo/js/jquery.wijmo.wijtabs.js'],
             function() {
                 $('#tabs').wijtabs({
                     alignment: 'left'

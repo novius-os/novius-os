@@ -1,39 +1,45 @@
-<div id="<?= $uniqid = 'tabs_'.uniqid() ?>">
-	<ul>
-		<li><a href="#properties">Properties</a></li>
-		<li><a href="admin/admin/media/mode/tinymce/index">Media library</a></li>
+<div id="<?= $uniqid = uniqid('tabs_') ?>">
+	<ul class="tabs">
+		<li><a href="#<?= $id_library = $uniqid.'_library' ?>">Media library</a></li>
+		<li><a href="#<?= $id_properties = $uniqid.'_properties' ?>">Properties</a></li>
 	</ul>
-	<div id="properties">
+	<div id="<?= $id_library ?>">
+		<?php
+		// We could load this using ajax, but it's faster to preload it directly here
+		echo Request::forge('admin/media/mode/tinymce/index')->execute()->response();
+		?>
+	</div>
+	<div id="<?= $id_properties ?>">
 		<form action="#">
 			<table class="fieldset">
 				<tr>
 					<th><label>Title: </label></th>
-					<td><input type="text" name="title" id="title" size="30" /></td>
+					<td><input type="text" name="title" data-id="title" size="30" /></td>
 				</tr>
 				<tr>
 					<th><label>Description: </label></th>
-					<td><input type="text" name="alt" id="alt" size="30" /> &nbsp; <input type="checkbox" id="same_title_alt" checked> <label for="same_title_alt">&nbsp;Same as title</label></td>
+					<td><input type="text" name="alt" data-id="alt" size="30" /> &nbsp; <input type="checkbox" data-id="same_title_alt" checked> <label for="same_title_alt">&nbsp;Same as title</label></td>
 				</tr>
 				<tr>
 					<th><label>Width: </label></th>
-					<td><input type="text" name="width" id="width" size="5" /> &nbsp; <input type="checkbox" id="proportional" checked> <label for="proportional">&nbsp;Keep proportions</label></td>
+					<td><input type="text" name="width" data-id="width" size="5" /> &nbsp; <input type="checkbox" data-id="proportional" checked> <label for="proportional">&nbsp;Keep proportions</label></td>
 				</tr>
 				<tr>
 					<th><label>Height: </label></th>
-					<td><input type="text" name="height" id="height" size="5" readonly /></td>
+					<td><input type="text" name="height" data-id="height" readonly /></td>
 				</tr>
 				<tr>
 					<th><label>Style: </label></th>
-					<td><input type="text" name="style" id="style" size="50" /></td>
+					<td><input type="text" name="style" data-id="style" size="50" /></td>
 				</tr>
 			</table>
 		</form>
 	</div>
-</div>
 
-<p style="position:absolute;width:190px;bottom:20px;left:10px;text-align:center;">
-	<button id="save">Save</button> &nbsp; or &nbsp; <a id="close" href="#">Cancel</a>
-</p>
+	<p style="position:absolute;width:190px;bottom:20px;left:10px;text-align:center;">
+		<button data-id="save">Save</button> &nbsp; or &nbsp; <a data-id="close" href="#">Cancel</a>
+	</p>
+</div>
 
 <style type="text/css">
 #library {
@@ -63,31 +69,60 @@
 require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 	$(function() {
 
-		setTimeout(function() {
-			var height = $('#<?= $uniqid ?>').parent().height();
-			$('#<?= $uniqid ?>').height(height);
-			var margin = $('#properties').outerHeight(true) - $('#properties').innerHeight();
-			$('#properties').height(height - margin);
-		}, 1);
+		var $container = $('#<?= $uniqid ?>');
+
+		var getMargin = function(el) {
+			return el.outerHeight(true) - el.height();
+		};
+
+		require(['static/cms/js/vendor/wijmo/js/jquery.wijmo.wijtabs.js'], function() {
+			$container.wijtabs({
+				alignment: 'left',
+				load: function(e, ui) {
+					var margin = $(ui.panel).outerHeight(true) - $(ui.panel).innerHeight();
+					$(ui.panel).height($('#<?= $uniqid ?>').parent().height() - margin);
+				}
+			});
+
+			var $dialog_content = $container.find('.ui-dialog-content');
+			var $tabs = $container.find('.tabs');
+
+			var $properties = $('#<?= $id_properties ?>');
+			var $library    = $('#<?= $id_library ?>');
+
+			var margin = 0;
+
+			margin += getMargin($dialog_content);
+			margin += getMargin($tabs);
+
+			var height = $container.parent().height() - margin;
+
+			$tabs.height(height);
+			$properties.height(height - getMargin($properties));
+			$library.css({padding:0, margin:0}).height(height);
+
+			// Now tabs are created and the appropriate dimensions are set, load the mp3grid
+			var mp3grid_tmp = $library.children().height(height - getMargin($library.children())).attr('id');
+			$.nos.listener.fire('mp3grid.' + mp3grid_tmp, true, []);
+
+			$.nos.ui.form('#<?= $uniqid ?>');
+		});
 
 		var base_url = '<?= \Uri::base(true) ?>';
 
-		var $height = $('#height');
-		var $width  = $('#width');
-		var $title  = $('#title');
-		var $alt    = $('#alt');
-		var $style  = $('#style');
+		var $height = $container.find('input[data-id=height]');
+		var $width  = $container.find('input[data-id=width]');
+		var $title  = $container.find('input[data-id=title]');
+		var $alt    = $container.find('input[data-id=alt]');
+		var $style  = $container.find('input[data-id=style]');
 
-		var $proportional   = $('#proportional');
-		var $same_title_alt = $('#same_title_alt');
+		var $proportional   = $container.find('input[data-id=proportional]');
+		var $same_title_alt = $container.find('input[data-id=same_title_alt]');
 
 		var media = null;
 
 		$.nos.listener.add('tinymce.image_select', true, function(media_json, image_dom) {
 			media = media_json;
-
-			console.log('inside callback');
-			console.log(arguments);
 
 			if (image_dom == null)
 			{
@@ -118,11 +153,11 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 			}
 		});
 
-		$('#close').click(function() {
+		$container.find('a[data-id=close]').click(function() {
 			$.nos.listener.fire('tinymce.image_close', true);
 		});
 
-		$('#save').click(function() {
+		$container.find('button[data-id=save]').click(function() {
 			var img = $('<img />');
 
 			if (!media || !media.id) {
@@ -140,8 +175,6 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 			img.attr('src', base_url + media.path);
 
 			$.nos.listener.fire('tinymce.image_save', true, [img]);
-
-			console.log('save clicked');
 		});
 
 		// Proportianal width & height
@@ -152,10 +185,10 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 		});
 		$proportional.change(function() {
 			if ($(this).is(':checked')) {
-				$('#height').attr('readonly', true).addClass('ui-state-disabled').removeClass('ui-state-default');
+				$height.attr('readonly', true).addClass('ui-state-disabled').removeClass('ui-state-default');
 				$width.triggerHandler('change');
 			} else {
-				$('#height').removeAttr('readonly').addClass('ui-state-default').removeClass('ui-state-disabled');
+				$height.removeAttr('readonly').addClass('ui-state-default').removeClass('ui-state-disabled');
 			}
 		}).triggerHandler('change');
 
@@ -167,9 +200,9 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 		});
 		$same_title_alt.change(function() {
 			if ($(this).is(':checked')) {
-				$('#alt').attr('readonly', true).addClass('ui-state-disabled').removeClass('ui-state-default');
+				$alt.attr('readonly', true).addClass('ui-state-disabled').removeClass('ui-state-default');
 			} else {
-				$('#alt').removeAttr('readonly').addClass('ui-state-default').removeClass('ui-state-disabled');
+				$alt.removeAttr('readonly').addClass('ui-state-default').removeClass('ui-state-disabled');
 			}
 		}).triggerHandler('change');
 
@@ -187,7 +220,7 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 			// No data available yet, we need to fetch them
 			if (media_id) {
 
-				console.log('get media data with ajax');
+				//log('get media data with ajax');
 				$.ajax({
 					method: 'GET',
 					url: base_url + 'admin/cms_media/info/media/' + media_id,
@@ -197,30 +230,10 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 					}
 				})
 			} else {
-				console.log('use current data from media');
+				//log('use current data from media');
 				$.nos.listener.fire('tinymce.image_select', true, [$img.data('media'), $img]);
 			}
 		}
-
-		$(":input[type='text'],:input[type='password'],textarea").wijtextbox();
-		$(":input[type='submit'],button").button();
-		$("select").wijdropdown();
-		$(":input[type=checkbox]").wijcheckbox();
-		$('.expander').wijexpander({expanded: true });
-		$('.accordion').wijaccordion({
-			header: "h3"
-		});
-
-		require(['static/cms/js/jquery/wijmo/js/jquery.wijmo.wijtabs.js'], function() {
-			$('#<?= $uniqid ?>').wijtabs({
-				alignment: 'left',
-				load: function(e, ui) {
-					log(ui.panel);
-					var margin = $(ui.panel).outerHeight(true) - $(ui.panel).innerHeight();
-					$(ui.panel).height($('#<?= $uniqid ?>').parent().height() - margin);
-				}
-			});
-		});
 	});
 });
 </script>

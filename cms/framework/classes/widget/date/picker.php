@@ -34,7 +34,7 @@ class Widget_Date_Picker extends \Fieldset_Field {
 		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').' datepicker';
 
 		if (empty($attributes['id'])) {
-			$attributes['id'] = uniqid();
+			$attributes['id'] = uniqid('date_');
 		}
 		if (!empty($attributes['widget_options'])) {
 			$this->options = \Arr::merge($this->options, $attributes['widget_options']);

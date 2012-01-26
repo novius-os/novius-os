@@ -1,7 +1,7 @@
 
 <script type="text/javascript">
 require(['jquery-nos'], function($) {
-	$.nos.ui.form("#<?= $uniqid1 = uniqid() ?>,#<?= $uniqid2 = uniqid() ?>");
+	$.nos.ui.form("#<?= $uniqid1 = uniqid('id_') ?>,#<?= $uniqid2 = uniqid('id_') ?>");
 });
 </script>
 

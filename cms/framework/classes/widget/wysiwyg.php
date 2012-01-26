@@ -20,7 +20,7 @@ class Widget_Wysiwyg extends \Fieldset_Field {
 		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').' tinymce';
 
 		if (empty($attributes['id'])) {
-			$attributes['id'] = uniqid();
+			$attributes['id'] = uniqid('wysiwyg_');
 		}
 		if (!empty($attributes['widget_options'])) {
 			$this->options = $attributes['widget_options'];

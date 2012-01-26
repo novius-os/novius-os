@@ -60,6 +60,7 @@ define([
                 }
             },
             grid : {
+				id : 'cms_media_grid',
                 proxyUrl : 'admin/admin/media/list/json',
                 columns : {
                     extension : {

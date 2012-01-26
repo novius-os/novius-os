@@ -28,7 +28,6 @@ class Controller_Admin_Media_Info extends Controller_Noviusos_Noviusos {
 			$item = null;
 		}
 
-		\Response::forge(\Format::forge()->to_json($item))->send(true);
-		exit();
+		\Response::json($item);
 	}
 }

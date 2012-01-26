@@ -38,13 +38,9 @@ class Controller_Inspector_Model extends \Controller {
     public function action_json()
     {
 		if (!\Cms\Auth::check()) {
-			$json = \Format::forge()->to_json(array(
+			\Response::json(403, array(
 				'login_page' => \Uri::base(false).'admin/login',
 			));
-			\Response::forge($json, 403, array(
-				'Content-Type' => 'application/json',
-			))->send(true);
-			exit();
 		}
 
     	$offset = intval(Input::get('offset', 0));

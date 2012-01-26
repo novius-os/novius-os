@@ -77,11 +77,7 @@ class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
 					);
 				}
 
-				$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-					'Content-Type' => 'application/json',
-				));
-				$response->send(true);
-				exit();
+				\Response::json($body);
 			}
 		));
 
