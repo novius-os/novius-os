@@ -170,6 +170,8 @@ define([
                 return self;
             },
 
+			// Keep track of all created menus so we can hide them when
+			mp3GridActionsList : [],
 			mp3gridActions : function(actions, noParseData) {
 
 				var container = $('<table><tr></tr></table>').addClass('buttontd wijgridtd');
@@ -214,20 +216,14 @@ define([
 							}
 						);
 
-
 					$("<span></span>")
 						.addClass("ui-icon ui-icon-triangle-1-s")
 						.appendTo(dropDown);
 
-					// Keep track of all created menus so we can hide them when
-					if (typeof allMenus == 'undefined') {
-						allMenus = [];
-					}
-
                     // Don't select the line when clicking the "more actions" arrow dropdown
 					dropDown.appendTo(container.find('tr')).click(function(e) {
 
-						$.each(allMenus, function() {
+						$.each($.nos.mp3GridActionsList, function() {
 							$(this).wijmenu('hideAllMenus');
 						});
 
@@ -247,7 +243,7 @@ define([
 							//       which is not convenient to add <ul>s or <div>s
 							var containerActions = $.nos.$noviusos.ostabs
 								? $.nos.$noviusos.ostabs('current').panel
-								: args.$container.parentsUntil('body').last();
+								: dropDown.parentsUntil('.ui-widget, body').last();
 
 							ul.appendTo(containerActions);
 
@@ -265,7 +261,7 @@ define([
 								}
 							});
 
-							allMenus.push(ul);
+							$.nos.mp3GridActionsList.push(ul);
 
 							this.created = true;
 
@@ -305,7 +301,7 @@ define([
                             });
                             return window.parent.$nos.nos.listener.add(id, true, fn);
                         }
-                        _get(id).add(fn);
+                        return _get(id).add(fn);
                     },
                     remove: function(id, alltabs, fn) {
                         if (fn === undefined) {
@@ -315,7 +311,7 @@ define([
                         if (alltabs && window.parent != window && window.parent.$nos) {
                             return window.parent.$nos.nos.listener.remove(id, true, fn);
                         }
-                        _get(id).remove(fn);
+                        return _get(id).remove(fn);
                     },
                     fire: function(id, alltabs, args) {
                         if (args === undefined) {
@@ -611,9 +607,7 @@ define([
 
 				var dialog = null;
 
-				// The popup will trigger this event when done
-				$.nos.listener.add('media.pick', true, function(item) {
-
+				var pick_media = function(item) {
 					// Close the popup (if we have one)
 					dialog && dialog.wijdialog('close');
 
@@ -621,22 +615,25 @@ define([
 						file: item.thumbnail
 					});
 					input.val(item.id);
-
-					// And self-remove from the listener
-					$.nos.listener.remove('media.pick', true, arguments.callee);
-				});
+				};
 
                 var options = $.extend({
                     title: input.attr('title') || 'File',
 					allowDelete : true,
                     choose: function(e) {
+						// The popup will trigger this event when done
+						$.nos.listener.remove('media.pick', true, pick_media);
+						$.nos.listener.add('media.pick', true, pick_media);
 
                         // Open the dialog to choose the file
 						if (dialog == null) {
 							dialog = $.nos.dialog({
 								contentUrl: contentUrls[data.mode],
 								ajax: true,
-								title: 'Choose a media file'
+								title: 'Choose a media file',
+								close: function() {
+									$.nos.listener.remove('media.pick', true, pick_media);
+								}
 							});
 						} else {
 							dialog.wijdialog('open');
