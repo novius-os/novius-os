@@ -12,39 +12,10 @@ namespace Cms;
 
 use Fuel\Core\Config;
 
-class Controller_Admin_Media_Mode_Tinymce extends Controller_Mp3table_List {
+class Controller_Admin_Media_Mode_Tinymce extends Controller_Admin_Media_List {
 
-    public $template = 'cms::templates/html5';
-
-	public function before($response = null) {
-		Config::load('cms::admin/media/media', true);
-		$this->config = Config::get('cms::admin/media/media', array());
-
-		// Add the "Choose" action button
-		if (isset($this->config['ui']['actions'])) {
-			array_unshift($this->config['ui']['actions'], array(
-				'label' => 'Choose',
-				'action'   =>  'function(item) {
-					console.log(item);
-					$.nos.listener.fire("tinymce.image_select", true, [item]);
-				}')
-			);
-		}
-
-		// Remove the choices for the extension
-        if (isset($this->config['ui']['inspectors'])) {
-            foreach ($this->config['ui']['inspectors'] as $id => $inspector) {
-                if ($inspector['widget_id'] == 'inspector-extension') {
-                    unset($this->config['ui']['inspectors'][$id]);
-                }
-            }
-        }
-
-		// Force only images to be displayed
-		$this->config['ui']['values'] = array(
-			'media_extension' => array('image'),
-		);
-
-		parent::before($response);
+	public function action_index() {
+		$this->mp3grid['urljson'] = 'static/cms/js/admin/media/media_tinymce.js';
+		return parent::action_index();
 	}
 }

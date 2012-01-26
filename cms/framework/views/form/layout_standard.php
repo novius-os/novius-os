@@ -1,21 +1,11 @@
 
-
 <script type="text/javascript">
 require(['jquery-nos'], function($) {
-	$(function() {
-		$(":input[type='text'],:input[type='password'],textarea").wijtextbox();
-		$(":input[type='submit'],button").button();
-		$("select").wijdropdown();
-		$(":input[type=checkbox]").wijcheckbox();
-		$('.expander').wijexpander({expanded: true });
-		$('.accordion').wijaccordion({
-			header: "h3"
-		});
-	});
+	$.nos.ui.form("#<?= $uniqid1 = uniqid('id_') ?>,#<?= $uniqid2 = uniqid('id_') ?>");
 });
 </script>
 
-<div class="line ui-widget">
+<div class="line ui-widget" id="<?= $uniqid1 ?>" style="margin-top: 3em;">
 	<div class="unit col c1"></div>
 	<div class="unit col c7" id="line_first" style="position:relative;z-index:99;">
 		<div class="line" style="margin-bottom:1em;">
@@ -41,7 +31,7 @@ require(['jquery-nos'], function($) {
 	</div>
 </div>
 
-<div class="line ui-widget">
+<div class="line ui-widget" id="<?= $uniqid2 ?>">
 	<div class="unit col c1"></div>
 	<div class="unit col c7" id="line_second" style="position:relative;margin-bottom:1em;">
 		<?= $content ?>

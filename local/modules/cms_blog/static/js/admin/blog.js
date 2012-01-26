@@ -16,12 +16,13 @@ define([
                 action : function(args) {
                     $.nos.tabs.add({
                         url     : "admin/cms_blog/form/edit/" + args.row.data.id,
-                        label   : "Update"
+                        label   : "Update",
+						iframe  : true
                     });
                 },
                 label : mp3Grid.i18n('Update')
             },
-            delete : {
+            'delete' : {
                 action : function(args) {
                     $.nos.ajax.request({
                         url: "admin/cms_blog/list/delete/" + args.row.data.id,
@@ -61,17 +62,6 @@ define([
                 columns : {
                     title : {
                         headerText : mp3Grid.i18n('Title'),
-                        cellFormatter : function(args) {
-                            if ($.isPlainObject(args.row.data)) {
-                                args.$container.closest("td").attr("title", args.row.data.title);
-
-                                $("<a href=\"admin/cms_blog/form?id=" + args.row.data.id + "\"></a>")
-                                    .text(args.row.data.title)
-                                    .appendTo(args.$container);
-
-                                return true;
-                            }
-                        },
                         dataKey : 'title',
                         sortDirection : 'ascending'
                     },
@@ -91,7 +81,7 @@ define([
                     actions : {
                         actions : [
                             actions.update,
-                            actions.delete
+                            actions['delete']
                         ]
                     }
                 }

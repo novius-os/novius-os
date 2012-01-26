@@ -27,6 +27,7 @@ return array(
         'Edit' => __('Edit'),
         'Delete' => __('Delete'),
         'Visualize' => __('Visualize'),
+        'Pick' => __('Pick'),
         'Folders' => __('Folders'),
         'Type of file' => __('Type of file'),
         'Id' => __('Id'),

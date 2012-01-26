@@ -41,15 +41,9 @@ class Controller_Admin_List extends Controller_Mp3table_List {
             $success = true;
         }
 
-        $json = array('success' => $success);
-
-        $response = \Response::forge(
-            \Format::forge()->to_json($json)
-            , 200, array(
-                'Content-Type' => 'application/json',
-            ));
-        $response->send(true);
-        exit();
+        \Response::json(array(
+			'success' => $success,
+		));
     }
 
 

@@ -54,13 +54,9 @@ class Controller_Mp3table_List extends Controller {
     {
 
 		if (!\Cms\Auth::check()) {
-			$json = \Format::forge()->to_json(array(
+			\Response::json(403, array(
 				'login_page' => \Uri::base(false).'admin/login',
 			));
-			\Response::forge($json, 403, array(
-				'Content-Type' => 'application/json',
-			))->send(true);
-			exit();
 		}
 
         $offset = intval(Input::get('offset', 0));
@@ -186,11 +182,7 @@ class Controller_Mp3table_List extends Controller {
             exit();
         }
 
-        $response = \Response::forge(\Format::forge()->to_json($json), 200, array(
-            'Content-Type' => 'application/json',
-        ));
-        $response->send(true);
-        exit();
+        \Response::json($json);
     }
 
 	protected function searchtext_condition($menu, $target, $search)

@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -13,7 +13,7 @@ namespace Cms;
 use Fuel\Core\File;
 use Fuel\Core\View;
 
-class Controller_Tray_Account extends Controller_Generic_Admin {
+class Controller_Tray_Account extends \Controller {
 
     public function action_index() {
 
@@ -24,19 +24,19 @@ class Controller_Tray_Account extends Controller_Generic_Admin {
         \Asset::css('jquery.wijmo-complete.all.2.0.0b2.min.css', array(), 'css');
 
 
-
-
 		$user = \Session::get('logged_user');
+		$fieldset_infos    = Controller_Admin_User_Form::fieldset_edit($user->user_id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>');
 		$fieldset_password = Controller_Admin_User_Form::fieldset_password($user->user_id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>');
-        $fieldset_display = static::fieldset_display($user)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>');
-        $this->template->body = View::forge('tray/account', array(
+        $fieldset_display  = static::fieldset_display($user)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>');
+
+        return View::forge('tray/account', array(
 			'logged_user' => $user,
+			'fieldset_infos' => $fieldset_infos,
 			'fieldset_password' => $fieldset_password,
             'fieldset_display' => $fieldset_display,
 		), false);
-		return $this->template;
 	}
-	
+
 	public function action_disconnect() {
 		\Session::destroy();
 		\Response::redirect('/admin/login/reset');
@@ -46,10 +46,14 @@ class Controller_Tray_Account extends Controller_Generic_Admin {
 
     public static function fieldset_display($user) {
 
+		$configuration = $user->getConfiguration();
         $fields = array (
             'background' => array (
-                'label' => 'Background',
+                'label' => 'Wallpaper',
                 'widget' => 'media',
+				'form' => array(
+					'value' => \Arr::get($configuration, 'misc.display.background', ''),
+				),
             ),
             'save' => array(
                 'label' => '',
@@ -67,27 +71,36 @@ class Controller_Tray_Account extends Controller_Generic_Admin {
                 try {
 
                     $configuration = $user->getConfiguration();
-                    if ($data['background']) {
-                        \Arr::set($configuration, 'misc.display.background', $data['background']);
+					if (!empty($data['background'])) {
+						$media = Model_Media_Media::find($data['background']);
+						if (!empty($media)) {
+							\Arr::set($configuration, 'misc.display.background', $data['background']);
+							$notify = 'Your wallpaper is now "'.$media->media_title.'"';
+						} else {
+							$data['background'] = null;
+							$error = 'The selected image does not exists.';
+						}
                     }
+					if (empty($data['background'])) {
+						\Arr::delete($configuration, 'misc.display.background');
+						$notify = 'Your wallpaper has been removed.';
+					}
 
                     $user->user_configuration = serialize($configuration);
                     $user->save();
-                    $body = array(
-                        'notify' => 'Display settings changed successfully.',
-                        'listener_fire' => array('cms_user.refresh' => true),
-                    );
                 } catch (\Exception $e) {
-                    $body = array(
-                        'error' => \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.',
-                    );
+                    $error = \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.';
                 }
 
-                $response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-                    'Content-Type' => 'application/json',
-                ));
-                $response->send(true);
-                exit();
+				$body = array();
+				if (!empty($notify)) {
+					$body['notify'] = $notify;
+				}
+				if (!empty($error)) {
+					$body['error'] = $error;
+				}
+
+                \Response::json($body);
             }
         ));
         $fieldset_display->js_validation();

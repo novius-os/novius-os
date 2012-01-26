@@ -63,10 +63,7 @@ class Controller_Admin_Media_Folder extends Controller_Noviusos_Noviusos {
 			);
 		}
 
-		$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-			'Content-Type' => 'application/json',
-		));
-		$response->send(true);
+		\Response::json($body);
 	}
 
 	protected static function pretty_filename($file) {

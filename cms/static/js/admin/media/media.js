@@ -22,7 +22,7 @@ define([
                     });
                 }
             },
-            delete : {
+            'delete' : {
                 label : mp3Grid.i18n('Delete'),
                 action : function(item) {
                     if (confirm("Are you sure ?")) {
@@ -60,6 +60,7 @@ define([
                 }
             },
             grid : {
+				id : 'cms_media_grid',
                 proxyUrl : 'admin/admin/media/list/json',
                 columns : {
                     extension : {
@@ -76,7 +77,7 @@ define([
                     actions : {
                         actions : [
                             actions.edit,
-                            actions.delete,
+                            actions['delete'],
                             actions.visualize
                         ]
                     }
@@ -94,7 +95,7 @@ define([
                 },
                 actions : [
                     actions.edit,
-                    actions.delete,
+                    actions['delete'],
                     actions.visualize
                 ]
             },
@@ -116,7 +117,7 @@ define([
                             actions : {
                                 actions : [
                                     {
-                                        label : mp3Grid.i18n('Upload a new file'),
+                                        label : mp3Grid.i18n('Upload'),
                                         action : function(item) {
                                             $.nos.dialog({
                                                 contentUrl: 'admin/admin/media/upload/form/' + item.id,
@@ -201,7 +202,7 @@ define([
                             $.extend(actions.visualize, {
                                 button : true
                             }),
-                            actions.delete
+                            actions['delete']
                         ],
                         dataParser : function(item) {
                             var data = {

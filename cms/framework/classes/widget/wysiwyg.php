@@ -16,15 +16,16 @@ class Widget_Wysiwyg extends \Fieldset_Field {
 
     public function __construct($name, $label = '', array $attributes = array(), array $rules = array(), \Fuel\Core\Fieldset $fieldset = null) {
 
-        $attributes['type']   = 'textarea';
-		$attributes['class'] .= ' tinymce';
+        $attributes['type']  = 'textarea';
+		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').' tinymce';
 
 		if (empty($attributes['id'])) {
-			$attributes['id'] = uniqid();
+			$attributes['id'] = uniqid('wysiwyg_');
 		}
 		if (!empty($attributes['widget_options'])) {
-			$this->options = $attributes['widget_options'];
+			$this->options = \Arr::merge($this->options, $attributes['widget_options']);
 		}
+		unset($attributes['widget_options']);
 
         parent::__construct($name, $label, $attributes, $rules, $fieldset);
     }

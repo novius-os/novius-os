@@ -43,13 +43,14 @@ define([
             pick : {
                 label : mp3Grid.i18n('Pick'),
                 action : function(item) {
-                    $.nos.listener.fire("media.pick", true, [item]);
+                    $.nos.listener.fire("tinymce.image_select", true, [item]);
                 }
             }
         };
 
     return $.extend(true, mp3Grid, {
         actions : actions,
+        delayed : true,
         mp3grid : {
             adds : {
                 media : {
@@ -62,7 +63,7 @@ define([
                 }
             },
             grid : {
-                id : 'cms_media_grid_image',
+                id : 'cms_media_grid_tinymce',
                 proxyUrl : 'admin/admin/media/list/json',
                 columns : {
                     extension : {
@@ -73,8 +74,7 @@ define([
                     },
                     title : {
                         headerText : mp3Grid.i18n('Title'),
-                        dataKey : 'title',
-                        sortDirection : 'ascending'
+                        dataKey : 'title'
                     },
                     actions : {
                         actions : [
@@ -146,39 +146,6 @@ define([
                                         }
                                     }
                                 ]
-                            }
-                        }
-                    }
-                },
-                extensions : {
-                    widget_id : 'cms_media_extensions',
-                    label : mp3Grid.i18n('Type of file'),
-                    url : 'admin/admin/media/inspector/extension/list',
-                    inputName : 'media_extension[]',
-                    grid : {
-                        columns : {
-                            title : {
-                                headerText : mp3Grid.i18n('Type of file'),
-                                dataKey : 'title',
-                                cellFormatter : function(args) {
-                                    if ($.isPlainObject(args.row.data)) {
-                                        var text = "";
-                                        if (args.row.data.icon) {
-                                            text += "<img style=\"vertical-align:middle\" src=\"static/cms/img/16/" + args.row.data.icon + "\"> ";
-                                        }
-                                        text += args.row.data.title;
-
-                                        args.$container.html(text);
-
-                                        return true;
-                                    }
-                                }
-                            },
-                            hide : {
-                                visible : false
-                            },
-                            hide2 : {
-                                visible : false
                             }
                         }
                     }

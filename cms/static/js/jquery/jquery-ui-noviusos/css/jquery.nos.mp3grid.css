@@ -1,6 +1,6 @@
 /*
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -310,17 +310,43 @@
 .nos-mp3grid ul {
   list-style-type: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003288}}
-.nos-mp3grid td.wijgridtd.buttontd {
-  text-align: center;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003287}}
+.nos-mp3grid .buttontd {
   cursor: pointer;
+  padding: 0;
+  border: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003291}}
-.nos-mp3grid td.wijgridtd.buttontd .ui-icon-triangle-1-s {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003292}}
+.nos-mp3grid .buttontd .ui-state-default {
+  display: table-cell;
+  font-weight: normal;
+  text-align: center;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003298}}
+.nos-mp3grid .buttontd .ui-icon-triangle-1-s {
   margin: auto;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003301}}
+.nos-mp3grid .buttontd .wijmo-wijgrid-innercell {
+  padding: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003305}}
+.nos-mp3grid .buttontd.wijgridtd {
+  border-width: 0;
+  height: 21px;
+  width: 100%;
+  margin: 0 0 0 auto;
+  text-align: right;
+}
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003300}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003317}}
+.nos-thumbnails-thumb .buttontd th {
+  border-width: 1px 1px 0 0;
+  border-collapse: 'separate';
+  -moz-user-select: 'none';
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003327}}
 #layout_settings .layout-inspector {
   background-color: white;
   position: relative;
@@ -328,7 +354,7 @@
   display: inline-block;
   cursor: move;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003307}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003334}}
 #layout_settings .layout-inspector > div {
   position: absolute;
   top: 50%;
@@ -338,22 +364,22 @@
   height: 24px;
   margin-top: -10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003347}}
 #layout_settings .droping {
   background-color: #DDD;
   display: inline-block;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003325}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003352}}
 #layout_settings .layout {
   width: 300px;
   height: 200px;
   border: 1px solid #BBB;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003331}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003358}}
 #layout_settings .layout .layout-inspector.last {
   border: 0 !important;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003336}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003363}}
 #layout_settings .layout .left-panel {
   position: relative;
   width: 99px;
@@ -361,36 +387,36 @@
   border-right: 1px solid #DDD;
   float: left;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003343}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003370}}
 #layout_settings .layout .left-panel .layout-inspector {
   border-bottom: 1px solid #EEE;
   width: 100%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003349}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003376}}
 #layout_settings .layout .top-panel {
   position: relative;
   width: 200px;
   height: 79px;
   border-bottom: 1px solid #DDD;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003355}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003382}}
 #layout_settings .layout .top-panel .layout-inspector {
   border-right: 1px solid #EEE;
   height: 100%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003361}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003388}}
 #layout_settings .layout .right-side {
   float: left;
   width: 200px;
   height: 100%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003366}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003393}}
 #layout_settings .layout .right-side .content {
   width: 200px;
   height: 120px;
   background-color: #EEE;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003374}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003401}}
 #layout_settings .not-layout {
   margin-top: 10px;
   width: 300px;
@@ -399,42 +425,42 @@
   position: relative;
   overflow: auto;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003382}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003409}}
 #layout_settings .not-layout .droping {
   width: 100px;
   height: 30px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003387}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003414}}
 #layout_settings .not-layout .invisible-panel {
   height: 30px;
   position: relative;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003391}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003418}}
 #layout_settings .not-layout .invisible-panel .layout-inspector {
   border-right: 1px solid #EEE;
   height: 30px;
   width: 100px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003401}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003428}}
 .content-settings h1, #layout_settings h1 {
   font-size: 17px;
   margin-top: -12px;
   margin-bottom: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003407}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003434}}
 .content-settings h2, #layout_settings h2 {
   margin-bottom: 5px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003413}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003440}}
 .widget-columns {
   width: 150px;
   padding: 4px;
   border-radius: 4px;
   border: 1px solid #BBB;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003421}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003448}}
 .widget-columns li {
   overflow: hidden;
   position: relative;
@@ -444,7 +470,7 @@
   margin-bottom: 3px;
   border-radius: 2px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003430}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003457}}
 .widget-columns li .handle {
   float: left;
   height: 100%;
@@ -454,7 +480,7 @@
   border-radius: 2px 0 0 2px;
   cursor: move;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003440}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003467}}
 .widget-columns li .title-zone, .widget-columns li .visibility-zone {
   float: left;
   height: 100%;
@@ -464,19 +490,19 @@
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
   font-weight: bold;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003450}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003477}}
 .widget-columns li .visibility-zone {
   float: right;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003454}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003481}}
 .widget-columns li.invisible {
   background-color: #F6F6F6;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003456}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003483}}
 .widget-columns li.invisible .handle {
   background-color: #E6E6E6;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003461}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003488}}
 .widget-columns li.placeholder {
   border-radius: 2px;
   border: 1px dashed #DDD;

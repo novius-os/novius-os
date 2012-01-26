@@ -14,19 +14,26 @@ class Widget_Media extends \Fieldset_Field {
 
 	protected $options = array(
 		'mode' => 'image',
+		'inputFileThumb' => array(),
 	);
 
     public function __construct($name, $label = '', array $attributes = array(), array $rules = array(), \Fuel\Core\Fieldset $fieldset = null) {
 
 		//$attributes['type']   = 'hidden';
-		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').'media';
+		$attributes['class'] = (isset($attributes['class']) ? $attributes['class'] : '').' media';
 
 		if (empty($attributes['id'])) {
-			$attributes['id'] = uniqid();
+			$attributes['id'] = uniqid('media_');
 		}
+		$this->options = \Arr::merge($this->options, array(
+			'inputFileThumb' => array(
+				'title' => __('Image from the media library'),
+			)
+		));
 		if (!empty($attributes['widget_options'])) {
-			$this->options = $attributes['widget_options'];
+			$this->options = \Arr::merge($this->options, $attributes['widget_options']);
 		}
+		unset($attributes['widget_options']);
 
         parent::__construct($name, $label, $attributes, $rules, $fieldset);
     }
@@ -41,7 +48,9 @@ class Widget_Media extends \Fieldset_Field {
 		$media_id = $this->get_value();
 		if (!empty($media_id)) {
 			$media = \Cms\Model_Media_Media::find($media_id);
-			$this->options['selected-image'] = $media->get_public_path_resized(64, 64);
+			if (!empty($media)) {
+				$this->options['inputFileThumb']['file'] = $media->get_public_path_resized(64, 64);
+			}
 		}
 		$this->set_attribute('data-media-options', htmlspecialchars(\Format::forge()->to_json($this->options)));
         return (string) parent::build();
@@ -53,7 +62,8 @@ class Widget_Media extends \Fieldset_Field {
 <script type="text/javascript">
 require(['jquery-nos'], function ($) {
 	$(function() {
-		$(':hidden#$id').each(function() {
+		$(':input#$id').each(function() {
+			log($(this).data('media-options'));
 			$.nos.media($(this), $(this).data('media-options'));
 		});
 	});

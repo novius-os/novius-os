@@ -26,6 +26,7 @@ Autoloader::add_classes(array(
 	'Fieldset'       => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'fieldset.php',
 	'Fieldset_Field' => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'fieldset_field.php',
 	'Format'         => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'format.php',
+	'Response'       => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'response.php',
 	'Cms\Orm\Query'  => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'orm'.DIRECTORY_SEPARATOR.'query.php',
 ));
 

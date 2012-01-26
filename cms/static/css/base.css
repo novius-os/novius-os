@@ -1,12 +1,12 @@
 /*
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
  */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/lib\/gems\/1\.9\.1\/gems\/compass-0\.11\.6\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/esperat\/\.gem\/ruby\/1\.9\.1\/gems\/compass-0\.11\.7\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000317}}
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -28,45 +28,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/lib\/gems\/1\.9\.1\/gems\/compass-0\.11\.6\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/esperat\/\.gem\/ruby\/1\.9\.1\/gems\/compass-0\.11\.7\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000320}}
 body {
   line-height: 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/lib\/gems\/1\.9\.1\/gems\/compass-0\.11\.6\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000322}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/esperat\/\.gem\/ruby\/1\.9\.1\/gems\/compass-0\.11\.7\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000322}}
 ol, ul {
   list-style: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/lib\/gems\/1\.9\.1\/gems\/compass-0\.11\.6\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000324}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/esperat\/\.gem\/ruby\/1\.9\.1\/gems\/compass-0\.11\.7\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000324}}
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/lib\/gems\/1\.9\.1\/gems\/compass-0\.11\.6\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000326}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/esperat\/\.gem\/ruby\/1\.9\.1\/gems\/compass-0\.11\.7\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000326}}
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/lib\/gems\/1\.9\.1\/gems\/compass-0\.11\.6\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/esperat\/\.gem\/ruby\/1\.9\.1\/gems\/compass-0\.11\.7\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000328}}
 q, blockquote {
   quotes: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/lib\/gems\/1\.9\.1\/gems\/compass-0\.11\.6\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\00003101}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/esperat\/\.gem\/ruby\/1\.9\.1\/gems\/compass-0\.11\.7\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\00003101}}
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/lib\/gems\/1\.9\.1\/gems\/compass-0\.11\.6\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000330}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/esperat\/\.gem\/ruby\/1\.9\.1\/gems\/compass-0\.11\.7\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\0000330}}
 a img {
   border: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/lib\/gems\/1\.9\.1\/gems\/compass-0\.11\.6\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\00003114}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/esperat\/\.gem\/ruby\/1\.9\.1\/gems\/compass-0\.11\.7\/frameworks\/compass\/stylesheets\/compass\/reset\/_utilities\.scss}line{font-family:\00003114}}
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
@@ -222,12 +222,44 @@ a:hover {
   vertical-align: middle;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000365}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000364}}
+.wijmo-checkbox {
+  display: inline-block;
+  width: inherit;
+  vertical-align: middle;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000370}}
+.wijmo-checkbox label {
+  width: inherit;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000375}}
+.ui-helper-clearfix:after {
+  content: '';
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000382}}
+.wijmo-wijaccordion p {
+  margin: 0.5em 0;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000387}}
+.mceExternalToolbar {
+  z-index: 100;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000391}}
+.title, .ui-widget .ui-widget.title {
+  font-size: 1.5em;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000395}}
 .ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
   padding: 0.2em 1em 0.2em 2.1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000368}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/css\/base\.scss}line{font-family:\0000398}}
 .ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
   padding: 0.2em;
 }

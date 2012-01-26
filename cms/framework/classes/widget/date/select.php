@@ -201,7 +201,12 @@ class Widget_Date_Select extends \Fieldset_Field {
      * @param array $input
      */
     public function repopulate(array $input) {
-        list($year, $month, $day, $time) = array($input[$this->name.'_year'], $input[$this->name.'_month'],  $input[$this->name.'_day'],  $input[$this->name.'_time']);
+        list($year, $month, $day, $time) = array(
+			isset($input[$this->name.'_year'])  ? $input[$this->name.'_year']  : null,
+			isset($input[$this->name.'_month']) ? $input[$this->name.'_month'] : null,
+			isset($input[$this->name.'_day'])   ? $input[$this->name.'_day']   : null,
+			isset($input[$this->name.'_time'])  ? $input[$this->name.'_time']  : null
+		);
 
         // Remember previous entered values
         empty($year)  or $this->year->set_value($year);

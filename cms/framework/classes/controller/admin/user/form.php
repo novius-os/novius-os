@@ -21,7 +21,7 @@ class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
 
 		\Asset::add_path('static/cms/');
 		\Asset::css('laGrid.css', array(), 'css');
-		\Asset::css('mystyle.css', array(), 'css');
+		\Asset::css('form.css', array(), 'css');
 
 		return parent::after($response);
 	}
@@ -70,7 +70,6 @@ class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
 					$body = array(
 						'notify' => 'User saved successfully.',
 						'redirect' => 'admin/admin/user/form/edit/'.$user->user_id,
-						'listener_fire' => array('cms_user.refresh' => true),
 					);
 				} catch (\Exception $e) {
 					$body = array(
@@ -78,11 +77,7 @@ class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
 					);
 				}
 
-				$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-					'Content-Type' => 'application/json',
-				));
-				$response->send(true);
-				exit();
+				\Response::json($body);
 			}
 		));
 
@@ -97,29 +92,12 @@ class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
 		$fields = \Config::get('cms::admin/user/form.fields', array());
 
 		$fieldset_edit = \Fieldset::build_from_config($fields, $user, array(
-			'complete' => function($data) use ($user) {
-				foreach ($data as $name => $value) {
-					$user->$name = $value;
-				}
-
-				try {
-					$user->save();
-					$body = array(
-						'notify' => 'User saved successfully.',
-						'listener_fire' => array('cms_user.refresh' => true),
-						'closeTab' => true,
-					);
-				} catch (\Exception $e) {
-					$body = array(
-						'error' => $e->getMessage(),
-					);
-				}
-
-				$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-					'Content-Type' => 'application/json',
-				));
-				$response->send(true);
-				exit();
+			'form_name' => 'edit_user_infos',
+			'success' => function() {
+				return array(
+					'notify' => 'User saved successfully.',
+					'listener_fire' => array('cms_user.refresh' => true),
+				);
 			},
 			'extend' => function($fieldset)  {
 				$fieldset->field('user_fullname')->add_rule('min_length', 3);
@@ -151,16 +129,26 @@ class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
                     'min_length' => array(6),
                 ),
             ),
-            /*
-            'user_password' => array (
-                'label' => 'Password',
-                'widget' => 'password',
+            //*
+            'new_password' => array (
+                'label' => 'New password',
+                'form' => array(
+                    'type' => 'password',
+                ),
                 'validation' => array(
                     'required',
                     'min_length' => array(6),
                 ),
             ),
-            */
+            'new_password_confirmation' => array (
+                'label' => 'Confirmation',
+                'form' => array(
+                    'type' => 'password',
+                ),
+                'validation' => array(
+					'match_field' => array('new_password'), // All rules will be satisfied
+                ),
+            ),
             'save' => array(
                 'label' => '',
                 'form' => array(
@@ -181,31 +169,16 @@ class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
 					}
 				));
 			},
-			'complete' => function($data) use ($user) {
-
-				try {
-					foreach ($data as $name => $value) {
-						if (substr($name, 0, 5) == 'user_' && $name != 'user_id') {
-							$user->$name = $value;
-						}
-					}
-
-					$user->save();
-					$body = array(
-						'notify' => 'Password changed successfully.',
-						'listener_fire' => array('cms_user.refresh' => true),
-					);
-				} catch (\Exception $e) {
-					$body = array(
-						'error' => \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.',
-					);
+			'before_save' => function($user, $data) {
+				if (!empty($data['new_password'])) {
+					$user->user_password = $data['new_password'];
 				}
-
-				$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-					'Content-Type' => 'application/json',
-				));
-				$response->send(true);
-				exit();
+			},
+			'success' => function() {
+				return array(
+					'notify' => 'Password changed successfully.',
+					'listener_fire' => array('cms_user.refresh' => true),
+				);
 			}
 		));
 		$fieldset_password->js_validation();

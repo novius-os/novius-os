@@ -156,14 +156,14 @@
 					var module_id = $(this).data('module');
 					var metadata  = self.settings.theme_nos_modules[module_id];
 					var data      = $(this).data('config');
-					console.log(metadata);
+					//console.log(metadata);
 					$.ajax({
 						url: metadata.previewUrl,
 						type: 'POST',
 						dataType: 'json',
 						data: data,
 						success: function(json) {
-							console.log(json);
+							//console.log(json);
 							module.html(json.preview);
 							self.onModuleAdd(module);
 						},
@@ -203,7 +203,8 @@
 			});
 
 			ed.onSaveContent.add(function(ed, o) {
-				var content = o.content
+				var content = $(o.content);
+
 				content.find('img.nosMedia').replaceWith(function() {
 					var $img = $(this);
 					var media = $img.data('media');
@@ -848,7 +849,12 @@
 					});
 
 					DOM.show(e);
-					DOM.setStyle(e, 'top', 0 - DOM.getRect(ed.id + '_tblext').h - 1);
+					var toolbarRect = DOM.getRect(ed.id + '_tblext');
+					DOM.setStyle(e, 'top', 0 - toolbarRect.h - 1);
+
+					if (toolbarRect.w + toolbarRect.x > window.innerWidth) {
+						DOM.setStyle(e, 'left', window.innerWidth - toolbarRect.w - toolbarRect.x - 1);
+					}
 
 					// Fixes IE rendering bug
 					DOM.hide(e);
@@ -1423,20 +1429,8 @@
 		},
 
 		_mceImage : function(ui, val) {
-			var ed = this.editor;
-
-			// Internal image object like a flash placeholder
-			if (ed.dom.getAttrib(ed.selection.getNode(), 'class').indexOf('mceItem') != -1)
-				return;
-
-			ed.windowManager.open({
-				url : this.url + '/image.htm',
-				width : 355 + parseInt(ed.getLang('nos.image_delta_width', 0)),
-				height : 275 + parseInt(ed.getLang('nos.image_delta_height', 0)),
-				inline : true
-			}, {
-				theme_url : this.url
-			});
+			// Don't use the native image editing. We have our own.
+			return this._nosImage(ui, val);
 		},
 
 		_mceLink : function(ui, val) {
@@ -1584,20 +1578,18 @@
 
 			var dialog = null;
 
-			$.nos.data('tinymce', this);
-
-			dialog = $.nos.dialog({
-				contentUrl: 'admin/tinymce/image',
-				title: 'Insert an image'
-			});
-
 			var clean = function() {
-				dialog && dialog.wijdialog('close');
+                if (dialog) {
+                    dialog.wijdialog('destroy');
+                    dialog.closest('.ui-dialog').remove();
+                    dialog.remove();
+                }
 				$.nos.listener.remove('tinymce.image_close', close);
 				$.nos.listener.remove('tinymce.image_save', save);
 			};
 
 			var close = function() {
+                dialog.wijdialog('close');
 				clean();
 			};
 
@@ -1612,6 +1604,15 @@
 				}
 				ed.execCommand("mceEndUndoLevel");
 			}
+
+			$.nos.data('tinymce', this);
+
+            dialog = $.nos.dialog({
+				contentUrl: 'admin/tinymce/image',
+				title: 'Insert an image',
+				ajax: true,
+                close: clean
+			});
 
 			$.nos.listener.add('tinymce.image_close', true, close);
 			$.nos.listener.add('tinymce.image_save',  true, save);

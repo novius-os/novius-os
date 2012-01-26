@@ -1,6 +1,6 @@
 /*
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -141,7 +141,7 @@
 						}
 					}
 				}
-				
+
 				.ui-resizable-handle {
 				    z-index : 1000;
 				}
@@ -284,15 +284,42 @@
 		list-style-type: none;
 	}
 
-    td.wijgridtd {
-        &.buttontd {
-            text-align: center;
-            cursor: pointer;
-            .ui-icon-triangle-1-s {
-                margin: auto;
-            }
-        }
-    }
+	.buttontd {
+		cursor: pointer;
+		padding: 0;
+		border: 0;
+
+		.ui-state-default {
+			display: table-cell;
+			font-weight: normal;
+			text-align: center;
+		}
+
+		.ui-icon-triangle-1-s {
+			margin: auto;
+		}
+		.wijmo-wijgrid-innercell {
+			padding: 0;
+		}
+
+		&.wijgridtd {
+			border-width: 0;
+			height: 21px;
+			width: 100%;
+			margin: 0 0 0 auto;
+			text-align: right;
+		}
+	}
+}
+
+.nos-thumbnails-thumb {
+	.buttontd {
+		th {
+			border-width: 1px 1px 0 0;
+			border-collapse: 'separate';
+			-moz-user-select: 'none';
+		}
+	}
 }
 
 #layout_settings {
@@ -314,7 +341,7 @@
             margin-top: -10px;
         }
 
-        
+
     }
 
     .droping {
@@ -351,7 +378,7 @@
             width: 200px;
             height: 79px;
             border-bottom: 1px solid #DDD;
-            
+
             .layout-inspector {
                 border-right: 1px solid #EEE;
                 height: 100%;

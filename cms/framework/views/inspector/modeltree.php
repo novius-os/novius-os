@@ -46,7 +46,7 @@ require([
                                     }
                                     if (args.row.data.hasChilds) {
                                         var toggle = $('<div></div>').css({
-                                            float : 'left',
+                                            'float' : 'left',
                                             marginLeft : (args.row.data.level * 20) + 'px'
                                         })
                                             .addClass('ui-icon').addClass(options.allExpanded ? 'ui-icon-triangle-1-se' : 'ui-icon-triangle-1-e');
