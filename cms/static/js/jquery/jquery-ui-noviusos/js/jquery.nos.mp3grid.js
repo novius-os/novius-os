@@ -1133,7 +1133,7 @@ define([
                                 .removeClass('ui-state-active');
                             $(this).addClass('ui-state-active');
                             o.defaultView = 'grid';
-                            self.gridRefresh();
+                            self._uiList();
                         }
                     });
             }
@@ -1161,7 +1161,7 @@ define([
                                 $(this).addClass('ui-state-active');
                                 o.defaultView = 'thumbnails';
                                 o.thumbnails.thumbnailSize = size;
-                                self.gridRefresh();
+                                self._uiList();
                             }
                         });
                 })
