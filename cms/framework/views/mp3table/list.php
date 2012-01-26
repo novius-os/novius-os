@@ -23,14 +23,28 @@ require([
         $.extend(mp3Grid.i18nMessages, <?= $i18n ?>);
 
 		$(function() {
-            var div = $('div#<?= $id ?>'),
+            var timeout,
+                div = $('div#<?= $id ?>'),
                 params = mp3Grid.build();
 
             if ($.isPlainObject(params.tab)) {
                 $.nos.tabs.update(div, params.tab);
             }
             div.removeAttr('id')
-                .mp3grid(params.mp3grid);
+                .mp3grid(params.mp3grid)
+                .parents('.nos-ostabs-panel')
+                .bind('panelResize.ostabs', function(eventType, direct) {
+                    if (direct) {
+                        if (timeout) {
+                            window.clearTimeout(timeout);
+                        }
+                        timeout = window.setTimeout(function() {
+                            div.mp3grid('refresh');
+                        }, 200);
+                    } else {
+                        div.mp3grid('refresh');
+                    }
+                });
 		});
 	});
 </script>

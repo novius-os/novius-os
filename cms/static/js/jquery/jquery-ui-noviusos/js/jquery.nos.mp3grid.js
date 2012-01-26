@@ -1525,7 +1525,7 @@ define([
                         self.uiThumbnail.thumbnails('setSize', self.uiSplitterHorizontalBottom.width(), height);
                     }
                 } else {
-                    self.uiGrid.nosgrid('setSize', self.uiSplitterHorizontalBottom.width(), height);
+                    self.uiGrid.nosgrid('setSize', null, height);
                     if (refresh) {
                         var heights = $.nos.grid.getHeights();
                         self.uiGrid.nosgrid('option', 'pageSize', Math.floor((height - heights.footer - heights.header - (self.showFilter ? heights.filter : 0)) / heights.row));
@@ -1582,6 +1582,20 @@ define([
 
 			return self;
 		},
+
+        refresh : function() {
+            var self = this,
+                o = self.options;
+
+            self.uiSplitterVertical.wijsplitter('refresh', true, false);
+            self.uiSplitterHorizontal.wijsplitter('refresh', true, false);
+
+            self._resizeInspectorsV()
+                ._resizeInspectorsH()
+                ._resizeList();
+
+            return self;
+        },
 
         slidersSettings : function() {
             return {
