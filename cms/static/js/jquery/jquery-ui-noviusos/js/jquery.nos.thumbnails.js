@@ -452,9 +452,12 @@ define([
         setSize : function(width, height) {
             var self = this;
 
-
-            self.element.width(width)
-                .height(height);
+            if (width !== null) {
+                self.element.width(width);
+            }
+            if (height !== null) {
+                self.element.height(height);
+            }
 
             return self;
         }
