@@ -88,6 +88,11 @@ require([
                         });
                     };
 
+            collapseIndentBehaviour(inspectorData.grid.columns[0], {
+                    allExpanded: true,
+                    allowCollapseExpand: true
+                });
+
             inspector.css({
                     height : '100%',
                     width : '100%'
@@ -131,11 +136,6 @@ require([
                             }
                         }
                     })
-                });
-
-			collapseIndentBehaviour(inspectorData.grid.columns[0], {
-                    allExpanded: true,
-                    allowCollapseExpand: true
                 });
 
 			$nos.nos.listener.add(inspectorData.widget_id + '.refresh', true, function() {
