@@ -71,9 +71,11 @@ define([
 			self.element
 				.addClass('nos-thumbnails nos-thumbnails-size-' + o.thumbnailSize)
 				.wijsuperpanel({
-					showRounder : false
-				});
-			self.uiContainer = self.element.find('.wijmo-wijsuperpanel-contentwrapper');
+					showRounder : false,
+                    autoRefresh : true
+            	});
+
+			self.uiContainer = $(self.element.wijsuperpanel('getContentElement'));
 
             self.uiOverlay = $('<div></div>')
                 .addClass('nos-thumbnails-overlay ui-widget-overlay')
@@ -95,14 +97,15 @@ define([
 					title : 'Test'
 				});
 
-				var el = self.uiContainer.find('.nos-thumbnails-thumb');
+				var el = self.uiContainer.find('.nos-thumbnails-thumb')
+                    container = self.uiContainer.parent();
 				self.itemDimension = {
 					width : el.outerWidth(true),
 					height : el.outerHeight(true)
 				};
 				self.uiContainer.empty();
 
-				o.pageSize = Math.floor(self.uiContainer.width() / self.itemDimension.width) * Math.max(1, Math.floor(self.uiContainer.height() / self.itemDimension.height));
+				o.pageSize = Math.floor(container.width() / self.itemDimension.width) * Math.max(1, Math.floor(container.height() / self.itemDimension.height));
 			}
 
 			self.dataSource = new wijdatasource({
@@ -444,7 +447,17 @@ define([
 			}
 
 			return self;
-		}
+		},
+
+        setSize : function(width, height) {
+            var self = this;
+
+
+            self.element.width(width)
+                .height(height);
+
+            return self;
+        }
 	});
 	return $;
 });

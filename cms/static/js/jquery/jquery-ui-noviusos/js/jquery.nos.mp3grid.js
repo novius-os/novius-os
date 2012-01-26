@@ -1164,12 +1164,15 @@ define([
                 o = self.options;
 
             if (self.init) {
+                var height = self.uiSplitterHorizontalBottom.height() - self.uiSearchBar.outerHeight(true);
                 if (o.defaultView === 'thumbnails') {
-                    self.uiThumbnail.show();
-                    self._uiThumbnail();
+                    if (refresh) {
+                        self._uiList();
+                    } else {
+                        self.uiThumbnail.thumbnails('setSize', self.uiSplitterHorizontalBottom.width(), height);
+                    }
                 } else {
-                    var height = self.uiSplitterHorizontalBottom.height() - self.uiSearchBar.outerHeight(true),
-                        heights = $.nos.grid.getHeights();
+                    var heights = $.nos.grid.getHeights();
                     self.uiGrid.nosgrid('setSize', self.uiSplitterHorizontalBottom.width(), height);
                     if (refresh) {
                         self.uiGrid.nosgrid('option', 'pageSize', Math.floor((height - heights.footer - heights.header - (self.showFilter ? heights.filter : 0)) / heights.row));
