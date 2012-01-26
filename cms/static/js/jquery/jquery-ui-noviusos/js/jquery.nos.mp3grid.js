@@ -1307,9 +1307,6 @@ define([
 							sel.addRows(self.itemSelected);
 						}
 					},
-                    columnResized : function() {
-                        //self._resizeList();
-                    },
                     dataLoading: function(e) {
                         self.uiPaginationLabel.detach();
                     },
@@ -1528,9 +1525,9 @@ define([
                         self.uiThumbnail.thumbnails('setSize', self.uiSplitterHorizontalBottom.width(), height);
                     }
                 } else {
-                    var heights = $.nos.grid.getHeights();
                     self.uiGrid.nosgrid('setSize', self.uiSplitterHorizontalBottom.width(), height);
                     if (refresh) {
+                        var heights = $.nos.grid.getHeights();
                         self.uiGrid.nosgrid('option', 'pageSize', Math.floor((height - heights.footer - heights.header - (self.showFilter ? heights.filter : 0)) / heights.row));
                     }
                 }
