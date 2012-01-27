@@ -534,7 +534,7 @@ define([
 				if (o.inspectors[j].grid) {
 					var gridColumns = o.inspectors[j].grid.columns;
 					var newColumns = [];
-					$('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
+                    self.element.find('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
 						var $this = $(this);
 						var newColumn = gridColumns[$this.data('column-id')];
 
@@ -552,7 +552,7 @@ define([
 			}
 
 			var newInspectors = [];
-			var layoutSettings = $('#layout_settings');
+			var layoutSettings = self.element.find('#layout_settings');
 			layoutSettings.find('.layout-inspector').each(function() {
 				var newInspector = self.options.inspectors[$(this).data('inspector-id')];
 				var $panel = $(this).closest('.panels');
@@ -565,26 +565,19 @@ define([
 			newColumns = [];
 
 
-			$('#settings-main-view .widget-columns > li').each(function(i, el) {
-			   var $this = $(this);
-			   var newColumn = o.grid.columns[$this.data('column-id')];
+            self.element.find('#settings-main-view .widget-columns > li').each(function(i, el) {
+			    var $this = $(this),
+			        newColumn = o.grid.columns[$this.data('column-id')];
 
-			   newColumn.dataIndex = i;
-			   newColumn.leavesIdx = i;
-			   newColumn.linearIdx = i;
-			   newColumn.thX = i;
-			   newColumn.travIdx = i;
-			   newColumn.visLeavesIdx = i;
-			   newColumn.visible = !$this.hasClass('invisible');
-			   newColumns.push(newColumn);
+			    newColumn.visible = !$this.hasClass('invisible');
+			    newColumns.push(newColumn);
 			});
 
 			self.options.grid.columns = newColumns;
 
-			$('li.ui-widget-content').remove();
-			self._uiInspectors();
-			self.uiGrid.nosgrid('columns', newColumns);
-			self.uiGrid.nosgrid('doRefresh');
+            self.element.find('.nos-mp3grid-inspector').remove();
+			self._uiInspectors()
+                ._uiList();
 		},
 
 		_uiSettingsMenuPopupAddItem : function(element, itemName, content) {
@@ -920,7 +913,7 @@ define([
 
 			$.each(o.inspectors, function() {
 				if (!this.hide) {
-					$('<li></li>').addClass('ui-widget-content')
+					$('<li></li>').addClass('nos-mp3grid-inspector ui-widget-content')
                         .data('inspector', this)
 						.appendTo( this.vertical ? self.uiInspectorsVertical : self.uiInspectorsHorizontal );
 				}
@@ -1433,7 +1426,13 @@ define([
 			var self = this;
 
 		    if (self.resizing) {
-				var inspectors = self.uiInspectorsVertical.find('> li').css({
+				var inspectors = self.uiInspectorsVertical.find('.wijmo-wijsplitter-v-bar')
+                    .css({
+                        width : null,
+                        borderRightWidth : null
+                    })
+                    .end()
+                    .find('> li').css({
 						width: '100%',
 						height: 'auto'
 					});
@@ -1453,7 +1452,13 @@ define([
 			var self = this;
 
 		    if (self.resizing) {
-				var inspectors = self.uiInspectorsHorizontal.find('> li').css({
+				var inspectors = self.uiInspectorsHorizontal.find('.wijmo-wijsplitter-h-bar')
+                    .css({
+                        height : null,
+                        borderTopWidth : null
+                    })
+                    .end()
+                    .find('> li').css({
 						width: 'auto',
 						height: '100%'
 					});
@@ -1498,23 +1503,31 @@ define([
         },
 
 		_hideSplitterV : function() {
-			var self = this,
-				o = self.options,
+			var self = this;
 
-				bar = $('.wijmo-wijsplitter-v-bar').hide();
-
-			self.uiSplitterVertical.wijsplitter('option', 'panel1', {collapsed : true});
+            self.uiSplitterVertical.find('.wijmo-wijsplitter-v-bar')
+                .css({
+                    width : '0px',
+                    borderRightWidth : '0px'
+                })
+                .end()
+                .wijsplitter('option', 'panel1', {collapsed : true})
+                .wijsplitter('refresh', true, false);
 
 			return self;
 		},
 
 		_hideSplitterH : function() {
-			var self = this,
-				o = self.options,
+			var self = this;
 
-				bar = $('.wijmo-wijsplitter-h-bar').hide();
-
-			self.uiSplitterHorizontal.wijsplitter('option', 'panel1', {collapsed : true});
+			self.uiSplitterHorizontal.find('.wijmo-wijsplitter-h-bar')
+                .css({
+                    height : '0px',
+                    borderTopWidth : '0px'
+                })
+                .end()
+                .wijsplitter('option', 'panel1', {collapsed : true})
+                .wijsplitter('refresh', true, false);
 
 			return self;
 		},
