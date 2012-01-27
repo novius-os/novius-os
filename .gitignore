@@ -18,3 +18,4 @@ noviusos.komodoproject
 .settings
 .sass-cache
 *.log
+.idea/
