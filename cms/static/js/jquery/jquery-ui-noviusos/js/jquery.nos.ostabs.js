@@ -13,10 +13,6 @@ define([
 ], function( $ ) {
 	(function(undefined ) {
 
-        var panelResizeTrigger = function() {
-            this.trigger('panelResize.ostabs');
-        };
-
 		$.widget( "nos.ostabs", {
 			options: {
 				initTabs: [], // e.g. [{"url":"http://www.google.com","iconUrl":"img/google-32.png","label":"Google","iconSize":32,"labelDisplay":false,"pined":true},{"url":"http://www.twitter.com","iconClasses":"ui-icon ui-icon-signal-diag","label":"Twitter","pined":true}]
@@ -55,12 +51,15 @@ define([
 			stackOpening: [],
 
 			_create: function() {
-                var self = this;
+                var self = this,
+                    o = self.options;
 
                 self._tabify( true );
 
                 $(window).resize(function() {
-                    self._windowResize();
+                    if (o.selected) {
+                        self.panels.eq(o.selected).trigger('panelResize.ostabs');
+                    }
                 });
 			},
 
@@ -1125,43 +1124,6 @@ define([
 				this._cleanup();
 				return this;
 			},
-
-            _windowResize: function() {
-                var self = this,
-                    o = this.options;
-
-                self.panels.each(function(i) {
-                    var $panel = $(this);
-                    if (i !== o.selected) {
-                        if ($panel.data('open.ostabs')) {
-                            self.addCallbackPanel($panel, panelResizeTrigger);
-                        }
-                    } else {
-                        $panel.trigger('panelResize.ostabs', true);
-                    }
-                });
-
-                return self;
-            },
-
-            addCallbackPanel : function(index, callback) {
-                index = this._getIndex( index );
-                if ( index == -1 ) {
-                    return this;
-                }
-
-                var self = this,
-                    $panel = self.panels.eq( index ),
-                    callbacks = $panel.data('callbacks.ostabs');
-
-                if (!callbacks) {
-                    callbacks = $.Callbacks('unique once');
-                    $panel.data('callbacks.ostabs', callbacks);
-                }
-                callbacks.add(callback);
-
-                return self;
-            },
 
 			tabs: function() {
 				var tabs = [];

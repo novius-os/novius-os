@@ -40,15 +40,13 @@ require([
                 .mp3grid(params.mp3grid)
                 .parents('.nos-ostabs-panel')
                 .bind({
-                    'panelResize.ostabs' : function(eventType, direct) {
-                        if (direct) {
-                            if (timeout) {
-                                window.clearTimeout(timeout);
-                            }
-                            timeout = window.setTimeout(function() {
-                                div.mp3grid('refresh');
-                            }, 200);
+                    'panelResize.ostabs' : function() {
+                        if (timeout) {
+                            window.clearTimeout(timeout);
                         }
+                        timeout = window.setTimeout(function() {
+                            div.mp3grid('refresh');
+                        }, 200);
                     },
                     'showPanel.ostabs' :  function() {
                         div.mp3grid('refresh');
