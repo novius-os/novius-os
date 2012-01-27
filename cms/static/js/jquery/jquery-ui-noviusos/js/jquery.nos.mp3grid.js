@@ -153,8 +153,7 @@ define([
 				._uiInspectors()
 				._uiSearchBar()
 				._uiList()
-				._uiSettings()
-				._listeners();
+				._uiSettings();
 
 			self.init = true;
 		},
@@ -1334,61 +1333,6 @@ define([
 						}
 					}
 				}, o.thumbnails));
-
-			return self;
-		},
-
-		_listeners : function() {
-			var self = this,
-				o = self.options;
-
-			$nos.nos.listener.add('inspector.showFilter', false, function(widget_id, change, checked) {
-				self._addSettingsInspectorMenu(widget_id, 'showFilters', {
-						content : {
-							name : 'showFilter' + widget_id,
-							id : 'showFilter' + widget_id,
-							checked : checked,
-							click : function() {
-								change($(this).is(':checked'));
-								self.uiSettingsMenu.wijmenu('hideAllMenus');
-							},
-							label : o.texts.showFiltersColumns
-						}
-					})
-			});
-
-			$nos.nos.listener.add('inspector.declareColumns', false, function(widget_id, columns) {
-				if (columns.length > 1) {
-					var childs = {};
-
-					$.each(columns, function(i) {
-						var column = this;
-
-						childs[i] = {
-								content : {
-									name : 'columns' + widget_id,
-									id : 'column' + widget_id + '_' + i,
-									checked : column.visible,
-									click : function() {
-										column.change($(this).is(':checked'));
-										self.uiSettingsMenu.wijmenu('hideAllMenus');
-									},
-									label : column.label
-								}
-							};
-					});
-
-					self._addSettingsInspectorMenu(widget_id, 'column', {
-							content : o.texts.columns,
-							childs : childs
-						});
-				}
-			});
-
-			$nos.nos.listener.add('mp3grid.' + self.options.grid.id + '.refresh', true, function() {
-				log('Refreshing mp3grid.' + self.options.grid.id + '.refresh');
-				self.gridRefresh();
-			});
 
 			return self;
 		},
