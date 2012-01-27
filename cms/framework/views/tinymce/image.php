@@ -10,7 +10,7 @@
 		?>
 	</div>
 	<div id="<?= $id_properties ?>">
-		<form action="#">
+		<form action="#" id="<?= $uniqid_form = uniqid('form_') ?>">
 			<table class="fieldset">
 				<tr>
 					<th><label>Title: </label></th>
@@ -76,36 +76,38 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 		};
 
 		require(['static/cms/js/vendor/wijmo/js/jquery.wijmo.wijtabs.js'], function() {
-			$container.wijtabs({
-				alignment: 'left',
-				load: function(e, ui) {
-					var margin = $(ui.panel).outerHeight(true) - $(ui.panel).innerHeight();
-					$(ui.panel).height($('#<?= $uniqid ?>').parent().height() - margin);
-				}
-			});
+			setTimeout(function() {
+				$container.wijtabs({
+					alignment: 'left',
+					load: function(e, ui) {
+						var margin = $(ui.panel).outerHeight(true) - $(ui.panel).innerHeight();
+						$(ui.panel).height($('#<?= $uniqid ?>').parent().height() - margin);
+					}
+				});
 
-			var $dialog_content = $container.find('.ui-dialog-content');
-			var $tabs = $container.find('.tabs');
+				var $dialog_content = $container.find('.ui-dialog-content');
+				var $tabs = $container.find('.tabs');
 
-			var $properties = $('#<?= $id_properties ?>');
-			var $library    = $('#<?= $id_library ?>');
+				var $properties = $('#<?= $id_properties ?>');
+				var $library    = $('#<?= $id_library ?>');
 
-			var margin = 0;
+				var margin = 0;
 
-			margin += getMargin($dialog_content);
-			margin += getMargin($tabs);
+				margin += getMargin($dialog_content);
+				margin += getMargin($tabs);
 
-			var height = $container.parent().height() - margin;
+				var height = $container.parent().height() - margin;
 
-			$tabs.height(height);
-			$properties.height(height - getMargin($properties));
-			$library.css({padding:0, margin:0}).height(height);
+				$tabs.height(height);
+				$properties.height(height - getMargin($properties));
+				$library.css({padding:0, margin:0}).height(height);
 
-			// Now tabs are created and the appropriate dimensions are set, load the mp3grid
-			var mp3grid_tmp = $library.children().height(height - getMargin($library.children())).attr('id');
-			$.nos.listener.fire('mp3grid.' + mp3grid_tmp, true, []);
+				// Now tabs are created and the appropriate dimensions are set, load the mp3grid
+				var mp3grid_tmp = $library.children().height(height - getMargin($library.children())).attr('id');
+				$.nos.listener.fire('mp3grid.' + mp3grid_tmp, true, []);
 
-			$.nos.ui.form('#<?= $uniqid ?>');
+				$.nos.ui.form('#<?= $uniqid ?>');
+			}, 0);
 		});
 
 		var base_url = '<?= \Uri::base(true) ?>';
@@ -121,12 +123,11 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 
 		var media = null;
 
-		$.nos.listener.add('tinymce.image_select', true, function(media_json, image_dom) {
+		var tinymce_image_select = function(media_json, image_dom) {
 			media = media_json;
 
 			if (image_dom == null)
 			{
-
 				$height.val(media_json.height);
 				$width.val(media_json.width);
 				$title.val(media_json.title);
@@ -151,10 +152,20 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 			{
 				$same_title_alt.prop('checked', false).removeAttr('checked').change();
 			}
+		}
+
+		// This is called by the "Pick" action from the grid
+		$.nos.listener.add('tinymce.image_select', true, tinymce_image_select);
+
+		// This is called for cleanup in the _nosImage command from tinyMce when the popup closes
+		$.nos.listener.add('tinymce.image_select.close_dialog', true, function() {
+			$.nos.listener.remove('tinymce.image_select', true, tinymce_image_select);
+			$.nos.listener.remove('tinymce.image_dialog_close', true, arguments.callee);
 		});
 
-		$container.find('a[data-id=close]').click(function() {
+		$container.find('a[data-id=close]').click(function(e) {
 			$.nos.listener.fire('tinymce.image_close', true);
+			e.preventDefault();
 		});
 
 		$container.find('button[data-id=save]').click(function() {
@@ -175,6 +186,11 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 			img.attr('src', base_url + media.path);
 
 			$.nos.listener.fire('tinymce.image_save', true, [img]);
+		});
+
+		$('#<?= $uniqid_form ?>').submit(function(e) {
+			$container.find('button[data-id=save]').triggerHandler('click');
+			e.stopPropagation();
 		});
 
 		// Proportianal width & height
@@ -223,15 +239,15 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 				//log('get media data with ajax');
 				$.ajax({
 					method: 'GET',
-					url: base_url + 'admin/cms_media/info/media/' + media_id,
+					url: base_url + 'admin/media/info/media/' + media_id,
 					dataType: 'json',
 					success: function(item) {
-						$.nos.listener.fire('tinymce.image_select', true, [item, $img]);
+						tinymce_image_select(item, $img);
 					}
 				})
 			} else {
 				//log('use current data from media');
-				$.nos.listener.fire('tinymce.image_select', true, [$img.data('media'), $img]);
+				tinymce_image_select($img.data('media'), $img);
 			}
 		}
 	});

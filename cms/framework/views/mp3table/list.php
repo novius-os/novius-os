@@ -28,9 +28,15 @@ require([
                 params = mp3Grid.build();
 
             if ($.isPlainObject(params.tab)) {
-                $.nos.tabs.update(div, params.tab);
+				try {
+					$.nos.tabs.update(div, params.tab);
+				} catch (e) {
+					log('Could not update current tab. Maybe your config file should not try to update it.');
+				}
             }
-            div.removeAttr('id')
+
+			$.nos.listener.add('mp3grid.<?= $id ?>', true, function() {
+				div.removeAttr('id')
                 .mp3grid(params.mp3grid)
                 .parents('.nos-ostabs-panel')
                 .bind({
@@ -48,6 +54,12 @@ require([
                         div.mp3grid('refresh');
                     }
                 });
+				$.nos.listener.remove('mp3grid.<?= $id ?>', true, arguments.callee);
+			})
+
+			if (null == params.delayed || !params.delayed) {
+				$.nos.listener.fire('mp3grid.<?= $id ?>', true, []);
+			}
 		});
 	});
 </script>

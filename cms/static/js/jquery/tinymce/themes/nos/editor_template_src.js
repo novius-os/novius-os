@@ -176,7 +176,7 @@
 
 			ed.onInit.add(function(ed) {
 
-				makeItNice(ed);
+				//makeItNice(ed);
 			});
 
 			// When editing HTML content, we clean up module preview, we'll make them nice again after
@@ -1578,23 +1578,22 @@
 
 			var dialog = null;
 
-			var clean = function() {
+			var close = function() {
                 if (dialog) {
                     dialog.wijdialog('destroy');
                     dialog.closest('.ui-dialog').remove();
                     dialog.remove();
                 }
-				$.nos.listener.remove('tinymce.image_close', close);
-				$.nos.listener.remove('tinymce.image_save', save);
-			};
+				$.nos.listener.remove('tinymce.image_close', true, close);
+				$.nos.listener.remove('tinymce.image_save', true, save);
 
-			var close = function() {
-                dialog.wijdialog('close');
-				clean();
+				// This event will cleanup the listeners set from within the dialog
+				$.nos.listener.fire('tinymce.image_dialog_close', true, []);
 			};
 
 			var save = function(img) {
-				close();
+				// Cleanup
+				dialog.wijdialog('close');
 
 				var html = $('<div></div>').append(img.addClass('nosMedia')).html();
 				if (ed.selection.getNode().nodeName == 'IMG') {
@@ -1607,15 +1606,15 @@
 
 			$.nos.data('tinymce', this);
 
+			$.nos.listener.add('tinymce.image_close', true, close);
+			$.nos.listener.add('tinymce.image_save',  true, save);
+
             dialog = $.nos.dialog({
 				contentUrl: 'admin/tinymce/image',
 				title: 'Insert an image',
 				ajax: true,
-                close: clean
+                close: close
 			});
-
-			$.nos.listener.add('tinymce.image_close', true, close);
-			$.nos.listener.add('tinymce.image_save',  true, save);
 		},
 
 		onModuleAdd: function(container) {
