@@ -1219,7 +1219,7 @@ define([
 						}
 					}),
 					pageIndexChanging: function() {
-						$nos.nos.listener.fire('mp3grid.selectionChanged', false);
+                        self.element.trigger('selectionChanged.mp3grid', false);
 					},
 					cellStyleFormatter: function(args) {
 						if (args.$cell.is('th')) {
@@ -1242,7 +1242,7 @@ define([
 
 							if (data) {
 								self.itemSelected = row.dataRowIndex;
-								$nos.nos.listener.fire('mp3grid.selectionChanged', false, [data]);
+                                self.element.trigger('selectionChanged.mp3grid', data);
 							}
 						}
 						return true;
@@ -1322,15 +1322,15 @@ define([
 					},
 					pageIndexChanging: function() {
 						self.itemSelected = null;
-						$nos.nos.listener.fire('mp3grid.selectionChanged', false);
+                        self.element.trigger('selectionChanged.mp3grid', false);
 					},
 					selectionChanged : function(e, data) {
 						if (!data || $.isEmptyObject(data)) {
 							self.itemSelected = null;
-							$nos.nos.listener.fire('mp3grid.selectionChanged', false);
+                            self.element.trigger('selectionChanged.mp3grid', false);
 						} else {
 							self.itemSelected = data.item.index;
-							$nos.nos.listener.fire('mp3grid.selectionChanged', false, [data.item.data.noParseData]);
+                            self.element.trigger('selectionChanged.mp3grid', data.item.data.noParseData);
 						}
 					}
 				}, o.thumbnails));
