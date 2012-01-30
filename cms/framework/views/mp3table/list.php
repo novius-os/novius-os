@@ -21,6 +21,11 @@ require([
 	], function( mp3Grid, $ ) {
 
         $.extend(mp3Grid.i18nMessages, <?= $i18n ?>);
+        mp3Grid.mp3grid.views = <?= $views ?>;
+        mp3Grid.mp3grid.name = <?= $name ?>;
+        mp3Grid.mp3grid.selectedView = <?= $selectedView ?>;
+
+        console.log(mp3Grid);
 
 		$(function() {
             var timeout,
@@ -30,6 +35,7 @@ require([
             if ($.isPlainObject(params.tab)) {
                 $.nos.tabs.update(div, params.tab);
             }
+
             div.removeAttr('id')
                 .mp3grid(params.mp3grid)
                 .parents('.nos-ostabs-panel')
