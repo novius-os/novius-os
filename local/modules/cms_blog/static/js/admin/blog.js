@@ -13,9 +13,9 @@ define([
     var mp3Grid = $.nos.mp3GridSetup(),
         actions = {
             update : {
-                action : function(args) {
+                action : function(item) {
                     $.nos.tabs.add({
-                        url     : "admin/cms_blog/form/edit/" + args.row.data.id,
+                        url     : "admin/cms_blog/form/edit/" + item.id,
                         label   : "Update",
 						iframe  : true
                     });
@@ -23,9 +23,9 @@ define([
                 label : mp3Grid.i18n('Update')
             },
             'delete' : {
-                action : function(args) {
+                action : function(item) {
                     $.nos.ajax.request({
-                        url: "admin/cms_blog/list/delete/" + args.row.data.id,
+                        url: "admin/cms_blog/list/delete/" + item.id,
                         data: {},
                         success: function(response) {
                             if (response.success) {
