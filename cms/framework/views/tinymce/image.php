@@ -6,7 +6,7 @@
 	<div id="<?= $id_library ?>">
 		<?php
 		// We could load this using ajax, but it's faster to preload it directly here
-		echo Request::forge('admin/media/mode/tinymce/index')->execute()->response();
+		echo Request::forge('admin/media/index?view=tinymce')->execute()->response();
 		?>
 	</div>
 	<div id="<?= $id_properties ?>">

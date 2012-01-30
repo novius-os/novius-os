@@ -602,8 +602,8 @@ define([
             media : function(input, data) {
 
                 var contentUrls = {
-                    'all'   : '/admin/admin/media/list',
-                    'image' : '/admin/admin/media/mode/image/index'
+                    'all'   : '/admin/media/list',
+                    'image' : '/admin/media/list?view=image'
                 };
 
 				var dialog = null;

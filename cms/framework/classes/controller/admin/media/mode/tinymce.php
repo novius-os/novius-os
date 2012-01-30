@@ -12,6 +12,10 @@ namespace Cms;
 
 use Fuel\Core\Config;
 
+/**
+ * @todo delete
+ */
+
 class Controller_Admin_Media_Mode_Tinymce extends Controller_Admin_Media_List {
 
 	public function action_index() {
