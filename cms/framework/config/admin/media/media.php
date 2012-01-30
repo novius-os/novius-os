@@ -17,7 +17,13 @@ return array(
 		'related' => array(),
 		'limit' => 10,
 	),
-    'urljson' => 'static/cms/js/admin/media/media.js',
+    'selectedView' => 'default',
+    'views' => array(
+        'default' => array(
+            'name' => __('Default'),
+            'json' => 'static/cms/js/admin/media/media.js',
+        )
+    ),
     'i18n' => array(
         'Media center' => __('Media center'),
         'Add a media' => __('Add a media'),

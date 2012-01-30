@@ -12,24 +12,26 @@ class Format extends \Fuel\Core\Format {
 
 	private function json_encode_jsfunc($input = array(), $funcs = array(), $level = 0)
 	{
-		foreach($input as $key => $value)
-		{
-			if (is_array($value))
-			{
-				$ret = $this->json_encode_jsfunc($value, $funcs, 1);
-				$input[$key]=$ret[0];
-				$funcs=$ret[1];
-			}
-			else
-			{
-				if (substr($value,0,9) == 'function(')
-				{
-					$func_key="#".uniqid()."#";
-					$funcs[$func_key]=$value;
-					$input[$key]=$func_key;
-				}
-			}
-		}
+        if (is_array($input)) {
+            foreach($input as $key => $value)
+            {
+                if (is_array($value))
+                {
+                    $ret = $this->json_encode_jsfunc($value, $funcs, 1);
+                    $input[$key]=$ret[0];
+                    $funcs=$ret[1];
+                }
+                else
+                {
+                    if (substr($value,0,9) == 'function(')
+                    {
+                        $func_key="#".uniqid()."#";
+                        $funcs[$func_key]=$value;
+                        $input[$key]=$func_key;
+                    }
+                }
+            }
+        }
 		if ($level == 1)
 		{
 			return array($input, $funcs);

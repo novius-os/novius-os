@@ -42,10 +42,19 @@ class Controller_Mp3table_List extends Controller {
 			exit();
 		}
 
+        $controllerName = \Request::active()->controller;
+
 		$view = View::forge('mp3table/list');
 
-        $view->set('urljson', $this->mp3grid['urljson'], false);
+
+
+
+
+        $view->set('urljson', $this->mp3grid['views'][$this->mp3grid['selectedView']]['json'], false);
 		$view->set('i18n', \Format::forge($this->mp3grid['i18n'])->to_json(), false);
+        $view->set('views', \Format::forge($this->mp3grid['views'])->to_json(), false);
+        $view->set('selectedView', \Format::forge($this->mp3grid['selectedView'])->to_json(), false);
+        $view->set('name', \Format::forge($this->mp3grid['configuration_id'])->to_json(), false);
 
 		return $view;
 	}

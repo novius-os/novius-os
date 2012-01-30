@@ -17,7 +17,17 @@ return array(
 		'related' => array('author'),
 		'limit' => 20,
 	),
-    'urljson' => 'static/modules/cms_blog/js/admin/blog.js',
+    'selectedView' => 'default',
+    'views' => array(
+        'default' => array(
+            'name' => __('Default'),
+            'json' => 'static/modules/cms_blog/js/admin/blog.js',
+        ),
+        'delete_first' => array(
+            'name' => __('Delete first'),
+            'json' => 'static/modules/cms_blog/js/admin/blog_1.js',
+        )
+    ),
     'i18n' => array(
         'Blog' => __('Blog'),
         'Add a post' => __('Add a post'),

@@ -95,9 +95,6 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 				'iconClasses' => 'nos-icon16 nos-icon16-add',
 				'iconSize' => 16,
 			),
-			'show' => 'function(e, tab) {
-				$nos.nos.listener.fire(\'ostabs.show\', false, [tab.index]);
-			}',
             'user_configuration' => unserialize($user->user_configuration),
 		);
 

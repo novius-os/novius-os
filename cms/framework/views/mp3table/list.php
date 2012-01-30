@@ -21,6 +21,11 @@ require([
 	], function( mp3Grid, $ ) {
 
         $.extend(mp3Grid.i18nMessages, <?= $i18n ?>);
+        mp3Grid.mp3grid.views = <?= $views ?>;
+        mp3Grid.mp3grid.name = <?= $name ?>;
+        mp3Grid.mp3grid.selectedView = <?= $selectedView ?>;
+
+        console.log(mp3Grid);
 
 		$(function() {
             var timeout,
@@ -39,15 +44,16 @@ require([
 				div.removeAttr('id')
                 .mp3grid(params.mp3grid)
                 .parents('.nos-ostabs-panel')
-                .bind('panelResize.ostabs', function(eventType, direct) {
-                    if (direct) {
+                .bind({
+                    'panelResize.ostabs' : function() {
                         if (timeout) {
                             window.clearTimeout(timeout);
                         }
                         timeout = window.setTimeout(function() {
                             div.mp3grid('refresh');
                         }, 200);
-                    } else {
+                    },
+                    'showPanel.ostabs' :  function() {
                         div.mp3grid('refresh');
                     }
                 });

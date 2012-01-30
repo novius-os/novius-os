@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -16,7 +16,13 @@ return array(
 		'model' => 'Cms\Model_User_User',
 		'related' => array('groups'),
 	),
-    'urljson' => 'static/cms/js/admin/user/user.js',
+    'selectedView' => 'default',
+    'views' => array(
+        'default' => array(
+            'name' => __('Default'),
+            'json' => 'static/cms/js/admin/user/user.js',
+        )
+    ),
     'i18n' => array(
         'Users' => __('Users'),
         'Add a user' => __('Add a user'),
