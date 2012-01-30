@@ -287,7 +287,7 @@ define([
 
                             if ($(this).val() == 'edit_custom') {
                                 var $el = self._uiSettingsMenuPopup();
-                                var $window = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
+                                self.uiSettingsDialog = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
                                             $el.wijtabs({
                                                 alignment: 'left',
                                                 scrollable: true,
@@ -325,12 +325,12 @@ define([
                                                     $('<button />').button({
                                                         label : o.texts.cancel,
                                                         icons : {primary : 'ui-icon-gear'}
-                                                    }).click( function() {$window.wijdialog('close');$window.remove();} )
+                                                    }).click( function() {self.uiSettingsDialog.wijdialog('close');self.uiSettingsDialog.remove();} )
                                                 ).append(
                                                     $('<button />').button({
                                                         label : o.texts.save,
                                                         icons : {primary : 'ui-icon-gear'}
-                                                    }).click( function() {self._uiSettingsMenuPopupSave();$window.wijdialog('close');$window.remove();} )
+                                                    }).click( function() {self._uiSettingsMenuPopupSave();self.uiSettingsDialog.wijdialog('close');self.uiSettingsDialog.remove();} )
                                                 )
                                             );
                             } else {
@@ -562,7 +562,7 @@ define([
 				if (o.inspectors[j].grid) {
 					var gridColumns = o.inspectors[j].grid.columns;
 					var newColumns = [];
-                    self.element.find('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
+                    self.uiSettingsDialog.find('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
 						var $this = $(this);
 						var newColumn = gridColumns[$this.data('column-id')];
 
@@ -580,7 +580,7 @@ define([
 			}
 
 			var newInspectors = [];
-			var layoutSettings = self.element.find('#layout_settings');
+			var layoutSettings = self.uiSettingsDialog.find('#layout_settings');
 			layoutSettings.find('.layout-inspector').each(function() {
 				var newInspector = self.options.inspectors[$(this).data('inspector-id')];
 				var $panel = $(this).closest('.panels');
@@ -593,7 +593,7 @@ define([
 			newColumns = [];
 
 
-            self.element.find('#settings-main-view .widget-columns > li').each(function(i, el) {
+            self.uiSettingsDialog.find('#settings-main-view .widget-columns > li').each(function(i, el) {
 			    var $this = $(this),
 			        newColumn = o.grid.columns[$this.data('column-id')];
 
