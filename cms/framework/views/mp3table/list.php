@@ -25,8 +25,6 @@ require([
         mp3Grid.mp3grid.name = <?= $name ?>;
         mp3Grid.mp3grid.selectedView = <?= $selectedView ?>;
 
-        console.log(mp3Grid);
-
 		$(function() {
             var timeout,
                 div = $('div#<?= $id ?>'),

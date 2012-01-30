@@ -28,15 +28,15 @@ define([
 			var self = this,
 				o = self.options;
 
-			self.element.addClass('nos-inspector-preview ui-widget ui-widget-content  wijmo-wijgrid');
-
-			$nos.nos.listener.add('mp3grid.selectionChanged', false, function(data) {
-				if ($.isPlainObject(data)) {
-					self.select(data);
-				} else {
-					self.unselect();
-				}
-			});
+			self.element.addClass('nos-inspector-preview ui-widget ui-widget-content  wijmo-wijgrid')
+                .parents('.nos-mp3grid')
+                .bind('selectionChanged.mp3grid', function(e, data) {
+                    if ($.isPlainObject(data)) {
+                        self.select(data);
+                    } else {
+                        self.unselect();
+                    }
+                });
 		},
 
 		_init: function() {
