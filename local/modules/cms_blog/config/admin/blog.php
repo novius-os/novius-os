@@ -36,7 +36,7 @@ return array(
         'Author' => __('Author'),
         'Date' => __('Date'),
         'Delete' => __('Delete'),
-        'Update' => __('Update'),
+        'Edit' => __('Edit'),
         'Categories' => __('Categories'),
         'Tags' => __('Tags'),
         'Authors' => __('Authors'),

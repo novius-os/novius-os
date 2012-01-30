@@ -61,8 +61,7 @@ class Format extends \Fuel\Core\Format {
 
 		// To allow exporting ArrayAccess objects like Orm\Model instances they need to be
 		// converted to an array first
-		$data = (is_array($data) or is_object($data)) ? $this->to_array($data) : $data;
-		return $this->json_encode_jsfunc($data);
+		return (is_array($data) or is_object($data)) ? $this->json_encode_jsfunc($this->to_array($data)) : json_encode($data);
 	}
 }
 

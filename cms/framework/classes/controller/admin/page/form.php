@@ -10,37 +10,13 @@
 
 namespace Cms;
 
-class Controller_Admin_Page_Form extends Controller_Generic_Admin {
-
-	public function after($response) {
-
-		\Asset::css('http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css', array(), 'css');
-
-		\Asset::add_path('static/cms/js/vendor/wijmo/');
-		\Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-		\Asset::css('jquery.wijmo-complete.all.2.0.0b2.min.css', array(), 'css');
-
-		\Asset::add_path('static/cms/');
-		\Asset::css('base.css', array(), 'css');
-		\Asset::css('laGrid.css', array(), 'css');
-		\Asset::css('form.css', array(), 'css');
-
-		\Asset::add_path('static/cms/js/jquery/jquery-ui-noviusos/');
-        \Asset::css('jquery.nos.ostabs.css', array(), 'css');
-        \Asset::css('jquery.nos.mp3grid.css', array(), 'css');
-
-		return parent::after($response);
-	}
+class Controller_Admin_Page_Form extends Controller {
 
     public function action_edit($id) {
-        $body = \View::forge('cms::admin/page/form/edit', array(
+        return \View::forge('cms::admin/page/form/edit', array(
 			'page' => Model_Page_Page::find($id),
 			'fieldset' => static::fieldset($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 		), false);
-
-		$this->template->set('body', $body, false);
-
-        return $this->template;
     }
 
 	public static function fieldset($id) {

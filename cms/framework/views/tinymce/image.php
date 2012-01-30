@@ -9,36 +9,37 @@
 		echo Request::forge('admin/media/index?view=tinymce')->execute()->response();
 		?>
 	</div>
-	<div id="<?= $id_properties ?>">
-		<form action="#" id="<?= $uniqid_form = uniqid('form_') ?>">
+
+	<form action="#" id="<?= $uniqid_form = uniqid('form_') ?>">
+		<div id="<?= $id_properties ?>">
 			<table class="fieldset">
 				<tr>
-					<th><label>Title: </label></th>
+					<th><label><?= __('Title:') ?> </label></th>
 					<td><input type="text" name="title" data-id="title" size="30" /></td>
 				</tr>
 				<tr>
-					<th><label>Description: </label></th>
-					<td><input type="text" name="alt" data-id="alt" size="30" /> &nbsp; <input type="checkbox" data-id="same_title_alt" checked> <label for="same_title_alt">&nbsp;Same as title</label></td>
+					<th><label><?= __('Description:') ?> </label></th>
+					<td><input type="text" name="alt" data-id="alt" size="30" /> &nbsp; <input type="checkbox" data-id="same_title_alt" checked> <label for="same_title_alt">&nbsp;<?= __('Same as title') ?></label></td>
 				</tr>
 				<tr>
-					<th><label>Width: </label></th>
-					<td><input type="text" name="width" data-id="width" size="5" /> &nbsp; <input type="checkbox" data-id="proportional" checked> <label for="proportional">&nbsp;Keep proportions</label></td>
+					<th><label><?= __('Width:') ?> </label></th>
+					<td><input type="text" name="width" data-id="width" size="5" /> &nbsp; <input type="checkbox" data-id="proportional" checked> <label for="proportional">&nbsp;<?= __('Keep proportions') ?></label></td>
 				</tr>
 				<tr>
-					<th><label>Height: </label></th>
+					<th><label><?= __('Height:') ?> </label></th>
 					<td><input type="text" name="height" data-id="height" readonly /></td>
 				</tr>
 				<tr>
-					<th><label>Style: </label></th>
+					<th><label><?= __('Style:') ?> </label></th>
 					<td><input type="text" name="style" data-id="style" size="50" /></td>
 				</tr>
 			</table>
-		</form>
-	</div>
+		</div>
 
-	<p style="position:absolute;width:190px;bottom:20px;left:10px;text-align:center;">
-		<button data-id="save">Save</button> &nbsp; or &nbsp; <a data-id="close" href="#">Cancel</a>
-	</p>
+		<p style="position:absolute;width:190px;bottom:20px;left:10px;text-align:center;">
+			<input type="submit" data-id="save" value="<?= __('Insert image') ?>" /> <br /> <?= __('or') ?> &nbsp; <a data-id="close" href="#"><?= __('Cancel') ?></a>
+		</p>
+	</form>
 </div>
 
 <style type="text/css">
@@ -168,11 +169,11 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 			e.preventDefault();
 		});
 
-		$container.find('button[data-id=save]').click(function() {
+		$container.find('input[data-id=save]').click(function(e) {
 			var img = $('<img />');
 
 			if (!media || !media.id) {
-				alert('Please choose an image first');
+				alert(<?= \Format::forge()->to_json(__('Please choose an image first')) ?>);
 				return;
 			}
 
@@ -186,11 +187,14 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 			img.attr('src', base_url + media.path);
 
 			$.nos.listener.fire('tinymce.image_save', true, [img]);
+			e.stopPropagation();
+			e.preventDefault();
 		});
 
 		$('#<?= $uniqid_form ?>').submit(function(e) {
-			$container.find('button[data-id=save]').triggerHandler('click');
+			$container.find('input[data-id=save]').triggerHandler('click');
 			e.stopPropagation();
+			e.preventDefault();
 		});
 
 		// Proportianal width & height

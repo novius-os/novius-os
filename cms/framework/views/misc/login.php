@@ -11,14 +11,9 @@
 ?>
 <script type="text/javascript">
 require(['jquery-nos'], function($) {
+	$.nos.ui.form('#login');
 	$(function() {
-		$(":input[type=text],:input[type='password'],textarea").wijtextbox();
-		$(":input[type=submit],button").button();
 		var $email = $('#email');
-		try {
-			// Most browsers don't authorize to change the type of an input, but it's still good if it works
-			$email.attr('type', 'email');
-		} catch (e) {}
 		$email.select();
 	});
 });
@@ -31,7 +26,7 @@ require(['jquery-nos'], function($) {
 		</p>
 	<?php } ?>
 	<form method="POST" action="">
-		<p><input type="text" name="email" id="email" value="<?= \Input::post('email', ''); ?>" placeholder="Email" /></p>
+		<p><input type="email" name="email" id="email" value="<?= \Input::post('email', ''); ?>" placeholder="Email" /></p>
 		<p><input type="password" name="password" placeholder="Password" /></p>
 		<p><input type="submit" value="Dive in"></p>
 	</form>

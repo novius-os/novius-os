@@ -343,6 +343,7 @@ JS
 			'required_mark'  => ' *',
 			'error_template' => '{error_msg}',
 			'error_class'    => 'error',
+			'form_template' => "\n\t\t{open}\n\t\t<table class=\"fieldset\">\n{fields}\n\t\t</table>\n\t\t{close}\n",
 		));
 
 		if (!empty($options['form_name'])) {
@@ -367,7 +368,6 @@ JS
 			} else {
 				 \Response::json(array(
 					'error' => (string) current($fieldset->error()),
-					'_error' => $fieldset->error(),
 					'config' => $config,
 				));
 			}
