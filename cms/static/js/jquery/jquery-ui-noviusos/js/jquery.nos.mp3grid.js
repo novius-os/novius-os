@@ -46,7 +46,10 @@ define([
             splitters: {
                 vertical: null,
                 horizontal: null
-            }
+            },
+            views: {},
+            selectedView: null,
+            name: null
 		},
 
 		pageIndex : 0,
@@ -75,7 +78,7 @@ define([
 
 			self.uiSettings = $('<div></div>').addClass('nos-mp3grid-settings')
 				.appendTo(self.uiHeaderBar);
-			self.uiSettingsButton = $('<button type="button"></button>').appendTo(self.uiSettings);
+			self.uiSettingsDropDown = $('<select></select>').appendTo(self.uiSettings);
 			//self.uiSettingsMenu = $('<ul></ul>').appendTo(self.uiSettings);
 
 			self.uiSplitterVertical = $('<div></div>').addClass('nos-mp3grid-splitter-v')
@@ -255,59 +258,84 @@ define([
 			var self = this,
 				o = self.options;
 
+            for (var key in o.views) {
+                self.uiSettingsDropDown.append(
+                    $('<option></option>')
+                        .attr({
+                            'value': key,
+                            'selected': (o.selectedView == key)
+                        })
+                        .append(o.views[key].name)
+                );
+            }
+            self.uiSettingsDropDown.append(
+                $('<option></option>')
+                    .attr('value', 'edit_custom')
+                    .append('Customize view')
+            );
+
+            self.uiSettingsDropDown.wijdropdown();
+            /*
 			self.uiSettingsButton.button({
 				 label : o.texts.settings,
 				 icons : {primary : 'ui-icon-gear'}
 			});
+            */
 
-                        self.uiSettingsButton.click(function() {
-				var $el = self._uiSettingsMenuPopup();
-				var $window = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
-                            $el.wijtabs({
-                                alignment: 'left',
-                                scrollable: true,
-                                show: function(e, ui) {
-                                    $(ui.panel).find('.superpanel').wijsuperpanel({
-                                        autoRefresh: true,
-                                        hScroller: {
-                                            scrollMode: 'buttons'
-                                        }
-                                    });
-						var $layout = $(ui.panel).find('#layout_settings');
-                                    $layout.find('.panels').sortable({
-                                            connectWith: ".panels",
-                                            update: function() {
-                                                self._uiSettingsMenuPopupRefreshLayout($layout);
-                                            },
-                                            change: function() {
-                                                self._uiSettingsMenuPopupRefreshLayout($layout);
-                                            },
-                                            start: function(event, ui) {
-                                                $(ui.item).addClass('moving');
-                                            },
-                                            stop: function(event, ui) {
-                                                $(ui.item).removeClass('moving');
-                                                self._uiSettingsMenuPopupRefreshLayout($layout);
-                                            },
-                                            placeholder: "droping"
-                                    });
-                                }
-                            });
-                            $el.after(
-                                $('<div></div>').css({
-                                    textAlign: 'right'
-                                }).append(
-                                    $('<button />').button({
-                                        label : o.texts.cancel,
-                                        icons : {primary : 'ui-icon-gear'}
-                                    }).click( function() {$window.wijdialog('close');$window.remove();} )
-                                ).append(
-                                    $('<button />').button({
-                                        label : o.texts.save,
-                                        icons : {primary : 'ui-icon-gear'}
-                                    }).click( function() {self._uiSettingsMenuPopupSave();$window.wijdialog('close');$window.remove();} )
-                                )
-                            );
+                        self.uiSettingsDropDown.change(function() {
+
+                            if ($(this).val() == 'edit_custom') {
+                                var $el = self._uiSettingsMenuPopup();
+                                self.uiSettingsDialog = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
+                                            $el.wijtabs({
+                                                alignment: 'left',
+                                                scrollable: true,
+                                                show: function(e, ui) {
+                                                    $(ui.panel).find('.superpanel').wijsuperpanel({
+                                                        autoRefresh: true,
+                                                        hScroller: {
+                                                            scrollMode: 'buttons'
+                                                        }
+                                                    });
+                                        var $layout = $(ui.panel).find('#layout_settings');
+                                                    $layout.find('.panels').sortable({
+                                                            connectWith: ".panels",
+                                                            update: function() {
+                                                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                                                            },
+                                                            change: function() {
+                                                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                                                            },
+                                                            start: function(event, ui) {
+                                                                $(ui.item).addClass('moving');
+                                                            },
+                                                            stop: function(event, ui) {
+                                                                $(ui.item).removeClass('moving');
+                                                                self._uiSettingsMenuPopupRefreshLayout($layout);
+                                                            },
+                                                            placeholder: "droping"
+                                                    });
+                                                }
+                                            });
+                                            $el.after(
+                                                $('<div></div>').css({
+                                                    textAlign: 'right'
+                                                }).append(
+                                                    $('<button />').button({
+                                                        label : o.texts.cancel,
+                                                        icons : {primary : 'ui-icon-gear'}
+                                                    }).click( function() {self.uiSettingsDialog.wijdialog('close');self.uiSettingsDialog.remove();} )
+                                                ).append(
+                                                    $('<button />').button({
+                                                        label : o.texts.save,
+                                                        icons : {primary : 'ui-icon-gear'}
+                                                    }).click( function() {self._uiSettingsMenuPopupSave();self.uiSettingsDialog.wijdialog('close');self.uiSettingsDialog.remove();} )
+                                                )
+                                            );
+                            } else {
+                                $.nos.saveUserConfiguration(o.name, {selectedView: $(this).val()});
+                                location.reload();
+                            }
 			});
 
 			return self;
@@ -533,7 +561,7 @@ define([
 				if (o.inspectors[j].grid) {
 					var gridColumns = o.inspectors[j].grid.columns;
 					var newColumns = [];
-                    self.element.find('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
+                    self.uiSettingsDialog.find('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
 						var $this = $(this);
 						var newColumn = gridColumns[$this.data('column-id')];
 
@@ -551,7 +579,7 @@ define([
 			}
 
 			var newInspectors = [];
-			var layoutSettings = self.element.find('#layout_settings');
+			var layoutSettings = self.uiSettingsDialog.find('#layout_settings');
 			layoutSettings.find('.layout-inspector').each(function() {
 				var newInspector = self.options.inspectors[$(this).data('inspector-id')];
 				var $panel = $(this).closest('.panels');
@@ -564,7 +592,7 @@ define([
 			newColumns = [];
 
 
-            self.element.find('#settings-main-view .widget-columns > li').each(function(i, el) {
+            self.uiSettingsDialog.find('#settings-main-view .widget-columns > li').each(function(i, el) {
 			    var $this = $(this),
 			        newColumn = o.grid.columns[$this.data('column-id')];
 

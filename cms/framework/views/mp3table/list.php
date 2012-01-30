@@ -21,6 +21,9 @@ require([
 	], function( mp3Grid, $ ) {
 
         $.extend(mp3Grid.i18nMessages, <?= $i18n ?>);
+        mp3Grid.mp3grid.views = <?= $views ?>;
+        mp3Grid.mp3grid.name = <?= $name ?>;
+        mp3Grid.mp3grid.selectedView = <?= $selectedView ?>;
 
 		$(function() {
             var timeout,
