@@ -12,6 +12,7 @@ define([
 	'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.loadspinner'
 ], function( $ ) {
 	(function(undefined ) {
+
 		$.widget( "nos.ostabs", {
 			options: {
 				initTabs: [], // e.g. [{"url":"http://www.google.com","iconUrl":"img/google-32.png","label":"Google","iconSize":32,"labelDisplay":false,"pined":true},{"url":"http://www.twitter.com","iconClasses":"ui-icon ui-icon-signal-diag","label":"Twitter","pined":true}]
@@ -50,12 +51,15 @@ define([
 			stackOpening: [],
 
 			_create: function() {
-                var self = this;
+                var self = this,
+                    o = self.options;
 
                 self._tabify( true );
 
                 $(window).resize(function() {
-                    self._windowResize();
+                    if (o.selected) {
+                        self.panels.eq(o.selected).trigger('panelResize.ostabs');
+                    }
                 });
 			},
 
@@ -446,11 +450,11 @@ define([
 				}
 
                 function fireCallbacks($panel) {
-                    var callbacks = $panel.data('ostabs-callbacks');
+                    var callbacks = $panel.data('callbacks.ostabs');
 
                     if (callbacks) {
-                        callbacks.fire();
-                        $li.data('ostabs-callbacks', null);
+                        callbacks.fireWith($panel);
+                        callbacks.empty();
                     }
                 }
 
@@ -469,7 +473,7 @@ define([
 								//$( this ).removeClass( "nos-ostabs-hide" );
 								resetStyle( $show, showFx );
                                 fireCallbacks($show);
-								self._trigger( "show", null, self._ui( $li[ 0 ], $show[ 0 ] ) );
+                                $show.trigger( "showPanel.ostabs");
 							});
 					}
 					: function( clicked, $show ) {
@@ -481,7 +485,7 @@ define([
 						$li.addClass( "nos-ostabs-selected ui-state-active" ).removeClass( 'ui-state-pined' );
 						$show.removeClass( "nos-ostabs-hide" );
                         fireCallbacks($show);
-						self._trigger( "show", null, self._ui( $li[ 0 ], $show[ 0 ] ) );
+                        $show.trigger( "showPanel.ostabs");
 					};
 
 				// Hide a tab, $show is optional...
@@ -495,6 +499,7 @@ define([
 							$hide.addClass( "nos-ostabs-hide" );
 							resetStyle( $hide, hideFx );
 							self.element.dequeue( "tabs" );
+                            $hide.trigger( "hidePanel.ostabs");
 						});
 					}
 					: function( clicked, $hide ) {
@@ -504,6 +509,7 @@ define([
 						self.lis.removeClass( "nos-ostabs-selected ui-state-active" );
 						$hide.addClass( "nos-ostabs-hide" );
 						self.element.dequeue( "tabs" );
+                        $hide.trigger( "hidePanel.ostabs");
 					};
 
 				// attach tab event handler, unbind to avoid duplicates from former tabifying...
@@ -1074,7 +1080,7 @@ define([
 						success: function( r ) {
 							$( '<div></div>' ).addClass( 'nos-ostabs-panel-content' )
                                 .data( 'nos-ostabs-index', index )
-								.prependTo( panel )
+								.prependTo( panel.data('open.ostabs', true) )
 								.html( r );
 
 							$.data( a, "cache.tabs", true );
@@ -1094,7 +1100,7 @@ define([
 							self._cleanup();
 							self._trigger( "load", null, self._ui( self.lis[index] ) );
 						})
-						.prependTo( self.element.find( self._sanitizeSelector( a.hash ) ) );
+						.prependTo( panel.data('open.ostabs', true) );
 
 					$.data( a, "cache.tabs", true );
 				}
@@ -1118,31 +1124,6 @@ define([
 				this._cleanup();
 				return this;
 			},
-
-            _windowResize: function() {
-                var self = this,
-                    o = this.options;
-
-                self.panels.each(function(i) {
-                    var $panel = $(this);
-                    if (i !== o.selected) {
-                        var callbacks = $panel.data('ostabs-callbacks'),
-                            resize = function() {
-                                $panel.trigger('panelResize.ostabs');
-                            };
-
-                        if (!callbacks) {
-                            callbacks = $.Callbacks('unique once');
-                            $panel.data('ostabs-callbacks', callbacks);
-                        }
-                        callbacks.add(resize);
-                    } else {
-                        $panel.trigger('panelResize.ostabs', true);
-                    }
-                });
-
-                return self;
-            },
 
 			tabs: function() {
 				var tabs = [];
