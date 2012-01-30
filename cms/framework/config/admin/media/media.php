@@ -26,6 +26,10 @@ return array(
         'image' => array(
             'name' => __('Image'),
             'json' => 'static/cms/js/admin/media/media_image.js',
+        ),
+        'tinymce' => array(
+            'name' => __('TinyMCE'),
+            'json' => 'static/cms/js/admin/media/media_tinymce.js',
         )
     ),
     'i18n' => array(
