@@ -655,8 +655,17 @@ define([
 				form : function(context) {
 					$(function() {
 						context = $(context) || 'body';
-						$(":input[type='text'],:input[type='password'],textarea", context).wijtextbox();
-						$(":input[type='submit'],button", context).button();
+						$(":input[type='text'],:input[type='password'],:input[type='email'],textarea", context).wijtextbox();
+						$(":input[type='submit'],button", context).each(function() {
+							var options = {};
+							var icon = $(this).data('icon');
+							if (icon) {
+								 options.icons = {
+									 primary: 'ui-icon-' + icon
+								 }
+							}
+							$(this).button(options);
+						});
 						$("select", context).wijdropdown();
 						$(":input[type=checkbox]", context).wijcheckbox();
 						$('.expander', context).wijexpander({expanded: true});

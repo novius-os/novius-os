@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -51,7 +51,7 @@ class Format extends \Fuel\Core\Format {
 		{
 			$data = $this->_data;
 		}
-		
+
 		if ($data == null)
 		{
 			return json_encode($data);
@@ -59,8 +59,7 @@ class Format extends \Fuel\Core\Format {
 
 		// To allow exporting ArrayAccess objects like Orm\Model instances they need to be
 		// converted to an array first
-		$data = (is_array($data) or is_object($data)) ? $this->to_array($data) : $data;
-		return $this->json_encode_jsfunc($data);
+		return (is_array($data) or is_object($data)) ? $this->json_encode_jsfunc($this->to_array($data)) : json_encode($data);
 	}
 }
 

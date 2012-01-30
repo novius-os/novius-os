@@ -10,23 +10,8 @@
 
 namespace Cms\Blog;
 
-class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
+class Controller_Admin_Form extends \Controller {
 
-    public function after($response) {
-
-        \Asset::css('http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css', array(), 'css');
-
-        \Asset::add_path('static/cms/js/vendor/wijmo/');
-        \Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-        \Asset::css('jquery.wijmo-complete.all.2.0.0b2.min.css', array(), 'css');
-
-        \Asset::add_path('static/cms/');
-        \Asset::css('base.css', array(), 'css');
-        \Asset::css('laGrid.css', array(), 'css');
-        \Asset::css('form.css', array(), 'css');
-
-        return parent::after($response);
-    }
 
     public function action_edit($id = false) {
         if ($id === false) {
@@ -34,14 +19,10 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
         } else {
             $object = Model_Blog::find('first', array('related' => array('wysiwygs'), 'where' => array('blog_id' => $id)));
         }
-        $body = \View::forge('cms_blog::form/edit', array(
+        return \View::forge('cms_blog::form/edit', array(
             'object'   => $object,
             'fieldset' => static::fieldset($object)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
         ), false);
-
-        $this->template->set('body', $body, false);
-
-        return $this->template;
     }
 
     public static function fieldset($object) {

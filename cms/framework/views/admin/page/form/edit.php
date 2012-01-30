@@ -20,7 +20,7 @@ require(['jquery-nos'], function ($) {
 });
 </script>
 
-<div id="<?= $uniqid = uniqid('id_') ?>" class="page myPage myBody">
+<div id="<?= $uniqid = uniqid('id_') ?>" class="page">
 <?php
 $fieldset->form()->set_config('field_template',  "\t\t<tr><th class=\"{error_class}\">{label}{required}</th><td class=\"{error_class}\">{field} {error_msg}</td></tr>\n");
 
@@ -49,8 +49,10 @@ $fieldset->field('page_verrou')->set_template('{label} {field}');
 	'subtitle' => array('page_type', 'page_gab'),
 
 	'content' => \View::forge('form/expander', array(
-		'title'   => 'Content',
-		'content' => '
+		'title'    => 'Content',
+		// Wysiwyg are edge-to-edge with the border
+		'nomargin' => true,
+		'content'  => '
 			<div id="external">
 				<table>
 					'.$fieldset->field('page_lien_externe')->build().'
@@ -107,10 +109,10 @@ require([
 						coords = this.split(',');
 						var bloc = $('<div></div>').css({
 							position: 'absolute',
-							left:   (coords[0] / data.cols * 100) + '%',
-							top:    (coords[1] / data.rows * ratio),
-							width:  (coords[2] / data.cols * 100) + '%',
-							height: (coords[3] / data.rows * ratio)
+							left:   Math.round(coords[0] / data.cols * 100) + '%',
+							top:    Math.round(coords[1] / data.rows * ratio),
+							width:  Math.round(coords[2] / data.cols * 100) + '%',
+							height: Math.round(coords[3] / data.rows * ratio)
 						}).append(
 							$('<textarea></textarea>')
 							.val(data.content[i])
@@ -119,7 +121,7 @@ require([
 							.css({
 								display: 'block',
 								width: '100%',
-								height: (coords[3] / data.rows * ratio),
+								height: Math.round(coords[3] / data.rows * ratio),
 								border: 0,
 								boxShadow: 'inset 0px 0px 2px 2px  #888'
 							}));

@@ -13,19 +13,18 @@ define([
     var mp3Grid = $.nos.mp3GridSetup(),
         actions = {
             update : {
-                action : function(args) {
+                action : function(item) {
                     $.nos.tabs.add({
-                        url     : "admin/cms_blog/form/edit/" + args.row.data.id,
-                        label   : "Update",
-						iframe  : true
+                        url     : "admin/cms_blog/form/edit/" + item.id,
+                        label   : mp3Grid.i18n('Edit')
                     });
                 },
-                label : mp3Grid.i18n('Update')
+                label : mp3Grid.i18n('Edit')
             },
             'delete' : {
-                action : function(args) {
+                action : function(item) {
                     $.nos.ajax.request({
-                        url: "admin/cms_blog/list/delete/" + args.row.data.id,
+                        url: "admin/cms_blog/list/delete/" + item.id,
                         data: {},
                         success: function(response) {
                             if (response.success) {
@@ -153,10 +152,10 @@ define([
                                             $.nos.tabs.add({
                                                 iframe : true,
                                                 url     : "admin/cms_blog/form?id=" + item.id,
-                                                label   : "Update"
+                                                label   : mp3Grid.i18n('Edit')
                                             });
                                         },
-                                        label : mp3Grid.i18n('Update')
+                                        label : mp3Grid.i18n('Edit')
                                     },
                                     {
                                         action : function(item) {

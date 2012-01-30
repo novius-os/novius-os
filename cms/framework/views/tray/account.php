@@ -9,27 +9,36 @@
  */
 
 ?>
-<div id="<?= $uniqid = uniqid('id_'); ?>">
-	<h1 class="title"><?= $logged_user->user_fullname; ?></h1>
+<div class="page line ui-widget" id="<?= $uniqid = uniqid('id_'); ?>">
+	<div class="unit col c1"></div>
+	<div class="unit col c10" id="line_first" style="position:relative;;">
+		<div class="line" style="overflow:visible;">
 
-	<a href="admin/tray/account/disconnect"><button>Disconnect</button></a>
+			<h1 class="title" style="float:left;"><?= $logged_user->user_fullname; ?></h1>
 
-	<div id="tabs" style="width: 100%;">
-		<ul style="width: 15%;">
-			<li><a href="#infos"><?= __('Your account') ?></a></li>
-			<li><a href="#password"><?= __('Change password') ?></a></li>
-			<li><a href="#display"><?= __('Theme') ?></a></li>
-		</ul>
-		<div id="infos" style="width: 80%;">
-			<?= $fieldset_infos ?>
-		</div>
-		<div id="password" style="width: 80%;">
-			<?= $fieldset_password ?>
-		</div>
-		<div id="display" style="width: 80%;">
-			<?= $fieldset_display ?>
+			<a style="float:right;overflow:auto;" href="admin/tray/account/disconnect">
+				<button data-icon="power"><?= __('Disconnect') ?></button>
+			</a>
+
+			<div id="tabs" style="width: 100%; clear:both; margin-top:3em;">
+				<ul style="width: 15%;">
+					<li><a href="#infos"><?= __('Your account') ?></a></li>
+					<li><a href="#password"><?= __('Change password') ?></a></li>
+					<li><a href="#display"><?= __('Theme') ?></a></li>
+				</ul>
+				<div id="infos" style="width: 80%;">
+					<?= $fieldset_infos ?>
+				</div>
+				<div id="password" style="width: 80%;">
+					<?= $fieldset_password ?>
+				</div>
+				<div id="display" style="width: 80%;">
+					<?= $fieldset_display ?>
+				</div>
+			</div>
 		</div>
 	</div>
+	<div class="unit lastUnit"></div>
 </div>
 
 <script type="text/javascript">

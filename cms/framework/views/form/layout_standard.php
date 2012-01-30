@@ -5,7 +5,7 @@ require(['jquery-nos'], function($) {
 });
 </script>
 
-<div class="line ui-widget" id="<?= $uniqid1 ?>" style="margin-top: 3em;">
+<div class="line ui-widget" id="<?= $uniqid1 ?>">
 	<div class="unit col c1"></div>
 	<div class="unit col c7" id="line_first" style="position:relative;z-index:99;">
 		<div class="line" style="margin-bottom:1em;">
