@@ -28,6 +28,7 @@ require([
 		$(function() {
             var timeout,
                 div = $('div#<?= $id ?>'),
+                container = div.parents('.nos-ostabs-panel, .ui-dialog'),
                 params = mp3Grid.build();
 
             if ($.isPlainObject(params.tab)) {
@@ -40,27 +41,33 @@ require([
 
 			$.nos.listener.add('mp3grid.<?= $id ?>', true, function() {
 				div.removeAttr('id')
-                .mp3grid(params.mp3grid)
-                .parents('.nos-ostabs-panel')
-                .bind({
-                    'panelResize.ostabs' : function() {
-                        if (timeout) {
-                            window.clearTimeout(timeout);
-                        }
-                        timeout = window.setTimeout(function() {
+                    .mp3grid(params.mp3grid);
+
+                container.bind({
+                        'panelResize.ostabs' : function() {
+                            if (timeout) {
+                                window.clearTimeout(timeout);
+                            }
+                            timeout = window.setTimeout(function() {
+                                div.mp3grid('refresh');
+                            }, 200);
+                        },
+                        'showPanel.ostabs' :  function() {
                             div.mp3grid('refresh');
-                        }, 200);
-                    },
-                    'showPanel.ostabs' :  function() {
-                        div.mp3grid('refresh');
-                    }
-                });
+                        }
+                    });
 				$.nos.listener.remove('mp3grid.<?= $id ?>', true, arguments.callee);
 			})
 
 			if (null == params.delayed || !params.delayed) {
 				$.nos.listener.fire('mp3grid.<?= $id ?>', true, []);
 			}
+
+            if (params.refresh) {
+                container.bind('refresh.' + params.refresh, function() {
+                        div.mp3grid('gridRefresh');
+                    });
+            }
 		});
 	});
 </script>
