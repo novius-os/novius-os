@@ -44,8 +44,13 @@
 <script type="text/javascript">
     require(['jquery-nos'], function($) {
 		$.nos.ui.form('#<?= $uniqid ?>');
-        require(['static/cms/js/vendor/wijmo/js/jquery.wijmo.wijtabs.js'],
-            function() {
+		$(function() {
+			$('#<?= $fieldset_display->form()->get_attribute('id') ?>').data('ajax-success', function(json) {
+				$('#noviusospanel').css('background-image', 'url("' + json.wallpaper_url + '")');
+			});
+		});
+
+        require(['static/cms/js/vendor/wijmo/js/jquery.wijmo.wijtabs.js'], function() {
                 $('#tabs').wijtabs({
                     alignment: 'left'
                 });

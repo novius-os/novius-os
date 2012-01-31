@@ -68,6 +68,8 @@ class Controller_Tray_Account extends \Controller {
             'form_name' => 'edit_user_display',
             'complete' => function($data) use ($user) {
 
+				$body = array();
+
                 try {
 
                     $configuration = $user->getConfiguration();
@@ -76,6 +78,7 @@ class Controller_Tray_Account extends \Controller {
 						if (!empty($media)) {
 							\Arr::set($configuration, 'misc.display.background', $data['background']);
 							$notify = 'Your wallpaper is now "'.$media->media_title.'"';
+							$body['wallpaper_url'] = \Uri::create($media->get_public_path());
 						} else {
 							$data['background'] = null;
 							$error = 'The selected image does not exists.';
@@ -92,7 +95,6 @@ class Controller_Tray_Account extends \Controller {
                     $error = \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.';
                 }
 
-				$body = array();
 				if (!empty($notify)) {
 					$body['notify'] = $notify;
 				}

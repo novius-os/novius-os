@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -50,8 +50,9 @@
 <script src="<?= $require ?>" type="text/javascript"></script>
 <?= $js ?>
 <style type="text/css">
-    .nos-ostabs #noviusospanel {
-        <?= $background ? 'background-image: url("'.Uri::create($background->get_public_path()).'") !important;' : '' ?>
+	/* body is needed to have better selectivity */
+    body .nos-ostabs #noviusospanel {
+        <?= $background ? 'background-image: url("'.Uri::create($background->get_public_path()).'");' : '' ?>
     }
 </style>
 </head>
