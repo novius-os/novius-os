@@ -12,55 +12,5 @@
 ?>
 <div id="<?= $id ?>"></div>
 <script type="text/javascript">
-require([
-        '<?= $urljson ?>',
-		'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.mp3grid.js',
-		'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.thumbnails.js',
-        'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.nosgrid.js',
-		'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.inspector-preview.js'
-	], function( mp3Grid, $ ) {
-
-        $.extend(mp3Grid.i18nMessages, <?= $i18n ?>);
-        mp3Grid.mp3grid.views = <?= $views ?>;
-        mp3Grid.mp3grid.name = <?= $name ?>;
-        mp3Grid.mp3grid.selectedView = <?= $selectedView ?>;
-
-		$(function() {
-            var timeout,
-                div = $('div#<?= $id ?>'),
-                params = mp3Grid.build();
-
-            if ($.isPlainObject(params.tab)) {
-				try {
-					$.nos.tabs.update(div, params.tab);
-				} catch (e) {
-					log('Could not update current tab. Maybe your config file should not try to update it.');
-				}
-            }
-
-			$.nos.listener.add('mp3grid.<?= $id ?>', true, function() {
-				div.removeAttr('id')
-                .mp3grid(params.mp3grid)
-                .parents('.nos-ostabs-panel')
-                .bind({
-                    'panelResize.ostabs' : function() {
-                        if (timeout) {
-                            window.clearTimeout(timeout);
-                        }
-                        timeout = window.setTimeout(function() {
-                            div.mp3grid('refresh');
-                        }, 200);
-                    },
-                    'showPanel.ostabs' :  function() {
-                        div.mp3grid('refresh');
-                    }
-                });
-				$.nos.listener.remove('mp3grid.<?= $id ?>', true, arguments.callee);
-			})
-
-			if (null == params.delayed || !params.delayed) {
-				$.nos.listener.fire('mp3grid.<?= $id ?>', true, []);
-			}
-		});
-	});
+    $.nos.mp3Add("<?= $id ?>", <?= $mp3grid ?>);
 </script>

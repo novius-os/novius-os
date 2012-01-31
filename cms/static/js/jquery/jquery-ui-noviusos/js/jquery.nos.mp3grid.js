@@ -334,7 +334,7 @@ define([
                                             );
                             } else {
                                 $.nos.saveUserConfiguration(o.name, {selectedView: $(this).val()});
-                                location.reload();
+                                self.element.trigger('reload', {selectedView: $(this).val()});
                             }
 			});
 
