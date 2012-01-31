@@ -758,8 +758,11 @@ define([
                     },
                     update : function(index, tab) {
                         if (window.parent != window && window.parent.$nos) {
-                            return window.parent.$nos.nos.tabs.update(this.current(), index);
+                            return window.parent.$nos.nos.tabs.update(this.current(), index, tab);
                         }
+						if (tab == null) {
+							tab = index;
+						}
                         index = this.current(index);
                         if (noviusos.length) {
                             noviusos.ostabs('update', index, tab);

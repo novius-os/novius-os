@@ -156,6 +156,8 @@ class Controller_Admin_Page_Form extends Controller {
 				'form' => array(
 					'type' => 'submit',
 					'value' => 'Save',
+					'class' => 'primary',
+					'data-icon' => 'check',
 				),
 			),
         );

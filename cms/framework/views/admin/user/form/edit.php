@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -11,8 +11,9 @@
 ?>
 <script type="text/javascript">
 require(['jquery-nos'], function ($) {
+	$.nos.ui.form('#<?= $uniqid = uniqid('id_') ?>');
 	$(function () {
-		$.nos.tabs.update({
+		$.nos.tabs.update($('#<?= $uniqid ?>'), {
 			label : '<?= $user->user_fullname ?>',
 			iconUrl : 'static/modules/cms_blog/img/16/author.png'
 		});
@@ -20,18 +21,7 @@ require(['jquery-nos'], function ($) {
 });
 </script>
 
-<script type="text/javascript">
-require(['jquery-nos'], function($) {
-	$(function() {
-		$(":input[type='text'],:input[type='password'],textarea").wijtextbox();
-		$(":input[type='submit'],button").button();
-		$("select").wijdropdown();
-		$('.fieldset').wijexpander({expanded: true });
-	});
-});
-</script>
-
-<div class="page myPage">
+<div id ="<?= $uniqid ?>" class="page">
 	<div class="line myBody">
 		<div class="unit col c1"></div>
 		<div class="unit col c7 ui-widget">
@@ -40,7 +30,7 @@ require(['jquery-nos'], function($) {
 				->set_template('{field}')
 				->set_attribute('class', 'title c4');
 			?>
-			<div class="fieldset">
+			<div class="expander">
 				<h3>Change details</h3>
 				<div>
 				<table>
@@ -56,8 +46,8 @@ require(['jquery-nos'], function($) {
 				</div>
 			</div>
 			<?= $fieldset_edit->close(); ?>
-			
-			<div class="fieldset">
+
+			<div class="expander">
 				<h3>Change password</h3>
 				<div>
 				<?= $fieldset_password->open('admin/admin/user/form/edit/'.$user->user_id); ?>
@@ -71,7 +61,7 @@ require(['jquery-nos'], function($) {
 				<?= $fieldset_password->close(); ?>
 				</div>
 			</div>
-			
+
 		</div>
 		<div class="unit col c3"></div>
 		<div class="unit lastUnit"></div>

@@ -1,6 +1,6 @@
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -588,7 +588,7 @@ define([
 				var actions = $( '<div></div>' )
 					.addClass( 'nos-ostabs-actions ui-state-active' )
 					.prependTo( $panel );
-					
+
 				var links = $( '<div></div>' )
 					.addClass( 'nos-ostabs-actions-links' )
 					.prependTo( actions );
@@ -863,14 +863,14 @@ define([
 				}
 
 				$li.removeClass( "ui-state-active ui-state-open" );
-				
+
 				// Remove tab from stack opening
 				for (var i = 0; i < self.stackOpening.length; i++) {
 					if (self.stackOpening[i] === $a.get(0)) {
 						self.stackOpening.splice(i, 1);
 					}
 				}
-				
+
 				// Open the last tab in stack opening or the 0 index
 				if (self.stackOpening.length) {
 					this.select( this.anchors.index( self.stackOpening[self.stackOpening.length - 1] ) );
