@@ -15,25 +15,31 @@
 	<p><input type="submit" value="Upload" ></p>
 </form>
 <script type="text/javascript">
-require(['jquery-nos', 'static/cms/js/jquery/jquery-form/jquery.form.min'], function($) {
-	$('form').submit(function(e) {
-		$(this).ajaxSubmit({
-			dataType: 'json',
-			success: function(json) {
-				console.log(json);
-				if (json.closeDialog) {
-					window.parent.jQuery(':wijmo-wijdialog')
-						.wijdialog('close')
-						.wijdialog('destroy')
-						.remove();
-				}
-				$.nos.ajax.success(json);
-			},
-			error: function() {
-				$.nos.notify('An error occured', 'error');
-			}
-		});
-		e.preventDefault();
-	});
+require([
+    'jquery-nos',
+    'static/cms/js/jquery/jquery-form/jquery.form.min'
+],
+function($) {
+    $(function() {
+        $('form').submit(function(e) {
+            $(this).ajaxSubmit({
+                dataType: 'json',
+                success: function(json) {
+                    //Success before close, success use the window reference
+                    $.nos.ajax.success(json);
+                    if (json.closeDialog) {
+                        window.parent.jQuery(':wijmo-wijdialog:last')
+                            .wijdialog('close')
+                            .wijdialog('destroy')
+                            .remove();
+                    }
+                },
+                error: function() {
+                    $.nos.notify('An error occured', 'error');
+                }
+            });
+            e.preventDefault();
+        });
+    });
 });
 </script>

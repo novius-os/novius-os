@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -17,6 +17,13 @@ class Controller_Admin_Media_List extends Controller_Mp3table_List {
 	public function before($response = null) {
 		Config::load('cms::admin/media/media', true);
 		$this->mp3grid = \Config::getFromUser('cms::admin/media/media', array());
+
+        $view = \Input::get('view', false);
+        //echo $view.'<br/>';
+        if ($view !== false) {
+            $this->mp3grid['selectedView'] = $view;
+            //echo $view.'<br/>';
+        }
 
 		parent::before($response);
 	}

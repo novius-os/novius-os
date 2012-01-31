@@ -48,11 +48,19 @@ define([
             label : mp3Grid.i18n('Media center'),
             iconUrl : 'static/cms/img/32/media.png'
         },
+        refresh : 'cms_media_media',
         mp3grid : {
             adds : {
                 media : {
                     label : mp3Grid.i18n('Add a media'),
-                    url : 'admin/admin/media/add'
+                    action : function() {
+                        $.nos.dialog({
+                            contentUrl: 'admin/admin/media/upload/form/',
+                            title: 'Upload a new file',
+                            width: 400,
+                            height: 200
+                        });
+                    }
                 },
                 folder : {
                     label : mp3Grid.i18n('Add a folder'),

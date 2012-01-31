@@ -293,7 +293,7 @@ define([
                 return {
                     add: function(id, alltabs, fn) {
                         if (fn === undefined) {
-                            fn = alltabs
+                            fn = alltabs;
                             alltabs = true;
                         }
                         if (alltabs && window.parent != window && window.parent.$nos) {
@@ -324,6 +324,10 @@ define([
                         }
                         if (alltabs && window.parent != window && window.parent.$nos) {
                             return window.parent.$nos.nos.listener.fire(id, true, args);
+                        }
+                        if ($.nos.$noviusos) {
+                            $.nos.$noviusos.ostabs('triggerPanels', id, args);
+                            $('.ui-dialog').trigger(id, args);
                         }
                         //log('listener.fire.args', args);
                         if (id.substring(id.length - 1) == '!') {
@@ -415,6 +419,7 @@ define([
             },
 
             notify : function( options, type ) {
+
                 if (window.parent != window && window.parent.$nos) {
                     return window.parent.$nos.nos.notify( options, type );
                 }
@@ -602,8 +607,8 @@ define([
             media : function(input, data) {
 
                 var contentUrls = {
-                    'all'   : '/admin/admin/media/list',
-                    'image' : '/admin/admin/media/mode/image/index'
+                    'all'   : '/admin/media/list',
+                    'image' : '/admin/media/list?view=image'
                 };
 
 				var dialog = null;
@@ -792,5 +797,6 @@ define([
                 }
             });
         });
+
         return $;
 	});
