@@ -16,7 +16,6 @@ define([
                 label : mp3Grid.i18n('Edit'),
                 action : function(item) {
                     $.nos.tabs.add({
-                        iframe : true,
                         url : 'admin/admin/user/form/edit/' + item.id,
                         label : item.title
                     });
@@ -33,7 +32,12 @@ define([
             adds : {
                 user : {
                     label : mp3Grid.i18n('Add a user'),
-                    url : 'admin/admin/user/form/add'
+					action : function(item) {
+						$.nos.tabs.add({
+							url : 'admin/admin/user/form/add',
+							label : mp3Grid.i18n('Add a user')
+						});
+					}
                 }
             },
             grid : {

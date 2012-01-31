@@ -10,44 +10,22 @@
 
 namespace Cms;
 
-class Controller_Admin_User_Form extends Controller_Noviusos_Noviusos {
-
-	public function after($response) {
-
-		\Asset::css('http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css', array(), 'css');
-
-		\Asset::add_path('static/js/vendor/wijmo');
-		\Asset::css('jquery.wijmo-complete.all.2.0.0b2.min.css', array(), 'css');
-
-		\Asset::add_path('static/cms/');
-		\Asset::css('laGrid.css', array(), 'css');
-		\Asset::css('form.css', array(), 'css');
-
-		return parent::after($response);
-	}
+class Controller_Admin_User_Form extends \Controller {
 
     public function action_add() {
 
-		$body = \View::forge('admin/user/form/add', array(
+		return \View::forge('admin/user/form/add', array(
 			'fieldset_add' => static::fieldset_add()->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 		), false);
-
-        $this->template->set('body', $body, false);
-
-        return $this->template;
     }
 
     public function action_edit($id) {
 
-        $body = \View::forge('admin/user/form/edit', array(
+        return \View::forge('admin/user/form/edit', array(
 			'user' => Model_User_User::find($id),
 			'fieldset_edit'     => static::fieldset_edit($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 			'fieldset_password' => static::fieldset_password($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 		), false);
-
-		$this->template->set('body', $body, false);
-
-        return $this->template;
     }
 
 	public static function fieldset_add() {
