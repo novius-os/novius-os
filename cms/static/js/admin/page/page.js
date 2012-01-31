@@ -16,7 +16,6 @@ define([
                 label : mp3Grid.i18n('Edit'),
                 action : function(item) {
                     $.nos.tabs.add({
-                        iframe : true,
                         url : 'admin/admin/page/form/edit/' + item.id,
                         label : item.title
                     });

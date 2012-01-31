@@ -8,6 +8,10 @@
  * @link http://www.novius-os.org
  */
 
+
+/**
+ * @todo delete
+ */
 namespace Cms;
 
 use Fuel\Core\Config;
