@@ -32,7 +32,7 @@ require(['jquery-nos'], function($) {
 <div align="center">
 <form data-ui="ajaxForm" id="search">
 	<span id="magnifier"></span>
-	<input type="search" name="search" placeholder="Rechercher" data-button-go="false" />
+	<input type="search" name="search" placeholder="<?= __('Search') ?>" data-button-go="false" />
 </form>
 </div>
 
