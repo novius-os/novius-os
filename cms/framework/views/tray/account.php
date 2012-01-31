@@ -46,7 +46,11 @@
 		$.nos.ui.form('#<?= $uniqid ?>');
 		$(function() {
 			$('#<?= $fieldset_display->form()->get_attribute('id') ?>').data('ajax-success', function(json) {
-				$('#noviusospanel').css('background-image', 'url("' + json.wallpaper_url + '")');
+				if (json.wallpaper_url) {
+					$('#noviusospanel').css('background-image', 'url("' + json.wallpaper_url + '")');
+				} else {
+					$('#noviusospanel').css('background-image', '');
+				}
 			});
 		});
 

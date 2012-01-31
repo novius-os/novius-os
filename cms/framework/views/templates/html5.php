@@ -49,17 +49,10 @@
 </script>
 <script src="<?= $require ?>" type="text/javascript"></script>
 <?= $js ?>
-<style type="text/css">
-	/* body is needed to have better selectivity */
-    body .nos-ostabs #noviusospanel {
-        <?= $background ? 'background-image: url("'.Uri::create($background->get_public_path()).'");' : '' ?>
-    }
-</style>
 </head>
 
 
 <body>
-
 	<?= $body ?>
 </body>
 </html>
