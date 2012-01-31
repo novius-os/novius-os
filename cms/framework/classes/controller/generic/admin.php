@@ -24,7 +24,7 @@ class Controller_Generic_Admin extends \Fuel\Core\Controller_Template {
 		foreach (array(
 			'title' => 'Administration',
 			'base' => \Uri::base(false),
-			'require'  => 'static/cms/js/requirejs/require.js',
+			'require'  => 'static/cms/js/vendor/requirejs/require.js',
 		) as $var => $default) {
 			if (empty($this->template->$var)) {
 				$this->template->$var = $default;
