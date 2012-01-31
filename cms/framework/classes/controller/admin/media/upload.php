@@ -12,7 +12,14 @@ namespace Cms;
 
 class Controller_Admin_Media_Upload extends Controller_Noviusos_Noviusos {
 
-	public function action_form($id) {
+	public function action_form($id = null) {
+
+        if (!$id) {
+            $query = Model_Media_Folder::find();
+            $query->where(array('medif_parent_id' => null));
+            $root = $query->get_one();
+            $id = $root->medif_id;
+        }
 
 		$folder = Model_Media_Folder::find($id);
 		$this->template->body = \View::forge('cms::admin/media/upload/form', array(
@@ -57,7 +64,7 @@ class Controller_Admin_Media_Upload extends Controller_Noviusos_Noviusos {
 			$body = array(
 				'notify' => 'File added successfully',
 				'closeDialog' => true,
-				'listener_fire' => 'mp3grid.cms_media.refresh!',
+				'listener_fire' => 'refresh.cms_media_media',
 				'listener_bubble' => true,
 			);
 		} catch (\Exception $e) {
@@ -67,11 +74,7 @@ class Controller_Admin_Media_Upload extends Controller_Noviusos_Noviusos {
 			);
 		}
 
-        // @todo Check why there is no "return" and replace this using \Response::json()
-		$response = \Response::forge(\Format::forge()->to_json($body), 200, array(
-			'Content-Type' => 'application/json',
-		));
-		$response->send(true);
+        \Response::json($body);
 	}
 
 	protected static function pretty_filename($file) {
