@@ -33,7 +33,9 @@ define([
 
                         var timeout,
                             div = $('div#' + id),
+                            container = div.parents('.nos-ostabs-panel, .ui-dialog'),
                             params = mp3Grid.build();
+
 
                         if ($.isPlainObject(params.tab)) {
                             try {
@@ -45,8 +47,8 @@ define([
 
                         $.nos.listener.add('mp3grid.' + id, true, function() {
                             div.removeAttr('id')
-                            .mp3grid(params.mp3grid)
-                            .parents('.nos-ostabs-panel')
+                            .mp3grid(params.mp3grid);
+                            container
                             .bind({
                                 'panelResize.ostabs' : function() {
                                     if (timeout) {
@@ -65,6 +67,12 @@ define([
 
                         if (null == params.delayed || !params.delayed) {
                             $.nos.listener.fire('mp3grid.' + id, true, []);
+                        }
+
+                        if (params.refresh) {
+                            container.bind('refresh.' + params.refresh, function() {
+                                    div.mp3grid('gridRefresh');
+                                });
                         }
 
                         div.bind('reload', function(e, newConfig) {
@@ -356,7 +364,7 @@ define([
                 return {
                     add: function(id, alltabs, fn) {
                         if (fn === undefined) {
-                            fn = alltabs
+                            fn = alltabs;
                             alltabs = true;
                         }
                         if (alltabs && window.parent != window && window.parent.$nos) {
@@ -387,6 +395,10 @@ define([
                         }
                         if (alltabs && window.parent != window && window.parent.$nos) {
                             return window.parent.$nos.nos.listener.fire(id, true, args);
+                        }
+                        if ($.nos.$noviusos) {
+                            $.nos.$noviusos.ostabs('triggerPanels', id, args);
+                            $('.ui-dialog').trigger(id, args);
                         }
                         //log('listener.fire.args', args);
                         if (id.substring(id.length - 1) == '!') {
@@ -478,6 +490,7 @@ define([
             },
 
             notify : function( options, type ) {
+
                 if (window.parent != window && window.parent.$nos) {
                     return window.parent.$nos.nos.notify( options, type );
                 }
@@ -821,8 +834,11 @@ define([
                     },
                     update : function(index, tab) {
                         if (window.parent != window && window.parent.$nos) {
-                            return window.parent.$nos.nos.tabs.update(this.current(), index);
+                            return window.parent.$nos.nos.tabs.update(this.current(), index, tab);
                         }
+						if (tab == null) {
+							tab = index;
+						}
                         index = this.current(index);
                         if (noviusos.length) {
                             noviusos.ostabs('update', index, tab);
@@ -852,5 +868,6 @@ define([
                 }
             });
         });
+
         return $;
 	});

@@ -1,6 +1,6 @@
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -452,9 +452,11 @@ define([
                 function fireCallbacks($panel) {
                     var callbacks = $panel.data('callbacks.ostabs');
 
-                    if (callbacks) {
-                        callbacks.fireWith($panel);
-                        callbacks.empty();
+                    if ($.isArray(callbacks)) {
+                        $.each(callbacks, function(i, callback) {
+                            $panel.trigger(callback.type, callback.data);
+                        });
+                        callbacks = [];
                     }
                 }
 
@@ -588,7 +590,7 @@ define([
 				var actions = $( '<div></div>' )
 					.addClass( 'nos-ostabs-actions ui-state-active' )
 					.prependTo( $panel );
-					
+
 				var links = $( '<div></div>' )
 					.addClass( 'nos-ostabs-actions-links' )
 					.prependTo( actions );
@@ -863,14 +865,14 @@ define([
 				}
 
 				$li.removeClass( "ui-state-active ui-state-open" );
-				
+
 				// Remove tab from stack opening
 				for (var i = 0; i < self.stackOpening.length; i++) {
 					if (self.stackOpening[i] === $a.get(0)) {
 						self.stackOpening.splice(i, 1);
 					}
 				}
-				
+
 				// Open the last tab in stack opening or the 0 index
 				if (self.stackOpening.length) {
 					this.select( this.anchors.index( self.stackOpening[self.stackOpening.length - 1] ) );
@@ -881,7 +883,8 @@ define([
 				if ( $li.not( '.nos-ostabs-appstab' ).not( '.nos-ostabs-newtab' ).length ) {
 					$( '> *', $panel ).not( '.nos-ostabs-actions' ).remove();
 				}
-				$panel.addClass( "nos-ostabs-hide" );
+				$panel.addClass( "nos-ostabs-hide" )
+                    .removeData('callbacks.ostabs');
 
 				$li.removeClass( "nos-ostabs-selected" );
 				if ( $.inArray( index, this.pined ) ) {
@@ -1080,7 +1083,7 @@ define([
 						success: function( r ) {
 							$( '<div></div>' ).addClass( 'nos-ostabs-panel-content' )
                                 .data( 'nos-ostabs-index', index )
-								.prependTo( panel.data('open.ostabs', true) )
+								.prependTo( panel.data('callbacks.ostabs', []) )
 								.html( r );
 
 							$.data( a, "cache.tabs", true );
@@ -1100,7 +1103,7 @@ define([
 							self._cleanup();
 							self._trigger( "load", null, self._ui( self.lis[index] ) );
 						})
-						.prependTo( panel.data('open.ostabs', true) );
+						.prependTo( panel.data('callbacks.ostabs', []) );
 
 					$.data( a, "cache.tabs", true );
 				}
@@ -1133,6 +1136,28 @@ define([
 					});
 				return tabs;
 			},
+
+            triggerPanels : function(type, data) {
+                var self = this,
+                    o = this.options;
+
+                $.each(self.panels, function(i) {
+                    var $panel = $(this);
+                    if (i === o.selected) {
+                        $panel.trigger(type, data);
+                    } else {
+                        var callbacks = $panel.data('callbacks.tabs');
+                        if ($.isArray(callbacks)) {
+                            callbacks.push({
+                                type : type,
+                                data : data
+                            });
+                        }
+                    }
+                });
+
+                return self;
+            },
 
             current: function() {
                 var self = this,

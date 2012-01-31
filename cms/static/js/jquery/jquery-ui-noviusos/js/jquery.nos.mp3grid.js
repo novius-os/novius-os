@@ -208,11 +208,15 @@ define([
 					}
 				})
 				.click(function() {
-					$.nos.tabs.add({
-                        iframe : true,
-						url : first.url,
-						label : first.label
-					});
+                    if ($.isFunction(first.action)) {
+                        first.action();
+                    } else {
+                        $.nos.tabs.add({
+                            iframe : true,
+                            url : first.url,
+                            label : first.label
+                        });
+                    }
 				});
 
 			self.uiAddsDropDown.button({
