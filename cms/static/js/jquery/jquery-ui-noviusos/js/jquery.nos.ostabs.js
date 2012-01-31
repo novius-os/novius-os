@@ -452,9 +452,11 @@ define([
                 function fireCallbacks($panel) {
                     var callbacks = $panel.data('callbacks.ostabs');
 
-                    if (callbacks) {
-                        callbacks.fireWith($panel);
-                        callbacks.empty();
+                    if ($.isArray(callbacks)) {
+                        $.each(callbacks, function(i, callback) {
+                            $panel.trigger(callback.type, callback.data);
+                        });
+                        callbacks = [];
                     }
                 }
 
@@ -881,7 +883,8 @@ define([
 				if ( $li.not( '.nos-ostabs-appstab' ).not( '.nos-ostabs-newtab' ).length ) {
 					$( '> *', $panel ).not( '.nos-ostabs-actions' ).remove();
 				}
-				$panel.addClass( "nos-ostabs-hide" );
+				$panel.addClass( "nos-ostabs-hide" )
+                    .removeData('callbacks.ostabs');
 
 				$li.removeClass( "nos-ostabs-selected" );
 				if ( $.inArray( index, this.pined ) ) {
@@ -1080,7 +1083,7 @@ define([
 						success: function( r ) {
 							$( '<div></div>' ).addClass( 'nos-ostabs-panel-content' )
                                 .data( 'nos-ostabs-index', index )
-								.prependTo( panel.data('open.ostabs', true) )
+								.prependTo( panel.data('callbacks.ostabs', []) )
 								.html( r );
 
 							$.data( a, "cache.tabs", true );
@@ -1100,7 +1103,7 @@ define([
 							self._cleanup();
 							self._trigger( "load", null, self._ui( self.lis[index] ) );
 						})
-						.prependTo( panel.data('open.ostabs', true) );
+						.prependTo( panel.data('callbacks.ostabs', []) );
 
 					$.data( a, "cache.tabs", true );
 				}
@@ -1133,6 +1136,28 @@ define([
 					});
 				return tabs;
 			},
+
+            triggerPanels : function(type, data) {
+                var self = this,
+                    o = this.options;
+
+                $.each(self.panels, function(i) {
+                    var $panel = $(this);
+                    if (i === o.selected) {
+                        $panel.trigger(type, data);
+                    } else {
+                        var callbacks = $panel.data('callbacks.tabs');
+                        if ($.isArray(callbacks)) {
+                            callbacks.push({
+                                type : type,
+                                data : data
+                            });
+                        }
+                    }
+                });
+
+                return self;
+            },
 
             current: function() {
                 var self = this,
