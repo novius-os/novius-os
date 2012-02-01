@@ -99,10 +99,6 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 		);
 
 		$view->set('ostabs', \Format::forge($ostabs)->to_json(), false);
-
-        $background_id = \Arr::get($user->getConfiguration(), 'misc.display.background');
-        $background = $background_id ? Model_Media_Media::find($background_id) : false;
-        $this->template->set('background', $background, false);
 		$this->template->body = $view;
 		return $this->template;
 	}
@@ -132,10 +128,14 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
         //exit();
         $apps = \Arr::sort($apps, 'order', 'asc');
 
+        $user = \Session::get('logged_user', false);
+        $background_id = \Arr::get($user->getConfiguration(), 'misc.display.background');
+        $background = $background_id ? Model_Media_Media::find($background_id) : false;
 
 		$view = \View::forge('noviusos/appstab', array(
 			'apps'          => $apps,
 		));
+        $view->set('background', $background, false);
 		return $view;
 	}
 

@@ -304,6 +304,10 @@ require(['jquery', 'static/cms/js/jquery/jquery-validation/jquery.validate.min']
 					dataType: 'json',
 					success: function(json) {
 						$.nos.ajax.success(json);
+						var callback_success = $(form).data('ajax-success');
+						if ($.isFunction(callback_success)) {
+							callback_success.call(form, json);
+						}
 					},
 					error: function() {
 						$.nos.notify('An error occured', 'error');

@@ -32,10 +32,10 @@ define([
             adds : {
                 user : {
                     label : mp3Grid.i18n('Add a user'),
-					action : function(item) {
+					action : function() {
 						$.nos.tabs.add({
 							url : 'admin/admin/user/form/add',
-							label : mp3Grid.i18n('Add a user')
+							label : mp3Grid.i18n('Add a user')._()
 						});
 					}
                 }

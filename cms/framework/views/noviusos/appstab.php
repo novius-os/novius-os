@@ -11,7 +11,7 @@
 ?>
 <div id="switcher"></div>
 <script type="text/javascript">
-(function($) {
+require(['jquery-nos'], function($) {
 	$(function() {
 		//$('#switcher').themeswitcher();
         $('#apps').sortable({
@@ -23,13 +23,16 @@
                 $.nos.saveUserConfiguration('misc.apps', orders);
             }
         });
+		<?php if ($background) { ?>
+		$('#noviusospanel').css('background-image', 'url("<?= Uri::create($background->get_public_path()) ?>")');
+		<?php } ?>
 	});
-})(jQuery);
+});
 </script>
 <div align="center">
 <form data-ui="ajaxForm" id="search">
 	<span id="magnifier"></span>
-	<input type="search" name="search" placeholder="Search" data-button-go="false" />
+	<input type="search" name="search" placeholder="<?= __('Search') ?>" data-button-go="false" />
 </form>
 </div>
 

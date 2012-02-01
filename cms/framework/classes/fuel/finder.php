@@ -88,6 +88,10 @@ class Finder extends Fuel\Core\Finder {
 			$search = array($local_config_path);
 		} else {
 
+			if ($active_module == 'cms' && $directory == 'views') {
+				$search[] = APPPATH.$directory.DS.'cms'.DS;
+			}
+
 			// -8 = strip the classes directory
 			if (!empty($namespace_path)) {
 				$search[] = substr($namespace_path, 0, -8).$directory.DS;
