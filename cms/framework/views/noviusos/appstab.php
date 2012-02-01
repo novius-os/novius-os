@@ -39,7 +39,7 @@
 	<?php
 	foreach ($apps as $app) {
 	?>
-	<a class="app" href="<?= $app['href'] ?>" data-key="<?= $app['key'] ?>">
+	<a class="app" href="<?= $app['url'] ?>" data-launcher="<?= htmlspecialchars(\Format::forge($app)->to_json()) ?>">
 		<span class="icon">
 			<img class="gloss" src="static/cms/img/64/gloss.png" />
 			<img width="64" src="<?= $app['icon64'] ?>" />
@@ -54,12 +54,12 @@
 <script type="text/javascript">
 require(['jquery-nos'], function($) {
 	$('a.app').click(function(e) {
-		$(this).attr('href') == '#' || $.nos.tabs.add({
-			url: this.href,
+        var tab = $(this).data('launcher');
+		$.nos.tabs.add($.extend({
 			app: true,
 			iconSize: 32,
 			labelDisplay: false
-		}, true);
+		}, tab), true);
 		e.preventDefault();
 	});
 });
