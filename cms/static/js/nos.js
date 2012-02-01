@@ -12,7 +12,7 @@ define([
 		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.0b2.min',
 		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.0b2.min'
 	], function($) {
-        var undefined = (function(undefined) {return undefined;})();
+        var undefined = void(0);
 
         $.nos = {
             mp3Add: function(id, config) {
