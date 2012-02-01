@@ -453,66 +453,57 @@
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003437}}
 .content-settings h2, #layout_settings h2 {
+  margin-top: 10px;
   margin-bottom: 5px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003443}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003444}}
 .widget-columns {
-  width: 150px;
-  padding: 4px;
-  border-radius: 4px;
+  width: 100%;
   border: 1px solid #BBB;
+  height: 25px;
+  position: relative;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003451}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003452}}
 .widget-columns li {
   overflow: hidden;
   position: relative;
-  height: 25px;
-  line-height: 25px;
-  background-color: #EEE;
-  margin-bottom: 3px;
-  border-radius: 2px;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003460}}
-.widget-columns li .handle {
-  float: left;
   height: 100%;
-  width: 10px;
-  margin-right: 5px;
-  background-color: #DDD;
-  border-radius: 2px 0 0 2px;
-  cursor: move;
+  line-height: 25px;
+  border-right: 1px solid #EEE;
+  width: 100px;
+  background: white;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003470}}
-.widget-columns li .title-zone, .widget-columns li .visibility-zone {
-  float: left;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003461}}
+.widget-columns li.last {
+  border: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003465}}
+.widget-columns li.moving {
+  border: 1px solid #EEE;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003469}}
+.widget-columns li .title-zone {
   height: 100%;
   line-height: 25px;
   color: #4F4F4F;
   text-decoration: none;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
   font-weight: bold;
+  text-align: center;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003480}}
-.widget-columns li .visibility-zone {
-  float: right;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003484}}
-.widget-columns li.invisible {
-  background-color: #F6F6F6;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003486}}
-.widget-columns li.invisible .handle {
-  background-color: #E6E6E6;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003491}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003479}}
 .widget-columns li.placeholder {
-  border-radius: 2px;
-  border: 1px dashed #DDD;
-  background-color: white;
+  background-color: #DDD;
+  float: left;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003500}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003488}}
+.not-columns li .title-zone {
+  color: #BBB;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.mp3grid\.scss}line{font-family:\00003495}}
 .ui-dialog li.separator {
   margin-top: 25px;
 }
