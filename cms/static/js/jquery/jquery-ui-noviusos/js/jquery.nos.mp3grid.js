@@ -290,7 +290,8 @@ define([
 
                             if ($(this).val() == 'edit_custom') {
                                 var $el = self._uiSettingsMenuPopup();
-                                self.uiSettingsDialog = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
+                                self.uiSettingsDialog = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el});
+                                            $el.css({height: '90%'});
                                             $el.wijtabs({
                                                 alignment: 'left',
                                                 scrollable: true,
@@ -301,7 +302,8 @@ define([
                                                             scrollMode: 'buttons'
                                                         }
                                                     });
-                                        var $layout = $(ui.panel).find('#layout_settings');
+                                                    var $layout = $(ui.panel).find('#layout_settings');
+                                                    self._uiSettingsMenuPopupRefreshLayout($layout);
                                                     $layout.find('.panels').sortable({
                                                             connectWith: ".panels",
                                                             update: function() {
@@ -312,6 +314,7 @@ define([
                                                             },
                                                             start: function(event, ui) {
                                                                 $(ui.item).addClass('moving');
+                                                                self._uiSettingsMenuPopupRefreshLayout($layout);
                                                             },
                                                             stop: function(event, ui) {
                                                                 $(ui.item).removeClass('moving');
@@ -321,6 +324,7 @@ define([
                                                     });
                                                 }
                                             });
+                                            //$el.css({height: self.uiSettingsDialog.height() * 0.9});
                                             $el.after(
                                                 $('<div></div>').css({
                                                     textAlign: 'right'
@@ -351,9 +355,9 @@ define([
 				o = self.options;
 
 			$el = $('<div><ul></ul></div>');
-			self._uiSettingsMenuPopupAddMainViewTab($el);
-
 			self._uiSettingsMenuPopupAddLayoutTab($el);
+
+            self._uiSettingsMenuPopupAddMainViewTab($el);
 
 			self._uiSettingsMenuPopupAddInspectorsTab($el);
 
@@ -365,7 +369,8 @@ define([
 			var self = this,
 				o = self.options;
 			self._uiSettingsMenuPopupAddItem($el, o.texts.mainView, self._uiSettingsMenuPopupGetWidgetContentSettings('settings-main-view', o.texts.mainView, self.options));
-		},
+            $el.find(' > ul > li:last').addClass('separator');
+        },
 
 		_uiSettingsMenuPopupAddInspectorsTab: function($el) {
 			var self = this,
@@ -527,8 +532,8 @@ define([
 
 			var $leftLis = $leftPanel.find('li').not('.moving');
 			$leftLis.css({
-				height: (200 - $leftLis.length) / $leftLis.length,
-				width: "inherit"
+				height: ($leftPanel.height() - $leftLis.length) / $leftLis.length,
+				width: ''
 			});
 			$leftLis.removeClass('last');
 			$($leftLis[$leftLis.length - 1]).addClass('last');
@@ -537,8 +542,8 @@ define([
 			var $topLis = $topPanel.find('li').not('.moving');
 
 			$topLis.css({
-				width: (200 - $topLis.length) / $topLis.length,
-				height: "inherit"
+				width: ($topPanel.width() - $topLis.length) / $topLis.length,
+				height: ''
 			});
 			$topLis.removeClass('last');
 			$($topLis[$topLis.length - 1]).addClass('last');
@@ -569,12 +574,6 @@ define([
 						var $this = $(this);
 						var newColumn = gridColumns[$this.data('column-id')];
 
-						newColumn.dataIndex = i;
-						newColumn.leavesIdx = i;
-						newColumn.linearIdx = i;
-						newColumn.thX = i;
-						newColumn.travIdx = i;
-						newColumn.visLeavesIdx = i;
 						newColumn.visible = !$this.hasClass('invisible');
 						newColumns.push(newColumn);
 					});
