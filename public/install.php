@@ -323,10 +323,12 @@ if ($step == 1) {
 			}
 
 			$dir  = APPPATH.'data'.DS.'config'.DS;
-			$file = 'app_installed.php';
-			if (!is_file($dir.$file)) {
-				File::create($dir, $file, '<?'.'php return array();');
-			}
+            $files = array('app_installed.php', 'templates.php', 'launchers.php');
+            foreach ($files as $file) {
+                if (!is_file($dir.$file)) {
+                    File::create($dir, $file, '<?'.'php return array();');
+                }
+            }
 
 			// public/cache
 			if (!is_dir(DOCROOT.'cache')) {
