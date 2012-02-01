@@ -290,7 +290,8 @@ define([
 
                             if ($(this).val() == 'edit_custom') {
                                 var $el = self._uiSettingsMenuPopup();
-                                self.uiSettingsDialog = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
+                                self.uiSettingsDialog = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el});
+                                            $el.css({height: '90%'});
                                             $el.wijtabs({
                                                 alignment: 'left',
                                                 scrollable: true,
@@ -301,7 +302,8 @@ define([
                                                             scrollMode: 'buttons'
                                                         }
                                                     });
-                                        var $layout = $(ui.panel).find('#layout_settings');
+                                                    var $layout = $(ui.panel).find('#layout_settings');
+                                                    self._uiSettingsMenuPopupRefreshLayout($layout);
                                                     $layout.find('.panels').sortable({
                                                             connectWith: ".panels",
                                                             update: function() {
@@ -312,6 +314,7 @@ define([
                                                             },
                                                             start: function(event, ui) {
                                                                 $(ui.item).addClass('moving');
+                                                                self._uiSettingsMenuPopupRefreshLayout($layout);
                                                             },
                                                             stop: function(event, ui) {
                                                                 $(ui.item).removeClass('moving');
@@ -319,8 +322,10 @@ define([
                                                             },
                                                             placeholder: "droping"
                                                     });
+                                                    self._uiSettingsMenuPopupRefreshColumns($(ui.panel).find('.columns-settings'));
                                                 }
                                             });
+                                            //$el.css({height: self.uiSettingsDialog.height() * 0.9});
                                             $el.after(
                                                 $('<div></div>').css({
                                                     textAlign: 'right'
@@ -351,9 +356,9 @@ define([
 				o = self.options;
 
 			$el = $('<div><ul></ul></div>');
-			self._uiSettingsMenuPopupAddMainViewTab($el);
-
 			self._uiSettingsMenuPopupAddLayoutTab($el);
+
+            self._uiSettingsMenuPopupAddMainViewTab($el);
 
 			self._uiSettingsMenuPopupAddInspectorsTab($el);
 
@@ -365,7 +370,8 @@ define([
 			var self = this,
 				o = self.options;
 			self._uiSettingsMenuPopupAddItem($el, o.texts.mainView, self._uiSettingsMenuPopupGetWidgetContentSettings('settings-main-view', o.texts.mainView, self.options));
-		},
+            $el.find(' > ul > li:last').addClass('separator');
+        },
 
 		_uiSettingsMenuPopupAddInspectorsTab: function($el) {
 			var self = this,
@@ -379,7 +385,7 @@ define([
 			var self = this,
 				o = self.options;
 
-			var $contentSettings = $('<div class="content-settings"></div>')
+			var $contentSettings = $('<div class="content-settings columns-settings"></div>')
 									.attr({id: id});
 
 			$contentSettings.append(
@@ -398,51 +404,88 @@ define([
 				var $columns = $('<ul class="widget-columns"></ul>');
 				var columns = settings.grid.columns;
 
+                console.log(columns);
 				for (var i = 0; i < columns.length; i++) {
-					$columns.append(
-						$('<li></li>')
-							.data('column-id', i)
-							.addClass(columns[i].visible !== false ? '' : 'invisible') //((typeof columns[i].visible == "undefined") ||
-							.append(
-								$('<div class="handle"></div>')
-							)
-							.append(
-								$('<div class="title-zone"></div>')
-									.append (
-										columns[i].headerText
-									)
-							)
-							.append(
-								$('<div class="visibility-zone"></div>')
-									.append (
-										$('<input type="checkbox" />')
-											.attr({checked: columns[i].visible !== false})
-											.change(
-												function() {
-													var $column = $(this).closest('li');
-													if ($(this).is(':checked')) {
-														$column.removeClass('invisible');
-													} else {
-														$column.addClass('invisible');
-													}
-												}
-											)
-										)
-									)
-							);
+                    if (columns[i].visible !== false) {
+                        $columns.append(
+                            $('<li style="float: left;"></li>')
+                                .data('column-id', i)
+                                .append(
+                                    $('<div class="title-zone"></div>')
+                                        .append (
+                                            columns[i].headerText
+                                        )
+                                )
+                        );
+                    }
 				}
 
-				$columns.sortable({
-					handle: '.handle',
-					placeholder: 'placeholder'
+
+
+                $contentSettings.append($columns);
+
+                $contentSettings.append(
+					$('<h2></h2>').append(
+						'Invisible columns' // o.texts.columns ????
+					)
+				);
+
+
+                var $notColumns = $('<ul class="not-columns widget-columns"></ul>');
+
+                for (var i = 0; i < columns.length; i++) {
+                    if (columns[i].visible === false) {
+                        $notColumns.append(
+                            $('<li style="float: left;"></li>')
+                                .data('column-id', i)
+                                .append(
+                                    $('<div class="title-zone"></div>')
+                                        .append (
+                                            columns[i].headerText
+                                        )
+                                )
+                        );
+                    }
+				}
+
+                $contentSettings.append($notColumns);
+
+				$contentSettings.find('.widget-columns').sortable({
+					placeholder: 'placeholder',
+                    connectWith: '.widget-columns',
+                    update: function() {
+                        self._uiSettingsMenuPopupRefreshColumns($(this).parent());
+                    },
+                    change: function() {
+                        self._uiSettingsMenuPopupRefreshColumns($(this).parent());
+                    },
+                    start: function(event, ui) {
+                        $(ui.item).addClass('moving');
+                        self._uiSettingsMenuPopupRefreshColumns($(this).parent());
+                    },
+                    stop: function(event, ui) {
+                        $(ui.item).removeClass('moving');
+                        self._uiSettingsMenuPopupRefreshColumns($(this).parent());
+                    }
 				});
 
-				$contentSettings.append($columns);
+
+
 
 			}
 
 			return $contentSettings;
 		},
+
+        _uiSettingsMenuPopupRefreshColumns : function($el) {
+            var $uls = $el.find('ul');
+            $uls.each(function() {
+                var $lis = $(this).find('li').not('.moving');
+                $lis.removeClass('last');
+                $lis.last().addClass('last');
+                $lis.css({width: ($(this).width() / $lis.length) - 1});
+            });
+        },
 
 		_uiSettingsMenuPopupAddLayoutTab : function($el) {
 			var self = this,
@@ -527,8 +570,8 @@ define([
 
 			var $leftLis = $leftPanel.find('li').not('.moving');
 			$leftLis.css({
-				height: (200 - $leftLis.length) / $leftLis.length,
-				width: "inherit"
+				height: ($leftPanel.height() - $leftLis.length) / $leftLis.length,
+				width: ''
 			});
 			$leftLis.removeClass('last');
 			$($leftLis[$leftLis.length - 1]).addClass('last');
@@ -537,8 +580,8 @@ define([
 			var $topLis = $topPanel.find('li').not('.moving');
 
 			$topLis.css({
-				width: (200 - $topLis.length) / $topLis.length,
-				height: "inherit"
+				width: ($topPanel.width() - $topLis.length) / $topLis.length,
+				height: ''
 			});
 			$topLis.removeClass('last');
 			$($topLis[$topLis.length - 1]).addClass('last');
@@ -565,17 +608,11 @@ define([
 				if (o.inspectors[j].grid) {
 					var gridColumns = o.inspectors[j].grid.columns;
 					var newColumns = [];
-                    self.uiSettingsDialog.find('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
+                    self.uiSettingsDialog.find('#settings-inspector-' + j + ' > ul li').each(function(i, el) {
 						var $this = $(this);
 						var newColumn = gridColumns[$this.data('column-id')];
 
-						newColumn.dataIndex = i;
-						newColumn.leavesIdx = i;
-						newColumn.linearIdx = i;
-						newColumn.thX = i;
-						newColumn.travIdx = i;
-						newColumn.visLeavesIdx = i;
-						newColumn.visible = !$this.hasClass('invisible');
+						newColumn.visible = !$this.closest('ul').hasClass('not-columns');
 						newColumns.push(newColumn);
 					});
 					o.inspectors[j].grid.columns = newColumns;
@@ -596,11 +633,11 @@ define([
 			newColumns = [];
 
 
-            self.uiSettingsDialog.find('#settings-main-view .widget-columns > li').each(function(i, el) {
+            self.uiSettingsDialog.find('#settings-main-view > ul li').each(function(i, el) {
 			    var $this = $(this),
-			        newColumn = o.grid.columns[$this.data('column-id')];
+                newColumn = o.grid.columns[$this.data('column-id')];
 
-			    newColumn.visible = !$this.hasClass('invisible');
+                newColumn.visible = !$this.closest('ul').hasClass('not-columns');
 			    newColumns.push(newColumn);
 			});
 
