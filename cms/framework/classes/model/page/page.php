@@ -13,14 +13,14 @@ namespace Cms;
 use Fuel\Core\Uri;
 
 class Model_Page_Page extends \Cms\Model {
-    protected static $_table_name = 'cms_page';
+    protected static $_table_name = 'os_page';
     protected static $_primary_key = array('page_id');
 
 	protected static $_has_many = array(
 		'childrens' => array(
 			'key_from'       => 'page_id',
 			'model_to'       => '\Cms\Model_Page_Page',
-			'key_to'         => 'page_pere_id',
+			'key_to'         => 'page_parent_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
@@ -28,16 +28,16 @@ class Model_Page_Page extends \Cms\Model {
 
 	protected static $_belongs_to = array(
 		'parent' => array(
-			'key_from'       => 'page_pere_id',
+			'key_from'       => 'page_parent_id',
 			'model_to'       => '\Cms\Model_Page_Page',
 			'key_to'         => 'page_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
 		'racine' => array(
-			'key_from'       => 'page_rac_id',
+			'key_from'       => 'page_root_id',
 			'model_to'       => '\Cms\Model_Page_Root',
-			'key_to'         => 'rac_id',
+			'key_to'         => 'root_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
@@ -59,7 +59,7 @@ class Model_Page_Page extends \Cms\Model {
 	/*
     public static function query($options = array())
     {
-        return parent::query($options + array('order_by' => array('page_rang')));
+        return parent::query($options + array('order_by' => array('page_sort')));
     }*/
 
     public function get_link() {
@@ -82,12 +82,12 @@ class Model_Page_Page extends \Cms\Model {
 
     public function get_href($params = array()) {
         if ($this->page_type == self::TYPE_EXTERNAL_LINK) {
-            return $this->page_lien_externe;
+            return $this->page_external_link;
         }
         $url = !empty($params['absolute']) ? Uri::base(false) : '';
 
         if (!$this->page_home) {
-            $url .= $this->page_url_virtuel;
+            $url .= $this->page_virtual_url;
         }
         return $url;
     }

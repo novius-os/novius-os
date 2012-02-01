@@ -208,14 +208,14 @@ define([
                         },
                         urlJson : 'admin/cms_blog/inspector/author/json'
                     },
-                    inputName : 'blog_auteur_id[]'
+                    inputName : 'blog_author_id[]'
                 },
                 publishDate : {
                     widget_id : 'cms_blog_publishDate',
                     vertical : true,
                     label : mp3Grid.i18n('Publish date'),
                     url : 'admin/cms_blog/inspector/date/list',
-                    inputName : 'blog_date_creation'
+                    inputName : 'blog_created_at'
                 },
                 language : {
                     widget_id : 'cms_blog_language',

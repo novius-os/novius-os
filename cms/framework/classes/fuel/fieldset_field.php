@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -9,7 +9,7 @@
  */
 
 class Fieldset_Field extends \Fuel\Core\Fieldset_Field {
-        
+
     public function populate($input, $repopulate = false) {
         if (is_array($input)) { // or $input instanceof \ArrayAccess
             if (isset($input[$this->name]))
@@ -22,9 +22,9 @@ class Fieldset_Field extends \Fuel\Core\Fieldset_Field {
             $this->set_value($input->{$this->name}, true);
         }
     }
-    
+
     public function repopulate(array $input) {
-        
+
         // Don't repopulate the CSRF field
         if ($this->name === \Config::get('security.csrf_token_key', 'fuel_csrf_token'))
         {
@@ -43,11 +43,11 @@ class Fieldset_Field extends \Fuel\Core\Fieldset_Field {
     public function get_name() {
         return $this->name;
     }
-    
+
     public function get_value() {
         return $this->value;
     }
-	
+
 	public function js_validation() {
 		return $this->rules;
 	}

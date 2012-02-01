@@ -66,5 +66,5 @@
 </html>
 
 <?php
-    Cms::main_controller()->page_title = Cms::main_controller()->page->page_titre_reference.' - Laboratoire technologique Internet : CMS, mobile, emailing, réseaux sociaux - '.NOM_SITE;
+    Cms::main_controller()->page_title = Cms::main_controller()->page->page_meta_title.' - Laboratoire technologique Internet : CMS, mobile, emailing, réseaux sociaux - '.NOM_SITE;
 ?>

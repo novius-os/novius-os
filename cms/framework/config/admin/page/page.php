@@ -53,23 +53,23 @@ return array(
     ),
 	'dataset' => array(
 		'id' => 'page_id',
-		'title' => 'page_titre',
-        'url' => 'page_url_virtuel',
+		'title' => 'page_title',
+        'url' => 'page_virtual_url',
 	),
 	'inputs' => array(
 		'rac_id' => function($value, $query) {
 			if ($value) {
-				$query->where(array('page_rac_id', '=', $value));
-				//$query->where(array('page_niveau', '=', 1));
-				$query->order_by('page_titre');
+				$query->where(array('page_root_id', '=', $value));
+				//$query->where(array('page_level', '=', 1));
+				$query->order_by('page_title');
 			}
 			return $query;
 		},
 		'directory_id' => function($value, $query) {
-			$query->where(array('page_niveau', '>', 0));
+			$query->where(array('page_level', '>', 0));
 			$query->where(array('page_type', '!=', Cms\Model_Page_Page::TYPE_FOLDER));
 			if ($value) {
-				$query->where(array('page_pere_id', '=', $value));
+				$query->where(array('page_parent_id', '=', $value));
 			}
 			return $query;
 		},
