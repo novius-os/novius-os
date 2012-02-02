@@ -502,8 +502,8 @@ define([
                 }
                 if ( $.isPlainObject( options ) ) {
                     require([
-                        'link!static/cms/js/jquery/pnotify/jquery.pnotify.default.css',
-                        'static/cms/js/jquery/pnotify/jquery.pnotify.min'
+                        'link!static/cms/js/vendor/jquery/pnotify/jquery.pnotify.default.css',
+                        'static/cms/js/vendor/jquery/pnotify/jquery.pnotify.min'
                     ], function() {
                         var o = {};
                         $.each( options, function(key, val) {
