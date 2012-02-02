@@ -18,19 +18,24 @@ define([
             mp3Add: function(id, config) {
                 var self = this;
                 var onCustom = false;
-                console.log(config);
-                if (config['selectedView'] == 'custom') {
+                var jsonFile = "";
 
+                if (config['selectedView'] == 'custom') {
                     if (config['custom']) {
-                        config['selectedView'] = config['custom']['from'];
+                        console.log('here');
+                        jsonFile = config['views'][config['custom']['from']].json;
                         onCustom = true;
                     } else {
                         config['selectedView'] = 'default';
                     }
                 }
+
+                if (config['selectedView'] != 'custom') {
+                    jsonFile = config['views'][config['selectedView']].json;
+                }
                 console.log(config['selectedView']);
                 require([
-                    config['views'][config['selectedView']].json,
+                    jsonFile,
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.mp3grid.js',
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.thumbnails.js',
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.nosgrid.js',
@@ -42,15 +47,18 @@ define([
                     mp3Grid.mp3grid.name = config['configuration_id'];
                     mp3Grid.mp3grid.selectedView = config['selectedView'];
 
+                    console.log(mp3Grid);
+
                     if (onCustom) {
-                        console.log(mp3Grid);
+                        $.extend(true, mp3Grid.mp3grid, config['custom'].mp3grid);
                     }
 
+console.log(mp3Grid);
                     var timeout,
                         div = $('div#' + id),
                         container = div.parents('.nos-ostabs-panel, .ui-dialog'),
                         params = mp3Grid.build();
-
+                        //console.log(params);
 
                     if ($.isPlainObject(params.tab)) {
                         try {
@@ -171,7 +179,8 @@ define([
                                             allowSort : false,
                                             width : width,
                                             ensurePxWidth : true,
-                                            showFilter : false
+                                            showFilter : false,
+                                            setupkey: 'actions'
                                         };
                                     }
                                 };
