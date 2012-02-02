@@ -12,11 +12,11 @@ namespace Cms;
 
 class Model_Page_Root extends \Orm\Model {
     protected static $_table_name = 'os_page_root';
-    protected static $_primary_key = array('rac_id');
+    protected static $_primary_key = array('root_id');
 
 	protected static $_has_many = array(
 		'pages' => array(
-			'key_from'       => 'rac_id',
+			'key_from'       => 'root_id',
 			'model_to'       => '\Cms\Model_Page_Page',
 			'key_to'         => 'page_root_id',
 			'cascade_save'   => false,
@@ -32,6 +32,6 @@ class Model_Page_Root extends \Orm\Model {
      */
     public static function query($options = array())
     {
-        return parent::query($options + array('order_by' => array('rac_sort')));
+        return parent::query($options + array('order_by' => array('root_sort')));
     }
 }

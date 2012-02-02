@@ -57,7 +57,7 @@ return array(
         'url' => 'page_virtual_url',
 	),
 	'inputs' => array(
-		'rac_id' => function($value, $query) {
+		'root_id' => function($value, $query) {
 			if ($value) {
 				$query->where(array('page_root_id', '=', $value));
 				//$query->where(array('page_level', '=', 1));

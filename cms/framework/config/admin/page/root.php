@@ -13,7 +13,7 @@ return array(
 		'model' => 'Cms\Model_Page_Root',
 	),
 	'dataset' => array(
-		'id' => 'rac_id',
-		'title' => 'rac_title',
+		'id' => 'root_id',
+		'title' => 'root_title',
 	),
 );
