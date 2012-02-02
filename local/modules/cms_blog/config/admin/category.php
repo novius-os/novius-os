@@ -14,6 +14,6 @@ return array(
 	),
 	'dataset' => array(
 		'id'    => 'blgc_id',
-		'title' => 'blgc_titre',
+		'title' => 'blgc_title',
 	),
 );

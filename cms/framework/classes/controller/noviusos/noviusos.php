@@ -105,27 +105,21 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 
 	public function action_appstab()
 	{
+		\Config::load(APPPATH.'data'.DS.'config'.DS.'launchers.php', 'launchers');
+		$launchers = \Config::get('launchers', array());
 
-
-
-		\Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
-		$app_installed = \Config::get('app_installed', array());
-
-        \Config::load('cms::admin/app_default', true);
-        $app_default = \Config::get('cms::admin/app_default', array());
-        $app_installed = array_merge($app_installed, $app_default);
+        \Config::load('cms::admin/launchers_default', true);
+        $launchers_default = \Config::get('cms::admin/launchers_default', array());
+        $launchers = array_merge($launchers, $launchers_default);
         //$app_installed = \Config::mergeWithUser('misc.apps', $app_installed);
 
         $apps = array();
-        foreach ($app_installed as $key => $app) {
-            if (!empty($app['href']) && !empty($app['icon64'])) {
+        foreach ($launchers as $key => $app) {
+            if (!empty($app['url']) && !empty($app['icon64'])) {
                 $app['key'] = $key;
                 $apps[] = $app;
             }
         }
-
-        //\Debug::dump($apps);
-        //exit();
         $apps = \Arr::sort($apps, 'order', 'asc');
 
         $user = \Session::get('logged_user', false);

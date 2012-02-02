@@ -20,7 +20,7 @@ return array(
 
     // List view
     'display_list' => array(
-        'order_by'    => array('blog_date_creation' => 'DESC', 'blog_id' => 'DESC'),
+        'order_by'    => array('blog_created_at' => 'DESC', 'blog_id' => 'DESC'),
     ),
 
     'display_list_main' => array(

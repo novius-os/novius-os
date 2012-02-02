@@ -17,8 +17,9 @@ class Controller_Admin_Form extends \Controller {
         if ($id === false) {
             $object = new Model_Blog();
         } else {
-            $object = Model_Blog::find('first', array('related' => array('wysiwygs'), 'where' => array('blog_id' => $id)));
+            $object = Model_Blog::find('first', array('where' => array('blog_id' => $id)));
         }
+
         return \View::forge('cms_blog::form/edit', array(
             'object'   => $object,
             'fieldset' => static::fieldset($object)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
@@ -39,27 +40,27 @@ class Controller_Admin_Form extends \Controller {
 				'widget' => 'text',
 				'editable' => false,
             ),
-            'blog_date_debut_publication' => array (
+            'blog_publication_start' => array (
 				'label' => 'Published',
 				'form' => array(
 					'type' => 'checkbox',
-					'value' => date('Y/m/d'),
+					'value' => $object->blog_publication_start ? $object->blog_publication_start : \Date::forge(strtotime('now'))->format('mysql'),
 				),
             ),
-            'blog_titre' => array (
-                'label' => 'Titre: ',
+            'blog_title' => array (
+                'label' => 'Title: ',
                 'form' => array(
                     'type' => 'text',
                 ),
             ),
-            'blog_auteur' => array(
+            'blog_author' => array(
                 'label' => 'Alias: ',
                 'form' => array(
                     'type' => 'text',
                 ),
             ),
             'author->user_fullname' => array(
-                'label' => 'Auteur: ',
+                'label' => 'Author: ',
 				'widget' => 'text',
 				'editable' => false,
             ),
@@ -77,11 +78,11 @@ class Controller_Admin_Form extends \Controller {
 					'title' => 'Thumbnail',
 				),
 			),
-            'blog_date_creation' => array(
+            'blog_created_at' => array(
                 'label' => 'Created at:',
                 'widget' => 'date_select',
             ),
-            'blog_lu' => array(
+            'blog_read' => array(
                 'label' => 'Read',
                 'form' => array(
                     'type' => 'text',
@@ -94,7 +95,6 @@ class Controller_Admin_Form extends \Controller {
                     'type' => 'submit',
                     'value' => 'Save',
                 ),
-				'editable' => false,
             ),
         );
 

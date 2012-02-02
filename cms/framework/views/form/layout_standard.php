@@ -49,7 +49,11 @@ require(['jquery-nos'], function($) {
 				<div style="overflow:visible;">
 					<?php
 					foreach ((array) $fields as $field) {
-						echo '<p>'.$fieldset->field($field)->build().'</p>';
+						try {
+							echo '<p>'.$fieldset->field($field)->build().'</p>';
+						} catch (\Exception $e) {
+							throw new \Exception("Field $field : " . $e->getMessage(), $e->getCode(), $e);
+						}
 					}
 					?>
 				</div>

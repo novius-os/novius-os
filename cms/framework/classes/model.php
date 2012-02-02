@@ -174,7 +174,7 @@ class Model extends \Orm\Model {
 						{
 							return $this->wysiwygs[$i];
 						}
-                        return $this->wysiwygs[$i]->{implode('->', $arr_name)};
+                        return $this->wysiwygs[$i]->__get(implode('->', $arr_name));
                     }
                 }
                 return null;
@@ -192,7 +192,7 @@ class Model extends \Orm\Model {
 						{
 							return $this->medias[$i];
 						}
-                        return $this->medias[$i]->{implode('->', $arr_name)};
+                        return $this->medias[$i]->__get(implode('->', $arr_name));
                     }
                 }
                 return null;
@@ -214,6 +214,15 @@ class Model extends \Orm\Model {
 
         return parent::__get($name);
     }
+
+	public function __isset($name) {
+		try {
+			$this->__get($name);
+			return true;
+		} catch (\Exception $e) {
+			return false;
+		}
+	}
 }
 
 
@@ -226,7 +235,7 @@ class Model_Media_Provider
 		$this->parent = $parent;
 	}
 
-	public function __get($value)
+	public function & __get($value)
 	{
 		// Reuse the getter and fetch the media directly
 		return $this->parent->{'media->'.$value}->media;
@@ -271,7 +280,7 @@ class Model_Wysiwyg_Provider
 		$this->parent = $parent;
 	}
 
-	public function __get($value)
+	public function & __get($value)
 	{
 		return $this->parent->{'wysiwyg->'.$value}->wysiwyg_text;
 	}

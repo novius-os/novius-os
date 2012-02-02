@@ -16,7 +16,7 @@ define([
                 action : function(item) {
                     $.nos.tabs.add({
                         url     : "admin/cms_blog/form/edit/" + item.id,
-                        label   : mp3Grid.i18n('Edit')
+                        label   : mp3Grid.i18n('Edit')._()
                     });
                 },
                 label : mp3Grid.i18n('Edit')
@@ -104,7 +104,7 @@ define([
                                             $.nos.tabs.add({
                                                 iframe : true,
                                                 url     : "admin/cms_blog/form?id=" + item.id,
-                                                label   : "Update"
+                                                label   : mp3Grid.i18n('Update')._()
                                             });
                                         },
                                         label : mp3Grid.i18n('Update')
@@ -207,14 +207,14 @@ define([
                         },
                         urlJson : 'admin/cms_blog/inspector/author/json'
                     },
-                    inputName : 'blog_auteur_id[]'
+                    inputName : 'blog_author_id[]'
                 },
                 publishDate : {
                     widget_id : 'cms_blog_publishDate',
                     vertical : true,
                     label : mp3Grid.i18n('Publish date'),
                     url : 'admin/cms_blog/inspector/date/list',
-                    inputName : 'blog_date_creation'
+                    inputName : 'blog_created_at'
                 },
                 language : {
                     widget_id : 'cms_blog_language',

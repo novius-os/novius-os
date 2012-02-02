@@ -16,4 +16,12 @@ return array(
     'provider' => array(
         'name' => 'Novius OS',
     ),
+    'launchers' => array(
+        'blog' => array(
+            'name'    => 'Blog',
+            'url' => 'admin/cms_blog/list',
+            'iconUrl' => 'static/modules/cms_blog/img/32/blog.png',
+            'icon64'  => 'static/modules/cms_blog/img/64/blog.png',
+        ),
+    ),
 );

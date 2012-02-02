@@ -25,13 +25,6 @@ class Model_Blog extends Model {
             'cascade_save' => false,
             'cascade_delete' => false,
         ),
-        'media_thumbnail' => array(
-            'key_from' => 'blog__media_thumbnail',
-            'model_to' => 'Cms\Model_Media_Media',
-            'key_to' => 'media_id',
-            'cascade_save' => false,
-            'cascade_delete' => false,
-        ),
     );
 
 	protected static $_observers = array(
@@ -57,7 +50,7 @@ class Model_Blog extends Model {
         'categories' => array(
             'key_from' => 'blog_id',
             'key_through_from' => 'blog_id', // column 1 from the table in between, should match a posts.id
-            'table_through' => 'cms_blog_lien_categorie', // both models plural without prefix in alphabetical order
+            'table_through' => 'os_blog_category_link', // both models plural without prefix in alphabetical order
             'key_through_to' => 'blgc_id', // column 2 from the table in between, should match a users.id
             'model_to' => 'Cms\Blog\Model_Category',
             'key_to' => 'blgc_id',
@@ -67,7 +60,7 @@ class Model_Blog extends Model {
         'tags' => array(
             'key_from'         => 'blog_id',
             'key_through_from' => 'blgt_blog_id',
-            'table_through'    => 'cms_blog_tag',
+            'table_through'    => 'os_blog_tag',
             'key_through_to'   => 'blgt_tag_id',
             'model_to'         => '\Cms\Blog\Model_Tag',
             'key_to'           => 'tag_id',
@@ -75,9 +68,6 @@ class Model_Blog extends Model {
             'cascade_delete'   => false,
         ),
     );
-
-    protected static $_has_wysiwygs = true;
-
 
 
     function updateCategoriesById($ids) {

@@ -185,7 +185,7 @@ class Controller_Front extends Controller {
         foreach ($this->template['layout'] as $wysiwyg_name => $layout) {
             $content = \Cms::parse_wysiwyg($this->page->{'wysiwyg->'.$wysiwyg_name.'->wysiwyg_text'}, $this);
 
-            $this->page_title = $this->page->page_titre;
+            $this->page_title = $this->page->page_title;
 
             $this->_view->set('wysiwyg_'.$wysiwyg_name, $content, false);
         }
@@ -195,11 +195,11 @@ class Controller_Front extends Controller {
      * Find the page in the database and fill in the page variable.
      */
     protected function _find_page() {
-        $where = array(array('page_publier', 1));
+        $where = array(array('page_published', 1));
         if (empty($this->url)) {
             $where[] = array('page_home', 1);
         } else {
-            $where[] = array('page_url_virtuel', $this->url);
+            $where[] = array('page_virtual_url', $this->url);
         }
 
         // Liste toutes les pages ayant le bon nom
@@ -225,13 +225,13 @@ class Controller_Front extends Controller {
         Config::load(APPPATH.'data'.DS.'config'.DS.'templates.php', 'templates');
         $templates = Config::get('templates', array());
 
-        if (!isset($templates[$this->page->page_gab])) {
-            throw new \Exception('The template '.$this->page->page_gab.' cannot be found.');
+        if (!isset($templates[$this->page->page_template])) {
+            throw new \Exception('The template '.$this->page->page_template.' cannot be found.');
         }
 
-        $this->template = $templates[$this->page->page_gab];
+        $this->template = $templates[$this->page->page_template];
 		if (empty($this->template['file'])) {
-			throw new \Exception('The template file for '. ($this->template['title'] ?: $this->page->page_gab ).' is not defined.');
+			throw new \Exception('The template file for '. ($this->template['title'] ?: $this->page->page_template ).' is not defined.');
 		}
 
         try {
@@ -254,7 +254,7 @@ class Controller_Front extends Controller {
     }
 
     public function save_cache() {
-        $page_fields = array('id', 'rac_id', 'pere_id', 'niveau', 'titre', 'titre_menu', 'titre_reference', 'type', 'noindex', 'home', 'carrefour', 'nom_virtuel', 'url_virtuel', 'lien_externe', 'lien_externe_type', 'description', 'keywords');
+        $page_fields = array('id', 'root_id', 'parent_id', 'level', 'title', 'menu_title', 'meta_title', 'type', 'meta_noindex', 'home', 'carrefour', 'virtual_name', 'virtual_url', 'external_link', 'external_link_type', 'meta_description', 'meta_keywords');
         $this->cache['page'] = array();
         foreach ($page_fields as $field) {
             $this->cache['page'][$field] = $this->page->{'page_'.$field};
