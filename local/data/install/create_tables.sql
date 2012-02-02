@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `os_blog` (
   `blog_publication_end` datetime default NULL,
   `blog_read` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`blog_id`),
-  KEY `blog_auteur_id` (`blog_author_id`),
+  KEY `blog_author_id` (`blog_author_id`),
   KEY `blog_lang` (`blog_lang`,`blog_lang_common_id`,`blog_lang_single_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `os_blog_category` (
   `blgc_sort` float default NULL,
   PRIMARY KEY  (`blgc_id`),
   KEY `blgc_parent_id` (`blgc_parent_id`),
-  KEY `blgc_rail` (`blgc_path_to_category`)
+  KEY `blgc_path_to_category` (`blgc_path_to_category`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
@@ -204,9 +204,9 @@ CREATE TABLE IF NOT EXISTS `os_page` (
   `page_head_additional` text,
   PRIMARY KEY  (`page_id`),
   UNIQUE KEY `page_url_virtuel` (`page_virtual_url`),
-  KEY `page_rac_id` (`page_root_id`),
-  KEY `page_pere_id` (`page_parent_id`),
-  KEY `page_demandeur_id` (`page_requested_by_user_id`)
+  KEY `page_root_id` (`page_root_id`),
+  KEY `page_parent_id` (`page_parent_id`),
+  KEY `page_requested_by_user_id` (`page_requested_by_user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
@@ -216,15 +216,12 @@ CREATE TABLE IF NOT EXISTS `os_page` (
 --
 
 CREATE TABLE IF NOT EXISTS `os_page_root` (
-  `rac_id` char(2) NOT NULL default '',
-  `rac_title` varchar(30) NOT NULL default '',
-  `rac_gab_id` int(11) NOT NULL default '0',
-  `rac_gab_popup_id` int(11) default NULL,
-  `rac_mobile` tinyint(1) unsigned NOT NULL,
-  `rac_sort` tinyint(4) default NULL,
+  `root_id` char(2) NOT NULL default '',
+  `root_title` varchar(30) NOT NULL default '',
+  `root_default_template` varchar(255) NOT NULL,
+  `root_sort` tinyint(4) default NULL,
   PRIMARY KEY  (`rac_id`),
-  KEY `rac_gab_id` (`rac_gab_id`),
-  KEY `rac_gab_popup_id` (`rac_gab_popup_id`)
+  KEY `root_default_template` (`root_default_template`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
