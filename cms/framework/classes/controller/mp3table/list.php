@@ -57,6 +57,7 @@ class Controller_Mp3table_List extends Controller {
         $view->set('selectedView', \Format::forge($this->mp3grid['selectedView'])->to_json(), false);
         $view->set('name', \Format::forge($this->mp3grid['configuration_id'])->to_json(), false);
          */
+        //\Debug::dump($this->mp3grid);
         $view->set('mp3grid', \Format::forge($this->mp3grid)->to_json(), false);
 		return $view;
 	}

@@ -16,7 +16,19 @@ define([
 
         $.nos = {
             mp3Add: function(id, config) {
-                self = this;
+                var self = this;
+                var onCustom = false;
+                console.log(config);
+                if (config['selectedView'] == 'custom') {
+
+                    if (config['custom']) {
+                        config['selectedView'] = config['custom']['from'];
+                        onCustom = true;
+                    } else {
+                        config['selectedView'] = 'default';
+                    }
+                }
+                console.log(config['selectedView']);
                 require([
                     config['views'][config['selectedView']].json,
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.mp3grid.js',
@@ -27,61 +39,65 @@ define([
 
                     $.extend(mp3Grid.i18nMessages, config['i18n']);
                     mp3Grid.mp3grid.views = config['views'];
-                    mp3Grid.mp3grid.name = config['name'];
+                    mp3Grid.mp3grid.name = config['configuration_id'];
                     mp3Grid.mp3grid.selectedView = config['selectedView'];
 
+                    if (onCustom) {
+                        console.log(mp3Grid);
+                    }
 
-                        var timeout,
-                            div = $('div#' + id),
-                            container = div.parents('.nos-ostabs-panel, .ui-dialog'),
-                            params = mp3Grid.build();
+                    var timeout,
+                        div = $('div#' + id),
+                        container = div.parents('.nos-ostabs-panel, .ui-dialog'),
+                        params = mp3Grid.build();
 
 
-                        if ($.isPlainObject(params.tab)) {
-                            try {
-                                $.nos.tabs.update(div, params.tab);
-                            } catch (e) {
-                                log('Could not update current tab. Maybe your config file should not try to update it.');
-                            }
+                    if ($.isPlainObject(params.tab)) {
+                        try {
+                            $.nos.tabs.update(div, params.tab);
+                        } catch (e) {
+                            log('Could not update current tab. Maybe your config file should not try to update it.');
                         }
+                    }
 
-                        $.nos.listener.add('mp3grid.' + id, true, function() {
-                            div.removeAttr('id')
-                            .mp3grid(params.mp3grid);
-                            container
-                            .bind({
-                                'panelResize.ostabs' : function() {
-                                    if (timeout) {
-                                        window.clearTimeout(timeout);
-                                    }
-                                    timeout = window.setTimeout(function() {
-                                        div.mp3grid('refresh');
-                                    }, 200);
-                                },
-                                'showPanel.ostabs' :  function() {
-                                    div.mp3grid('refresh');
+                    $.nos.listener.add('mp3grid.' + id, true, function() {
+                        div.removeAttr('id')
+                        .mp3grid(params.mp3grid);
+                        container
+                        .bind({
+                            'panelResize.ostabs' : function() {
+                                if (timeout) {
+                                    window.clearTimeout(timeout);
                                 }
-                            });
-                            $.nos.listener.remove('mp3grid.' + id, true, arguments.callee);
-                        })
-
-                        if (null == params.delayed || !params.delayed) {
-                            $.nos.listener.fire('mp3grid.' + id, true, []);
-                        }
-
-                        if (params.refresh) {
-                            container.bind('refresh.' + params.refresh, function() {
-                                    div.mp3grid('gridRefresh');
-                                });
-                        }
-
-                        div.bind('reload', function(e, newConfig) {
-                            config = $.extend(config, newConfig);
-                            var newDiv = $('<div id="' + id + '"></div>');
-                            newDiv.insertAfter(div);
-                            div.remove();
-                            self.mp3Add(id, config);
+                                timeout = window.setTimeout(function() {
+                                    div.mp3grid('refresh');
+                                }, 200);
+                            },
+                            'showPanel.ostabs' :  function() {
+                                div.mp3grid('refresh');
+                            }
                         });
+                        $.nos.listener.remove('mp3grid.' + id, true, arguments.callee);
+                    })
+
+                    if (null == params.delayed || !params.delayed) {
+                        $.nos.listener.fire('mp3grid.' + id, true, []);
+                    }
+
+                    if (params.refresh) {
+                        container.bind('refresh.' + params.refresh, function() {
+                            div.mp3grid('gridRefresh');
+                        });
+                    }
+
+                    div.bind('reload', function(e, newConfig) {
+                        config = $.extend(config, newConfig);
+                        var newDiv = $('<div id="' + id + '"></div>');
+                        newDiv.insertAfter(div);
+                        div.remove();
+                        self.mp3Add(id, config);
+                    });
+
                 });
             },
 

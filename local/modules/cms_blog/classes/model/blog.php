@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -19,7 +19,7 @@ class Model_Blog extends Model {
 
     protected static $_belongs_to = array(
         'author' => array(
-            'key_from' => 'blog_auteur_id',
+            'key_from' => 'blog_author_id',
             'model_to' => 'Cms\Model_User_User',
             'key_to' => 'user_id',
             'cascade_save' => false,
@@ -33,7 +33,7 @@ class Model_Blog extends Model {
             'cascade_delete' => false,
         ),
     );
-	
+
 	protected static $_observers = array(
 		'Cms\Orm_Translatable' => array(
 			'lang_property'      => 'blog_lang',
