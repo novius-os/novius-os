@@ -222,7 +222,7 @@ class Controller_Front extends Controller {
             $query->where(array('categories.blgc_id', $this->category->blgc_id));
         }
         if (!empty($this->author)) {
-            $query->where(array('blog_auteur_id', $this->author->user_id));
+            $query->where(array('blog_author_id', $this->author->user_id));
         }
         if (!empty($this->tag)) {
             $query->related('tags');
@@ -357,10 +357,10 @@ class Controller_Front extends Controller {
         $data['title_tag']   = $this->config['title_tag'];
 
         // Main data from model, probably not needed thanks to Orm\Observers\Typing
-        $data['created_at'] = strtotime($item['blog_date_creation']);
+        $data['created_at'] = strtotime($item['blog_created_at']);
 
         // Additional data calculated per-item
-        $data['link_to_author'] = self::rewrite_url_author($item->author, $item->blog_auteur, $this->url);
+        $data['link_to_author'] = self::rewrite_url_author($item->author, $item->blog_author, $this->url);
         $data['link_to_item']   = self::rewrite_url_item($item, $this->url);
         $data['link_on_title']  = $this->config['link_on_title'] ? $data['link_to_item'] : false;
 
@@ -525,33 +525,33 @@ class Controller_Front extends Controller {
                     ->where(array('page_home', '=', '1'))
                     ->or_where(array('page_carrefour', '=', '1'))
                 ->where_close()
-                ->where(array('page_rac_id', '=', 'fr'));
+                ->where(array('page_root_id', '=', 'fr'));
         $accueil = current($page->get());
 
-        $page_titre_menu = $accueil->page_titre_menu;
-        if ($page_titre_menu == '') {
-            $page_titre_menu = $accueil->page_titre;
+        $page_menu_title = $accueil->page_menu_title;
+        if ($page_menu_title == '') {
+            $page_menu_title = $accueil->page_title;
         }
         $on = in_array($accueil->page_id, (array) $GLOBALS['page_rail']) && !is_array($_GET['rewrite_ids']);
 ?>
     <ul>
-      <li><a <?= $accueil->get_link() ?> class="<?= $on ? 'on' : '' ?>"><?= $page_titre_menu ?></a></li>
+      <li><a <?= $accueil->get_link() ?> class="<?= $on ? 'on' : '' ?>"><?= $page_menu_title ?></a></li>
 <?      self::SousMenuCategorie(null);
 
         //-------Listage des pages du dossier Menu Header
 
         $list_page = \Cms\Model_Page_Page::query()
-                ->where(array('page_pere_id', DOSSIER_MENU_HEADER))
-                ->where(array('page_publier', 1))
+                ->where(array('page_parent_id', DOSSIER_MENU_HEADER))
+                ->where(array('page_published', 1))
                 ->where(array('page_menu', 1))
                 ->get();
         foreach ($list_page as $i => $page1) {
-        $page_titre_menu = $page1->page_titre_menu;
-        if ($page_titre_menu == '') {
-            $page_titre_menu = $page1->page_titre;
+        $page_menu_title = $page1->page_menu_title;
+        if ($page_menu_title == '') {
+            $page_menu_title = $page1->page_title;
         }
 ?>
-                <li><a <?= $page1->get_link() ?>><?= $page_titre_menu ?></a></li>
+                <li><a <?= $page1->get_link() ?>><?= $page_menu_title ?></a></li>
 <?      }
 ?>
     </ul>
@@ -571,7 +571,7 @@ class Controller_Front extends Controller {
             $nbss = count($nbss);
 
 ?>
-      <li><a href="<?= self::rewrite_url_category($categorie, static::$blog_url) ?>"><?= $categorie->blgc_titre ?></a>
+      <li><a href="<?= self::rewrite_url_category($categorie, static::$blog_url) ?>"><?= $categorie->blgc_title ?></a>
 <?          if ($nbss) { ?>
         <ul>
 <?              self::SousMenuCategorie($categorie->blgc_id); ?>
@@ -592,7 +592,7 @@ class Controller_Front extends Controller {
   <?php
   $page_newsletters = \Cms\Model_Page_Page::find(PAGE_INSCRIPTION_NEWSLETTER);
   ?>
-  <li style="list-style-type:none;list-style-image: none;"><a href="<?= $page_newsletters->page_url_virtuel ?>"><img src="static/images/abonner_actualites.png" border="0" alt="s'abonner aux actualités"  title="s'abonner aux actualités" /></a></li>
+  <li style="list-style-type:none;list-style-image: none;"><a href="<?= $page_newsletters->page_virtual_url ?>"><img src="static/images/abonner_actualites.png" border="0" alt="s'abonner aux actualités"  title="s'abonner aux actualités" /></a></li>
   <li style="list-style-type:none;list-style-image: none;"><a href="<?= static::$blog_url ?>?todo=rss" ><img src="static/images/abonner_rss.png" border="0" alt="s'abonner au flux RSS" title="s'abonner au flux RSS" /></a></li>
   <script src="http://widgets.twimg.com/j/2/widget.js"></script>
   <script>
@@ -631,12 +631,12 @@ class Controller_Front extends Controller {
 
     static function rewrite_url_item($item, $url = null) {
 
-        return self::rewrite_url($url, 'blog', $item->blog_titre, $item->blog_id);
+        return self::rewrite_url($url, 'blog', $item->blog_title, $item->blog_id);
     }
 
     static function rewrite_url_category($category, $page = 1, $url = null) {
 
-        $args = array($url, 'blog', $category->blgc_titre, 'c', $category->blgc_id);
+        $args = array($url, 'blog', $category->blgc_title, 'c', $category->blgc_id);
         if ($page > 1) {
             $args[] = $page;
         }

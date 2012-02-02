@@ -11,7 +11,7 @@
 namespace Cms;
 
 class Model_Media_Media extends \Orm\Model {
-    protected static $_table_name = 'cms_media';
+    protected static $_table_name = 'os_media';
     protected static $_primary_key = array('media_id');
 
     public static $public_path = 'media/';

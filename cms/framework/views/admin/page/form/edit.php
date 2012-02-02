@@ -13,7 +13,7 @@
 require(['jquery-nos'], function ($) {
 	$(function () {
 		$.nos.tabs.update($('#<?= $uniqid = uniqid('id_') ?>'), {
-			label : '<?= $page->page_titre ?>',
+			label : '<?= $page->page_title ?>',
 			iconUrl : 'static/cms/img/16/page.png'
 		});
 	});
@@ -30,8 +30,8 @@ foreach ($fieldset->field() as $field) {
 	}
 }
 
-$fieldset->field('page_duree_vie')->set_template('{label} {field} seconds');
-$fieldset->field('page_verrou')->set_template('{label} {field}');
+$fieldset->field('page_cache_duration')->set_template('{label} {field} seconds');
+$fieldset->field('page_lock')->set_template('{label} {field}');
 ?>
 
 <?= $fieldset->open('admin/admin/page/form/edit/'.$page->page_id); ?>
@@ -40,13 +40,13 @@ $fieldset->field('page_verrou')->set_template('{label} {field}');
 
 	'fieldset' => $fieldset,
 	'medias' => array(),
-	'title' => 'page_titre',
+	'title' => 'page_title',
 	'id' => 'page_id',
 
-	'published' => 'page_publier',
+	'published' => 'page_published',
 	'save' => 'save',
 
-	'subtitle' => array('page_type', 'page_gab'),
+	'subtitle' => array('page_type', 'page_template'),
 
 	'content' => \View::forge('form/expander', array(
 		'title'    => 'Content',
@@ -55,8 +55,8 @@ $fieldset->field('page_verrou')->set_template('{label} {field}');
 		'content'  => '
 			<div id="external">
 				<table>
-					'.$fieldset->field('page_lien_externe')->build().'
-					'.$fieldset->field('page_lien_externe_type')->build().'
+					'.$fieldset->field('page_external_link')->build().'
+					'.$fieldset->field('page_external_link_type')->build().'
 				</table>
 			</div>
 			<div id="internal" style="display:none;">
@@ -66,9 +66,9 @@ $fieldset->field('page_verrou')->set_template('{label} {field}');
 	), false),
 
 	'menu' => array(
-		'Menu' => array('page_menu', 'page_titre_menu'),
-		'SEO' => array('page_nom_virtuel', 'page_noindex', 'page_titre_reference', 'page_description', 'page_keywords'),
-		'Admin' => array('page_duree_vie', 'page_verrou'),
+		'Menu' => array('page_menu', 'page_menu_title'),
+		'SEO' => array('page_virtual_name', 'page_meta_noindex', 'page_meta_title', 'page_meta_description', 'page_meta_keywords'),
+		'Admin' => array('page_cache_duration', 'page_lock'),
 	),
 ), false); ?>
 <?= $fieldset->close(); ?>
@@ -82,7 +82,7 @@ require([
 ], function(a,b,$) {
 	$(function() {
 
-		$('input[name=page_noindex]').change(function() {
+		$('input[name=page_meta_noindex]').change(function() {
 			$(this).closest('p').nextAll()[$(this).is(':checked') ? 'hide' : 'show']();
 		}).change();
 
@@ -91,7 +91,7 @@ require([
 			$(this).closest('p').nextAll()[$(this).is(':checked') ? 'show' : 'hide']();
 		}).change();
 
-		$('select[name=page_gab]').bind('change', function() {
+		$('select[name=page_template]').bind('change', function() {
 			$.ajax({
 				url: 'admin/admin/page/ajax/wysiwyg/<?= $page->page_id ?>',
 				data: {
@@ -140,17 +140,17 @@ require([
 
 			if (val == <?= Cms\Model_Page_Page::TYPE_CLASSIC ?> || val == <?= Cms\Model_Page_Page::TYPE_FOLDER ?>) {
 				$('#wysiwyg').show().siblings().hide();
-				$('select[name=page_gab]').closest('div.unit').show().end().change();
+				$('select[name=page_template]').closest('div.unit').show().end().change();
 			}
 
 			if (val == <?= Cms\Model_Page_Page::TYPE_EXTERNAL_LINK ?>) {
 				$('#external').show().siblings().hide();
-				$('select[name=page_gab]').closest('div.unit').hide();
+				$('select[name=page_template]').closest('div.unit').hide();
 			}
 
 			if (val == <?= Cms\Model_Page_Page::TYPE_INTERNAL_LINK ?>) {
 				$('#internal').show().siblings().hide();
-				$('select[name=page_gab]').closest('div.unit').hide();
+				$('select[name=page_template]').closest('div.unit').hide();
 			}
 		}).change();
 	});

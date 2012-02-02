@@ -87,7 +87,8 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	 */
 	public function populate($input, $repopulate = false) {
 		foreach ($this->fields as $f) {
-			if (substr(strtolower(\Inflector::denamespace(get_class($f))), 0, 6) == 'widget' && isset($input->{$f->name})) {
+			$class = strtolower(\Inflector::denamespace(get_class($f)));
+			if (substr($class, 0, 6) == 'widget' && isset($input->{$f->name})) {
 				$f->populate($input);
 			}
 		}
@@ -325,8 +326,6 @@ JS
 
 	public static function build_from_config($config, $model = null, $options = array()) {
 
-
-
 		if (is_object($model)) {
 			$instance = $model;
 			$class = get_class($instance);
@@ -395,34 +394,25 @@ JS
 
 		foreach ($fields as $name => $config)
 		{
-			$type = \Arr::get($config, 'form.type', null);
-
 			if (!empty($config['widget']) && in_array($config['widget'], array('widget_text', 'widget_empty'))) {
 				continue;
 			}
+			$type = \Arr::get($config, 'form.type', null);
 
-			switch($type) {
-				case 'checkbox' :
-					if (empty($data[$name])) {
-						$object->$name = null;
-					}
-					break;
+			if ($type == 'submit') {
+				continue;
+			}
 
-				// Skip submit fields
-				case 'submit' :
-					continue 2;
-					break;
-
-				default :
-					if (isset($data[$name])) {
-						try {
-							$object->$name = $data[$name];
-						} catch (\Exception $e) {
-							$body = array(
-								'error' => $e->getMessage(),
-							);
-						}
-					}
+			if ($type == 'checkox' && empty($data[$name])) {
+				$object->$name = null;
+			} else if (isset($data[$name])) {
+				try {
+					$object->$name = $data[$name];
+				} catch (\Exception $e) {
+					$body = array(
+						'error' => $e->getMessage(),
+					);
+				}
 			}
 		}
 

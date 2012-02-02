@@ -13,7 +13,7 @@
     require(['jquery-nos'], function ($) {
         $(function () {
             $.nos.tabs.update({
-                label : <?= \Format::forge()->to_json($object->blog_titre) ?>,
+                label : <?= \Format::forge()->to_json($object->blog_title) ?>,
                 iconUrl : 'static/modules/cms_blog/img/16/blog.png'
             });
         });
@@ -39,28 +39,30 @@ foreach ($fieldset->field() as $field) {
 	}
 }
 
-$fieldset->field('blog_lu')->set_template('{label} {field} times');
+$fieldset->field('blog_read')->set_template('{label} {field} times');
+$fieldset->field('wysiwyg->content->wysiwyg_text')->set_template('{field}');
 ?>
 
 <?= $fieldset->open('admin/cms_blog/form/edit/'.$object->blog_id); ?>
 <?= View::forge('form/layout_standard', array(
 	'fieldset' => $fieldset,
 	'medias' => array('media->thumbnail->medil_media_id'),
-	'title' => 'blog_titre',
+	'title' => 'blog_title',
 	'id' => 'blog_id',
 
-	'published' => 'blog_date_debut_publication',
+	'published' => 'blog_publication_start',
 	'save' => 'save',
 
 	'subtitle' => array(),
 
 	'content' => \View::forge('form/expander', array(
 		'title'   => 'Content',
+		'nomargin' => true,
 		'content' => $fieldset->field('wysiwyg->content->wysiwyg_text'),
 	), false),
 
 	'menu' => array(
-		'Meta' => array('author->user_fullname', 'blog_auteur', 'blog_date_creation', 'blog_lu'),
+		'Meta' => array('author->user_fullname', 'blog_author', 'blog_created_at', 'blog_read'),
 		'Categories' => array(),
 		'Tags' => array(),
 	),

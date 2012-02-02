@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -19,21 +19,14 @@ class Model_Blog extends Model {
 
     protected static $_belongs_to = array(
         'author' => array(
-            'key_from' => 'blog_auteur_id',
+            'key_from' => 'blog_author_id',
             'model_to' => 'Cms\Model_User_User',
             'key_to' => 'user_id',
             'cascade_save' => false,
             'cascade_delete' => false,
         ),
-        'media_thumbnail' => array(
-            'key_from' => 'blog__media_thumbnail',
-            'model_to' => 'Cms\Model_Media_Media',
-            'key_to' => 'media_id',
-            'cascade_save' => false,
-            'cascade_delete' => false,
-        ),
     );
-	
+
 	protected static $_observers = array(
 		'Cms\Orm_Translatable' => array(
 			'lang_property'      => 'blog_lang',
@@ -57,7 +50,7 @@ class Model_Blog extends Model {
         'categories' => array(
             'key_from' => 'blog_id',
             'key_through_from' => 'blog_id', // column 1 from the table in between, should match a posts.id
-            'table_through' => 'cms_blog_lien_categorie', // both models plural without prefix in alphabetical order
+            'table_through' => 'os_blog_category_link', // both models plural without prefix in alphabetical order
             'key_through_to' => 'blgc_id', // column 2 from the table in between, should match a users.id
             'model_to' => 'Cms\Blog\Model_Category',
             'key_to' => 'blgc_id',
@@ -67,7 +60,7 @@ class Model_Blog extends Model {
         'tags' => array(
             'key_from'         => 'blog_id',
             'key_through_from' => 'blgt_blog_id',
-            'table_through'    => 'cms_blog_tag',
+            'table_through'    => 'os_blog_tag',
             'key_through_to'   => 'blgt_tag_id',
             'model_to'         => '\Cms\Blog\Model_Tag',
             'key_to'           => 'tag_id',
@@ -75,9 +68,6 @@ class Model_Blog extends Model {
             'cascade_delete'   => false,
         ),
     );
-
-    protected static $_has_wysiwygs = true;
-
 
 
     function updateCategoriesById($ids) {
