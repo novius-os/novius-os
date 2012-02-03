@@ -308,7 +308,7 @@ define([
                                     title: 'Settings',
                                     contentUrl: null,
                                     content: $el,
-                                    show: function() {
+                                    onLoad: function() {
 
                                         $el.css({height: '90%'});
                                         $el.wijtabs({
@@ -678,10 +678,15 @@ define([
 			self.options.grid.columns = newColumns;
 
             self.element.find('.nos-mp3grid-inspector').remove();
-			self._uiInspectors()
-                ._uiList();
 
-            self._saveUserConfiguration();
+
+            var custom = self._saveUserConfiguration();
+
+            self.element.trigger('reload', {custom: custom});
+            /*
+            			self._uiInspectors()
+                ._uiList();
+                */
 		},
 
 		_uiSettingsMenuPopupAddItem : function(element, itemName, content) {
@@ -717,10 +722,11 @@ define([
             custom['from']                  = o.selectedView != 'custom' ? o.selectedView : o.fromView;
 
             $.nos.saveUserConfiguration(o.name, {selectedView: 'custom', custom: custom});
+            return custom;
         },
 
         _getGridConfiguration: function(gridFrom) {
-            var grid = {columns: [], columnsOrder: gridFrom.columnsOrder.join(',')};
+            var grid = {columns: {}, columnsOrder: gridFrom.columnsOrder.join(',')};
             var orderedColumns = this._getParameters(gridFrom.columns, this.variantColumnsProperties);
 
             for (var i = 0; i < gridFrom.columns.length; i++) {
