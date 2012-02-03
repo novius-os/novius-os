@@ -354,10 +354,17 @@ define([
                                                     }).click( function() {self._uiSettingsMenuPopupSave();self.uiSettingsDialog.wijdialog('close');self.uiSettingsDialog.remove();} )
                                                 )
                                             );
+
+                                            $(this).find('option').attr('selected', '');
+                                            $(this).find('option[value=custom]').attr('selected', 'selected');
+                                            $(this).wijdropdown("refresh");
+                                            $.nos.saveUserConfiguration(o.name + '.selectedView', $(this).val());
                             } else {
                                 $.nos.saveUserConfiguration(o.name + '.selectedView', $(this).val());
                                 self.element.trigger('reload', {selectedView: $(this).val()});
                             }
+
+
 			});
 
 			return self;
@@ -698,7 +705,7 @@ define([
             custom['mp3grid']['grid']       = self._getGridConfiguration(o.grid);
             custom['from']                  = o.selectedView;
 
-            $.nos.saveUserConfiguration(o.name, {custom: custom});
+            $.nos.saveUserConfiguration(o.name, {selectedView: 'custom', custom: custom});
         },
 
         _getGridConfiguration: function(gridFrom) {

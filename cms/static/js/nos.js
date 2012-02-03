@@ -20,6 +20,8 @@ define([
                 var onCustom = false;
                 var jsonFile = "";
 
+                console.log(config);
+
                 if (config['selectedView'] == 'custom') {
                     if (config['custom']) {
                         console.log('here');
