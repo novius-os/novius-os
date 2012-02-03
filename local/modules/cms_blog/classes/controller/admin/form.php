@@ -15,7 +15,7 @@ class Controller_Admin_Form extends \Controller {
 
     public function action_edit($id = false) {
         if ($id === false) {
-            $object = new Model_Blog();
+            $object = null;
         } else {
             $object = Model_Blog::find('first', array('where' => array('blog_id' => $id)));
         }
@@ -44,7 +44,7 @@ class Controller_Admin_Form extends \Controller {
 				'label' => 'Published',
 				'form' => array(
 					'type' => 'checkbox',
-					'value' => $object->blog_publication_start ? $object->blog_publication_start : \Date::forge(strtotime('now'))->format('mysql'),
+					'value' => isset($object) && $object->blog_publication_start ? $object->blog_publication_start : \Date::forge(strtotime('now'))->format('mysql'),
 				),
             ),
             'blog_title' => array (
@@ -80,7 +80,7 @@ class Controller_Admin_Form extends \Controller {
 			),
             'blog_created_at' => array(
                 'label' => 'Created at:',
-                'widget' => 'date_select',
+                'widget' => 'date_picker',
             ),
             'blog_read' => array(
                 'label' => 'Read',

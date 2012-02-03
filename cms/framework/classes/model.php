@@ -177,7 +177,8 @@ class Model extends \Orm\Model {
                         return $this->wysiwygs[$i]->__get(implode('->', $arr_name));
                     }
                 }
-                return null;
+				$ref = null;
+                return $ref;
             }
 
             if ($arr_name[0] == 'media')
@@ -195,7 +196,8 @@ class Model extends \Orm\Model {
                         return $this->medias[$i]->__get(implode('->', $arr_name));
                     }
                 }
-                return null;
+				$ref = null;
+                return $ref;
             }
 
             $obj = $this;

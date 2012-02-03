@@ -48,7 +48,12 @@ define([
             adds : {
                 post : {
                     label : mp3Grid.i18n('Add a post'),
-                    url : 'admin/cms_blog/form/edit'
+					action : function() {
+						$.nos.tabs.add({
+							url     : 'admin/cms_blog/form/edit',
+							label   : mp3Grid.i18n('Edit')._()
+						});
+					}
                 },
                 category : {
                     label : mp3Grid.i18n('Add a category'),
