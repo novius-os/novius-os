@@ -726,11 +726,16 @@ define([
             var newOptions = {inspectors: {}, inspectorsOrder: optionsFrom.inspectorsOrder.join(',')};
             var orderedInspectors = this._getParameters(optionsFrom.inspectors, this.variantInspectorsProperties);
             for (var i = 0; i < this.options.inspectors.length; i++) {
-                newOptions[optionsFrom.inspectors[i].setupkey] = orderedInspectors[i];
+                console.log('inspector', orderedInspectors[i]);
+                if (!orderedInspectors[i]['vertical']) {
+                    orderedInspectors[i]['vertical'] = false;
+                }
+                newOptions['inspectors'][optionsFrom.inspectors[i].setupkey] = orderedInspectors[i];
                 if (this.options.inspectors[i]['grid']) {
-                    newOptions[optionsFrom.inspectors[i].setupkey] = {'grid': this._getGridConfiguration(this.options.inspectors[i]['grid'])};
+                    newOptions['inspectors'][optionsFrom.inspectors[i].setupkey]['grid'] = this._getGridConfiguration(this.options.inspectors[i]['grid']);
                 }
             }
+            console.log(newOptions);
             return newOptions;
         },
 

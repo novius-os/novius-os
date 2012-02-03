@@ -40,7 +40,8 @@ define([
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.nosgrid.js',
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.inspector-preview.js'
                 ], function( mp3GridFrom, $ ) {
-                    var mp3Grid = $.extend(true, {}, mp3GridFrom);
+                    var mp3Grid = $.extend(true, {}, mp3GridFrom); // Deep copy of mp3Grid
+                    // because when we add custom properties we don't want these properties to override the default configuration...
 
                     $.extend(mp3Grid.i18nMessages, config['i18n']);
                     mp3Grid.mp3grid.views = config['views'];
@@ -53,6 +54,7 @@ define([
                     console.log(mp3Grid.mp3grid);
 
                     if (onCustom) {
+                        console.log(config['custom'].mp3grid);
                         mp3Grid.mp3grid = $.extend(true, mp3Grid.mp3grid, config['custom'].mp3grid);
                     }
 
@@ -123,7 +125,6 @@ define([
 
                     keyToOrderedArray = function(object, key) {
                         if (object[key + 'Order']) {
-                            console.log(object);
                             var keys = object[key + 'Order'].split(',');
                             var ordered = [];
                             for (var i = 0; i < keys.length; i++) {
