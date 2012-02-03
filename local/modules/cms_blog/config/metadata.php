@@ -24,4 +24,16 @@ return array(
             'icon64'  => 'static/modules/cms_blog/img/64/blog.png',
         ),
     ),
+    'wysiwyg_enhancers' => array(
+        'cms_blog' => array(
+            'title' => 'Blog',
+            'id'    => 'cms_blog',
+            'rewrite_prefix' => 'blog',
+            'desc'  => '',
+            'target' => 'cms_blog/front',
+            'iconUrl' => 'static/modules/cms_blog/img/16/blog.png',
+            'popupUrl' => 'admin/cms_blog/popup',
+            'previewUrl' => 'admin/cms_blog/preview',
+        ),
+    ),
 );
