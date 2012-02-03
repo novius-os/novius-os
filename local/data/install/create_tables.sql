@@ -220,8 +220,8 @@ CREATE TABLE IF NOT EXISTS `os_page_root` (
   `root_title` varchar(30) NOT NULL default '',
   `root_default_template` varchar(255) NOT NULL,
   `root_sort` tinyint(4) default NULL,
-  PRIMARY KEY  (`rac_id`),
-  KEY `root_default_template` (`root_default_template`),
+  PRIMARY KEY  (`root_id`),
+  KEY `root_default_template` (`root_default_template`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
