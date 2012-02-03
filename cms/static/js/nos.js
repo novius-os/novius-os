@@ -527,6 +527,9 @@ define([
 					} else {
 						$dialog.wijdialog(wijdialog_options);
 					}
+                    if ($.isFunction(wijdialog_options['show'])) {
+                        wijdialog_options['show']();
+                    }
 					$dialog.bind('wijdialogclose', function(event, ui) {
 						//log('Fermeture et destroyage');
 						$dialog.closest('.ui-dialog').hide().appendTo(where);
