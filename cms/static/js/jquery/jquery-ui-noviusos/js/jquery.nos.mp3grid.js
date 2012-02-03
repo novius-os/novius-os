@@ -635,7 +635,7 @@ define([
 
 						newColumn.visible = !$this.closest('ul').hasClass('not-columns');
 						newColumns.push(newColumn);
-                        o.inspectors[j].grid.columnsOrder[$this.data('column-id')] = i;
+                        o.inspectors[j].grid.columnsOrder.push(newColumn['setupkey']);
 					});
 					o.inspectors[j].grid.columns = newColumns;
 				}
@@ -659,7 +659,7 @@ define([
             self.uiSettingsDialog.find('#settings-main-view > ul li').each(function(i, el) {
 			    var $this = $(this),
                 newColumn = o.grid.columns[$this.data('column-id')];
-                o.grid.columnsOrder[$this.data('column-id')] = i;
+                o.grid.columnsOrder.push(newColumn['setupkey']);
 
                 newColumn.visible = !$this.closest('ul').hasClass('not-columns');
 			    newColumns.push(newColumn);
@@ -710,10 +710,10 @@ define([
         },
 
         _getGridConfiguration: function(gridFrom) {
-            var grid = {columns: {}, columnsOrder: gridFrom.columnsOrder};
+            var grid = {columns: [], columnsOrder: gridFrom.columnsOrder.join(',')};
             var orderedColumns = this._getParameters(gridFrom.columns, this.variantColumnsProperties);
 
-            for (var i = 0; i < grid.columnsOrder.length; i++) {
+            for (var i = 0; i < gridFrom.columns.length; i++) {
                 grid.columns[gridFrom.columns[i].setupkey] = orderedColumns[i];
             }
 

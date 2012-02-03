@@ -136,7 +136,17 @@ define([
 
                             // Build actions columns if any, and translate columns properties
                             if (key === 'columns') {
-                                object[key] = $.map(val, objectToArray);
+                                if (object['columnsOrder']) {
+                                    var columnsKeys = object['columnsOrder'].split(',');
+                                    var orderedColumns = [];
+                                    for (var i = 0; i < columnsKeys.length; i++) {
+                                        object[key][columnsKeys[i]]['setupkey'] = columnsKeys[i];
+                                        orderedColumns.push(object[key][columnsKeys[i]]);
+                                    }
+                                    object[key] = orderedColumns;
+                                } else {
+                                    object[key] = $.map(val, objectToArray);
+                                }
 
                                 for (var i = 0; i < object[key].length; i++) {
                                     if (object[key][i].lang) {
