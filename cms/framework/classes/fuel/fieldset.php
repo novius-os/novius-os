@@ -358,7 +358,7 @@ JS
 			call_user_func($options['extend'], $fieldset);
 		}
 
-		$instance && $fieldset->populate($instance);
+		isset($instance) && $fieldset->populate($instance);
 		if (\Input::method() == 'POST' && (empty($options['form_name']) || \Input::post('form_name') == $options['form_name'])) {
 			$fieldset->repopulate();
 			if ($fieldset->validation()->run($fieldset->value())) {

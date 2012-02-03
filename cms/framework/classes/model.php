@@ -177,7 +177,8 @@ class Model extends \Orm\Model {
                         return $this->wysiwygs[$i]->__get(implode('->', $arr_name));
                     }
                 }
-                return null;
+				$ref = null;
+                return $ref;
             }
 
             if ($arr_name[0] == 'media')
@@ -195,7 +196,8 @@ class Model extends \Orm\Model {
                         return $this->medias[$i]->__get(implode('->', $arr_name));
                     }
                 }
-                return null;
+				$ref = null;
+                return $ref;
             }
 
             $obj = $this;
@@ -282,7 +284,7 @@ class Model_Wysiwyg_Provider
 
 	public function & __get($value)
 	{
-		return $this->parent->{'wysiwyg->'.$value}->wysiwyg_text;
+		return $this->parent->{'wysiwyg->'.$value}->get('wysiwyg_text');
 	}
 
 	public function __set($property, $value)

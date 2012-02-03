@@ -47,8 +47,8 @@ class Widget_Wysiwyg extends \Fieldset_Field {
 		return <<<JS
 <script type="text/javascript">
     require([
-    'static/cms/js/jquery/tinymce/jquery.tinymce_src',
-    'static/cms/js/jquery/tinymce/jquery.wysiwyg'
+    'static/cms/js/vendor/tinymce/jquery.tinymce_src',
+    'static/cms/js/vendor/tinymce/jquery.wysiwyg'
     ], function() {
         $('textarea#$id').wysiwyg($('textarea#$id').data('wysiwyg-options'));
     });

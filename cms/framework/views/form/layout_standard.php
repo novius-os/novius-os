@@ -14,8 +14,11 @@ require(['jquery-nos'], function($) {
 				echo $fieldset->field($field)->build();
 			}
 			?>
-			<?= $fieldset->field($title)->set_template('{field}')->set_attribute('class', 'title c4')->build(); ?>
-			<?= $fieldset->field($id)->set_template('{label} {field}')->build(); ?>
+			<?= $fieldset->field($title)/*->set_attribute('placeholder', $fieldset->field($title)->label)*/->set_template('{field}')->set_attribute('class', 'title c4')->build(); ?>
+			<?php
+			$value = $fieldset->field($id)->get_value();
+			echo !empty($value) ? $fieldset->field($id)->set_template('{label} {field}')->build() : '';
+			?>
 		</div>
 		<div class="line" style="margin-bottom:1em;overflow:visible;">
 			<?php
