@@ -166,13 +166,15 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
         \Response::json($json);
     }
 
-    public function convertFromPost($arr) {
-        foreach ($arr as $key => $value) {
-            if (is_array($value)) {
-                $arr[$key] = $this->convertFromPost($arr[$key]);
-            } else {
-                $arr[$key] = $arr[$key] == 'true' ? true : ($arr[$key] == 'false' ? false : $arr[$key]);
-                $arr[$key] = is_numeric($arr[$key]) ? floatval($arr[$key]) : $arr[$key];
+    protected function convertFromPost($arr) {
+        if (is_array($arr)) {
+            foreach ($arr as $key => $value) {
+                if (is_array($value)) {
+                    $arr[$key] = $this->convertFromPost($arr[$key]);
+                } else {
+                    $arr[$key] = $arr[$key] == 'true' ? true : ($arr[$key] == 'false' ? false : $arr[$key]);
+                    $arr[$key] = is_numeric($arr[$key]) ? floatval($arr[$key]) : $arr[$key];
+                }
             }
         }
         return $arr;

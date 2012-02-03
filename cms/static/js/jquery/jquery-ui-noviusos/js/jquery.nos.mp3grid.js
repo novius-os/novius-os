@@ -49,7 +49,8 @@ define([
             },
             views: {},
             selectedView: null,
-            name: null
+            name: null,
+            grid: {}
 		},
 
 		pageIndex : 0,
@@ -59,6 +60,8 @@ define([
 		resizing : true,
 		init : false,
 		itemSelected : null,
+        variantColumnsProperties: {'visible': true, 'width': true, 'showFilter': true},
+        variantInspectorsProperties: {'hide': true, 'vertical': true},
 
 		_create: function() {
 			var self = this,
@@ -272,10 +275,20 @@ define([
                         .append(o.views[key].name)
                 );
             }
+
+            self.uiSettingsDropDown.append(
+                $('<option></option>')
+                    .attr({
+                        'value': 'custom',
+                        'selected': (o.selectedView == 'custom')
+                    })
+                    .append('Custom view')
+            );
+
             self.uiSettingsDropDown.append(
                 $('<option></option>')
                     .attr('value', 'edit_custom')
-                    .append('Customize view')
+                    .append('Edit custom view')
             );
 
             self.uiSettingsDropDown.wijdropdown();
@@ -341,10 +354,17 @@ define([
                                                     }).click( function() {self._uiSettingsMenuPopupSave();self.uiSettingsDialog.wijdialog('close');self.uiSettingsDialog.remove();} )
                                                 )
                                             );
+
+                                            $(this).find('option').attr('selected', '');
+                                            $(this).find('option[value=custom]').attr('selected', 'selected');
+                                            $(this).wijdropdown("refresh");
+                                            $.nos.saveUserConfiguration(o.name + '.selectedView', $(this).val());
                             } else {
-                                $.nos.saveUserConfiguration(o.name, {selectedView: $(this).val()});
+                                $.nos.saveUserConfiguration(o.name + '.selectedView', $(this).val());
                                 self.element.trigger('reload', {selectedView: $(this).val()});
                             }
+
+
 			});
 
 			return self;
@@ -404,7 +424,6 @@ define([
 				var $columns = $('<ul class="widget-columns"></ul>');
 				var columns = settings.grid.columns;
 
-                console.log(columns);
 				for (var i = 0; i < columns.length; i++) {
                     if (columns[i].visible !== false) {
                         $columns.append(
@@ -608,12 +627,14 @@ define([
 				if (o.inspectors[j].grid) {
 					var gridColumns = o.inspectors[j].grid.columns;
 					var newColumns = [];
+                    o.inspectors[j].grid.columnsOrder = [];
                     self.uiSettingsDialog.find('#settings-inspector-' + j + ' > ul li').each(function(i, el) {
 						var $this = $(this);
 						var newColumn = gridColumns[$this.data('column-id')];
 
 						newColumn.visible = !$this.closest('ul').hasClass('not-columns');
 						newColumns.push(newColumn);
+                        o.inspectors[j].grid.columnsOrder[$this.data('column-id')] = i;
 					});
 					o.inspectors[j].grid.columns = newColumns;
 				}
@@ -633,9 +654,11 @@ define([
 			newColumns = [];
 
 
+            o.grid.columnsOrder = [];
             self.uiSettingsDialog.find('#settings-main-view > ul li').each(function(i, el) {
 			    var $this = $(this),
                 newColumn = o.grid.columns[$this.data('column-id')];
+                o.grid.columnsOrder[$this.data('column-id')] = i;
 
                 newColumn.visible = !$this.closest('ul').hasClass('not-columns');
 			    newColumns.push(newColumn);
@@ -646,6 +669,8 @@ define([
             self.element.find('.nos-mp3grid-inspector').remove();
 			self._uiInspectors()
                 ._uiList();
+
+            self._saveUserConfiguration();
 		},
 
 		_uiSettingsMenuPopupAddItem : function(element, itemName, content) {
@@ -658,7 +683,7 @@ define([
 		_uiSettingsMenuAdd : function(item, ul) {
 			var self = this;
 
-			li = $('<li></li>').appendTo(ul)
+			var li = $('<li></li>').appendTo(ul)
 				.append(self._uiSettingsMenuRow(item.content));
 
 			if ($.isArray(item.childs) || $.isPlainObject(item.childs)) {
@@ -670,6 +695,55 @@ define([
 
 			return self;
 		},
+
+        _saveUserConfiguration: function() {
+            var self = this,
+		        o = self.options;
+            var custom = {'mp3grid': {}};
+
+            custom['mp3grid']['inspectors']  = self._getInspectorsConfiguration(o.inspectors);
+            custom['mp3grid']['grid']       = self._getGridConfiguration(o.grid);
+            custom['from']                  = o.selectedView;
+
+            $.nos.saveUserConfiguration(o.name, {selectedView: 'custom', custom: custom});
+        },
+
+        _getGridConfiguration: function(gridFrom) {
+            var grid = {columns: {}, columnsOrder: gridFrom.columnsOrder};
+            var orderedColumns = this._getParameters(gridFrom.columns, this.variantColumnsProperties);
+
+            for (var i = 0; i < grid.columnsOrder.length; i++) {
+                grid.columns[gridFrom.columns[i].setupkey] = orderedColumns[i];
+            }
+
+            return grid;
+        },
+
+        _getInspectorsConfiguration: function(inspectors) {
+            var newInspectors = {};
+            var orderedInspectors = this._getParameters(inspectors, this.variantInspectorsProperties);
+            for (var i = 0; i < this.options.inspectors.length; i++) {
+                newInspectors[inspectors[i].setupkey] = orderedInspectors[i];
+                if (this.options.inspectors[i]['grid']) {
+                    newInspectors[inspectors[i].setupkey] = {'grid': this._getGridConfiguration(this.options.inspectors[i]['grid'])};
+                }
+            }
+            return newInspectors;
+        },
+
+        _getParameters: function(objects, selected) {
+            var newObjects = [];
+            for (var i = 0; i < objects.length; i++) {
+                var newObject = {};
+                for (var key in objects[i]) {
+                    if (selected[key]) {
+                        newObject[key] = objects[i][key];
+                    }
+                }
+                newObjects.push(newObject);
+            }
+            return newObjects;
+        },
 
 		_uiSettingsMenuRow : function(args) {
 			if (!$.isPlainObject(args)) {
