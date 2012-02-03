@@ -524,6 +524,8 @@ define([
 					$li.addClass( "ui-state-open" ).removeClass('ui-state-pined');
 					self.uiOstabsNewTab.removeClass('ui-state-open ui-state-default');
 
+                    o.selected = self.anchors.index( this );
+
 					// If tab selected or
 					// or is already loading or click callback returns false stop here.
 					// Check if click handler returns false last so that it is not executed
@@ -535,8 +537,6 @@ define([
 						this.blur();
 						return false;
 					}
-
-					o.selected = self.anchors.index( this );
 
 					self._abort();
 

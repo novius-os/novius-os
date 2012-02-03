@@ -76,8 +76,8 @@ $fieldset->field('page_lock')->set_template('{label} {field}');
 
 <script type="text/javascript">
 require([
-	'static/cms/js/jquery/tinymce/jquery.tinymce_src',
-	'static/cms/js/jquery/tinymce/jquery.wysiwyg',
+	'static/cms/js/vendor/tinymce/jquery.tinymce_src',
+	'static/cms/js/vendor/tinymce/jquery.wysiwyg',
 	'jquery-nos'
 ], function(a,b,$) {
 	$(function() {
