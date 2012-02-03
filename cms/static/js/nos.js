@@ -51,14 +51,9 @@ define([
                         mp3Grid.mp3grid.fromView = config['custom']['from'];
                     }
 
-                    console.log(mp3Grid.mp3grid);
-
                     if (onCustom) {
-                        console.log(config['custom'].mp3grid);
                         mp3Grid.mp3grid = $.extend(true, mp3Grid.mp3grid, config['custom'].mp3grid);
                     }
-
-                    console.log(mp3Grid.mp3grid);
 
                     var timeout,
                         div = $('div#' + id),
