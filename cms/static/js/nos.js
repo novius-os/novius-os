@@ -121,6 +121,21 @@ define([
                         return val;
                     },
 
+                    keyToOrderedArray = function(object, key) {
+                        if (object[key + 'Order']) {
+                            console.log(object);
+                            var keys = object[key + 'Order'].split(',');
+                            var ordered = [];
+                            for (var i = 0; i < keys.length; i++) {
+                                object[key][keys[i]]['setupkey'] = keys[i];
+                                ordered.push(object[key][keys[i]]);
+                            }
+                            return ordered;
+                        } else {
+                            return $.map(object[key], objectToArray);
+                        }
+                    },
+
                     recursive = function(object) {
                         $.each(object, function(key, val) {
                             if ($.isPlainObject(val)) {
@@ -136,17 +151,7 @@ define([
 
                             // Build actions columns if any, and translate columns properties
                             if (key === 'columns') {
-                                if (object['columnsOrder']) {
-                                    var columnsKeys = object['columnsOrder'].split(',');
-                                    var orderedColumns = [];
-                                    for (var i = 0; i < columnsKeys.length; i++) {
-                                        object[key][columnsKeys[i]]['setupkey'] = columnsKeys[i];
-                                        orderedColumns.push(object[key][columnsKeys[i]]);
-                                    }
-                                    object[key] = orderedColumns;
-                                } else {
-                                    object[key] = $.map(val, objectToArray);
-                                }
+                                object[key] = keyToOrderedArray(object, key);
 
                                 for (var i = 0; i < object[key].length; i++) {
                                     if (object[key][i].lang) {
@@ -251,7 +256,9 @@ define([
                                 params.mp3grid.splitters.horizontal = {splitterDistance : params.mp3grid.splittersHorizontal};
                             }
                             params.mp3grid.adds = $.map(params.mp3grid.adds, objectToArray);
-                            params.mp3grid.inspectors = $.map(params.mp3grid.inspectors, objectToArray);
+
+
+                            params.mp3grid.inspectors = keyToOrderedArray(params.mp3grid, 'inspectors');
 
                             // Translate clone object
                             recursive(params);

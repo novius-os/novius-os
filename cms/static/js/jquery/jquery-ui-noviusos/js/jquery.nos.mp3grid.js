@@ -624,6 +624,7 @@ define([
 			var self = this,
 		        o = self.options;
 
+
 			for (var j = 0; j < o.inspectors.length; j++) {
 				if (o.inspectors[j].grid) {
 					var gridColumns = o.inspectors[j].grid.columns;
@@ -640,7 +641,7 @@ define([
 					o.inspectors[j].grid.columns = newColumns;
 				}
 			}
-
+            o.inspectorsOrder = [];
 			var newInspectors = [];
 			var layoutSettings = self.uiSettingsDialog.find('#layout_settings');
 			layoutSettings.find('.layout-inspector').each(function() {
@@ -649,6 +650,7 @@ define([
 				newInspector.hide = $panel.hasClass('invisible-panel');
 				newInspector.vertical = $panel.hasClass('left-panel');
 				newInspectors.push(newInspector);
+                o.inspectorsOrder.push(newInspector['setupkey']);
 			});
 			self.options.inspectors = newInspectors;
 
@@ -702,7 +704,7 @@ define([
 		        o = self.options;
             var custom = {'mp3grid': {}};
 
-            custom['mp3grid']['inspectors']  = self._getInspectorsConfiguration(o.inspectors);
+            custom['mp3grid']               = self._getInspectorsConfiguration(o);
             custom['mp3grid']['grid']       = self._getGridConfiguration(o.grid);
             custom['from']                  = o.selectedView != 'custom' ? o.selectedView : o.fromView;
 
@@ -720,16 +722,16 @@ define([
             return grid;
         },
 
-        _getInspectorsConfiguration: function(inspectors) {
-            var newInspectors = {};
-            var orderedInspectors = this._getParameters(inspectors, this.variantInspectorsProperties);
+        _getInspectorsConfiguration: function(optionsFrom) {
+            var newOptions = {inspectors: {}, inspectorsOrder: optionsFrom.inspectorsOrder.join(',')};
+            var orderedInspectors = this._getParameters(optionsFrom.inspectors, this.variantInspectorsProperties);
             for (var i = 0; i < this.options.inspectors.length; i++) {
-                newInspectors[inspectors[i].setupkey] = orderedInspectors[i];
+                newOptions[optionsFrom.inspectors[i].setupkey] = orderedInspectors[i];
                 if (this.options.inspectors[i]['grid']) {
-                    newInspectors[inspectors[i].setupkey] = {'grid': this._getGridConfiguration(this.options.inspectors[i]['grid'])};
+                    newOptions[optionsFrom.inspectors[i].setupkey] = {'grid': this._getGridConfiguration(this.options.inspectors[i]['grid'])};
                 }
             }
-            return newInspectors;
+            return newOptions;
         },
 
         _getParameters: function(objects, selected) {
