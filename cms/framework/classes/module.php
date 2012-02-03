@@ -78,7 +78,7 @@ class Module {
 		return true;
 	}
 
-    static protected $properties = array('templates', 'launchers');
+    static protected $properties = array('templates', 'launchers', 'wysiwyg_enhancers');
 
     protected function _refresh_properties($add = true) {
         foreach (static::$properties as $property) {

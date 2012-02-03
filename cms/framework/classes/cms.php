@@ -101,7 +101,7 @@ class Cms {
     public static function parse_wysiwyg($content, $controller, $inline = null) {
 
         // Fetch the available functions
-        Config::load('front', true);
+        \Config::load(APPPATH.'data'.DS.'config'.DS.'wysiwyg_enhancers.php', 'wysiwyg_enhancers');
 
         \Fuel::$profiling && Profiler::mark('Recherche des fonctions dans la page');
 
@@ -113,7 +113,7 @@ class Cms {
 
             // Check if the function exists
             $name   = $fct_id;
-            $config = Config::get("front.$name", false);
+            $config = Config::get("wysiwyg_enhancers.$name", false);
             $found  = $config !== false;
 
             false && \Fuel::$profiling && Profiler::console(array(
