@@ -20,11 +20,8 @@ define([
                 var onCustom = false;
                 var jsonFile = "";
 
-                console.log(config);
-
                 if (config['selectedView'] == 'custom') {
                     if (config['custom']) {
-                        console.log('here');
                         jsonFile = config['views'][config['custom']['from']].json;
                         onCustom = true;
                     } else {
@@ -35,32 +32,30 @@ define([
                 if (config['selectedView'] != 'custom') {
                     jsonFile = config['views'][config['selectedView']].json;
                 }
-                console.log(config['selectedView']);
+
                 require([
                     jsonFile,
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.mp3grid.js',
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.thumbnails.js',
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.nosgrid.js',
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.inspector-preview.js'
-                ], function( mp3Grid, $ ) {
+                ], function( mp3GridFrom, $ ) {
+                    var mp3Grid = $.extend(true, {}, mp3GridFrom);
 
                     $.extend(mp3Grid.i18nMessages, config['i18n']);
                     mp3Grid.mp3grid.views = config['views'];
                     mp3Grid.mp3grid.name = config['configuration_id'];
                     mp3Grid.mp3grid.selectedView = config['selectedView'];
 
-                    console.log(mp3Grid);
-
                     if (onCustom) {
-                        $.extend(true, mp3Grid.mp3grid, config['custom'].mp3grid);
+
+                        mp3Grid.mp3grid = $.extend(true, mp3Grid.mp3grid, config['custom'].mp3grid);
                     }
 
-console.log(mp3Grid);
                     var timeout,
                         div = $('div#' + id),
                         container = div.parents('.nos-ostabs-panel, .ui-dialog'),
                         params = mp3Grid.build();
-                        //console.log(params);
 
                     if ($.isPlainObject(params.tab)) {
                         try {
@@ -209,6 +204,7 @@ console.log(mp3Grid);
 
                         i18n : function(label) {
                             var o = {};
+                            var self = this;
 
                             $.extend(o, {
                                 label : label,
@@ -224,13 +220,13 @@ console.log(mp3Grid);
                             // Clone object
                             var params = $.extend(true, {
                                 mp3grid : {
-                                    texts : self.i18nMessages,
+                                    texts : this.i18nMessages,
                                     splitters : {},
                                     slidersChange : function(e, rapport) {
                                         //$nos.saveUserConfiguration("'.$config['configuration_id'].'.ui.splitters", rapport)
                                     }
                                 }
-                            }, self);
+                            }, this);
 
                             if (params.mp3grid.splittersVertical) {
                                 params.mp3grid.splitters.vertical = {splitterDistance : params.mp3grid.splittersVertical};
