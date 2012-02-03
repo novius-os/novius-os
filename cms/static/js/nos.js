@@ -46,11 +46,17 @@ define([
                     mp3Grid.mp3grid.views = config['views'];
                     mp3Grid.mp3grid.name = config['configuration_id'];
                     mp3Grid.mp3grid.selectedView = config['selectedView'];
+                    if (onCustom) {
+                        mp3Grid.mp3grid.fromView = config['custom']['from'];
+                    }
+
+                    console.log(mp3Grid.mp3grid);
 
                     if (onCustom) {
-
                         mp3Grid.mp3grid = $.extend(true, mp3Grid.mp3grid, config['custom'].mp3grid);
                     }
+
+                    console.log(mp3Grid.mp3grid);
 
                     var timeout,
                         div = $('div#' + id),

@@ -49,6 +49,7 @@ define([
             },
             views: {},
             selectedView: null,
+            fromView: null,
             name: null,
             grid: {}
 		},
@@ -703,7 +704,7 @@ define([
 
             custom['mp3grid']['inspectors']  = self._getInspectorsConfiguration(o.inspectors);
             custom['mp3grid']['grid']       = self._getGridConfiguration(o.grid);
-            custom['from']                  = o.selectedView;
+            custom['from']                  = o.selectedView != 'custom' ? o.selectedView : o.fromView;
 
             $.nos.saveUserConfiguration(o.name, {selectedView: 'custom', custom: custom});
         },
