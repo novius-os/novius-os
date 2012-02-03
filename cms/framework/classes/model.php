@@ -284,7 +284,7 @@ class Model_Wysiwyg_Provider
 
 	public function & __get($value)
 	{
-		return $this->parent->{'wysiwyg->'.$value}->wysiwyg_text;
+		return $this->parent->{'wysiwyg->'.$value}->get('wysiwyg_text');
 	}
 
 	public function __set($property, $value)
