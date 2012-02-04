@@ -491,7 +491,7 @@ if ($step == 3) {
 				throw new Exception('The two password don\'t match.');
 			}
 			$user = new Cms\Model_User(array(
-				'user_fullname' => \Input::post('fullanme', 'Administrator'),
+				'user_fullname' => \Input::post('fullname', 'Administrator'),
 				'user_email'    => \Input::post('login', ''),
 				'user_password' => \Input::post('password', ''),
 			), true);
