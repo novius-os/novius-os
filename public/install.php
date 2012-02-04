@@ -477,7 +477,7 @@ if ($step == 2) {
 
 
 if ($step == 3) {
-	if (Cms\Model_User::count() > 0) {
+	if (Cms\Model_User_User::count() > 0) {
 		header('Location: install.php?step=4');
 		exit();
 	}
@@ -490,7 +490,7 @@ if ($step == 3) {
 			if (\Input::post('password', '') != \Input::post('password_confirmation', '')) {
 				throw new Exception('The two password don\'t match.');
 			}
-			$user = new Cms\Model_User(array(
+			$user = new Cms\Model_User_User(array(
 				'user_fullname' => \Input::post('fullname', 'Administrator'),
 				'user_email'    => \Input::post('login', ''),
 				'user_password' => \Input::post('password', ''),
