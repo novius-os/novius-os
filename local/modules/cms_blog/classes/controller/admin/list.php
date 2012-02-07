@@ -8,7 +8,7 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Blog;
+namespace Cms_Blog;
 
 use Fuel\Core\Config;
 

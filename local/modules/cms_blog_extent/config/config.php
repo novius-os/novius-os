@@ -9,8 +9,9 @@
  */
 
 return array(
-    'namespace' => 'Cms\Blog',
-    'classes' => array('Model_Blog', 'Model_Category', 'Model_Tag', 'Controller_Admin_List'),
+    'extends'   => 'cms_blog',
+    'classes'   => array('Model_Blog', 'Controller_Admin_List'),
+
 
     // Global
     'config' => array(

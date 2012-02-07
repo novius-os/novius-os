@@ -8,7 +8,7 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Blog;
+namespace Cms_Blog;
 
 class Model_Category extends \Orm\Model {
     protected static $_table_name = 'os_blog_category';

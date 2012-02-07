@@ -9,25 +9,25 @@
  */
 
 return array(
-    'name'    => 'Blog',
+    'name'    => 'Blog extent',
     'version' => '0.9-alpha',
-	'href' => 'admin/cms_blog/list',
+	'href' => 'admin/cms_blog_extent/list',
 	'icon64'  => 'static/modules/cms_blog/img/64/blog.png',
     'provider' => array(
         'name' => 'Novius OS',
     ),
     'launchers' => array(
-        'blog' => array(
-            'name'    => 'Blog',
-            'url' => 'admin/cms_blog/list',
+        'blog_extent' => array(
+            'name'    => 'Blog extent',
+            'url' => 'admin/cms_blog_extent/list',
             'iconUrl' => 'static/modules/cms_blog/img/32/blog.png',
             'icon64'  => 'static/modules/cms_blog/img/64/blog.png',
         ),
     ),
     'wysiwyg_enhancers' => array(
-        'cms_blog' => array(
+        'cms_blog_extent' => array(
             'title' => 'Blog',
-            'id'    => 'cms_blog',
+            'id'    => 'cms_blog_extent',
             'rewrite_prefix' => 'blog',
             'desc'  => '',
             'target' => 'cms_blog/front',

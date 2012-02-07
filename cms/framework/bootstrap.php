@@ -10,7 +10,8 @@
 
 // Load in the Autoloader
 require COREPATH.'classes'.DIRECTORY_SEPARATOR.'autoloader.php';
-class_alias('Fuel\\Core\\Autoloader', 'Autoloader');
+require CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'autoloader.php';
+//class_alias('Fuel\\Core\\Autoloader', 'Autoloader');
 
 // Bootstrap the framework DO NOT edit this
 require_once COREPATH.'bootstrap.php';

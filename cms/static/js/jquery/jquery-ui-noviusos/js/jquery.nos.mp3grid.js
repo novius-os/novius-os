@@ -682,7 +682,7 @@ define([
 
             var custom = self._saveUserConfiguration();
 
-            self.element.trigger('reload', {custom: custom});
+            self.element.trigger('reload', {selectedView: 'custom', custom: custom});
             /*
             			self._uiInspectors()
                 ._uiList();

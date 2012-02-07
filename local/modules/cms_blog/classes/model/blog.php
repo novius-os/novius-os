@@ -8,7 +8,7 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms\Blog;
+namespace Cms_Blog;
 use \Cms\Model;
 
 class Model_Blog extends Model {
@@ -86,5 +86,8 @@ class Model_Blog extends Model {
         }
     }
 
-
+    public function toto() {
+        return 'first toto';
+    }
 }
+
