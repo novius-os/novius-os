@@ -30,7 +30,18 @@ class Controller extends Fuel\Core\Controller {
     protected function getConfiguration() {
         list($module_name, $file_name) = $this->getLocation();
         \Config::load($module_name.'::'.$file_name, true);
-        return \Config::get($module_name.'::'.$file_name);
+        $config = \Config::get($module_name.'::'.$file_name);
+        // Load dependent moduless
+
+        Config::load('modules_dependencies', true);
+        $dependencies = Config::get('modules_dependencies', array());
+        if (!empty($dependencies[$module_name])) {
+            foreach ($dependencies[$module_name] as $dependency) {
+                \Config::load($dependency.'::'.$file_name, true);
+                $config = \Arr::merge($config, \Config::get($dependency.'::'.$file_name));
+            }
+        }
+        return $config;
     }
 
     protected function getLocation() {

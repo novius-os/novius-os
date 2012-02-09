@@ -10,9 +10,6 @@
 
 namespace Cms\Blog;
 
-use Fuel\Core\Arr;
-use Fuel\Core\Config;
-
 class Controller_Admin_Inspector_Author extends \Cms\Controller_Inspector_Model {
 
 }

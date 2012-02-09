@@ -10,9 +10,6 @@
 
 namespace Cms\Blog;
 
-use Fuel\Core\Arr;
-use Fuel\Core\Config;
-
 class Controller_Admin_Inspector_Category extends \Cms\Controller_Inspector_Modeltree {
 
 	public function action_delete($id) {
