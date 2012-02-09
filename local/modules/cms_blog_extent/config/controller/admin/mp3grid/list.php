@@ -13,13 +13,6 @@ I18n::load('cms_blog::blog');
 
 return array(
 	'views' => array(
-		'default' => array(
-			'name' => __('Default'),
-			'json' => 'static/modules/cms_blog/js/admin/blog.js',
-		),
-		'delete_first' => array(
-			'name' => 'Delete first Youhou',
-			'json' => 'static/modules/cms_blog/js/admin/blog_1.js',
-		)
+		'delete_first' => null,
 	),
 );
