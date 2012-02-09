@@ -8,7 +8,7 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms_Blog;
+namespace Cms\Blog;
 
 class Model_Tag extends \Orm\Model {
     protected static $_table_name = 'os_tag';

@@ -35,6 +35,22 @@ class Controller_Mp3table_List extends Controller {
         'inputs' => array(),
 	);
 
+    public function before() {
+        parent::before();
+        $mp3gridConfig = '';
+        if (!isset($this->config['mp3grid'])) {
+            list($module_name, $file_name) = $this->getLocation();
+            $file_name = explode('/', $file_name);
+            array_splice($file_name, count($file_name) - 1, 0, array('mp3grid'));
+            $file_name = implode('/', $file_name);
+            $mp3gridConfig = $module_name.'::'.$file_name;
+        } else {
+            $mp3gridConfig = $this->config['mp3grid'];
+        }
+        \Config::load($mp3gridConfig, true);
+		$this->mp3grid = \Config::getFromUser($mp3gridConfig, array());
+    }
+
 	public function action_index()
 	{
 		if (!\Cms\Auth::check()) {

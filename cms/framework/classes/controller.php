@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -12,7 +12,7 @@ namespace Cms;
 
 use Event;
 
-class Controller extends \Fuel\Core\Controller {
+class Controller extends \Controller {
 
     public $url;
     public $rewrite_url;
@@ -27,7 +27,7 @@ class Controller extends \Fuel\Core\Controller {
     public $nesting_level;
 
     public $default_config = array();
-    public $config         = array();
+
 
     public function before() {
         $parent_request = $this->request->parent();
@@ -38,6 +38,8 @@ class Controller extends \Fuel\Core\Controller {
         if ($this->nesting_level > 3) {
             \Fuel::$profiling && \Console::logError(new Exception(), '3 levels of nesting reached. You need to stop now.');
         }
+
+        return parent::before();
     }
 
     public function set_rewrite_prefix($prefix = null) {
@@ -102,4 +104,6 @@ class Controller extends \Fuel\Core\Controller {
         $url = array_shift($args);
         return \Cms::rewrite_url($url, $args);
     }
+
+
 }

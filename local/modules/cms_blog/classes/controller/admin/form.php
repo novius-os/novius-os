@@ -19,8 +19,7 @@ class Controller_Admin_Form extends \Controller {
         } else {
             $object = Model_Blog::find('first', array('where' => array('blog_id' => $id)));
         }
-
-        return \View::forge('cms_blog::form/edit', array(
+        return \View::forge($this->config['views']['edit'], array(
             'object'   => $object,
             'fieldset' => static::fieldset($object)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
         ), false);

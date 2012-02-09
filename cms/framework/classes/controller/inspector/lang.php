@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -37,7 +37,7 @@ class Controller_Inspector_Lang extends \Controller {
 	public function action_list()
 	{
 		$view = View::forge('inspector/lang');
-		
+
 		$content = array();
 		foreach ($this->config['languages'] as $lang => $title) {
 			$content[] = array(
@@ -45,7 +45,7 @@ class Controller_Inspector_Lang extends \Controller {
 				'title' => $title,
 			);
 		}
-		
+
 		$view->set('content', \Format::forge($content)->to_json($content), false);
 		return $view;
 	}

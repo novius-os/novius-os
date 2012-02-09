@@ -8,7 +8,7 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms_Blog;
+namespace Cms\Blog;
 use \Cms\Model;
 
 class Model_Blog extends Model {

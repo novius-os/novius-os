@@ -44,7 +44,7 @@ class Controller_Front extends Controller {
 
     public function action_main($args = array()) {
 
-        $this->default_config = \Arr::merge(\Config::get('cms_blog::config'), array(
+        $this->default_config = \Arr::merge($this->config, \Config::get('cms_blog::config'), array(
 			'config' => (array) $args,
 		));
 
@@ -205,6 +205,8 @@ class Controller_Front extends Controller {
         // Allow events for each or all context
         $this->trigger('display_list');
         $this->trigger("display_{$context}");
+
+        \Debug::dump($this->default_config['display_list']);
 
         $this->config = \Arr::merge($this->config, $this->default_config['display_list'], $this->default_config["display_{$context}"]);
 

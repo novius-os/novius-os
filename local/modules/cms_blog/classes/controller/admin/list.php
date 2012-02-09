@@ -8,7 +8,7 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms_Blog;
+namespace Cms\Blog;
 
 use Fuel\Core\Config;
 
@@ -18,21 +18,20 @@ use Asset, Format, Input, Session, View, Uri;
 
 class Controller_Admin_List extends Controller_Mp3table_List {
 
-	public function before($response = null) {
-		Config::load('cms_blog::admin/blog', true);
-		$this->mp3grid = \Config::getFromUser('cms_blog::admin/blog', array());
+    public function before() {
 
-        parent::before($response);
-	}
 
-	public function after($response) {
-		\Asset::add_path('static/modules/cms_blog/');
-		\Asset::css('admin.css', array(), 'css');
-		return parent::after($response);
-	}
+/*
+        Config::load('cms_blog::mp3grid', true);
+		$this->mp3grid = \Config::getFromUser('cms_blog::mp3grid', array());
+ */
+        parent::before();
+    }
 
 
     public function action_delete($id) {
+
+
         $success = false;
 
         $billet = Model_Blog::find_by_blog_id($id);

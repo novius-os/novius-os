@@ -35,11 +35,13 @@ class Fuel extends Fuel\Core\Fuel {
 		\Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
 		$app_installed = \Config::get('app_installed', array());
 
-		return isset($app_installed[$name]) && parent::module_exists($name);
+		if (isset($app_installed[$name])) {
+            return parent::module_exists($name);
+        }
+        return false;
 	}
 
-
-	public static function add_module($name, $already_extended = array()) {
+    public static function add_module($name) {
 		if ($name == 'cms' || $name == 'app') {
 			return;
 		}
@@ -66,42 +68,12 @@ class Fuel extends Fuel\Core\Fuel {
 			Config::load("$name::config", true);
 			$config = Config::get("$name::config", array());
 
-            // If the module is extending an other one, we load the extended module and get its configuration
-            if (isset($config['extends'])) {
-                // When we add the extended module, we send the extended classes
-                // so that he only combine the unextended class to the namespace
-                static::add_module($config['extends'], $config['classes']);
-
-                Config::load($config['extends']."::config", true);
-                $config_extension = Config::get($config['extends']."::config", array());
-            }
-
-
-            // We try to resolve the namespace. We get :
-            // - the defined namespace in configuration file
-            // - or the defined namespace in the extended module configuration file
-            $to_namespace = null;
-            if (!empty($config['namespace'])) {
-                $to_namespace = $config['namespace'];
-            } else if (!empty($config['extends'])) {
-                $to_namespace = $config_extension['namespace'];
-            }
-
-			if ($to_namespace != null) {
-                /*
+			if (!empty($config['namespace'])) {
 				Autoloader::add_namespaces(array(
 					$config['namespace'] => $path.'classes'.DS,
 				), true);
-                 */
-                // Instead of combining the entire module folder to the namespace, we alias each declared class
-                // except those that have already been extended
-                foreach($config['classes'] as $class) {
-                    if (!in_array($class, $already_extended)) {
-                        Autoloader::alias_to_namespace($namespace.'\\'.$class, $to_namespace);
-                    }
-                }
 				// Allow autoloading from bootstrap to alias classes from this namespace
-				self::$namespace_aliases[$namespace] = $to_namespace;
+				self::$namespace_aliases[$namespace] = $config['namespace'];
 			}
 			Config::load("modules/$name", "$name::config");
 
