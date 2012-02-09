@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `os_page` (
   `page_id` int(11) NOT NULL auto_increment,
   `page_root_id` char(2) NOT NULL default '',
   `page_parent_id` int(11) default NULL,
-  `page_template` varchar(255) NOT NULL,
+  `page_template` varchar(255) NULL,
   `page_level` tinyint(4) NOT NULL default '0',
   `page_title` varchar(255) NOT NULL default '',
   `page_menu_title` varchar(255) default NULL,
