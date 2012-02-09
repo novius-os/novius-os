@@ -108,6 +108,7 @@ define([
                 ]
             },
             defaultView : 'thumbnails',
+            inspectorsOrder : 'preview,folders,extensions',
             inspectors : {
                 folders : {
                     vertical : true,

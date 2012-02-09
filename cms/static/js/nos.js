@@ -40,15 +40,18 @@ define([
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.nosgrid.js',
                     'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.inspector-preview.js'
                 ], function( mp3GridFrom, $ ) {
-                    var mp3Grid = $.extend(true, {}, mp3GridFrom);
+                    var mp3Grid = $.extend(true, {}, mp3GridFrom); // Deep copy of mp3Grid
+                    // because when we add custom properties we don't want these properties to override the default configuration...
 
                     $.extend(mp3Grid.i18nMessages, config['i18n']);
                     mp3Grid.mp3grid.views = config['views'];
                     mp3Grid.mp3grid.name = config['configuration_id'];
                     mp3Grid.mp3grid.selectedView = config['selectedView'];
+                    if (onCustom) {
+                        mp3Grid.mp3grid.fromView = config['custom']['from'];
+                    }
 
                     if (onCustom) {
-
                         mp3Grid.mp3grid = $.extend(true, mp3Grid.mp3grid, config['custom'].mp3grid);
                     }
 
@@ -115,6 +118,20 @@ define([
                         return val;
                     },
 
+                    keyToOrderedArray = function(object, key) {
+                        if (object[key + 'Order']) {
+                            var keys = object[key + 'Order'].split(',');
+                            var ordered = [];
+                            for (var i = 0; i < keys.length; i++) {
+                                object[key][keys[i]]['setupkey'] = keys[i];
+                                ordered.push(object[key][keys[i]]);
+                            }
+                            return ordered;
+                        } else {
+                            return $.map(object[key], objectToArray);
+                        }
+                    },
+
                     recursive = function(object) {
                         $.each(object, function(key, val) {
                             if ($.isPlainObject(val)) {
@@ -130,7 +147,7 @@ define([
 
                             // Build actions columns if any, and translate columns properties
                             if (key === 'columns') {
-                                object[key] = $.map(val, objectToArray);
+                                object[key] = keyToOrderedArray(object, key);
 
                                 for (var i = 0; i < object[key].length; i++) {
                                     if (object[key][i].lang) {
@@ -235,7 +252,9 @@ define([
                                 params.mp3grid.splitters.horizontal = {splitterDistance : params.mp3grid.splittersHorizontal};
                             }
                             params.mp3grid.adds = $.map(params.mp3grid.adds, objectToArray);
-                            params.mp3grid.inspectors = $.map(params.mp3grid.inspectors, objectToArray);
+
+
+                            params.mp3grid.inspectors = keyToOrderedArray(params.mp3grid, 'inspectors');
 
                             // Translate clone object
                             recursive(params);
@@ -503,6 +522,9 @@ define([
 					} else {
 						$dialog.wijdialog(wijdialog_options);
 					}
+                    if ($.isFunction(wijdialog_options['onLoad'])) {
+                        wijdialog_options['onLoad']();
+                    }
 					$dialog.bind('wijdialogclose', function(event, ui) {
 						//log('Fermeture et destroyage');
 						$dialog.closest('.ui-dialog').hide().appendTo(where);
