@@ -10,7 +10,6 @@
 
 return array(
     'namespace' => 'Cms\Blog',
-    'classes' => array('Model_Blog', 'Model_Category', 'Model_Tag', 'Controller_Admin_List'),
 
     // Global
     'config' => array(

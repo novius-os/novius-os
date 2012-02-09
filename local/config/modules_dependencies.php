@@ -8,6 +8,4 @@
  * @link http://www.novius-os.org
  */
 
-return array(
-    'cms_blog' => array('cms_blog_extent'),
-);
+return array();

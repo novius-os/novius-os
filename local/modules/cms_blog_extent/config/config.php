@@ -9,10 +9,6 @@
  */
 
 return array(
-    'extends'   => 'cms_blog',
-    'classes'   => array('Model_Blog', 'Controller_Admin_List'),
-
-
     // Global
     'config' => array(
         'date_format'   => '%A %e %B %Y %H:%M',

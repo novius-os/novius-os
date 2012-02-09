@@ -11,7 +11,7 @@
 return array(
     'name'    => 'Blog extent',
     'version' => '0.9-alpha',
-	'href' => 'admin/cms_blog_extent/list',
+    'extends'   => 'cms_blog',
 	'icon64'  => 'static/modules/cms_blog/img/64/blog.png',
     'provider' => array(
         'name' => 'Novius OS',
