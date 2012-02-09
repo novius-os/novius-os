@@ -83,7 +83,7 @@ class Fuel extends Fuel\Core\Fuel {
 			}
 
 			// Load dependent moduless
-			Config::load('modules_dependencies', true);
+			Config::load(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', true);
 			$dependencies = Config::get('modules_dependencies', array());
 			if (!empty($dependencies[$name])) {
 				foreach ($dependencies[$name] as $module) {

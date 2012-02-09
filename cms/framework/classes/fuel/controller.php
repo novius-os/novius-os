@@ -29,19 +29,7 @@ class Controller extends Fuel\Core\Controller {
 
     protected function getConfiguration() {
         list($module_name, $file_name) = $this->getLocation();
-        \Config::load($module_name.'::'.$file_name, true);
-        $config = \Config::get($module_name.'::'.$file_name);
-        // Load dependent moduless
-
-        Config::load('modules_dependencies', true);
-        $dependencies = Config::get('modules_dependencies', array());
-        if (!empty($dependencies[$module_name])) {
-            foreach ($dependencies[$module_name] as $dependency) {
-                \Config::load($dependency.'::'.$file_name, true);
-                $config = \Arr::merge($config, \Config::get($dependency.'::'.$file_name));
-            }
-        }
-        return $config;
+        return static::loadConfiguration($module_name, $file_name);
     }
 
     protected function getLocation() {
@@ -52,6 +40,20 @@ class Controller extends Fuel\Core\Controller {
         array_splice($class_name, count($class_name) - 1, 1);
         $module_name = strtolower(implode('_', $class_name));
         return array($module_name, $file_name);
+    }
+
+    protected static function loadConfiguration($module_name, $file_name) {
+        \Config::load($module_name.'::'.$file_name, true);
+        $config = \Config::get($module_name.'::'.$file_name);
+        Config::load(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', true);
+        $dependencies = Config::get(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', array());
+        if (!empty($dependencies[$module_name])) {
+            foreach ($dependencies[$module_name] as $dependency) {
+                \Config::load($dependency.'::'.$file_name, true);
+                $config = \Arr::merge($config, \Config::get($dependency.'::'.$file_name));
+            }
+        }
+        return $config;
     }
 }
 ?>
