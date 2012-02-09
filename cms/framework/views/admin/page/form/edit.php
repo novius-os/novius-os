@@ -13,7 +13,7 @@
 require(['jquery-nos'], function ($) {
 	$(function () {
 		$.nos.tabs.update($('#<?= $uniqid = uniqid('id_') ?>'), {
-			label : '<?= $page->page_title ?>',
+			label : <?= json_encode($page->page_title) ?>,
 			iconUrl : 'static/cms/img/16/page.png'
 		});
 	});

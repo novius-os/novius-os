@@ -99,5 +99,5 @@ if (is_file(APPPATH.'bootstrap.php')) {
 	require_once APPPATH.'bootstrap.php';
 }
 
-define('CACHE_DURATION_PAGE',     30);
-define('CACHE_DURATION_FUNCTION', 30);
+define('CACHE_DURATION_PAGE',     5);
+define('CACHE_DURATION_FUNCTION', 10);

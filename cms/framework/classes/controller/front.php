@@ -53,18 +53,13 @@ class Controller_Front extends Controller {
         $cache_path = (empty($this->url) ? 'index/' : $this->url).$cache_path;
         $cache_path = rtrim($cache_path, '/');
 
-		if ($nocache = true) {
-			$this->_generate_cache();
-			ob_start();
-            echo $this->_view->render();
-			$content = ob_get_clean();
-            return $this->_handle_head($content);
-		}
+		$nocache = false;
+
+		\Event::trigger('front.start');
 
         $publi_cache = PubliCache::forge('pages'.DS.$cache_path);
         try {
             $content = $publi_cache->execute($this);
-            return $this->_handle_head($content);
         } catch (CacheNotFoundException $e) {
             $publi_cache->start();
             try {
@@ -73,17 +68,22 @@ class Controller_Front extends Controller {
                 // Cannot generate cache: fatal error...
                 exit($e->getMessage());
             }
-			ob_start();
+			//ob_start();
             echo $this->_view->render();
-			$content = ob_get_clean();
-            $publi_cache->save(CACHE_DURATION_PAGE, $this);
-            \Fuel\Core\Event::trigger('page_save_cache', $publi_cache->get_path());
+			//$content = ob_get_clean();
+            $publi_cache->save(-1, $this);
+            //\Event::trigger('page_save_cache', $publi_cache->get_path());
             $content = $publi_cache->execute();
-            return $this->_handle_head($content);
         }
+		$this->_handle_head($content);
+
+		foreach(\Event::trigger('front.display', null, 'array') as $c) {
+			is_callable($c) && call_user_func_array($c, array(&$content));
+		}
+		return $content;
     }
 
-    protected function _handle_head($content) {
+    protected function _handle_head(&$content) {
         $head = array();
 
         if (!empty($this->page_title)) {
@@ -116,7 +116,7 @@ class Controller_Front extends Controller {
             $head[] = $metas;
         }
 
-        return str_ireplace('</head>', implode("\n", $head).'</head>', $content);
+        $content = str_ireplace('</head>', implode("\n", $head).'</head>', $content);
     }
 
     /**
@@ -183,7 +183,7 @@ class Controller_Front extends Controller {
 
         // Scan all wysiwyg
         foreach ($this->template['layout'] as $wysiwyg_name => $layout) {
-            $content = \Cms::parse_wysiwyg($this->page->{'wysiwyg->'.$wysiwyg_name.'->wysiwyg_text'}, $this);
+            $content = \Cms::parse_wysiwyg($this->page->wysiwyg->{$wysiwyg_name}, $this);
 
             $this->page_title = $this->page->page_title;
 

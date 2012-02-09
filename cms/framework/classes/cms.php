@@ -100,6 +100,23 @@ class Cms {
      */
     public static function parse_wysiwyg($content, $controller, $inline = null) {
 
+		Cms::_parse_enhancers($content);
+		Cms::_parse_medias($content);
+		Cms::_parse_internals($content);
+
+		$content = strtr($content, array(
+			'nos://anchor/' => \Cms::main_controller()->url,
+		));
+
+		foreach(Event::trigger('front.parse_wysiwyg', null, 'array') as $c) {
+			is_callable($c) && call_user_func_array($c, array(&$content));
+		}
+
+		return $content;
+    }
+
+	protected static function _parse_enhancers(&$content) {
+
         // Fetch the available functions
         \Config::load(APPPATH.'data'.DS.'config'.DS.'wysiwyg_enhancers.php', 'wysiwyg_enhancers');
 
@@ -135,8 +152,46 @@ class Cms {
 
 			$content = str_replace($matches[0][$match_id], $function_content, $content);
 		}
-        return strtr($content, array(
-            'http://virtuel_url_data' => Uri::base(false).'data/',
-        ));
-    }
+	}
+
+	protected static function _parse_medias(&$content) {
+
+		// Replace media URL
+		preg_match_all('`nos://media/(\d+)(?:/(\d+)/(\d+))?`', $content, $matches);
+		if (!empty($matches[0])) {
+			$media_ids = array();
+			foreach ($matches[1] as $match_id => $media_id)
+			{
+				$media_ids[] = $media_id;
+			}
+			$medias = Cms\Model_Media_Media::find('all', array('where' => array(array('media_id', 'IN', $media_ids))));
+			foreach ($matches[1] as $match_id => $media_id)
+			{
+				if (!empty($matches[3][$match_id])) {
+					$media_url = $medias[$media_id]->get_public_path_resized($matches[2][$match_id], $matches[3][$match_id]);
+				} else {
+					$media_url = $medias[$media_id]->get_public_path();
+				}
+				$content = str_replace($matches[0][$match_id], $media_url, $content);
+			}
+		}
+	}
+
+	protected static function _parse_internals(&$content) {
+
+		// Replace internal links
+		preg_match_all('`nos://page/(\d+)`', $content, $matches);
+		if (!empty($matches[0])) {
+			$page_ids = array();
+			foreach ($matches[1] as $match_id => $page_id)
+			{
+				$page_ids[] = $page_id;
+			}
+			$pages = Cms\Model_Page_Page::find('all', array('where' => array(array('page_id', 'IN', $page_ids))));
+			foreach ($matches[1] as $match_id => $page_id)
+			{
+				$content = str_replace($matches[0][$match_id], $pages[$page_id]->get_href(), $content);
+			}
+		}
+	}
 }

@@ -30,23 +30,27 @@ class Module {
 
 	public function install() {
 		return $this->_refresh_properties() && ($this->check_install() ||
-			($this->symlink('static') && $this->symlink('htdocs') && $this->symlink('data') && $this->symlink('cache')));
+			($this->symlink('static')
+				&& $this->symlink('htdocs')
+				//&& $this->symlink('data')
+				//&& $this->symlink('cache')
+			));
 	}
 
 	public function uninstall() {
 		return $this->_refresh_properties(false)
         && $this->unsymlink('static')
-		&& $this->unsymlink('htdocs')
-		&& $this->unsymlink('data')
-		&& $this->unsymlink('cache');
+		&& $this->unsymlink('htdocs');
+		//&& $this->unsymlink('data')
+		//&& $this->unsymlink('cache');
 	}
 
 	public function check_install() {
 		return is_dir(APPPATH.'modules'.DS.$this->name)
 		&& $this->is_link('static')
-		&& $this->is_link('htdocs')
-		&& $this->is_link('data')
-		&& $this->is_link('cache');
+		&& $this->is_link('htdocs');
+		//&& $this->is_link('data')
+		//&& $this->is_link('cache');
 	}
 
 	protected function symlink($folder) {
@@ -107,6 +111,10 @@ class Module {
 
         // We add the module templates we want to add
         $new_properties = array();
+		if ($property == 'templates') {
+			\Config::load('templates', 'local_templates');
+			$new_properties = \Config::get('local_templates', array());
+		}
 
         if ($add) {
             \Config::load($add.'::metadata', true);
@@ -140,8 +148,8 @@ class Module {
         if ($property === 'templates') {
             $deleted_properties = array();
             foreach ($existing_properties as $key => $val) {
-                if ($new_properties[$key]) {
-                    if (!($remove && $remove === $val['module'])) {
+                if (!empty($new_properties[$key])) {
+                    if (!($remove && isset($val['module']) && $remove === $val['module'])) {
                         $new_properties[$key] = $existing_properties[$key];
                     }
                 } else {
@@ -151,12 +159,17 @@ class Module {
 
             // we check that deleted templates are not used on the page
             if ($deleted_properties) {
-                $nb = Model_Page_Page::count(array('where' => array(array('page_gab', 'IN', $deleted_properties))));
+                $nb = Model_Page_Page::count(array('where' => array(array('page_template', 'IN', $deleted_properties))));
                 if ($nb > 0) {
                     throw new \Exception('Some page include those partials and can therefore not be deleted !');
                 }
             }
         }
+
+		// Local templates get replaced, everytime and have priority over modules
+		if ($property == 'templates') {
+			$new_properties = \Arr::merge($new_properties, \Config::get('local_templates'));
+		}
 
         // if none of the page use the template, we save the new configuration
         \Config::set($property, $new_properties);

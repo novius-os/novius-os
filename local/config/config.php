@@ -21,4 +21,6 @@ return array(
 	'upload' => array(
 		'disabled_extensions' => array('php'),
 	),
+
+	'allow_plugin_upload' => false,
 );

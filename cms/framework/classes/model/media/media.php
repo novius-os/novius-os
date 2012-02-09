@@ -92,10 +92,10 @@ class Model_Media_Media extends \Orm\Model {
 	public function refresh_path() {
 		$folder = Model_Media_Folder::find($this->media_path_id);
 		$this->media_path = $folder->medif_path;
-		$this->media_ext = pathinfo($this->media_file, PATHINFO_EXTENSION);
 	}
 
 	public function _event_before_save() {
+		$this->media_ext = pathinfo($this->media_file, PATHINFO_EXTENSION);
 		$is_image = @getimagesize(APPPATH.$this->get_public_path());
 		if ($is_image !== false) {
 			list($this->media_width, $this->media_height) = $is_image;
