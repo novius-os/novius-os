@@ -23,7 +23,7 @@ class Controller_Admin_User_Form extends \Controller {
 
         return \View::forge('admin/user/form/edit', array(
 			'user' => Model_User_User::find($id),
-			'fieldset_edit'     => static::fieldset_edit($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
+			'fieldset_edit'     => static::fieldset_edit($id, $this->config['fields'])->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 			'fieldset_password' => static::fieldset_password($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 		), false);
     }
@@ -63,11 +63,11 @@ class Controller_Admin_User_Form extends \Controller {
 		return $form;
 	}
 
-	public static function fieldset_edit($id) {
+	public static function fieldset_edit($id, $fields) {
         $user = Model_User_User::find($id);
 
-        \Config::load('cms::admin/user/form', true);
-		$fields = \Config::get('cms::admin/user/form.fields', array());
+        //\Config::load('cms::admin/user/form', true);
+		//$fields = $this->config['fields']; //\Config::get('cms::admin/user/form.fields', array());
 
 		$fieldset_edit = \Fieldset::build_from_config($fields, $user, array(
 			'form_name' => 'edit_user_infos',
