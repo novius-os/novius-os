@@ -43,12 +43,10 @@ class Controller_Mp3table_List extends Controller {
             $file_name = explode('/', $file_name);
             array_splice($file_name, count($file_name) - 1, 0, array('mp3grid'));
             $file_name = implode('/', $file_name);
-            $mp3gridConfig = $module_name.'::'.$file_name;
         } else {
-            $mp3gridConfig = $this->config['mp3grid'];
+            list($module_name, $file_name) = explode('::', $this->config['mp3grid']);
         }
-        \Config::load($mp3gridConfig, true);
-		$this->mp3grid = \Config::getFromUser($mp3gridConfig, array());
+		$this->mp3grid = static::loadConfiguration($module_name, $file_name);
     }
 
 	public function action_index()
