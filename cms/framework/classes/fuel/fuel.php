@@ -42,9 +42,11 @@ class Fuel extends Fuel\Core\Fuel {
 	}
 
     public static function add_module($name) {
+
 		if ($name == 'cms' || $name == 'app') {
 			return;
 		}
+
 
 		static $added_modules = array();
 
@@ -57,6 +59,7 @@ class Fuel extends Fuel\Core\Fuel {
 			$added_modules[$name] = true;
 
 			$namespace = Inflector::words_to_upper($name);
+
 			Autoloader::add_namespaces(array(
 				$namespace                  => $path.'classes'.DS,
 				//strtolower($namespace)      => $path.'classes'.DS,
@@ -81,6 +84,7 @@ class Fuel extends Fuel\Core\Fuel {
 			if (is_file($path.'bootstrap.php')) {
 				static::load($path.'bootstrap.php');
 			}
+
 
 			// Load dependent moduless
 			Config::load(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', true);

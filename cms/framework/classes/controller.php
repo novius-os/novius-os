@@ -38,7 +38,6 @@ class Controller extends Controller_Extendable {
         if ($this->nesting_level > 3) {
             \Fuel::$profiling && \Console::logError(new Exception(), '3 levels of nesting reached. You need to stop now.');
         }
-
         return parent::before();
     }
 
@@ -48,13 +47,13 @@ class Controller extends Controller_Extendable {
             $c =\Cms::main_controller();
             if (!empty($c->rewrite_prefix)) {
                 $prefix    = $c->rewrite_prefix;
-                $rewriting = $c->rewriting[$c->rewrite_prefix];
+                $rewriting = \Arr::get($c->rewriting, $c->rewrite_prefix, array());
             }
         } else if ($prefix == -1) {
             $rewriting = $this->rewriting[-1];
         }
 
-        if (!empty($prefix)) {
+        if (!empty($rewriting)) {
             $this->rewrite_prefix = $prefix;
             $this->url            = $rewriting['url'];
             $this->rewrite_url    = $rewriting['rewrite_url'];

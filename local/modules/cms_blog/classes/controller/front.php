@@ -92,14 +92,15 @@ class Controller_Front extends Controller {
 
     public function display_list_main($params) {
 
-        //$this->merge_config('config');
 
+        //$this->merge_config('config');
         $list = $this->_display_list('list_main');
 
         \Cms::main_controller()->page_title = 'Novius Labs';
 
         $self   = $this;
         $class = get_class($this);
+
 
         // Add surrounding stuff
         return View::forge($this->config['list_view'], array(
@@ -206,16 +207,14 @@ class Controller_Front extends Controller {
         $this->trigger('display_list');
         $this->trigger("display_{$context}");
 
-        \Debug::dump($this->default_config['display_list']);
+
 
         $this->config = \Arr::merge($this->config, $this->default_config['display_list'], $this->default_config["display_{$context}"]);
 
-		\Fuel::add_module('cms_media');
+
         // Get the list of posts
         $query = Model_Blog::query()
-                ->related('author')
-                ->related('media_thumbnail')
-                ->related('media_thumbnail.path');
+                ->related('author');
 
 		$query->where(array('blog_lang', 'fr'));
 
@@ -230,6 +229,8 @@ class Controller_Front extends Controller {
             $query->related('tags');
             $query->where(array('tags.tag_label', $this->tag));
         }
+
+
 
         $this->pagination->set_config(array(
             'total_items'    => $query->count(),
@@ -417,10 +418,11 @@ class Controller_Front extends Controller {
 
         return \Cms\PubliCache::get('cms_blog/menu', array(
             'callback_func' => array($this, 'action_menu_execute'),
+            'callback_args' => array($dossier_menu)
         ));
     }
 
-    public function action_menu_execute() {
+    public function action_menu_execute($dossier_menu = false) {
         static::$blog_url = \Cms\Model_Page_Page::get_url(2);
         self::MenuBlog($dossier_menu);
     }
