@@ -19,7 +19,7 @@ use Asset, Format, Input, Session, View, Uri;
 class Controller_Admin_List extends Controller_Mp3table_List {
 
     public function action_delete($id) {
-        
+
         $success = false;
 
         $billet = Model_Blog::find_by_blog_id($id);

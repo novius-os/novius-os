@@ -12,7 +12,7 @@ namespace Cms;
 
 use Event;
 
-class Controller extends \Controller {
+class Controller extends Controller_Extendable {
 
     public $url;
     public $rewrite_url;
