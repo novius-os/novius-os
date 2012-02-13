@@ -21,7 +21,7 @@ return array(
     'views' => array(
         'default' => array(
             'name' => __('Default'),
-            'json' => 'static/cms/js/admin/page/page.js',
+            'json' => array('static/cms/js/admin/page/page.js'),
         )
     ),
     'i18n' => array(

@@ -13,6 +13,9 @@ I18n::load('cms_blog::blog');
 
 return array(
 	'views' => array(
+		'default' => array(
+			'json' => array('static/modules/cms_blog/js/admin/blog_1.js'),
+		),
 		'delete_first' => null,
 	),
 );

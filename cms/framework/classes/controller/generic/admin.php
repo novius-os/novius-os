@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_Generic_Admin extends \Fuel\Core\Controller_Template {
+class Controller_Generic_Admin extends Controller_Template_Extendable {
 
     public $template = 'cms::templates/html5';
 

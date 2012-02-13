@@ -20,7 +20,7 @@ return array(
     'views' => array(
         'default' => array(
             'name' => __('Default'),
-            'json' => 'static/cms/js/admin/user/user.js',
+            'json' => array('static/cms/js/admin/user/user.js'),
         )
     ),
     'i18n' => array(

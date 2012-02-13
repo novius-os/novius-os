@@ -15,7 +15,7 @@ use Fuel\Core\View;
 use Fuel\Core\Config;
 
 
-class Controller_Inspector_Lang extends \Controller {
+class Controller_Inspector_Lang extends Controller_Extendable {
 
 	protected $config = array(
 		'label' => 'Language',
