@@ -45,12 +45,12 @@ class Controller_Extendable extends \Controller {
         return \Event::trigger($module_name.'.'.$file_name.'.'.$event, $data, $return_type);
     }
 
-    protected function getConfiguration() {
-        list($module_name, $file_name) = $this->getLocation();
+    protected static function getConfiguration() {
+        list($module_name, $file_name) = self::getLocation();
         return static::loadConfiguration($module_name, $file_name);
     }
 
-    protected function getLocation() {
+    protected static function getLocation() {
         $controller = explode('\\', \Request::active()->controller);
         $module_name = strtolower($controller[0]);
         $file_name   = strtolower(str_replace('_', DS, $controller[1]));

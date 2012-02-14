@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_Admin_User_Form extends \Controller {
+class Controller_Admin_User_Form extends Controller_Extendable {
 
     public function action_add() {
 
@@ -23,7 +23,7 @@ class Controller_Admin_User_Form extends \Controller {
 
         return \View::forge('admin/user/form/edit', array(
 			'user' => Model_User_User::find($id),
-			'fieldset_edit'     => static::fieldset_edit($id, $this->config['fields'])->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
+			'fieldset_edit'     => static::fieldset_edit($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 			'fieldset_password' => static::fieldset_password($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 		), false);
     }
@@ -63,8 +63,11 @@ class Controller_Admin_User_Form extends \Controller {
 		return $form;
 	}
 
-	public static function fieldset_edit($id, $fields) {
+	public static function fieldset_edit($id) {
         $user = Model_User_User::find($id);
+        $configuration = static::loadConfiguration('cms', 'controller/admin/user/form');
+
+        $fields = $configuration['fields'];
 
         //\Config::load('cms::admin/user/form', true);
 		//$fields = $this->config['fields']; //\Config::get('cms::admin/user/form.fields', array());
