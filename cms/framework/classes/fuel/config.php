@@ -18,12 +18,15 @@ class Config extends \Fuel\Core\Config {
     public static function mergeWithUser($item, $config) {
         $user = Session::user();
 
+        Arr::set($config, 'configuration_id', static::getBDDName($item));
+
+        return \Arr::merge($config, \Arr::get($user->getConfiguration(), static::getBDDName($item), array()));
+    }
+
+    public static function getBDDName($item) {
         $item = str_replace('::', '/config/', $item);
         $item = str_replace('/', '.', $item);
-
-        Arr::set($config, 'configuration_id', $item);
-
-        return \Arr::merge($config, \Arr::get($user->getConfiguration(), $item, array()));
+        return $item;
     }
 
 }

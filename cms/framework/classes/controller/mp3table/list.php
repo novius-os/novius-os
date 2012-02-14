@@ -47,8 +47,9 @@ class Controller_Mp3table_List extends Controller_Extendable {
             list($module_name, $file_name) = explode('::', $this->config['mp3grid']);
         }
 
-		$this->mp3grid = static::loadConfiguration($module_name, $file_name);
+		$this->mp3grid = \Config::mergeWithUser($module_name.'::'.$file_name, static::loadConfiguration($module_name, $file_name));
 
+        //\Debug::dump($this->mp3grid);
         //print_r($this->mp3grid['views']['default']['json']);
     }
 

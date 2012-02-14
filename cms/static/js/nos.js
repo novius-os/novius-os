@@ -156,12 +156,12 @@ define([
                             // Build actions columns if any, and translate columns properties
                             if (key === 'columns') {
                                 object[key] = keyToOrderedArray(object, key);
-
                                 for (var i = 0; i < object[key].length; i++) {
                                     if (object[key][i].lang) {
                                         object[key][i] = {
                                             headerText : 'Languages',
-                                            dataKey   : 'lang',
+                                            dataKey    : 'lang',
+                                            setupkey   : 'lang',
                                             showFilter : false,
                                             cellFormatter : function(args) {
                                                 if (args.row.type & $.wijmo.wijgrid.rowType.data) {

@@ -534,12 +534,14 @@ define([
 					)
 					.append(
 						$('<div class="right-side"></div>')
-						.append(
-							$('<ul class="top-panel panels"></ul>')
-						)
-						.append(
-							$('<div class="content"></div>')
-						)
+                        .append($('<div class="inside"></div>')
+                            .append(
+                                $('<ul class="top-panel panels"></ul>')
+                            )
+                            .append(
+                                $('<div class="content"></div>')
+                            )
+                        )
 					)
 			);
 
@@ -642,6 +644,7 @@ define([
 						var $this = $(this);
 						var newColumn = gridColumns[$this.data('column-id')];
 
+
 						newColumn.visible = !$this.closest('ul').hasClass('not-columns');
 						newColumns.push(newColumn);
                         o.inspectors[j].grid.columnsOrder.push(newColumn['setupkey']);
@@ -681,6 +684,8 @@ define([
 
 
             var custom = self._saveUserConfiguration();
+
+
 
             self.element.trigger('reload', {selectedView: 'custom', custom: custom});
             /*
