@@ -645,7 +645,7 @@ class Controller_Front extends Controller {
 
     static function rewrite_url_author($author, $fallback, $page, $url = null) {
 
-        $args = array($url, 'blog', $author->user_fullname ?: $fallback, 'u', $author->user_id);
+        $args = array($url, 'blog', $author->fullname() ?: $fallback, 'u', $author->user_id);
         if ($page > 1) {
             $args[] = $page;
         }

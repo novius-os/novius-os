@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -33,23 +33,53 @@ class Orm_Translatable extends \Orm\Observer
 
 		return static::$_instances[$observer][$model_class];
 	}
-	
-	
+
+
 	protected $_class = null;
-	
+
 	/**
 	 * lang_property
 	 * common_id_property
 	 * single_id_property
 	 */
 	protected $_properties = array();
-	
+
 	public function __construct($class)
 	{
 		$this->_class = $class;
 		$this->_properties = call_user_func($class . '::observers', get_class($this));
 	}
-	
+
+	/**
+	 * Fill the lang_common_id and lang properties when creating the object
+	 *
+	 * @param   Model  The object
+	 * @return  void
+	 */
+	public function before_insert(Orm\Model $obj)
+	{
+		$common_id_property = $this->_properties['common_id_property'];
+		$lang_property      = $this->_properties['lang_property'];
+
+        if (empty($obj->$common_id_property)) {
+            $obj->$common_id_property = 0;
+        }
+        if (empty($obj->$lang_property)) {
+            // @todo: decide whether we force a lang or we use NULL instead
+            $obj->$lang_property = Arr::get($this->_properties['default_lang'], \Config::get('default_lang', 'en_GB'));
+        }
+	}
+	public function after_insert_insert(Orm\Model $obj)
+	{
+		$common_id_property = $this->_properties['common_id_property'];
+
+        if ($obj->$common_id_property == 0) {
+            // __get() magic method will retrieve $_primary_key[0]
+            $obj->$common_id_property = $this->id;
+            $obj->save();
+        }
+	}
+
 	public function languages($data)
 	{
 		$common_id_property = $this->_properties['common_id_property'];
@@ -58,11 +88,11 @@ class Orm_Translatable extends \Orm\Observer
 			array($common_id_property, $common_id_property),
 			array(\Db::expr('GROUP_CONCAT('.$lang_property.')'), 'list_lang'),
 		);
-		
+
 		$query = call_user_func_array('\Db::select', $properties)
 				 ->from(call_user_func($this->_class . '::table'))
 				 ->group_by($common_id_property);
-		
+
 		foreach ($data as $field_name => $value) {
 			if (!empty($value)) {
 				if (is_array($value)) {

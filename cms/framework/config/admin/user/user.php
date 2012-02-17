@@ -52,7 +52,9 @@ return array(
     ),
 	'dataset' => array(
 		'id' => 'user_id',
-		'fullname' => 'user_fullname',
+		'fullname' => function($object) {
+			return $object->fullname();
+		},
 		'email' => 'user_email',
 		'id_permission' => function($object) {
 			return $object->groups && reset($object->groups)->group_id ?: $object->user_id;

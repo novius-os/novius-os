@@ -53,11 +53,12 @@ font[face=mceinline] {font-family:inherit !important}
 	border:1px dotted red;
 	padding:5px;
 }
-.nosModuleActionBlock {
+.nosModuleActionBlock, .nos_module_action_block {
 	float : right;
 	padding: 0 3px;
 	display:none;
 }
-.nosModule:hover .nosModuleActionBlock {
+.nosModule:hover .nosModuleActionBlock, .nosModule:hover .nos_module_action_block {
+    cursor: pointer;
 	display : block;
 }

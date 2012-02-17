@@ -55,7 +55,11 @@ Fuel::$env = (isset($_SERVER['FUEL_ENV']) ? $_SERVER['FUEL_ENV'] : Fuel::DEVELOP
 spl_autoload_register(function($class) {
 	$class = ltrim($class, '\\');
 	list($module, $whatever) = explode('\\', $class.'\\');
-	$module = Inflector::words_to_upper($module);
+	$module = explode('_', $module);
+	foreach ($module as &$part) {
+		$part = ucfirst($part);
+	}
+	$module = implode('_', $module);
 
 	// A module can be put inside any namespace when properly configured
 	if (!empty(Fuel::$namespace_aliases[$module])) {
@@ -67,7 +71,7 @@ spl_autoload_register(function($class) {
 		}
 	}
 	return false;
-}, true, false);
+}, true, true);
 //*/
 
 // Initialize the framework with the config file.

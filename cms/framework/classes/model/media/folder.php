@@ -36,6 +36,10 @@ class Model_Media_Folder extends \Orm\Model {
 		),
 	);
 
+    public function path($file = '') {
+        return APPPATH.'media/'.$this->medif_path.$file;
+    }
+
     /**
      * Properties
      * medif_id

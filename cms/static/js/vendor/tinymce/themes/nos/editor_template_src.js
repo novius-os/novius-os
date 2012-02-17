@@ -165,7 +165,7 @@
 						success: function(json) {
 							//console.log(json);
 							module.html(json.preview);
-							self.onModuleAdd(module);
+							self.onModuleAdd(module, metadata);
 						},
 						error: function() {
 							module.html('Error when loading the preview of the module');
@@ -236,9 +236,11 @@
 				// Modules are non-editable, so we can't add new paragraphs by pressing "Enter"
 				// This allow insertion before or after the display:block module
 
+                var p = null;
+
 				// Add a new paragraph before a display:block module
 				if (action == 'addParagraphBefore') {
-					var p = $('<p>New paragraph</p>');
+					p = $('<p>New paragraph</p>');
 					target.closest('.nosModule, .nosModuleInline').before(p);
 					// All 3 commands are needed to select the node and focus the editor
 					ed.selection.select(p.get(0), true);
@@ -251,7 +253,7 @@
 
 				// Add a new paragraph after a display:block module
 				if (action == 'addParagraphAfter') {
-					var p = $('<p>New paragraph</p>');
+					p = $('<p>New paragraph</p>');
 					target.closest('.nosModule, .nosModuleInline').after(p);
 					// All 3 commands are needed to select the node and focus the editor
 					ed.selection.select(p.get(0), true);
@@ -259,6 +261,13 @@
 					ed.execCommand('mceSelectNode', false, p.get(0), {skip_undo : 1});
 					// Tell undoManager to add a checkpoint
 					ed.execCommand("mceEndUndoLevel");
+					e.preventDefault();
+				}
+
+				if (action == 'editModule') {
+                    var module   = target.closest('.nosModule, .nosModuleInline');
+                    var metadata = self.settings.theme_nos_modules[$(module).data('module')];
+					self._nosModule(null, metadata, module);
 					e.preventDefault();
 				}
 
@@ -1517,40 +1526,55 @@
 			return c;
         },
 
-        _nosModule : function(ui, val) {
+        _nosModule : function(ui, metadata, edit) {
             var ed = tinyMCE.activeEditor;
 
 			// Keep reference to the wijdialog node, so we can close the popup manually
 			var dialog = null;
-			var self=  this;
+			var self   = this;
 
-			// The popup will trigger this event when done
-			$.nos.listener.add('wysiwyg.module.save', true, function(json) {
+            var cleanup = function() {
+				$.nos.listener.remove('wysiwyg.module.save', true, save);
+				$.nos.listener.remove('wysiwyg.module.close', true, close);
+            }
+
+            var close = function() {
+				// Close the popup (if we have one)
+				dialog && dialog.wijdialog('close');
+            }
+
+            var save = function(json) {
 
 				var pr = $(json.preview);
 				// We set a temporary ID so we can fetch the node later
 				pr.attr({
 					'id': '__mce_tmp',
 					'data-config': json.config,
-					'data-module': val.id
+					'data-module': metadata.id
 				}).addClass('mceNonEditable');
 
 				// Close the popup (if we have one)
 				dialog && dialog.wijdialog('close');
 
-				// And self-remove from the listener
-				$.nos.listener.remove('wysiwyg.module.save', true, arguments.callee);
-
-				ed.execCommand('mceInsertContent', false, $('<div></div>').append(pr).html(), {skip_undo : 1});
+                if (edit) {
+                    // @todo needs review!
+                    edit.empty().removeClass('mceNonEditable nosModule').data('config', '').data('module', '');
+					ed.selection.select(edit.get(0), true);
+					ed.focus(false);
+					ed.execCommand('mceSelectNode', false, edit.get(0), {skip_undo : 1});
+                    ed.execCommand('mceReplaceContent', false, $('<div></div>').append(pr).html(), {skip_undo : 1});
+                } else {
+                    ed.execCommand('mceInsertContent', false, $('<div></div>').append(pr).html(), {skip_undo : 1});
+                }
 
 				// Retrieve the preview node from the tinyMce document context, or we get this error:
 				// "Node cannot be used in a document other than the one in which it was created"
-				preview = $(ed.dom.get('__mce_tmp'));
+				var preview = $(ed.dom.get('__mce_tmp'));
 				// We don't need the id anymore now
 				preview.attr('id', '');
 
 				// Add special links (this is also called onInit())
-				self.onModuleAdd(preview);
+				self.onModuleAdd(preview, metadata);
 
 				// @todo search why this doesn't work
 				// This is an uncessfull attempt to refocus the editor after the nonEditable block content has been added
@@ -1564,13 +1588,33 @@
 				// mceAddUndoLevel has been removed in 3.3, we don't need it anymore
 				// mceEndUndoLevel calls mceAddUndoLevel
 				ed.execCommand("mceEndUndoLevel");
-			});
+			};
+
+            if (!metadata.popupUrl) {
+                $.ajax({
+                    url: metadata.previewUrl,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: save,
+                    error: function() {
+                        console.log('Error: unable to add the enhancer in the Wysiwyg (no popup)');
+                    }
+                });
+                return;
+            }
+
+			// The popup will trigger this event when done
+			$.nos.listener.add('wysiwyg.module.save',  true, save);
+			$.nos.listener.add('wysiwyg.module.close', true, close);
+
 
 			// Open the dialog popup (it returns the node inserted in the body)
 			dialog = $.nos.dialog({
-				contentUrl: val.popupUrl,
-				title: val.title
+				contentUrl: metadata.popupUrl,
+				title: metadata.title,
+                close: cleanup
 			});
+
         },
 
 		_nosImage : function(ui, val) {
@@ -1621,7 +1665,7 @@
 			});
 		},
 
-		onModuleAdd: function(container) {
+		onModuleAdd: function(container, metadata) {
 
             var ed = tinyMCE.activeEditor;
 			container = $(container);
@@ -1630,20 +1674,27 @@
 			// Instead, use a global click handler and detect the action using data-action="..."
 			// Ctrf + F using an action name (removeModule or addParagraphAfter) to find where this is :)
 			var deleteLink = $('<a href="#" data-action="removeModule">Delete</a>');
+			var editLink = $('<a href="#" data-action="editModule">Options</a>');
 			var insertAfter = $('<a href="#" data-action="addParagraphAfter">New paragraph after</a>');
 			var insertBefore = $('<a href="#" data-action="addParagraphBefore">New paragraph before</a>');
 
 			if (container.is('span')) {
 				container.addClass('nosModuleInline')
 				container.append(document.createTextNode(' '));
+                if (metadata.popupUrl) {
+                    container.append(editLink);
+                }
 				container.append(deleteLink);
 				container.before($('<span> </span>'));
 				container.after($('<span> </span>'));
 			} else {
 				container.addClass('nosModule');
-				container.prepend(insertBefore.addClass('nosModuleActionBlock'));
-				container.prepend(insertAfter.addClass('nosModuleActionBlock'));
-				container.prepend(deleteLink.addClass('nosModuleActionBlock'));
+				container.prepend(insertBefore.addClass('nos_module_action_block'));
+				container.prepend(insertAfter.addClass('nos_module_action_block'));
+                if (metadata.popupUrl) {
+                    container.prepend(editLink.addClass('nos_module_action_block'));
+                }
+				container.prepend(deleteLink.addClass('nos_module_action_block'));
 			}
 		},
 

@@ -20,8 +20,12 @@ class Model extends \Orm\Model {
 	public $media;
 	public $wysiwyg;
 
-    public static function _init() {
+    public static function properties() {
         Event::trigger(get_called_class().'.properties', get_called_class());
+		return call_user_func_array('parent::properties', func_get_args());
+	}
+
+    public static function relations() {
 
 		static::$_has_many['wysiwygs'] = array(
 			'key_from' => static::$_primary_key[0],
@@ -31,7 +35,7 @@ class Model extends \Orm\Model {
 			'cascade_delete' => false,
 			'conditions'     => array(
 				'where' => array(
-					array('wysiwyg_join_table', '=', \DB::expr('"'.static::$_table_name.'"') ),
+					array('wysiwyg_join_table', '=', \DB::expr(static::$_table_name) ),
 				),
 			),
 		);
@@ -44,10 +48,11 @@ class Model extends \Orm\Model {
 			'cascade_delete' => false,
 			'conditions'     => array(
 				'where' => array(
-					array('medil_from_table', '=', \DB::expr('"'.static::$_table_name.'"') ),
+					array('medil_from_table', '=', \DB::expr(static::$_table_name) ),
 				),
 			),
 		);
+		return call_user_func_array('parent::relations', func_get_args());
     }
 
 	public function __construct() {
@@ -58,6 +63,27 @@ class Model extends \Orm\Model {
 
     public static function add_properties($properties) {
         static::$_properties = Arr::merge(static::$_properties, $properties);
+    }
+
+    public static function search($where, $order_by = array(), $options = array()) {
+        $options = \Arr::merge($options, array(
+            'where'    => $where,
+            'order_by' => $order_by,
+        ));
+        return static::find('all', $options);
+    }
+
+    public function pick() {
+        static $prefix = null;
+        if (null == $prefix) {
+            $prefix = substr(static::$_primary_key[0], 0, strpos(static::$_primary_key[0], '_') + 1);
+        }
+        foreach (func_get_args() as $property) {
+            if (!empty($this->{$prefix.$property})) {
+                return $this->{$prefix.$property};
+            }
+        }
+        return null;
     }
 
     /**
@@ -217,6 +243,10 @@ class Model extends \Orm\Model {
         return parent::__get($name);
     }
 
+	public function __toString() {
+		return get_class($this);
+	}
+
 	public function __isset($name) {
 		try {
 			$this->__get($name);
@@ -269,6 +299,11 @@ class Model_Media_Provider
 
 		// Don't save the link here, it's done with cascade_save = true
 	}
+
+    public function __isset($value) {
+        $value = $this->__get($value);
+        return (!empty($value));
+    }
 }
 
 
@@ -306,4 +341,11 @@ class Model_Wysiwyg_Provider
 
 		// Don't save the link here, it's done with cascade_save = true
 	}
+
+    public function __isset($value) {
+        $value = $this->__get($value);
+        return (!empty($value));
+    }
 }
+
+

@@ -25,8 +25,10 @@ class PubliCache {
 
     public static function delete($path)
     {
-        // Experimentalpl
+        // Disabled
+		// Experimental
         return;
+
         $dir = \Config::get('cache_dir').$path.'/';
         $files = \Fuel\Core\File::read_dir($dir, 1);
         echo '<pre>';
@@ -122,6 +124,7 @@ class PubliCache {
         if ($expires > 0 && $expires <= time()) {
             throw new CacheExpiredException();
         }
+		\Cms::main_controller()->expires = \Date::forge($expires)->format("%H:%M:%S");;
     }
 
     public function save($duration = -1, $controller = null) {

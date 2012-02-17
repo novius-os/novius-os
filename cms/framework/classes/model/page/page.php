@@ -43,6 +43,15 @@ class Model_Page_Page extends \Cms\Model {
 		),
 	);
 
+	protected static $_observers = array(
+		'Cms\Orm_Translatable' => array(
+			'events' => array('before_insert', 'after_insert'),
+			'lang_property'      => 'page_lang',
+			'common_id_property' => 'page_lang_common_id',
+			'single_id_property' => 'page_lang_single_id',
+		),
+	);
+
 	const TYPE_CLASSIC       = 0;
 	const TYPE_POPUP         = 1;
 	const TYPE_FOLDER        = 2;
@@ -61,6 +70,16 @@ class Model_Page_Page extends \Cms\Model {
     {
         return parent::query($options + array('order_by' => array('page_sort')));
     }*/
+
+    public static function search($where, $order_by = array(), $options = array()) {
+        isset($order_by['page_sort']) or $order_by['page_sort'] = 'ASC';
+        return parent::search($where, $order_by, $options);
+    }
+
+    public function children($where = array()) {
+        $where[] = array('page_parent_id', $this->page_id);
+        return static::search($where);
+    }
 
     public function get_link() {
         return 'href="'.$this->get_href().'"';

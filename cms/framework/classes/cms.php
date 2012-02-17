@@ -70,10 +70,12 @@ class Cms {
         ob_start();
         try {
             $request  = Request::forge($where);
+
             \Cms::main_controller()->rewrite_prefix = $module;
             $response = call_user_func_array(array($request, "execute"), array($args['args']));
             \Cms::main_controller()->rewrite_prefix = null;
             $cache_cleanup = $request->controller_instance->cache_cleanup;
+
             if (!empty($cache_cleanup)) {
                 \Fuel::$profiling && \Profiler::console($cache_cleanup);
                 Cms::main_controller()->cache_cleanup[] = $cache_cleanup;
@@ -124,35 +126,49 @@ class Cms {
 
 		preg_match_all('`<(\w+)\s[^>]+data-module="([^"]+)" data-config="([^"]+)">.*?</\\1>`', $content, $matches);
         foreach ($matches[2] as $match_id => $fct_id) {
-			$args = json_decode(strtr($matches[3][$match_id], array(
-				'&quot;' => '"',
-			)));
 
-            // Check if the function exists
-            $name   = $fct_id;
-            $config = Config::get("wysiwyg_enhancers.$name", false);
-            $found  = $config !== false;
+            $function_content = static::__parse_enhancers($fct_id, $matches[3][$match_id]);
+			$content = str_replace($matches[0][$match_id], $function_content, $content);
+		}
 
-            false && \Fuel::$profiling && Profiler::console(array(
-                'function_id'   => $fct_id,
-                'function_name' => $name,
-                'controller'    => get_class($controller),
-            ));
-
-            if ($found) {
-                $function_content = self::hmvc($config['target'].'/main', array(
-                    'args'     => array($args),
-                    'module'   => $config['rewrite_prefix'] ?: $name,
-                    'inline'   => true,
-                ));
-            } else {
-                $function_content = '';
-                \Fuel::$profiling && Console::logError(new Exception(), 'Function '.$name.' not found in '.get_class($controller).'.');
-            }
-
+		preg_match_all('`<(\w+)\s[^>]+data-config="([^"]+)" data-module="([^"]+)">.*?</\\1>`', $content, $matches);
+        foreach ($matches[3] as $match_id => $fct_id) {
+            $function_content = static::__parse_enhancers($fct_id, $matches[2][$match_id]);
 			$content = str_replace($matches[0][$match_id], $function_content, $content);
 		}
 	}
+
+    protected static function __parse_enhancers($fct_id, $args) {
+        $args = json_decode(strtr($args, array(
+            '&quot;' => '"',
+        )));
+
+        // Check if the function exists
+        $name   = $fct_id;
+        $config = Config::get("wysiwyg_enhancers.$name", false);
+        $found  = $config !== false;
+
+        false && \Fuel::$profiling && Profiler::console(array(
+            'function_id'   => $fct_id,
+            'function_name' => $name,
+            'controller'    => get_class($controller),
+        ));
+
+        if ($found) {
+            $function_content = self::hmvc($config['target'].'/main', array(
+                'args'     => array($args),
+                'module'   => $config['rewrite_prefix'] ?: $name,
+                'inline'   => true,
+            ));
+            if (empty($function_content) && \Fuel::$env == \Fuel::DEVELOPMENT) {
+                $function_content = 'Enhancer '.$name.' ('.$config['target'].') returned empty content.';
+            }
+        } else {
+            $function_content = \Fuel::$env == \Fuel::DEVELOPMENT ? 'Function '.$name.' not found in '.get_class($controller).'.' : '';
+            \Fuel::$profiling && Console::logError(new Exception(), 'Function '.$name.' not found in '.get_class($controller).'.');
+        }
+        return $function_content;
+    }
 
 	protected static function _parse_medias(&$content) {
 

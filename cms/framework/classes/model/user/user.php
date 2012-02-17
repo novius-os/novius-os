@@ -64,7 +64,7 @@ class Model_User_User extends Model {
 		} else {
 			$group = reset($this->groups);
 		}
-		$group->group_name = $this->user_fullname;
+		$group->group_name = $this->fullname();
 		$this->groups[] = $group;
 		$this->save(array('groups'));
     }
@@ -93,134 +93,15 @@ class Model_User_User extends Model {
         return false;
     }
 
-	protected static $_properties = array (
-        'user_id' => array (
-            'type' => 'int',
-            'min' => '0',
-            'max' => '4294967295',
-            'name' => 'user_id',
-            'default' => null,
-            'data_type' => 'int unsigned',
-            'null' => false,
-            'ordinal_position' => 1,
-            'display' => '10',
-            'comment' => '',
-            'extra' => 'auto_increment',
-            'key' => 'PRI',
-            'privileges' => 'select,insert,update,references',
+	public function fullname() {
+		return $this->user_firstname.(empty($this->user_firstname) ? '' : ' ').$this->user_name;
+	}
 
-            'label' => 'ID',
-            'widget' => array(
-                'hide_add'   => true,
-                'display_as' => 'text',
-            ),
-        ),
-        'user_fullname' => array (
-            'type' => 'string',
-            'name' => 'user_fullname',
-            'default' => null,
-            'data_type' => 'varchar',
-            'null' => false,
-            'ordinal_position' => 2,
-            'character_maximum_length' => '100',
-            'collation_name' => 'utf8_general_ci',
-            'comment' => '',
-            'extra' => '',
-            'key' => '',
-            'privileges' => 'select,insert,update,references',
-
-            'label' => 'Full name',
-            'widget' => array(
-            ),
-        ),
-        'user_email' => array (
-            'type' => 'string',
-            'name' => 'user_email',
-            'default' => null,
-            'data_type' => 'varchar',
-            'null' => false,
-            'ordinal_position' => 3,
-            'character_maximum_length' => '100',
-            'collation_name' => 'utf8_general_ci',
-            'comment' => '',
-            'extra' => '',
-            'key' => '',
-            'privileges' => 'select,insert,update,references',
-
-            'label' => 'Email',
-            'widget' => array(
-            ),
-            'validation' => array(
-                'valid_email',
-            ),
-        ),
-        'user_password' => array (
-            'type' => 'string',
-            'name' => 'user_password',
-            'default' => null,
-            'data_type' => 'varchar',
-            'null' => false,
-            'ordinal_position' => 4,
-            'character_maximum_length' => '40',
-            'collation_name' => 'utf8_general_ci',
-            'comment' => '',
-            'extra' => '',
-            'key' => '',
-            'privileges' => 'select,insert,update,references',
-
-            'label' => 'Password',
-            'widget' => array(
-                'display_as' => 'password',
-            ),
-            'validation' => array(
-                'required',
-                'min_length' => array(6),
-            ),
-        ),
-        'user_last_connection' => array (
-            'type' => 'string',
-            'name' => 'user_last_connection',
-            'default' => null,
-            'data_type' => 'datetime',
-            'null' => false,
-            'ordinal_position' => 5,
-            'comment' => '',
-            'extra' => '',
-            'key' => '',
-            'privileges' => 'select,insert,update,references',
-
-            'label' => 'Last login',
-            'widget' => array(
-                'hide_add'   => true,
-                'display_as' => 'date_select',
-            ),
-        ),
-        'user_configuration' => array (
-            'type' => 'string',
-            'name' => 'user_configuration',
-            'default' => null,
-            'data_type' => 'text',
-            'null' => true,
-            'ordinal_position' => 6,
-            'comment' => '',
-            'extra' => '',
-            'key' => '',
-            'privileges' => 'select,insert,update,references',
-
-            'label' => 'User configuration',
-            'widget' => array(
-            ),
-        ),
-    );
-
+	/*
     public static function _init() {
         static::$_properties['user_last_connection']['default'] = \DB::expr('NOW()');
-    }
+    }*/
 
-
-    public function & __get($name) {
-        return parent::__get($name);
-    }
 
     public function getConfiguration() {
         if (!$this->user_configuration) {

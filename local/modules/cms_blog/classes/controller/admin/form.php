@@ -63,6 +63,9 @@ class Controller_Admin_Form extends \Controller {
                 'label' => 'Author: ',
 				'widget' => 'text',
 				'editable' => false,
+                'form' => array(
+                    'value' => $object->author->fullname(),
+                 ),
             ),
             'wysiwyg->content->wysiwyg_text' => array(
                 'label' => 'Contenu',

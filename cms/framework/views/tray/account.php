@@ -14,7 +14,7 @@
 	<div class="unit col c10" id="line_first" style="position:relative;;">
 		<div class="line" style="overflow:visible;">
 
-			<h1 class="title" style="float:left;"><?= $logged_user->user_fullname; ?></h1>
+			<h1 class="title" style="float:left;"><?= $logged_user->fullname(); ?></h1>
 
 			<a style="float:right;overflow:auto;" href="admin/tray/account/disconnect">
 				<button data-icon="power"><?= __('Disconnect') ?></button>

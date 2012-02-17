@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -34,8 +34,11 @@ class Fuel extends Fuel\Core\Fuel {
 
 		\Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
 		$app_installed = \Config::get('app_installed', array());
-		
-		return isset($app_installed[$name]) && parent::module_exists($name);
+
+		if (isset($app_installed[$name])) {
+			return parent::module_exists($name);
+		}
+		return false;
 	}
 
 
@@ -50,14 +53,14 @@ class Fuel extends Fuel\Core\Fuel {
 
 			// Don't add twice
 			if (!empty($added_modules[$name])) {
-				return;
+				return $path;
 			}
 			$added_modules[$name] = true;
 
 			$namespace = Inflector::words_to_upper($name);
 			Autoloader::add_namespaces(array(
 				$namespace                  => $path.'classes'.DS,
-				//strtolower($namespace)      => $path.'classes'.DS,
+				//ucfirst(strtolower($namespace)) => $path.'classes'.DS,
 				//'\\'.$namespace             => $path.'classes'.DS,
 				//'\\'.strtolower($namespace) => $path.'classes'.DS,
 			), true);
@@ -89,5 +92,6 @@ class Fuel extends Fuel\Core\Fuel {
 				}
 			}
 		}
+		return $path;
 	}
 }

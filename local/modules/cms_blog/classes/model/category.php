@@ -10,7 +10,9 @@
 
 namespace Cms\Blog;
 
-class Model_Category extends \Orm\Model {
+use Cms\Model;
+
+class Model_Category extends Model {
     protected static $_table_name = 'os_blog_category';
     protected static $_primary_key = array('blgc_id');
 

@@ -17,7 +17,7 @@ if (!empty($display['title'])) {
 }
 
 if (!empty($display['author'])) {
-    $author = $item->author->user_fullname ?: $item->blog_author;
+    $author = $item->author->fullname() ?: $item->blog_author;
     if (!empty($link_to_author)) {
         $author = '<a href="'.$link_to_author.'">'.$author.'</a>';
     }

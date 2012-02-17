@@ -9,7 +9,8 @@
  */
 
 namespace Cms\Blog;
-use \Cms\Model;
+
+use Cms\Model;
 
 class Model_Blog extends Model {
     protected static $_table_name = 'os_blog';

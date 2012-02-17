@@ -62,6 +62,7 @@ $fieldset->field('wysiwyg->content->wysiwyg_text')->set_template('{field}');
 	), false),
 
 	'menu' => array(
+		// user_fullname is not a real field in the database
 		'Meta' => array('author->user_fullname', 'blog_author', 'blog_created_at', 'blog_read'),
 		'Categories' => array(),
 		'Tags' => array(),

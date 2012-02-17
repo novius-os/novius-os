@@ -14,7 +14,7 @@ require(['jquery-nos'], function ($) {
 	$.nos.ui.form('#<?= $uniqid = uniqid('id_') ?>');
 	$(function () {
 		$.nos.tabs.update($('#<?= $uniqid ?>'), {
-			label : '<?= $user->user_fullname ?>',
+			label : '<?= $user->fullname() ?>',
 			iconUrl : 'static/cms/img/16/user.png'
 		});
 	});
@@ -26,9 +26,13 @@ require(['jquery-nos'], function ($) {
 		<div class="unit col c1"></div>
 		<div class="unit col c7 ui-widget">
 			<?= $fieldset_edit->open('admin/admin/user/form/edit/'.$user->user_id); ?>
-			<?= $fieldset_edit->field('user_fullname')
+			<?= $fieldset_edit->field('user_name')
 				->set_template('{field}')
-				->set_attribute('class', 'title c4');
+				->set_attribute('class', 'title c3');
+			?>
+			<?= $fieldset_edit->field('user_firstname')
+				->set_template('{field}')
+				->set_attribute('class', 'title c3');
 			?>
 			<div class="expander">
 				<h3>Change details</h3>
@@ -36,7 +40,7 @@ require(['jquery-nos'], function ($) {
 				<table>
 					<?php
 					foreach ($fieldset_edit->field() as $f) {
-						if ($f->name == 'user_fullname') {
+						if (in_array($f->name, array('user_name', 'user_firstname'))) {
 							continue;
 						}
 						echo $f->build();

@@ -78,7 +78,8 @@ class Controller_Admin_User_Form extends \Controller {
 				);
 			},
 			'extend' => function($fieldset)  {
-				$fieldset->field('user_fullname')->add_rule('min_length', 3);
+				$fieldset->field('user_name')->add_rule('min_length', 3);
+				$fieldset->field('user_firstname')->add_rule('min_length', 3);
 			},
 		));
 		$fieldset_edit->js_validation();

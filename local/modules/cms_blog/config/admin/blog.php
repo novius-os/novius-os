@@ -69,10 +69,10 @@ return array(
 		'lang' => 'blog_lang',
 		'author' => array(
 			'search_relation' => 'author',
-			'search_column'   => 'author.user_fullname',
+			'search_column'   => 'author.user_name',
 			'value' =>  function($object) {
-							return $object->author->user_fullname;
-						},
+				return $object->author->fullname();
+			},
 		),
 		'date' => array(
 			'search_column'    =>  'blog_created_at',

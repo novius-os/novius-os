@@ -15,7 +15,14 @@ return array (
             'add' => false,
             'widget' => 'text',
         ),*/
-        'user_fullname' => array (
+        'user_name' => array (
+            'label' => 'Full name',
+            'widget' => '',
+            'validation' => array(
+                'required',
+            ),
+        ),
+        'user_firstname' => array (
             'label' => 'Full name',
             'widget' => '',
             'validation' => array(

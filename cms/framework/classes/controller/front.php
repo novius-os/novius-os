@@ -53,7 +53,7 @@ class Controller_Front extends Controller {
         $cache_path = (empty($this->url) ? 'index/' : $this->url).$cache_path;
         $cache_path = rtrim($cache_path, '/');
 
-		$nocache = false;
+		$nocache = true;
 
 		\Event::trigger('front.start');
 
@@ -71,7 +71,7 @@ class Controller_Front extends Controller {
 			//ob_start();
             echo $this->_view->render();
 			//$content = ob_get_clean();
-            $publi_cache->save(-1, $this);
+            $publi_cache->save($nocache ? -1 : CACHE_DURATION_PAGE, $this);
             //\Event::trigger('page_save_cache', $publi_cache->get_path());
             $content = $publi_cache->execute();
         }
@@ -88,6 +88,7 @@ class Controller_Front extends Controller {
 
         if (!empty($this->page_title)) {
             $head[] = '<title>'.$this->page_title.'</title>';
+			//$content = str_ireplace('<head>', '<head><title>'.$this->page_title.'</title>', $content);
         }
 
         if (!empty($this->meta_robots)) {
@@ -226,7 +227,7 @@ class Controller_Front extends Controller {
         $templates = Config::get('templates', array());
 
         if (!isset($templates[$this->page->page_template])) {
-            throw new \Exception('The template '.$this->page->page_template.' cannot be found.');
+            throw new \Exception('The template '.$this->page->page_template.' is not configured.');
         }
 
         $this->template = $templates[$this->page->page_template];
@@ -240,11 +241,7 @@ class Controller_Front extends Controller {
             $this->_view = View::forge($this->template['file']);
         } catch (\FuelException $e) {
 
-            $path = array(rtrim(APPPATH, DS), $this->template['file'].'.php');
-
-            array_splice($path, 1, 0, array('modules', $this->template['module'], 'templates'));
-
-            $template_file = implode(DS, $path);
+			$template_file = \Finder::search('views', $this->template['file']);
 
             if (!is_file($template_file)) {
                 throw new \Exception('The template '.$this->template['file'].' cannot be found.');
@@ -254,7 +251,7 @@ class Controller_Front extends Controller {
     }
 
     public function save_cache() {
-        $page_fields = array('id', 'root_id', 'parent_id', 'level', 'title', 'menu_title', 'meta_title', 'type', 'meta_noindex', 'home', 'carrefour', 'virtual_name', 'virtual_url', 'external_link', 'external_link_type', 'meta_description', 'meta_keywords');
+        $page_fields = array('id', 'root_id', 'parent_id', 'level', 'title', 'menu_title', 'meta_title', 'type', 'meta_noindex', 'entrance', 'home', 'virtual_name', 'virtual_url', 'external_link', 'external_link_type', 'meta_description', 'meta_keywords');
         $this->cache['page'] = array();
         foreach ($page_fields as $field) {
             $this->cache['page'][$field] = $this->page->{'page_'.$field};

@@ -165,6 +165,11 @@ class Controller_Mp3table_List extends Controller {
                 foreach ($items as &$item) {
                     $flags = '';
                     foreach (explode(',', $item['lang']) as $lang) {
+						// Convert lang_LOCALE to locale
+						list($lang, $locale) = explode('_', $lang.'_');
+						if (!empty($locale)) {
+							$lang = strtolower($locale);
+						}
                         switch($lang) {
                             case 'en':
                                 $lang = 'gb';
