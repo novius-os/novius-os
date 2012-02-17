@@ -13,10 +13,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `os_blog` (
   `blog_id` int(10) unsigned NOT NULL auto_increment,
+  `blog_title` varchar(255) NOT NULL default '',
   `blog_lang` varchar(5) NOT NULL,
   `blog_lang_common_id` int(11) NOT NULL,
   `blog_lang_single_id` int(11) default NULL,
-  `blog_title` varchar(255) NOT NULL default '',
   `blog_author` varchar(255) default NULL,
   `blog_author_id` int(10) unsigned default NULL,
   `blog_summary` text,
@@ -58,6 +58,17 @@ CREATE TABLE IF NOT EXISTS `os_blog_category_link` (
   `blog_id` int(11) NOT NULL default '0',
   `blgc_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`blog_id`,`blgc_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+--
+-- Structure de la table `os_blog_tag`
+--
+
+CREATE TABLE IF NOT EXISTS `os_blog_tag` (
+  `blgt_blog_id` int(11) NOT NULL,
+  `blgt_tag_id` int(11) NOT NULL,
+  UNIQUE KEY `blgt_blog_id` (`blgt_blog_id`,`blgt_tag_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -173,11 +184,14 @@ CREATE TABLE IF NOT EXISTS `os_media_link` (
 
 CREATE TABLE IF NOT EXISTS `os_page` (
   `page_id` int(11) NOT NULL auto_increment,
+  `page_title` varchar(255) NOT NULL default '',
+  `page_lang` varchar(5) NOT NULL,
+  `page_lang_common_id` int(11) NOT NULL,
+  `page_lang_single_id` int(11) default NULL,
   `page_root_id` char(2) NOT NULL default '',
   `page_parent_id` int(11) default NULL,
-  `page_template` varchar(255) NULL,
   `page_level` tinyint(4) NOT NULL default '0',
-  `page_title` varchar(255) NOT NULL default '',
+  `page_template` varchar(255) NULL,
   `page_menu_title` varchar(255) default NULL,
   `page_meta_title` varchar(255) default NULL,
   `page_search_words` text,
@@ -245,7 +259,8 @@ CREATE TABLE IF NOT EXISTS `os_tag` (
 
 CREATE TABLE IF NOT EXISTS `os_user` (
   `user_id` int(10) unsigned NOT NULL auto_increment,
-  `user_fullname` varchar(100) NOT NULL,
+  `user_name` varchar(100) NOT NULL,
+  `user_firstname` varchar(100) default NULL,
   `user_email` varchar(100) NOT NULL,
   `user_password` varchar(64) NOT NULL,
   `user_last_connection` datetime NOT NULL,

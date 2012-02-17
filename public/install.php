@@ -493,9 +493,10 @@ if ($step == 3) {
 				throw new Exception('The two password don\'t match.');
 			}
 			$user = new Cms\Model_User_User(array(
-				'user_fullname' => \Input::post('fullanme', 'Administrator'),
-				'user_email'    => \Input::post('login', ''),
-				'user_password' => \Input::post('password', ''),
+				'user_name'      => \Input::post('name', 'Admin name'),
+				'user_firstname' => \Input::post('firstname', 'Firstname'),
+				'user_email'     => \Input::post('email', ''),
+				'user_password'  => \Input::post('password', ''),
 			), true);
 
 			$user->save();
@@ -512,8 +513,9 @@ if ($step == 3) {
 	?>
 	<h2>Step 3 / 3 : Create the first administrator account</h2>
 	<form action="" method="POST">
-		<p><label>Full name: <input type="text" name="fullname" value="<?= Input::post('fullname', 'Administrator') ?>" /></label></p>
-		<p><label>Login / email: <input type="text" name="login" value="<?= Input::post('login', 'admin') ?>" /></label></p>
+		<p><label>Name: <input type="text" name="name" value="<?= Input::post('name', 'Admin name') ?>" /></label></p>
+		<p><label>Firstname: <input type="text" name="firstname" value="<?= Input::post('firstname', 'Firstname') ?>" /></label></p>
+		<p><label>Email (login): <input type="email" name="email" value="<?= Input::post('email', 'admin@'.Input::server('server_name', 'domain.com')) ?>" /></label></p>
 		<p><label>Password: <input type="password" name="password" /></label></p>
 		<p><label>Password (confirmation): <input type="password" name="password_confirmation" /></label></p>
 		<p><input type="submit" value="Create the new account" /></p>
