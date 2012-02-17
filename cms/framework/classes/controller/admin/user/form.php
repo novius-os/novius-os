@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_Admin_User_Form extends \Controller {
+class Controller_Admin_User_Form extends Controller_Extendable {
 
     public function action_add() {
 
@@ -65,9 +65,12 @@ class Controller_Admin_User_Form extends \Controller {
 
 	public static function fieldset_edit($id) {
         $user = Model_User_User::find($id);
+        $configuration = static::loadConfiguration('cms', 'controller/admin/user/form');
 
-        \Config::load('cms::admin/user/form', true);
-		$fields = \Config::get('cms::admin/user/form.fields', array());
+        $fields = $configuration['fields'];
+
+        //\Config::load('cms::admin/user/form', true);
+		//$fields = $this->config['fields']; //\Config::get('cms::admin/user/form.fields', array());
 
 		$fieldset_edit = \Fieldset::build_from_config($fields, $user, array(
 			'form_name' => 'edit_user_infos',

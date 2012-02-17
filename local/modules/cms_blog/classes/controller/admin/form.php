@@ -10,7 +10,7 @@
 
 namespace Cms\Blog;
 
-class Controller_Admin_Form extends \Controller {
+class Controller_Admin_Form extends Controller_Extendable {
 
 
     public function action_edit($id = false) {
@@ -19,14 +19,13 @@ class Controller_Admin_Form extends \Controller {
         } else {
             $object = Model_Blog::find('first', array('where' => array('blog_id' => $id)));
         }
-
-        return \View::forge('cms_blog::form/edit', array(
+        return \View::forge($this->config['views']['edit'], array(
             'object'   => $object,
-            'fieldset' => static::fieldset($object)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
+            'fieldset' => static::fieldset($this->config['fields']($object), $object)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
         ), false);
     }
 
-    public static function fieldset($object) {
+    public static function fieldset($fields, $object) {
 
         \Config::load('app::templates', true);
         $templates = array();
@@ -34,72 +33,7 @@ class Controller_Admin_Form extends \Controller {
             $templates[(int) substr($tpl_id, 3)] = $template['title'];
         }
 
-        $fields = array (
-            'blog_id' => array (
-                'label' => 'Id: ',
-				'widget' => 'text',
-				'editable' => false,
-            ),
-            'blog_publication_start' => array (
-				'label' => 'Published',
-				'form' => array(
-					'type' => 'checkbox',
-					'value' => isset($object) && $object->blog_publication_start ? $object->blog_publication_start : \Date::forge(strtotime('now'))->format('mysql'),
-				),
-            ),
-            'blog_title' => array (
-                'label' => 'Title: ',
-                'form' => array(
-                    'type' => 'text',
-                ),
-            ),
-            'blog_author' => array(
-                'label' => 'Alias: ',
-                'form' => array(
-                    'type' => 'text',
-                ),
-            ),
-            'author->user_fullname' => array(
-                'label' => 'Author: ',
-				'widget' => 'text',
-				'editable' => false,
-                'form' => array(
-                    'value' => $object->author->fullname(),
-                 ),
-            ),
-            'wysiwyg->content->wysiwyg_text' => array(
-                'label' => 'Contenu',
-                'widget' => 'wysiwyg',
-                'form' => array(
-                    'style' => 'width: 100%; height: 500px;',
-                 ),
-            ),
-			'media->thumbnail->medil_media_id' => array(
-				'label' => '',
-				'widget' => 'media',
-				'form' => array(
-					'title' => 'Thumbnail',
-				),
-			),
-            'blog_created_at' => array(
-                'label' => 'Created at:',
-                'widget' => 'date_picker',
-            ),
-            'blog_read' => array(
-                'label' => 'Read',
-                'form' => array(
-                    'type' => 'text',
-					'size' => '4',
-                ),
-            ),
-            'save' => array(
-                'label' => '',
-                'form' => array(
-                    'type' => 'submit',
-                    'value' => 'Save',
-                ),
-            ),
-        );
+        //$fields = $this->config['fields']($object);
 
         //$editable_fields = array_diff(array_keys(Model_Blog::properties()), Model_Blog::primary_key());
 

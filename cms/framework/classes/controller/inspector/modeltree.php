@@ -15,7 +15,7 @@ use \Format;
 use \View;
 use \Config;
 
-class Controller_Inspector_Modeltree extends \Controller {
+class Controller_Inspector_Modeltree extends Controller_Extendable {
 
     protected $config = array(
         'model' => '',

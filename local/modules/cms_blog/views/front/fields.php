@@ -42,7 +42,7 @@ if (!empty($display['thumbnail']) && !empty($item->media->thumbnail)) {
 }
 
 if (!empty($display['wysiwyg']) && !empty($item->wysiwyg)) {
-    echo $item->wysiwyg->content();
+    echo $item->wysiwyg->content;
 }
 
 if (!empty($display['tags'])) {

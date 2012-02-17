@@ -21,11 +21,11 @@ return array(
 	'views' => array(
 		'default' => array(
 			'name' => __('Default'),
-			'json' => 'static/modules/cms_blog/js/admin/blog.js',
+			'json' => array('static/modules/cms_blog/js/admin/blog.js'),
 		),
 		'delete_first' => array(
 			'name' => __('Delete first'),
-			'json' => 'static/modules/cms_blog/js/admin/blog_1.js',
+			'json' => array('static/modules/cms_blog/js/admin/blog_1.js'),
 		)
 	),
 	'i18n' => array(

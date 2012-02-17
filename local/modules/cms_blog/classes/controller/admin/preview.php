@@ -16,7 +16,7 @@ class Controller_Admin_Preview extends \Cms\Controller_Generic_Admin {
 
 		$body = array(
 			'config'  => \Format::forge()->to_json($_POST),
-			'preview' => \View::forge('cms_blog::preview')->render(),
+			'preview' => \View::forge($this->config['views']['index'])->render(),
 		);
 
 		$response = \Response::forge(\Format::forge()->to_json($body), 200, array(

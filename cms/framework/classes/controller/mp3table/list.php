@@ -23,7 +23,7 @@ use Asset, Format, Input, Session, View, Uri;
  * @package  app
  * @extends  Controller
  */
-class Controller_Mp3table_List extends Controller {
+class Controller_Mp3table_List extends Controller_Extendable {
 
 	protected $mp3grid = array(
         'query' => array(
@@ -35,8 +35,25 @@ class Controller_Mp3table_List extends Controller {
         'inputs' => array(),
 	);
 
-	public function action_index()
-	{
+    public function before() {
+        parent::before();
+        $mp3gridConfig = '';
+        if (!isset($this->config['mp3grid'])) {
+            list($module_name, $file_name) = $this->getLocation();
+            $file_name = explode('/', $file_name);
+            array_splice($file_name, count($file_name) - 1, 0, array('mp3grid'));
+            $file_name = implode('/', $file_name);
+        } else {
+            list($module_name, $file_name) = explode('::', $this->config['mp3grid']);
+        }
+
+		$this->mp3grid = \Config::mergeWithUser($module_name.'::'.$file_name, static::loadConfiguration($module_name, $file_name));
+
+        //\Debug::dump($this->mp3grid);
+        //print_r($this->mp3grid['views']['default']['json']);
+    }
+
+	public function action_index() {
 		if (!\Cms\Auth::check()) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();

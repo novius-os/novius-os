@@ -87,5 +87,8 @@ class Model_Blog extends Model {
         }
     }
 
-
+    public function toto() {
+        return 'first toto';
+    }
 }
+

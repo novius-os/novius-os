@@ -15,16 +15,13 @@ use Fuel\Core\Config;
 class Controller_Admin_Media_List extends Controller_Mp3table_List {
 
 	public function before($response = null) {
-		Config::load('cms::admin/media/media', true);
-		$this->mp3grid = \Config::getFromUser('cms::admin/media/media', array());
 
+        parent::before($response);
         $view = \Input::get('view', false);
-        //echo $view.'<br/>';
         if ($view !== false) {
             $this->mp3grid['selectedView'] = $view;
-            //echo $view.'<br/>';
         }
 
-		parent::before($response);
+
 	}
 }

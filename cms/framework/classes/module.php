@@ -90,6 +90,7 @@ class Module {
                 return false;
             }
         }
+        static::_refresh_dependencies(array(($add ? 'add' : 'remove') => $this->name));
         return true;
     }
 
@@ -125,6 +126,7 @@ class Module {
                 }
                 $new_properties = array_merge($new_properties, $config[$property]);
             }
+
         }
 
         // then we get the list of installed modules
@@ -177,5 +179,42 @@ class Module {
 
         return true;
 
+    }
+
+    protected static function _refresh_dependencies(array $params = array()) {
+        $add = isset($params['add']) ? $params['add'] : false;
+        $remove = isset($params['remove']) ? $params['remove'] : false;
+        $app_refresh = $add ? $add : $remove;
+
+        $dependencies = array();
+        if ($add) {
+            \Config::load($add.'::metadata', true);
+            $config = \Config::get($add.'::metadata', array());
+            if (isset($config['extends'])) {
+                if (!isset($dependencies[$config['extends']])) {
+                    $dependencies[$config['extends']] = array();
+                }
+                $dependencies[$config['extends']][] = $app_refresh;
+            }
+        }
+
+        \Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
+        $app_installed = \Config::get('app_installed', array());
+
+        foreach ($app_installed as $app_name => $app) {
+            if ($app_refresh !== $app_name) {
+                \Config::load($app_name.'::metadata', true);
+                $config = \Config::get($app_name.'::metadata', array());
+                if (isset($config['extends'])) {
+                    if (!isset($dependencies[$config['extends']])) {
+                        $dependencies[$config['extends']] = array();
+                    }
+                    $dependencies[$config['extends']][] = $app_name;
+                }
+            }
+        }
+
+        \Config::set('modules_dependencies', $dependencies);
+        \Config::save(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', $dependencies);
     }
 }
