@@ -52,9 +52,12 @@ return array(
     ),
 	'dataset' => array(
 		'id' => 'user_id',
-		'fullname' => function($object) {
-			return $object->fullname();
-		},
+		'fullname' => array(
+            'search_column' => \DB::expr('CONCAT(user_firstname, user_name)'),
+            'value' => function($object) {
+                return $object->fullname();
+            },
+        ),
 		'email' => 'user_email',
 		'id_permission' => function($object) {
 			return $object->groups && reset($object->groups)->group_id ?: $object->user_id;

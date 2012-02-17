@@ -58,7 +58,9 @@ class Filter {
         for ($i = 0; $i < count($sorting); $i++) {
             $key = $sorting[$i]['dataKey'];
             $column = self::getColumnFromKey($query, $key, $config);
-            $query->order_by($column, $sorting[$i]['sortDirection'] == 'ascending' ? 'ASC' : 'DESC');
+            if ($column != null) {
+                $query->order_by($column, $sorting[$i]['sortDirection'] == 'ascending' ? 'ASC' : 'DESC');
+            }
         }
     }
 
