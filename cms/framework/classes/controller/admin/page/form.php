@@ -115,9 +115,9 @@ class Controller_Admin_Page_Form extends Controller {
 				'form' => array(
 					'type' => 'select',
 					'options' => array(
-						0 => 'New window',
-						1 => 'Popup',
-						2 => 'Same window',
+						Model_Page_Page::EXTERNAL_TARGET_NEW   => 'New window',
+						Model_Page_Page::EXTERNAL_TARGET_POPUP => 'Popup',
+						Model_Page_Page::EXTERNAL_TARGET_SAME  => 'Same window',
 					),
 				),
 			),

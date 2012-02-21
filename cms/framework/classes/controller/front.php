@@ -198,7 +198,7 @@ class Controller_Front extends Controller {
     protected function _find_page() {
         $where = array(array('page_published', 1));
         if (empty($this->url)) {
-            $where[] = array('page_home', 1);
+            $where[] = array('page_entrance', 1);
         } else {
             $where[] = array('page_virtual_url', $this->url);
         }

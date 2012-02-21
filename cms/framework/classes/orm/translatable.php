@@ -41,6 +41,7 @@ class Orm_Translatable extends \Orm\Observer
 	 * lang_property
 	 * common_id_property
 	 * single_id_property
+     * invariant_fields
 	 */
 	protected $_properties = array();
 
@@ -51,12 +52,12 @@ class Orm_Translatable extends \Orm\Observer
 	}
 
 	/**
-	 * Fill the lang_common_id and lang properties when creating the object
+	 * Fill in the lang_common_id and lang properties when creating the object
 	 *
 	 * @param   Model  The object
 	 * @return  void
 	 */
-	public function before_insert(Orm\Model $obj)
+	public function before_insert(\Orm\Model $obj)
 	{
 		$common_id_property = $this->_properties['common_id_property'];
 		$lang_property      = $this->_properties['lang_property'];
@@ -69,7 +70,12 @@ class Orm_Translatable extends \Orm\Observer
             $obj->$lang_property = Arr::get($this->_properties['default_lang'], \Config::get('default_lang', 'en_GB'));
         }
 	}
-	public function after_insert_insert(Orm\Model $obj)
+    /**
+     * Updates the lang_common_id property
+     * @param Model $obj
+	 * @return  void
+     */
+	public function after_insert_insert(\Orm\Model $obj)
 	{
 		$common_id_property = $this->_properties['common_id_property'];
 
@@ -80,7 +86,27 @@ class Orm_Translatable extends \Orm\Observer
         }
 	}
 
-	public function languages($data)
+    /**
+     * Copies all invariant fields from the main language
+     *
+     * @param Model $obj
+     */
+    public function before_save(\Cms\Model $obj) {
+        if (!$obj->is_main_lang()) {
+            $obj_main = $obj->find_main_lang();
+            foreach ($this->_properties['invariant_fields'] as $invariant) {
+                $obj->$invariant = $obj_main->$invariant;
+            }
+        }
+    }
+
+    /**
+     * Returns all available languages for the requested items
+     *
+     * @param  array  $where
+     * @return array  List of available languages for each single_id
+     */
+	public function languages($where)
 	{
 		$common_id_property = $this->_properties['common_id_property'];
 		$lang_property = $this->_properties['lang_property'];
@@ -93,7 +119,7 @@ class Orm_Translatable extends \Orm\Observer
 				 ->from(call_user_func($this->_class . '::table'))
 				 ->group_by($common_id_property);
 
-		foreach ($data as $field_name => $value) {
+		foreach ($where as $field_name => $value) {
 			if (!empty($value)) {
 				if (is_array($value)) {
 					$query->where($field_name, 'in', $value);

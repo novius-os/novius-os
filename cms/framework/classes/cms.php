@@ -22,7 +22,7 @@ class Cms {
     public static function rewrite_url($url = null, array $rewrites = array()) {
         // No URL provided, we use the one from the main page
         if ($url === null) {
-            $url = self::main_controller()->page->get_href();
+            $url = self::main_page()->get_href();
         }
         $url  = str_replace('.html', '/', $url);
 
@@ -48,6 +48,15 @@ class Cms {
      */
     public static function main_controller() {
         return Request::main()->controller_instance;
+    }
+
+    /**
+     * Returns the pagefrom the main request
+     *
+     * @return \Cms\Model_Page_Page
+     */
+    public static function main_page() {
+        return static::main_controller()->page;
     }
 
     /**
