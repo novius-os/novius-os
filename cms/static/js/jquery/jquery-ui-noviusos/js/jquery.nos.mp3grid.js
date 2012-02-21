@@ -1234,7 +1234,7 @@ define([
                 $('<label for="view_grid"></label>')
                     .text(o.texts.viewGrid)
                     .appendTo(self.uiViewsButtons);
-                $('<input type="radio" id="view_grid" name="view" checked="' + (o.defaultView === 'grid' ? 'checked="checked"' : '') + '" />')
+                $('<input type="radio" id="view_grid" name="view" ' + (o.defaultView === 'grid' ? 'checked="checked"' : '') + ' />')
                     .appendTo(self.uiViewsButtons)
                     .button({
                         text : false,
