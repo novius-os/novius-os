@@ -20,7 +20,7 @@ return array(
     'selectedView' => 'default',
     'views' => array(
         'default' => array(
-            'name' => __('Default'),
+            'name' => __('Default view'),
             'json' => array('static/cms/js/admin/page/page.js'),
         )
     ),

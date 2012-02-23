@@ -20,16 +20,25 @@ return array(
     'selectedView' => 'default',
     'views' => array(
         'default' => array(
-            'name' => __('Default'),
-            'json' => array('static/cms/js/admin/media/media.js'),
+            'name' => __('Default view'),
+            'json' => array(
+                'static/cms/js/admin/media/common.js',
+                'static/cms/js/admin/media/media.js'
+            ),
         ),
         'image' => array(
             'name' => __('Image'),
-            'json' => array('static/cms/js/admin/media/media_image.js'),
+            'json' => array(
+                'static/cms/js/admin/media/common.js',
+                'static/cms/js/admin/media/media_image.js'
+            ),
         ),
         'tinymce' => array(
             'name' => __('TinyMCE'),
-            'json' => array('static/cms/js/admin/media/media_tinymce.js'),
+            'json' => array(
+                'static/cms/js/admin/media/common.js',
+                'static/cms/js/admin/media/media_tinymce.js'
+            ),
         )
     ),
     'i18n' => array(
@@ -42,12 +51,14 @@ return array(
         'Delete' => __('Delete'),
         'Visualize' => __('Visualize'),
         'Pick' => __('Pick'),
+        'Folder' => __('Folder'),
         'Folders' => __('Folders'),
         'Type of file' => __('Type of file'),
         'Id' => __('Id'),
         'Extension' => __('Extension'),
         'File name' => __('File name'),
         'Path' => __('Path'),
+        'Upload a new file' => __('Upload a new file'),
 
         'addDropDown' => __('Select an action'),
         'columns' => __('Columns'),

@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_Admin_Media_Upload extends Controller_Noviusos_Noviusos {
+class Controller_Admin_Media_Upload extends \Controller {
 
 	public function action_form($id = null) {
 
@@ -22,10 +22,43 @@ class Controller_Admin_Media_Upload extends Controller_Noviusos_Noviusos {
         }
 
 		$folder = Model_Media_Folder::find($id);
-		$this->template->body = \View::forge('cms::admin/media/upload/form', array(
-			'folder' => $folder,
-		));
-		return $this->template;
+        $fieldset = \Fieldset::build_from_config(array(
+            'folder_inspector' => array(
+                'widget' => 'media_folder',
+                'widget_options' => array(),
+            ),
+            'media_path_id' => array(
+                'form' => array(
+                    'type' => 'hidden',
+                    'value' => $folder->medif_id,
+                ),
+            ),
+            'media' => array(
+                'form' => array(
+                    'type' => 'file',
+                ),
+                'label' => __('File from your hard drive: '),
+            ),
+            'media_title' => array(
+                'form' => array(
+                    'type' => 'text',
+                ),
+                'label' => __('Title: '),
+            ),
+            'save' => array(
+                'form' => array(
+                    'type' => 'submit',
+                    'class' => 'primary',
+                    'value' => __('Add'),
+                    'data-icon' => 'circle-plus',
+                ),
+            ),
+        ));
+
+		return \View::forge('cms::admin/media/upload/form', array(
+			'folder'   => $folder,
+            'fieldset' => $fieldset,
+		), false);
 	}
 
 	public function action_do() {

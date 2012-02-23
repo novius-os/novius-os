@@ -13,4 +13,5 @@ namespace Cms;
 use Fuel\Core\Config;
 
 class Controller_Admin_Page_List extends Controller_Mp3table_List {
+
 }

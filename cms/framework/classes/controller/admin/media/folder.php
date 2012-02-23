@@ -10,15 +10,41 @@
 
 namespace Cms;
 
-class Controller_Admin_Media_Folder extends Controller_Noviusos_Noviusos {
+class Controller_Admin_Media_Folder extends \Controller {
 
 	public function action_form($id) {
 
-		$folder = Model_Media_Folder::find($id);
-		$this->template->body = \View::forge('cms::admin/media/folder/form', array(
-			'folder' => $folder,
-		));
-		return $this->template;
+        $fieldset = \Fieldset::build_from_config(array(
+            'medif_parent_id' => array(
+                'form' => array(
+                    'type' => 'hidden',
+                    'value' => $folder->medif_id,
+                ),
+            ),
+            'medif_title' => array(
+                'form' => array(
+                    'type' => 'text',
+                ),
+                'label' => __('Title: '),
+            ),
+            'medif_path' => array(
+                'form' => array(
+                    'type' => 'text',
+                ),
+                'label' => __('Path: ').$folder->medif_path.' ',
+            ),
+            'save' => array(
+                'form' => array(
+                    'type' => 'submit',
+                    'class' => 'primary',
+                    'value' => __('Add'),
+                    'data-icon' => 'circle-plus',
+                ),
+            ),
+        ));
+		return \View::forge('cms::admin/media/folder/form', array(
+            'fieldset' => $fieldset,
+		), false);
 	}
 
 	public function action_do() {

@@ -10,199 +10,39 @@
 define([
     'jquery-nos'
 ], function($) {
-    var mp3Grid = $.nos.mp3GridSetup(),
-        actions = {
-            edit : {
-                label : mp3Grid.i18n('Edit'),
-                action : function(item) {
-                    $.nos.tabs.add({
-                        iframe : true,
-                        url : "admin/admin/media/form?id=" + item.id,
-                        label : item.title
-                    });
-                }
-            },
-            'delete' : {
-                label : mp3Grid.i18n('Delete'),
-                action : function(item) {
-                    if (confirm("Are you sure ?")) {
-                        $.nos.tabs.add({
-                            iframe : true,
-                            url : "admin/admin/media/form?id=" + item.id,
-                            label : item.title
-                        });
+    return function(mp3Grid) {
+        return {
+            actions : {
+                pick : {
+                    label : mp3Grid.i18n('Pick'),
+                    action : function(item) {
+                        $.nos.listener.fire("tinymce.image_select", true, [item]);
                     }
                 }
             },
-            visualize : {
-                label : mp3Grid.i18n('Visualize'),
-                action : function(item) {
-                    window.open(item.image);
-                }
-            },
-            pick : {
-                label : mp3Grid.i18n('Pick'),
-                action : function(item) {
-                    $.nos.listener.fire("tinymce.image_select", true, [item]);
-                }
-            }
-        };
-
-    return $.extend(true, mp3Grid, {
-        actions : actions,
-        refresh : 'cms_media_media',
-        delayed : true,
-        mp3grid : {
-            adds : {
-                media : {
-                    label : mp3Grid.i18n('Add a media'),
-                    action : function() {
-                        $.nos.dialog({
-                            contentUrl: 'admin/admin/media/upload/form/',
-                            title: 'Upload a new file',
-                            width: 400,
-                            height: 200
-                        });
-                    }
-                },
-                folder : {
-                    label : mp3Grid.i18n('Add a folder'),
-                    url : 'admin/admin/media/folder/add'
-                }
-            },
-            grid : {
-                id : 'cms_media_grid_tinymce',
-                proxyUrl : 'admin/admin/media/list/json',
-                columns : {
-                    extension : {
-                        headerText : mp3Grid.i18n('Ext.'),
-                        dataKey : 'extension',
-                        width : 1,
-                        allowSizing : false
-                    },
-                    title : {
-                        headerText : mp3Grid.i18n('Title'),
-                        dataKey : 'title'
-                    },
-                    actions : {
-                        actions : [
-                            actions.pick,
-                            actions.edit,
-                            actions['delete'],
-                            actions.visualize
-                        ]
-                    }
-                }
-            },
-            thumbnails : {
-                dataParser : function(size, item) {
-                    var data = {
-                        title : item.title,
-                        thumbnail : (item.image ? item.thumbnail : item.thumbnailAlternate).replace(/64/g, size),
-                        thumbnailAlternate : (item.image ? item.thumbnailAlternate : '').replace(/64/g, size),
-                        actions : []
-                    };
-                    return data;
-                },
-                actions : [
-                    actions.pick,
-                    actions.edit,
-                    actions['delete'],
-                    actions.visualize
-                ]
-            },
-            values: {
-                media_extension: ['image']
-            },
-            defaultView : 'thumbnails',
-            inspectors : {
-                folders : {
-                    vertical : true,
-                    label : mp3Grid.i18n('Folders'),
-                    url : 'admin/admin/media/inspector/folder/list',
-                    widget_id : 'cms_media_folders',
-                    inputName : 'folder_id',
-                    grid : {
-                        urlJson : 'admin/admin/media/inspector/folder/json',
-                        columns : {
-                            title : {
-                                headerText : mp3Grid.i18n('Folder name'),
-                                dataKey : 'title'
-                            },
-                            actions : {
-                                actions : [
-                                    {
-                                        label : mp3Grid.i18n('Upload'),
-                                        action : function(item) {
-                                            $.nos.dialog({
-                                                contentUrl: 'admin/admin/media/upload/form/' + item.id,
-                                                title: 'Upload a new file in the "' + item.title + '" folder',
-                                                width: 400,
-                                                height: 200
-                                            });
-                                        }
-                                    },
-                                    {
-                                        label : mp3Grid.i18n('Create a sub-folder'),
-                                        action : function(item) {
-                                            $.nos.dialog({
-                                                contentUrl: 'admin/admin/media/folder/form/' + item.id,
-                                                title: 'Create a sub-folder in "' + item.title + '"',
-                                                width: 550,
-                                                height: 200
-                                            });
-                                        }
-                                    }
-                                ]
-                            }
+            mp3grid : {
+                grid : {
+                    id : 'cms_media_grid_tinymce',
+                    columns : {
+                        actions : {
+                            actions : ['pick', 'edit', 'delete', 'visualize']
                         }
                     }
                 },
-                preview : {
-                    preview : true,
-                    hide : false,
-                    vertical : true,
-                    label : mp3Grid.i18n('Preview'),
-                    widget_id : 'cms_media_preview',
-                    options : {
-                        meta : {
-                            id : {
-                                label : mp3Grid.i18n('Id')
-                            },
-                            extensions : {
-                                label : mp3Grid.i18n('Extension')
-                            },
-                            fileName : {
-                                label : mp3Grid.i18n('File name')
-                            },
-                            path : {
-                                label : mp3Grid.i18n('Path')
-                            }
-                        },
-                        actions : [
-                            actions.edit,
-                            $.extend(actions.visualize, {
-                                button : true
-                            }),
-                            actions['delete']
-                        ],
-                        dataParser : function(item) {
-                            var data = {
-                                title : item.title,
-                                thumbnail : (item.image ? item.thumbnail.replace(/64/g, 256) : item.thumbnailAlternate),
-                                thumbnailAlternate : (item.image ? item.thumbnailAlternate : ''),
-                                meta : {
-                                    id : item.id,
-                                    extension : item.extension,
-                                    fileName : item.file_name,
-                                    path : item.path
-                                }
-                            };
-                            return data;
-                        }
+                thumbnails : {
+                    actions : ['pick', 'edit', 'delete', 'visualize']
+                },
+                values: {
+                    media_extension: ['image']
+                },
+                inspectors : {
+                    extensions : {
+                        hide : true
                     }
-                }
+                },
+                // Another solution is to remove the extensions inspector in the "Order" property
+                inspectorsOrder : 'folders,preview'
             }
         }
-    });
+    }
 });

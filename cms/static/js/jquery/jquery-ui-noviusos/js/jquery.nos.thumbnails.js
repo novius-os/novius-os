@@ -12,7 +12,7 @@ define([
 ], function( $, undefined ) {
 	$.widget( "nos.thumbnails", {
 		options: {
-			thumbnailSize : 64,
+			thumbnailSize : 128,
 			pageIndex: 0,
 			pageSize: null,
 			url : '',
@@ -52,8 +52,8 @@ define([
 			var self = this,
 				o = self.options;
 
-			if ($.inArray(o.thumbnailSize, [32, 64]) === -1) {
-				o.thumbnailSize = 64;
+			if ($.inArray(o.thumbnailSize, [64, 128]) === -1) {
+				o.thumbnailSize = 128;
 			}
 
 			self.uiPager.wijpager({

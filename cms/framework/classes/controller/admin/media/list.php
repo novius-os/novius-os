@@ -14,14 +14,4 @@ use Fuel\Core\Config;
 
 class Controller_Admin_Media_List extends Controller_Mp3table_List {
 
-	public function before($response = null) {
-
-        parent::before($response);
-        $view = \Input::get('view', false);
-        if ($view !== false) {
-            $this->mp3grid['selectedView'] = $view;
-        }
-
-
-	}
 }

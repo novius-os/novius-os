@@ -37,14 +37,17 @@ class Controller_Inspector_Modeltree extends Controller_Extendable {
         $this->config['primary_column'] = $primary[0];
     }
 
-    public function action_list()
+    public function action_list($view = null)
     {
 		if (!\Cms\Auth::check()) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
 		}
 
-        $view = View::forge('inspector/modeltree');
+        if (empty($view)) {
+            $view = 'inspector/modeltree';
+        }
+        $view = View::forge(str_replace('\\', '/', $view));
 
         return $view;
     }

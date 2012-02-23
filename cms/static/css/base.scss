@@ -52,11 +52,16 @@ a:hover {
 	width : auto;
 
 	.wijmo-wijmenu-link {
+        width : 100%;
+        padding : 0.3em 0;
 
 		span, label {
 			white-space: nowrap;
 		}
 	}
+    .wijmo-wijmenu-text {
+        padding : 0 0.3em;
+    }
 	input {
 		vertical-align: middle;
 	}
@@ -78,7 +83,7 @@ a:hover {
 }
 
 // Right menu on form pages
-.wijmo-wijaccordion {
+.wijmo-wijaccordion, .fieldset.standalone {
 	p {
 		margin: 0.5em 0;
 	}
@@ -99,6 +104,10 @@ a:hover {
 	padding : 0.2em;
 }
 
+.ui-button-text .ui-button-text {
+    padding : 0.2em 1em;
+}
+
 .page {
 	margin-top: 3em;
 }
@@ -110,4 +119,9 @@ input.ui-widget.primary, button.ui-widget.primary {
 }
 input.ui-widget.primary.ui-state-active, button.ui-widget.ui-state-active.primary {
 	border-style : inset;
+}
+
+span.optional {
+    font-style : italic;
+    opacity    : 0.7;
 }

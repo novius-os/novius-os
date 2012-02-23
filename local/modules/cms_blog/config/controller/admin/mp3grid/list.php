@@ -20,13 +20,9 @@ return array(
 	'selectedView' => 'default',
 	'views' => array(
 		'default' => array(
-			'name' => __('Default'),
+			'name' => __('Default view'),
 			'json' => array('static/modules/cms_blog/js/admin/blog.js'),
 		),
-		'delete_first' => array(
-			'name' => __('Delete first'),
-			'json' => array('static/modules/cms_blog/js/admin/blog_1.js'),
-		)
 	),
 	'i18n' => array(
 		'Blog' => __('Blog'),

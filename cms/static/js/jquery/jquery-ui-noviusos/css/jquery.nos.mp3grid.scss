@@ -33,20 +33,26 @@
     height : 100%;
 
 	.nos-mp3grid-headerbar {
-		margin : 0px 5px;
+		margin : 0px 10px 0;
 
 		.nos-mp3grid-adds {
 			float : left;
+            margin-top: 5px;
 		}
+        .nos-mp3grid-action-secondary {
+            display : inline-block;
+            margin: 0 1em;
+        }
 		.nos-mp3grid-settings {
 			float : right;
+            margin-top: 10px;
 		}
 	}
 
 	.nos-mp3grid-splitter-v {
 		@include box-sizing(border-box);
 		position : absolute;
-        top : 40px;
+        top : 45px;
 		left : 0;
 		right : 0;
 		bottom : 0;

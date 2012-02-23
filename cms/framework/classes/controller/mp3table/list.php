@@ -53,18 +53,22 @@ class Controller_Mp3table_List extends Controller_Extendable {
         //print_r($this->mp3grid['views']['default']['json']);
     }
 
-	public function action_index() {
+	public function action_index($view = null, $delayed = false) {
 		if (!\Cms\Auth::check()) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
 		}
 
-        $controllerName = \Request::active()->controller;
+        if (empty($view)) {
+            $view = \Input::get('view', $this->mp3grid['selectedView']);
+        }
+        $this->mp3grid['selectedView'] = $view;
 
 		$view = View::forge('mp3table/list');
 
-
-
+        if ($delayed) {
+            $this->mp3grid['delayed'] = true;
+        }
 
 
         /*
@@ -78,6 +82,10 @@ class Controller_Mp3table_List extends Controller_Extendable {
         $view->set('mp3grid', \Format::forge($this->mp3grid)->to_json(), false);
 		return $view;
 	}
+
+    public function action_delayed($view = null) {
+        return $this->action_index($view, true);
+    }
 
     public function action_json()
     {

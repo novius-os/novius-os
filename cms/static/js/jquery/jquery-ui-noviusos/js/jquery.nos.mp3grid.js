@@ -75,10 +75,8 @@ define([
 
 			self.uiAdds = $('<div></div>').addClass('nos-mp3grid-adds')
 				.appendTo(self.uiHeaderBar);
-			self.uiAddsButton = $('<button type="button"></button>').appendTo(self.uiAdds);
-			self.uiAddsDropDown = $('<button type="button"></button>').text(o.texts.addDropDown)
-				.appendTo(self.uiAdds);
-			self.uiAddsMenu = $('<ul></ul>').appendTo(self.uiAdds);
+			self.uiAddsButton = $('<button type="button"></button>').addClass('primary').appendTo(self.uiAdds);
+			//self.uiAddsMenu = $('<div></div>').appendTo(self.uiAdds);
 
 			self.uiSettings = $('<div></div>').addClass('nos-mp3grid-settings')
 				.appendTo(self.uiHeaderBar);
@@ -145,7 +143,7 @@ define([
 				o.thumbnails = false;
 			} else {
 				o.thumbnails = $.extend({
-					thumbnailSize : 64
+					thumbnailSize : 128
 				}, o.thumbnails);
 			}
 
@@ -207,13 +205,15 @@ define([
 			self.uiAddsButton.button({
 					label: first.label,
 					icons : {
-						primary: 'ui-icon ui-icon-circle-plus',
+						primary: 'ui-icon ui-icon-plus',
 						secondary: null
 					}
 				})
-				.click(function() {
+				.click(function(e) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
                     if ($.isFunction(first.action)) {
-                        first.action();
+                        first.action.apply();
                     } else {
                         $.nos.tabs.add({
                             iframe : true,
@@ -223,41 +223,26 @@ define([
                     }
 				});
 
-			self.uiAddsDropDown.button({
-					text: false,
-					icons: {
-						primary: "ui-icon-triangle-1-s"
-					}
-				});
-
-			self.uiAdds.buttonset();
-
-			$.each(o.adds, function() {
-				var li = $('<li></li>').appendTo(self.uiAddsMenu),
-					a = $('<a href="#"></a>').click(function() {
-							$.nos.tabs.add({
+			$.each(o.adds, function(i, add) {
+				$('<a href="#"></a>')
+                    .addClass('nos-mp3grid-action-secondary')
+                    .text(this.label)
+                    .appendTo(self.uiAdds)
+                    .click(function(e) {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        if ($.isFunction(add.action)) {
+                            add.action.apply(this);
+                        } else {
+                            $.nos.tabs.add({
                                 iframe : true,
-								url : this.url,
-								label : this.label
-							});
-						}).appendTo(li);
+                                url : this.url,
+                                label : this.label
+                            });
+                        }
+                    });
 
-				$('<span></span>').text(this.label)
-					.appendTo(a);
 			});
-			self.uiAddsMenu.wijmenu({
-					trigger : self.uiAddsDropDown,
-					triggerEvent : 'click',
-					orientation : 'vertical',
-					showAnimation : {Animated:"slide", duration: 50, easing: null},
-					hideAnimation : {Animated:"hide", duration: 0, easing: null},
-					position : {
-						my        : 'right top',
-						at        : 'right bottom',
-						collision : 'flip',
-						offset    : '0 0'
-					}
-				});
 
 			return self;
 		},
@@ -1256,7 +1241,7 @@ define([
                     });
             }
             if (o.thumbnails) {
-                var sizes = [32, 64];
+                var sizes = [64, 128];
                 $.each(sizes, function(i, size) {
                     $('<label for="view_thumbnails_' + size + '"></label>')
                         .text(o.texts.viewThumbnails + ' ' + size + 'px')
@@ -1267,7 +1252,7 @@ define([
                             text : false,
                             label: o.texts.viewThumbnails + ' ' + size + 'px',
                             icons : {
-                                primary: 'ui-icon ' + (size === 32 ? 'view-thumbs-small' : 'view-thumbs-big'),
+                                primary: 'ui-icon ' + (size === 64 ? 'view-thumbs-small' : 'view-thumbs-big'),
                                 secondary: null
                             }
                         })
