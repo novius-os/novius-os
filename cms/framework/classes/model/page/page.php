@@ -13,6 +13,7 @@ namespace Cms;
 use Fuel\Core\Uri;
 
 class Model_Page_Page extends \Cms\Model {
+
     protected static $_table_name = 'os_page';
     protected static $_primary_key = array('page_id');
 
@@ -45,10 +46,23 @@ class Model_Page_Page extends \Cms\Model {
 
 	protected static $_observers = array(
 		'Cms\Orm_Translatable' => array(
-			'events' => array('before_insert', 'after_insert'),
+			'events' => array('before_insert', 'after_insert', 'before_save'),
 			'lang_property'      => 'page_lang',
 			'common_id_property' => 'page_lang_common_id',
 			'single_id_property' => 'page_lang_single_id',
+            'invariant_fields'   => array(
+                //'page_parent_id', // Depends on the lang, cannot be updated automagically
+                'page_template',
+                'page_level',
+                'page_raw_html',
+                'page_sort',
+                'page_menu',
+                'page_type',
+                'page_lock',
+                'page_entrance',
+                'page_home',
+                'page_cache_duration',
+            ),
 		),
 	);
 
@@ -59,49 +73,102 @@ class Model_Page_Page extends \Cms\Model {
 	const TYPE_INTERNAL_LINK = 4;
 	const TYPE_OTHER_PAGE    = 5;
 
-    /**
-     * Creates a new query with optional settings up front
-     *
-     * @param   array
-     * @return  Query
-     */
-	/*
-    public static function query($options = array())
-    {
-        return parent::query($options + array('order_by' => array('page_sort')));
-    }*/
+    const EXTERNAL_TARGET_NEW   = 0;
+    const EXTERNAL_TARGET_POPUP = 1;
+    const EXTERNAL_TARGET_SAME  = 2;
 
+    /**
+     * Alias to Model:find('all') with appropriate sort for Model_Page_Page
+     *
+     * @param array  $where
+     * @param array  $order_by
+     * @param array  $options   Additional options to pass on to the ::find() method
+     * @return array of \Cms\Model_Page_Page
+     */
     public static function search($where, $order_by = array(), $options = array()) {
         isset($order_by['page_sort']) or $order_by['page_sort'] = 'ASC';
         return parent::search($where, $order_by, $options);
     }
 
-    public function children($where = array()) {
+    /**
+     * Returns all the direct children of the page
+     *
+     * @param  array  $where
+     * @param  array  $order_by
+     * @param  array  $options
+     * @see \Cms\Model_Page_Page::search
+     * @return array of \Cms\Model_Page_Page
+     */
+    public function children($where = array(), $order_by = array(), $options = array()) {
         $where[] = array('page_parent_id', $this->page_id);
-        return static::search($where);
+        return static::search($where, $order_by, $options);
     }
 
+    /**
+     * Find a page with the pair $id (of the main language) + $lang
+     *
+     * @param  int     $id
+     * @param  string  $lang
+     * @param array    $options
+     * @return \Cms\Model_Page_Page
+     */
+    public static function find_by_id_lang($id, $lang, $options = array()) {
+        return static::find('first', \Arr::merge($options, array(
+            'where' => array(
+                array('page_lang_common_id', $id),
+                array('page_lang', $lang),
+            )
+        )));
+    }
+
+    /**
+     * Returns the href and target attributes for an HTML link <a>
+     *
+     * @return string
+     */
     public function get_link() {
-        return 'href="'.$this->get_href().'"';
+        $attr = array(
+            'href' => $this->get_href(),
+        );
+        if ($this->page_type == self::TYPE_EXTERNAL_LINK) {
+            if ($this->page_external_link_type == self::EXTERNAL_TARGET_NEW) {
+                $attr['target'] = '_blank';
+            }
+        }
+        return array_to_attr($attr);
     }
 
+    /**
+     *
+     * @param int $params Id of the page
+     * @return type
+     */
     public static function get_url($params) {
         if (is_numeric($params)) {
-            return self::find($params)->get_href();
+            return static::find($params)->get_href();
         }
     }
 
     public static function get_url_absolute($params) {
         if (is_numeric($params)) {
-            return self::find($params)->get_href(array(
+            return static::find($params)->get_href(array(
                 'absolute' => true,
             ));
         }
     }
 
+    /**
+     *
+     * @param   array   params
+     * @return  string  the href of the page (external link or virtuak URL)
+     */
     public function get_href($params = array()) {
         if ($this->page_type == self::TYPE_EXTERNAL_LINK) {
-            return $this->page_external_link;
+            $page_external_link = $this->page_external_link;
+            if (empty($page_external_link) && !$this->is_main_lang()) {
+                $page_external_link = $this->find_main_lang()->page_external_link;
+            }
+            return $page_external_link;
         }
         $url = !empty($params['absolute']) ? Uri::base(false) : '';
 
