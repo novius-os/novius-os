@@ -58,6 +58,10 @@ define([
                     }
                 }
             },
+            treeGrid : {
+                proxyUrl : 'admin/admin/page/list/tree_json'
+            },
+            defaultView : 'treeGrid',
             inspectors : {
                 roots : {
                     widget_id : 'cms_page_roots',

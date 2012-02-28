@@ -9,6 +9,7 @@
 @import "compass/css3/box-sizing";
 @import "compass/css3/border-radius";
 @import "jquery.nos.nosgrid.css";
+@import "jquery.nos.nostreegrid.css";
 @import "jquery.nos.thumbnails.css";
 @import "jquery.nos.inspector-preview.css";
 
@@ -38,7 +39,7 @@
 		.nos-mp3grid-adds {
 			float : left;
 		}
-		.nos-mp3grid-settings {
+		.nos-mp3grid-dropdownviews {
 			float : right;
 		}
 	}
@@ -161,6 +162,10 @@
 
 	                .view-list {
 	                    background-image: url(../images/view-list.png);
+	                    background-position: 0 0;
+	                }
+	                .view-tree {
+	                    background-image: url(../images/view-tree.png);
 	                    background-position: 0 0;
 	                }
 	                .view-thumbs-small {

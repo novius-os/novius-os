@@ -50,7 +50,7 @@ define([
             }
             o.columnResized = function(e, args) {
                 var columns = self.option('columns');
-                $.extend(columns[args.column.dataIndex], {
+                $.extend(columns[args.column.thX], {
                     ensurePxWidth : true,
                     width : args.column.width
                 });

@@ -13,6 +13,25 @@ use Cms\I18n;
 I18n::load('page', 'cms_page');
 
 return array(
+	'tree' => array(
+		'models' => array(
+			array(
+				'model' => 'Cms\Model_Page_Page',
+				'childs' => array('Cms\Model_Page_Page'),
+				'dataset' => array(
+					'id' => 'page_id',
+					'title' => 'page_title',
+					'url' => 'page_virtual_url',
+				),
+			),
+		),
+		'roots' => array(
+			array(
+				'model' => 'Cms\Model_Page_Page',
+				'where' => array(array('page_parent_id', 'IS', \DB::expr('NULL'))),
+			),
+		),
+	),
 	'query' => array(
 		'model' => 'Cms\Model_Page_Page',
 		'related' => array(),
@@ -67,7 +86,7 @@ return array(
 		},
 		'directory_id' => function($value, $query) {
 			$query->where(array('page_level', '>', 0));
-			$query->where(array('page_type', '!=', Cms\Model_Page_Page::TYPE_FOLDER));
+			//$query->where(array('page_type', '!=', Cms\Model_Page_Page::TYPE_FOLDER));
 			if ($value) {
 				$query->where(array('page_parent_id', '=', $value));
 			}
