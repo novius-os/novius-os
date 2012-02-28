@@ -19,6 +19,7 @@ class Response extends \Fuel\Core\Response {
 		static::forge(\Format::forge()->to_json($data), $status, array(
 			'Content-Type' => 'application/json',
 		))->send(true);
+		Event::shutdown();
 		exit();
 	}
 }
