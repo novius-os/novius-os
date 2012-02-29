@@ -10,14 +10,15 @@
 define([
 	'jquery-nos'
 ], function( $, undefined ) {
-	$.widget( "nos.nostreegrid", {
+	$.widget( "nos.nostreegrid", $.nos.nosgrid, {
 		options: {
             treeUrl : '',
             sortable : true,
             movable : true,
             texts : {
                 moveConfirm : 'Are you sure you want to move \nxxx\ninto\nyyy'
-            }
+            },
+            data : []
 		},
 
         oldFirstColumn : null,
@@ -50,53 +51,13 @@ define([
             };
 
             o.allowPaging = false;
+
+            $.nos.nosgrid.prototype._create.call(self);
 		},
 
 		_init: function() {
 			var self = this,
 				o = self.options;
-
-            self.treeDataSource = new wijdatasource({
-                dynamic: true,
-                proxy: new wijhttpproxy({
-                    url: o.treeUrl,
-                    dataType: "json",
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        log(jqXHR, textStatus, errorThrown);
-                    },
-                    data: {}
-                }),
-                loaded: function(dataSource, data) {
-                    var toObject = function(items) {
-                            var oItems = {};
-                            $.each(items, function() {
-                                var item = this;
-                                item.treeHash = item.treeType + '|' + item.treeId;
-                                if ($.isArray(item.treeChilds)) {
-                                    item.treeChilds = toObject(item.treeChilds);
-                                }
-                                if (!item.treeTitle) {
-                                    item.treeTitle = item.title || item.name || item.label || item.treeHash;
-                                }
-                                oItems[item.treeHash] = item;
-                            });
-                            return oItems;
-                        },
-                        items = toObject(dataSource.items);
-
-                    if (!$.isPlainObject(data)) {
-                        self.treeData = items;
-                    } else {
-                        self._getTreeNode(data.node).treeChilds = items;
-                    }
-                    self._treeGrid();
-                },
-                reader: {
-                    read: function (dataSource) {
-                        dataSource.items = dataSource.data.items;
-                    }
-                }
-            });
 
             self.oldFirstColumn = $.extend(true, {}, o.columns[0]);
 
@@ -112,41 +73,39 @@ define([
                     }
                     if (node.treeChilds) {
                         $('<div class="nostreegrid-toggle"></div>').css({
-                                marginLeft : (node.treeLevel * 20) + 'px',
-                                cursor : 'pointer'
-                            })
+                            marginLeft : (node.treeLevel * 20) + 'px',
+                            cursor : 'pointer'
+                        })
                             .addClass('ui-icon')
                             .addClass($.isPlainObject(node.treeChilds) ? 'ui-icon-triangle-1-se' : 'ui-icon-triangle-1-e')
                             .click(function(e) {
                                 e.stopImmediatePropagation();
                                 if ($.isPlainObject(node.treeChilds)) {
                                     $(this).toggleClass('ui-icon-triangle-1-e ui-icon-triangle-1-se');
-                                    node.treeChilds = true;
-                                    tr.nextAll().each(function(i) {
-                                        var tr = $(this),
-                                            n = tr.data('treeNode');
-
-                                        if (!$.isPlainObject(n) || n.treeLevel <= node.treeLevel) {
-                                            return false;
-                                        } else {
-                                            tr.remove();
-                                        }
+                                    self.treeDataSource.proxy.options.data.deep = -1;
+                                    self.treeDataSource.proxy.options.data.id = node._id;
+                                    self.treeDataSource.proxy.options.data.model = node._model;
+                                    self.treeDataSource.load({
+                                        close : true,
+                                        node : node,
+                                        index : tr.data('wijgriddataItemIndex')
                                     });
                                 } else {
                                     $(this).toggleClass('ui-icon-triangle-1-e ui-icon-clock');
                                     self.treeDataSource.proxy.options.data.deep = 1;
-                                    self.treeDataSource.proxy.options.data.id = node.treeId;
-                                    self.treeDataSource.proxy.options.data.type = node.treeType;
+                                    self.treeDataSource.proxy.options.data.id = node._id;
+                                    self.treeDataSource.proxy.options.data.model = node._model;
                                     self.treeDataSource.load({
-                                        node : node
+                                        node : node,
+                                        index : tr.data('wijgriddataItemIndex')
                                     });
                                 }
                             })
                             .prependTo(args.$container);
                     } else {
                         $('<div class="nostreegrid-toggle"></div>').css({
-                                marginLeft : (node.treeLevel * 20) + 'px'
-                            })
+                            marginLeft : (node.treeLevel * 20) + 'px'
+                        })
                             .addClass('nos-icon16 nos-icon16-empty')
                             .prependTo(args.$container);
                     }
@@ -173,6 +132,66 @@ define([
 
             $.each(o.columns, function() {
                 this.sortDirection = 'none';
+            });
+
+            $.nos.nosgrid.prototype._init.call(self);
+
+            self.treeDataSource = new wijdatasource({
+                dynamic: true,
+                proxy: new wijhttpproxy({
+                    url: o.treeUrl,
+                    dataType: "json",
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        log(jqXHR, textStatus, errorThrown);
+                    },
+                    data: {}
+                }),
+                loaded: function(dataSource, data) {
+                    var arrayData = [],
+                        nosGridData = self.data(),
+                        recursive = function(parent, childs) {
+                            var nb = 0,
+                                oItems = {};
+                            $.each(childs, function(id, child) {
+                                $.extend(child, {
+                                    treeHash : child._model + '|' + child._id,
+                                    treeLevel : !parent ? 0 : parent.treeLevel + 1,
+                                    treePath : !parent ? [] : parent.treePath.concat([parent.treeHash])
+                                });
+                                if (!child.treeTitle) {
+                                    child.treeTitle = child.title || child.name || child.label || child.treeHash;
+                                }
+                                arrayData.push(child);
+                                if ($.isArray(child.treeChilds) || $.isPlainObject(child.treeChilds)) {
+                                    child.treeChilds = recursive(child, child.treeChilds);
+                                }
+                                nb++;
+                                oItems[child.treeHash] = child;
+                            });
+                            return $.extend({length : nb}, oItems);
+                        };
+
+                    if (!$.isPlainObject(data)) {
+                        self.treeData = recursive(null, dataSource.items);
+                        $.merge(nosGridData, arrayData);
+                    } else {
+                        var treeNode = self._getTreeNode(data.node);
+                        if (data.close) {
+                            var length = treeNode.treeChilds.length;
+                            treeNode.treeChilds = dataSource.data.total;
+                            Array.prototype.splice.apply(nosGridData, [data.index, length + 1, treeNode]);
+                        } else {
+                            treeNode.treeChilds = recursive(treeNode, dataSource.items);
+                            Array.prototype.splice.apply(nosGridData, [data.index + 1, 0].concat(arrayData));
+                        }
+                    }
+                    self.ensureControl(true);
+                },
+                reader: {
+                    read: function (dataSource) {
+                        dataSource.items = dataSource.data.items;
+                    }
+                }
             });
 
             self.treeDataSource.proxy.options.data.deep = 2;
@@ -258,7 +277,7 @@ define([
             if (self.mousePressed && (new Date().getTime() - self.mousePressed) > 500) {
                 if (!self._scroller) {
                     self._scroller = {
-                        superpanel : self.nosGrid._view()._scroller.data('wijsuperpanel')
+                        superpanel : self._view()._scroller.data('wijsuperpanel')
                     };
                     var contentElement = self._scroller.superpanel.getContentElement(),
                         contentWrapper = contentElement.parent(),

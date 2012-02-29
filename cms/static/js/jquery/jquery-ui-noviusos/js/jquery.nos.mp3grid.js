@@ -1192,7 +1192,11 @@ define([
                 positionContainer = self.element.offset(),
                 height = self.element.height() - position.top + positionContainer.top;
 
-            self.uiTreeGrid.nostreegrid($.extend(true, {
+            self.uiTreeGrid.css({
+                    height : height,
+                    width : '100%'
+                }).nostreegrid($.extend(true, { // True for recursive clone
+                    treeUrl : o.treeGrid.proxyUrl,
                     columnsAutogenerationMode : 'none',
                     selectionMode: 'singleRow',
                     allowSorting: true,
@@ -1255,15 +1259,7 @@ define([
                     loaded: function() {
                         self.uiSplitterHorizontalBottom.find('.wijmo-wijgrid-footer').prepend(self.uiPaginationLabel);
                     }
-                }, o.grid, { // True for recursive clone
-                    treeUrl : o.treeGrid.proxyUrl,
-                    beforeRefresh : function() {
-                        self.uiTreeGrid.css({
-                            height : height,
-                            width : '100%'
-                        });
-                    }
-                }));
+                }, o.grid));
 
             return self;
         },

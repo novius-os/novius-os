@@ -151,17 +151,28 @@ class Controller_Mp3table_List extends Controller_Extendable {
 		}
 
 		$id = Input::get('id');
-		$type = Input::get('type');
-		$deep = Input::get('deep', 1);
+		$model = Input::get('model');
+		$deep = intval(Input::get('deep', 1));
 		$this->build_tree();
-		\Session::set('tree.'.$this->mp3grid['configuration_id'].'.'.$type.'|'.$id, true);
-		$items = $this->tree_items(false, $type, $id, $deep);
+		if ($deep === -1) {
+			\Session::set('tree.'.$this->mp3grid['configuration_id'].'.'.$model.'|'.$id, false);
+			$count = $this->tree_items(true, $model, $id);
 
-		$json = array(
-			'get' => '',
-			'items' => $items,
-			'total' => count($items),
-		);
+			$json = array(
+				'get' => '',
+				'items' => array(),
+				'total' => $count,
+			);
+		} else {
+			\Session::set('tree.'.$this->mp3grid['configuration_id'].'.'.$model.'|'.$id, true);
+			$items = $this->tree_items(false, $model, $id, $deep);
+
+			$json = array(
+				'get' => '',
+				'items' => $items,
+				'total' => count($items),
+			);
+		}
 
 		if (\Fuel::$env === \Fuel::DEVELOPMENT) {
 			$json['get'] = Input::get();
@@ -176,14 +187,11 @@ class Controller_Mp3table_List extends Controller_Extendable {
 
 	protected function build_tree() {
 		$list_models  = array();
-		foreach ($this->mp3grid['tree']['models'] as $i => $model) {
+		foreach ($this->mp3grid['tree']['models'] as $model) {
 			if (!is_array($model)) {
 				$model = array('model' => $model);
 			}
 			$class = $model['model'];
-			if (!isset($model['type'])) {
-				$model['type'] = strtolower(str_replace('Model_', '', $class));
-			}
 			if (!isset($model['pk'])) {
 				$model['pk'] = \Arr::get($class::primary_key(), 0);
 			}
@@ -195,16 +203,13 @@ class Controller_Mp3table_List extends Controller_Extendable {
 			if (!isset($model['childs'])) {
 				$model['childs'] = array();
 			}
-			$list_models[$model['type']] = $model;
+			$list_models[$model['model']] = $model;
 		}
 
-		foreach ($list_models as $type => $model) {
+		foreach ($list_models as $model) {
 			$childs = array();
 			foreach ($model['childs'] as $child) {
 				if (!is_array($child)) {
-					if (!isset($list_models[$child])) {
-						$child = strtolower(str_replace('Model_', '', $child));
-					}
 					if (!isset($list_models[$child])) {
 						continue;
 					}
@@ -215,19 +220,19 @@ class Controller_Mp3table_List extends Controller_Extendable {
 							$foreignkey = $relation->key_from;
 							$childs[] = array(
 								'relation'  => $relation->name,
-								'type'      => $child,
+								'model'      => $child,
 								'fk'        => $foreignkey[0],
 							);
 							break;
 						}
 					}
 				} else {
-					if (isset($child['type']) && isset($child['fk'])) {
+					if (isset($child['model']) && isset($child['fk'])) {
 						$childs[] = $child;
 					}
 				}
 			}
-			$list_models[$type]['childs'] = $childs;
+			$list_models[$model['model']]['childs'] = $childs;
 		}
 		$this->mp3grid['tree']['models'] = $list_models;
 
@@ -236,33 +241,26 @@ class Controller_Mp3table_List extends Controller_Extendable {
 			$this->mp3grid['tree']['roots'] = array($this->mp3grid['tree']['roots']);
 		}
 		foreach ($this->mp3grid['tree']['roots'] as $root) {
-			if (is_array($root)) {
-				if (!isset($root['type'])) {
-					$root['type'] = strtolower(str_replace('Model_', '', $root['model']));
-				}
-			} else {
-				if (!isset($this->mp3grid['tree']['models'][$root])) {
-					$root = strtolower(str_replace('Model_', '', $root));
-				}
-				$root = array('type' => $root);
+			if (!is_array($root)) {
+				$root = array('model' => $root);
 			}
 			if (!isset($root['where']) || !is_array($root['where'])) {
 				$root['where'] = array();
 			}
-			if (isset($this->mp3grid['tree']['models'][$root['type']])) {
+			if (isset($this->mp3grid['tree']['models'][$root['model']])) {
 				$list_roots[] = $root;
 			}
 		}
 		$this->mp3grid['tree']['roots'] = $list_roots;
 	}
 
-	public function tree_items($countProcess = false, $type = null, $id = null, $deep = 1)
+	public function tree_items($countProcess = false, $model = null, $id = null, $deep = 1)
 	{
 		$childs = array();
-		if (!$type) {
+		if (!$model) {
 			$childs = $this->mp3grid['tree']['roots'];
 		} else {
-			$tree_model = $this->mp3grid['tree']['models'][$type];
+			$tree_model = $this->mp3grid['tree']['models'][$model];
 			foreach ($tree_model['childs'] as $child) {
 				$child['where'] = array(array($child['fk'] => $id));
 				$childs[]       = $child;
@@ -272,7 +270,7 @@ class Controller_Mp3table_List extends Controller_Extendable {
 		$items = array();
 		$count = 0;
 		foreach ($childs as $child) {
-			$tree_model = $this->mp3grid['tree']['models'][$child['type']];
+			$tree_model = $this->mp3grid['tree']['models'][$child['model']];
 			$pk = $tree_model['pk'];
 			$configuration_id = $this->mp3grid['configuration_id'];
 			$controler = $this;
@@ -288,15 +286,11 @@ class Controller_Mp3table_List extends Controller_Extendable {
 					return $query;
 				}),
 				'dataset' => array_merge($tree_model['dataset'], array(
-					'treeType' => function($object) use ($child) {
-						return $child['type'];
-					},
-					'treeId' => $pk,
 					'treeChilds' => function($object) use ($controler, $deep, $configuration_id, $child, $pk) {
-						if ($deep > 1 || \Session::get('tree.'.$configuration_id.'.'.$child['type'].'|'.$object->{$pk})) {
-							return $controler->tree_items(false, $child['type'], $object->{$pk}, $deep - 1);
+						if ($deep > 1 || \Session::get('tree.'.$configuration_id.'.'.$child['model'].'|'.$object->{$pk})) {
+							return $controler->tree_items(false, $child['model'], $object->{$pk}, $deep - 1);
 						} else {
-							return $controler->tree_items(true, $child['type'], $object->{$pk});
+							return $controler->tree_items(true, $child['model'], $object->{$pk});
 						}
 					},
 				)),

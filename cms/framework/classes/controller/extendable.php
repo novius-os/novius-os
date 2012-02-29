@@ -86,6 +86,7 @@ class Controller_Extendable extends \Controller {
 		$items = array();
 
 		$model = $config['model'];
+		$pk = \Arr::get($model::primary_key(), 0);
 
 		$query = \Cms\Orm\Query::forge($model, $model::connection());
 		foreach ($config['related'] as $related) {
@@ -166,6 +167,8 @@ class Controller_Extendable extends \Controller {
 						$item[$key] = $object->{$data};
 					}
 				}
+				$item['_id'] = $object->{$pk};
+				$item['_model'] = $model;
 				$items[] = $item;
 				if ($translatable) {
 					$common_id = $object->{$translatable['common_id_property']};
