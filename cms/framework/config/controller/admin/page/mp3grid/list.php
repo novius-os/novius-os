@@ -17,6 +17,7 @@ return array(
 		'models' => array(
 			array(
 				'model' => 'Cms\Model_Page_Page',
+				'order_by' => 'page_sort',
 				'childs' => array('Cms\Model_Page_Page'),
 				'dataset' => array(
 					'id' => 'page_id',
@@ -29,6 +30,7 @@ return array(
 			array(
 				'model' => 'Cms\Model_Page_Page',
 				'where' => array(array('page_parent_id', 'IS', \DB::expr('NULL'))),
+				'order_by' => 'page_sort',
 			),
 		),
 	),

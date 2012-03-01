@@ -116,8 +116,8 @@ define([
                     url : 'admin/admin/media/inspector/folder/list',
                     widget_id : 'cms_media_folders',
                     inputName : 'folder_id',
-                    grid : {
-                        urlJson : 'admin/admin/media/inspector/folder/json',
+                    treeGrid : {
+                        treeUrl : 'admin/admin/media/inspector/folder/json',
                         columns : {
                             title : {
                                 headerText : mp3Grid.i18n('Folder name'),

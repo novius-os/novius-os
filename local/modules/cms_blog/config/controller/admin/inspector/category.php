@@ -9,11 +9,22 @@
  */
 
 return array(
-	'query' => array(
-		'model' => 'Cms\Blog\Model_Category',
+	'models' => array(
+		array(
+			'model' => 'Cms\Blog\Model_Category',
+			'order_by' => 'blgc_sort',
+			'childs' => array('Cms\Blog\Model_Category'),
+			'dataset' => array(
+				'id'    => 'blgc_id',
+				'title' => 'blgc_title',
+			),
+		),
 	),
-	'dataset' => array(
-		'id'    => 'blgc_id',
-		'title' => 'blgc_title',
+	'roots' => array(
+		array(
+			'model' => 'Cms\Blog\Model_Category',
+			'where' => array(array('blgc_parent_id', 'IS', \DB::expr('NULL'))),
+			'order_by' => 'blgc_sort',
+		),
 	),
 );

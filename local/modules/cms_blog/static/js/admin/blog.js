@@ -96,7 +96,7 @@ define([
                     label : mp3Grid.i18n('Categories'),
                     vertical : true,
                     url : 'admin/cms_blog/inspector/category/list',
-                    grid : {
+                    treeGrid : {
                         columns : {
                             title : {
                                 headerText : mp3Grid.i18n('Category'),
@@ -134,7 +134,7 @@ define([
                                 ]
                             }
                         },
-                        urlJson : 'admin/cms_blog/inspector/category/json'
+                        treeUrl : 'admin/cms_blog/inspector/category/json'
                     },
                     inputName : 'blgc_id[]'
                 },

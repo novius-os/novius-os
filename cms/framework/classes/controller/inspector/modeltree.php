@@ -17,25 +17,7 @@ use \Config;
 
 class Controller_Inspector_Modeltree extends Controller_Extendable {
 
-    protected $config = array(
-        'model' => '',
-        'columns' => array(),
-    	'input_name'   => '',
-        'limit' => 20,
-        'urljson' => '',
-        'order_by' => null,
-    );
-
-    public function before() {
-        parent::before();
-
-        $model = $this->config['query']['model'];
-
-        $relations = $model::relations();
-        $primary = $model::primary_key();
-        $this->config['parent_column'] = $relations['parent']->key_from[0];
-        $this->config['primary_column'] = $primary[0];
-    }
+    protected $config = array();
 
     public function action_list()
     {
@@ -51,73 +33,22 @@ class Controller_Inspector_Modeltree extends Controller_Extendable {
 
     public function action_json()
     {
-
 		if (!\Cms\Auth::check()) {
 			\Response::json(403, array(
 				'login_page' => \Uri::base(false).'admin/login',
 			));
 		}
 
-    	$items = $this->items();
+	    $json = $this->tree($this->config);
 
-        $response = \Response::forge(\Format::forge()->to_json(array(
-        	'offset' => 0,
-            'items' => $items,
-        	'total' => count($items),
-        )), 200, array(
-            'Content-Type' => 'application/json',
-        ));
-        $response->send(true);
-        exit();
+	    if (\Fuel::$env === \Fuel::DEVELOPMENT) {
+		    $json['get'] = Input::get();
+	    }
+	    if (\Input::get('debug') !== null) {
+		    \Debug::dump($json);
+		    exit();
+	    }
 
-    }
-
-    protected function items($parent_id = null, $level = 0)
-    {
-        $query = $this->query($parent_id);
-
-        $items = array();
-        foreach ($query->get() as $object) {
-            $item = array(
-                'id' => $object->{$this->config['primary_column']},
-                'level' => $level,
-            );
-            foreach ($this->config['dataset'] as $key => $data) {
-            	if (is_callable($data)) {
-            		$item[$key] = $data($object);
-            	} else {
-            		$item[$key] = $object->{$data};
-            	}
-            }
-            $childs = $this->items($object->{$this->config['primary_column']}, $level + 1);
-            $item['hasChilds'] = count($childs) ? true : false;
-            $items[] = $item;
-            $items = array_merge($items, $childs);
-        }
-
-        return $items;
-    }
-
-    protected function query($parent_id)
-    {
-        $model = $this->config['query']['model'];
-
-        $query = $model::find();
-        $query->where(array($this->config['parent_column'], $parent_id));
-
-        if ($this->config['order_by']) {
-            $orders_by = $this->config['order_by'];
-            if (!is_array($order_by)) {
-                $orders_by = array($orders_by);
-            }
-            foreach ($orders_by as $order_by => $direction) {
-                if (!is_string($order_by)) {
-                    $order_by = $direction;
-                    $direction = 'ASC';
-                }
-                $query->order_by($order_by, $direction);
-            }
-        }
-        return $query;
+	    \Response::json($json);
     }
 }
