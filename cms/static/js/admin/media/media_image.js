@@ -11,10 +11,22 @@ define([
     'jquery-nos'
 ], function($) {
     return function(mp3Grid) {
+
+        // Remove all primary actions
+        $.each(mp3Grid.actions, function() {
+            this.primary = false;
+        });
+
+        // Add "pick" as unique primary action
+        mp3Grid.mp3grid.grid.columns.actions.actions.unshift('pick');
+        mp3Grid.mp3grid.thumbnails.actions.unshift('pick');
+
         return {
             actions : {
                 pick : {
                     label : mp3Grid.i18n('Pick'),
+                    icon : 'check',
+                    primary : true,
                     action : function(item) {
                         $.nos.listener.fire("media.pick", true, [item]);
                     }
@@ -22,15 +34,7 @@ define([
             },
             mp3grid : {
                 grid : {
-                    id : 'cms_media_grid_image',
-                    columns : {
-                        actions : {
-                            actions : ['pick','edit', 'delete', 'visualize']
-                        }
-                    }
-                },
-                thumbnails : {
-                    actions : ['pick','edit', 'delete', 'visualize']
+                    id : 'cms_media_grid_image'
                 },
                 values: {
                     media_extension: ['image']
@@ -39,9 +43,9 @@ define([
                     extensions : {
                         hide : true
                     }
-                },
+                }
                 // Another solution is to remove the extensions inspector in the "Order" property
-                inspectorsOrder : 'folders,preview'
+                //inspectorsOrder : 'folders,preview'
             }
         }
     }

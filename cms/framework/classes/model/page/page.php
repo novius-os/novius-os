@@ -18,7 +18,7 @@ class Model_Page_Page extends \Cms\Model {
     protected static $_primary_key = array('page_id');
 
 	protected static $_has_many = array(
-		'childrens' => array(
+		'children' => array(
 			'key_from'       => 'page_id',
 			'model_to'       => '\Cms\Model_Page_Page',
 			'key_to'         => 'page_parent_id',

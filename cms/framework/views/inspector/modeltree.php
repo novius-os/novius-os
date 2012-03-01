@@ -120,6 +120,7 @@ require([
                     },
                     columns: inspectorData.grid.columns,
                     data: new wijdatasource({
+                        dynamic: true,
                         proxy: new wijhttpproxy({
                             url: inspectorData.grid.urlJson,
                             dataType: "json",
@@ -140,6 +141,9 @@ require([
 
 			$nos.nos.listener.add(inspectorData.widget_id + '.refresh', true, function() {
                     parent.triggerHandler('inspectorResize');
+                });
+                $nos.nos.listener.add(inspectorData.widget_id + '.reload', true, function() {
+                    inspector.nosgrid("ensureControl", true);
                 });
 		});
 	});

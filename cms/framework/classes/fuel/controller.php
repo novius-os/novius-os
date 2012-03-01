@@ -10,6 +10,5 @@
 
 
 class Controller extends Fuel\Core\Controller {
-
+    
 }
-?>

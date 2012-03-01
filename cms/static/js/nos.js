@@ -363,7 +363,7 @@ define([
                             .addClass("ui-state-default")
                             .attr('title', action.label)
                             .html( action.icon ? '<span class="ui-icon ui-icon-' + action.icon +'"></span>' : '&nbsp;' + action.label + '&nbsp;')
-                            .click(function() {
+                            .click(function(e) {
                                 action.action.apply(this, [noParseData]);
                                 e.stopImmediatePropagation();
                                 e.preventDefault();
@@ -419,18 +419,28 @@ define([
 
 						if (!this.created) {
 							var ul = $('<ul></ul>');
-							$.each(actions, function() {
-								var action = this;
+							$.each(actions, function(key, action) {
                                 var text = '<span class="' + (action.icon ? 'ui-icon ui-icon-' + action.icon : 'nos-icon16 nos-icon16-empty') + ' wijmo-wijmenu-icon-left"></span><span class="wijmo-wijmenu-text">'+action.label+'</span>';
-								$('<li><a href="#"></a></li>')
+								var li = $('<li><a href="#"></a></li>')
 									.appendTo(ul)
 									.find('a')
-									.html(text)
-									.click(function(e) {
+									.html(text);
+
+                                if (action.name && noParseData.actions && noParseData.actions[action.name] == false) {
+                                    li.addClass('ui-state-disabled')
+                                    .click(function(e) {
+                                        e.stopImmediatePropagation();
+                                        e.preventDefault();
+                                    });
+                                } else {
+									li.click(function(e) {
+                                        // Hide me
+                                        ul.wijmenu('hideAllMenus');
                                         action.action.apply(this, [noParseData]);
                                         e.stopImmediatePropagation();
                                         e.preventDefault();
-                                    })
+                                    });
+                                }
 							});
 
 							// Search the higher ancestor possible
@@ -584,7 +594,7 @@ define([
 				var where   = $.nos.$noviusos.ostabs ? $.nos.$noviusos.ostabs('current').panel : $('body');
 				var $dialog = $(document.createElement('div')).appendTo(where);
 
-				$.nos.data('dialog_media', $dialog);
+				$.nos.data('dialog', $dialog);
 
                 if (typeof wijdialog_options['content'] != 'undefined') {
                     $dialog.append(wijdialog_options.content);
@@ -595,21 +605,34 @@ define([
                     //'static/cms/js/wijmo/wijmo/js/jquery.wijmo.wijutil',
                     'static/cms/js/vendor/wijmo/js/jquery.wijmo.wijdialog'
                 ], function() {
+                    var proceed = true;
 					if (wijdialog_options.ajax) {
 						$dialog.load(wijdialog_options.contentUrl, {}, function(responseText, textStatus, XMLHttpRequest){
-							delete wijdialog_options.contentUrl;
-							$dialog.wijdialog(wijdialog_options);
+                            try {
+                                var json = $.parseJSON(responseText);
+                                // If the dialog ajax URL returns a valid JSON string, don't show the dialog
+                                proceed = false;
+                            } catch (e) {}
+                            if (proceed) {
+                                delete wijdialog_options.contentUrl;
+                                $dialog.wijdialog(wijdialog_options);
+                            } else {
+                                $dialog.empty();
+                                $.nos.ajax.success(json);
+                            }
 						});
 					} else {
 						$dialog.wijdialog(wijdialog_options);
 					}
-                    if ($.isFunction(wijdialog_options['onLoad'])) {
-                        wijdialog_options['onLoad']();
+                    if (proceed) {
+                        if ($.isFunction(wijdialog_options['onLoad'])) {
+                            wijdialog_options['onLoad']();
+                        }
+                        $dialog.bind('wijdialogclose', function(event, ui) {
+                            //log('Fermeture et destroyage');
+                            $dialog.closest('.ui-dialog').hide().appendTo(where);
+                        });
                     }
-					$dialog.bind('wijdialogclose', function(event, ui) {
-						//log('Fermeture et destroyage');
-						$dialog.closest('.ui-dialog').hide().appendTo(where);
-					});
                 });
 
                 return $dialog;
@@ -665,6 +688,8 @@ define([
                                 json.user_success = old_success;
                                 $.nos.ajax.success(json);
                             }
+                        } else {
+                            options.success = $.nos.ajax.success;
                         }
 
                         if ($.isFunction(options.error)) {
@@ -673,6 +698,8 @@ define([
                                 $.nos.ajax.error(json);
                                 old_error.apply(this, arguments);
                             }
+                        } else {
+                            options.error = $.nos.ajax.error;
                         }
                     }
 
@@ -691,7 +718,7 @@ define([
                                 $.nos.listener.fire(listener_name, bubble);
                             });
                         } else {
-                            $.nos.listener.fire(json.listener_fire);
+                            $.nos.listener.fire(json.listener_fire, json.listener_bubble ? true : false);
                         }
                     }
                     // Call user callback

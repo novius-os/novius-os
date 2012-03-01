@@ -7,6 +7,8 @@
  * @link http://www.novius-os.org
  */
 @import "compass/reset";
+@import "compass/css3/box-shadow";
+@import "compass/css3/text-shadow";
 
 body, select, input, textarea {
 	color       : #444; /* 444 looks better than black: twitter.com/H_FJ/statuses/11800719859 */
@@ -80,6 +82,11 @@ a:hover {
 	&:after {
 		content: '';
 	}
+}
+
+// Prevents flickering
+input.ui-state-disabled {
+    border-width : 1px;
 }
 
 // Right menu on form pages

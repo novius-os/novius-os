@@ -1,12 +1,12 @@
 <div id="<?= $uniqid = uniqid('tabs_') ?>">
 	<ul class="tabs">
-		<li><a href="#<?= $id_library = $uniqid.'_library' ?>">Media library</a></li>
-		<li><a href="#<?= $id_properties = $uniqid.'_properties' ?>">Properties</a></li>
+		<li><a href="#<?= $id_library = $uniqid.'_library' ?>"><?= __('1. Pick your image') ?></a></li>
+		<li><a href="#<?= $id_properties = $uniqid.'_properties' ?>"><?= __('2. Set the properties') ?></a></li>
 	</ul>
 	<div id="<?= $id_library ?>">
 		<?php
 		// We could load this using ajax, but it's faster to preload it directly here
-		echo Request::forge('admin/media/list/delayed')->execute()->response();
+		echo Request::forge('admin/media/list/delayed')->execute(array('tinymce'))->response();
 		?>
 	</div>
 
@@ -19,11 +19,11 @@
 				</tr>
 				<tr>
 					<th><label><?= __('Description:') ?> </label></th>
-					<td><input type="text" name="alt" data-id="alt" size="30" /> &nbsp; <input type="checkbox" data-id="same_title_alt" checked> <label for="same_title_alt">&nbsp;<?= __('Same as title') ?></label></td>
+					<td><input type="text" name="alt" data-id="alt" size="30" /> &nbsp; <label><input type="checkbox" data-id="same_title_alt" checked> &nbsp;<?= __('Same as title') ?></label></td>
 				</tr>
 				<tr>
 					<th><label><?= __('Width:') ?> </label></th>
-					<td><input type="text" name="width" data-id="width" size="5" /> &nbsp; <input type="checkbox" data-id="proportional" checked> <label for="proportional">&nbsp;<?= __('Keep proportions') ?></label></td>
+					<td><input type="text" name="width" data-id="width" size="5" /> &nbsp; <label><input type="checkbox" data-id="proportional" checked> &nbsp;<?= __('Keep proportions') ?></label></td>
 				</tr>
 				<tr>
 					<th><label><?= __('Height:') ?> </label></th>
@@ -33,12 +33,12 @@
 					<th><label><?= __('Style:') ?> </label></th>
 					<td><input type="text" name="style" data-id="style" size="50" /></td>
 				</tr>
+				<tr>
+					<th></th>
+					<td> <input type="submit" class="primary" data-icon="check" data-id="save" value="<?= __('Insert this image') ?>" /> &nbsp; <?= __('or') ?> &nbsp; <a data-id="close" href="#"><?= __('Cancel') ?></a></td>
+				</tr>
 			</table>
 		</div>
-
-		<p style="position:absolute;width:190px;bottom:20px;left:10px;text-align:center;">
-			<input type="submit" data-id="save" value="<?= __('Insert image') ?>" /> <br /> <?= __('or') ?> &nbsp; <a data-id="close" href="#"><?= __('Cancel') ?></a>
-		</p>
 	</form>
 </div>
 
@@ -57,11 +57,11 @@
 }
 
 <?= '#'.$uniqid ?> > ul {
-	width : 15%;
+	width : 17%;
 }
 
 <?= '#'.$uniqid ?> > div {
-	width : 83%;
+	width : 81%;
 	margin-right : 1%;
 }
 </style>

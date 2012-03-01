@@ -17,8 +17,8 @@ class Controller_Admin_Media_Info extends Controller_Noviusos_Noviusos {
 		$media = Model_Media_Media::find($id);
 
 		if (!empty($media)) {
-			\Config::load('cms::admin/media/media', true);
-			$dataset = \Config::get('cms::admin/media/media.dataset', array());
+			\Config::load('cms::controller/admin/media/mp3grid/list', true);
+			$dataset = \Config::get('cms::controller/admin/media/mp3grid/list.dataset', array());
 			$item = array();
 			foreach ($dataset as $key => $data)
 			{

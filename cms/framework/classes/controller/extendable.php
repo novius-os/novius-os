@@ -71,5 +71,15 @@ class Controller_Extendable extends \Controller {
         $config = \Arr::recursive_filter($config, function($var) { return $var !== null; });
         return $config;
     }
+
+    protected static function check_permission_action($action, $dataset_location, $item) {
+        \Config::load($dataset_location, true);
+        $dataset = \Config::get($dataset_location.'.dataset');
+        // An unknown action is authorized
+        // This is for consistency with client-side, where actions are visible by default (not greyed out)
+        if (empty($dataset['actions']) || empty($dataset['actions'][$action])) {
+            return true;
+        }
+        return $dataset['actions'][$action]($item);
+    }
 }
-?>

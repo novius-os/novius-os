@@ -15,5 +15,13 @@ return array(
 	'dataset' => array(
 		'id'    => 'medif_id',
 		'title' => 'medif_title',
+        'actions' => array(
+            'edit' => function($item) {
+                return $item->medif_parent_id != null;
+            },
+            'delete' => function($item) {
+                return $item->medif_parent_id != null;
+            },
+        ),
 	),
 );

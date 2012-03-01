@@ -28,15 +28,19 @@ return array(
         ),
         'image' => array(
             'name' => __('Image'),
+            'virtual' => true,
             'json' => array(
                 'static/cms/js/admin/media/common.js',
+                'static/cms/js/admin/media/media.js',
                 'static/cms/js/admin/media/media_image.js'
             ),
         ),
         'tinymce' => array(
             'name' => __('TinyMCE'),
+            'virtual' => true,
             'json' => array(
                 'static/cms/js/admin/media/common.js',
+                'static/cms/js/admin/media/media.js',
                 'static/cms/js/admin/media/media_tinymce.js'
             ),
         )

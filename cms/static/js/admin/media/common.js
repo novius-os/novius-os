@@ -14,37 +14,39 @@ define([
         return {
             actions : {
                 edit : {
+                    name : 'edit',
                     primary : true,
                     icon : 'pencil',
                     label : mp3Grid.i18n('Edit'),
                     action : function(item) {
-                        $.nos.tabs.add({
-                            iframe : true,
-                            url : "admin/admin/media/form?id=" + item.id,
-                            label : item.title
-                        });
+                        $.nos.notify('Not implemented (yet).');
                     }
                 },
                 'delete' : {
+                    name : 'delete',
                     primary : true,
                     icon : 'trash',
                     label : mp3Grid.i18n('Delete'),
                     action : function(item) {
-                        if (confirm("Are you sure ?")) {
-                            $.nos.tabs.add({
-                                iframe : true,
-                                url : "admin/admin/media/form?id=" + item.id,
-                                label : item.title
+                        if (confirm("Are you sure?")) {
+                            $.nos.ajax.request({
+                                url : 'admin/admin/media/actions/delete_media',
+                                method : 'POST',
+                                data : {
+                                    id : item.id
+                                }
                             });
+                            log('ok ?');
                         }
                     }
                 },
                 visualize : {
+                    name : 'visualize',
                     //primary : true,
                     icon : 'search',
                     label : mp3Grid.i18n('Visualize'),
                     action : function(item) {
-                        window.open(item.image);
+                        window.open(item.path);
                     }
                 }
             },
@@ -70,7 +72,13 @@ define([
                     folder : {
                         label : mp3Grid.i18n('Add a folder'),
                         action : function() {
-                            $.nos.notify('Not implemented (yet).');
+                            $.nos.dialog({
+                                contentUrl: 'admin/admin/media/folder/form',
+                                ajax : true,
+                                title: 'Add a folder',
+                                width: 600,
+                                height: 400
+                            });
                         }
                     }
                 },
@@ -126,6 +134,7 @@ define([
                                     showOnlyArrow : true,
                                     actions : [
                                         {
+                                            name : 'add_media',
                                             label : mp3Grid.i18n('Add a media in this folder'),
                                             icon : 'plus',
                                             action : function(item) {
@@ -133,12 +142,13 @@ define([
                                                     contentUrl: 'admin/admin/media/upload/form/' + item.id,
                                                     ajax : true,
                                                     title: 'Add a media in the "' + item.title + '" folder',
-                                                    width: 500,
-                                                    height: 200
+                                                    width: 650,
+                                                    height: 240
                                                 });
                                             }
                                         },
                                         {
+                                            name : 'add_folder',
                                             label : mp3Grid.i18n('Add a sub-folder to this folder'),
                                             icon : 'folder-open',
                                             action : function(item) {
@@ -146,12 +156,13 @@ define([
                                                     contentUrl: 'admin/admin/media/folder/form/' + item.id,
                                                     ajax : true,
                                                     title: 'Add a sub-folder in "' + item.title + '"',
-                                                    width: 550,
-                                                    height: 200
+                                                    width: 600,
+                                                    height: 250
                                                 });
                                             }
                                         },
                                         {
+                                            name : 'edit',
                                             label : mp3Grid.i18n('Edit this folder'),
                                             icon : 'pencil',
                                             action : function(item) {
@@ -159,10 +170,17 @@ define([
                                             }
                                         },
                                         {
+                                            name : 'delete',
                                             label : mp3Grid.i18n('Delete this folder'),
                                             icon : 'trash',
                                             action : function(item) {
-                                                $.nos.notify('Not implemented (yet).');
+                                                $.nos.dialog({
+                                                    contentUrl: 'admin/admin/media/actions/delete_folder/' + item.id,
+                                                    ajax : true,
+                                                    title: 'Delete the "' + item.title + '" folder',
+                                                    width: 400,
+                                                    height: 200
+                                                });
                                             }
                                         }
                                     ]

@@ -25,11 +25,6 @@ class Widget_Media_Folder extends \Fieldset_Field {
 		if (empty($attributes['id'])) {
 			$attributes['id'] = uniqid('media_');
 		}
-		$this->options = \Arr::merge($this->options, array(
-			'inputFileThumb' => array(
-				'title' => __('Image from the media library'),
-			)
-		));
 		if (!empty($attributes['widget_options'])) {
 			$this->options = \Arr::merge($this->options, $attributes['widget_options']);
 		}
@@ -43,14 +38,17 @@ class Widget_Media_Folder extends \Fieldset_Field {
      * @return type
      */
     public function build() {
-		$media_id = $this->get_value();
-		if (!empty($media_id)) {
-			$media = \Cms\Model_Media_Media::find($media_id);
-			if (!empty($media)) {
-				$this->options['inputFileThumb']['file'] = $media->get_public_path_resized(64, 64);
+		$folder_id = $this->get_value();
+		if (!empty($folder_id)) {
+			$folder = \Cms\Model_Media_Folder::find($folder_id);
+			if (!empty($folder)) {
+				$this->options['selected-folder'] = $folder_id;
 			}
 		}
-		$this->set_attribute('data-media-options', htmlspecialchars(\Format::forge()->to_json($this->options)));
-        return (string) \Request::forge('admin/media/inspector/folder/list')->execute(array('widget\media_folder'))->response();
+		$this->set_attribute('data-widget-options', htmlspecialchars(\Format::forge()->to_json($this->options)));
+        return (string) parent::build().\Request::forge('admin/media/inspector/folder/list')->execute(array(array('widget/media_folder', array(
+            'input_id' => $this->get_attribute('id'),
+            'selected' => $folder_id,
+        ))))->response();
     }
 }

@@ -37,7 +37,7 @@ class Controller_Inspector_Modeltree extends Controller_Extendable {
         $this->config['primary_column'] = $primary[0];
     }
 
-    public function action_list($view = null)
+    public function action_list($view = null, $view_data = array())
     {
 		if (!\Cms\Auth::check()) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
@@ -48,6 +48,9 @@ class Controller_Inspector_Modeltree extends Controller_Extendable {
             $view = 'inspector/modeltree';
         }
         $view = View::forge(str_replace('\\', '/', $view));
+        foreach($view_data as $k => $v) {
+            $view->set($k, $v, false);
+        }
 
         return $view;
     }
@@ -85,12 +88,19 @@ class Controller_Inspector_Modeltree extends Controller_Extendable {
                 'id' => $object->{$this->config['primary_column']},
                 'level' => $level,
             );
-            foreach ($this->config['dataset'] as $key => $data) {
+            $dataset = $this->config['dataset'];
+            $actions = \Arr::get($dataset, 'actions', array());
+            unset($dataset['actions']);
+            foreach ($dataset as $key => $data) {
             	if (is_callable($data)) {
             		$item[$key] = $data($object);
             	} else {
             		$item[$key] = $object->{$data};
             	}
+            }
+            $item['actions'] = array();
+            foreach ($actions as $action => $callback) {
+                $item['actions'][$action] = $callback($object);
             }
             $childs = $this->items($object->{$this->config['primary_column']}, $level + 1);
             $item['hasChilds'] = count($childs) ? true : false;

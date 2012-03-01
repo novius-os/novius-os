@@ -64,6 +64,12 @@ class Controller_Mp3table_List extends Controller_Extendable {
         }
         $this->mp3grid['selectedView'] = $view;
 
+        if (empty($this->mp3grid['custom'])) {
+            $this->mp3grid['custom'] = array(
+                'from' => 'default',
+            );
+        }
+
 		$view = View::forge('mp3table/list');
 
         if ($delayed) {
