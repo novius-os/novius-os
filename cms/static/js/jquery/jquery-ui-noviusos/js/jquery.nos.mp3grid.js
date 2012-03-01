@@ -1231,7 +1231,7 @@ define([
                     },
                     currentCellChanged: function (e) {
                         if (e) {
-                            var row = $(e.target).nosgrid("currentCell").row(),
+                            var row = $(e.target).nostreegrid("currentCell").row(),
                                 data = row ? row.data : false;
 
                             if (data) {
@@ -1430,7 +1430,11 @@ define([
                         self.uiThumbnail.thumbnails('setSize', self.uiSplitterHorizontalBottom.width(), height);
                     }
                 } else if (o.defaultView === 'treeGrid') {
-                    self.uiTreeGrid.nosgrid('setSize', null, height);
+                    if (refresh) {
+                        self._uiList();
+                    } else {
+                        self.uiTreeGrid.nostreegrid('setSize', null, height);
+                    }
                 } else {
                     self.uiGrid.nosgrid('setSize', null, height);
                     if (refresh) {

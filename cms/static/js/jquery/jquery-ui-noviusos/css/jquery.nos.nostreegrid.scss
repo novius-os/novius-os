@@ -16,10 +16,10 @@
 .nostreegrid-drag-helper {
 	position: absolute;
 }
-.nostreegrid-drag-addhelper, .nostreegrid-drag-deniedhelper {
-	float: left;
-	margin: 0 5px;
-}
 .nostreegrid-drag-inserthelper {
+    position: absolute;
 	height : 2px;
+	width: 100%;
+	margin-top: -2px;
+	margin-bottom: -2px;
 }
