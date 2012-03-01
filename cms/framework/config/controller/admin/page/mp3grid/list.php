@@ -84,13 +84,5 @@ return array(
 			}
 			return $query;
 		},
-		'directory_id' => function($value, $query) {
-			$query->where(array('page_level', '>', 0));
-			//$query->where(array('page_type', '!=', Cms\Model_Page_Page::TYPE_FOLDER));
-			if ($value) {
-				$query->where(array('page_parent_id', '=', $value));
-			}
-			return $query;
-		},
 	),
 );

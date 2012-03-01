@@ -78,22 +78,6 @@ define([
                             }
                         }
                     }
-                },
-                directories : {
-                    widget_id : 'cms_page_directories',
-                    vertical : true,
-                    label : mp3Grid.i18n('Directories'),
-                    url : 'admin/admin/page/inspector/tree/list',
-                    inputName : 'directory_id',
-                    grid : {
-                        urlJson : 'admin/admin/page/inspector/tree/json',
-                        columns : {
-                            title : {
-                                headerText : mp3Grid.i18n('Directory'),
-                                dataKey : 'title'
-                            }
-                        }
-                    }
                 }
             }
         }
