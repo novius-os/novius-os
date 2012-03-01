@@ -507,6 +507,18 @@ define([
             }
 
             return removeLength;
+        },
+
+        reload : function() {
+            var self = this,
+                o = self.options
+
+            self.treeDataSource.proxy.options.data.deep = 2;
+            self.treeDataSource.proxy.options.data.id = null;
+            self.treeDataSource.proxy.options.data.model = null;
+            self.treeDataSource.load();
+
+            return self;
         }
     });
 	return $;

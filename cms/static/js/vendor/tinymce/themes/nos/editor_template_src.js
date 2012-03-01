@@ -1624,6 +1624,8 @@
 			if (ed.dom.getAttrib(ed.selection.getNode(), 'class').indexOf('mceItem') != -1)
 				return;
 
+            var editCurrentImage = ed.selection.getNode().nodeName == 'IMG';
+
 			var dialog = null;
 
 			var close = function() {
@@ -1644,7 +1646,7 @@
 				dialog.wijdialog('close');
 
 				var html = $('<div></div>').append(img.addClass('nosMedia')).html();
-				if (ed.selection.getNode().nodeName == 'IMG') {
+				if (editCurrentImage) {
 					ed.execCommand('mceReplaceContent', false, html, {skip_undo : 1});
 				} else {
 					ed.execCommand('mceInsertContent', false, html, {skip_undo : 1});
@@ -1659,7 +1661,7 @@
 
             dialog = $.nos.dialog({
 				contentUrl: 'admin/tinymce/image',
-				title: 'Insert an image',
+				title: editCurrentImage ? 'Edit an image' : 'Insert an image',
 				ajax: true,
                 close: close
 			});

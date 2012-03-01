@@ -16,7 +16,7 @@ class Model_Media_Media extends \Orm\Model {
 
     public static $public_path = 'media/';
 
-    protected static $_has_one = array(
+    protected static $_belongs_to = array(
         'path' => array(
             'key_from'       => 'media_path_id',
             'model_to'       => 'Cms\Model_Media_Folder',
@@ -24,12 +24,15 @@ class Model_Media_Media extends \Orm\Model {
             'cascade_save'   => false,
             'cascade_delete' => false,
         ),
+    );
+
+    protected static $_has_many = array(
 		'link' => array(
 			'key_from' => 'media_id',
 			'model_to' => 'Cms\Model_Media_Link',
 			'key_to' => 'medil_media_id',
 			'cascade_save' => false,
-			'cascade_delete' => true,
+			'cascade_delete' => false,
 		),
     );
 
@@ -51,6 +54,32 @@ class Model_Media_Media extends \Orm\Model {
      * media_width
      * media_height
      */
+
+    public function delete_from_disk() {
+
+        $file = APPPATH.$this->get_public_path();
+        if (is_file($file)) {
+            \File::delete($file);
+        }
+        return true;
+    }
+
+    public function delete_public_cache() {
+
+        // Delete cached media entries
+        $path_public     = DOCROOT.$this->get_public_path();
+        $path_thumbnails = DOCROOT.str_replace('media/', 'cache/media/', static::$public_path).$this->media_path;
+        try {
+            // delete_dir($path, $recursive, $delete_top)
+            is_link($path_public)    and \File::delete($path_public);
+            is_dir($path_thumbnails) and \File::delete_dir($path_thumbnails, true, true);
+            return true;
+        } catch (\Exception $e) {
+            if (\Fuel::$env == \Fuel::DEVELOPMENT) {
+                throw $e;
+            }
+        }
+    }
 
     public function get_public_path() {
         //$this->_relate('path');
@@ -91,8 +120,30 @@ class Model_Media_Media extends \Orm\Model {
 
 	public function refresh_path() {
 		$folder = Model_Media_Folder::find($this->media_path_id);
-		$this->media_path = $folder->medif_path;
+        if (empty($folder)) {
+            return false;
+        }
+        $this->media_path = $folder->medif_path;
+        return true;
 	}
+
+    public function check_and_filter_slug($sep = '-', $lowercase = true) {
+
+
+        $ext = pathinfo($this->media_file, PATHINFO_EXTENSION);
+        if (!empty($ext)) {
+            $ext = '.'.$ext;
+            $this->media_file = substr($this->media_file, 0, -strlen($ext));
+        }
+
+        $this->media_file = Model_Media_Folder::friendly_slug($this->media_file, $sep, $lowercase);
+
+        if (empty($this->media_file)) {
+            return false;
+        }
+        $this->media_file .= strtolower($ext);
+        return true;
+    }
 
 	public function _event_before_save() {
 		$this->media_ext = pathinfo($this->media_file, PATHINFO_EXTENSION);

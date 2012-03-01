@@ -1,11 +1,11 @@
 /*
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
- */ 
+ */
 @import "compass/css3/background-size";
 
 .nos-inspector-preview {
@@ -37,18 +37,15 @@
 		}
 	}
 
-
-	.nos-inspector-preview-actions {
+	.nos-inspector-preview-footer {
 	    width : 100%;
+        margin-bottom : 24px;
 
-		th {
-			border-width: 1px 1px 1px 0;
-			text-align: center;
-			cursor: pointer;
-		}
-
-		th:last-child {
-			border-width: 1px 0;
-		}
+        .ui-button {
+            margin-right: 0.4em;
+        }
+        a {
+            padding : 0.2em 0.5em 0;
+        }
 	}
 }

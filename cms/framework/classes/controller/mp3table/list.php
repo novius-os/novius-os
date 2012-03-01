@@ -41,16 +41,45 @@ class Controller_Mp3table_List extends Controller_Extendable {
 		$this->mp3grid = \Config::mergeWithUser($module_name.'::'.$file_name, static::loadConfiguration($module_name, $file_name));
     }
 
-	public function action_index() {
+	public function action_index($view = null, $delayed = false) {
 		if (!\Cms\Auth::check()) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
 		}
 
+        if (empty($view)) {
+            $view = \Input::get('view', $this->mp3grid['selectedView']);
+        }
+        $this->mp3grid['selectedView'] = $view;
+
+        if (empty($this->mp3grid['custom'])) {
+            $this->mp3grid['custom'] = array(
+                'from' => 'default',
+            );
+        }
+
 		$view = View::forge('mp3table/list');
+
+        if ($delayed) {
+            $this->mp3grid['delayed'] = true;
+        }
+
+
+        /*
+        $view->set('urljson', $this->mp3grid['views'][$this->mp3grid['selectedView']]['json'], false);
+		$view->set('i18n', \Format::forge($this->mp3grid['i18n'])->to_json(), false);
+        $view->set('views', \Format::forge($this->mp3grid['views'])->to_json(), false);
+        $view->set('selectedView', \Format::forge($this->mp3grid['selectedView'])->to_json(), false);
+        $view->set('name', \Format::forge($this->mp3grid['configuration_id'])->to_json(), false);
+         */
+        //\Debug::dump($this->mp3grid);
         $view->set('mp3grid', \Format::forge($this->mp3grid)->to_json(), false);
 		return $view;
 	}
+
+    public function action_delayed($view = null) {
+        return $this->action_index($view, true);
+    }
 
     public function action_json()
     {

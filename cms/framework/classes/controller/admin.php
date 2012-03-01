@@ -14,7 +14,15 @@ class Controller_Admin extends Controller {
 
 	// Admin entry point
 	public function action_dispatch() {
-		$uri = implode('/', func_get_args());
+        $args = func_get_args();
+        end($args);
+        $execute = current($args);
+        if (is_array($execute)) {
+            array_pop($args);
+        } else {
+            $execute = array();
+        }
+		$uri = implode('/', $args);
 		list($first, $controller, $action) = explode('/', ltrim($uri, '/').'///', 3);
 
 		$first = $first ?: 'noviusos';
@@ -44,7 +52,7 @@ class Controller_Admin extends Controller {
 		}
 
 		try {
-			return $request->execute()->response();
+			return $request->execute($execute)->response();
 		} catch (\Request404Exception $e) {
 			return \Request::forge('cms/404/admin')->execute()->response();
 		}

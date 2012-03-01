@@ -28,7 +28,7 @@ define([
 			var self = this,
 				o = self.options;
 
-			self.element.addClass('nos-inspector-preview ui-widget ui-widget-content  wijmo-wijgrid')
+			self.element.addClass('nos-inspector-preview ui-widget ui-widget-content wijmo-wijgrid')
                 .parents('.nos-mp3grid')
                 .bind('selectionChanged.mp3grid', function(e, data) {
                     if ($.isPlainObject(data)) {
@@ -80,101 +80,45 @@ define([
 
 		_uiFooter : function() {
 			var self = this,
-				o = self.options,
-				hasDropDown = false;
+				o = self.options;
 
 			if (o.actions.length > 0) {
 
 				self.uiFooter = $('<div></div>')
-					.addClass('nos-inspector-preview-footer wijmo-wijsuperpanel-footer wijmo-wijgrid')
-					.appendTo(self.element);
+					.addClass('nos-inspector-preview-footer')
+					.appendTo(self.uiContainer);
 
+                $.each(o.actions, function() {
+                    var action = this;
+                    if (action.primary) {
+                        var text = action.icon ? '<span class="ui-button-icon-primary ui-icon ui-icon-' + action.icon + ' wijmo-wijmenu-icon-left"></span>' : '';
+                            text += '<span class="ui-button-text">' + action.label + '</span>';
+                        $('<button></button>')
+                            .addClass('ui-button ui-button-text' + (action.icon ? '-icon-primary' : '') + ' ui-widget ui-state-default ui-corner-all')
+                            .appendTo(self.uiFooter)
+                            .html(text)
+                            .hover(function() {
+                                $(this).addClass('ui-state-hover');
+                            }, function() {
+                                $(this).removeClass('ui-state-hover');
+                            })
+                            .click(function(e) {
+                                e.preventDefault();
+                                e.stopImmediatePropagation();
+                                action.action.apply(this, [self.data]);
+                            })
+                    } else {
+                        $('<a href="#"></a>')
+                            .appendTo(self.uiFooter)
+                            .text(action.label)
+                            .click(function(e) {
+                                e.preventDefault();
+                                e.stopImmediatePropagation();
+                                action.action.apply(this, [self.data]);
+                            })
+                    }
+                });
 
-				var tr = $('<table cellspacing="0" cellpadding="0" border="0"><tbody><tr></tr></tbody></table>')
-						.addClass('nos-inspector-preview-actions wijmo-wijgrid-root wijmo-wijgrid-table')
-						.css({
-							borderCollapse : 'separate',
-							'-moz-user-select' : '-moz-none'
-						})
-						.appendTo(self.uiFooter)
-						.find('tbody')
-						.addClass('ui-widget-content wijmo-wijgrid-data')
-						.find('tr')
-						.addClass('wijmo-wijgrid-row ui-widget-content wijmo-wijgrid-datarow'),
-
-					ul = $('<ul></ul>');
-
-				$.each(o.actions, function(i) {
-					var action = this;
-
-					if (action.button || i === 0) {
-						var th = $('<th><div></div></th>')
-							.addClass('nos-inspector-preview-action wijgridtd ui-state-default')
-							.hover(
-								function() {
-									th.parent().addClass('ui-state-hover');
-								},
-								function() {
-									th.parent().removeClass('ui-state-hover');
-								}
-							)
-							.click(function(e) {
-								e.preventDefault();
-								action.action(data);
-							})
-							.appendTo(tr)
-							.find('div')
-							.text(action.label)
-							.addClass('wijmo-wijgrid-innercell');
-					} else {
-						hasDropDown = true;
-					}
-
-					$('<li><a href="#"></a></li>')
-						.appendTo(ul)
-						.find('a')
-						.text(action.label)
-						.click(function(e) {
-							e.preventDefault();
-							action.action(data);
-						})
-				})
-
-				if (hasDropDown) {
-					var dropDown = $('<th><div></div></th>')
-						.css('width', '1px')
-						.addClass('nos-inspector-preview-action-dropdown wijgridtd ui-state-default')
-						.hover(
-							function() {
-								dropDown.parent().addClass('ui-state-hover');
-							},
-							function() {
-								dropDown.parent().removeClass('ui-state-hover');
-							}
-						)
-						.appendTo(tr)
-						.find('div')
-						.addClass('wijmo-wijgrid-innercell');
-
-					$('<span></span>')
-						.addClass('ui-icon ui-icon-triangle-1-s')
-						.appendTo(dropDown);
-
-					ul.appendTo('body')
-						.wijmenu({
-							trigger : dropDown,
-							triggerEvent : 'click',
-							orientation : 'vertical',
-							showAnimation : {Animated:"slide", duration: 50, easing: null},
-							hideAnimation : {Animated:"hide", duration: 0, easing: null},
-							position : {
-								my        : 'right top',
-								at        : 'right bottom',
-								collision : 'flip',
-								offset    : '0 0'
-							}
-						});
-				}
 			}
 
 			return self;
@@ -294,21 +238,21 @@ define([
 
 				if ($.isFunction(o.dataParser)) {
 					data = o.dataParser(data);
-				};
+				}
 
 				self.element.wijsuperpanel('destroy')
 					.empty()
 					.css('height', '100%');
 
-				self._uiHeader(data.title)
-					._uiFooter();
+				self._uiHeader(data.title);
 
 				self.uiContainer = $('<div></div>')
 					.addClass('nos-inspector-preview-container')
 					.appendTo(self.element);
 
 				self._uiThumbnail(data)
-					._uiMetaData(data.meta);
+					._uiMetaData(data.meta)
+					._uiFooter();
 
 				self.element.wijsuperpanel({
 						showRounder : false,

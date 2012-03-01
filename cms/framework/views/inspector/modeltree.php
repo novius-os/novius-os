@@ -56,6 +56,10 @@ require([
 			$nos.nos.listener.add(inspectorData.widget_id + '.refresh', true, function() {
                     parent.triggerHandler('inspectorResize');
                 });
+			$nos.nos.listener.add(inspectorData.widget_id + '.reload', true, function() {
+					inspector.nostreegrid('reload');
+				});
+
 		});
 	});
 </script>

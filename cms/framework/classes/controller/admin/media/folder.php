@@ -10,50 +10,97 @@
 
 namespace Cms;
 
-class Controller_Admin_Media_Folder extends Controller_Noviusos_Noviusos {
+class Controller_Admin_Media_Folder extends \Controller {
 
-	public function action_form($id) {
+	public function action_form($folder_id = null) {
 
-		$folder = Model_Media_Folder::find($id);
-		$this->template->body = \View::forge('cms::admin/media/folder/form', array(
-			'folder' => $folder,
-		));
-		return $this->template;
+        // Find root folder ID
+        if (!$folder_id) {
+            $query = Model_Media_Folder::find();
+            $query->where(array('medif_parent_id' => null));
+            $root = $query->get_one();
+            $folder_id = $root->medif_id;
+            $hide_widget_media_path = false;
+        } else {
+            $hide_widget_media_path = true;
+        }
+
+		$folder = Model_Media_Folder::find($folder_id);
+
+        $fieldset = \Fieldset::build_from_config(array(
+            'medif_parent_id' => array(
+                'widget' => $hide_widget_media_path ? null : 'media_folder',
+                'form' => array(
+                    'type'  => 'hidden',
+                    'value' => $folder->medif_id,
+                ),
+                'label' => __('Choose a folder where to put your media:'),
+            ),
+            'medif_title' => array(
+                'form' => array(
+                    'type' => 'text',
+                ),
+                'label' => __('Title: '),
+            ),
+            'medif_path' => array(
+                'form' => array(
+                    'type' => 'text',
+                ),
+                'label' => __('SEO, folder URL:'),
+            ),
+            'save' => array(
+                'form' => array(
+                    'type' => 'submit',
+                    'class' => 'primary',
+                    'value' => __('Add'),
+                    'data-icon' => 'circle-plus',
+                ),
+            ),
+        ));
+		return \View::forge('cms::admin/media/folder/form', array(
+            'fieldset' => $fieldset,
+            'folder' => $folder,
+            'hide_widget_media_path' => $hide_widget_media_path,
+		), false);
 	}
 
 	public function action_do() {
 
-		$path  = \Input::post('medif_path', '');
-		$title = \Input::post('medif_title');
-
-		if (empty($path) && !empty($title)) {
-			$path = $title;
-		}
-		if (empty($title) && !empty($path)) {
-			$title = \Inflector::humanize($path);
-		}
-
-		$path = \Inflector::ascii($path);
-		$path = trim($path);
-		$path = trim($path, '/\\');
-
 		try {
-			if (empty($path) || empty($title)) {
-				throw new \Exception('Please provide a title or a path.');
-			}
-
 			$folder = new Model_Media_Folder();
-			$folder->medif_parent_id = \Input::post('medif_parent_id');
 
-			$parent = Model_Media_Folder::find($folder->medif_parent_id);
-			$folder->medif_path  = $parent->medif_path.$path.'/';
-			$folder->medif_title = $title;
+            $folder->medif_title = \Input::post('medif_title');
+            if (empty($folder->medif_title)) {
+                throw new \Exception('Please provide a title or a path.');
+            }
+
+            $path  = \Input::post('medif_path');
+
+            if (empty($path) ) {
+                $path = $folder->medif_title;
+            }
+
+            $path = Model_Media_Folder::friendly_slug($path, '-', true);
+            if (empty($path)) {
+                throw new \Exception(__('Generated slug was empty.'));
+            }
+
+			$folder->medif_parent_id = \Input::post('medif_parent_id', 1);
+
+            if (false === $folder->set_path($path)) {
+                throw new \Exception(__("The parent folder doesn't exists."));
+            }
+
+            $duplicate_folder = Model_Media_Folder::find_by_medif_path($folder->medif_path);
+            if (!empty($duplicate_folder)) {
+                throw new \Exception(__('A folder with the same name already exists.'));
+            }
 
 			$folder->save();
 			$body = array(
-				'notify' => 'Sub-directory created successfully.',
+				'notify' => 'Sub-directory successfully created.',
 				'closeDialog' => true,
-				'listener_fire' => 'inspector-folder.refresh!',
+				'listener_fire' => 'cms_media_folders.reload',
 				'listener_bubble' => true,
 			);
 		} catch (\Exception $e) {

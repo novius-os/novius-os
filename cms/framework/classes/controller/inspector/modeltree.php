@@ -19,14 +19,20 @@ class Controller_Inspector_Modeltree extends Controller_Extendable {
 
     protected $config = array();
 
-    public function action_list()
+	public function action_list($view = null, $view_data = array())
     {
 		if (!\Cms\Auth::check()) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
 		}
 
-        $view = View::forge('inspector/modeltree');
+        if (empty($view)) {
+            $view = 'inspector/modeltree';
+        }
+        $view = View::forge(str_replace('\\', '/', $view));
+        foreach($view_data as $k => $v) {
+            $view->set($k, $v, false);
+        }
 
         return $view;
     }
