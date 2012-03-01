@@ -25,19 +25,10 @@ use Asset, Format, Input, Session, View, Uri;
  */
 class Controller_Mp3table_List extends Controller_Extendable {
 
-	protected $mp3grid = array(
-        'query' => array(
-            'model' => '',
-        ),
-        'urljson' => '',
-        'i18n' => array(),
-        'dataset' => array(),
-        'inputs' => array(),
-	);
+	protected $mp3grid = array();
 
     public function before() {
         parent::before();
-        $mp3gridConfig = '';
         if (!isset($this->config['mp3grid'])) {
             list($module_name, $file_name) = $this->getLocation();
             $file_name = explode('/', $file_name);
@@ -48,9 +39,6 @@ class Controller_Mp3table_List extends Controller_Extendable {
         }
 
 		$this->mp3grid = \Config::mergeWithUser($module_name.'::'.$file_name, static::loadConfiguration($module_name, $file_name));
-
-        //\Debug::dump($this->mp3grid);
-        //print_r($this->mp3grid['views']['default']['json']);
     }
 
 	public function action_index($view = null, $delayed = false) {
@@ -102,128 +90,43 @@ class Controller_Mp3table_List extends Controller_Extendable {
 			));
 		}
 
-        $offset = intval(Input::get('offset', 0));
-        $limit = intval(Input::get('limit', \Arr::get($this->mp3grid['query'], 'limit')));
+	    $offset = intval(Input::get('offset', 0));
+	    $limit = intval(Input::get('limit', \Arr::get($this->mp3grid['query'], 'limit')));
+	    $config = $this->mp3grid;
+	    $where = function($query) use ($config) {
+		    foreach ($config['inputs'] as $input => $condition) {
+			    $value = Input::get('inspectors.'.$input);
+			    if (is_callable($condition)) {
+				    $query = $condition($value, $query);
+			    }
+		    }
 
-        $items = array();
+		    Filter::apply($query, $config);
 
-        $model = $this->mp3grid['query']['model'];
+		    return $query;
+	    };
 
-        $query = \Cms\Orm\Query::forge($model, $model::connection());
-        foreach ($this->mp3grid['query']['related'] as $related) {
-            $query->related($related);
-        }
-
-        foreach ($this->mp3grid['inputs'] as $input => $condition) {
-            $value = Input::get('inspectors.'.$input);
-            if (is_callable($condition)) {
-                $query = $condition($value, $query);
-            }
-        }
-
-
-
-        $inspectors_lang = Input::get('inspectors.lang', null);
-        $translatable  = $model::observers('Cms\Orm_Translatable');
-        if ($translatable) {
-
-            if (empty($inspectors_lang)) {
-                // No inspector, we only search items in their primary language
-                $query->where($translatable['single_id_property'], 'IS NOT', null);
-            } else if (is_array($inspectors_lang)) {
-                // Multiple langs
-                $query->where($translatable['lang_property'], 'IN', $inspectors_lang);
-            } else  {
-                $query->where($translatable['lang_property'],  '=', $inspectors_lang);
-            }
-            $common_ids = array();
-            $keys = array();
-        }
-
-        Filter::apply($query, $this->mp3grid);
-
-        $count = $query->count();
-
-        // Copied over and adapted from $query->count()
-        $select = \Arr::get($model::primary_key(), 0);
-        $select = (strpos($select, '.') === false ? $query->alias().'.'.$select : $select);
-
-        // Get the columns
-        $columns = \DB::expr('DISTINCT '.\Database_Connection::instance()->quote_identifier($select).' AS group_by_pk');
-
-        // Remove the current select and
-        $new_query = call_user_func('DB::select', $columns);
-
-        // Set from table
-        $new_query->from(array($model::table(), $query->alias()));
-
-
-
-        $tmp   = $query->build_query($new_query, $columns, 'select');
-        $new_query = $tmp['query'];
-        $objects = $new_query->group_by('group_by_pk')->limit($limit)->offset($offset)->execute($query->connection())->as_array('group_by_pk');
-
-        if (!empty($objects)) {
-            $query = $model::find()->where(array($select, 'in', array_keys($objects)));
-
-            Filter::apply($query, $this->mp3grid);
-
-            foreach ($query->get() as $object) {
-                $item = array();
-                foreach ($this->mp3grid['dataset'] as $key => $data) {
-                    if (is_array($data)) {
-                        $data = $data['value'];
-                    }
-                    if (is_callable($data)) {
-                        $item[$key] = $data($object);
-                    } else {
-                        $item[$key] = $object->{$data};
-                    }
-                }
-                $items[] = $item;
-                if ($translatable) {
-                    $common_id = $object->{$translatable['common_id_property']};
-                    $keys[] = $common_id;
-                    $common_ids[$translatable['common_id_property']][] = $common_id;
-                }
-            }
-            if ($translatable) {
-                $langs = call_user_func('Cms\Orm_Translatable::orm_notify_class', $model, 'languages', $common_ids);
-                foreach ($keys as $key => $common_id) {
-                    $items[$key]['lang'] = $langs[$common_id];
-                }
-
-                foreach ($items as &$item) {
-                    $flags = '';
-                    foreach (explode(',', $item['lang']) as $lang) {
-						// Convert lang_LOCALE to locale
-						list($lang, $locale) = explode('_', $lang.'_');
-						if (!empty($locale)) {
-							$lang = strtolower($locale);
-						}
-                        switch($lang) {
-                            case 'en':
-                                $lang = 'gb';
-                                break;
-                        }
-                        $flags .= '<img src="static/cms/img/flags/'.$lang.'.png" /> ';
-                    }
-                    $item['lang'] = $flags;
-                }
-            }
-        }
+	    $return = $this->items(array_merge($this->mp3grid['query'], array(
+		    'callback' => array($where),
+		    'dataset' => $this->mp3grid['dataset'],
+		    'lang' => Input::get('inspectors.lang', null),
+	        'limit' => $limit,
+	        'offset' => $offset,
+	    )));
 
         $json = array(
             'get' => '',
             'query' =>  '',
+	        'query2' =>  '',
             'offset' => $offset,
-            'items' => $items,
-            'total' => $count,
+            'items' => $return['items'],
+            'total' => $return['total'],
         );
 
         if (\Fuel::$env === \Fuel::DEVELOPMENT) {
             $json['get'] = Input::get();
-            $json['query'] = (string) $query->get_query();
+            $json['query'] = $return['query'];
+	        $json['query2'] = $return['query2'];
         }
         if (\Input::get('debug') !== null) {
             \Debug::dump($json);
@@ -268,7 +171,170 @@ class Controller_Mp3table_List extends Controller_Extendable {
 		return array();
 	}
 
+	public function action_tree_json()
+	{
+		if (!\Cms\Auth::check()) {
+			\Response::json(403, array(
+				'login_page' => \Uri::base(false).'admin/login',
+			));
+		}
 
+		$id = Input::get('id');
+		$model = Input::get('model');
+		$deep = intval(Input::get('deep', 1));
+		$this->build_tree();
+		if ($deep === -1) {
+			\Session::set('tree.'.$this->mp3grid['configuration_id'].'.'.$model.'|'.$id, false);
+			$count = $this->tree_items(true, $model, $id);
+
+			$json = array(
+				'get' => '',
+				'items' => array(),
+				'total' => $count,
+			);
+		} else {
+			\Session::set('tree.'.$this->mp3grid['configuration_id'].'.'.$model.'|'.$id, true);
+			$items = $this->tree_items(false, $model, $id, $deep);
+
+			$json = array(
+				'get' => '',
+				'items' => $items,
+				'total' => count($items),
+			);
+		}
+
+		if (\Fuel::$env === \Fuel::DEVELOPMENT) {
+			$json['get'] = Input::get();
+		}
+		if (\Input::get('debug') !== null) {
+			\Debug::dump($json);
+			exit();
+		}
+
+		\Response::json($json);
+	}
+
+	protected function build_tree() {
+		$list_models  = array();
+		foreach ($this->mp3grid['tree']['models'] as $model) {
+			if (!is_array($model)) {
+				$model = array('model' => $model);
+			}
+			$class = $model['model'];
+			if (!isset($model['pk'])) {
+				$model['pk'] = \Arr::get($class::primary_key(), 0);
+			}
+			if (!isset($model['order_by'])) {
+				$model['order_by'] = array($model['pk']);
+			} elseif (!is_array($model['order_by'])) {
+				$model['order_by'] = array($model['order_by']);
+			}
+			if (!isset($model['childs'])) {
+				$model['childs'] = array();
+			}
+			$list_models[$model['model']] = $model;
+		}
+
+		foreach ($list_models as $model) {
+			$childs = array();
+			foreach ($model['childs'] as $child) {
+				if (!is_array($child)) {
+					if (!isset($list_models[$child])) {
+						continue;
+					}
+					$class     = $list_models[$child]['model'];
+					$relations = $class::relations();
+					foreach ($relations as $relation) {
+						if ($relation->model_to == $model['model']) {
+							$foreignkey = $relation->key_from;
+							$childs[] = array(
+								'relation'  => $relation->name,
+								'model'      => $child,
+								'fk'        => $foreignkey[0],
+							);
+							break;
+						}
+					}
+				} else {
+					if (isset($child['model']) && isset($child['fk'])) {
+						$childs[] = $child;
+					}
+				}
+			}
+			$list_models[$model['model']]['childs'] = $childs;
+		}
+		$this->mp3grid['tree']['models'] = $list_models;
+
+		$list_roots = array();
+		if (!is_array($this->mp3grid['tree']['roots'])) {
+			$this->mp3grid['tree']['roots'] = array($this->mp3grid['tree']['roots']);
+		}
+		foreach ($this->mp3grid['tree']['roots'] as $root) {
+			if (!is_array($root)) {
+				$root = array('model' => $root);
+			}
+			if (!isset($root['where']) || !is_array($root['where'])) {
+				$root['where'] = array();
+			}
+			if (isset($this->mp3grid['tree']['models'][$root['model']])) {
+				$list_roots[] = $root;
+			}
+		}
+		$this->mp3grid['tree']['roots'] = $list_roots;
+	}
+
+	public function tree_items($countProcess = false, $model = null, $id = null, $deep = 1)
+	{
+		$childs = array();
+		if (!$model) {
+			$childs = $this->mp3grid['tree']['roots'];
+		} else {
+			$tree_model = $this->mp3grid['tree']['models'][$model];
+			foreach ($tree_model['childs'] as $child) {
+				$child['where'] = array(array($child['fk'] => $id));
+				$childs[]       = $child;
+			}
+		}
+
+		$items = array();
+		$count = 0;
+		foreach ($childs as $child) {
+			$tree_model = $this->mp3grid['tree']['models'][$child['model']];
+			$pk = $tree_model['pk'];
+			$configuration_id = $this->mp3grid['configuration_id'];
+			$controler = $this;
+
+			$config = array_merge($tree_model, array(
+				'callback' => array(function($query) use ($child, $tree_model) {
+					foreach($child['where'] as $where) {
+						$query->where($where);
+					}
+					foreach($tree_model['order_by'] as $order_by) {
+						$query->order_by(is_array($order_by) ? $order_by : array($order_by));
+					}
+					return $query;
+				}),
+				'dataset' => array_merge($tree_model['dataset'], array(
+					'treeChilds' => function($object) use ($controler, $deep, $configuration_id, $child, $pk) {
+						if ($deep > 1 || \Session::get('tree.'.$configuration_id.'.'.$child['model'].'|'.$object->{$pk})) {
+							return $controler->tree_items(false, $child['model'], $object->{$pk}, $deep - 1);
+						} else {
+							return $controler->tree_items(true, $child['model'], $object->{$pk});
+						}
+					},
+				)),
+			));
+
+			if ($countProcess) {
+				$return = $this->items($config, true);
+				$count += $return['total'];
+			} else {
+				$return = $this->items($config);
+				$items = array_merge($items, $return['items']);
+			}
+		}
+		return $countProcess ? $count : $items;
+	}
 }
 
 /* End of file list.php */
