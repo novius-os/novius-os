@@ -304,7 +304,6 @@ define([
                                         });
                                     }
                                 });
-                                log(params.mp3grid);
                             }
 
                             // Translate clone object
