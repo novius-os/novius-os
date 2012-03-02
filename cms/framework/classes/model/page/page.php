@@ -12,7 +12,7 @@ namespace Cms;
 
 use Fuel\Core\Uri;
 
-class Model_Page_Page extends \Cms\Model {
+class Model_Page_Page extends \Cms\Orm\Model {
 
     protected static $_table_name = 'os_page';
     protected static $_primary_key = array('page_id');

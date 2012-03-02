@@ -10,9 +10,7 @@
 
 namespace Cms\Blog;
 
-use Cms\Model;
-
-class Model_Tag extends Model {
+class Model_Tag extends \Cms\Orm\Model {
     protected static $_table_name = 'os_tag';
     protected static $_primary_key = array('tag_id');
 

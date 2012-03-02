@@ -8,7 +8,7 @@
  * @link http://www.novius-os.org
  */
 
-namespace Cms;
+namespace Cms\Orm;
 
 use Arr;
 use DB;
@@ -70,6 +70,41 @@ class Model extends \Orm\Model {
         $this->wysiwyg = new Model_Wysiwyg_Provider($this);
         call_user_func_array('parent::__construct', func_get_args());
     }
+
+	public function __call($method, $args) {
+		foreach ($this->observers() as $observer => $settings)
+		{
+			$events = isset($settings['events']) ? $settings['events'] : array();
+			if (empty($events) or in_array($method, $events))
+			{
+				if ( ! class_exists($observer))
+				{
+					$observer_class = \Inflector::get_namespace($observer).'Observer_'.\Inflector::denamespace($observer);
+					if ( ! class_exists($observer_class))
+					{
+						throw new \UnexpectedValueException($observer);
+					}
+
+					// Add the observer with the full classname for next usage
+					unset(static::$_observers_cached[$observer]);
+					static::$_observers_cached[$observer_class] = $events;
+					$observer = $observer_class;
+				}
+
+				try
+				{
+					return call_user_func(array($observer, 'behavior'), $this, $method, $args);
+				}
+				catch (\Exception $e)
+				{
+					// Unfreeze before failing
+					$this->unfreeze();
+
+					throw $e;
+				}
+			}
+		}
+	}
 
     public static function add_properties($properties) {
         static::$_properties = Arr::merge(static::$_properties, $properties);

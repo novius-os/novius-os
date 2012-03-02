@@ -12,7 +12,7 @@ namespace Cms;
 
 use Fuel\Core\Uri;
 
-class Model_Comment extends Model {
+class Model_Comment extends \Cms\Orm\Model {
     protected static $_table_name = 'os_comment';
     protected static $_primary_key = array('comm_id');
 
