@@ -16,497 +16,477 @@ use Event;
 
 class Model extends \Orm\Model {
 
-    protected static $_has_many = array();
+	protected static $_has_many = array();
 
-    public $media;
-    public $wysiwyg;
+	/**
+	 * @var  array  cached observers
+	 */
+	protected static $_behaviors_cached = array();
 
-    /**
-     *  @see \Orm\Model::properties()
-     */
-    public static function properties() {
-        Event::trigger(get_called_class().'.properties', get_called_class());
-        return call_user_func_array('parent::properties', func_get_args());
-    }
+	public $media;
+	public $wysiwyg;
 
-    /**
-     * @see \Orm\Model::relations()
-     */
-    public static function relations() {
-
-        static::$_has_many['wysiwygs'] = array(
-            'key_from' => static::$_primary_key[0],
-            'model_to' => 'Cms\Model_Wysiwyg',
-            'key_to' => 'wysiwyg_foreign_id',
-            'cascade_save' => true,
-            'cascade_delete' => false,
-            'conditions'     => array(
-                'where' => array(
-                    array('wysiwyg_join_table', '=', DB::expr(static::$_table_name) ),
-                ),
-            ),
-        );
-
-        static::$_has_many['medias'] = array(
-            'key_from' => static::$_primary_key[0],
-            'model_to' => 'Cms\Model_Media_Link',
-            'key_to' => 'medil_foreign_id',
-            'cascade_save' => true,
-            'cascade_delete' => false,
-            'conditions'     => array(
-                'where' => array(
-                    array('medil_from_table', '=', DB::expr(static::$_table_name) ),
-                ),
-            ),
-        );
-        return call_user_func_array('parent::relations', func_get_args());
-    }
-
-    /**
-     * @see \Orm\Model::__construct()
-     */
-    public function __construct() {
-        $this->media   = new Model_Media_Provider($this);
-        $this->wysiwyg = new Model_Wysiwyg_Provider($this);
-        call_user_func_array('parent::__construct', func_get_args());
-    }
-
-	public function __call($method, $args) {
-		foreach ($this->observers() as $observer => $settings)
-		{
-			$events = isset($settings['events']) ? $settings['events'] : array();
-			if (empty($events) or in_array($method, $events))
-			{
-				if ( ! class_exists($observer))
-				{
-					$observer_class = \Inflector::get_namespace($observer).'Observer_'.\Inflector::denamespace($observer);
-					if ( ! class_exists($observer_class))
-					{
-						throw new \UnexpectedValueException($observer);
-					}
-
-					// Add the observer with the full classname for next usage
-					unset(static::$_observers_cached[$observer]);
-					static::$_observers_cached[$observer_class] = $events;
-					$observer = $observer_class;
-				}
-
-				try
-				{
-					return call_user_func(array($observer, 'behavior'), $this, $method, $args);
-				}
-				catch (\Exception $e)
-				{
-					// Unfreeze before failing
-					$this->unfreeze();
-
-					throw $e;
-				}
-			}
-		}
+	/**
+	 *  @see \Orm\Model::properties()
+	 */
+	public static function properties() {
+		Event::trigger(get_called_class().'.properties', get_called_class());
+		return call_user_func_array('parent::properties', func_get_args());
 	}
 
-    public static function add_properties($properties) {
-        static::$_properties = Arr::merge(static::$_properties, $properties);
-    }
+	/**
+	 * @see \Orm\Model::relations()
+	 */
+	public static function relations($specific = false) {
 
-    /**
-     * Alias to Model:find('all')
-     *
-     * @param  array  $where
-     * @param  array  $order_by
-     * @param  array  $options   Additional options to pass on to the ::find() method
-     * @return array
-     */
-    public static function search($where, $order_by = array(), $options = array()) {
+		static::$_has_many['wysiwygs'] = array(
+			'key_from' => static::$_primary_key[0],
+			'model_to' => 'Cms\Model_Wysiwyg',
+			'key_to' => 'wysiwyg_foreign_id',
+			'cascade_save' => true,
+			'cascade_delete' => false,
+			'conditions'     => array(
+				'where' => array(
+					array('wysiwyg_join_table', '=', DB::expr(static::$_table_name) ),
+				),
+			),
+		);
 
-        $translatable = static::observers('Cms\Orm_Translatable');
-        if (!empty($translatable)) {
-            foreach ($where as $k => $w) {
-                if ($w[0] == 'lang_main') {
-                    if ($w[1] == true) {
-                        $where[$k] = array($translatable['single_id_property'], 'IS NOT', null);
-                    } else if ($w[1] == false) {
-                        $where[$k] = array($translatable['single_id_property'], 'IS', null);
-                    }
-                }
-            }
-        }
+		static::$_has_many['medias'] = array(
+			'key_from' => static::$_primary_key[0],
+			'model_to' => 'Cms\Model_Media_Link',
+			'key_to' => 'medil_foreign_id',
+			'cascade_save' => true,
+			'cascade_delete' => false,
+			'conditions'     => array(
+				'where' => array(
+					array('medil_from_table', '=', DB::expr(static::$_table_name) ),
+				),
+			),
+		);
+		return parent::relations($specific);
+	}
 
-        $options = \Arr::merge($options, array(
-            'where'    => $where,
-            'order_by' => $order_by,
-        ));
-        return static::find('all', $options);
-    }
+	/**
+	 * @see \Orm\Model::observers()
+	 */
+	public static function observers($specific = null, $default = null)
+	{
+		$class = get_called_class();
+		$init = array_key_exists($class, static::$_observers_cached);
 
-    /**
-     * Returns the first non empty field. Will add field prefix when needed.
-     *
-     * @example $object->pick('menu_title', 'title');
-     * @return mixed
-     */
-    public function pick() {
-        static $prefix = null;
-        if (null == $prefix) {
-            $prefix = substr(static::$_primary_key[0], 0, strpos(static::$_primary_key[0], '_') + 1);
-            $prefix_length = strlen($prefix);
-        }
-        foreach (func_get_args() as $property) {
-            if (substr($property, 0, $prefix_length) != $prefix) {
-                $property = $prefix.$property;
-            }
-            if (!empty($this->{$property})) {
-                return $this->{$property};
-            }
-        }
-        return null;
-    }
+		call_user_func_array('parent::observers', func_get_args());
 
-    /**
-     * Returns null if the Model is not translatable. Returns true or false whether the object is in the main language.
-     *
-     * @return  bool
-     */
-    public function is_main_lang() {
-        $translatable = $this->observers('Cms\Orm_Translatable');
-        if (empty($translatable)) {
-            // multilanguage is not applicable
-            return null;
-        }
-        return $this->{$translatable['single_id_property']} !== null;
-    }
+		if ( !$init)
+		{
+			static::$_observers_cached[$class] = array_merge(static::$_observers_cached[$class], static::behaviors());
+		}
 
-    /**
-     * Find the object in the main language
-     *
-     * @return  \Cms\Model
-     */
-    public function find_main_lang() {
-        return $this->find_lang('main');
-    }
+		if ($specific)
+		{
+			return \Arr::get(static::$_observers_cached[$class], $specific, $default);
+		}
 
-    /**
-     * Find the object in the specified locale. Won't create it when it doesn't exists
-     *
-     * @param string | true $lang Which locale to retrieve.
-     *  - 'main' will return the main language
-     *  - 'all'  will return all the available objects
-     *  - any valid locale
-     */
-    public function find_lang($lang = null) {
-        $translatable = $this->observers('Cms\Orm_Translatable');
-        if (empty($translatable)) {
-            // multilanguage is not applicable
-            return null;
-        }
+		return static::$_observers_cached[$class];
+	}
 
-        $common_id_property = $this->{$translatable['common_id_property']};
-        if (empty($common_id_property)) {
-            // prevents errors
-            // false (and not null) because it's an error and should probably not happen
-            return false;
-        }
+	/**
+	 * Get the class's behaviors and what they observe
+	 *
+	 * @param   string  specific behavior to retrieve info of, allows direct param access by using dot notation
+	 * @param   mixed   default return value when specific key wasn't found
+	 * @return  array
+	 */
+	public static function behaviors($specific = null, $default = null)
+	{
+		$class = get_called_class();
 
-        if ($lang == 'all') {
-            return $this->find('all', array(
-                'where' => array(
-                    array($translatable['common_id_property'], $common_id_property),
-            )));
-        }
+		if ( ! array_key_exists($class, static::$_behaviors_cached))
+		{
+			$behaviors = array();
+			if (property_exists($class, '_behaviors'))
+			{
+				foreach (static::$_behaviors as $beha_k => $beha_v)
+				{
+					if (is_int($beha_k))
+					{
+						$behaviors[$beha_v] = array();
+					}
+					else
+					{
+						$behaviors[$beha_k] = $beha_v;
+					}
+				}
+			}
+			static::$_behaviors_cached[$class] = $behaviors;
+		}
 
-        return $this->find('first', array(
-            'where' => array(
-                array($translatable['common_id_property'], $common_id_property),
-                $lang === 'main' ? array($translatable['single_id_property'], $common_id_property) : array($translatable['lang_property'], $lang),
-        )));
-    }
+		if ($specific)
+		{
+			return \Arr::get(static::$_behaviors_cached[$class], $specific, $default);
+		}
 
-    /**
-     * Returns the locale of the current object
-     *
-     * @return string
-     */
-    public function get_lang() {
-        $translatable = $this->observers('Cms\Orm_Translatable');
-        if (empty($translatable)) {
-            // multilanguage is not applicable
-            return null;
-        }
-        return $this->{$translatable['lang_property']};
-    }
+		return static::$_behaviors_cached[$class];
+	}
 
-    /**
-     * Returns all other available locale for this object
-     *
-     * @return array
-     */
-    public function get_other_lang() {
-        $translatable = $this->observers('Cms\Orm_Translatable');
-        if (empty($translatable)) {
-            // multilanguage is not applicable
-            return null;
-        }
 
-        $current_lang = $this->get_lang();
-        $all = array();
-        foreach ($this->find_lang('all') as $object) {
-            $lang = $object->{$translatable['lang_property']};
-            if ($lang != $current_lang) {
-                $all[] = $lang;
-            }
-        }
-        return $all;
-    }
 
-    public function __set($name, $value)
-    {
-        $arr_name = explode('->', $name);
+	/**
+	 * @see \Orm\Model::__construct()
+	 */
+	public function __construct() {
+		$this->media   = new Model_Media_Provider($this);
+		$this->wysiwyg = new Model_Wysiwyg_Provider($this);
+		call_user_func_array('parent::__construct', func_get_args());
+	}
 
-        if (count($arr_name) > 1)
-        {
-            if ($arr_name[0] == 'wysiwyg')
-            {
-                $key = $arr_name[1];
-                $w_keys = array_keys($this->wysiwygs);
-                for ($j = 0; $j < count($this->wysiwygs); $j++)
-                {
-                    $i = $w_keys[$j];
-                    if ($this->wysiwygs[$i]->wysiwyg_key == $key)
-                    {
-                        array_splice ($arr_name, 0, 2);
-                        if (empty($arr_name))
-                        {
-                            return $this->wysiwygs[$i];
-                        }
-                        return $this->wysiwygs[$i]->{implode('->', $arr_name)} = $value;
-                    }
-                }
-                // Create a new relation if it doesn't exist yet
-                $wysiwyg                        = new Model_Wysiwyg();
-                $wysiwyg->wysiwyg_text          = $value;
-                $wysiwyg->wysiwyg_join_table    = static::$_table_name;
-                $wysiwyg->wysiwyg_key           = $key;
-                $wysiwyg->wysiwyg_foreign_id    = $this->id;
-                // Don't save the link here, it's done with cascade_save = true
-                //$wysiwyg->save();
-                $this->wysiwygs[] = $wysiwyg;
+	public function __call($method, $args) {
+		try {
+			return static::_callBehavior($this, $method, $args);
+		} catch (\Exception $e) {
+			if ($e->getMessage() !== 'no behavior') {
+				throw $e;
+			}
+		}
 
-                return $value;
-            }
+		return parent::__call($method, $args);
+	}
 
-            if ($arr_name[0] == 'media')
-            {
-                $key = $arr_name[1];
-                $w_keys = array_keys($this->medias);
-                for ($j = 0; $j < count($this->medias); $j++)
-                {
-                    $i = $w_keys[$j];
-                    if ($this->medias[$i]->medil_key == $key)
-                    {
-                        array_splice ($arr_name, 0, 2);
-                        if (empty($arr_name))
-                        {
-                            return $this->medias[$i];
-                        }
-                        return $this->medias[$i]->{implode('->', $arr_name)} = $value;
-                    }
-                }
+	public static function __callStatic($method, $args) {
+		try {
+			return static::_callBehavior(get_called_class(), $method, $args);
+		} catch (\Exception $e) {
+			if ($e->getMessage() !== 'no behavior') {
+				throw $e;
+			}
+		}
 
-                // Create a new relation if it doesn't exist yet
-                $medil                   = new Model_Media_Link();
-                $medil->medil_from_table = static::$_table_name;
-                $medil->medil_key        = $key;
-                $medil->medil_foreign_id = $this->id;
-                $medil->medil_media_id   = $value;
-                // Don't save the link here, it's done with cascade_save = true
-                $this->medias[] = $medil;
+		return parent::__callStatic($method, $args);
+	}
 
-                return $value;
-            }
+	private static function _callBehavior($context, $method, $args) {
+		foreach (static::behaviors() as $behavior => $settings)
+		{
+			$events = isset($settings['events']) ? $settings['events'] : array();
+			if ( ! class_exists($behavior))
+			{
+				$behavior_class = \Inflector::get_namespace($behavior).'Observer_'.\Inflector::denamespace($behavior);
+				if ( ! class_exists($behavior_class))
+				{
+					throw new \UnexpectedValueException($behavior);
+				}
 
-            $obj = $this;
+				// Add the observer with the full classname for next usage
+				unset(static::$_behaviors_cached[$behavior]);
+				static::$_behaviors_cached[$behavior_class] = $events;
+				$behavior = $behavior_class;
+			}
 
-            // We need to access the relation and not the final object
-            // So we don't want to use the provider but the __get({"media->key"}) instead
-            //$arr_name[0] = $arr_name[0].'->'.$arr_name[1];
-            for ($i = 0; $i < count($arr_name); $i++)
-            {
-                $obj = &$obj->{$arr_name[$i]};
-            }
-            return $obj = $value;
-        }
+			return call_user_func_array(array($behavior, 'behavior'), array($context, $method, $args));
+		}
+		throw new \Exception('no behavior');
+	}
 
-        // No special setter for ID: immutable
+	public static function add_properties($properties) {
+		static::$_properties = Arr::merge(static::$_properties, $properties);
+	}
 
-        return parent::__set($name, $value);
-    }
+	/**
+	 * Alias to Model:find('all')
+	 *
+	 * @param  array  $where
+	 * @param  array  $order_by
+	 * @param  array  $options   Additional options to pass on to the ::find() method
+	 * @return array
+	 */
+	public static function search($where, $order_by = array(), $options = array()) {
 
-    public function & __get($name)
-    {
-        $arr_name = explode('->', $name);
-        if (count($arr_name) > 1)
-        {
-            if ($arr_name[0] == 'wysiwyg')
-            {
-                $key = $arr_name[1];
-                $w_keys = array_keys($this->wysiwygs);
-                for ($j = 0; $j < count($this->wysiwygs); $j++)
-                {
-                    $i = $w_keys[$j];
-                    if ($this->wysiwygs[$i]->wysiwyg_key == $key)
-                    {
-                        array_splice ($arr_name, 0, 2);
-                        if (empty($arr_name))
-                        {
-                            return $this->wysiwygs[$i];
-                        }
-                        return $this->wysiwygs[$i]->__get(implode('->', $arr_name));
-                    }
-                }
-                $ref = null;
-                return $ref;
-            }
+		try {
+			static::_callBehavior(get_called_class(), 'before_search', array(&$where, &$order_by, &$options));
+		} catch (\Exception $e) {
+			if ($e->getMessage() !== 'no behavior') {
+				throw $e;
+			}
+		}
 
-            if ($arr_name[0] == 'media')
-            {
-                $key = $arr_name[1];
-                $w_keys = array_keys($this->medias);
-                for ($j = 0; $j < count($this->medias); $j++) {
-                    $i = $w_keys[$j];
-                    if ($this->medias[$i]->medil_key == $key) {
-                        array_splice ($arr_name, 0, 2);
-                        if (empty($arr_name))
-                        {
-                            return $this->medias[$i];
-                        }
-                        return $this->medias[$i]->__get(implode('->', $arr_name));
-                    }
-                }
-                $ref = null;
-                return $ref;
-            }
+		$options = \Arr::merge($options, array(
+			'where'    => $where,
+			'order_by' => $order_by,
+		));
+		return static::find('all', $options);
+	}
 
-            $obj = $this;
-            for ($i = 0; $i < count($arr_name); $i++)
-            {
-                $obj = $obj->{$arr_name[$i]};
-            }
-            return $obj;
-        }
+	/**
+	 * Returns the first non empty field. Will add field prefix when needed.
+	 *
+	 * @example $object->pick('menu_title', 'title');
+	 * @return mixed
+	 */
+	public function pick() {
+		static $prefix = null;
+		if (null == $prefix) {
+			$prefix = substr(static::$_primary_key[0], 0, strpos(static::$_primary_key[0], '_') + 1);
+			$prefix_length = strlen($prefix);
+		}
+		foreach (func_get_args() as $property) {
+			if (substr($property, 0, $prefix_length) != $prefix) {
+				$property = $prefix.$property;
+			}
+			if (!empty($this->{$property})) {
+				return $this->{$property};
+			}
+		}
+		return null;
+	}
 
-        // Special getter for ID without prefix
-        if ($name == 'id')
-        {
-            $name = static::$_primary_key[0];
-        }
+	public function __set($name, $value)
+	{
+		$arr_name = explode('->', $name);
 
-        return parent::__get($name);
-    }
+		if (count($arr_name) > 1)
+		{
+			if ($arr_name[0] == 'wysiwyg')
+			{
+				$key = $arr_name[1];
+				$w_keys = array_keys($this->wysiwygs);
+				for ($j = 0; $j < count($this->wysiwygs); $j++)
+				{
+					$i = $w_keys[$j];
+					if ($this->wysiwygs[$i]->wysiwyg_key == $key)
+					{
+						array_splice ($arr_name, 0, 2);
+						if (empty($arr_name))
+						{
+							return $this->wysiwygs[$i];
+						}
+						return $this->wysiwygs[$i]->{implode('->', $arr_name)} = $value;
+					}
+				}
+				// Create a new relation if it doesn't exist yet
+				$wysiwyg                        = new Model_Wysiwyg();
+				$wysiwyg->wysiwyg_text          = $value;
+				$wysiwyg->wysiwyg_join_table    = static::$_table_name;
+				$wysiwyg->wysiwyg_key           = $key;
+				$wysiwyg->wysiwyg_foreign_id    = $this->id;
+				// Don't save the link here, it's done with cascade_save = true
+				//$wysiwyg->save();
+				$this->wysiwygs[] = $wysiwyg;
 
-    public function __toString() {
-        return get_class($this);
-    }
+				return $value;
+			}
 
-    public function __isset($name) {
-        try {
-            $this->__get($name);
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
+			if ($arr_name[0] == 'media')
+			{
+				$key = $arr_name[1];
+				$w_keys = array_keys($this->medias);
+				for ($j = 0; $j < count($this->medias); $j++)
+				{
+					$i = $w_keys[$j];
+					if ($this->medias[$i]->medil_key == $key)
+					{
+						array_splice ($arr_name, 0, 2);
+						if (empty($arr_name))
+						{
+							return $this->medias[$i];
+						}
+						return $this->medias[$i]->{implode('->', $arr_name)} = $value;
+					}
+				}
+
+				// Create a new relation if it doesn't exist yet
+				$medil                   = new Model_Media_Link();
+				$medil->medil_from_table = static::$_table_name;
+				$medil->medil_key        = $key;
+				$medil->medil_foreign_id = $this->id;
+				$medil->medil_media_id   = $value;
+				// Don't save the link here, it's done with cascade_save = true
+				$this->medias[] = $medil;
+
+				return $value;
+			}
+
+			$obj = $this;
+
+			// We need to access the relation and not the final object
+			// So we don't want to use the provider but the __get({"media->key"}) instead
+			//$arr_name[0] = $arr_name[0].'->'.$arr_name[1];
+			for ($i = 0; $i < count($arr_name); $i++)
+			{
+				$obj = &$obj->{$arr_name[$i]};
+			}
+			return $obj = $value;
+		}
+
+		// No special setter for ID: immutable
+
+		return parent::__set($name, $value);
+	}
+
+	public function & __get($name)
+	{
+		$arr_name = explode('->', $name);
+		if (count($arr_name) > 1)
+		{
+			if ($arr_name[0] == 'wysiwyg')
+			{
+				$key = $arr_name[1];
+				$w_keys = array_keys($this->wysiwygs);
+				for ($j = 0; $j < count($this->wysiwygs); $j++)
+				{
+					$i = $w_keys[$j];
+					if ($this->wysiwygs[$i]->wysiwyg_key == $key)
+					{
+						array_splice ($arr_name, 0, 2);
+						if (empty($arr_name))
+						{
+							return $this->wysiwygs[$i];
+						}
+						return $this->wysiwygs[$i]->__get(implode('->', $arr_name));
+					}
+				}
+				$ref = null;
+				return $ref;
+			}
+
+			if ($arr_name[0] == 'media')
+			{
+				$key = $arr_name[1];
+				$w_keys = array_keys($this->medias);
+				for ($j = 0; $j < count($this->medias); $j++) {
+					$i = $w_keys[$j];
+					if ($this->medias[$i]->medil_key == $key) {
+						array_splice ($arr_name, 0, 2);
+						if (empty($arr_name))
+						{
+							return $this->medias[$i];
+						}
+						return $this->medias[$i]->__get(implode('->', $arr_name));
+					}
+				}
+				$ref = null;
+				return $ref;
+			}
+
+			$obj = $this;
+			for ($i = 0; $i < count($arr_name); $i++)
+			{
+				$obj = $obj->{$arr_name[$i]};
+			}
+			return $obj;
+		}
+
+		// Special getter for ID without prefix
+		if ($name == 'id')
+		{
+			$name = static::$_primary_key[0];
+		}
+
+		return parent::__get($name);
+	}
+
+	public function __toString() {
+		return get_class($this);
+	}
+
+	public function __isset($name) {
+		try {
+			$this->__get($name);
+			return true;
+		} catch (\Exception $e) {
+			return false;
+		}
+	}
 }
 
 
 
 class Model_Media_Provider
 {
-    protected $parent;
+	protected $parent;
 
-    public function __construct($parent)
-    {
-        $this->parent = $parent;
-    }
+	public function __construct($parent)
+	{
+		$this->parent = $parent;
+	}
 
-    public function & __get($value)
-    {
-        // Reuse the getter and fetch the media directly
-        return $this->parent->{'media->'.$value}->media;
-    }
+	public function & __get($value)
+	{
+		// Reuse the getter and fetch the media directly
+		return $this->parent->{'media->'.$value}->media;
+	}
 
-    public function __set($property, $value)
-    {
-        // Check existence of the media, the ORM will throw an exception anyway upon save if it doesn't exists
-        $media_id = (string) ($value instanceof \Cms\Model_Media_Media ? $value->media_id : $value);
-        $media = \Cms\Model_Media_Media::find($media_id);
-        if (is_null($media))
-        {
-            $pk = $this->parent->primary_key();
-            throw new \Exception("The media with ID $media_id doesn't exists, cannot assign it as \"$property\" for ".\Inflector::denamespace(get_class($this->parent))."(".$this->parent->{$pk[0]}.")");
-        }
+	public function __set($property, $value)
+	{
+		// Check existence of the media, the ORM will throw an exception anyway upon save if it doesn't exists
+		$media_id = (string) ($value instanceof \Cms\Model_Media_Media ? $value->media_id : $value);
+		$media = \Cms\Model_Media_Media::find($media_id);
+		if (is_null($media))
+		{
+			$pk = $this->parent->primary_key();
+			throw new \Exception("The media with ID $media_id doesn't exists, cannot assign it as \"$property\" for ".\Inflector::denamespace(get_class($this->parent))."(".$this->parent->{$pk[0]}.")");
+		}
 
-        // Reuse the getter
-        $media_link = $this->parent->{'media->'.$property};
+		// Reuse the getter
+		$media_link = $this->parent->{'media->'.$property};
 
-        // Create the new relation if it doesn't exists yet
-        if (is_null($media_link))
-        {
-            $this->parent->{'media->'.$property} = $media_id;
-            return;
-        }
+		// Create the new relation if it doesn't exists yet
+		if (is_null($media_link))
+		{
+			$this->parent->{'media->'.$property} = $media_id;
+			return;
+		}
 
-        // Update an existing relation
-        $media_link->medil_media_id = $media_id;
+		// Update an existing relation
+		$media_link->medil_media_id = $media_id;
 
-        // Don't save the link here, it's done with cascade_save = true
-    }
+		// Don't save the link here, it's done with cascade_save = true
+	}
 
-    public function __isset($value) {
-        $value = $this->__get($value);
-        return (!empty($value));
-    }
+	public function __isset($value) {
+		$value = $this->__get($value);
+		return (!empty($value));
+	}
 }
 
 
 
 class Model_Wysiwyg_Provider
 {
-    protected $parent;
+	protected $parent;
 
-    public function __construct($parent)
-    {
-        $this->parent = $parent;
-    }
+	public function __construct($parent)
+	{
+		$this->parent = $parent;
+	}
 
-    public function & __get($value)
-    {
-        return $this->parent->{'wysiwyg->'.$value}->get('wysiwyg_text');
-    }
+	public function & __get($value)
+	{
+		return $this->parent->{'wysiwyg->'.$value}->get('wysiwyg_text');
+	}
 
-    public function __set($property, $value)
-    {
-        $value = (string) ($value instanceof \Cms\Model_Wysiwyg ? $value->wysiwyg_text : $value);
+	public function __set($property, $value)
+	{
+		$value = (string) ($value instanceof \Cms\Model_Wysiwyg ? $value->wysiwyg_text : $value);
 
-        // Reuse the getter
-        $wysiwyg = $this->parent->{'wysiwyg->'.$property};
+		// Reuse the getter
+		$wysiwyg = $this->parent->{'wysiwyg->'.$property};
 
-        // Create the new relation if it doesn't exists yet
-        if (is_null($wysiwyg))
-        {
-            $this->parent->{'wysiwyg->'.$property} = $value;
-            return;
-        }
+		// Create the new relation if it doesn't exists yet
+		if (is_null($wysiwyg))
+		{
+			$this->parent->{'wysiwyg->'.$property} = $value;
+			return;
+		}
 
-        // Update an existing relation
-        $wysiwyg->wysiwyg_text = $value;
+		// Update an existing relation
+		$wysiwyg->wysiwyg_text = $value;
 
-        // Don't save the link here, it's done with cascade_save = true
-    }
+		// Don't save the link here, it's done with cascade_save = true
+	}
 
-    public function __isset($value) {
-        $value = $this->__get($value);
-        return (!empty($value));
-    }
+	public function __isset($value) {
+		$value = $this->__get($value);
+		return (!empty($value));
+	}
 }
 

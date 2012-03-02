@@ -109,7 +109,7 @@ class Controller_Extendable extends \Controller {
             }
         }
 
-	    if ($config['order_by']) {
+	    if (!empty($config['order_by'])) {
 		    $orders_by = $config['order_by'];
 		    if (!is_array($orders_by)) {
 			    $orders_by = array($orders_by);
@@ -123,7 +123,7 @@ class Controller_Extendable extends \Controller {
 		    }
 	    }
 
-        $translatable  = $model::observers('Cms\Orm_Translatable');
+        $translatable  = $model::behaviors('Cms\Orm_Translatable');
         if ($translatable) {
             if (empty($config['lang'])) {
                 // No inspector, we only search items in their primary language
@@ -208,7 +208,7 @@ class Controller_Extendable extends \Controller {
                 }
             }
             if ($translatable) {
-                $langs = Orm_Translatable::orm_notify_class($model, 'languages', $common_ids);
+	            $langs = $model::languages($common_ids);
                 foreach ($keys as $key => $common_id) {
                     $items[$key]['lang'] = $langs[$common_id];
                 }
