@@ -57,7 +57,7 @@ class Orm_Translatable extends \Orm\Observer
 	 * @param   Model  The object
 	 * @return  void
 	 */
-	public function before_insert(\Orm\Model $obj)
+	public function before_insert(\Cms\Orm\Model $obj)
 	{
 		$common_id_property = $this->_properties['common_id_property'];
 		$lang_property      = $this->_properties['lang_property'];
@@ -75,7 +75,7 @@ class Orm_Translatable extends \Orm\Observer
      * @param Model $obj
 	 * @return  void
      */
-	public function after_insert_insert(\Orm\Model $obj)
+	public function after_insert_insert(\Cms\Orm\Model $obj)
 	{
 		$common_id_property = $this->_properties['common_id_property'];
 
