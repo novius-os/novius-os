@@ -61,7 +61,7 @@ class Controller extends Controller_Extendable {
         }
     }
 
-    public function trigger($event) {
+    public function trigger($event, $data = '', $return_type = 'string') {
         Event::trigger(get_called_class().'.'.$event, $this, 'array');
     }
 
