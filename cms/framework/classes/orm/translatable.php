@@ -91,7 +91,7 @@ class Orm_Translatable extends \Orm\Observer
      *
      * @param Model $obj
      */
-    public function before_save(\Cms\Model $obj) {
+    public function before_save(\Cms\Orm\Model $obj) {
         if (!$obj->is_main_lang()) {
             $obj_main = $obj->find_main_lang();
             foreach ($this->_properties['invariant_fields'] as $invariant) {
