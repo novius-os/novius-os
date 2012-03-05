@@ -155,7 +155,9 @@ define([
                         };
 
                     if (!$.isPlainObject(data)) {
-                        self.treeData = self._completeChilds(null, dataSource.items);
+                        self.treeData = self._completeChilds(null, dataSource.items);$
+                        // http://stackoverflow.com/questions/1232040/how-to-empty-an-array-in-javascript
+                        nosGridData.length = 0;
                         $.merge(nosGridData, toArray(self.treeData));
                     } else {
                         var index = $.inArray(data.node, nosGridData);
@@ -511,11 +513,11 @@ define([
 
         reload : function() {
             var self = this,
-                o = self.options
+                o = self.options;
 
             self.treeDataSource.proxy.options.data.deep = 2;
-            self.treeDataSource.proxy.options.data.id = null;
-            self.treeDataSource.proxy.options.data.model = null;
+            delete self.treeDataSource.proxy.options.data.id;
+            delete self.treeDataSource.proxy.options.data.model;
             self.treeDataSource.load();
 
             return self;

@@ -129,7 +129,7 @@ class Model_Media_Folder extends Model {
         ));
     }
 
-    public static function friendly_slug($slug, $sep, $lowercase) {
+    public static function friendly_slug($slug, $sep = '-', $lowercase = true) {
 
         $slug = strtr($slug, '@€', 'ae');
 		$slug = \Inflector::ascii($slug);
@@ -137,7 +137,6 @@ class Model_Media_Folder extends Model {
         if ($lowercase) {
             $slug = \Str::lower($slug);
         }
-
 
         $quoted_sep = preg_quote($sep);
         $slug = preg_replace("`[\s+]`", $sep, $slug);
@@ -167,12 +166,30 @@ class Model_Media_Folder extends Model {
 
     public function set_path($path) {
 
-		$parent = Model_Media_Folder::find($this->medif_parent_id);
+		$parent = $this->parent;
         if (empty($parent)) {
             return false;
         }
         $this->medif_path = $parent->medif_path.$path.'/';
         return true;
+    }
+
+	public function refresh_path($cascade_children = true, $cascade_media = true) {
+        $current_path = pathinfo($this->medif_path, PATHINFO_BASENAME);
+        $this->set_path($current_path);
+        if ($cascade_children) {
+            foreach ($this->children as $child) {
+                $child->refresh_path(true, $cascade_media);
+                $child->save();
+            }
+        }
+        if ($cascade_media) {
+            // 1 request for each updated folder
+            \DB::update(Model_Media_Media::table())
+                ->value('media_path', $this->medif_path)
+                ->where('media_path_id', $this->medif_id)
+                ->execute();
+        }
     }
 
     /**

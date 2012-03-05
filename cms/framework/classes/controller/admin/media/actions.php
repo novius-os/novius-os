@@ -12,23 +12,50 @@ namespace Cms;
 
 class Controller_Admin_Media_Actions extends Controller_Extendable {
 
-	public function action_delete_media() {
+
+    protected static function  _get_media_with_permission($media_id, $permission) {
+        if (empty($media_id)) {
+            throw new \Exception('No media specified.');
+        }
+        $media = Model_Media_Media::find($media_id);
+        if (empty($media)) {
+            throw new \Exception('Media not found.');
+        }
+        if (!static::check_permission_action('delete', 'controller/admin/media/mp3grid/list', $media)) {
+            throw new \Exception('Permission denied');
+        }
+        return $media;
+    }
+
+	public function action_delete_media($media_id = null) {
+        try {
+            $media = static::_get_media_with_permission($media_id, 'delete');
+            return \View::forge('cms::admin/media/media_delete', array(
+                'media'       => $media,
+                'usage_count' => count($media->link),
+            ));
+            throw new \Exception($count);
+        } catch (\Exception $e) {
+            // Easy debug
+            if (\Fuel::$env == \Fuel::DEVELOPMENT && !\Input::is_ajax()) {
+                throw $e;
+            }
+			$body = array(
+				'error' => $e->getMessage(),
+			);
+            \Response::json($body);
+		}
+    }
+
+	public function action_delete_media_confirm() {
         try {
             $media_id = \Input::post('id');
             // Allow GET for easier dev
             if (empty($media_id) && \Fuel::$env == \Fuel::DEVELOPMENT) {
                 $media_id = \Input::get('id');
             }
-            if (empty($media_id)) {
-                throw new \Exception('No media specified.');
-            }
-            $media = Model_Media_Media::find($media_id);
-            if (empty($media)) {
-                throw new \Exception('Media not found.');
-            }
-            if (!static::check_permission_action('delete', 'controller/admin/media/mp3grid/list', $media)) {
-                throw new \Exception('Permission denied');
-            }
+
+            $media = static::_get_media_with_permission($media_id, 'delete');
 
             // Delete database & relations (link)
             $media->delete();
@@ -80,7 +107,7 @@ class Controller_Admin_Media_Actions extends Controller_Extendable {
 	public function action_delete_folder($folder_id = null) {
         try {
             $folder = static::_get_folder_with_permission($folder_id, 'delete');
-            return \View::forge('admin/media/actions/delete_folder', array(
+            return \View::forge('cms::admin/media/folder_delete', array(
                 'folder'      => $folder,
                 'media_count' => $folder->count_media(),
             ));
@@ -166,8 +193,6 @@ class Controller_Admin_Media_Actions extends Controller_Extendable {
                     'cms_media_folders.reload' => true,
                     'refresh.cms_media_media'  => true,
                 ),
-                'closeDialog' => true,
-
             );
         } catch (\Exception $e) {
             \DB::rollback_transaction();

@@ -34,14 +34,14 @@ return array(
                 'widget' => 'text',
                 'editable' => false,
             ),
-            'wysiwyg->content->wysiwyg_text' => array(
+            'wysiwygs->content->wysiwyg_text' => array(
                 'label' => 'Contenu',
                 'widget' => 'wysiwyg',
                 'form' => array(
                     'style' => 'width: 100%; height: 500px;',
                     ),
             ),
-            'media->thumbnail->medil_media_id' => array(
+            'medias->thumbnail->medil_media_id' => array(
                 'label' => '',
                 'widget' => 'media',
                 'form' => array(

@@ -10,9 +10,9 @@
 
 namespace Cms;
 
-class Controller_Admin_Media_Upload extends \Controller {
+class Controller_Admin_Media_Media extends Controller_Extendable {
 
-	public function action_form($folder_id = null) {
+	public function action_add($folder_id = null) {
 
         // Find root folder ID
         if (empty($folder_id)) {
@@ -56,21 +56,78 @@ class Controller_Admin_Media_Upload extends \Controller {
             'save' => array(
                 'form' => array(
                     'type' => 'submit',
+                    //'tag'  => 'button',
                     'class' => 'primary',
                     'value' => __('Add'),
-                    'data-icon' => 'circle-plus',
+                    'data-icon' => 'check',
                 ),
             ),
         ));
 
-		return \View::forge('cms::admin/media/upload/form', array(
+		return \View::forge('cms::admin/media/media_add', array(
             'fieldset' => $fieldset,
             'folder' => $folder,
             'hide_widget_media_path' => $hide_widget_media_path,
 		), false);
 	}
 
-	public function action_do() {
+	public function action_edit($media_id = null) {
+
+		$media = Model_Media_Media::find($media_id);
+        $pathinfo = pathinfo($media->media_file);
+        $ext = $pathinfo['extension'];
+        $filename = $pathinfo['filename'];
+
+        $fieldset = \Fieldset::build_from_config(array(
+            'media_id' => array(
+                'form' => array(
+                    'type' => 'hidden',
+                    'value' => $media->media_id,
+                ),
+            ),
+            'media' => array(
+                'form' => array(
+                    'type' => 'file',
+                ),
+                'label' => __('File from your hard drive: '),
+            ),
+            'media_title' => array(
+                'form' => array(
+                    'type' => 'text',
+                    'value' => $media->media_title,
+                ),
+                'label' => __('Title: '),
+            ),
+            'slug' => array(
+                'form' => array(
+                    'type' => 'text',
+                    'value' => $filename,
+                ),
+                'label' => __('Slug: '),
+            ),
+            'save' => array(
+                'form' => array(
+                    'type' => 'submit',
+                    //'tag'  => 'button',
+                    'class' => 'primary',
+                    'value' => __('Edit'),
+                    'data-icon' => 'check',
+                ),
+            ),
+        ));
+
+		return \View::forge('cms::admin/media/media_edit', array(
+            'fieldset' => $fieldset,
+            'media' => $media,
+            'checked' => $filename == Model_Media_Folder::friendly_slug($media->media_title),
+		), false);
+	}
+
+	public function action_upload() {
+
+        if (!static::check_permission_action('add', 'controller/admin/media/mp3grid/list')) {
+            throw new \Exception(__('Permission denied'));
+        }
 
         try {
             if (!is_uploaded_file($_FILES['media']['tmp_name'])) {
@@ -133,6 +190,91 @@ class Controller_Admin_Media_Upload extends \Controller {
                 $media->save();
                 chmod($dest, 0664);
             }
+
+			$body = array(
+				'notify' => 'File successfully edited.',
+				'closeDialog' => true,
+				'listener_fire' => 'refresh.cms_media_media',
+				'listener_bubble' => true,
+			);
+        } catch (\Exception $e) {
+			$body = array(
+				'error' => $e->getMessage(),
+			);
+		}
+
+        \Response::json($body);
+	}
+
+	public function action_update() {
+
+        if (!static::check_permission_action('add', 'controller/admin/media/mp3grid/list')) {
+            throw new \Exception(__('Permission denied'));
+        }
+        try {
+
+            $media = Model_Media_Media::find(\Input::post('media_id'));
+            if (empty($media)) {
+                throw new \Exception('Media not found.');
+            }
+            $old_media = clone $media;
+
+            if (is_uploaded_file($_FILES['media']['tmp_name'])) {
+                $pathinfo = pathinfo(strtolower($_FILES['media']['name']));
+
+                $disallowed_extensions = \Config::get('upload.disabled_extensions', array('php'));
+                if (in_array($pathinfo['extension'], $disallowed_extensions)) {
+                    throw new \Exception(__('This extension is not allowed due to security reasons.'));
+                }
+            } else {
+                $pathinfo = pathinfo(APPPATH.$media->get_public_path());
+            }
+            $media->media_title = \Input::post('media_title', '');
+            $media->media_file  = \Input::post('slug', '');
+
+            // Empty title = auto-generated from file name
+            if (empty($media->media_title)) {
+                if (empty($pathinfo['basename'])) {
+                    throw new \Exception('Please provide a title.');
+                }
+                $media->media_title = static::pretty_title($pathinfo['basename']);
+            }
+
+            // Empty slug = auto-generated with title
+            if (empty($media->media_file)) {
+                $media->media_file  = $media->media_title;
+            }
+            if (!empty($pathinfo['extension'])) {
+                $media->media_file .= '.'.$pathinfo['extension'];
+            }
+
+            if (false === $media->check_and_filter_slug()) {
+                throw new \Exception(__('Generated slug was empty.'));
+            }
+
+            $dest = APPPATH.$media->get_public_path();
+
+            if ($old_media->media_file != $media->media_file) {
+                if (is_file($dest)) {
+                    throw new \Exception(__('A file with the same name already exists.'));
+                }
+
+                if (is_uploaded_file($_FILES['media']['tmp_name'])) {
+                    $old_media->delete_from_disk();
+                } else {
+                    \File::rename(APPPATH.$old_media->get_public_path(), $dest);
+                }
+                $old_media->delete_public_cache();
+            }
+
+            // Relace old file if needed
+            if (is_uploaded_file($_FILES['media']['tmp_name'])) {
+                // Move the file
+                if (move_uploaded_file($_FILES['media']['tmp_name'], $dest)) {
+                    chmod($dest, 0664);
+                }
+            }
+            $media->save();
 
 			$body = array(
 				'notify' => 'File successfully added.',

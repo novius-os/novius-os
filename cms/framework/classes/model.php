@@ -18,8 +18,8 @@ class Model extends \Orm\Model {
 
     protected static $_has_many = array();
 
-    public $media;
-    public $wysiwyg;
+    public $medias;
+    public $wysiwygs;
 
     /**
      *  @see \Orm\Model::properties()
@@ -32,9 +32,9 @@ class Model extends \Orm\Model {
     /**
      * @see \Orm\Model::relations()
      */
-    public static function relations() {
+    public static function relations($specific = false) {
 
-        static::$_has_many['wysiwygs'] = array(
+        static::$_has_many['linked_wysiwygs'] = array(
             'key_from' => static::$_primary_key[0],
             'model_to' => 'Cms\Model_Wysiwyg',
             'key_to' => 'wysiwyg_foreign_id',
@@ -47,7 +47,7 @@ class Model extends \Orm\Model {
             ),
         );
 
-        static::$_has_many['medias'] = array(
+        static::$_has_many['linked_medias'] = array(
             'key_from' => static::$_primary_key[0],
             'model_to' => 'Cms\Model_Media_Link',
             'key_to' => 'medil_foreign_id',
@@ -66,8 +66,8 @@ class Model extends \Orm\Model {
      * @see \Orm\Model::__construct()
      */
     public function __construct() {
-        $this->media   = new Model_Media_Provider($this);
-        $this->wysiwyg = new Model_Wysiwyg_Provider($this);
+        $this->medias   = new Model_Media_Provider($this);
+        $this->wysiwygs = new Model_Wysiwyg_Provider($this);
         call_user_func_array('parent::__construct', func_get_args());
     }
 
@@ -230,21 +230,21 @@ class Model extends \Orm\Model {
 
         if (count($arr_name) > 1)
         {
-            if ($arr_name[0] == 'wysiwyg')
+            if ($arr_name[0] == 'wysiwygs')
             {
                 $key = $arr_name[1];
-                $w_keys = array_keys($this->wysiwygs);
-                for ($j = 0; $j < count($this->wysiwygs); $j++)
+                $w_keys = array_keys($this->linked_wysiwygs);
+                for ($j = 0; $j < count($this->linked_wysiwygs); $j++)
                 {
                     $i = $w_keys[$j];
-                    if ($this->wysiwygs[$i]->wysiwyg_key == $key)
+                    if ($this->linked_wysiwygs[$i]->wysiwyg_key == $key)
                     {
                         array_splice ($arr_name, 0, 2);
                         if (empty($arr_name))
                         {
-                            return $this->wysiwygs[$i];
+                            return $this->linked_wysiwygs[$i];
                         }
-                        return $this->wysiwygs[$i]->{implode('->', $arr_name)} = $value;
+                        return $this->linked_wysiwygs[$i]->{implode('->', $arr_name)} = $value;
                     }
                 }
                 // Create a new relation if it doesn't exist yet
@@ -255,26 +255,26 @@ class Model extends \Orm\Model {
                 $wysiwyg->wysiwyg_foreign_id    = $this->id;
                 // Don't save the link here, it's done with cascade_save = true
                 //$wysiwyg->save();
-                $this->wysiwygs[] = $wysiwyg;
+                $this->linked_wysiwygs[] = $wysiwyg;
 
                 return $value;
             }
 
-            if ($arr_name[0] == 'media')
+            if ($arr_name[0] == 'medias')
             {
                 $key = $arr_name[1];
-                $w_keys = array_keys($this->medias);
-                for ($j = 0; $j < count($this->medias); $j++)
+                $w_keys = array_keys($this->linked_medias);
+                for ($j = 0; $j < count($this->linked_medias); $j++)
                 {
                     $i = $w_keys[$j];
-                    if ($this->medias[$i]->medil_key == $key)
+                    if ($this->linked_medias[$i]->medil_key == $key)
                     {
                         array_splice ($arr_name, 0, 2);
                         if (empty($arr_name))
                         {
-                            return $this->medias[$i];
+                            return $this->linked_medias[$i];
                         }
-                        return $this->medias[$i]->{implode('->', $arr_name)} = $value;
+                        return $this->linked_medias[$i]->{implode('->', $arr_name)} = $value;
                     }
                 }
 
@@ -293,7 +293,7 @@ class Model extends \Orm\Model {
             $obj = $this;
 
             // We need to access the relation and not the final object
-            // So we don't want to use the provider but the __get({"media->key"}) instead
+            // So we don't want to use the provider but the __get({"medias->key"}) instead
             //$arr_name[0] = $arr_name[0].'->'.$arr_name[1];
             for ($i = 0; $i < count($arr_name); $i++)
             {
@@ -312,40 +312,40 @@ class Model extends \Orm\Model {
         $arr_name = explode('->', $name);
         if (count($arr_name) > 1)
         {
-            if ($arr_name[0] == 'wysiwyg')
+            if ($arr_name[0] == 'wysiwygs')
             {
                 $key = $arr_name[1];
-                $w_keys = array_keys($this->wysiwygs);
-                for ($j = 0; $j < count($this->wysiwygs); $j++)
+                $w_keys = array_keys($this->linked_wysiwygs);
+                for ($j = 0; $j < count($this->linked_wysiwygs); $j++)
                 {
                     $i = $w_keys[$j];
-                    if ($this->wysiwygs[$i]->wysiwyg_key == $key)
+                    if ($this->linked_wysiwygs[$i]->wysiwyg_key == $key)
                     {
                         array_splice ($arr_name, 0, 2);
                         if (empty($arr_name))
                         {
-                            return $this->wysiwygs[$i];
+                            return $this->linked_wysiwygs[$i];
                         }
-                        return $this->wysiwygs[$i]->__get(implode('->', $arr_name));
+                        return $this->linked_wysiwygs[$i]->__get(implode('->', $arr_name));
                     }
                 }
                 $ref = null;
                 return $ref;
             }
 
-            if ($arr_name[0] == 'media')
+            if ($arr_name[0] == 'medias')
             {
                 $key = $arr_name[1];
-                $w_keys = array_keys($this->medias);
-                for ($j = 0; $j < count($this->medias); $j++) {
+                $w_keys = array_keys($this->linked_medias);
+                for ($j = 0; $j < count($this->linked_medias); $j++) {
                     $i = $w_keys[$j];
-                    if ($this->medias[$i]->medil_key == $key) {
+                    if ($this->linked_medias[$i]->medil_key == $key) {
                         array_splice ($arr_name, 0, 2);
                         if (empty($arr_name))
                         {
-                            return $this->medias[$i];
+                            return $this->linked_medias[$i];
                         }
-                        return $this->medias[$i]->__get(implode('->', $arr_name));
+                        return $this->linked_medias[$i]->__get(implode('->', $arr_name));
                     }
                 }
                 $ref = null;
@@ -397,7 +397,7 @@ class Model_Media_Provider
     public function & __get($value)
     {
         // Reuse the getter and fetch the media directly
-        return $this->parent->{'media->'.$value}->media;
+        return $this->parent->{'medias->'.$value}->media;
     }
 
     public function __set($property, $value)
@@ -412,12 +412,12 @@ class Model_Media_Provider
         }
 
         // Reuse the getter
-        $media_link = $this->parent->{'media->'.$property};
+        $media_link = $this->parent->{'medias->'.$property};
 
         // Create the new relation if it doesn't exists yet
         if (is_null($media_link))
         {
-            $this->parent->{'media->'.$property} = $media_id;
+            $this->parent->{'medias->'.$property} = $media_id;
             return;
         }
 
@@ -446,7 +446,7 @@ class Model_Wysiwyg_Provider
 
     public function & __get($value)
     {
-        return $this->parent->{'wysiwyg->'.$value}->get('wysiwyg_text');
+        return $this->parent->{'wysiwygs->'.$value}->get('wysiwyg_text');
     }
 
     public function __set($property, $value)
@@ -454,12 +454,12 @@ class Model_Wysiwyg_Provider
         $value = (string) ($value instanceof \Cms\Model_Wysiwyg ? $value->wysiwyg_text : $value);
 
         // Reuse the getter
-        $wysiwyg = $this->parent->{'wysiwyg->'.$property};
+        $wysiwyg = $this->parent->{'wysiwygs->'.$property};
 
         // Create the new relation if it doesn't exists yet
         if (is_null($wysiwyg))
         {
-            $this->parent->{'wysiwyg->'.$property} = $value;
+            $this->parent->{'wysiwygs->'.$property} = $value;
             return;
         }
 
