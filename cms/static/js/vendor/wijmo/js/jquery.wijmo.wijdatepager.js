@@ -4,7 +4,7 @@ clearTimeout,amplify*/
 /*jslint nomen: false*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -17,9 +17,9 @@ clearTimeout,amplify*/
 *
 * Depends:
 *  jquery.ui.core.js
-*  jquery.ui.mouse.js
 *  jquery.ui.widget.js
-*  jquery.ui.slider.js
+*  globalize.js
+*  jquery.wijmo.wijpopup.js
 *  jquery.ui.wijutil.js
 *  
 */
@@ -169,7 +169,7 @@ clearTimeout,amplify*/
 		},
 
 		///	<summary>
-		///	Destroy widget and reset the DOM element.
+		///	Destroys the widget and resets the DOM element.
 		///	</summary>
 		destroy: function () {
 			this.element.removeClass("wijmo-wijdatepager");
@@ -177,13 +177,13 @@ clearTimeout,amplify*/
 		},
 
 		///	<summary>
-		///	Refresh widget layout.
+		///	Refreshes the widget layout.
 		///	</summary>
 		refresh: function () {
 			this.invalidate();
 		},
 		///	<summary>
-		///	Refresh widget layout.
+		///	Refreshes the widget layout.
 		///	</summary>
 		invalidate: function () {
 			var selectedPage = $(this.element
@@ -214,6 +214,9 @@ clearTimeout,amplify*/
 			container.outerWidth(innerWidth - decBtnW - incBtnW);
 		},
 
+		///	<summary>
+		///	Selects the previous date.
+		///	</summary>
 		goLeft: function () {
 			var o = this.options;
 			if (o.disabled) {
@@ -222,6 +225,9 @@ clearTimeout,amplify*/
 			this._setSelectedIndex(this._index - 1, true);
 		},
 
+		///	<summary>
+		///	Selects the next date.
+		///	</summary>
 		goRight: function () {
 			var o = this.options;
 			if (o.disabled) {
@@ -460,14 +466,7 @@ clearTimeout,amplify*/
 								o.selectedDate.getMonth(), o.selectedDate.getDate() + 7);
 						}
 
-					} else if (this._index === 0) {
-						if (o.viewType === "day") {
-							o.selectedDate = new Date(o.selectedDate.getFullYear(),
-								o.selectedDate.getMonth(), 0);
-						}
 					}
-
-
 
 					if (this._max > 2 && this._index === 0) {
 						this._initBackground(true, true);

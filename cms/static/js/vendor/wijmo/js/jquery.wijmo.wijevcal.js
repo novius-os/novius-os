@@ -4,7 +4,7 @@ clearTimeout,amplify*/
 /*jslint nomen: false*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -282,8 +282,7 @@ block comments:
 		}
 	}
 
-	function executeSql(sqlCommand, params, successHandler, errorHandler) {
-
+	function executeSql(sqlCommand, params, successHandler, errorHandler) {		
 		/*
 		executeSql("SELECT * FROM events", []
 
@@ -393,6 +392,7 @@ block comments:
 		} else {
 
 			if (!database) {
+				errorHandler("Local data storage not found.");
 				return;
 			}
 			database.transaction(function (tx) {
@@ -444,8 +444,7 @@ block comments:
 			/// Code example: $("#eventscalendar").wijevcal(
 			///						{ colors: ["cornflowerblue", "yellow"]);
 			/// </summary>
-			colors: ["red", "darkorchid", "green",
-								"blue", "cornflowerblue", "yellow", "bronze"],
+			colors: null,
 
 
 			/// <summary>
@@ -1032,21 +1031,7 @@ block comments:
 				case "disabled":
 					if (o.disabled !== value) {
 						o.disabled = value;
-						if (value) {
-							this.element.addClass("ui-state-disabled");
-							this.element.find(".ui-button").button("option",
-																"disabled", true);
-							this.element.find(".ui-buttonset").buttonset("option",
-																"disabled", true);
-							this._unbindEvents();
-						} else {
-							this.element.removeClass("ui-state-disabled");
-							this.element.find(".ui-button").button("option",
-																"disabled", false);
-							this.element.find(".ui-buttonset").buttonset("option",
-																"disabled", false);
-							this._bindEvents();
-						}
+						this._ensureDisabled();
 					}
 					break;
 				case "enableLogs":
@@ -1118,7 +1103,37 @@ block comments:
 			}
 			$.Widget.prototype._setOption.apply(this, arguments);
 		},
-
+		_ensureDisabled: function () {
+			var o = this.options;
+			if (o.disabled) {
+				this.element.addClass("ui-state-disabled");
+				this.element.find(".ui-button").button("option",
+																"disabled", true);
+				this.element.find(".ui-buttonset").buttonset("option",
+																"disabled", true);
+				this.element.find(".wijmo-wijcalendar").wijcalendar("option",
+																"disabled", true);
+				this.element.find(".wijmo-wijsuperpanel").wijsuperpanel("option",
+																"disabled", true);
+				this.element.find(".wijmo-wijdatepager").wijdatepager("option",
+																"disabled", true);
+				this._unbindEvents();
+			} else {
+				this.element.removeClass("ui-state-disabled");
+				this.element.find(".ui-button").button("option",
+																"disabled", false);
+				this.element.find(".ui-buttonset").buttonset("option",
+																"disabled", false);
+				this.element.find(".wijmo-wijcalendar").wijcalendar("option",
+																"disabled", false);
+				this.element.find(".wijmo-wijsuperpanel").wijsuperpanel("option",
+																"disabled", false);
+				this.element.find(".wijmo-wijdatepager").wijdatepager("option",
+																"disabled", false);
+				this._bindEvents();
+				this._updateTitleText();
+			}
+		},
 		_onViewTypeChanged: function () {
 			this._renderActiveView();
 			this._updateTitleText();
@@ -1165,10 +1180,6 @@ block comments:
 				viewStart = o.selectedDates[0],
 				viewEnd = o.selectedDates[o.selectedDates.length - 1],
 				todayDate = new Date(), isTodayShown = false;
-
-			if (o.viewType === "list") {
-				viewEnd = this._addDays(viewStart, 14);
-			}
 			isTodayShown = this._compareDayDates(viewStart, todayDate) === 0 ||
 							(viewStart < todayDate && viewEnd > todayDate);
 			this.element.find(".wijmo-wijev-navigationbar .wijmo-wijev-today")
@@ -1181,6 +1192,11 @@ block comments:
 
 		_create: function () {
 			var navigationbar, toolsBar, o = this.options;
+			// fix problem with array options:
+			if (!o.colors) {
+				o.colors = ["red", "darkorchid", "green",
+								"blue", "cornflowerblue", "yellow", "bronze"];
+			}
 			if (!this.wijevcalnamespacekey) {
 				this.wijevcalnamespacekey = "wijevcal" +
 					new Date().getTime();
@@ -1357,9 +1373,11 @@ block comments:
 			this._initLocalDataStorage(); // _loadData called here
 			this.element.ajaxError(jQuery.proxy(this._onAjaxError, this));
 			$(window).resize($.proxy(this._onWindowResize, this));
-			this._bindEvents();
+
 			this._renderActiveView(); // invalidate called here
-			this._updateTitleText();
+
+			//this._bindEvents();this._updateTitleText(); called here:
+			this._ensureDisabled();
 
 		},
 		_initLocalDataStorage: function () {
@@ -1545,7 +1563,7 @@ block comments:
 
 			o.appointments = [];
 			appointmentsById = this._appointmentsById = {};
-			loadEventsCallback = function (events) {
+			loadEventsCallback = function (events) {				
 				if (!events) {
 					return;
 				}
@@ -1590,16 +1608,17 @@ block comments:
 				o.dataStorage.loadEvents(o.visibleCalendars,
 				loadEventsCallback, errorCallback);
 			} else if (o.webServiceUrl) {
-
 				$.ajax({
 					url: o.webServiceUrl + "?clientId=" + this.element[0].id +
-						"&command=loadEvents" +
-						"&visibleCalendars=" + o.visibleCalendars,
+						"&command=loadEvents",
 					dataType: "text",
-					/*data: { visibleCalendars2: o.visibleCalendars },*/
+					/*dataType: "json",*/
+					contentType: "application/json; charset=utf-8",
+					data: { visibleCalendars: o.visibleCalendars },
 					success: loadEventsCallback
 				});
 			} else {
+				
 				query = "SELECT * FROM events where ";
 				for (i = 0; i < o.visibleCalendars.length; i += 1) {
 					if (i > 0) {
@@ -1609,7 +1628,7 @@ block comments:
 				}
 				executeSql(query,
 				[],
-				function (data) {
+				function (data) {					
 					for (i = 0, count = data.rows.length; i < count; i += 1) {
 						appt = self._cloneObj(data.rows.item(i));
 						appt.start = new Date(appt.start);
@@ -2183,7 +2202,8 @@ block comments:
 							}
 						}, this)
 					});
-				this._editEventDialog.find(".wijmo-wijev-allday").wijcheckbox();
+				this._editEventDialog.find(".wijmo-wijev-allday").wijcheckbox()
+					.change($.proxy(this._eventDialogEnsureTimePartState, this));
 
 				this._editEventDialog.find(
 				".wijmo-wijev-subject,.wijmo-wijev-location,.wijmo-wijev-description")
@@ -2479,6 +2499,23 @@ block comments:
 				color = cal.color;
 			}
 			this._addColorClass(dlg.find(".wijmo-wijev-color"), color);
+			this._eventDialogEnsureTimePartState();
+		},
+		_eventDialogEnsureTimePartState: function () {
+			var dlg = this._editEventDialog;
+			if (dlg.find(".wijmo-wijev-allday").length > 0) {
+				if (dlg.find(".wijmo-wijev-allday")[0].checked) {
+					dlg.find(".wijmo-wijev-start-time")
+										.wijinputdate("option", "disabled", true);
+					dlg.find(".wijmo-wijev-end-time")
+										.wijinputdate("option", "disabled", true);
+				} else {
+					dlg.find(".wijmo-wijev-start-time")
+										.wijinputdate("option", "disabled", false);
+					dlg.find(".wijmo-wijev-end-time")
+										.wijinputdate("option", "disabled", false);
+				}
+			}
 		},
 		_loadRepeatValue: function (appt, repeatSelect) {
 			var repeatVal = "none";
@@ -2604,6 +2641,9 @@ block comments:
 				this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcellheader")
 					.live("click." + this.wijevcalnamespacekey,
 								$.proxy(this._onMonthViewDayLabelClick, this));
+				this.element.find(".wijmo-wijev-weekview .wijmo-wijev-daylabel")
+					.live("click." + this.wijevcalnamespacekey,
+								$.proxy(this._onMonthViewDayLabelClick, this));
 				this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcell")
 					.live("click." + this.wijevcalnamespacekey,
 								$.proxy(this._onMonthViewCellClick, this));
@@ -2626,6 +2666,10 @@ block comments:
 				this.element.find(".wijmo-wijev-dayview .wijmo-wijev-allday-cell")
 					.die("click." + this.wijevcalnamespacekey);
 				this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcellheader")
+					.die("click." + this.wijevcalnamespacekey);
+				this.element.find(".wijmo-wijev-weekview .wijmo-wijev-daylabel")
+					.die("click." + this.wijevcalnamespacekey);
+				this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcell")
 					.die("click." + this.wijevcalnamespacekey);
 				this._eventsAttached = false;
 			}
@@ -2713,6 +2757,7 @@ block comments:
 					url: this.options.webServiceUrl + "?clientId=" + this.element[0].id +
 						"&command=deleteCalendar",
 					dataType: "text",
+					contentType: "application/json; charset=utf-8",
 					data: { calendar: k },
 					success: deleteCalendarCallback
 				});
@@ -2823,6 +2868,7 @@ block comments:
 					url: this.options.webServiceUrl + "?clientId=" + this.element[0].id +
 						"&command=addCalendar",
 					dataType: "text",
+					contentType: "application/json; charset=utf-8",
 					data: { calendar: k },
 					success: addCalendarCallback
 				});
@@ -2934,6 +2980,7 @@ block comments:
 					url: this.options.webServiceUrl + "?clientId=" + this.element[0].id +
 						"&command=updateCalendar",
 					dataType: "text",
+					contentType: "application/json; charset=utf-8",
 					data: { calendar: k },
 					success: updateCalendarCallback
 				});
@@ -3065,6 +3112,7 @@ block comments:
 					url: this.options.webServiceUrl + "?clientId=" + this.element[0].id +
 						"&command=addEvent",
 					dataType: "text",
+					contentType: "application/json; charset=utf-8",
 					data: { event: k },
 					success: addEventCallback
 				});
@@ -3217,6 +3265,7 @@ block comments:
 					url: this.options.webServiceUrl + "?clientId=" + this.element[0].id +
 						"&command=updateEvent",
 					dataType: "text",
+					contentType: "application/json; charset=utf-8",
 					data: { event: k },
 					success: updateEventCallback
 				});
@@ -3420,6 +3469,7 @@ block comments:
 					url: this.options.webServiceUrl + "?clientId=" + this.element[0].id +
 						"&command=deleteEvent",
 					dataType: "text",
+					contentType: "application/json; charset=utf-8",
 					data: { event: k },
 					success: deleteEventCallback
 				});
@@ -3745,7 +3795,8 @@ block comments:
 				{ of: targetCell,
 					my: "left center",
 					at: "right center",
-					offset: (targetCell && e ? Math.round(e.offsetX - targetCell.width()) : 10) + " 0"
+					offset: (targetCell && e ? Math.round(e.offsetX - targetCell.width()) : 10) + " 0",
+					collision: "fit"
 				});
 		},
 
@@ -4057,7 +4108,7 @@ block comments:
 						showWeekNumbers: false,
 						selectionMode: { day: true, days: false },
 						selectedDatesChanged: $.proxy(function (e, args) {
-							if (args.dates) {
+							if (args.dates && !o.disabled) {
 								this.goToDate(args.dates[0]);
 							}
 						}, this)
@@ -4484,21 +4535,34 @@ block comments:
 				targetAppt.parents(".wijmo-wijev-appointment").length > 0) {
 				return;
 			}
+			if ((targetAppt.hasClass("wijmo-wijev-daylabel") ||
+				targetAppt.parents(".wijmo-wijev-daylabel").length > 0)) {
+				return;
+			}
+			//
 			this.showEditEventDialog(null, e.target, e);
 		},
 
 
 		_onMonthViewDayLabelClick: function (e) {
 			var monthcellcontainer = $(e.target)
-										.parent(".wijmo-wijev-monthcellcontainer"),
+										.parents(".wijmo-wijev-monthcellcontainer"),
 				o = this.options, cellDate;
-			cellDate = this._parseDateFromClass(monthcellcontainer[0].className);
-			if (o.viewType !== "day") {
-				o.viewType = "day";
-				this._onViewTypeChanged();
+
+			if (monthcellcontainer.length < 1) {
+				monthcellcontainer = $(e.target)
+										.parents(".wijmo-wijev-dayheadercolumn");
 			}
-			o.selectedDates = [new Date(cellDate)];
-			this._onSelectedDatesChanged();
+			//
+			if (monthcellcontainer[0]) {
+				cellDate = this._parseDateFromClass(monthcellcontainer[0].className);
+				if (o.viewType !== "day") {
+					o.viewType = "day";
+					this._onViewTypeChanged();
+				}
+				o.selectedDates = [new Date(cellDate)];
+				this._onSelectedDatesChanged();
+			}
 		},
 		_onMonthViewCellClick: function (e) {
 			var monthcellcontainer = $(e.target)
@@ -4527,7 +4591,8 @@ block comments:
 										of: target,
 										my: "left center",
 										at: "right center",
-										offset: "-10 0"
+										offset: "-10 0",
+										collision: "fit"
 									});
 			}
 		},

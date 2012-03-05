@@ -2,7 +2,7 @@
 /*jslint white: false */
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -453,7 +453,7 @@
 							function () { $(this).removeClass('ui-state-focus'); });
 		},
 		_unbindLiveEvents: function () {
-			this.element.find('.ui-accordion-header').die("wijaccordion");
+			this.element.find('.ui-accordion-header').die(".wijaccordion");
 		},
 		_onHeaderClick: function (e) {
 			if (!this.options.disabled) {

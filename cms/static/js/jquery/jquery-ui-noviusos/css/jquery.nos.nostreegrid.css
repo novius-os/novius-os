@@ -23,12 +23,10 @@
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.nostreegrid\.scss}line{font-family:\0000319}}
-.nostreegrid-drag-addhelper, .nostreegrid-drag-deniedhelper {
-  float: left;
-  margin: 0 5px;
-}
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/var\/www\/novius-cloud\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.nostreegrid\.scss}line{font-family:\0000323}}
 .nostreegrid-drag-inserthelper {
+  position: absolute;
   height: 2px;
+  width: 100%;
+  margin-top: -2px;
+  margin-bottom: -2px;
 }

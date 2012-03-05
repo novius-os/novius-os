@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Model_Page_Root extends \Orm\Model {
+class Model_Page_Root extends \Cms\Orm\Model {
     protected static $_table_name = 'os_page_root';
     protected static $_primary_key = array('root_id');
 

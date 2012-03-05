@@ -1,7 +1,7 @@
 /*globals jQuery, Globalize*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -52,7 +52,7 @@
 			/// </summary>
 			clusterOverlap: 0,
 			/// <summary>
-			/// A value that indicates the percentage of the plotarea 
+			/// A value that indicates the percentage of the plot area 
 			///	that each bar cluster occupies.
 			/// Default: 85.
 			/// Type: Number.
@@ -210,7 +210,7 @@
 			},
 			/// <summary>
 			/// A value that indicates whether to show animation 
-			/// and the duration for the animation when reload data.
+			/// and the duration for the animation when reloading data.
 			/// Default: {enabled:true, duration:400, easing: ">"}.
 			/// Type: Object.
 			/// Code example:
@@ -220,7 +220,7 @@
 			/// </summary>
 			seriesTransition: {
 				/// <summary>
-				/// A value that determines whether to show animation when reload.
+				/// A value that determines whether to show animation when reloading data.
 				/// Default: true.
 				/// Type: Boolean.
 				/// </summary>
@@ -249,7 +249,7 @@
 			/// });
 			/// Bind to the event by type: wijcompositechartmousedown
 			/// $("#compositechart").bind("wijcompositechartmousedown", 
-			/// function(e, data) {} );
+			/// function(e, data) {} );*-
 			/// </summary>
 			/// <param name="e" type="eventObj">
 			/// jQuery.Event object.
@@ -773,7 +773,7 @@
 							eles.path.area.show();
 						}
 						if (eles.path.tracker) {
-							eles.path.tracker.hide();
+							eles.path.tracker.show();
 						}
 					}
 				}
@@ -884,7 +884,7 @@
 		_paintTooltip: function () {
 			var self = this,
 				element = self.chartElement,
-				fields = element.data("fields"),
+				fields = element.data("fields") || {},
 				ctracers = fields.ctracers || [];
 
 			$.wijmo.wijchartcore.prototype._paintTooltip.apply(this, arguments);
@@ -912,6 +912,7 @@
 				bounds = self.canvasBounds,
 				charts = {},
 				index = 0,
+				isMulityYAxis = $.isArray(o.axis.y),
 				options = {
 					canvas: self.canvas,
 					tooltip: self.tooltip,
@@ -945,15 +946,20 @@
 						self._trigger("click", e, args);
 					}
 				},
-				tmpOptions, seriesEles, fields, ctracers;
+				fields = self.chartElement.data("fields"),
+				tmpOptions, chartgroup;
 
+			if (fields) {
+				fields.ctracers = [];
+			}
 			$.each(o[seriesList], function (i, series) {
 				var type = series.type,
 					chart = {},
 					chartType = type,
 					pie = {},
 					style = styles[index],
-					hoverStyle = hoverStyles[index];
+					hoverStyle = hoverStyles[index],
+					yAxis = series.yAxis;
 
 				if (!type || type.length === 0) {
 					return true;
@@ -1024,6 +1030,10 @@
 					series.fitType = "bezier";
 				}
 
+				if (isMulityYAxis) {
+					chart.yAxis = yAxis || 0;
+				}
+
 				if (type === "line" || type === "spline" ||
 						type === "bezier") {
 					delete style.fill;
@@ -1049,22 +1059,23 @@
 			});
 
 			$.each(charts, function (type, chart) {
+				var yAxisIndex = chart.yAxis;
 				switch (type) {
 				case "pie":
 					$.each(chart, function (idx, pie) {
 						var center = pie.center,
-						r = pie.radius || 50,
-						pieBounds = center ? {
-							startX: center.x - r,
-							startY: center.y - r,
-							endX: center.x + r,
-							endY: center.y + r
-						} : {
-							startX: bounds.startX + 10,
-							startY: bounds.startY + 10,
-							endX: bounds.startX + 10 + 2 * r,
-							endY: bounds.startY + 10 + 2 * r
-						};
+					r = pie.radius || 50,
+					pieBounds = center ? {
+						startX: center.x - r,
+						startY: center.y - r,
+						endX: center.x + r,
+						endY: center.y + r
+					} : {
+						startX: bounds.startX + 10,
+						startY: bounds.startY + 10,
+						endX: bounds.startX + 10 + 2 * r,
+						endY: bounds.startY + 10 + 2 * r
+					};
 
 						tmpOptions = $.extend(true, {}, options, {
 							bounds: pieBounds,
@@ -1073,9 +1084,11 @@
 
 						self.chartElement.wijpie(tmpOptions);
 					});
+					self._savechartData(type);
 					break;
 				case "bar":
 				case "column":
+
 					tmpOptions = $.extend(true, {}, options, {
 						stacked: o.stacked,
 						axis: o.axis,
@@ -1085,65 +1098,108 @@
 						is100Percent: o.is100Percent,
 						clusterRadius: o.clusterRadius,
 						isYTime: self.axisInfo.y.isTime,
-						isXTime: self.axisInfo.x.isTime
+						isXTime: self.axisInfo.x.isTime,
+						yAxisInfo: self.axisInfo.y,
+						yAxisIndex: yAxisIndex
 					}, chart);
 
 					self.chartElement.wijbar(tmpOptions);
+
+					self._savechartData(type);
 					break;
 				case "line":
 				case "spline":
 				case "bezier":
+					chartgroup = self._getyAxisGroup(chart);
 					if (!self.aniPathsAttr) {
 						self.aniPathsAttr = [];
 					}
-					tmpOptions = $.extend(true, {}, options, {
-						axis: o.axis,
-						isXTime: self.axisInfo.x.isTime,
-						isYTime: self.axisInfo.y.isTime,
-						aniPathsAttr: self.aniPathsAttr,
-						chartLabelEles: self.chartLabelEles
-					}, chart);
+					$.each(chartgroup, function (ykey, subchart) {
+						tmpOptions = $.extend(true, {}, options, {
+							axis: o.axis,
+							isXTime: self.axisInfo.x.isTime,
+							isYTime: self.axisInfo.y.isTime,
+							aniPathsAttr: self.aniPathsAttr,
+							chartLabelEles: self.chartLabelEles
+						}, subchart);
+						tmpOptions.axis.y = o.axis.y[ykey] || o.axis.y;
+						self.chartElement.wijline(tmpOptions);
 
-					self.chartElement.wijline(tmpOptions);
+						self._savechartData(type, true);
+					});
 					break;
 				case "scatter":
-					tmpOptions = $.extend(true, {}, options, {
-						axis: o.axis,
-						isXTime: self.axisInfo.x.isTime,
-						isYTime: self.axisInfo.y.isTime,
-						zoomOnHover: o.zoomOnHover
-					}, chart);
+					chartgroup = self._getyAxisGroup(chart);
+					$.each(chartgroup, function (ykey, subchart) {
+						tmpOptions = $.extend(true, {}, options, {
+							axis: o.axis,
+							isXTime: self.axisInfo.x.isTime,
+							isYTime: self.axisInfo.y.isTime,
+							zoomOnHover: o.zoomOnHover
+						}, subchart);
+						tmpOptions.axis.y = o.axis.y[ykey] || o.axis.y;
+						self.chartElement.wijscatter(tmpOptions);
 
-					self.chartElement.wijscatter(tmpOptions);
+						self._savechartData(type);
+					});
 					break;
 				}
-
-				fields = self.chartElement.data("fields");
-				seriesEles = fields.seriesEles;
-				$.each(seriesEles, function (i, ele) {
-					self.seriesEles.push({ eles: ele, type: type });
-				});
-				ctracers = fields.ctracers || [];
-				ctracers.push({
-					trackers: fields.trackers,
-					type: type
-				});
-				fields.ctracers = ctracers;
 			});
 			self.chartElement.data("fields").seriesEles = null;
 
 			self._bindtooltip();
 		},
 
+		_savechartData: function (type, notrackers) {
+			var self = this,
+				fields = self.chartElement.data("fields"),
+				seriesEles = fields.seriesEles,
+				ctracers;
+			$.each(seriesEles, function (i, ele) {
+				self.seriesEles.push({ eles: ele, type: type });
+			});
+			if (notrackers) {
+				fields.ctracers = [];
+			}
+			else {
+				ctracers = fields.ctracers || [];
+				ctracers.push({
+					trackers: fields.trackers,
+					type: type
+				});
+				fields.ctracers = ctracers;
+			}
+		},
+
+		_getyAxisGroup: function (chart) {
+			var group = {};
+			$.each(chart.seriesList, function (idx, series) {
+				var yAxis = series.yAxis || 0;
+				if (!group[yAxis]) {
+					group[yAxis] = {
+						seriesList: [],
+						seriesStyles: [],
+						seriesHoverStyles: []
+					};
+				}
+				group[yAxis].seriesList.push(series);
+				group[yAxis].seriesStyles.push(chart.seriesStyles[idx]);
+				group[yAxis].seriesHoverStyles.push(chart.seriesHoverStyles[idx]);
+			});
+			return group;
+		},
+
 		_bindtooltip: function () {
 			var self = this,
 			namespace = self.widgetName,
 			fields = self.chartElement.data("fields");
-			$.each(fields.ctracers, function (index, ctracer) {
-				if (ctracer.trackers) {
-					ctracer.trackers.toFront();
-				}
-			});
+			if (fields) {
+				$.each(fields.ctracers, function (index, ctracer) {
+					if (ctracer.trackers) {
+						ctracer.trackers.toFront();
+					}
+				});
+			}
 
 			self.chartElement
 			.delegate(".linetracker, .bartracker, .pietracker, .wijscatterchart",
@@ -1166,7 +1222,7 @@
 				content = hint.content,
 				isTitleFunc = $.isFunction(title),
 				isContentFunc = $.isFunction(content),
-				data, bbox, position; 
+				data, bbox, position;
 
 			position = $(self.canvas.canvas.parentNode).offset();
 

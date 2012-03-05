@@ -2,7 +2,7 @@
 
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -15,11 +15,14 @@
 * Wijmo Menu widget.
 *
 * Depends:
+* 	jquery.js
 *	jquery.ui.core.js
 *	jquery.ui.widget.js
 *	jquery.wijmo.wijutil.js
 *	jquery.ui.position.js
 *	jquery.ui.effects.core.js
+*	jquery.mousewheel.js
+*	jquery.bgiframe.js
 *	jquery.wijmo.wijsuperpanel.js
 *
 */
@@ -29,14 +32,15 @@
 	$.widget("wijmo.wijmenu", {
 		options: {
 			/// <summary>
-			/// An jQuery selector which handle to open the menu or submenu.
+			/// A jQuery selector which handles to open the menu or submenu.
 			/// Default: "".
 			/// Type: String.
-			/// Remark: If set to the menu item(the li element) then when it is clicked
-			/// (if the triggerEvent set to 'click') show submenu.  If set to a element 
-			/// out of the menu, click(if the triggerEvent set to 'click') it, open the 
-			/// menu. 
-			/// Code example: $(".selector").wijmenu("option", "trigger", "")
+			/// Remark:  If the trigger is set to a menu item(the <li> element),
+			/// then the submenu appears when the item is clicked if the triggerEvent 
+			/// is set to click. If the trigger is set to an element outside of the menu, 
+			/// then the menu opens when the element is clicked if the triggerEvent is 
+			/// set to click as a contextmenu.
+			/// Code example: $(".selector").wijmenu("option", "trigger", "#selector")
 			/// </summary>
 			trigger: '',
 			/// <summary>
@@ -49,58 +53,76 @@
 			/// </summary>
 			triggerEvent: 'click',
 			/// <summary>
-			/// Location and Orientation of the menu,relative to the button/link userd
-			/// to open it. Configuration for the Position Utility,Of option
-			/// excluded(always configured by widget).  Collision also controls collision 
-			/// detection automatically too.
+			/// Specifies the location and Orientation of the menu relative to the button
+			/// or link used to open it. Configuration for the Position Utility,Of option
+			/// is excluded, it is always configured by the widget.
+			/// Collision also controls collision detection automatically too.
 			/// Default: {}.
 			/// Type: Object.
-			/// Code example: $(".selector").wijmenu("option", "position", {})
+			/// Code example: $(".selector").wijmenu("option", "position", 
+			///		{my: "top right", at: "bottom left"});
 			/// </summary>
 			position: {},
 			/// <summary>
-			/// Sets showAnimation and hideAnimation if not specified individually.
-			/// Default: { animated: "slide", duration: 400, easing: null }.
+			/// Sets the showAnimation and hideAnimation options 
+			/// if they are not specified individually.
+			/// Default: { animated: "slide", option: null, 
+			///		duration: 400, easing: null }.
 			/// Type: Object.
-			/// Remark: User's standard animation setting syntax from other widgets.
-			/// Code example: $(".selector").wijmenu("option", "animation", {})
+			/// Remark: This option uses the standard animation setting syntax 
+			/// from jQuery.UI.
+			/// Code example: $(".selector").wijmenu("option", "animation", {
+			///		animated: "slide", 
+			///		option: { direction: "right" }, 
+			///		duration: 400, 
+			///		easing: null})
 			/// </summary>
 			animation: { animated: "slide", duration: 400, easing: null },
 			/// <summary>
-			/// Determine the animation used to show submenu.
+			/// Determine the animation used to show submenus.
 			/// Default: {}.
 			/// Type: Object.
-			/// Code example: $(".selector").wijmenu("option", "showAnimation", {})
+			/// Code example: $(".selector").wijmenu("option", "showAnimation", {
+			///		animated: "slide", 
+			///		option: { direction: "right" }, 
+			///		duration: 400, 
+			///		easing: null})
 			/// </summary>
 			showAnimation: {},
 			/// <summary>
-			/// Determine the animation used to hide submenu.
+			/// Determine the animation used to hide submenus.
 			/// Default: { animated: "fade", duration: 400, easing: null }.
 			/// Type: Object.
-			/// Code example: $(".selector").wijmenu("option", "hideAnimation", {})
+			/// Code example: $(".selector").wijmenu("option", "hideAnimation", {
+			///		animated: "slide", 
+			///		option: { direction: "right" }, 
+			///		duration: 400, 
+			///		easing: null})
 			/// </summary>
 			hideAnimation: { animated: "fade", duration: 400, easing: null },
 			/// <summary>
-			/// When the menu is flyout menu, determines how many milliseconds delay 
-			/// to show submenu.
+			/// This option determines how many milliseconds to delay 
+			/// before showing the submenu in a fly-out menu.
 			/// Default: 400
 			/// Type: Number
-			/// Code example: $(".selector").wijmenu("option", "showDelay", 400);
+			/// Code example: $(".selector").wijmenu("option", "showDelay", 1000);
 			/// </summary>
 			showDelay: 400,
 			/// <summary>
-			/// When the menu is flyout menu, determines how many milliseconds delay
-			/// to hide submenu.
+			/// This option determines how many milliseconds to delay 
+			/// before hiding the submenu in a fly-out menu.
 			/// Default: 400
 			/// Type: Number
-			/// Code exapmle: $(".selector").wijmenu("option", "hideDelay", 400).
+			/// Code exapmle: $(".selector").wijmenu("option", "hideDelay", 1000).
 			/// </summary>
 			hideDelay: 400,
 			/// <summary>
 			/// Determine the animation used to slide submenu in sliding mode.
 			/// Default: { duration: 400, easing: null }.
 			/// Type: Object.
-			/// Code example: $(".selector").wijmenu("option", "slidingAnimation", {})
+			/// Code example: $(".selector").wijmenu("option", "slidingAnimation", {
+			///		duration: 1000
+			///	})
 			/// </summary>
 			slidingAnimation: { duration: 400, easing: null },
 			/// <summary>
@@ -128,7 +150,7 @@
 			/// </summary>
 			checkable: false,
 			/// <summary>
-			/// Controls the root menus orientation. All submenus are vertical 
+			/// Controls the root menu's orientation. All submenus are vertical 
 			/// regardless of the orientation of the root menu.
 			/// Default: "horizontal".
 			/// Type: String.
@@ -137,38 +159,38 @@
 			/// </summary>
 			orientation: 'horizontal',
 			/// <summary>
-			/// Determines the i-Pod-style menu's maximum height.
+			/// Determines the iPod-style menu's maximum height.
 			/// Default: 200.
 			/// Type: Number.
-			/// Remark: This option only used in i-pod style menu.  When the menu's  
-			/// heiget largger than this value, menu show scroll bar.
-			/// Code example: $(".selector").wijmenu("option", "maxHeight", 200)
+			/// Remark: This option can only be used in an iPod style menu.
+			/// When the menu's heiget is largger than this value, the menu shows a scroll bar.
+			/// Code example: $(".selector").wijmenu("option", "maxHeight", 300)
 			/// </summary>
 			maxHeight: 200,
 			/// <summary>
-			/// Determines whether the i-Pod menu shows a back link or a breadcrumb header
+			/// Determines whether the iPod menu shows a back link or a breadcrumb header
 			/// in the menu.
 			/// Default: true.
 			/// Type: Boolean.
-			/// Code example: $(".selector").wijmenu("option", "backLink", true)
+			/// Code example: $(".selector").wijmenu("option", "backLink", false)
 			/// </summary>
 			backLink: true,
 			/// <summary>
 			/// Sets the text of the back link.
 			/// Default: "Back".
 			/// Type: String.
-			/// Code example: $(".selector").wijmenu("option", "backLinkText", "Back")
+			/// Code example: $(".selector").wijmenu("option", "backLinkText", "Previous")
 			/// </summary>
 			backLinkText: 'Back',
 			/// <summary>
 			/// Sets the text of the top link.
 			/// Default: "All".
 			/// Type: String.
-			/// Code example: $(".selector").wijmenu("option", "topLinkText", "All")
+			/// Code example: $(".selector").wijmenu("option", "topLinkText", "Root")
 			/// </summary>
 			topLinkText: 'All',
 			/// <summary>
-			/// Sets the top breadcrumb's default Text.
+			/// Sets the top breadcrumb's default text.
 			/// Default: "Choose an option".
 			/// Type: String.
 			/// Code example: $(".selector").wijmenu("option", "crumbDefaultText", 
@@ -227,7 +249,7 @@
 			/// Supply a function as an option.
 			/// $("#selector").wijmenu("showing", function(e, sublist){})
 			/// Bind to the event by type: wijmenushowing
-			/// $(".selector").bind("wijmenushowing", function(e, data) { } );
+			/// $(".selector").bind("wijmenushowing", function(e, sublist) { } );
 			/// </summary>
 			/// <param name="e" type="Object">the event object relates to the 
 			/// submenu's parent item.</param>
@@ -437,11 +459,11 @@
 		},
 
 		destroy: function () {
-			var self = this;
 			/// <summary>
 			/// Removes the wijmenu functionality completely.
 			/// This returns the element back to its pre-init state.
 			/// </summary>
+			var self = this;
 			this._destroy();
 			//Add for support disabled option at 2011/7/8
 			if (self.disabledDiv) {
@@ -532,8 +554,8 @@
 		},
 
 		nextPage: function (event) {
-			/// <summary>This event is similar to the next event,
-			///but it jumps a whole page.</summary>
+			/// <summary>This method is similar to the "next" method,
+			///but it jumps a whole page to the next page.</summary>
 			/// <param name="event" type="Event">The javascript event.</param>
 			var self = this,
 				activeItem = self.activeItem,
@@ -572,8 +594,8 @@
 		},
 
 		previousPage: function (event) {
-			/// <summary>This event is silimlar to the previous event,
-			///but it jumps a whole page.</summary>
+			/// <summary>This method is silimlar to the "previous" method,
+			///but it jumps a whole page to the previous page.</summary>
 			/// <param name="event" type="Event">The javascript event.</param>
 			var self = this,
 				activeItem = self.activeItem,
@@ -620,6 +642,13 @@
 		},
 
 		setItemDisabled: function (selector, disabled) {
+			/// <summary>Disables a menu item. </summary>
+			/// <param name="selector" type="jQuery selector">
+			/// 	Indicates the item to be disabled.</param>
+			/// <param name="disabled" type="Boolean">
+			/// 	If the value is true, the item is disabled; 
+			///		Otherwise, the item is enabled.
+			/// </param>
 			var items = $(selector, this.element);
 			items.find(".wijmo-wijmenu-item>a").attr("disabled", disabled);
 			items.find(">a").toggleClass("ui-state-disabled", disabled);
@@ -1358,6 +1387,9 @@
 						.attr('aria-expanded', 'true');
 
 						self.activate(e, $(this).parent());
+						//add comments for tfs issue 18483
+						self.select(e);
+						//end comments.
 
 						// initialize "back" link
 						if (o.backLink) {

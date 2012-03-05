@@ -1,7 +1,7 @@
 /*globals jQuery,document,window*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -13,14 +13,10 @@
 * * Wijmo Dropdown widget.
 * 
 * Depends:
-*	jquery-1.5.1.js
-*	jquery.ui.core.js
-*	jquery.ui.widget.js
-*	jquery.ui.resizable.js
-*	jquery.ui.draggable.js
-*	jquery.effects.core.js
-*	jquery.effects.mousewheel.js
-*	jquery.wijmo.wijdropdown.js
+*	jquery.js
+*	jquery.ui.js
+*	jquery.mousewheel.js
+*	jquery.bgiframe.js
 *	jquery.wijmo.wijsuperpanel.js
 
 *
@@ -286,31 +282,46 @@
 				switch (e.which) {
 				case keyCode.UP:
 				case keyCode.LEFT:
-					self.previous();
+					self._previous();
 					self._setValue();
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				case keyCode.DOWN:
 				case keyCode.RIGHT:
-					self.next();
+					self._next();
 					self._setValue();
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				case keyCode.PAGE_DOWN:
-					self.nextPage();
+					self._nextPage();
 					self._setValue();
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				case keyCode.PAGE_UP:
-					self.previousPage();
+					self._previousPage();
 					self._setValue();
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
 					self._setValue();
 					self._listContainer.hide();
-					self.oldVal = ele.val();
-					ele.val(self._value);
-					if (self.oldVal !== self._value) {
-						ele.trigger("change");
-					}
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				}
 				if (e.which !== keyCode.TAB) {
@@ -443,6 +454,16 @@
 				}
 			}
 		},
+		
+		_setValueToEle: function () {
+			var self = this, ele = self.element;
+			
+			self.oldVal = ele.val();
+			ele.val(self._value);
+			if (self.oldVal !== self._value) {
+				ele.trigger("change");
+			}
+		},
 
 		_initActiveItem: function () {
 			var self = this;
@@ -470,23 +491,24 @@
 			}
 		},
 
-		next: function () {
+		_next: function () {
 			this._move("next", "first");
 		},
 
-		previous: function () {
+		_previous: function () {
 			this._move("prev", "last");
 		},
 
-		nextPage: function () {
+		_nextPage: function () {
 			this._movePage("first");
 		},
 
-		previousPage: function () {
+		_previousPage: function () {
 			this._movePage("last");
 		},
 
 		refresh: function () {
+			/// Use the refresh method to set the drop-down element's style.
 			var self = this, containerWidth;
 
 			if (self.needInit) {
@@ -587,6 +609,8 @@
 		},
 
 		destroy: function () {
+			/// Remove the functionality completely. 
+			/// This will return the element back to its pre-init state.
 			this.element.closest(".wijmo-wijdropdown")
 			.find(">div.wijmo-dropdown-trigger,>div.wijmo-dropdown," +
 			">a").remove();

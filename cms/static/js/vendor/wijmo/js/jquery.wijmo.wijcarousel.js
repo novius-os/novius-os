@@ -1,7 +1,7 @@
 /*globals jQuery window */
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -65,7 +65,7 @@
 			/// <summary>
 			/// An object collection that contains the data of the carousel.
 			/// Default: [].
-			/// Type: Boolean.
+			/// Type: Array.
 			/// Code example: 
 			/// $("#element").wijcarousel( { data: [{
 			///		imageUrl: "../thumb/image1.jpg",
@@ -98,25 +98,27 @@
 			/// Determines if the timer of the carousel should be shown. 
 			/// Default: false.
 			/// Type: Boolean.
-			/// Code example: $("#element").wijcarousel( { interval: 3000 } );
+			/// Code example: $("#element").wijcarousel( { showTimer: true } );
 			/// </summary>
 			showTimer: false,
 			/// <summary>
 			/// Determines position value for next button & previous button. 
+			/// Possible values are: "inside" & "outside".
 			/// Default: "inside".
 			/// Type: String.
-			/// Code example: $("#element").wijcarousel( { buttonPosition: "inside" } );
+			/// Code example: $("#element").wijcarousel( { buttonPosition: "outside" } );
 			/// </summary>
 			buttonPosition: "inside",
 			/// <summary>
 			/// Determines whether the pager should be shown.
-			/// Default: true.
+			/// Default: false.
 			/// Type: Boolean.
 			/// Code example: $("#element").wijcarousel( { showPager: true } );
 			/// </summary>
 			showPager: false,
 			/// <summary>
 			/// Determines the class of custom previous button.
+			/// Include sub-options "defaultClass", "hoverClass", "disableClass".
 			/// Default: null.
 			/// Type: object.
 			/// Code example: $("#element").wijcarousel( { prevBtnClass: {
@@ -130,6 +132,7 @@
 			},
 			/// <summary>
 			/// Determines the class of custom previous button.
+			/// Include sub-options "defaultClass", "hoverClass", "disableClass".
 			/// Default: null.
 			/// Type: object.
 			/// Code example: $("#element").wijcarousel( { nextBtnClass: {
@@ -151,8 +154,17 @@
 			pagerType: "numbers",
 			/// <summary>
 			/// Determines the thumbnails list for pager when pagerType is "thumbnails". 
-			/// Default:[].
-			/// Type: Array.
+			/// Default: {
+			///		mouseover: null,
+			///		mouseout: null,
+			///		mousedown: null,
+			///		mouseup: null,
+			///		click: null,
+			///		imageWidth: 58,
+			///		imageHeight: 74,
+			///		images: []
+			/// }.
+			/// Type: Object.
 			/// Code example: $("#element").wijcarousel( { thumbnails: [] } );
 			/// </summary>
 			thumbnails: {
@@ -187,7 +199,7 @@
 			orientation: "horizontal",
 			/// <summary>
 			/// Allows carousel to loop back to the beginning 
-			/// Default: false.
+			/// Default: true.
 			/// Type: Boolean.
 			/// Code example: $("#element").wijcarousel( { loop: true } );
 			/// </summary>
@@ -195,6 +207,7 @@
 			/// <summary>
 			/// The animation properties of wijcarousel images scrolling.
 			/// Type: Object.
+			/// Default: 
 			/// Code example: $("#element").wijcarousel( { 
 			///		animation { 
 			///			queue: true,
@@ -245,7 +258,7 @@
 			/// </summary>
 			display: 1,
 			/// <summary>
-			/// Determines if we should preview the last & next pics.
+			/// Determines if we should preview the last and next pics.
 			/// loop == false , orintation == "horizontal",display == 1.
 			/// Default: 1.
 			/// Type: Boolean.
@@ -262,7 +275,7 @@
 			step: 1,
 			/// <summary>
 			/// Determines whether the custom control should be shown.
-			/// Default: true.
+			/// Default: false.
 			/// Type: Boolean.
 			/// Code example: $("#element").wijcarousel( { showControls: true } );
 			/// </summary>
@@ -302,7 +315,7 @@
 			/// </summary>
 			showControlsOnHover: false,
 			/// <summary>
-			/// The itemClick event handler.
+			/// This is the itemClick event handler.
 			/// A function called when the image is clicked.
 			/// Default: null.
 			/// Type: Function.
@@ -322,8 +335,8 @@
 			/// </param>
 			itemClick: null,
 			/// <summary>
-			/// The beforeScroll event handler.
-			/// A function called before scroll to another image.
+			/// This is the beforeScroll event handler.
+			/// A function called before scrolling to another image.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example: 
@@ -342,8 +355,8 @@
 			/// </param>
 			beforeScroll: null,
 			/// <summary>
-			/// The afterScroll event handler.
-			/// A function called after scroll to another image.
+			/// This is the afterScroll event handler.
+			/// A function called after scrolling to another image.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example: 
@@ -362,8 +375,8 @@
 			/// </param>
 			afterScroll: null,
 			/// <summary>
-			/// The loadCallback event handler.
-			/// A function called after created the dom element.
+			/// This is the loadCallback event handler.
+			/// A function called after creating the dom element.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example: 

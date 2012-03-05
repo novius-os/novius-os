@@ -14,7 +14,7 @@ use Fuel\Core\Uri;
 
 \Autoloader::add_class('PasswordHash', CMSPATH.'vendor'.DS.'phpass'.DS.'PasswordHash.php');
 
-class Model_User_User extends Model {
+class Model_User_User extends \Cms\Orm\Model {
     protected static $_table_name = 'os_user';
     protected static $_primary_key = array('user_id');
 

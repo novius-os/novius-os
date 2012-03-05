@@ -17,6 +17,7 @@ return array(
 		'models' => array(
 			array(
 				'model' => 'Cms\Model_Page_Page',
+				'order_by' => 'page_sort',
 				'childs' => array('Cms\Model_Page_Page'),
 				'dataset' => array(
 					'id' => 'page_id',
@@ -29,6 +30,7 @@ return array(
 			array(
 				'model' => 'Cms\Model_Page_Page',
 				'where' => array(array('page_parent_id', 'IS', \DB::expr('NULL'))),
+				'order_by' => 'page_sort',
 			),
 		),
 	),
@@ -39,7 +41,7 @@ return array(
     'selectedView' => 'default',
     'views' => array(
         'default' => array(
-            'name' => __('Default'),
+            'name' => __('Default view'),
             'json' => array('static/cms/js/admin/page/page.js'),
         )
     ),
@@ -81,14 +83,6 @@ return array(
 				$query->where(array('page_root_id', '=', $value));
 				//$query->where(array('page_level', '=', 1));
 				$query->order_by('page_title');
-			}
-			return $query;
-		},
-		'directory_id' => function($value, $query) {
-			$query->where(array('page_level', '>', 0));
-			//$query->where(array('page_type', '!=', Cms\Model_Page_Page::TYPE_FOLDER));
-			if ($value) {
-				$query->where(array('page_parent_id', '=', $value));
 			}
 			return $query;
 		},

@@ -13,10 +13,10 @@ namespace Cms;
 class Controller_404 extends \Controller {
 
     public function action_front() {
-        $this->response->body = \View::forge('errors/404_front');
+        return \View::forge('errors/404_front');
     }
 
     public function action_admin() {
-        $this->response->body = \View::forge('errors/404_admin');
+        return \View::forge('errors/404_admin');
     }
 }

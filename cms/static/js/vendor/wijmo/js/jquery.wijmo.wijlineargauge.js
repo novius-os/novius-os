@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -12,6 +12,14 @@
  *
  *
  *  Wijmo LinearGauge widget.
+ *
+ * Depends:
+ *  jQuery.1.5.1.js
+ *  jQuery.ui.core.js
+ *  jQuery.ui.widget.js
+ *	raphael.js
+ *  jQuery.wijmo.rahpael.js
+ *  jquery.wijmo.wijgauge.js
  */
 (function ($) {
 	"use strict";
@@ -308,10 +316,17 @@
 				width = self._innerBbox.width,
 				height = self._innerBbox.height,
 				left = self._innerBbox.left,
-				top = self._innerBbox.top;
+				top = self._innerBbox.top,
+				ui = {
+					width: width,
+					height: height,
+					x: left,
+					y: top,
+					canvas: self.canvas
+				};
 			if (o.face && o.face.template &&
 			$.isFunction(o.face.template)) {
-				return o.face.call(self, width, height, left, top);
+				return o.face.template.call(self, ui);
 			}
 			face = self.canvas.rect(left, top, width, height, 5);
 			if (o.face && o.face.style) {

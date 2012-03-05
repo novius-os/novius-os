@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `os_media_folder` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 REPLACE INTO `os_media_folder` (`medif_id`, `medif_parent_id`, `medif_path`, `medif_title`) VALUES
-(1, NULL, '', 'Media library');
+(1, NULL, '', 'Media centre');
 
 
 -- --------------------------------------------------------

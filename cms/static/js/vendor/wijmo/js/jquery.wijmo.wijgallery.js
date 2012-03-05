@@ -1,7 +1,7 @@
 /*globals jQuery,window,S,document */
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -110,13 +110,13 @@
 			data: [],
 			/// <summary>
 			/// Determines whether the custom control should be shown.
-			/// Default: true.
+			/// Default: false.
 			/// Type: Boolean.
 			/// Code example: $("#element").wijgallery( { showControls: true } );
 			/// </summary>
 			showControls: false,
 			/// <summary>
-			/// Determines the innerHtml of the custom control.
+			/// Determines the innerHTML of the custom control.
 			/// Default: "".
 			/// Type: String.
 			/// Code example: $("#element").wijgallery( { control: "<div>Blah</div>" } );
@@ -197,7 +197,7 @@
 			/// <summary>
 			/// Determines the direction of the thumbnails. 
 			/// Possible values are: "before" & "after"
-			/// Default: "horizontal".
+			/// Default: "after".
 			/// Type: String.
 			/// Code example: $("#element").wijgallery( { 
 			///		thumbnailOrientation: "before" 
@@ -322,6 +322,11 @@
 			autoPlayMovies: true,
 			///	<summary>
 			///	A hash object that contains parameters for flash object.
+			/// Type: Object
+			/// Code example:
+			///  $("#id").wijgallery({
+			///      flashParams: { allowfullscreen: false }
+			///  });
 			///	</summary>
 			flashParams: {
 				bgcolor: "#000000",
@@ -330,24 +335,28 @@
 			},
 			///	<summary>
 			///	A hash object that contains variants for flash object.
+			/// Code Example: $("#id").wijgallery({  flashVars: { width:300,  height:400 } });
 			///	</summary>
 			flashVars: {},
 			///	<summary>
 			///	Version of flash object.
 			/// Default: "9.0.115"
 			/// Type: String
+			/// Code Example: $("#id").wijgallery({  flashVersion: "8.0" })
 			///	</summary>
 			flashVersion: "9.0.115",
 			///	<summary>
 			///	The relative path and name of the flash vedio player.
 			/// Default: 'player\\player.swf'
 			/// Type: String
+			/// Code Example: $("#id").wijgallery({  flvPlayer: "player\\player2.swf " });
 			///	</summary>
 			flvPlayer: 'player\\player.swf',
 			///	<summary>
 			///	The relative path and name of the flash installation guide.
 			/// Default: 'player\\expressInstall.swf'
 			/// Type: String
+			/// Code Example: $("#id").wijgallery({  flashInstall: " player\expressInstall2.swf " });
 			///	</summary>
 			flashInstall: 'player\\expressInstall.swf',
 			///	<summary>
@@ -355,6 +364,8 @@
 			/// Possible values: "img", "iframe", "swf", "flv"
 			/// Default: 'img'
 			/// Type: String
+			/// Code example:
+			///  $("#id").wijgallery({  mode: "swf" });
 			///	</summary>
 			mode: "img"
 		},
@@ -1555,6 +1566,12 @@
 		},
 
 		add: function (ui, index) {
+			/// <summary>
+			/// Adds a custom item with specified index.
+			/// The first parameter is the new item to add, it should be a jQuery Element or HTML string. 
+			/// The second parameter is the index of item to add , 
+			/// If  no index specified the item will be added at the last of  item collection.
+			/// </summary>
 			var self = this, item, idx, data;
 			if (typeof ui === "string") {
 				item = $(ui);
@@ -1589,6 +1606,11 @@
 		},
 
 		remove: function (index) {
+			/// <summary>
+			/// Removes the item at specified index. 
+			/// The parameter is the index of item to add , 
+			/// If  no index specified the last item will be removed.
+			/// </summary>
 			var self = this, idx;
 			if (!index || index > self.count) {
 				idx = self.count;

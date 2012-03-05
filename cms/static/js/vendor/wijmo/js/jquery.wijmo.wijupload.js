@@ -2,7 +2,7 @@
 
 /*
 * 
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 * 
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -301,6 +301,11 @@
 			/// "return false;" to cancel the event.
 			/// Default: null.
 			/// Type: Function.
+			/// Code example: 
+			/// Supply a function as an option.
+			/// $(".selector").wijupload({ change: function (e, data) { } });
+			/// Bind to the event by type: wijuploadchange
+			/// $("#selector").bind("wijuploadchange", function(e, data) { } );
 			/// </summary>
 			/// <param name="e" type="eventObj">
 			/// jQuery.Event object.
@@ -314,6 +319,11 @@
 			/// "return false;" to cancel the event.
 			/// Default: null.
 			/// Type: Function.
+			/// Code example: 
+			/// Supply a function as an option.
+			/// $(".selector").wijupload({ upload: function (e, data) { } });
+			/// Bind to the event by type: wijuploadupload
+			/// $("#selector").bind("wijuploadupload", function(e, data) { } );
 			/// </summary>
 			/// <param name="e" type="eventObj">
 			/// jQuery.Event object.
@@ -327,6 +337,11 @@
 			/// "return false;" to cancel the event.
 			/// Default: null.
 			/// Type: Function.
+			/// Code example: 
+			/// Supply a function as an option.
+			/// $(".selector").wijupload({ totalUpload: function (e, data) { } });
+			/// Bind to the event by type: wijuploadtotalupload
+			/// $("#selector").bind("wijuploadtotalupload", function(e, data) { } );
 			/// </summary>
 			/// <param name="e" type="eventObj">
 			/// jQuery.Event object.
@@ -336,6 +351,11 @@
 			/// Fires when file uploading. 
 			/// Default: null.
 			/// Type: Function.
+			/// Code example: 
+			/// Supply a function as an option.
+			/// $(".selector").wijupload({ progress: function (e, data) { } });
+			/// Bind to the event by type: wijuploadprogress
+			/// $("#selector").bind("wijuploadprogress", function(e, data) { } );
 			/// </summary>
 			/// <param name="e" type="eventObj">
 			/// jQuery.Event object.
@@ -348,6 +368,11 @@
 			/// Fires when click the uploadAll button adn file uploading. 
 			/// Default: null.
 			/// Type: Function.
+			/// Code example: 
+			/// Supply a function as an option.
+			/// $(".selector").wijupload({ totalProgress: function (e, data) { } });
+			/// Bind to the event by type: wijuploadtotalprogress
+			/// $("#selector").bind("wijuploadtotalprogress", function(e, data) { } );
 			/// </summary>
 			/// <param name="e" type="eventObj">
 			/// jQuery.Event object.
@@ -360,6 +385,11 @@
 			/// Fires when file upload is complete. 
 			/// Default: null.
 			/// Type: Function.
+			/// Code example: 
+			/// Supply a function as an option.
+			/// $(".selector").wijupload({ complete: function (e, data) { } });
+			/// Bind to the event by type: wijuploadcomplete
+			/// $("#selector").bind("wijuploadcomplete", function(e, data) { } );
 			/// </summary>
 			/// <param name="e" type="eventObj">
 			/// jQuery.Event object.
@@ -372,6 +402,11 @@
 			/// Fires when click the uploadAll button and file upload is complete. 
 			/// Default: null.
 			/// Type: Function.
+			/// Code example: 
+			/// Supply a function as an option.
+			/// $(".selector").wijupload({ totalComplete: function (e, data) { } });
+			/// Bind to the event by type: wijuploadtotalcomplete
+			/// $("#selector").bind("wijuploadtotalcomplete", function(e, data) { } );
 			/// </summary>
 			/// <param name="e" type="eventObj">
 			/// jQuery.Event object.
@@ -381,6 +416,8 @@
 			/// Specifies the maxmized files number that can be uploaded. 
 			/// Default: 0.
 			/// Type: Number.
+			/// Code Example: 
+			///		$(".selector","maximunFiles", 5)
 			/// </summary>
 			maximumFiles: 0
 		},

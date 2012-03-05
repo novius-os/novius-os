@@ -9,8 +9,8 @@
 
 define([
         'jquery',
-		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.0b2.min',
-		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.0b2.min'
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.0.min',
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.0.min'
 	], function($) {
         var undefined = void(0);
 
@@ -20,17 +20,17 @@ define([
                 var onCustom = false;
                 var jsonFile = "";
 
-                if (config['selectedView'] == 'custom') {
-                    if (config['custom']) {
-                        jsonFile = config['views'][config['custom']['from']].json;
+                if (config.selectedView == 'custom') {
+                    if (config.custom) {
+                        jsonFile = config.views[config.custom.from].json;
                         onCustom = true;
                     } else {
-                        config['selectedView'] = 'default';
+                        config.selectedView = 'default';
                     }
                 }
 
-                if (config['selectedView'] != 'custom') {
-                    jsonFile = config['views'][config['selectedView']].json;
+                if (config.selectedView != 'custom') {
+                    jsonFile = config.views[config.selectedView].json;
                 }
 
 
@@ -43,23 +43,23 @@ define([
                 ], function( $ ) {
 
                     require(jsonFile, function () {
-                        var mp3Grid = {};
+                        var mp3Grid = $.nos.mp3GridSetup();
+                        $.extend(true, mp3Grid.i18nMessages, config.i18n);
 
                         // Extending mp3Grid with each of the different json files
                         for (var i = 0; i < arguments.length; i++) {
-                            mp3Grid = $.extend(true, mp3Grid, arguments[i]);
+                            $.extend(true, mp3Grid, arguments[i](mp3Grid));
                         }
 
-                        $.extend(mp3Grid.i18nMessages, config['i18n']);
-                        mp3Grid.mp3grid.views = config['views'];
-                        mp3Grid.mp3grid.name = config['configuration_id'];
-                        mp3Grid.mp3grid.selectedView = config['selectedView'];
+                        $.extend(true, mp3Grid.mp3grid, {
+                            views : config.views,
+                            name  : config.configuration_id,
+                            selectedView : config.selectedView
+                        });
                         if (onCustom) {
-                            mp3Grid.mp3grid.fromView = config['custom']['from'];
-                        }
-
-                        if (onCustom) {
-                            mp3Grid.mp3grid = $.extend(true, mp3Grid.mp3grid, config['custom'].mp3grid);
+                            $.extend(true, mp3Grid.mp3grid, {
+                                fromView : config.custom.from
+                            }, config.custom.mp3grid);
                         }
 
                         var timeout,
@@ -93,9 +93,9 @@ define([
                                 }
                             });
                             $.nos.listener.remove('mp3grid.' + id, true, arguments.callee);
-                        })
+                        });
 
-                        if (null == params.delayed || !params.delayed) {
+                        if (null == config.delayed || !config.delayed) {
                             $.nos.listener.fire('mp3grid.' + id, true, []);
                         }
 
@@ -106,7 +106,7 @@ define([
                         }
 
                         div.bind('reload', function(e, newConfig) {
-                            config = $.extend(config, newConfig);
+                            $.extend(config, newConfig);
                             var newDiv = $('<div id="' + id + '"></div>');
                             newDiv.insertAfter(div);
                             div.remove();
@@ -132,8 +132,11 @@ define([
                             var keys = object[key + 'Order'].split(',');
                             var ordered = [];
                             for (var i = 0; i < keys.length; i++) {
-                                object[key][keys[i]]['setupkey'] = keys[i];
-                                ordered.push(object[key][keys[i]]);
+                                // Remove null values
+                                if (object[key][keys[i]] != null) {
+                                    object[key][keys[i]]['setupkey'] = keys[i];
+                                    ordered.push(object[key][keys[i]]);
+                                }
                             }
                             return ordered;
                         } else {
@@ -175,28 +178,37 @@ define([
                                     }
                                     if (object[key][i].actions) {
                                         var actions = object[key][i].actions;
-										var width = $.nos.grid.getActionWidth(actions[0].label);
+										var width;
+                                        var showOnlyArrow = object[key][i].showOnlyArrow ? true : false;
 
-										// At least 80px wide
-										if (actions.length > 1) {
-											// Reserve space for the dropdown actions menu
-											width -= 20;
-										}
-										width = Math.max(width, 80);
+                                        if (showOnlyArrow) {
+                                            width = 20;
+                                        } else {
+                                            width = $.nos.grid.getActionWidth(actions);
+
+                                            if (actions.length > 1) {
+                                                // Reserve space for the dropdown actions menu
+                                                //width -= 20;
+                                            }
+                                            // At least 80px wide
+                                            //width = Math.max(width, 80);
+                                        }
 
                                         // Make the drop-down actions columns
                                         object[key][i] = {
-                                            headerText : 'Actions',
+                                            headerText : showOnlyArrow ? '' : '',
                                             cellFormatter : function(args) {
                                                 if ($.isPlainObject(args.row.data)) {
 
-                                                    var buttons = $.nos.mp3gridActions(actions, args.row.data);
+                                                    var buttons = $.nos.mp3gridActions(actions, args.row.data, {
+                                                        showOnlyArrow : showOnlyArrow
+                                                    });
 
 													buttons.appendTo(args.$container);
 													args.$container.parent().addClass('buttontd').css({width: width + 1});
 
                                                     return true;
-                                                };
+                                                }
                                             },
                                             allowSizing : false,
                                             allowSort : false,
@@ -206,7 +218,7 @@ define([
                                             setupkey: 'actions'
                                         };
                                     }
-                                };
+                                }
                             }
                         });
                     },
@@ -265,6 +277,35 @@ define([
 
                             params.mp3grid.inspectors = keyToOrderedArray(params.mp3grid, 'inspectors');
 
+                            // 'actions' is an object containing all the possible actions
+                            // 'mp3grid.grid.columns.actions.actions' references the actions we actually use (and are copied from 'actions')
+                            if (params.actions) {
+                                var gridActions = params.actions;
+                                if (params.mp3grid.grid.columns.actions && params.mp3grid.grid.columns.actions.actions) {
+                                    $.each(params.mp3grid.grid.columns.actions.actions, function(i, val) {
+                                        if ($.type(val) == 'string') {
+                                            params.mp3grid.grid.columns.actions.actions[i] = gridActions[val];
+                                        }
+                                    });
+                                }
+                                if (params.mp3grid.thumbnails && params.mp3grid.thumbnails.actions) {
+                                    $.each(params.mp3grid.thumbnails.actions, function(i, val) {
+                                        if ($.type(val) == 'string') {
+                                            params.mp3grid.thumbnails.actions[i] = gridActions[val];
+                                        }
+                                    });
+                                }
+                                $.each(params.mp3grid.inspectors, function(i, inspector) {
+                                    if (inspector.preview && inspector.options.actions) {
+                                        $.each(inspector.options.actions, function(i, val) {
+                                            if ($.type(val) == 'string') {
+                                                inspector.options.actions[i] = gridActions[val];
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
                             // Translate clone object
                             recursive(params);
 
@@ -295,35 +336,67 @@ define([
 
 			// Keep track of all created menus so we can hide them when
 			mp3GridActionsList : [],
-			mp3gridActions : function(actions, noParseData) {
-
+			mp3gridActions : function(actions, noParseData, options) {
+                options = options || {};
 				var container = $('<table><tr></tr></table>').addClass('buttontd wijgridtd');
 
-				$.each(actions, function() {
-					var action = this;
-					action._action = function(e) {
-						action.action(noParseData);
-						e.stopImmediatePropagation();
-						e.preventDefault();
-					}
-				});
+                var actionsPrimary = [];
+                var actionsSecondary = [];
 
-				var action = $('<th></th>')
-					.addClass("ui-state-default")
-					.html(actions[0].label)
-					.click(actions[0]._action)
-					.hover(
-						function() {
-							$(this).addClass("ui-state-hover");
-						},
-						function() {
-							$(this).removeClass("ui-state-hover");
-						}
-					);
+                // Possibility to always hide everyting
+                if (!options.showOnlyArrow) {
+                    $.each(actions, function() {
+                        if (this.primary) {
+                            actionsPrimary.push(this);
+                        } else {
+                            actionsSecondary.push(this);
+                        }
+                    });
 
-				action.appendTo(container.find('tr'));
+                    // If there is only 1 secondary action and it has an icon, don't show the dropdow, but show the action as a button
+                    if (actionsSecondary.length == 1 && (actionsSecondary[0].icon || actionsSecondary[0].iconClasses)) {
+                        actionsPrimary.push(actionsSecondary[0]);
+                    }
 
-				if (actions.length > 1) {
+                    $.each(actionsPrimary, function(i, action) {
+                        var iconClass = false;
+                        if (action.iconClasses) {
+                            iconClass = action.iconClasses;
+                        } else if (action.icon) {
+                            iconClass = 'ui-icon ui-icon-' + action.icon;
+                        }
+                        var uiAction = $('<th></th>')
+                            .addClass("ui-state-default")
+                            .attr('title', action.label)
+                            .html( iconClass ? '<span class="' + iconClass +'"></span>' : '&nbsp;' + action.label + '&nbsp;')
+                            .click(function(e) {
+                                action.action.apply(this, [noParseData]);
+                                e.stopImmediatePropagation();
+                                e.preventDefault();
+                            })
+                            .hover(
+                                function() {
+                                    $(this).addClass("ui-state-hover");
+                                },
+                                function() {
+                                    $(this).removeClass("ui-state-hover");
+                                }
+                            );
+                        if (iconClass) {
+                            uiAction.css({
+                                width : 20,
+                                textAlign : 'center'
+                            }).children().css({
+                                margin : 'auto'
+                            });
+                        }
+
+                        uiAction.appendTo(container.find('tr'));
+                    });
+                }
+
+                // Create the dropdown
+				if (options.showOnlyArrow || actionsSecondary.length >= 2 || (actionsSecondary.length == 1 && !(actionsSecondary[0].icon || actionsSecondary[0].iconClasses))) {
 
 					var dropDown = $('<th></th>')
 						.addClass("ui-state-default")
@@ -352,13 +425,34 @@ define([
 
 						if (!this.created) {
 							var ul = $('<ul></ul>');
-							$.each(actions, function() {
-								var action = this;
-								$('<li><a href="#"></a></li>')
+							$.each(actions, function(key, action) {
+                                var iconClass;
+                                if (action.iconClasses) {
+                                    iconClass = action.iconClasses;
+                                } else if (action.icon) {
+                                    iconClass = 'ui-icon ui-icon-' + action.icon;
+                                }
+                                var text = '<span class="' + (iconClass ? iconClass : 'nos-icon16 nos-icon16-empty') + ' wijmo-wijmenu-icon-left"></span><span class="wijmo-wijmenu-text">'+action.label+'</span>';
+								var li = $('<li><a href="#"></a></li>')
 									.appendTo(ul)
 									.find('a')
-									.text(action.label)
-									.click(action._action)
+									.html(text);
+
+                                if (action.name && noParseData.actions && noParseData.actions[action.name] == false) {
+                                    li.addClass('ui-state-disabled')
+                                    .click(function(e) {
+                                        e.stopImmediatePropagation();
+                                        e.preventDefault();
+                                    });
+                                } else {
+									li.click(function(e) {
+                                        // Hide me
+                                        ul.wijmenu('hideAllMenus');
+                                        action.action.apply(this, [noParseData]);
+                                        e.stopImmediatePropagation();
+                                        e.preventDefault();
+                                    });
+                                }
 							});
 
 							// Search the higher ancestor possible
@@ -512,32 +606,45 @@ define([
 				var where   = $.nos.$noviusos.ostabs ? $.nos.$noviusos.ostabs('current').panel : $('body');
 				var $dialog = $(document.createElement('div')).appendTo(where);
 
-				$.nos.data('dialog_media', $dialog);
+				$.nos.data('dialog', $dialog);
 
                 if (typeof wijdialog_options['content'] != 'undefined') {
                     $dialog.append(wijdialog_options.content);
                 }
 
                 require([
-                    //'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.2.0.0b2.css',
+                    //'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.2.0.0.css',
                     //'static/cms/js/wijmo/wijmo/js/jquery.wijmo.wijutil',
                     'static/cms/js/vendor/wijmo/js/jquery.wijmo.wijdialog'
                 ], function() {
+                    var proceed = true;
 					if (wijdialog_options.ajax) {
 						$dialog.load(wijdialog_options.contentUrl, {}, function(responseText, textStatus, XMLHttpRequest){
-							delete wijdialog_options.contentUrl;
-							$dialog.wijdialog(wijdialog_options);
+                            try {
+                                var json = $.parseJSON(responseText);
+                                // If the dialog ajax URL returns a valid JSON string, don't show the dialog
+                                proceed = false;
+                            } catch (e) {}
+                            if (proceed) {
+                                delete wijdialog_options.contentUrl;
+                                $dialog.wijdialog(wijdialog_options);
+                            } else {
+                                $dialog.empty();
+                                $.nos.ajax.success(json);
+                            }
 						});
 					} else {
 						$dialog.wijdialog(wijdialog_options);
 					}
-                    if ($.isFunction(wijdialog_options['onLoad'])) {
-                        wijdialog_options['onLoad']();
+                    if (proceed) {
+                        if ($.isFunction(wijdialog_options['onLoad'])) {
+                            wijdialog_options['onLoad']();
+                        }
+                        $dialog.bind('wijdialogclose', function(event, ui) {
+                            //log('Fermeture et destroyage');
+                            $dialog.closest('.ui-dialog').hide().appendTo(where);
+                        });
                     }
-					$dialog.bind('wijdialogclose', function(event, ui) {
-						//log('Fermeture et destroyage');
-						$dialog.closest('.ui-dialog').hide().appendTo(where);
-					});
                 });
 
                 return $dialog;
@@ -593,6 +700,8 @@ define([
                                 json.user_success = old_success;
                                 $.nos.ajax.success(json);
                             }
+                        } else {
+                            options.success = $.nos.ajax.success;
                         }
 
                         if ($.isFunction(options.error)) {
@@ -601,6 +710,8 @@ define([
                                 $.nos.ajax.error(json);
                                 old_error.apply(this, arguments);
                             }
+                        } else {
+                            options.error = $.nos.ajax.error;
                         }
                     }
 
@@ -619,7 +730,7 @@ define([
                                 $.nos.listener.fire(listener_name, bubble);
                             });
                         } else {
-                            $.nos.listener.fire(json.listener_fire);
+                            $.nos.listener.fire(json.listener_fire, json.listener_bubble ? true : false);
                         }
                     }
                     // Call user callback
@@ -673,12 +784,13 @@ define([
                     }
                     return this.heights;
                 },
-				getActionWidth : function(text) {
+				getActionWidth : function(actions) {
 
+/*
 					this.cache = {};
 					if (null != this.cache[text]) {
 						return this.cache[text];
-					}
+					}*/
 
 					var $div = $('<div></div>')
 						.appendTo('body');
@@ -696,10 +808,7 @@ define([
 									cellFormatter : function(args) {
 										if ($.isPlainObject(args.row.data)) {
 
-											var buttons = $.nos.mp3gridActions([{
-												label : '&nbsp;' + text + '&nbsp;',
-												action: function() {}
-											}], []);
+											var buttons = $.nos.mp3gridActions(actions, []);
 
 											buttons.appendTo(args.$container);
 											args.$container.parent().addClass('buttontd');
@@ -722,10 +831,12 @@ define([
 						'font-size' : '1.05em',
 						'width' : 'auto'
 					});
-					this.cache[text] = $div.find('.buttontd .buttontd:first').outerWidth();
+					//this.cache[text] = $div.find('.buttontd .buttontd:first').outerWidth();
+                    var width = $div.find('.buttontd .buttontd:first').outerWidth();
 					table.nosgrid('destroy');
 					$div.remove();
-					return this.cache[text];
+                    return width;
+					//return this.cache[text];
 				}
             },
 
@@ -773,8 +884,8 @@ define([
                 }, data.inputFileThumb);
 
                 require([
-                    'static/cms/js/jquery/jquery-ui-input-file-thumb/js/jquery.input-file-thumb',
-                    'link!static/cms/js/jquery/jquery-ui-input-file-thumb/css/jquery.input-file-thumb.css'
+                    'static/cms/js/vendor/jquery/jquery-ui-input-file-thumb/js/jquery.input-file-thumb',
+                    'link!static/cms/js/vendor/jquery/jquery-ui-input-file-thumb/css/jquery.input-file-thumb.css'
                 ], function() {
                     $(function() {
                         input.inputFileThumb(options);

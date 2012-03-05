@@ -1,7 +1,7 @@
 /*globals jQuery,window*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -413,7 +413,17 @@
 			/// <param name="data" type="Object">
 			/// The node widget that relates to this event.
 			/// </param>
-			selectedNodeChanged: null
+			selectedNodeChanged: null,
+			/// <summary>
+			/// A function called before expanding the node, 
+			/// This event can be canceled, if return false 
+			/// </summary>
+			nodeExpanding: null,
+			/// <summary>
+			/// A function called before collapsing the node, 
+			/// This event can be canceled, if return false 
+			/// </summary>
+			nodeCollapsing: null
 		},
 
 		/* init methods*/
@@ -532,6 +542,16 @@
 			}
 			return $li;
 		},
+
+//		getChildNodes: function (node) {
+//			var expand = this._trigger("expandingPotentialParentNode", null, {
+//				node : node,
+//				params : node.options.params
+//			});
+//			if (expand !== false) {
+//				node._expandNode(true);
+//			}
+//		},
 
 		/*tree event*/
 		_attachEvent: function () {
@@ -785,7 +805,8 @@
 				self.$nodes.append(nodeWidget.element);
 			}
 			self._changeCollection(position, nodeWidget);
-			self._refreshNodesClass();
+			nodeWidget._initNodeClass();
+			//self._refreshNodesClass();
 		},
 
 		remove: function (node) {
@@ -811,7 +832,7 @@
 			nodeWidget = nodes[idx];
 			nodeWidget.element.detach();
 			this._changeCollection(idx);
-			this._refreshNodesClass();
+			//this._refreshNodesClass();
 		},
 
 		_changeCollection: function (idx, nodeWidget) {
@@ -1003,7 +1024,22 @@
 			/// Default:"".
 			/// Code example:$(".selector").wijtreenode("toolTip","Node 1 toolTip").
 			///	</summary>
-			toolTip: ""
+			toolTip: "",
+			///	<summary>
+			///	Determines whether this nodes has child nodes. 
+			/// It's always use for custom add child nodes (like async load).
+			/// Type:Boolean.
+			/// Default:false.
+			/// Code example:$(".selector").wijtreenode("hasChildren",true).
+			///	</summary>
+			hasChildren: false,
+			///	<summary>
+			///	The parameter need to pass when custom load child nodes.
+			/// Type:Boolean.
+			/// Default:{}.
+			/// Code example:$(".selector").wijtreenode("ajaxParams",{}).
+			///	</summary>
+			params:{}
 		},
 
 		/*widget Method*/
@@ -1180,7 +1216,7 @@
 		},
 
 		_initNodeClass: function () {
-			var self = this, o = self.options,
+			var self = this, o = self.options, style,
 			hitClass = "ui-icon " +
 			(o.expanded ? "ui-icon-triangle-1-se" : "ui-icon-triangle-1-e");
 			if (self._tree.options.showExpandCollapse) {
@@ -1198,7 +1234,10 @@
 						.addClass("wijmo-wijtree-parent");
 					}
 					if (self._hasChildren) {
-						self.$nodes[o.expanded ? "show" : "hide"]();
+						//self.$nodes[o.expanded ? "show" : "hide"]();
+						// the performance "display:none" is must better then show, hide, fixed bug on adding lots of child nodes.
+						style = o.expanded ? "" : "none";
+						self.$nodes.css({ display: style });
 					}
 				}
 				else if (self.$hitArea) {
@@ -1344,7 +1383,20 @@
 		},
 
 		_expandNode: function (expand) {
-			var self = this, treeOption = self._tree.options;
+			var self = this, treeOption = self._tree.options,
+			trigger = expand ? "nodeExpanding" : "nodeCollapsing";
+
+			if(self._tree._trigger(trigger, null, {
+				node : this,
+				params : this.options.params
+			}) === false) {
+				return;
+			}
+
+			self.$nodeBody.attr("aria-expanded", expand);
+			self._expanded = expand;
+			self.options.expanded = expand;
+			
 			if (!treeOption.disabled && !self._isClosestDisabled()) {
 				if (expand) {
 					if (treeOption.expandDelay > 0) {
@@ -2142,7 +2194,7 @@
 
 		add: function (node, position) {
 			/// <summary>
-			/// Adds a node to the element.
+			/// Adds a child node to the node.
 			/// </summary>
 			/// <param name="node" type="String,Object">
 			/// which node to be added
@@ -2212,12 +2264,13 @@
 			}
 			self._changeCollection(position, nodeWidget);
 			self._collectionChanged("add");
+			nodeWidget._initNodeClass();
 
 		},
 
 		remove: function (node) {
 			/// <summary>
-			/// Removes a node of this element.
+			/// Removes a child node from this node.
 			/// </summary>
 			/// <param name="node" type="String,Object">
 			/// which node to be removed
@@ -2361,7 +2414,7 @@
 		_collectionChanged: function () {
 			this._hasChildren = this._getChildren();
 			this._initNodeClass();
-			this._refreshNodesClass();
+			//this._refreshNodesClass();
 		},
 
 		_refreshNodesClass: function () {
@@ -2392,16 +2445,16 @@
 		},
 
 		_setExpanded: function (value) {
-			var self = this;
+			var self = this, o = self.options;
 			if (self._expanded === value) {
 				return;
 			}
-			if (self._hasChildren) {
-				self._expanded = value;
-				self.options.expanded = value;
-				self.$nodeBody.attr("aria-expanded", value);
+			if (self._hasChildren || o.hasChildren) {				
 				self._expandNode(value);
 			}
+			//			else if () {
+			//				//self._tree.getChildNodes(this);
+			//			}
 		},
 
 		_setFocused: function (value) {

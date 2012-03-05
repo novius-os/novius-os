@@ -37,12 +37,12 @@ if (!empty($display['summary']) && !empty($item->blog_summary)) {
     echo nl2br($item->blog_summary);
 }
 
-if (!empty($display['thumbnail']) && !empty($item->media->thumbnail)) {
-    echo $item->media->thumbnail->get_img_tag_resized(200);
+if (!empty($display['thumbnail']) && !empty($item->medias->thumbnail)) {
+    echo $item->medias->thumbnail->get_img_tag_resized(200);
 }
 
-if (!empty($display['wysiwyg']) && !empty($item->wysiwyg)) {
-    echo $item->wysiwyg->content;
+if (!empty($display['wysiwyg']) && !empty($item->wysiwygs)) {
+    echo $item->wysiwygs->content;
 }
 
 if (!empty($display['tags'])) {

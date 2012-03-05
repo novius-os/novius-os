@@ -18,7 +18,7 @@ require(['jquery-nos'], function($) {
 		$('.fieldset').wijexpander({expanded: true });
 	});
 });
-require(['jquery-nos', 'static/cms/js/jquery/jquery-form/jquery.form.min'], function($) {
+require(['jquery-nos', 'static/cms/js/vendor/jquery/jquery-form/jquery.form.min'], function($) {
 	$('form').submit(function() {
 		var self = this;
 		$(self).ajaxSubmit({

@@ -295,12 +295,12 @@ class Fieldset extends \Fuel\Core\Fieldset {
 		$validate = \Format::forge()->to_json($json);
 		$this->append(<<<JS
 <script type="text/javascript">
-require(['jquery', 'static/cms/js/jquery/jquery-validation/jquery.validate.min'], function($) {
+require(['jquery', 'static/cms/js/vendor/jquery/jquery-validation/jquery.validate.min'], function($) {
 	var json = $validate;
 	//console.log($validate);
 	$('#{$form_attributes['id']}').validate($.extend({}, json, {
 		submitHandler: function(form) {
-			require(['jquery-nos', 'static/cms/js/jquery/jquery-form/jquery.form.min'], function($) {
+			require(['jquery-nos', 'static/cms/js/vendor/jquery/jquery-form/jquery.form.min'], function($) {
 				$(form).ajaxSubmit({
 					dataType: 'json',
 					success: function(json) {
@@ -317,7 +317,7 @@ require(['jquery', 'static/cms/js/jquery/jquery-validation/jquery.validate.min']
 			});
 		}
 	}));
-	require(['static/cms/js/jquery/jquery-form/jquery.form.min', 'jquery-nos']);
+	require(['static/cms/js/vendor/jquery/jquery-form/jquery.form.min', 'jquery-nos']);
 });
 </script>
 JS
