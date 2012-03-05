@@ -54,7 +54,15 @@ class Controller_Extendable extends \Controller {
         $controller = explode('\\', \Request::active()->controller);
         $module_name = strtolower($controller[0]);
         $file_name   = strtolower(str_replace('_', DS, $controller[1]));
-        return array($module_name, $file_name);
+        $location = array($module_name, $file_name);
+        if ($module_name == 'cms') {
+            $submodule = explode('_', $controller[1]);
+            if ($submodule[0] == 'Controller' && $submodule[1] == 'Admin' && count($submodule) > 2) {
+                $location[] = strtolower($submodule[2]);
+            }
+        }
+
+        return $location;
     }
 
     protected static function loadConfiguration($module_name, $file_name) {

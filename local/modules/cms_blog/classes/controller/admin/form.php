@@ -10,7 +10,7 @@
 
 namespace Cms\Blog;
 
-class Controller_Admin_Form extends Controller_Extendable {
+class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
 
 
     public function action_edit($id = false) {

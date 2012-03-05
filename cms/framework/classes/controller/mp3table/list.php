@@ -23,7 +23,7 @@ use Asset, Format, Input, Session, View, Uri;
  * @package  app
  * @extends  Controller
  */
-class Controller_Mp3table_List extends Controller_Extendable {
+class Controller_Mp3table_List extends Controller_Generic_Admin {
 
 	protected $mp3grid = array();
 

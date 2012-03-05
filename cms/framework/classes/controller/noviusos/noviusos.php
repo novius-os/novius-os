@@ -115,12 +115,19 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 
         $apps = array();
         foreach ($launchers as $key => $app) {
-            if (!empty($app['url']) && !empty($app['icon64'])) {
-                $app['key'] = $key;
-                $apps[] = $app;
+            if (!empty($app['url']) && !empty($app['icon64'])) { // do we have to display the modules ?
+                //\Debug::dump($app['module'], Permission::check($app['module'], 'access'));
+                if (!isset($app['module']) || Permission::check($app['module'], 'access')) { // do we have the rights to access the modules ?
+                    $app['key'] = $key;
+                    $apps[] = $app;
+                }
             }
         }
-        $apps = \Arr::sort($apps, 'order', 'asc');
+        if (count($apps) > 0) {
+            $apps = \Arr::sort($apps, 'order', 'asc');
+        }
+
+        //\Debug::dump($apps);
 
         $user = \Session::get('logged_user', false);
         $background_id = \Arr::get($user->getConfiguration(), 'misc.display.background');

@@ -61,7 +61,9 @@ define([
                             if ($.isPlainObject(args.row.data)) {
                                 args.$container.css("text-align", "center");
 
-                                $("<a href=\"admin/admin/user/group/permission/edit/" + args.row.data.id_permission + "\"></a>")
+                                /*console.log(args.row.data);*/
+
+                                $("<a href=\"admin/admin/user/group/permission/edit?user_id=" + args.row.data.id + "\"></a>")
                                     .addClass("ui-state-default")
                                     .append("<img src=\"static/cms/img/icons/tick.png\" />")
                                     .appendTo(args.$container)

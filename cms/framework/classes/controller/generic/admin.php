@@ -16,7 +16,18 @@ class Controller_Generic_Admin extends Controller_Template_Extendable {
 
 
     public function before($response = null) {
-        return parent::before($response);
+        $ret = parent::before($response);
+        $location = $this->getLocation();
+        list($module_name, $file_name) = $location;
+        if ($module_name == 'cms' && isset($location[2])) {
+            $module_name = 'nos_'.$location[2]; // this hack should be temporary until we figure out how to correctly implement native modules...
+        }
+        if ($module_name != 'cms' && !Permission::check($module_name, 'access')) {
+            throw new \Exception('You don\'t have access to module '.$module_name.'!');
+        }
+
+        //\Debug::dump($module_name, Permission::check($module_name, 'access'));
+        return $ret;
     }
 
 
