@@ -12,7 +12,7 @@ namespace Cms;
 
 use Fuel\Core\Uri;
 
-class Model_Page_Page extends \Cms\Model {
+class Model_Page_Page extends \Cms\Orm\Model {
 
     protected static $_table_name = 'os_page';
     protected static $_primary_key = array('page_id');
@@ -44,7 +44,7 @@ class Model_Page_Page extends \Cms\Model {
 		),
 	);
 
-	protected static $_observers = array(
+	protected static $_behaviors = array(
 		'Cms\Orm_Translatable' => array(
 			'events' => array('before_insert', 'after_insert', 'before_save'),
 			'lang_property'      => 'page_lang',

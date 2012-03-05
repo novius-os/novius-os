@@ -12,7 +12,7 @@ namespace Cms;
 
 use Fuel\Core\Uri;
 
-class Model_Media_Folder extends Model {
+class Model_Media_Folder extends \Cms\Orm\Model {
     protected static $_table_name = 'os_media_folder';
     protected static $_primary_key = array('medif_id');
 

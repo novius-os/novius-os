@@ -53,6 +53,6 @@
 
 
 <body>
-	<?= $body ?>
+	<?= !empty($body) ? $body : '' ?>
 </body>
 </html>
