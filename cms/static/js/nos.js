@@ -354,15 +354,21 @@ define([
                     });
 
                     // If there is only 1 secondary action and it has an icon, don't show the dropdow, but show the action as a button
-                    if (actionsSecondary.length == 1 && actionsSecondary[0].icon) {
+                    if (actionsSecondary.length == 1 && (actionsSecondary[0].icon || actionsSecondary[0].iconClasses)) {
                         actionsPrimary.push(actionsSecondary[0]);
                     }
 
                     $.each(actionsPrimary, function(i, action) {
+                        var iconClass = false;
+                        if (action.iconClasses) {
+                            iconClass = action.iconClasses;
+                        } else if (action.icon) {
+                            iconClass = 'ui-icon ui-icon-' + action.icon;
+                        }
                         var uiAction = $('<th></th>')
                             .addClass("ui-state-default")
                             .attr('title', action.label)
-                            .html( action.icon ? '<span class="ui-icon ui-icon-' + action.icon +'"></span>' : '&nbsp;' + action.label + '&nbsp;')
+                            .html( iconClass ? '<span class="' + iconClass +'"></span>' : '&nbsp;' + action.label + '&nbsp;')
                             .click(function(e) {
                                 action.action.apply(this, [noParseData]);
                                 e.stopImmediatePropagation();
@@ -376,7 +382,7 @@ define([
                                     $(this).removeClass("ui-state-hover");
                                 }
                             );
-                        if (action.icon) {
+                        if (iconClass) {
                             uiAction.css({
                                 width : 20,
                                 textAlign : 'center'
@@ -390,7 +396,7 @@ define([
                 }
 
                 // Create the dropdown
-				if (options.showOnlyArrow || actionsSecondary.length >= 2 || (actionsSecondary.length == 1 && !actionsSecondary[0].icon)) {
+				if (options.showOnlyArrow || actionsSecondary.length >= 2 || (actionsSecondary.length == 1 && !(actionsSecondary[0].icon || actionsSecondary[0].iconClasses))) {
 
 					var dropDown = $('<th></th>')
 						.addClass("ui-state-default")
@@ -420,7 +426,13 @@ define([
 						if (!this.created) {
 							var ul = $('<ul></ul>');
 							$.each(actions, function(key, action) {
-                                var text = '<span class="' + (action.icon ? 'ui-icon ui-icon-' + action.icon : 'nos-icon16 nos-icon16-empty') + ' wijmo-wijmenu-icon-left"></span><span class="wijmo-wijmenu-text">'+action.label+'</span>';
+                                var iconClass;
+                                if (action.iconClasses) {
+                                    iconClass = action.iconClasses;
+                                } else if (action.icon) {
+                                    iconClass = 'ui-icon ui-icon-' + action.icon;
+                                }
+                                var text = '<span class="' + (iconClass ? iconClass : 'nos-icon16 nos-icon16-empty') + ' wijmo-wijmenu-icon-left"></span><span class="wijmo-wijmenu-text">'+action.label+'</span>';
 								var li = $('<li><a href="#"></a></li>')
 									.appendTo(ul)
 									.find('a')

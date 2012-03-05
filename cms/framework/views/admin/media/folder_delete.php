@@ -21,7 +21,7 @@
             '{count}' => $media_count,
         )) ?></p>
         <p><?= __('To confirm the supression, you need to enter this number in the field below') ?></p>
-        <p><?= strtr(__('Yes, I want to delete all {count} files from the library.'), array(
+        <p><?= strtr(__('Yes, I want to delete all {count} files from the media centre.'), array(
             '{count}' => '<input data-id="verification" data-verification="'.$media_count.'" size="'.(strlen($media_count) + 1).'" />',
         )); ?></p>
         <?php
@@ -64,9 +64,7 @@ require(['jquery-nos'], function($) {
                     id : <?= $folder->medif_id ?>
                 },
                 success : function(json) {
-                    if (json.closeDialog) {
-                        closeDialog();
-                    }
+                    closeDialog();
                 }
             });
         });

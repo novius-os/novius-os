@@ -50,6 +50,22 @@ a:hover {
 .nos-icon32-media { background-image: url(../img/32/media.png) !important; }
 .nos-icon32-root { background-image: url(../img/32/root.png) !important; }
 
+
+/*
+.ui-widget-content .nos-icon16-eye
+{
+    background-image: url(../img/icons/eye-616161.png);
+}
+*/
+.nos-icon16-eye
+{
+    background-image: url(../img/icons/eye-38667f.png);
+}
+.ui-state-highlight .nos-icon16-eye
+{
+    background-image: url(../img/icons/eye-2e83ff.png);
+}
+
 .wijmo-wijmenu, .wijmo-wijmenu-child {
 	width : auto;
 

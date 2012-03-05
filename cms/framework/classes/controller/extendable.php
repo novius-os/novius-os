@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_Extendable extends \Controller {
+class Controller_Extendable extends \Fuel\Core\Controller {
     protected $config = array();
 
     public function before() {
@@ -72,7 +72,7 @@ class Controller_Extendable extends \Controller {
         return $config;
     }
 
-    protected static function check_permission_action($action, $dataset_location, $item) {
+    protected static function check_permission_action($action, $dataset_location, $item = null) {
         \Config::load($dataset_location, true);
         $dataset = \Config::get($dataset_location.'.dataset');
         // An unknown action is authorized

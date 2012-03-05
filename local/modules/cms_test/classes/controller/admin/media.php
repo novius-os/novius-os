@@ -14,31 +14,30 @@ class Controller_Admin_Media extends \Cms\Controller_Noviusos_Noviusos
 {
 	public function action_index()
 	{
-		\Fuel::add_module('cms_media');
 		\Fuel::add_module('cms_blog');
 
 		//*
 		$blog = \Cms\Blog\Model_Blog::find(565);
 
-		//$blog->{'media->vignette'};
-		//$blog->media->vignette = 2;
+		//$blog->{'medias->vignette'};
+		//$blog->medias->vignette = 2;
 
 		// Creates a media using __set() or the provider
-		//$blog->{'media->test->medil_media_id'} = 1;
-		//$blog->media->test2 = 2;
+		//$blog->{'medias->test->medil_media_id'} = 1;
+		//$blog->medias->test2 = 2;
 
-		//$blog->{'wysiwyg->test->wysiwyg_text'} = "AZE";
-		//$blog->wysiwyg->test2 = "QSD";
+		//$blog->{'wysiwygs->test->wysiwyg_text'} = "AZE";
+		//$blog->wysiwygs->test2 = "QSD";
 
-		//\Debug::dump($blog->{'wysiwyg->test->wysiwyg_text'});
-		//\Debug::dump($blog->wysiwyg->test2);
+		//\Debug::dump($blog->{'wysiwygs->test->wysiwyg_text'});
+		//\Debug::dump($blog->wysiwygs->test2);
 
 		//$blog->save();
 		//exit();
 
 
 		//*/
-		//\Debug::dump($blog->media->vignette);
+		//\Debug::dump($blog->medias->vignette);
 
 		$this->template->body = \View::forge('cms_test::media');
 		return $this->template;

@@ -19,7 +19,13 @@ define([
                     icon : 'pencil',
                     label : mp3Grid.i18n('Edit'),
                     action : function(item) {
-                        $.nos.notify('Not implemented (yet).');
+                        $.nos.dialog({
+                            contentUrl: 'admin/admin/media/media/edit/' + item.id,
+                            ajax : true,
+                            title: mp3Grid.i18n('Edit a media')._(),
+                            width: 850,
+                            height: 250
+                        });
                     }
                 },
                 'delete' : {
@@ -28,22 +34,20 @@ define([
                     icon : 'trash',
                     label : mp3Grid.i18n('Delete'),
                     action : function(item) {
-                        if (confirm("Are you sure?")) {
-                            $.nos.ajax.request({
-                                url : 'admin/admin/media/actions/delete_media',
-                                method : 'POST',
-                                data : {
-                                    id : item.id
-                                }
-                            });
-                            log('ok ?');
-                        }
+                        $.nos.dialog({
+                            contentUrl: 'admin/admin/media/actions/delete_media/' + item.id,
+                            ajax : true,
+                            title: mp3Grid.i18n('Delete a media')._(),
+                            width: 400,
+                            height: 150
+                        });
                     }
                 },
                 visualize : {
                     name : 'visualize',
                     //primary : true,
-                    icon : 'search',
+                    //icon : 'search',
+                    iconClasses : 'nos-icon16 nos-icon16-eye',
                     label : mp3Grid.i18n('Visualize'),
                     action : function(item) {
                         window.open(item.path);
@@ -61,7 +65,7 @@ define([
                         label : mp3Grid.i18n('Add a media'),
                         action : function() {
                             $.nos.dialog({
-                                contentUrl: 'admin/admin/media/upload/form/',
+                                contentUrl: 'admin/admin/media/media/add',
                                 ajax : true,
                                 title: mp3Grid.i18n('Add a media')._(),
                                 width: 850,
@@ -73,7 +77,7 @@ define([
                         label : mp3Grid.i18n('Add a folder'),
                         action : function() {
                             $.nos.dialog({
-                                contentUrl: 'admin/admin/media/folder/form',
+                                contentUrl: 'admin/admin/media/folder/add',
                                 ajax : true,
                                 title: 'Add a folder',
                                 width: 600,
@@ -139,7 +143,7 @@ define([
                                             icon : 'plus',
                                             action : function(item) {
                                                 $.nos.dialog({
-                                                    contentUrl: 'admin/admin/media/upload/form/' + item.id,
+                                                    contentUrl: 'admin/admin/media/media/add/' + item.id,
                                                     ajax : true,
                                                     title: 'Add a media in the "' + item.title + '" folder',
                                                     width: 650,
@@ -153,7 +157,7 @@ define([
                                             icon : 'folder-open',
                                             action : function(item) {
                                                 $.nos.dialog({
-                                                    contentUrl: 'admin/admin/media/folder/form/' + item.id,
+                                                    contentUrl: 'admin/admin/media/folder/add/' + item.id,
                                                     ajax : true,
                                                     title: 'Add a sub-folder in "' + item.title + '"',
                                                     width: 600,
@@ -166,7 +170,13 @@ define([
                                             label : mp3Grid.i18n('Edit this folder'),
                                             icon : 'pencil',
                                             action : function(item) {
-                                                $.nos.notify('Not implemented (yet).');
+                                                $.nos.dialog({
+                                                    contentUrl: 'admin/admin/media/folder/edit/' + item.id,
+                                                    ajax : true,
+                                                    title: 'Edit the "' + item.title + '" folder',
+                                                    width: 600,
+                                                    height: 250
+                                                });
                                             }
                                         },
                                         {

@@ -193,7 +193,7 @@ class Controller_Admin_Page_Form extends Controller {
 					// Save wysiwyg after the page->save(), because we need page_id on creation too
 					// @todo change this to use the provider from Cms\Model
 					foreach (\Input::post('wysiwyg', array()) as $name => $content) {
-						$page->{'wysiwyg->'.$name.'->wysiwyg_text'} = $content;
+						$page->{'wysiwygs->'.$name.'->wysiwyg_text'} = $content;
 					}
 
                     $page->save();

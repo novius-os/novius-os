@@ -40,13 +40,13 @@ foreach ($fieldset->field() as $field) {
 }
 
 $fieldset->field('blog_read')->set_template('{label} {field} times');
-$fieldset->field('wysiwyg->content->wysiwyg_text')->set_template('{field}');
+$fieldset->field('wysiwygs->content->wysiwyg_text')->set_template('{field}');
 ?>
 
 <?= $fieldset->open('admin/cms_blog/form/edit'.(isset($object) ? '/'.$object->blog_id : '')); ?>
 <?= View::forge('form/layout_standard', array(
 	'fieldset' => $fieldset,
-	'medias' => array('media->thumbnail->medil_media_id'),
+	'medias' => array('medias->thumbnail->medil_media_id'),
 	'title' => 'blog_title',
 	'id' => 'blog_id',
 
@@ -58,7 +58,7 @@ $fieldset->field('wysiwyg->content->wysiwyg_text')->set_template('{field}');
 	'content' => \View::forge('form/expander', array(
 		'title'   => 'Content',
 		'nomargin' => true,
-		'content' => $fieldset->field('wysiwyg->content->wysiwyg_text'),
+		'content' => $fieldset->field('wysiwygs->content->wysiwyg_text'),
 	), false),
 
 	'menu' => array(
