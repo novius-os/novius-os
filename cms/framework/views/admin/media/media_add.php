@@ -51,7 +51,7 @@
 <script type="text/javascript">
 require([
     'jquery-nos',
-    'static/cms/js/jquery/jquery-form/jquery.form.min'
+    'static/cms/js/vendor/jquery/jquery-form/jquery.form.min'
 ],
 function($) {
     $.nos.ui.form('#<?= $uniqid ?>');

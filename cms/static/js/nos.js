@@ -884,8 +884,8 @@ define([
                 }, data.inputFileThumb);
 
                 require([
-                    'static/cms/js/jquery/jquery-ui-input-file-thumb/js/jquery.input-file-thumb',
-                    'link!static/cms/js/jquery/jquery-ui-input-file-thumb/css/jquery.input-file-thumb.css'
+                    'static/cms/js/vendor/jquery/jquery-ui-input-file-thumb/js/jquery.input-file-thumb',
+                    'link!static/cms/js/vendor/jquery/jquery-ui-input-file-thumb/css/jquery.input-file-thumb.css'
                 ], function() {
                     $(function() {
                         input.inputFileThumb(options);
