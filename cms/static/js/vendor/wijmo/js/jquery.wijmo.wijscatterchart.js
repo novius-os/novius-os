@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window, navigator*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -14,7 +14,9 @@
  * * Wijmo ScatterChart widget.
  *
  * Depends:
+ *  jquery.js
  *	raphael.js
+ *  jquery.wijmo.raphael.js
  *	globalize.min.js
  *	jquery.ui.widget.js
  *	jquery.wijmo.wijchartcore.js
@@ -37,6 +39,13 @@
 			/// Default: {direction: "horizontal",enabled:true, 
 			/// duration:2000, easing: ">"}.
 			/// Type: Object.
+			/// Code example:
+			/// $("#scatter").wijscatterchart({
+			///		animation: {
+			///			enabled: true,
+			///			duration: 1000	
+			///		}
+			/// })
 			/// </summary>
 			animation: {
 				/// <summary>
@@ -44,7 +53,7 @@
 				/// Default: false.
 				/// Type: Boolean.
 				/// </summary>
-				enabled: false,
+				enabled: true,
 				/// <summary>
 				/// A value that indicates the duration for the animation.
 				/// Default: 2000.
@@ -60,7 +69,7 @@
 			},
 			/// <summary>
 			/// A value that indicates whether to show animation 
-			///	and the duration for the animation when reload data.
+			///	and the duration for the animation when reloading data.
 			/// Default: {enabled:true, duration:2000, easing: ">"}.
 			/// Type: Object.
 			/// Code example:
@@ -70,7 +79,7 @@
 			/// </summary>
 			seriesTransition: {
 				/// <summary>
-				/// A value that determines whether to show animation when reload.
+				/// A value that determines whether to show animation when reloading data.
 				/// Default: false.
 				/// Type: Boolean.
 				/// </summary>
@@ -92,6 +101,8 @@
 			/// A value that indicates whether to zoom in on the marker on hover.
 			/// Default: true.
 			/// Type: Boolean.
+			/// Code example:
+			/// $("#scatterchart").wijscatterchart("option", "zoomOnHover", false);
 			/// </summary>
 			zoomOnHover: true,
 			/// <summary>
@@ -109,14 +120,20 @@
 			///	</param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the series infos of the mousedown scatter. 
-			/// data.type: type of the target.
+			/// data.marker: The Raphael object of the marker.
+			/// data.data: The data of the series of the marker.
+			/// data.hoverStyle: The hover style of the series of the marker.
+			/// data.type: "scatter".
+			/// data.label: The label of the series of the marker. 
 			/// data.index: index of the marker.
+			/// data.legendEntry: The legend entry of the series of the marker.
+			/// data.style: The style of the series of the marker.
 			/// data.x: value x of the marker.
 			/// data.y: value y of the marker.
 			///	</param>
 			mouseDown: null,
 			/// <summary>
-			/// Occurs when the user releases a mouse button
+			/// Fires when the user releases a mouse button
 			/// while the pointer is over the chart element.
 			/// Default: null.
 			/// Type: Function.
@@ -131,14 +148,20 @@
 			///	</param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the series infos of the mouseup marker.  
-			/// data.type: type of the target.
+			/// data.marker: The Raphael object of the marker.
+			/// data.data: The data of the series of the marker.
+			/// data.hoverStyle: The hover style of the series of the marker.
+			/// data.type: "scatter".
+			/// data.label: The label of the series of the marker. 
 			/// data.index: index of the marker.
+			/// data.legendEntry: The legend entry of the series of the marker.
+			/// data.style: The style of the series of the marker.
 			/// data.x: value x of the marker.
 			/// data.y: value y of the marker.
 			///	</param>
 			mouseUp: null,
 			/// <summary>
-			/// Occurs when the user first places the pointer over the chart element.
+			/// Fires when the user first places the pointer over the chart element.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -152,14 +175,20 @@
 			///	</param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the series infos of the mouseover marker.  
-			/// data.type: type of the target.
+			/// data.marker: The Raphael object of the marker.
+			/// data.data: The data of the series of the marker.
+			/// data.hoverStyle: The hover style of the series of the marker.
+			/// data.type: "scatter".
+			/// data.label: The label of the series of the marker. 
 			/// data.index: index of the marker.
+			/// data.legendEntry: The legend entry of the series of the marker.
+			/// data.style: The style of the series of the marker.
 			/// data.x: value x of the marker.
 			/// data.y: value y of the marker.
 			///	</param>
 			mouseOver: null,
 			/// <summary>
-			/// Occurs when the user moves the pointer off of the chart element.
+			/// Fires when the user moves the pointer off of the chart element.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -173,15 +202,20 @@
 			///	</param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the series infos of the mouseout marker. 
-			/// data.type: type of the target.
+			/// data.marker: The Raphael object of the marker.
+			/// data.data: The data of the series of the marker.
+			/// data.hoverStyle: The hover style of the series of the marker.
+			/// data.type: "scatter".
+			/// data.label: The label of the series of the marker. 
 			/// data.index: index of the marker.
-			/// data.index: index of the marker.
-			/// data.valueX: value x of the marker.
-			/// data.valueY: value y of the marker.
+			/// data.legendEntry: The legend entry of the series of the marker.
+			/// data.style: The style of the series of the marker.
+			/// data.x: value x of the marker.
+			/// data.y: value y of the marker.
 			///	</param>
 			mouseOut: null,
 			/// <summary>
-			/// Occurs when the user moves the mouse pointer
+			/// Fires when the user moves the mouse pointer
 			/// while it is over a chart element.
 			/// Default: null.
 			/// Type: Function.
@@ -196,14 +230,20 @@
 			///	</param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the series infos of the mousemove marker. 
-			/// data.type: type of the target.
+			/// data.marker: The Raphael object of the marker.
+			/// data.data: The data of the series of the marker.
+			/// data.hoverStyle: The hover style of the series of the marker.
+			/// data.type: "scatter".
+			/// data.label: The label of the series of the marker. 
 			/// data.index: index of the marker.
+			/// data.legendEntry: The legend entry of the series of the marker.
+			/// data.style: The style of the series of the marker.
 			/// data.x: value x of the marker.
 			/// data.y: value y of the marker.
 			///	</param>
 			mouseMove: null,
 			/// <summary>
-			/// Occurs when the user clicks the chart element. 
+			/// Fires when the user clicks the chart element. 
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -217,8 +257,14 @@
 			///	</param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the series infos of the clicked marker.  
-			/// data.type: type of the target.
+			/// data.marker: The Raphael object of the marker.
+			/// data.data: The data of the series of the marker.
+			/// data.hoverStyle: The hover style of the series of the marker.
+			/// data.type: "scatter".
+			/// data.label: The label of the series of the marker. 
 			/// data.index: index of the marker.
+			/// data.legendEntry: The legend entry of the series of the marker.
+			/// data.style: The style of the series of the marker.
 			/// data.x: value x of the marker.
 			/// data.y: value y of the marker.
 			///	</param>
@@ -232,6 +278,12 @@
 		},
 
 		destroy: function () {
+			/// <summary>
+			/// Remove the functionality completely. 
+			/// This will return the element back to its pre-init state
+			/// Code example:
+			/// $(“#scatterchart”).wijscatterchart(“destroy”);
+			/// </summary>
 			var self = this;
 
 			self.chartElement.removeClass("wijmo-wijscatterchart");
@@ -239,6 +291,22 @@
 		},
 
 		getScatter: function (seriesIndex, scatterIndex) {
+			/// <summary>
+			/// Returns the scatter element with the given series index and 
+			/// scatter index.
+			/// Code Example:
+			/// $("wijscatterchart").wijscatterchart("getScatter", "0", 1);
+			/// </summary>
+			/// <param name="seriesIndex" type="Number">
+			/// The index of the series
+			/// </param>
+			/// <param name="scatterIndex" type="Number">
+			/// The index of the scatter element
+			/// </param>
+			/// <returns type="Element">
+			/// if scatterIndex is not specified, return a list of scatters of 
+			/// specified seriesIndex, else return the specified scatter element
+			/// </returns>
 			var self = this,
 				fields = self.chartElement.data("fields"),
 				und,
@@ -386,6 +454,86 @@
 
 			$.wijmo.wijchartcore.prototype._onBeforeTooltipShowing
 				.apply(self, arguments);
+		},
+
+		_clearChartElement: function () {
+			var self = this,
+				fields = self.chartElement.data("fields");
+
+			if (self.headerEles.length) {
+				$.each(self.headerEles, function (idx, headerEle) {
+					headerEle.wijRemove();
+					headerEle = null;
+				});
+				self.headerEles = [];
+			}
+			if (self.footerEles.length) {
+				$.each(self.footerEles, function (idx, footerEle) {
+					footerEle.wijRemove();
+					footerEle = null;
+				});
+				self.footerEles = [];
+			}
+			if (self.legendEles.length) {
+				$.each(self.legendEles, function (idx, legendEle) {
+					legendEle.wijRemove();
+					legendEle = null;
+				});
+				self.legendEles = [];
+			}
+			if (self.legends.length) {
+				$.each(self.legends, function (idx, legend) {
+					legend.wijRemove();
+					legend = null;
+				});
+				self.legends = [];
+			}
+			if (self.legendIcons.length) {
+				$.each(self.legendIcons, function (idx, legendIcon) {
+					legendIcon.wijRemove();
+					legendIcon = null;
+				});
+				self.legendIcons = [];
+			}
+			if (self.legendDots.length) {
+				$.each(self.legendDots, function (idx, legendDot) {
+					legendDot = null;
+				});
+				self.legendDots = [];
+			}
+			if (self.axisEles.length) {
+				$.each(self.axisEles, function (idx, axisEle) {
+					axisEle.wijRemove();
+					axisEle = null;
+				});
+				self.axisEles = [];
+			}
+			if (self.chartLabelEles.length) {
+				$.each(self.chartLabelEles, function (idx, chartLabelEle) {
+					chartLabelEle.wijRemove();
+					chartLabelEle = null;
+				});
+				self.chartLabelEles = [];
+			}
+
+			if (fields && fields.chartElements) {
+				$.each(fields.chartElements, function (key, eles) {
+					if (eles.length) {
+						$.each(eles, function (i, ele) {
+							if (ele[0] !== null) {
+								if (ele.remove) {
+									ele.remove();
+								}
+								ele = null;
+							}
+						});
+					}
+					eles = [];
+				});
+			}
+
+			self.canvas.clear();
+			self.innerState = {};
 		},
 
 		_paintPlotArea: function () {
@@ -586,7 +734,9 @@
 			}
 			
 			function unbindLiveEvents() {
-				$(".wijscatterchart", element).die(widgetName);
+				$(".wijscatterchart", element).die(widgetName)
+				// for jQuery 1.7.1
+				.die("." + widgetName);
 			}
 			$.each(seriesList, function (i, series) {
 				var data = series.data,
@@ -1050,6 +1200,12 @@
 			while (i--) {
 				element.removeChild(childNodes[i]);
 			}
+		},
+
+		remove: function () {
+			var ele = this.element,
+				parentNode = ele.parentNode;
+			parentNode.removeChild(ele);
 		}
 	};
 

@@ -9,8 +9,8 @@
 
 define([
         'jquery',
-		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.0b2.min',
-		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.0b2.min'
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.0.min',
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.0.min'
 	], function($) {
         var undefined = void(0);
 
@@ -601,7 +601,7 @@ define([
                 }
 
                 require([
-                    //'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.2.0.0b2.css',
+                    //'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.2.0.0.css',
                     //'static/cms/js/wijmo/wijmo/js/jquery.wijmo.wijutil',
                     'static/cms/js/vendor/wijmo/js/jquery.wijmo.wijdialog'
                 ], function() {

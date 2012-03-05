@@ -2356,3 +2356,7 @@ div.wijmo-wijribbon .ui-state-active .ui-button-text
 {
     color: #404040;
 }
+/* Grid highlight row icon fix */
+.wijmo-wijgrid .ui-state-highlight .ui-state-active .ui-icon {
+    background-image: url("images/ui-icons_00a6dd_256x240.png");
+}

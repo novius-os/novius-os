@@ -1,7 +1,7 @@
 /*globals jQuery, window*/
 /*
  * 
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  * 
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -14,8 +14,9 @@
  * Wijmo Rating widget.
  * 
  * Depends:
- *     jquery.ui.core.js
- *     jquery.ui.widget.js
+ * 	jquery.js
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
  */
 (function ($) {
 	"use strict";
@@ -57,19 +58,19 @@
 			/// </summary>
 			split: 1,
 			/// <summary>
-			/// Determines the total value of rating widget.
+			/// Determines the total value of the rating widget.
 			/// Type: Number.
 			/// Default: 5.
 			/// Code example: $(".selector").wijrating("option", "totalValue", 100).
 			/// </summary>
 			/// <remarks>
-			/// For ex, if the count is 5, split is 2 and the totalValue
+			/// For example, if the count is 5, split is 2 and the totalValue
 			/// is 100, then the value that every step represents is 100/(5 * 2) = 10
 			/// and one star represents the 10*(1 * 2) = 20;
 			/// </remarks>
 			totalValue: 5,
 			/// <summary>
-			/// Determines the rated value of rating widget.
+			/// Determines the rated value of the rating widget.
 			/// Type: Number.
 			/// Default: 0.
 			/// Code example: $(".selector").wijrating("option", "value", 1).
@@ -93,13 +94,14 @@
 			/// Represents a reset button.
 			/// Type: Object.
 			/// Default: {disabled: false, hint: "cancel this rating!",
-			///		position: "leftOrTop"}.
+			///		position: "leftOrTop", customizedClass: "",
+			///		custommizedHoverClass: ""}.
 			/// Code example: $(".selector").wijrating("option", 
 			///		"resetButton", {disabled: true}).
 			/// </summary>
 			/// <remarks>
 			/// The reset button is used to reset the rated value to 0.
-			/// If rating widget is disabled, the reset button will be always hidden.
+			/// If the rating widget is disabled, the reset button will be always hidden.
 			/// </remarks>
 			resetButton: {
 				/// <summary>
@@ -169,7 +171,7 @@
 			///		"vertical").
 			/// </summary>
 			/// <remarks>
-			/// Options are "horizontal", "vertical"
+			/// Options are "horizontal" and "vertical"
 			/// </remarks>
 			orientation: "horizontal",
 			/// <summary>
@@ -179,7 +181,7 @@
 			/// Code example: $(".selector").wijrating("option", "direction", "reversed").
 			/// </summary>
 			/// <remarks>
-			/// Options are "normal", "reversed". The "normal" represents rating 
+			/// Options are "normal" and "reversed". The "normal" represents rating 
 			/// from left to right or top to bottom.
 			/// </remarks>
 			direction: "normal",
@@ -190,9 +192,9 @@
 			/// Code example: $(".selector").wijrating("option", "ratingMode", "single").
 			/// </summary>
 			/// <remarks>
-			/// Options are "continuous", "single". "single" represents that only 
-			/// one star can be rated, while "continuous" represents that all the 
-			/// stars from first to the rated one will be rated.
+			/// Options are "continuous" and "single". The "single" option represents 
+			/// that only one star can be rated, while "continuous" represents that 
+			/// all the stars from first to the rated one will be rated.
 			/// </remarks>
 			ratingMode: "continuous",
 			/// <summary>
@@ -204,7 +206,7 @@
 			/// </summary>
 			icons: {
 				/// <summary>
-				/// a string or an array value that indicates the urls of icons.
+				/// A string or an array value that indicates the urls of icons.
 				/// Type: String or Array.
 				/// Default: null.
 				/// </summary>
@@ -243,12 +245,14 @@
 			/// Determines the width of the icon. All icons should have the same width.
 			/// Type: Number.
 			/// Default: 16.
+			/// Code example: $(".selector").wijrating("option", "iconWidth", 32).
 			/// </summary>
 			iconWidth: 16,
 			/// <summary>
 			/// Determines the height of the icon. All icons should have the same height.
 			/// Type: Number.
 			/// Default: 16.
+			/// Code example: $(".selector").wijrating("option", "iconHeight", 32).
 			/// </summary>
 			iconHeight: 16,
 			/// <summary>
@@ -277,6 +281,11 @@
 			/// <param name="data" type="Object">
 			/// An object that contains new value and old value.  
 			///	</param>
+			/// Code Example:
+			/// Supply a function as an option. 
+			///	$(".selector").wijrating({rating: function(e, data) { } }); 
+			/// Bind to the event by type: wijratingrating 
+			///	$(".selector").bind("wijratingrating", function(e, data) {} );
 			rating: null,
 			/// <summary>
 			/// Fires after the widget is rated.
@@ -289,6 +298,11 @@
 			/// <param name="data" type="Object">
 			/// An object that contains new value.  
 			///	</param>
+			/// Code Example:
+			/// Supply a function as an option. 
+			///	$(".selector").wijrating({rated: function(e, data) { } }); 
+			/// Bind to the event by type: wijratingrated 
+			///	$(".selector").bind("wijratingrated", function(e, data) {} );
 			rated: null,
 			/// <summary>
 			/// Fires when the reset button is clicked.
@@ -298,6 +312,11 @@
 			/// <param name="e" type="eventObj">
 			/// jQuery.Event object.
 			///	</param>
+			/// Code Example:
+			/// Supply a function as an option. 
+			///	$(".selector").wijrating({reset: function(e) { } }); 
+			/// Bind to the event by type: wijratingreset 
+			///	$(".selector").bind("wijratingreset", function(e) {} );
 			reset: null,
 			/// <summary>
 			/// Fires when the widget is hovered over.
@@ -310,6 +329,11 @@
 			/// <param name="data" type="Object">
 			/// An object that contains the value of the hovered object.  
 			///	</param>
+			/// Code Example:
+			/// Supply a function as an option. 
+			///	$(".selector").wijrating({hover: function(e, data) { } }); 
+			/// Bind to the event by type: wijratinghover 
+			///	$(".selector").bind("wijratinghover", function(e, data) {} );
 			hover: null
 		},
 
@@ -515,6 +539,8 @@
 		},
 
 		destroy: function () {
+			///Remove the functionality completely. 
+			///This will return the element back to its pre-init state. 
 			var self = this;
 			self._unbindLiveEvents();
 			if (self.element !== self.ratingElement) {
@@ -531,8 +557,12 @@
 		},
 
 		_unbindLiveEvents: function () {
-			$("." + normalStarClass, this.ratingElement[0]).die("wijrating");
-			$("." + resetButtonClass, this.ratingElement[0]).die("wijrating");
+			$("." + normalStarClass, this.ratingElement[0]).die("wijrating")
+			// for jQuery 1.7.1
+			.die(".wijrating");
+			$("." + resetButtonClass, this.ratingElement[0]).die("wijrating")
+			// for jQuery 1.7.1
+			.die(".wijrating");
 		},
 
 		_bindLiveEvents: function () {

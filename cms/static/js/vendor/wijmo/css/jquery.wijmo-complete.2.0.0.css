@@ -3815,7 +3815,22 @@ wijmo-wijtree a.ui-state-default:link, wijmo-wijtree a.ui-state-default:visited,
     overflow: hidden;
     font-weight: normal;
     padding: 0 6px;
+    cursor: default;
 }
+.wijmo-wijev .wijmo-wijev-weekview .wijmo-wijev-headercontainer .wijmo-wijev-dayheadercolumn .wijmo-wijev-daylabel
+{
+    text-align: left;
+    font-size: 12px;
+    opacity: 0.7;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-weight: normal;
+    padding: 0 6px;
+    cursor: pointer;
+
+}
+
 
 .wijmo-wijev .wijmo-wijev-dayview .wijmo-wijev-headercontainer .wijmo-wijev-dayheadercolumn .wijmo-wijev-allday-cell
 {
@@ -4116,11 +4131,6 @@ Current time indicator is under certain colors of appointments
 .wijmo-wijev .wijmo-wijev-monthview .wijmo-wijev-monthcellcontainer .wijmo-wijev-monthcellheader .wijmo-wijev-todaylabel
 {
 	float:left;
-}
-
-.wijmo-wijev .wijmo-wijev-monthview .wijmo-wijev-today .wijmo-wijev-monthcellheader, .wijmo-wijev .wijmo-wijev-view .wijmo-wijev-today .wijmo-wijev-allday-cell
-{
-    background: #FFF8C2;
 }
 
 .wijmo-wijev .wijmo-wijev-monthview .wijmo-wijev-monthcellcontainer.wijmo-wijev-today .wijmo-wijev-monthcell

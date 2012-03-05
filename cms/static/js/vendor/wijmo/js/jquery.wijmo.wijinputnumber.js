@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -181,13 +181,15 @@
 			 }
 		 },
 
-		 getValue: function () {
+        getValue: function () {
+            /// <summary>Gets the value.</summary>
 			 var val = this._textProvider.getValue();
 			 if (val === undefined || val === null) { val = this.getText(); }
 			 return val;
 		 },
 
-		 setValue: function (val, exact) {
+         setValue: function (val, exact) {
+            /// <summary>Sets the value.</summary>
 			 try {
 				 exact = !!exact;
 				 if (typeof val === 'boolean') {
@@ -220,7 +222,8 @@
 			 }
 		 },
 
-		 isValueNull: function () {
+        isValueNull: function () {
+            /// <summary>Determines whether the value is in null state.</summary>
 			 try {
 				 return (this._textProvider).isValueNull();
 			 }

@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window, Globalize*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -30,11 +30,18 @@
 
 	$.extend({
 		round: function (val, digits) {
+			/// Errors occur when using Math.round and toFixed() 
+			/// because JavaScript's method of storing numbers is not perfect. 
+			/// JavaScript uses a floating-point number format which cannot 
+			/// store certain numbers "exactly". 
+			/// In other words, some numbers are approximations.
+			/// So if need accuracy, a workaround is required for rounding numbers.
 			if (!val) {
 				return 0;
 			}
-			var value = Globalize.format(val, "N" + digits);
-			return Globalize.parseFloat(value);
+			//var value = Globalize.format(val, "N" + digits);
+			//return Globalize.parseFloat(value);
+			return Globalize.parseFloat(val.toFixed(digits));
 		},
 		toOADate: function (time) {
 			var day = 24 * 60 * 60 * 1000,

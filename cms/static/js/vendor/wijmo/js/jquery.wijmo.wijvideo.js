@@ -1,7 +1,7 @@
 /*globals jQuery,window,document*/
 /*
  * 
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  * 
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -16,6 +16,7 @@
  * Depends:
  *     jquery.ui.core.js
  *     jquery.ui.widget.js
+ *     jquery.wijmo.wijtooltip.js
  */
 (function ($) {
 	"use strict";
@@ -453,6 +454,12 @@
 		},
 		
 		destroy: function () {
+			///	<summary>
+			///	Removes the wijvideo functionality completely. 
+			/// This returns the element back to its pre-init state. 
+			/// Code example: $("#element").wijvideo("destroy");
+			///	</summary>
+			
 			var self = this;
 			$.Widget.prototype.destroy.apply(this, arguments);
 			
@@ -465,10 +472,21 @@
 		},
 
 		play: function () {
+			///	<summary>
+			///	Play the video. 
+			/// Code example: $("#element").wijvideo("play");
+			///	</summary>
+			
 			$video[0].play();
 		},
+		
 		pause: function () {
-			$video[0].pause();	
+			///	<summary>
+			///	Pause the video.
+			/// Code example: $("#element").wijvideo("pause");
+			///	</summary>
+			
+			$video[0].pause();
 		}
 	});
 }(jQuery));

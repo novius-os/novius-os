@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -73,146 +73,279 @@
 	$.widget("wijmo.wijcalendar", {
 		options: {
 			///	<summary>
-			///		Gets or sets culture ID.
+			///	Gets or sets culture ID.
+			/// Default: ''
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({culture: "zh-CN"}); 
 			///	</summary>
 			culture: '',
 			///	<summary>
-			///		Gets or sets the number of calendar months in horizontal direction. 
+			///	Gets or sets the number of calendar months in horizontal direction. 
+			/// Default: 1
+			/// Type: Number
+			/// Code example:
+			///		$(".selector").wijcalendar({monthCols: 2}); 
 			///	</summary>
 			monthCols: 1,
 			///	<summary>
-			///		Gets or sets the number of calendar months in vertical direction. 
+			///	Gets or sets the number of calendar months in vertical direction. 
+			/// Default: 1
+			/// Type: Number
+			/// Code example:
+			///		$(".selector").wijcalendar({monthRows: 2}); 
 			///	</summary>
 			monthRows: 1,
 			///	<summary>
-			///		Gets or sets the format for the title text. 
+			///	Gets or sets the format for the title text. 
+			/// Default: "MMMM yyyy"
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({titleFormat: "MMMM yyyy"}); 
 			///	</summary>
 			titleFormat: "MMMM yyyy",
 			///	<summary>
-			///		A Boolean property that determines whether to display calendar title.
+			///	A Boolean property that determines whether to display calendar title.
+			/// Default: true
+			/// Type: Boolean
+			/// Code example:
+			///		$(".selector").wijcalendar({showTitle: false}); 
 			///	</summary>
 			showTitle: true,
 			///	<summary>
-			///		Gets or sets the display date for the first month view.  
+			///	Gets or sets the display date for the first month view.  
+			/// Default: undefined
+			/// Type: Date
+			/// Code example:
+			///		$(".selector").wijcalendar({displayDate: new Date(1900,1,1)}); 
 			///	</summary>
 			displayDate: undefined,
 			///	<summary>
-			///		Gets or sets the number of day rows. 
+			///	Gets or sets the number of day rows. 
+			/// Default: 6
+			/// Type: Number
+			/// Code example:
+			///		$(".selector").wijcalendar({dayRows: 6}); 
 			///	</summary>
 			dayRows: 6,
 			///	<summary>
-			///		Gets or sets the number of day columns. 
+			///	Gets or sets the number of day columns. 
+			/// Default: 7
+			/// Type: Number
+			/// Code example:
+			///		$(".selector").wijcalendar({dayCols: 7}); 
 			///	</summary>
 			dayCols: 7,
 			///	<summary>
-			///		Gets or sets the format for the week day. 
-			///		Possible values are: "short", "full", "firstLetter" or "abbreviated".
+			///	Gets or sets the format for the week day. 
+			///	Possible values are: "short", "full", "firstLetter" or "abbreviated".
+			/// Default: "short"
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({weekDayFormat: "abbreviated"}); 
 			///	</summary>
 			weekDayFormat: "short",
 			///	<summary>
-			///		A Boolean property that determines whether to display week days.
+			///	A Boolean property that determines whether to display week days.
+			/// Default: true
+			/// Type: Boolean
+			/// Code example:
+			///		$(".selector").wijcalendar({showWeekDays: false}); 
 			///	</summary>
 			showWeekDays: true,
 			///	<summary>
-			///		Determines whether to display week numbers. 
+			///	Determines whether to display week numbers. 
+			/// Default: false
+			/// Type: Boolean
+			/// Code example:
+			///		$(".selector").wijcalendar({showWeekNumbers: true}); 
 			///	</summary>
 			showWeekNumbers: false,
 			///	<summary>
-			///		Defines different rules for determining the first week of the year. 
-			///		Possible values are: "firstDay", "firstFullWeek" or "firstFourDayWeek"
+			///	Defines different rules for determining the first week of the year. 
+			///	Possible values are: "firstDay", "firstFullWeek" or "firstFourDayWeek"
+			/// Default: "firstDay"
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({calendarWeekRule: "firstDay"}); 
 			///	</summary>
 			calendarWeekRule: "firstDay",
 			///	<summary>
-			///		Determines the minimum date to display.
+			///	Determines the minimum date to display.
+			/// Default: new Date(1900, 0, 1)
+			/// Type: Date
+			/// Code example:
+			///		$(".selector").wijcalendar({minDate: new Date(2012, 2, 1)}); 
 			///	</summary>
 			minDate: new Date(1900, 0, 1),
 			///	<summary>
-			///		Determines the maximum date to display. 
+			///	Determines the maximum date to display. 
+			/// Default: new Date(2099, 11, 31)
+			/// Type: Date
+			/// Code example:
+			///		$(".selector").wijcalendar({maxDate: new Date(2012, 5, 31)}); 
 			///	</summary>
 			maxDate: new Date(2099, 11, 31),
 			///	<summary>
-			///		Determines whether to display the days of the next and/or previous month.
+			///	Determines whether to display the days of the next and/or previous month.
+			/// Default: true
+			/// Type: Boolean
+			/// Code example:
+			///		$(".selector").wijcalendar({showOtherMonthDays: false}); 
 			///	</summary>
 			showOtherMonthDays: true,
 			///	<summary>
-			///		Determines whether to add zeroes to days with only one digit (for example, "1" would become "01" if this property were set to "true").
+			///	Determines whether to add zeroes to days with only one digit (for example, "1" would become "01" if this property were set to "true").
+			/// Default: false
+			/// Type: Boolean
+			/// Code example:
+			///		$(".selector").wijcalendar({showDayPadding: true}); 
 			///	</summary>
 			showDayPadding: false,
 			///	<summary>
-			///		Gets or sets the date selection mode on the calendar control that specifies whether the user can select a single day, a week, or an entire month. 
+			///	Gets or sets the date selection mode on the calendar control that specifies whether the user can select a single day, a week, or an entire month. 
+			/// Default: { day: true, days: true }
+			/// Type: Hash Object
+			///	Possible fields in hash are: day, days, weekDay, weekNumber, month.
+			/// Code example:
+			///		$(".selector").wijcalendar({selectionMode: { day: true, days: true, weekDay: true}}); 
 			///	</summary>
 			selectionMode: { day: true, days: true },
 			///	<summary>
-			///		Determines whether the preview buttons are displayed.
+			///	Determines whether the preview buttons are displayed.
+			/// Default: false
+			/// Type: Boolean
+			/// Code example:
+			///		$(".selector").wijcalendar({allowPreview: true}); 
 			///	</summary>
 			allowPreview: false,
 			///	<summary>
-			///		Determines whether users can change the view to month/year/decade while clicking on the calendar title.
+			///	Determines whether users can change the view to month/year/decade while clicking on the calendar title.
+			/// Default: true
+			/// Type: Boolean
+			/// Code example:
+			///		$(".selector").wijcalendar({allowQuickPick: false}); 
 			///	</summary>
 			allowQuickPick: true,
 			///	<summary>
-			///		Gets or sets the format for the ToolTip. 
+			///	Gets or sets the format for the ToolTip. 
+			/// Default: "dddd, MMMM dd, yyyy"
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({toolTipFormat: "dddd, MMMM dd, yyyy"}); 
 			///	</summary>
 			toolTipFormat: "dddd, MMMM dd, yyyy",
 			///	<summary>
-			///		Gets or sets the text for the 'previous' button's ToolTip. 
+			///	Gets or sets the text for the 'previous' button's ToolTip. 
+			/// Default: "Previous"
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({prevTooltip: "Previous"}); 
 			///	</summary>
 			prevTooltip: "Previous",
 			///	<summary>
-			///		Gets or sets the text for the 'next' button's ToolTip. 
+			///	Gets or sets the text for the 'next' button's ToolTip. 
+			/// Default: "Next"
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({nextTooltip: "Next"}); 
 			///	</summary>
 			nextTooltip: "Next",
 			///	<summary>
-			///		Gets or sets the  "quick previous" button's ToolTip.
+			///	Gets or sets the  "quick previous" button's ToolTip.
+			/// Default: "Quick Previous"
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({quickPrevTooltip: "Quick Previous"}); 
 			///	</summary>
 			quickPrevTooltip: "Quick Previous",
 			///	<summary>
-			///		Gets or sets the "quick next" button's ToolTip.
+			///	Gets or sets the "quick next" button's ToolTip.
+			/// Default: "Quick Next"
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({quickNextTooltip: "Quick Next"}); 
 			///	</summary>
 			quickNextTooltip: "Quick Next",
 			///	<summary>
-			///		Gets or sets the "previous preview" button's ToolTip. 
+			///	Gets or sets the "previous preview" button's ToolTip. 
+			/// Default: ""
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({prevPreviewTooltip: "Preview previous month"}); 
 			///	</summary>
 			prevPreviewTooltip: "",
 			///	<summary>
-			///		Gets or sets the "next preview" button's ToolTip. 
+			///	Gets or sets the "next preview" button's ToolTip. 
+			/// Default: ""
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({nextPreviewTooltip: "Preview next month"}); 
 			///	</summary>
 			nextPreviewTooltip: "",
 			///	<summary>
-			///		Determines the display type of navigation buttons.
-			///		Possible values are: "default", "quick" or "none"
+			///	Determines the display type of navigation buttons.
+			///	Possible values are: "default", "quick" or "none"
+			/// Default: 'default'
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({navButtons: "quick"}); 
 			///	</summary>
 			navButtons: 'default',
 			///	<summary>
-			///		Detemines the inc/dec steps when clicking the quick navigation button.
+			///	Detemines the inc/dec steps when clicking the quick navigation button.
+			/// Default: 12
+			/// Type: Number
+			/// Code example:
+			///		$(".selector").wijcalendar({quickNavStep: 3}); 
 			///	</summary>
 			quickNavStep: 12,
 			///	<summary>
-			///		Determines the month slide direction.
-			///		Possible values are: horizontal or vertical
+			///	Determines the month slide direction.
+			///	Possible values are: horizontal or vertical
+			/// Default: 'horizontal'
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({direction: "vertical"}); 
 			///	</summary>
 			direction: 'horizontal',
 			///	<summary>
-			///		Gets or sets the animation duration in milliseconds. 
+			///	Gets or sets the animation duration in milliseconds. 
+			/// Default: 250
+			/// Type: Number
+			/// Code example:
+			///		$(".selector").wijcalendar({duration: 500}); 
 			///	</summary>
 			duration: 250,
 			///	<summary>
-			///		Determines the animations easing effect.
+			///	Determines the animations easing effect.
+			/// Default: 'easeInQuad'
+			/// Type: String
+			/// Code example:
+			///		$(".selector").wijcalendar({easing: "easeInQuad"}); 
 			///	</summary>
 			easing: 'easeInQuad',
 			///	<summary>
-			///		A Boolean property that determines whether the wijcalendar widget is a pop-up calendar.
+			///	A Boolean property that determines whether the wijcalendar widget is a pop-up calendar.
+			/// Default: false
+			/// Type: Boolean
+			/// Code example:
+			///		$(".selector").wijcalendar({popupMode: true}); 
 			///	</summary>
 			popupMode: false,
 			///	<summary>
-			///		A Boolean property that determines whether to autohide the calendar in pop-up mode when clicking outside of the calendar.
+			///	A Boolean property that determines whether to autohide the calendar in pop-up mode when clicking outside of the calendar.
+			/// Default: true
+			/// Type: Boolean
+			/// Code example:
+			///		$(".selector").wijcalendar({autoHide: false}); 
 			///	</summary>
 			autoHide: true,
 			/// <summary>
 			/// A callback function used for customizing the content, style and attributes of a day cell.
 			/// Default: null.
 			/// Type: Function.
-			/// Code example: $("#element").wijcalendar({ customizeDate: function($daycell, date, dayType, hover, preview){ } });
+			/// Code example: $(".selector").wijcalendar({ customizeDate: function($daycell, date, dayType, hover, preview){ } });
 			/// </summary>
 			/// <param name="$daycell" type="jQuery">jQuery object that represents table cell of the date to be customized.</param>
 			/// <param name="date" type="Date">Date of the cell.</param>
@@ -226,7 +359,7 @@
 			/// A callback function used to customizing the title text on month view.
 			/// Default: null.
 			/// Type: Function.
-			/// Code example: $("#element").wijcalendar({ title: function (date, format) { } });
+			/// Code example: $(".selector").wijcalendar({ title: function (date, format) { } });
 			/// </summary>
 			///
 			/// <param name="date" type="Date">The display date of the month.</param>
@@ -237,7 +370,7 @@
 			/// The beforeSlide event handler. A function called before the calendar view slides to another month. Cancellable.
 			/// Default: null.
 			/// Type: Function.
-			/// Code example: $("#element").wijcalendar({ beforeSlide: function (e) { } });
+			/// Code example: $(".selector").wijcalendar({ beforeSlide: function (e) { } });
 			/// </summary>
 			///
 			/// <param name="e" type="Object">jQuery.Event object.</param>
@@ -246,7 +379,7 @@
 			/// The afterSlide event handler. A function called after the calendar view slided to another month.
 			/// Default: null.
 			/// Type: Function.
-			/// Code example: $("#element").wijcalendar({ afterSlide: function (e) { } });
+			/// Code example: $(".selector").wijcalendar({ afterSlide: function (e) { } });
 			/// </summary>
 			///
 			/// <param name="e" type="Object">jQuery.Event object.</param>
@@ -255,7 +388,7 @@
 			/// The beforeSelect event handler. A function called before user selects a day by mouse. Cancellable.
 			/// Default: null.
 			/// Type: Function.
-			/// Code example: $("#element").wijcalendar({ beforeSelect: function (e, args) { } });
+			/// Code example: $(".selector").wijcalendar({ beforeSelect: function (e, args) { } });
 			/// </summary>
 			///
 			/// <param name="e" type="Object">jQuery.Event object.</param>
@@ -268,7 +401,7 @@
 			/// The afterSelect event handler. A function called after user selects a day by mouse.
 			/// Default: null.
 			/// Type: Function.
-			/// Code example: $("#element").wijcalendar({ afterSelect: function (e, args) { } });
+			/// Code example: $(".selector").wijcalendar({ afterSelect: function (e, args) { } });
 			/// </summary>
 			///
 			/// <param name="e" type="Object">jQuery.Event object.</param>
@@ -281,7 +414,7 @@
 			/// The selectedDatesChanged event handler. A function called after the selectedDates collection changed.
 			/// Default: null.
 			/// Type: Function.
-			/// Code example: $("#element").wijcalendar({ selectedDatesChanged: function (e, args) { } });
+			/// Code example: $(".selector").wijcalendar({ selectedDatesChanged: function (e, args) { } });
 			/// </summary>
 			///
 			/// <param name="e" type="Object">jQuery.Event object.</param>
@@ -397,14 +530,17 @@
 		},
 
 		refresh: function () {
-			/// <summary>Refresh the calendar.</summary>
+			/// <summary>Refreshes the calendar.</summary>
 			this.element.empty().append(this._createCalendar());
 			this.element[(this._isRTL() ? 'add' : 'remove') + 'Class']('ui-datepicker-rtl');
 			this._bindEvents();
 		},
 
 		refreshDate: function (date) {
-			/// <summary>Refresh a single date.</summary>
+			/// <summary>
+			///  Refreshes a single date.
+			/// </summary>
+			/// <param name="date" type="Date">The date to be refreshed.</param>
 			if (!this._monthViews) { return; }
 			if (date < this._groupStartDate || date > this._groupEndDate) { return; }
 			$.each(this._monthViews, function () {
@@ -536,13 +672,13 @@
 			return this._getDates('selectedDates');
 		},
 		
-		onDayDragStart: function(e){
+		_onDayDragStart: function(e){
 			e.preventDefault();
 			e.stopPropagation();
 			return false;
 		},
 
-		onDayMouseDown: function (e) {
+		_onDayMouseDown: function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 
@@ -582,7 +718,7 @@
 			return false;
 		},
 
-		onDayClicked: function (e) {
+		_onDayClicked: function (e) {
 			var date = this._getCellDate(e.currentTarget);
 			if (date === undefined) { return false; }
 			if (!this.options.selectionMode.day) { return false; }
@@ -598,7 +734,7 @@
 			return false;
 		},
 
-		onDayMouseEnter: function (e) {
+		_onDayMouseEnter: function (e) {
 			$(e.currentTarget).attr('state', 'hover');
 			this._refreshDayCell(e.currentTarget);
 
@@ -611,7 +747,7 @@
 			}
 		},
 
-		onDayMouseLeave: function (e) {
+		_onDayMouseLeave: function (e) {
 			$(e.currentTarget).attr('state', 'normal');
 			this._refreshDayCell(e.currentTarget);
 		},
@@ -693,7 +829,7 @@
 			$(ms).data('cells', cells);
 		},
 
-		onMonthSelectorClicked: function (e) {
+		_onMonthSelectorClicked: function (e) {
 			this._initMonthSelector(e.currentTarget);
 			var cells = $(e.currentTarget).data('cells'), i;
 
@@ -718,23 +854,23 @@
 			return false;
 		},
 
-		onMonthSelectorMouseEnter: function (e) {
+		_onMonthSelectorMouseEnter: function (e) {
 			this._initMonthSelector(e.currentTarget);
 			var cells = $(e.currentTarget).data('cells'), i;
 
 			for (i = 0; i < cells.length; i++) {
 				e.currentTarget = cells[i];
-				this.onDayMouseEnter(e);
+				this._onDayMouseEnter(e);
 			}
 		},
 
-		onMonthSelectorMouseLeave: function (e) {
+		_onMonthSelectorMouseLeave: function (e) {
 			this._initMonthSelector(e.currentTarget);
 			var cells = $(e.currentTarget).data('cells'), i;
 
 			for (i = 0; i < cells.length; i++) {
 				e.currentTarget = cells[i];
-				this.onDayMouseLeave(e);
+				this._onDayMouseLeave(e);
 			}
 		},
 
@@ -777,7 +913,7 @@
 			$(wd).data('cells', cells);
 		},
 
-		onWeekDayClicked: function (e) {
+		_onWeekDayClicked: function (e) {
 			this._initWeekDaySelector(e.currentTarget);
 			var cells = $(e.currentTarget).data('cells'), i;
 
@@ -801,23 +937,23 @@
 			return false;
 		},
 
-		onWeekDayMouseEnter: function (e) {
+		_onWeekDayMouseEnter: function (e) {
 			this._initWeekDaySelector(e.currentTarget);
 			var cells = $(e.currentTarget).data('cells'), i;
 
 			for (i = 0; i < cells.length; i++) {
 				e.currentTarget = cells[i];
-				this.onDayMouseEnter(e);
+				this._onDayMouseEnter(e);
 			}
 		},
 
-		onWeekDayMouseLeave: function (e) {
+		_onWeekDayMouseLeave: function (e) {
 			this._initWeekDaySelector(e.currentTarget);
 			var cells = $(e.currentTarget).data('cells'), i;
 
 			for (i = 0; i < cells.length; i++) {
 				e.currentTarget = cells[i];
-				this.onDayMouseLeave(e);
+				this._onDayMouseLeave(e);
 			}
 		},
 
@@ -859,7 +995,7 @@
 			$(wn).data('cells', cells);
 		},
 
-		onWeekNumberClicked: function (e) {
+		_onWeekNumberClicked: function (e) {
 			this._initWeekNumberSelector(e.currentTarget);
 			var cells = $(e.currentTarget).data('cells');
 			this.unSelectAll();
@@ -882,21 +1018,21 @@
 			return false;
 		},
 
-		onWeekNumberMouseEnter: function (e) {
+		_onWeekNumberMouseEnter: function (e) {
 			this._initWeekNumberSelector(e.currentTarget);
 			var cells = $(e.currentTarget).data('cells'), i;
 			for (i = 0; i < cells.length; i++) {
 				e.currentTarget = cells[i];
-				this.onDayMouseEnter(e);
+				this._onDayMouseEnter(e);
 			}
 		},
 
-		onWeekNumberMouseLeave: function (e) {
+		_onWeekNumberMouseLeave: function (e) {
 			this._initWeekNumberSelector(e.currentTarget);
 			var cells = $(e.currentTarget).data('cells'), i;
 			for (i = 0; i < cells.length; i++) {
 				e.currentTarget = cells[i];
-				this.onDayMouseLeave(e);
+				this._onDayMouseLeave(e);
 			}
 		},
 
@@ -904,7 +1040,7 @@
 			return !!this.element.data('animating.wijcalendar');
 		},
 
-		onPreviewMouseEnter: function (e) {
+		_onPreviewMouseEnter: function (e) {
 			if (!!this.element.data('previewContainer')) { return; }
 			if (this._isAnimating()) { return; }
 
@@ -944,7 +1080,7 @@
 			this.element.data('previewContainer', previewContainer);
 		},
 
-		onPreviewMouseLeave: function (e) {
+		_onPreviewMouseLeave: function (e) {
 			var btn = $(e.currentTarget),
 				btnId = btn.attr('id');
 			if (btnId === undefined) { return; }
@@ -953,7 +1089,7 @@
 			if (previewContainer) {
 				if (previewContainer.wijpopup('isAnimating')) {
 					var self = this;
-					window.setTimeout(function () { self.onPreviewMouseLeave(e); }, 200);
+					window.setTimeout(function () { self._onPreviewMouseLeave(e); }, 200);
 				} else {
 					previewContainer.wijpopup('hide');
 					this.element.removeData('previewContainer');
@@ -1130,7 +1266,7 @@
 			});
 		},
 
-		onTitleClicked: function () {
+		_onTitleClicked: function () {
 			if (!this.options.allowQuickPick || !this._isSingleMonth()) { return; }
 			if (this._isAnimating()) { return; }
 
@@ -1228,7 +1364,7 @@
 		);
 		},
 
-		onMyGridClicked: function (e) {
+		_onMyGridClicked: function (e) {
 			if (this._myGrid === undefined) { return false; }
 			if (this._isAnimating()) { return false; }
 
@@ -1326,7 +1462,7 @@
 			return false;
 		},
 
-		onMyGridMouseEnter: function (e) {
+		_onMyGridMouseEnter: function (e) {
 			if (this._myGrid === undefined) { return; }
 
 			var cell = $(e.currentTarget);
@@ -1335,7 +1471,7 @@
 			cell.addClass("ui-state-hover");
 		},
 
-		onMyGridMouseLeave: function (e) {
+		_onMyGridMouseLeave: function (e) {
 			if (this._myGrid === undefined) { return; }
 
 			var cell = $(e.currentTarget);
@@ -1362,53 +1498,53 @@
 					} else if (el.hasClass('ui-datepicker-prev')) {
 						el.addClass('ui-datepicker-prev-hover');
 					}
-				}).bind('click.wijcalendar', $.proxy(this.onNavButtonClicked, this));
+				}).bind('click.wijcalendar', $.proxy(this._onNavButtonClicked, this));
 
 				this.element.find(".ui-datepicker-title").unbind().bind('mouseout.wijcalendar', function () {
 					$(this).removeClass('ui-state-hover');
 				}).bind('mouseover.wijcalendar', function () {
 					$(this).addClass('ui-state-hover');
-				}).bind('click.wijcalendar', $.proxy(this.onTitleClicked, this));
+				}).bind('click.wijcalendar', $.proxy(this._onTitleClicked, this));
 
 				this.element.find(".wijmo-wijcalendar-prevpreview-button, .wijmo-wijcalendar-nextpreview-button").unbind('mouseenter.wijcalendar').unbind('mouseleave.wijcalendar').bind({
-					"mouseenter.wijcalendar": $.proxy(this.onPreviewMouseEnter, this),
-					"mouseleave.wijcalendar": $.proxy(this.onPreviewMouseLeave, this)
+					"mouseenter.wijcalendar": $.proxy(this._onPreviewMouseEnter, this),
+					"mouseleave.wijcalendar": $.proxy(this._onPreviewMouseLeave, this)
 				});
 
 				if (this._myGrid === undefined) {
 					this.element.find(".wijmo-wijcalendar-day-selectable").unbind().bind({
-						"click.wijcalendar": $.proxy(this.onDayClicked, this),
-						"mouseenter.wijcalendar": $.proxy(this.onDayMouseEnter, this),
-						"mouseleave.wijcalendar": $.proxy(this.onDayMouseLeave, this),
-						"mousedown.wijcalendar": $.proxy(this.onDayMouseDown, this),
-						"dragstart.wijcalendar": $.proxy(this.onDayDragStart, this)
+						"click.wijcalendar": $.proxy(this._onDayClicked, this),
+						"mouseenter.wijcalendar": $.proxy(this._onDayMouseEnter, this),
+						"mouseleave.wijcalendar": $.proxy(this._onDayMouseLeave, this),
+						"mousedown.wijcalendar": $.proxy(this._onDayMouseDown, this),
+						"dragstart.wijcalendar": $.proxy(this._onDayDragStart, this)
 					});
 					if (!!this.options.selectionMode.month) {
 						this.element.find(".wijmo-wijcalendar-monthselector").unbind().bind({
-							"click.wijcalendar": $.proxy(this.onMonthSelectorClicked, this),
-							"mouseenter.wijcalendar": $.proxy(this.onMonthSelectorMouseEnter, this),
-							"mouseleave.wijcalendar": $.proxy(this.onMonthSelectorMouseLeave, this)
+							"click.wijcalendar": $.proxy(this._onMonthSelectorClicked, this),
+							"mouseenter.wijcalendar": $.proxy(this._onMonthSelectorMouseEnter, this),
+							"mouseleave.wijcalendar": $.proxy(this._onMonthSelectorMouseLeave, this)
 						});
 					}
 					if (!!this.options.selectionMode.weekDay) {
 						this.element.find(".ui-datepicker-week-day").unbind().bind({
-							"click.wijcalendar": $.proxy(this.onWeekDayClicked, this),
-							"mouseenter.wijcalendar": $.proxy(this.onWeekDayMouseEnter, this),
-							"mouseleave.wijcalendar": $.proxy(this.onWeekDayMouseLeave, this)
+							"click.wijcalendar": $.proxy(this._onWeekDayClicked, this),
+							"mouseenter.wijcalendar": $.proxy(this._onWeekDayMouseEnter, this),
+							"mouseleave.wijcalendar": $.proxy(this._onWeekDayMouseLeave, this)
 						});
 					}
 					if (!!this.options.selectionMode.weekNumber) {
 						this.element.find(".wijmo-wijcalendar-week-num").unbind().bind({
-							"click.wijcalendar": $.proxy(this.onWeekNumberClicked, this),
-							"mouseenter.wijcalendar": $.proxy(this.onWeekNumberMouseEnter, this),
-							"mouseleave.wijcalendar": $.proxy(this.onWeekNumberMouseLeave, this)
+							"click.wijcalendar": $.proxy(this._onWeekNumberClicked, this),
+							"mouseenter.wijcalendar": $.proxy(this._onWeekNumberMouseEnter, this),
+							"mouseleave.wijcalendar": $.proxy(this._onWeekNumberMouseLeave, this)
 						});
 					}
 				} else {
 					this.element.find(".wijmo-wijcalendar-day-selectable").unbind().bind({
-						"click.wijcalendar": $.proxy(this.onMyGridClicked, this),
-						"mouseenter.wijcalendar": $.proxy(this.onMyGridMouseEnter, this),
-						"mouseleave.wijcalendar": $.proxy(this.onMyGridMouseLeave, this)
+						"click.wijcalendar": $.proxy(this._onMyGridClicked, this),
+						"mouseenter.wijcalendar": $.proxy(this._onMyGridMouseEnter, this),
+						"mouseleave.wijcalendar": $.proxy(this._onMyGridMouseLeave, this)
 					});
 				}
 			}
@@ -1468,7 +1604,7 @@
 			return { cssCell: cssCell, cssText: cssText };
 		},
 
-		onNavButtonClicked: function (e) {
+		_onNavButtonClicked: function (e) {
 			if (this._isAnimating()) { return false; }
 
 			var step = 1,

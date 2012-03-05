@@ -1,7 +1,7 @@
 /*globals Raphael,jQuery, window*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -14,11 +14,12 @@
  * * Wijmo PieChart widget.
  *
  * Depends:
- *  raphael.js
+ *	jquery.js
+ *	raphael.js
  *	globalize.js
- *  jquery.ui.widget.js
- *	raphaelEx.js
- *  jquery.wijmo.wijchartcore.js
+ *	jquery.ui.widget.js
+ *	jquery.wijmo.raphael.js
+ *	jquery.wijmo.wijchartcore.js
  *  
  */
 
@@ -28,7 +29,7 @@
 	$.widget("wijmo.wijpiechart", $.wijmo.wijchartcore, {
 		options: {
 			/// <summary>
-			/// A value indicates the radius used for a pie chart.
+			/// A value that indicates the radius used for a pie chart.
 			/// Default: null.
 			/// Type: Number.
 			/// Code example:
@@ -42,7 +43,7 @@
 			/// </remarks>
 			radius: null,
 			/// <summary>
-			/// A value indicates the inner radius used for doughnut charts.
+			/// A value that indicates the inner radius used for doughnut charts.
 			/// Default: 0.
 			/// Type: Number.
 			/// Code example:
@@ -81,7 +82,7 @@
 				/// </summary>
 				easing: ">",
 				/// <summary>
-				/// A value that indicates the offset for explode animation.
+				/// A value that indicates the offset for an explode animation.
 				/// Default: 10.
 				/// Type: Number.
 				/// </summary>
@@ -117,6 +118,36 @@
 				/// </summary>
 				easing: "bounce"
 			},
+			/// <summary>
+			/// An array collection that contains the data to be charted.
+			/// Default: [].
+			/// Type: Array.
+			/// Code example:
+			/// $("#chartcore").wijchartcore({
+			/// seriesList: [{
+			/// label: "Q1",
+			/// legendEntry: true,
+			/// data: 12,
+			/// offset: 0
+			/// }, {
+			/// label: "Q2",
+			/// legendEntry: true,
+			/// data: 21,
+			/// offset: 0
+			/// }, {
+			/// label: "Q3",
+			/// legendEntry: true,
+			/// data: 9,
+			/// offset: 0
+			/// }, {
+			/// label: "Q4",
+			/// legendEntry: true,
+			/// data: 29,
+			/// offset: 10
+			/// }]
+			/// });
+			/// </summary>
+			seriesList: [],
 			/// <summary>
 			/// Occurs when the user clicks a mouse button.
 			/// Default: null.
@@ -281,6 +312,8 @@
 		},
 
 		destroy: function () {
+			///Remove the functionality completely. 
+			///This will return the element back to its pre-init state. 
 			var self = this,
 				element = self.chartElement,
 				fields = element.data("fields"),
@@ -420,7 +453,7 @@
 			
 			$.wijmo.wijchartcore.prototype._paintTooltip.apply(this, arguments);
 			
-			if (self.tooltip) {
+			if (self.tooltip && fields) {
 				if (fields.trackers && fields.trackers.length) {
 					//self.tooltip.setTargets(fields.trackers);
 					self.tooltip.setSelector($(".wijchart-canvas-object", element[0]));
@@ -878,7 +911,9 @@
 			}
 
 			function unbindLiveEvents() {
-				$(".wijpiechart", element[0]).die(widgetName);
+				$(".wijpiechart", element[0]).die(widgetName)
+				// for jQuery 1.7.1
+				.die("." + widgetName);
 			}
 
 			canvas.customAttributes.segment =

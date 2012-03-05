@@ -1,7 +1,7 @@
 /*globals jQuery Raphael Globalize*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -120,6 +120,58 @@
 			},
 
 			/// <summary>
+			/// An array collection that contains the data to be charted.
+			/// Default: [].
+			/// Type: Array.
+			/// Code example:
+			/// $("#bubblechart").wijbubblechart({
+			/// seriesList: [{
+			/// label: "Q1",
+			/// legendEntry: true,
+			/// data: {
+			/// x: [1, 2, 3, 4, 5],
+			/// y: [12, 21, 9, 29, 30],
+			/// y1:[3, 5, 1, 6, 2]
+			/// },
+			/// offset: 0
+			/// }, {
+			/// label: "Q2",
+			/// legendEntry: true,
+			/// data: {
+			/// xy: [1, 21, 2, 10, 3, 19, 4, 31, 5, 20],
+			/// y1:[3, 5, 1, 6, 2]
+			/// },
+			/// offset: 0
+			/// }]
+			/// OR
+			/// seriesList: [{
+			/// label: "Q1",
+			/// legendEntry: true,
+			/// data: {
+			/// x: ["A", "B", "C", "D", "E"],
+			/// y: [12, 21, 9, 29, 30],
+			/// y1:[3, 5, 1, 6, 2]
+			/// },
+			/// offset: 0
+			/// }]
+			/// OR
+			/// seriesList: [{
+			/// label: "Q1",
+			/// legendEntry: true,
+			/// data: {
+			/// x: [new Date(1978, 0, 1), new Date(1980, 0, 1),
+			/// new Date(1981, 0, 1), new Date(1982, 0, 1),
+			/// new Date(1983, 0, 1)],
+			/// y: [12, 21, 9, 29, 30],
+			/// y1:[3, 5, 1, 6, 2]
+			/// },
+			/// offset: 0
+			/// }]
+			/// });
+			/// </summary>
+			seriesList: [],
+
+			/// <summary>
 			/// An array collection that contains the style to 
 			/// be charted when hovering the chart element.
 			/// Default: [{opacity: 1, "stroke-width": 5}, {
@@ -224,7 +276,7 @@
 			},
 
 			/// <summary>
-			/// Occurs when the user clicks a mouse button.
+			/// Fires when the user clicks a mouse button.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -246,10 +298,13 @@
 			/// data.legendEntry: legend entry of the series of the bubble.
 			/// data.style: style of the series of the bubble.
 			/// data.type: "bubble"
+			/// data.x: the x value of the bubble.
+			/// data.y: The y value of the bubble.
+			/// data.y1: The y1 value of the bubble
 			///	</param>
 			mouseDown: null,
 			/// <summary>
-			/// Occurs when the user releases a mouse button
+			/// Fires when the user releases a mouse button
 			/// while the pointer is over the chart element.
 			/// Default: null.
 			/// Type: Function.
@@ -272,10 +327,13 @@
 			/// data.legendEntry: legend entry of the series of the bubble.
 			/// data.style: style of the series of the bubble.
 			/// data.type: "bubble"
+			/// data.x: the x value of the bubble.
+			/// data.y: The y value of the bubble.
+			/// data.y1: The y1 value of the bubble
 			///	</param>
 			mouseUp: null,
 			/// <summary>
-			/// Occurs when the user first places the pointer over the chart element.
+			/// Fires when the user first places the pointer over the chart element.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -297,10 +355,13 @@
 			/// data.legendEntry: legend entry of the series of the bubble.
 			/// data.style: style of the series of the bubble.
 			/// data.type: "bubble"
+			/// data.x: the x value of the bubble.
+			/// data.y: The y value of the bubble.
+			/// data.y1: The y1 value of the bubble
 			///	</param>
 			mouseOver: null,
 			/// <summary>
-			/// Occurs when the user moves the pointer off of the chart element.
+			/// Fires when the user moves the pointer off of the chart element.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -322,10 +383,13 @@
 			/// data.legendEntry: legend entry of the series of the bubble.
 			/// data.style: style of the series of the bubble.
 			/// data.type: "bubble"
+			/// data.x: the x value of the bubble.
+			/// data.y: The y value of the bubble.
+			/// data.y1: The y1 value of the bubble
 			///	</param>
 			mouseOut: null,
 			/// <summary>
-			/// Occurs when the user moves the mouse pointer
+			/// Fires when the user moves the mouse pointer
 			/// while it is over a chart element.
 			/// Default: null.
 			/// Type: Function.
@@ -348,10 +412,13 @@
 			/// data.legendEntry: legend entry of the series of the bubble.
 			/// data.style: style of the series of the bubble.
 			/// data.type: "bubble"
+			/// data.x: the x value of the bubble.
+			/// data.y: The y value of the bubble.
+			/// data.y1: The y1 value of the bubble
 			///	</param>
 			mouseMove: null,
 			/// <summary>
-			/// Occurs when the user clicks the chart element. 
+			/// Fires when the user clicks the chart element. 
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -373,6 +440,9 @@
 			/// data.legendEntry: legend entry of the series of the bubble.
 			/// data.style: style of the series of the bubble.
 			/// data.type: "bubble"
+			/// data.x: the x value of the bubble.
+			/// data.y: The y value of the bubble.
+			/// data.y1: The y1 value of the bubble
 			///	</param>
 			click: null
 		},
@@ -436,6 +506,12 @@
 		},
 
 		destroy: function () {
+			/// <summary>
+			/// Remove the functionality completely. This will return the 
+			/// element back to its pre-init state.
+			/// Code example:
+			/// $("#bubblechart").wijbubblechart("destroy");
+			/// </summary>
 			var self = this;
 			self.chartElement
 			.removeClass("wijmo-wijbubblechart ui-helper-reset");
@@ -950,7 +1026,10 @@
 
 		_unbindLiveEvents: function () {
 			var self = this;
-			$(".wijbubblechart-bubble", self.chartElement[0]).die(".wijbubblechart");
+			$(".wijbubblechart-bubble", self.chartElement[0])
+			// for jQuery 1.7.1
+			.die(".wijbubblechart")
+			.die("wijbubblechart");
 			if (self.tooltip) {
 				self.tooltip.destroy();
 				self.tooltip = null;
@@ -1018,6 +1097,8 @@
 			/// <summary>
 			/// Returns the bubble which has a Raphael's object 
 			/// that represents bubbles for the series data with the given index.
+			/// Code example:
+			/// $("#bubblechart").wijbubblechart("getBubble", 2)
 			/// </summary>
 			/// <param name="index" type="Number">
 			/// The index of the bubble.
@@ -1325,7 +1406,7 @@
 					.attr({ opacity: 0.01, fill: "white", "fill-opacity": 0.01 });
 
 					$(tracker.node).data("owner", $(bubble.node));
-					$.wijraphael.addClass($(bubble.node),
+					$.wijraphael.addClass($(tracker.node),
 						"wijchart-canvas-object wijbubblechart-bubble bubbletracker");
 					bubble.tracker = tracker;
 					trackers.push(tracker);
@@ -1418,8 +1499,7 @@
 							target = target.data("owner");
 						}
 						dataObj = target.data("wijchartDataObj");
-						bubble = dataObj.bubble;
-						mouseOut.call(element, e, dataObj);
+						bubble = dataObj.bubble;					
 
 						if (dataObj.symbol) {
 							return;
@@ -1436,6 +1516,7 @@
 								bubble.attr("opacity", dataObj.style.opacity);
 							}
 						}
+						mouseOut.call(element, e, dataObj);
 					},
 					mousemove: function (e) {
 						if (disabled) {
@@ -1447,8 +1528,7 @@
 							target = target.data("owner");
 						}
 						dataObj = target.data("wijchartDataObj");
-						bubble = dataObj.bubble;
-						mouseMove.call(element, e, dataObj);
+						bubble = dataObj.bubble;						
 						if (!dataObj.hoverStyle) {
 							if (bubble) {
 								bubble.attr({ opacity: "0.8" });
@@ -1457,6 +1537,7 @@
 						else {
 							bubble.attr(dataObj.hoverStyle);
 						}
+						mouseMove.call(element, e, dataObj);
 					},
 					click: function (e) {
 						if (disabled) {
@@ -1475,7 +1556,7 @@
 				$.each(["click", "mouseenter", "mouseleave", "mousemove",
 				"mousedown", "mouseup"], function (i, n) {
 					$(".wijbubblechart-bubble", element)
-					.live(n + ".wijbubblechart", proxyObj[n]);
+					.bind(n + ".wijbubblechart", proxyObj[n]);
 				});
 			}
 

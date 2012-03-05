@@ -1,7 +1,7 @@
 /*globals jQuery */
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -55,6 +55,8 @@
 			});
 		},
 		destroy: function () {
+			/// Remove the functionality completely. 
+			/// This will return the element back to its pre-init state.
 			var self = this;
 			self.element.removeClass("ui-widget ui-state-default ui-corner-all " +
 			"ui-state-hover ui-state-active wijmo-wijtextbox")

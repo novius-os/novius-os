@@ -3,7 +3,7 @@
 
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -48,6 +48,14 @@
 	$.widget("wijmo.wijgrid", {
 		options: {
 			/// <summary>
+			/// A value indicating whether columns can be moved.
+			/// Default: false.
+			/// Type: Boolean.
+			/// Code example: $("#element").wijgrid({ allowColMoving: false });
+			/// </summary>
+			allowColMoving: false,
+
+			/// <summary>
 			/// A value indicating whether columns can be sized.
 			/// Default: false.
 			/// Type: Boolean.
@@ -56,12 +64,12 @@
 			allowColSizing: false,
 
 			/// <summary>
-			/// A value indicating whether columns can be moved.
+			/// A value indicating whether editing is enabled.
 			/// Default: false.
 			/// Type: Boolean.
-			/// Code example: $("#element").wijgrid({ allowColMoving: false });
+			/// Code example: $("#element").wijgrid({ allowEditing: false });
 			/// </summary>
-			allowColMoving: false,
+			allowEditing: false,
 
 			/// <summary>
 			/// A value indicating whether keyboard navigation is allowed.
@@ -88,15 +96,7 @@
 			allowSorting: false,
 
 			/// <summary>
-			/// A value indicating whether editing is enabled.
-			/// Default: false.
-			/// Type: Boolean.
-			/// Code example: $("#element").wijgrid({ allowEditing: false });
-			/// </summary>
-			allowEditing: false,
-
-			/// <summary>
-			/// Determines whether wijgrid should parse underlying data at each operation requiring data re-fetching, like calling the ensureControl(true) method, paging, sorting, etc.
+			/// Determines whether wijgrid should parse underlying data at each operation requiring data re-fetching, like calling the ensureControl(true) method, paging, sorting, and so on.
 			/// If the option is disabled, wijgrid parses data only at the first fetch.
 			/// The option is ignored if dynamic data load feature is used, in this case data are always parsed.
 			///
@@ -110,27 +110,6 @@
 			/// that changes match column datatype.
 			/// </remarks>
 			alwaysParseData: true,
-
-			/// <summary>
-			/// Determines behavior for column autogeneration.
-			///
-			/// Possible values are: "none", "append", "merge".
-			///
-			/// "none": column auto-generation is turned off.
-			/// "append": a column will be generated for each data field and added to the end of the columns collection.
-			/// "merge": each column having dataKey option not specified will be automatically bound to the first unreserved data field.
-			/// For each data field not bound to any column a new column will be generated and added to the end of the columns collection.
-			/// To prevent automatic binding of a column to a data field set its dataKey option to null.
-			///
-			/// Default: "merge".
-			/// Type: String.
-			/// Code example: $("#element").wijgrid({ columnsAutogenerationMode: "merge" });
-			/// </summary>
-			///
-			/// <remarks>
-			/// Note: columns autogeneration process affects the options of columns and the columns option itself.
-			/// </remarks>
-			columnsAutogenerationMode: "merge",
 
 			/// <summary>
 			/// Function used for styling the cells in wijgrid.
@@ -161,6 +140,27 @@
 			columns: [],
 
 			/// <summary>
+			/// Determines behavior for column autogeneration.
+			///
+			/// Possible values are: "none", "append", "merge".
+			///
+			/// "none": column auto-generation is turned off.
+			/// "append": a column will be generated for each data field and added to the end of the columns collection.
+			/// "merge": each column having dataKey option not specified will be automatically bound to the first unreserved data field.
+			/// For each data field not bound to any column a new column will be generated and added to the end of the columns collection.
+			/// To prevent automatic binding of a column to a data field set its dataKey option to null.
+			///
+			/// Default: "merge".
+			/// Type: String.
+			/// Code example: $("#element").wijgrid({ columnsAutogenerationMode: "merge" });
+			/// </summary>
+			///
+			/// <remarks>
+			/// Note: columns autogeneration process affects the options of columns and the columns option itself.
+			/// </remarks>
+			columnsAutogenerationMode: "merge",
+
+			/// <summary>
 			/// Determines the culture ID.
 			/// Default: "".
 			/// Type: String.
@@ -174,7 +174,6 @@
 			/// Custom user filter is an object which contains the following properties:
 			///   name - operator name.
 			///   arity - the number of filter operands. Can be either 1 or 2.
-			///   css - the name of the CSS-class determining filter icon. If no value is set, then "filter-<name.toLowerCase()>" class is used.
 			///   applicableTo - an array of datatypes to which the filter can be applied. Possible values for elements of the array are "string", "number", "datetime", "currency" and "boolean".
 			///   operator - comparison operator, the number of accepted parameters depends upon the arity. The first parameter is a data value, the second parameter is a filter value.
 			///
@@ -198,10 +197,10 @@
 			/// Possible datasources include:
 			///
 			///   1. A DOM table. This is the default datasource, used if the data option is null.
-			///     Table must be contained in a DOM element to which wijgrid is attached, must have no cells with rowSpan and colSpan attributes.
-			///   2. A two-dimensional array, such as [[0, "a"], [1, "b"]]
-			///   3. An array of hashes, such as [{field0: 0, field1: "a"}, {field0: 1, field1: "b'}]
-			///   4. A wijdatasource
+			///     Table must have no cells with rowSpan and colSpan attributes.
+			///   2. A two-dimensional array, such as [[0, "a"], [1, "b"]].
+			///   3. An array of objects, such as [{field0: 0, field1: "a"}, {field0: 1, field1: "b'}].
+			///   4. A wijdatasource.
 			///
 			/// Type: Object.
 			/// Default: null
@@ -448,10 +447,8 @@
 			splitDistanceY: 50,*/
 
 			/// <summary>
-			/// Indicates the index  of columns that will always be shown on the
-			/// left when the grid view scrolled horizontally. 
-			/// Note, that all columns before the static column
-			/// will be automatically marked as static, too.
+			/// Indicates the index of columns that will always be shown on the left when the grid view scrolled horizontally. 
+			/// Note, that all columns before the static column will be automatically marked as static, too.
 			/// It can only take effect when scrollMode is not "none".
 			/// It will be considered as -1 when grouping or row merging is enabled.
 			/// -1 means no data column but row header is static.
@@ -606,7 +603,7 @@
 			columnDragged: null,
 
 			/// <summary>
-			/// The columnDropping event handler. A function called when column is dropped, but before wijgrid handles the operation. Cancellable.
+			/// The columnDropping event handler. A function called when column is dropped into the columns area, but before wijgrid handles the operation. Cancellable.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -620,13 +617,13 @@
 			/// <param name="args" type="Object">
 			/// The data with this event.
 			/// args.drag: drag source, column being dragged.
-			/// args.drop: drop target, column on which drag source is dropped(be null if dropping a column into empty group area).
-			/// args.at: position to drop (one of the "left", "right" and "center" values) relative to drop target(be "left" if dropping a column into empty group area).
+			/// args.drop: drop target, column on which drag source is dropped.
+			/// args.at: position to drop (one of the "left", "right" and "center" values) relative to drop target.
 			/// </param>
 			columnDropping: null,
 
 			/// <summary>
-			/// The columnDropped event handler. A function called when column has been dropped.
+			/// The columnDropped event handler. A function called when column has been dropped into the columns area.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -640,8 +637,8 @@
 			/// <param name="args" type="Object">
 			/// The data with this event.
 			/// args.drag: drag source, column being dragged.
-			/// args.drop: drop target, column on which drag source is dropped(be null if dropping a column into empty group area).
-			/// args.at: position to drop (one of the "left", "right" and "center" values) relative to drop target(be "left" if dropping a column into empty group area).
+			/// args.drop: drop target, column on which drag source is dropped.
+			/// args.at: position to drop (one of the "left", "right" and "center" values) relative to drop target.
 			/// </param>
 			columnDropped: null,
 
@@ -663,7 +660,7 @@
 			/// args.drop: drop target, column on which drag source is dropped (be null if dropping a column into empty group area).
 			/// args.dragSource: the place where the dragged column widget is located, possible value: "groupArea", "columns".
 			/// args.dropSource: the place where the dropped column widget is located, possible value: "groupArea", "columns".
-			/// args.at: position to drop (one of the "left", "right" and "center" values) relative to drop target(be "left" if dropping a column into empty group area).
+			/// args.at: position to drop (one of the "left", "right" and "center" values) relative to drop target ("left" if dropping a column into empty group area).
 			/// </param>
 			columnGrouping: null,
 
@@ -682,10 +679,10 @@
 			/// <param name="args" type="Object">
 			/// The data with this event.
 			/// args.drag: drag source, column being dragged.
-			/// args.drop: drop target, column on which drag source is dropped (be null if dropping a column into empty group area).
-			/// args.dragSource: the place where the dragged column widget is located, possible value: "groupArea", "columns".
-			/// args.dropSource: the place where the dropped column widget is located, possible value: "groupArea", "columns".
-			/// args.at: position to drop (one of the "left", "right" and "center" values) relative to drop target(be "left" if dropping a column into empty group area).
+			/// args.drop: drop target, column on which drag source is dropped (null if dropping a column into empty group area).
+			/// args.dragSource: the place where the dragged column is located, possible values: "groupArea", "columns".
+			/// args.dropSource: the place where the dropped column is located, possible values: "groupArea", "columns".
+			/// args.at: position to drop (one of the "left", "right" and "center" values) relative to drop target ("left" if dropping a column into empty group area).
 			/// </param>
 			columnGrouped: null,
 
@@ -838,7 +835,7 @@
 			filtering: null,
 
 			/// <summary>
-			/// The filtered event handler. A function called after the widget is filtered.
+			/// The filtered event handler. A function called after the wijgrid is filtered.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -1291,6 +1288,13 @@
 		},
 
 		getFilterOperatorsByDataType: function (dataType) {
+			/// <summary>
+			/// Returns a one-dimensional array of filter operators which are applicable to the specified data type.
+			/// Code example: var operators = $("#element").wijgrid("getFilterOperatorsByDataType", "string");
+			/// <param name="dataType" type="String">Data type. Possible values are: "string", "number", "datetime", "currency" and "boolean".</param>
+			/// </summary>
+			/// <returns type="Array">A one-dimensional array of filter operators.</returns>
+
 			var applicableFilters = this.filterOperatorsCache.getByDataType(dataType || "string");
 
 			this.filterOperatorsCache.sort(applicableFilters, this.options.filterOperatorsSortMode);
@@ -1300,8 +1304,10 @@
 
 		setSize: function (width, height) {
 			/// <summary>
-			/// set the size of grid.
-			/// Code example: $("#element").wijgrid("setSize");
+			/// Set the size of grid.
+			/// Code example: $("#element").wijgrid("setSize", 200, 200);
+			/// <param name="width" type="Object" optional="true">Determines the width of the grid.</param>
+			/// <param name="height" type="Object" optional="true">Determines the height of the grid.</param>
 			/// </summary>
 			var view = this._view(),
 				scrollValue = { type: "", hScrollValue: null, vScrollValue: null },
@@ -1313,11 +1319,11 @@
 				scrollValue = view.getScrollValue();
 			}
 
-			if (width !== null) {
+			if (width || (width === 0)) {
 				this._autoWidth = false;
 				outerDiv.width(width);
 			}
-			if (height !== null) {
+			if (height || (height === 0)) {
 				this._autoHeight = false;
 				outerDiv.height(height);
 			}
@@ -1750,7 +1756,7 @@
 			/// Code example:
 			/// var pageCount = $("#element").wijgrid("pageCount");
 			/// </summary>
-			/// <returns type="Number" integer="true">True if the cell is successfully put in edit mode, otherwise false.</returns>
+			/// <returns type="Number" integer="true"></returns>
 			return this.options.allowPaging
 				? this._field("pageCount") || 1
 				: 1;
@@ -3863,16 +3869,6 @@
 			allowSizing: true,
 
 			/// <summary>
-			/// A value indicating the key of the data field associated with a column.
-			/// If an array of hashes is used as a datasource for wijgrid, this should be string value,
-			/// otherwise this should be an integer determining an index of the field in the datasource.
-			/// Default: undefined
-			/// Type: String or Number.
-			/// Code example: $("#element").wijgrid({ columns: [ { dataKey: "ProductID" } ] });
-			/// </summary>
-			dataKey: undefined,
-
-			/// <summary>
 			/// Function used for changing content, style and attributes of the column cells.
 			/// Default: undefined.
 			/// Type: Function.
@@ -3896,6 +3892,16 @@
 			/// </param>
 			/// <returns type="Boolean">True if container content has been changed and wijgrid should not apply the default formatting to the cell.</returns>
 			cellFormatter: undefined,
+
+			/// <summary>
+			/// A value indicating the key of the data field associated with a column.
+			/// If an array of hashes is used as a datasource for wijgrid, this should be string value,
+			/// otherwise this should be an integer determining an index of the field in the datasource.
+			/// Default: undefined
+			/// Type: String or Number.
+			/// Code example: $("#element").wijgrid({ columns: [ { dataKey: "ProductID" } ] });
+			/// </summary>
+			dataKey: undefined,
 
 			/// <summary>
 			/// Determines whether to use number type column width as the real width of the column.
@@ -4167,9 +4173,9 @@
 			/// Data converter that is able to translate values from a string representation to column data type and back.
 			/// 
 			/// The dataParser is an object which must contains the following methods:
-			///   parseDOM(value, culture, format): converts given DOM element into the typed value.
-			///   parse(value, culture, format): converts the value into typed value.
-			///   toStr(value, culture, format): converts the value into its string representation.
+			///   parseDOM(value, culture, format, nullString): converts given DOM element into the typed value.
+			///   parse(value, culture, format, nullString): converts the value into typed value.
+			///   toStr(value, culture, format, nullString): converts the value into its string representation.
 			///
 			/// Default: undefined (widget built-in parser for supported datatypes will be used).
 			/// Type: Object.
@@ -8634,7 +8640,7 @@
 	"use strict";
 	$.wijmo.wijgrid.cellInfo = function (cellIndex, rowIndex) {
 		/// <summary>
-		/// Object that represents a single cell.
+		/// Creates an object that represents a single cell.
 		/// Code example: var cell = new $.wijmo.wijgrid.cellInfo(0, 0);
 		/// </summary>
 		/// <param name="cellIndex">Zero-based index of the required cell inside the corresponding row.</param>
@@ -8662,7 +8668,7 @@
 		this.column = function () {
 			/// <summary>
 			/// Gets the associated column object.
-			/// Code example: var index = cellInfoObj.column();
+			/// Code example: var column = cellInfoObj.column();
 			/// </summary>
 			/// <returns type="Object"></returns>
 
@@ -8670,46 +8676,6 @@
 				var offset = _gridView._getDataToAbsOffset();
 
 				return _gridView._field("visibleLeaves")[cellIndex + offset.x];
-			}
-
-			return null;
-		};
-
-
-		this.rowIndex = function (value) {
-			/// <summary>
-			/// Gets the zero-based index of the row containing the cell.
-			/// Code example: var index = cellInfoObj.rowIndex();
-			/// </summary>
-			/// <returns type="Number" integer="true"></returns>
-
-			if (arguments.length === 0) {
-				return rowIndex;
-			}
-
-			rowIndex = value;
-		};
-
-		this.isEqual = function (value) {
-			/// <summary>
-			/// Compares the current object with a specified one and indicates whether they are identical.
-			/// Code example: var isEqual = cellInfoObj1.isEqual(cellInfoObj2);
-			/// </summary>
-			/// <param name="value" type="$.wijmo.wijgrid.cellInfo">Object to compare</param>
-			/// <returns type="Boolean">True if the objects are identical, otherwise false.</returns>
-			return (value && (value.rowIndex() === rowIndex) && (value.cellIndex() === cellIndex));
-		};
-
-		this.tableCell = function () {
-			/// <summary>
-			/// Returns the table cell element corresponding to this object.
-			/// Code example: var domCell = cellInfoObj.tableCell();
-			/// </summary>
-			/// <returns type="Object" domElement="true" />
-			if (_gridView && this._isValid()) {
-				var offset = _gridView._getDataToAbsOffset();
-
-				return _gridView._view().getCell(cellIndex + offset.x, rowIndex + offset.y);
 			}
 
 			return null;
@@ -8729,6 +8695,72 @@
 				if ($innerDiv) {
 					return $innerDiv;
 				}
+			}
+
+			return null;
+		};
+
+		this.isEqual = function (value) {
+			/// <summary>
+			/// Compares the current object with a specified one and indicates whether they are identical.
+			/// Code example: var isEqual = cellInfoObj1.isEqual(cellInfoObj2);
+			/// </summary>
+			/// <param name="value" type="$.wijmo.wijgrid.cellInfo">The object to compare</param>
+			/// <returns type="Boolean">True if the objects are identical, otherwise false.</returns>
+			return (value && (value.rowIndex() === rowIndex) && (value.cellIndex() === cellIndex));
+		};
+
+		this.row = function () {
+			/// <summary>
+			/// Gets the accociated row's information.
+			/// Code example: var row = cellInfoObj.row();
+			/// </summary>
+			/// <returns type="object">
+			/// Information about associated row.
+			/// 
+			/// The return value has the following properties:
+			/// $rows: jQuery object that represents associated rows.
+			/// data: associated data.
+			/// dataRowIndex: data row index.
+			/// dataItemIndex: data item index.
+			/// virtualDataItemIndex: virtual data item index.
+			/// type: type of the row, one of the $.wijmo.wijgrid.rowType values.
+			/// </returns>
+
+			var rowObj = this._row();
+
+			if (rowObj !== null) {
+				rowObj = _gridView._createRowInfo(rowObj);
+				return rowObj;
+			}
+
+			return null;
+		};
+
+		this.rowIndex = function (value) {
+			/// <summary>
+			/// Gets the zero-based index of the row containing the cell.
+			/// Code example: var index = cellInfoObj.rowIndex();
+			/// </summary>
+			/// <returns type="Number" integer="true"></returns>
+
+			if (arguments.length === 0) {
+				return rowIndex;
+			}
+
+			rowIndex = value;
+		};
+
+		this.tableCell = function () {
+			/// <summary>
+			/// Returns the table cell element corresponding to this object.
+			/// Code example: var domCell = cellInfoObj.tableCell();
+			/// </summary>
+			/// <returns type="Object" domElement="true" />
+			if (_gridView && this._isValid()) {
+				var offset = _gridView._getDataToAbsOffset();
+
+				return _gridView._view().getCell(cellIndex + offset.x, rowIndex + offset.y);
 			}
 
 			return null;
@@ -8771,32 +8803,6 @@
 					}
 				}
 			}
-		};
-
-		this.row = function () {
-			/// <summary>
-			/// Gets the accociated row's information.
-			/// </summary>
-			/// <returns type="object">
-			/// Information about associated row.
-			/// 
-			/// The return value has the following properties:
-			/// $rows: jQuery object that represents associated rows.
-			/// data: associated data.
-			/// dataRowIndex: data row index.
-			/// dataItemIndex: data item index.
-			/// virtualDataItemIndex: virtual data item index.
-			/// type: type of the row, one of the $.wijmo.wijgrid.rowType values.
-			/// </returns>
-
-			var rowObj = this._row();
-
-			if (rowObj !== null) {
-				rowObj = _gridView._createRowInfo(rowObj);
-				return rowObj;
-			}
-
-			return null;
 		};
 
 		this.toString = function () {
@@ -8883,7 +8889,7 @@
 
 	$.wijmo.wijgrid.cellInfoRange = function (topLeft, bottomRight) {
 		/// <summary>
-		/// Specifies a range of cells determined by two cells.
+		/// Creates an object that specifies a range of cells determined by two cells.
 		/// Code example: var range = $.wijmo.wijgrid.cellInfoRange(new $.wijmo.wijgrid.cellInfo(0, 0), new $.wijmo.wijgrid.cellInfo(0, 0));
 		/// </summary>
 		/// <param name="topLeft" type="$.wijmo.wijgrid.cellInfo">Object that represents the top left cell of the range.</param>
@@ -9099,6 +9105,10 @@
 		},
 
 		getVisibleAreaBounds: function () {
+			throw "not implemented";
+		},
+
+		getFixedAreaVisibleBounds: function () {
 			throw "not implemented";
 		},
 
@@ -9382,7 +9392,7 @@
 				expandIndex;
 
 			gridElement.css({
-				"table-layout" : "",
+				"table-layout": "",
 				"width": ""
 			});
 
@@ -9881,6 +9891,34 @@
 			return $.wijmo.wijgrid.bounds(this._wijgrid.outerDiv.find(".wijmo-wijsuperpanel-contentwrapper:first"));
 		},
 
+		getFixedAreaVisibleBounds: function () {
+			var bounds = this.getVisibleAreaBounds(),
+				neBounds = $.wijmo.wijgrid.bounds(this._wijgrid.outerDiv.find(".wijmo-wijgrid-split-area-ne:first")),
+				nwBounds = $.wijmo.wijgrid.bounds(this._wijgrid.outerDiv.find(".wijmo-wijgrid-split-area-nw:first")),
+				horBounds = null,
+				verBounds = null;
+
+			if (neBounds.height || nwBounds.height) {
+				horBounds = {
+					left: bounds.left,
+					top: bounds.top,
+					width: bounds.width,
+					height: Math.min(neBounds.height || nwBounds.height, bounds.height)
+				};
+			}
+
+			if (nwBounds.width) {
+				verBounds = {
+					left: bounds.left,
+					top: bounds.top,
+					width: Math.min(nwBounds.width, bounds.width),
+					height: bounds.height
+				};
+			}
+
+			return [horBounds, verBounds];
+		},
+
 		refreshPanel: function (scrollValue) {
 			var self = this,
 				wijgrid = this._wijgrid,
@@ -9896,7 +9934,7 @@
 				this._scroller.wijsuperpanel({
 					//scrolled: $.proxy(this._onScrolled, this),
 					scroll: $.proxy(this._onScroll, this),
-					bubbleScrollingEvent: false,
+					bubbleScrollingEvent: true,
 					vScroller: { scrollBarVisibility: panelModes.vScrollBarVisibility, scrollValue: scrollValue.type === "fixed" ? scrollValue.vScrollValue : null },
 					hScroller: { scrollBarVisibility: panelModes.hScrollBarVisibility, scrollValue: scrollValue.type === "fixed" ? scrollValue.hScrollValue : null },
 					//auto adjusting height with hscrollbar shown
@@ -9925,8 +9963,8 @@
 
 			/*
 			this._wijgrid.outerDiv
-				.find(".wijmo-wijgrid-split-area-ne") // area ne (01)
-				.width(this._scroller.wijsuperpanel("getContentElement").parent().width());
+			.find(".wijmo-wijgrid-split-area-ne") // area ne (01)
+			.width(this._scroller.wijsuperpanel("getContentElement").parent().width());
 			*/
 
 			// synchronize scroll left of top table with bottom table
@@ -10984,19 +11022,19 @@
 			/*
 			var heightArray = [];
 			for (i = 0; i < rowLen; i++) {
-				heightArray.push(this._getRowHeight(this.getJoinedRows(i, 9)));
+			heightArray.push(this._getRowHeight(this.getJoinedRows(i, 9)));
 			}
 
 			for (i = 0; i < 4; i++) {
-				tableParentArray[i].removeChild(tableArray[i]);
+			tableParentArray[i].removeChild(tableArray[i]);
 			}
 
 			for (i = 0; i < rowLen; i++) {
-				this._setRowHeight(this.getJoinedRows(i, 9), heightArray[i]);
+			this._setRowHeight(this.getJoinedRows(i, 9), heightArray[i]);
 			}
 
 			for (i = 0; i < 4; i++) {
-				tableParentArray[i].appendChild(tableArray[i]);
+			tableParentArray[i].appendChild(tableArray[i]);
 			}
 			*/
 
@@ -11088,45 +11126,45 @@
 
 		/*
 		adjustCellsSizes: function () {
-			var accessor = new $.wijmo.wijgrid.rowAccessor(this, 9, 0),
-				rowLen = accessor.length(),
-				heights = [], // int[rowLen];
-				i, j, rowObj,
-				row0, len0, row0Span, row0h,
-				row1, len1, row1Span, row1h,
-				row;
+		var accessor = new $.wijmo.wijgrid.rowAccessor(this, 9, 0),
+		rowLen = accessor.length(),
+		heights = [], // int[rowLen];
+		i, j, rowObj,
+		row0, len0, row0Span, row0h,
+		row1, len1, row1Span, row1h,
+		row;
 
-			for (i = 0; i < rowLen; i++) {
-				rowObj = this.getJoinedRows(i, 9); // = accessor[i];
+		for (i = 0; i < rowLen; i++) {
+		rowObj = this.getJoinedRows(i, 9); // = accessor[i];
 
-				row0 = rowObj[0];
-				len0 = (row0 !== null) ? row0.cells.length : 0;
-				row0Span = false;
+		row0 = rowObj[0];
+		len0 = (row0 !== null) ? row0.cells.length : 0;
+		row0Span = false;
 
-				for (j = 0; j < len0 && !row0Span; j++) {
-					row0Span = (row0.cells[j].rowSpan > 1);
-				}
+		for (j = 0; j < len0 && !row0Span; j++) {
+		row0Span = (row0.cells[j].rowSpan > 1);
+		}
 
-				row1 = rowObj[1];
-				len1 = (row1 !== null) ? row1.cells.length : 0;
-				row1Span = false;
+		row1 = rowObj[1];
+		len1 = (row1 !== null) ? row1.cells.length : 0;
+		row1Span = false;
 
-				if (!row0Span) {
-					for (j = 0; j < len1 && !row1Span; j++) {
-						row1Span = (row1.cells[j].rowSpan > 1);
-					}
-				}
+		if (!row0Span) {
+		for (j = 0; j < len1 && !row1Span; j++) {
+		row1Span = (row1.cells[j].rowSpan > 1);
+		}
+		}
 
-				row0h = (row0 !== null && len0 > 0) ? row0.offsetHeight : 0;
-				row1h = (row1 !== null && len1 > 0) ? row1.offsetHeight : 0;
+		row0h = (row0 !== null && len0 > 0) ? row0.offsetHeight : 0;
+		row1h = (row1 !== null && len1 > 0) ? row1.offsetHeight : 0;
 
-				heights[i] = (row0Span || row1Span) ? Math.min(row0h, row1h) : Math.max(row0h, row1h);
-			}
+		heights[i] = (row0Span || row1Span) ? Math.min(row0h, row1h) : Math.max(row0h, row1h);
+		}
 
-			for (i = 0; i < rowLen; i++) {
-				row = this.getJoinedRows(i, 9); // = accessor[i];
-				accessor.iterateCells(row, this.setCellContentDivHeight, heights[i]);
-			}
+		for (i = 0; i < rowLen; i++) {
+		row = this.getJoinedRows(i, 9); // = accessor[i];
+		accessor.iterateCells(row, this.setCellContentDivHeight, heights[i]);
+		}
 		},
 
 		adjustColumnSizes: function(topTable, bottomTable) {
@@ -11172,29 +11210,41 @@
 		},
 
 		_onMouseWheel: function (e, delta) {
-			var visibleBounds = this.getVisibleAreaBounds(),
-				dir;
-			if (this._wijgrid._canInteract()
-				&& $.ui.isOver(e.pageY, e.pageX,
-								visibleBounds.top, visibleBounds.left,
-								visibleBounds.height, visibleBounds.width)) {
-				if (delta > 0) {
-					dir = "top";
-				} else {
-					dir = "bottom";
-				}
-				if (this._scroller.data("wijsuperpanel")) {
+			// force superpanel to do scrolling when cursor is placed over then non-scrollable (fixed) areas of the wijgrid.
+
+			var bounds,
+				dir = (delta > 0) ? "top" : "bottom",
+				isOverFixedArea = false,
+				vPos;
+
+			if (this._wijgrid._canInteract()) {
+				bounds = this.getFixedAreaVisibleBounds(), // an array
+
+				$.each(bounds, function (i, o) {
+					if (o && $.ui.isOver(e.pageY, e.pageX, o.top, o.left, o.height, o.width)) {
+						isOverFixedArea = true;
+						return false; // break
+					}
+				});
+
+				if (isOverFixedArea && this._scroller.data("wijsuperpanel")) {
+					vPos = this._scroller.wijsuperpanel("option", "vScroller").scrollValue;
+					
 					this._scroller.wijsuperpanel("doScrolling", dir);
-					e.stopPropagation();
-					e.preventDefault();
+
+					// simulate wijsuperpanel behaviour: prevent window scrolling until superpanel is not scrolled to the end.
+					if (vPos !== this._scroller.wijsuperpanel("option", "vScroller").scrollValue) {
+						e.stopPropagation();
+						e.preventDefault();
+					}
 				}
 			}
 		},
 
 		/*
 		setCellContentDivHeight: function (cell, param) {
-			cell.style.height = param + "px";
-			return true;
+		cell.style.height = param + "px";
+		return true;
 		},
 		*/
 
@@ -11231,7 +11281,7 @@
 		_updateSplitAreaBounds: function (bSet) {
 			var wijgrid = this._wijgrid,
 				o = wijgrid.options,
-				//controlWidth = wijgrid.outerDiv.width(),
+			//controlWidth = wijgrid.outerDiv.width(),
 				controlHeight, contentHeight, topHeight = 0, bottomHeight = 0,
 				areaNW = wijgrid.outerDiv.find(".wijmo-wijgrid-split-area-nw"),
 				areaNE = wijgrid.outerDiv.find(".wijmo-wijgrid-split-area-ne"),
@@ -11339,6 +11389,29 @@
 			return _selectedCells;
 		};
 
+		this.addColumns = function (start, end /* opt */) {
+			/// <summary>
+			/// Adds a column range to the current selection.
+			///
+			/// Usage:
+			/// 1. addColumns(0)
+			/// 2. addColumns(0, 2)
+			/// 
+			/// The result depends upon the chosen selection mode in the grid. For example, if current selection mode
+			/// does not allow multiple selection the previous selection will be removed.
+			///
+			/// Code example: selectionObj.addColumns(0);
+			/// </summary>
+			/// <param name="start" type="Number" integer="true">The index of the first column to select.</param>
+			/// <param name="end" type="Number" integer="true">The index of the last column to select. Optional.</param>
+
+			if (!end && end !== 0) {
+				end = start;
+			}
+
+			this.addRange(start, 0, end, 0xFFFFFF);
+		};
+
 		this.addRange = function (cellRange /* x0 */, y0 /* opt */, x1 /* opt */, y1 /* opt */) {
 			/// <summary>
 			/// Adds a cell range to the current selection.
@@ -11378,29 +11451,6 @@
 			this._selectRange(range, false, true, 0 /* none*/, null);
 
 			this.endUpdate();
-		};
-
-		this.addColumns = function (start, end /* opt */) {
-			/// <summary>
-			/// Adds a column range to the current selection.
-			///
-			/// Usage:
-			/// 1. addColumns(0)
-			/// 2. addColumns(0, 2)
-			/// 
-			/// The result depends upon the chosen selection mode in the grid. For example, if current selection mode
-			/// does not allow multiple selection the previous selection will be removed.
-			///
-			/// Code example: selectionObj.addColumns(0);
-			/// </summary>
-			/// <param name="start" type="Number" integer="true">The index of the first column to select.</param>
-			/// <param name="end" type="Number" integer="true">The index of the last column to select. Optional.</param>
-
-			if (!end && end !== 0) {
-				end = start;
-			}
-
-			this.addRange(start, 0, end, 0xFFFFFF);
 		};
 
 		this.addRows = function (start, end /* opt */) {
@@ -11861,7 +11911,7 @@
 
 	$.wijmo.wijgrid.cellInfoOrderedCollection = function (gridView) {
 		/// <summary>
-		/// Ordered read-only collection of a $.wijmo.wijgrid.cellInfo objects.
+		/// Creates an ordered read-only collection of $.wijmo.wijgrid.cellInfo objects.
 		/// Code example: var collection = new $.wijmo.wijgrid.cellInfoOrderedCollection(gridView);
 		/// </summary>
 		/// <param name="gridView" type="$.wijmo.wijgrid" mayBeNull="false">gridView</param>

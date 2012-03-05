@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -160,10 +160,13 @@
 		},
 
 		refresh: function () {
+			/// Use the refresh method to set the radio button's style.
 			this._refresh();
 		},
 
 		destroy: function () {
+			/// Remove the functionality completely. 
+			/// This will return the element back to its pre-init state.
 			var self = this, boxelement = self.element.parent().parent();
 			boxelement.children("div." + self._radiobuttonPre + "-box").remove();
 			self.element.unwrap();

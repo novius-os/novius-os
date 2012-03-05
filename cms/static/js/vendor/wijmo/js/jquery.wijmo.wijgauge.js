@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -12,9 +12,18 @@
  *
  *
  * * Wijmo gauge widget.
+ *
+ * Depends:
+ *	raphael.js
+ *	globalize.min.js
+ *	jquery.ui.widget.js
+ *	jquery.wijmo.raphael.js
  */
 (function ($) {
 	"use strict";
+	// do nothing if raphael not loaded
+	if (!window.Raphael) return;
+
 	Raphael.fn.isoTri = function (x, y, width, height, compass) {
 		var x1 = x,
 			y1 = y + height / 2,
@@ -108,7 +117,7 @@
 	};
 
 
-}(jQuery));
+} (jQuery));
 
 (function ($) {
 	"use strict";
@@ -159,6 +168,10 @@
 			/// Default: {position: "inside", style: { fill: "#1E395B", stroke:"none"
 			/// }, factor: 2, visible: true, marker: "rect", offset: 0, interval: 10}
 			/// Type: Object.
+			/// Code example:
+			/// $("#selector").wijgauge({
+			///		interval: 20, offset: 20
+			/// })
 			/// </summary>
 			tickMajor: {
 				/// <summary>
@@ -220,6 +233,10 @@
 			/// Default: {position: "inside", style: { fill: "#1E395B", stroke:"none"
 			/// }, factor: 1, visible: false, marker: "rect", offset: 0, interval: 5}
 			/// Type: Object.
+			/// Code example:
+			/// $("#selector").wijgauge({
+			///		tickMinor: { interval:10, offset:10 }
+			///	});
 			/// </summary>
 			tickMinor: {
 				/// <summary>
@@ -345,7 +362,7 @@
 			logarithmicBase: 10,
 			/// <summary>
 			/// A value that includes all settings of the gauge label.
-			/// Default: {format: "", style: {fill: "#1E395B", "font-size": "12pt",
+			/// Default: {format: "", style: {fill: "#1E395B", "font-size": 12,
 			/// "font-weight": "800"}, visible: true, offset: 0}.
 			/// Type: Object.
 			/// </summary>
@@ -358,12 +375,12 @@
 				format: "",
 				/// <summary>
 				/// A value that indicates the style of the gauge label.
-				/// Default: {fill: "#1E395B", "font-size": "12pt", "font-weight": "800"}.
+				/// Default: {fill: "#1E395B", "font-size": 12, "font-weight": "800"}.
 				/// Type: Object.
 				/// </summary>
 				style: {
 					fill: "#1E395B",
-					"font-size": "12pt",
+					"font-size": 12,
 					"font-weight": "800"
 				},
 				/// <summary>
@@ -401,13 +418,13 @@
 				/// <summary>
 				/// A value that indicates the style of the gauge face.
 				/// Default: {fill: "270-#FFFFFF-#D9E3F0", stroke: "#7BA0CC", 
-				/// "stroke-width": "4"}.
+				/// "stroke-width": 4}.
 				/// Type: Object.
 				/// </summary>
 				style: {
 					fill: "270-#FFFFFF-#D9E3F0",
 					stroke: "#7BA0CC",
-					"stroke-width": "4"
+					"stroke-width": 4
 				},
 				/// <summary>
 				/// A value that indicates how to draw the gauge face.
@@ -446,7 +463,65 @@
 			/// Default: [].
 			/// Type :Array.
 			/// </summary>
-			ranges: []
+			ranges: [],
+			/// <summary>
+			/// Fires before the value changs, this event can be called.
+			/// Default: null
+			/// Type: Function
+			/// Code example:
+			/// Supply a function as an option.
+			/// $("#gauge").wijgauge({
+			///		beforeValueChanged: function(e, arg){}
+			/// })
+			/// Bind to the event by type: wijgaugebeforevaluechanged
+			/// $("#gauge").bind("wijgaugebeforevaluechanged", function (e, arg) {});
+			/// </summary>
+			/// <param name="e" type="eventObj">
+			/// jQuery.Event object
+			/// </param>
+			/// <param name="arg" type="Object">
+			/// arg.oldValue: the gauge's old value.
+			/// arg.newValue: the value to be seted.
+			/// </param>
+			beforeValueChanged: null,
+			/// <summary>
+			/// Fires when the value has changed.
+			/// Default: null
+			/// Type: Function
+			/// Code example:
+			/// Supply a function as an option.
+			/// $("#gauge").wijgauge({
+			///		valueChanged: function(e, arg){}
+			/// })
+			/// Bind to the event by type: wijgaugevaluechanged
+			/// $("#gauge").bind("wijgaugevaluechanged", function (e, arg) {});
+			// </summary>
+			/// <param name="e" type="eventObj">
+			/// jQuery.Event object
+			/// </param>
+			/// <param name="arg" type="Object">
+			/// arg.oldValue: the gauge's old value.
+			/// arg.newValue: the value to be seted.
+			/// </param>
+			valueChanged: null,
+			/// <summary>
+			/// Fires before the canvas is painted. This event can be cancelled.
+			/// "return false;" to cancel the event.
+			/// Default: null.
+			/// Type: Function.
+			/// Code example:
+			/// Supply a function as an option.
+			/// $("#gauge").wijgauge({
+			/// painted: function(e){}
+			/// });
+			/// Bind to the event by type: wijgaugepainted
+			/// $("#gauge").bind("wijgaugepainted", function(e){});
+			/// </summary>
+			/// <param name="e" type="eventObj">
+			/// jQuery.Event object.
+			/// </param>
+			/// </summary>
+			painted: null
 		},
 
 		_create: function () {
@@ -461,6 +536,7 @@
 				self._setDefaultHeight();
 			}
 
+			self._setDefaultWidthHeight();
 			if (o.disabled) {
 				self.disable();
 			}
@@ -483,6 +559,23 @@
 
 		_setDefaultHeight: function () {
 		
+		},
+
+		_setDefaultWidthHeight: function () {
+			var self = this,
+				ele = self.element,
+				o = self.options,
+				style = ele.get(0).style,
+				width = style.width,
+				height = style.height;
+
+				if (width !== "") {
+					o.width = ele.width();
+				}
+				
+				if (height !== "") {
+					o.height = ele.height();
+				}
 		},
 
 		_setOption: function (key, value) {
@@ -675,6 +768,12 @@
 		},
 
 		destroy: function () {
+			/// <summary>
+			/// Remove the functionality completely. This will return the 
+			/// element back to its pre-init state.
+			/// Code example:
+			/// $("#gauge").wijgauge("destroy");
+			/// </summary>
 			var self = this;
 			
 			self._unbindEvents(self.majorMarks);
@@ -694,6 +793,8 @@
 		getCanvas: function () {
 			/// <summary>
 			/// Returns a reference to the Raphael canvas object.
+			/// Code example:
+			/// $("gauge").wijgauge("getCanvas");
 			/// </summary>
 			/// <returns type="Raphael">
 			/// Reference to raphael canvas object.

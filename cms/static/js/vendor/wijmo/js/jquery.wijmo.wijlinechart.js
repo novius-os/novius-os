@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window, Globalize*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -14,10 +14,11 @@
  * * Wijmo LineChart widget.
  *
  * Depends:
+ *	jquery.js
+ *	jquery.ui.widget.js
  *	raphael.js
  *	globalize.js
- *	jquery.ui.widget.js
- *	raphaelEx.js
+ *	jquery.wijmo.raphael.js
  *	jquery.wijmo.wijchartcore.js
  *
  */
@@ -51,6 +52,10 @@
 			/// Data holes are used as placeholders for data points 
 			/// that indicate data is normally present but not in this case.
 			/// </remarks>
+			/// Code example:
+			///  $("#linechart").wijlinechart({
+			///      hole: 100
+			///  });
 			hole: null,
 			/// <summary>
 			/// A value that indicates the type of the linechart.
@@ -58,8 +63,12 @@
 			/// Type: String.
 			/// </summary>
 			/// <remarks>
-			/// Options are 'line', 'area'.
+			/// Options are 'line' and 'area'.
 			/// </remarks>
+			/// Code example:
+			///  $("#linechart").wijlinechart({
+			///      type: "area"
+			///  });
 			type: "line",
 			/// <summary>
 			/// A value that indicates whether to show the animation
@@ -67,6 +76,10 @@
 			/// Default: {direction: "horizontal",enabled:true, 
 			/// duration:2000, easing: ">"}.
 			/// Type: Object.
+			/// Code example:
+			///  $("#linechart").wijlinechart({
+			///      animation: {direction: "vertical"}
+			///  });
 			/// </summary>
 			animation: {
 				/// <summary>
@@ -81,7 +94,7 @@
 				/// Type: String.
 				/// </summary>
 				/// <remarks>
-				/// Options are 'horizontal', 'vertical'.
+				/// Options are 'horizontal' and 'vertical'.
 				/// </remarks>
 				direction: "horizontal",
 				/// <summary>
@@ -128,7 +141,7 @@
 				easing: ">"
 			},
 			/// <summary>
-			/// Occurs when the user clicks a mouse button.
+			/// Fires when the user clicks a mouse button.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -163,7 +176,7 @@
 			///	</param>
 			mouseDown: null,
 			/// <summary>
-			/// Occurs when the user releases a mouse button
+			/// Fires when the user releases a mouse button
 			/// while the pointer is over the chart element.
 			/// Default: null.
 			/// Type: Function.
@@ -199,7 +212,7 @@
 			///	</param>
 			mouseUp: null,
 			/// <summary>
-			/// Occurs when the user first places the pointer over the chart element.
+			/// Fires when the user first places the pointer over the chart element.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -234,7 +247,7 @@
 			///	</param>
 			mouseOver: null,
 			/// <summary>
-			/// Occurs when the user moves the pointer off of the chart element.
+			/// Fires when the user moves the pointer off of the chart element.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -269,7 +282,7 @@
 			///	</param>
 			mouseOut: null,
 			/// <summary>
-			/// Occurs when the user moves the mouse pointer
+			/// Fires when the user moves the mouse pointer
 			/// while it is over a chart element.
 			/// Default: null.
 			/// Type: Function.
@@ -305,7 +318,7 @@
 			///	</param>
 			mouseMove: null,
 			/// <summary>
-			/// Occurs when the user clicks the chart element. 
+			/// Fires when the user clicks the chart element. 
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -353,6 +366,8 @@
 		},
 
 		destroy: function () {
+			///Remove the functionality completely. 
+			///This will return the element back to its pre-init state. 
 			var self = this,
 				o = self.options;
 			self.chartElement.removeClass("wijmo-wijlinechart");
@@ -375,10 +390,17 @@
 		******************************/
 		/** public methods */
 
-		/* returns reference to raphael's path object
-		for the line data with given index */
 		getLinePath: function (lineIndex) {
-			//return this.paths[lineIndex];
+			/// <summary>
+			/// Returns reference to raphael's path object
+			/// for the line data with given index
+			/// </summary>
+			/// <param name="lineIndex" type="Number">
+			/// A value that indicates the index of line.
+			/// </param>
+			/// <returns type="Raphael element">
+			/// Reference to raphael element object.
+			/// </returns>
 			var self = this,
 				fields = self.chartElement.data("fields"),
 				chartEles,
@@ -392,9 +414,17 @@
 			return und;
 		},
 
-		/* returns reference to set of the raphael's objects(circles)
-		what represents markers for the line data with given index */
 		getLineMarkers: function (lineIndex) {
+			/// <summary>
+			/// Returns reference to set of the raphael's objects
+			/// what represents markers for the line data with given index
+			/// </summary>
+			/// <param name="lineIndex" type="Number">
+			/// A value that indicates the index of line.
+			/// </param>
+			/// <returns type="Raphael element">
+			/// Reference to raphael element object.
+			/// </returns>
 			var self = this,
 				o = self.options,
 				fields = self.chartElement.data("fields"),
@@ -2230,7 +2260,9 @@
 	};
 			
 	$.wijchart._line.prototype.unbindLiveEvents = function (element, widgetName) {
-		$(".wijlinechart", element[0]).die(widgetName);
+		$(".wijlinechart", element[0]).die(widgetName)
+		// for jQuery 1.7.1
+		.die("." + widgetName);
 	};
 	
 	$.fn.extend({
