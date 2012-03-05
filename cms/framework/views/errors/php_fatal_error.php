@@ -61,7 +61,7 @@
 		var require = {
 			paths: {
 				'jquery-nos': 'static/cms/js/nos',
-				'jquery': 'static/cms/js/jquery/jquery-1.7.1.min',
+				'jquery': 'static/cms/js/vendor/jquery/jquery-1.7.1.min',
 				'jquery-ui' : 'static/cms/js/vendor/jquery-ui/jquery-ui-1.8.18.custom.min',
 				'link': 'static/cms/js/vendor/requirejs/link',
 				'order': 'static/cms/js/vendor/requirejs/order.min',
