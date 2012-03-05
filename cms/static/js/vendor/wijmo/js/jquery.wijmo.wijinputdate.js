@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -165,18 +165,7 @@
         },
 
         _strToDate: function (str) {
-            str = str.replace(/-/g, '/');
-            var date;
-            try {
-                date = new Date(str);
-                if (isNaN(date)) {
-                    date = new Date();
-                }
-            }
-            catch (e) {
-                date = new Date();
-            }
-            return date;
+            return this._textProvider.parseDate(str);
         },
 
         _beginUpdate: function () {
@@ -199,9 +188,9 @@
             if (!o.date) {
                 date = new Date();
                 if (!this.element.data('elementValue')) {
-                    this.element.data('nullDate', true);
+					this.element.data('nullDate', true);
                 } else {
-                    strDate = this.element.data('elementValue');
+					strDate = this.element.data('elementValue');
                 }
             } else {
                 if (typeof o.date === 'string') {
@@ -236,7 +225,7 @@
         _endUpdate: function () {
             var self = this;
             this.element.click(function () {
-                self.highLightCursor();
+                self._highLightCursor();
             });
 
             this.element.mousewheel(function (e, delta) {
@@ -305,23 +294,24 @@
                 case 'date':
                     if (!value) {
                         value = new Date();
-
-                        if (!this.isFocused()) {
-                            this.element.data('nullDate', true);
-                        }
+                        this.element.data('nullDate', !this.isFocused());
                     } else {
                         if (typeof value === "string") {
-                            value = value.replace(/-/g, '/');
-                        }
+							value = this._strToDate(value);
+                        } else if (typeof value === "object") {
+                            value = new Date(value.getTime());
+                        } else {
+							value = new Date(value);
+						}
 
-                        value = new Date(value);
                         if (isNaN(value)) {
                             value = new Date();
                         }
                     }
                     this._safeSetDate(value);
                     this._updateText();
-                    this.highLightField();
+                    this._highLightField();
+					
                     break;
 
                 case 'dateFormat':
@@ -334,7 +324,7 @@
                     value = Math.min(value, this._textProvider.getFieldCount() - 1);
                     value = Math.max(value, 0);
                     this.options.activeField = value;
-                    this.highLightField();
+                    this._highLightField();
                     this._resetTimeStamp();
                     break;
             }
@@ -365,19 +355,19 @@
             this.element.data('cursorPos', 0);
             this.element.data('timeStamp', new Date('1900/1/1'));
         },
-		
-		getPostValue: function(){
-			/// <summary>Gets the text value when the container form is posted back to server.</summary>
-			if (!this._isInitialized()) { return this.element.val(); }
-			if (this.options.showNullText && this.isDateNull()) { return ""; }
-			
-			var val = this._textProvider.toString();
-			if (val === this.options.nullText) { return ""; }
-			
-			return val;
-		},
 
-        highLightField: function (index) {
+        getPostValue: function () {
+            /// <summary>Gets the text value when the container form is posted back to server.</summary>
+            if (!this._isInitialized()) { return this.element.val(); }
+            if (this.options.showNullText && this.isDateNull()) { return ""; }
+
+            var val = this._textProvider.toString();
+            if (val === this.options.nullText) { return ""; }
+
+            return val;
+        },
+
+        _highLightField: function (index) {
             if (index === undefined) { index = this.options.activeField; }
             if (this.isFocused()) {
                 var range = this._textProvider.getFieldRange(index);
@@ -387,7 +377,7 @@
             }
         },
 
-        highLightCursor: function (pos) {
+        _highLightCursor: function (pos) {
             if (this._isNullText()) {
                 return;
             }
@@ -401,23 +391,23 @@
             this._setOption('activeField', index);
         },
 
-        toNextField: function () {
+        _toNextField: function () {
             this._setOption('activeField', this.options.activeField + 1);
         },
 
-        toPrevField: function () {
+        _toPrevField: function () {
             this._setOption('activeField', this.options.activeField - 1);
         },
 
-        toFirstField: function () {
+        _toFirstField: function () {
             this._setOption('activeField', 0);
         },
 
-        toLastField: function () {
+        _toLastField: function () {
             this._setOption('activeField', this._textProvider.getFieldCount());
         },
 
-        clearField: function (index) {
+        _clearField: function (index) {
             if (index === undefined) { index = this.options.activeField; }
             var range = this._textProvider.getFieldRange(index);
             if (range) {
@@ -426,11 +416,11 @@
                 this._updateText();
                 var self = this;
                 window.setTimeout(function () {
-                    self.highLightField();
+                    self._highLightField();
                 }, 1);
             }
         },
-		
+
         _doSpin: function (up, repeating) {
             up = !!up;
             repeating = !!repeating;
@@ -440,7 +430,7 @@
 
             if (this._textProvider[up ? 'incEnumPart' : 'decEnumPart']()) {
                 this._updateText();
-                this.highLightField();
+                this._highLightField();
             }
 
             if (repeating && !this.element.data('breakSpinner')) {
@@ -456,7 +446,7 @@
 
             var self = this,
 				hc = function () {
-				    self.highLightCursor();
+				    self._highLightCursor();
 				    self._resetTimeStamp();
 				};
 
@@ -467,12 +457,12 @@
             var key = e.keyCode || e.which;
             switch (key) {
                 case $.ui.keyCode.LEFT:
-                    this.toPrevField();
+                    this._toPrevField();
                     return true;
                     break;
 
                 case $.ui.keyCode.RIGHT:
-                    this.toNextField();
+                    this._toNextField();
                     return true;
                     break;
 
@@ -484,12 +474,12 @@
                 case 191: // /
                     if (e.shiftKey) {
                         if (this.options.activeField > 0) {
-                            this.toPrevField();
+                            this._toPrevField();
                             return true;
                         }
                     } else {
                         if (this.options.activeField < this._textProvider.getFieldCount() - 1) {
-                            this.toNextField();
+                            this._toNextField();
                             return true;
                         }
                     }
@@ -499,7 +489,7 @@
                     if (e.ctrlKey) {
                         this._setOption('date', new Date());
                     } else {
-                        this.toFirstField();
+                        this._toFirstField();
                     }
                     return true;
                     break;
@@ -508,22 +498,21 @@
                     if (e.ctrlKey) {
                         this._setOption('date', new Date('1970/1/1'));
                     } else {
-                        this.toLastField();
+                        this._toLastField();
                     }
                     return true;
                     break;
 
                 case $.ui.keyCode.DELETE:
-					if (this._allowEdit()) {
-						var selRange = this.element.wijtextselection();
-						if (selRange.end - selRange.start === this.element.val().length){
-							this._setOption('date', new Date('1970/1/1'));
-						} else {
-							this.clearField();
-						}
-						return true;
-					}
-                    
+                    if (this._allowEdit()) {
+                        var selRange = this.element.wijtextselection();
+                        if (selRange.end - selRange.start === this.element.val().length) {
+                            this._setOption('date', new Date('1970/1/1'));
+                        } else {
+                            this._clearField();
+                        }
+                        return true;
+                    }
                     break;
             }
 
@@ -534,7 +523,7 @@
             if (!this.options.autoNextField) { return; }
 
             if (this._textProvider.needToMove(this.options.activeField, pos, ch)) {
-                this.toNextField();
+                this._toNextField();
             }
         },
 
@@ -554,7 +543,7 @@
                 var ch = String.fromCharCode(key);
                 var fieldSep = this._textProvider.isFieldSep(ch, this.options.activeField);
                 if (fieldSep) {
-                    this.toNextField();
+                    this._toNextField();
                     this._stopEvent(e);
                     return true;
                 }
@@ -574,7 +563,7 @@
                 if (ret) {
                     this._updateText();
                     this._autoMoveToNextField(cursor, ch);
-                    this.highLightField();
+                    this._highLightField();
                 } else {
                     this._fireIvalidInputEvent();
                 }
@@ -927,7 +916,7 @@
                         if ((now.getTime() - lastTime.getTime()) > o.keyDelay) {
                             self.inputWidget._safeSetDate(o.date);
                             self.inputWidget._updateText();
-                            self.inputWidget.highLightField();
+                            self.inputWidget._highLightField();
                         } else {
                             window.setTimeout(chkBounds, o.keyDelay);
                         }
@@ -1446,24 +1435,35 @@
             return s;
         },
 
-        set: function (input, rh) {
-            if (this.pattern === 'dddd' || this.pattern === 'ddd') {
-                return false;
+        parseDate: function (str) {
+            var date;
+            if (this.pattern === 'dddd' ||
+				this.pattern === 'ddd' ||
+				typeof str == 'object') {
+                try {
+                    date = new Date(str);
+                    if (isNaN(date)) {
+                        date = new Date();
+                    }
+                }
+                catch (e) {
+                    date = new Date();
+                }
+            } else {
+                date = Globalize.parseDate(str, this.pattern, this._getCulture());
+                if (!date) {
+                    date = this._tryParseDate(str, this.pattern);
+                }
+                if (!date) {
+                    date = new Date();
+                }
             }
-            if (typeof input == 'object') {
-                this._internalSetDate(new Date(input));
-                return true;
-            }
+            return date;
+        },
 
-            var dt = this.getDateFromFormat(input, this.pattern);
-            if (!dt) {
-                dt = this._parseDate(input, this.pattern);
-            }
-            if (!!dt) {
-                this._internalSetDate(new Date(dt));
-                return true;
-            }
-            return false;
+        set: function (input, rh) {
+            this._internalSetDate(new Date(this.parseDate(input)));
+            return true;
         },
 
         haveEnumParts: function () {
@@ -1753,216 +1753,9 @@
             return null;
         },
 
-        getDateFromFormat: function (val, format) {
-            var cf = this._getCulture().calendars.standard;
-
-            var monthNames = $.merge($.merge([], cf.months.names), cf.months.namesAbbr);
-            var dayNames = $.merge($.merge([], cf.days.names), cf.days.namesShort);
-            val = val + '';
-            format = format + '';
-            var i_val = 0, i_format = 0, c = '', token = '', x = 0, y = 0, i;
-            var now = new Date(), year = now.getFullYear(), month = now.getMonth() + 1;
-            var date = 1, hh = 0, mm = 0, ss = 0, ampm = '';
-            var comment = false, escape = false;
-            while (i_format < format.length) {
-                c = format.charAt(i_format);
-                token = '';
-                while ((format.charAt(i_format) === c) && (i_format < format.length)) {
-                    token += format.charAt(i_format++);
-                    if (escape) {
-                        break;
-                    }
-                }
-                if (escape) {
-                    i_val += token.length;
-                    escape = false;
-                } else if (token === '\\') {
-                    escape = true;
-                } else if (token === '\'') {
-                    comment = !comment;
-                } else if (comment) {
-                    i_val += token.length;
-                } else if (token === 'yyyy' || token === 'yy' || token === 'y') {
-                    if (token === 'yyyy') {
-                        x = 4;
-                        y = 4;
-                    }
-                    if (token === 'yy') {
-                        x = 2;
-                        y = 2;
-                    }
-                    if (token === 'y') {
-                        x = 2;
-                        y = 4;
-                    }
-                    year = this._getInt(val, i_val, x, y);
-                    if (!year) {
-                        return 0;
-                    }
-                    i_val += (year).length;
-                    if ((year).length === 2) {
-                        if (year > 70) {
-                            year = 1900 + (year - 0);
-                        } else {
-                            year = 2000 + (year - 0);
-                        }
-                    }
-                }
-                else if (token === 'MMMM' || token === 'MMM' || token === 'NNN') {
-                    month = 0;
-                    for (i = 0; i < monthNames.length; i++) {
-                        var month_name = monthNames[i];
-                        if (val.substring(i_val, i_val + month_name.length).toLowerCase() === month_name.toLowerCase()) {
-                            if ((token === 'MMM' || token === 'MMMM') || (token === 'NNN' && i > 11)) {
-                                month = i + 1;
-                                if (month > 12) {
-                                    month = month - 12;
-                                }
-                                i_val += month_name.length;
-                                break;
-                            }
-                        }
-                    }
-                    if ((month < 1) || (month > 12)) {
-                        return 0;
-                    }
-                }
-                else if (token === 'dddd' || token === 'ddd' || token === 'EE' || token === 'E') {
-                    for (i = 0; i < dayNames.length; i++) {
-                        var day_name = dayNames[i];
-                        if (val.substring(i_val, i_val + day_name.length).toLowerCase() === day_name.toLowerCase()) {
-                            i_val += day_name.length;
-                            break;
-                        }
-                    }
-                }
-                else if (token === 'MM' || token === 'M') {
-                    month = this._getInt(val, i_val, token.length, 2);
-                    if (!month || (month < 1) || (month > 12)) {
-                        return 0;
-                    }
-                    i_val += (month).length;
-                }
-                else if (token === 'dd' || token === 'd') {
-                    date = this._getInt(val, i_val, token.length, 2);
-                    if (!date || (date < 1) || (date > 31)) {
-                        return 0;
-                    }
-                    i_val += (date).length;
-                }
-                else if (token === 'hh' || token === 'h') {
-                    hh = this._getInt(val, i_val, token.length, 2);
-                    if (!hh || (hh < 1) || (hh > 12)) {
-                        return 0;
-                    }
-                    i_val += (hh).length;
-                }
-                else if (token === 'HH' || token === 'H') {
-                    hh = this._getInt(val, i_val, token.length, 2);
-                    if (!hh || (hh < 0) || (hh > 23)) {
-                        return 0;
-                    }
-                    i_val += (hh).length;
-                }
-                else if (token === 'KK' || token === 'K') {
-                    hh = this._getInt(val, i_val, token.length, 2);
-                    if (!hh || (hh < 0) || (hh > 11)) {
-                        return 0;
-                    }
-                    i_val += (hh).length;
-                }
-                else if (token === 'kk' || token === 'k') {
-                    hh = this._getInt(val, i_val, token.length, 2);
-                    if (!hh || (hh < 1) || (hh > 24)) {
-                        return 0;
-                    }
-                    i_val += (hh).length;
-                    hh = hh - 1;
-                }
-                else if (token === 'mm' || token === 'm') {
-                    mm = this._getInt(val, i_val, token.length, 2);
-                    if (!mm || (mm < 0) || (mm > 59)) {
-                        return 0;
-                    }
-                    i_val += (mm).length;
-                }
-                else if (token === 'ss' || token === 's') {
-                    ss = this._getInt(val, i_val, token.length, 2);
-                    if (!ss || (ss < 0) || (ss > 59)) {
-                        return 0;
-                    }
-                    i_val += (ss).length;
-                }
-                else if (token === 'tt' || token === 't' || token === 'a') {
-                    if (val.substring(i_val, i_val + 2).toLowerCase() === 'am') {
-                        ampm = 'AM';
-                        i_val += 2;
-                    }
-                    else if (val.substring(i_val, i_val + 2).toLowerCase() === 'pm') {
-                        ampm = 'PM';
-                        i_val += 2;
-                    }
-                    else if (val.substring(i_val, i_val + 1).toLowerCase() === 'a') {
-                        ampm = 'AM';
-                        i_val += 1;
-                    }
-                    else if (val.substring(i_val, i_val + 1).toLowerCase() === 'p') {
-                        ampm = 'PM';
-                        i_val += 1;
-                    }
-                    else if (val.substring(i_val, i_val + cf.AM[0].length).toLowerCase() === cf.AM[0].toLowerCase()) {
-                        ampm = 'AM';
-                        i_val += cf.AM[0].length;
-                    }
-                    else if (val.substring(i_val, i_val + cf.PM[0].length).toLowerCase() === cf.PM[0].toLowerCase()) {
-                        ampm = 'PM';
-                        i_val += cf.AM[0].length;
-                    }
-                    else if (val.substring(i_val, i_val + 1).toLowerCase() === ' ') {
-                        i_val += 1;
-                    }
-                }
-                else {
-                    var chch = val.substring(i_val, i_val + token.length);
-                    if (chch !== token) {
-                        return 0;
-                    } else {
-                        i_val += token.length;
-                    }
-                }
-            }
-            if (i_val !== val.length) {
-                return 0;
-            }
-            if (month === 2) {
-                if (((!year % 4) && (year % 100)) || (!year % 400)) {
-                    if (date > 29) {
-                        return 0;
-                    }
-                }
-                else {
-                    if (date > 28) {
-                        return 0;
-                    }
-                }
-            }
-            if ((month === 4) || (month === 6) || (month === 9) || (month === 11)) {
-                if (date > 30) {
-                    return 0;
-                }
-            }
-            if (hh < 12 && ampm === 'PM') {
-                hh = hh - 0 + 12;
-            }
-            else if (hh > 11 && ampm === 'AM') {
-                hh = hh - 12;
-            }
-            var newdate = new Date(year, month - 1, date, hh, mm, ss);
-            newdate.setFullYear(year);
-            return newdate.getTime();
-        },
-
-        _parseDate: function (val, pattern) {
+        _tryParseDate: function (val, pattern) {
+            var ci = this._getCulture().calendars;
+            pattern = pattern || ci.standard.patterns.d;
             if (pattern) {
                 if (pattern.indexOf('MMM') === -1 && pattern.indexOf('MMMM') === -1) {
                     pattern = pattern.replace('MM', 'M');
@@ -1970,21 +1763,16 @@
                 pattern = pattern.replace('dd', 'd');
                 pattern = pattern.replace('tt', 'a');
             }
-            var preferEuro = false;
-            window.generalFormats = [(!pattern) ? 'y/M/d' : pattern, 'y-M-d', 'MMM d, y', 'MMM d,y', 'y-MMM-d', 'd-MMM-y', 'MMM d'];
-            window.monthFirst = ['M/d/y', 'M-d-y', 'M.d.y', 'MMM-d', 'M/d', 'M-d'];
-            window.dateFirst = ['d/M/y', 'd-M-y', 'd.M.y', 'd-MMM', 'd/M', 'd-M'];
-            var checkList = ['generalFormats', (preferEuro) ? 'dateFirst' : 'monthFirst', (preferEuro) ? 'monthFirst' : 'dateFirst'];
-            var d;
-            for (var i = 0; i < checkList.length; i++) {
-                var l = (window)[checkList[i]];
-                for (var j = 0; j < l.length; j++) {
-                    d = this.getDateFromFormat(val, l[j]);
-                    if (d) {
-                        return d;
-                    }
-                }
+
+            var pattern2 = pattern.replace('yyyy', 'yy'),
+				sep = ci.standard["/"],
+				patterns = [pattern, pattern2, pattern.replace(new RegExp(sep, 'g'), '-'), pattern2.replace(new RegExp(sep, 'g'), '-'), pattern.replace(new RegExp(sep, 'g'), '.'), pattern2.replace(new RegExp(sep, 'g'), '.')],
+				d = Globalize.parseDate(val, patterns, this._getCulture());
+
+            if (d) {
+                return d;
             }
+
             return 0;
         },
 
@@ -2409,9 +2197,8 @@
                 startYear = this._txtProvider.paddingZero(startYear, 4);
                 endYear = this._txtProvider.paddingZero(endYear, 4);
                 if (result.pos === 0 || result.pos === 1) {
-                    var curDate = new Date();
-                    //var curYear = this._txtProvider.paddingZero(curDate.getFullYear(), 4);
-                    var thisYear = this._txtProvider.paddingZero(this._txtProvider.getYear(), 4);
+                    var curDate = new Date(),
+						thisYear = this._txtProvider.paddingZero(this._txtProvider.getYear(), 4);
                     if (thisYear.charAt(0) === '0' && thisYear.charAt(1) === '0' && result.pos <= 1) {
                         var inputNum = result.val * 1;
                         var century = '00';
@@ -2803,10 +2590,10 @@
         },
 
         setText: function (value, allowchangeotherpart, result) {
-			if (result && result.isfullreset) {
-				value = '0';
+            if (result && result.isfullreset) {
+                value = '0';
             }
-		
+
             return this._txtProvider.setMinutes(value, allowchangeotherpart);
         },
 
@@ -2836,10 +2623,10 @@
         },
 
         setText: function (value, allowchangeotherpart, result) {
-			if (result && result.isfullreset) {
-				value = '0';
+            if (result && result.isfullreset) {
+                value = '0';
             }
-			
+
             return this._txtProvider.setMinutes(value, allowchangeotherpart);
         },
 
@@ -2872,8 +2659,8 @@
         },
 
         setText: function (value, allowchangeotherpart, result) {
-			if (result && result.isfullreset) {
-				value = '0';
+            if (result && result.isfullreset) {
+                value = '0';
             }
             return this._txtProvider.setSeconds(value, allowchangeotherpart);
         },
@@ -2904,8 +2691,8 @@
         },
 
         setText: function (value, allowchangeotherpart, result) {
-			if (result && result.isfullreset) {
-				value = '0';
+            if (result && result.isfullreset) {
+                value = '0';
             }
             return this._txtProvider.setSeconds(value, allowchangeotherpart);
         },

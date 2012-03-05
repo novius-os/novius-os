@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -353,6 +353,7 @@
         },
 
         widget: function () {
+            /// <summary>Gets element this widget is associated.</summary>
             return this.outerDiv;
         },
 

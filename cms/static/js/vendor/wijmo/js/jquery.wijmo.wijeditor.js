@@ -1,6 +1,6 @@
 /*globals jQuery, alert, document, window, setTimeout, $, Components, netscape */
 /*
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -674,9 +674,8 @@
 			/// </summary>
 			editorMode: "wysiwyg",
 			/// <summary>
-			/// Use this option to true if you want to switch 
-			/// editor to full screen mode.  All client area of 
-			/// the page will be covered by wijeditor if this option is true.
+			/// Use Set this option to true if you want to switch the editor to FullScreen Mode. 
+			/// All client area of the page will be covered by WebEditor. 
 			/// Default: false.
 			/// Type: Boolean.
 			/// Code example:
@@ -733,7 +732,7 @@
 			/// <summary>
 			/// Use this option to custom simple toolbar.
 			/// Default: null.
-			/// Type: array.
+			/// Type: Array.
 			/// Code example:
 			///  $("#wijeditor").wijeditor({
 			///		 mode: "simple",
@@ -1675,6 +1674,9 @@
 			});
 
 			self._addHandlerToDesignView();
+			//for adding default font style to editor by wh at 2012/1/18 
+			self._addDefaultFontStyleToDesignView();
+			//end for adding
 			self._createWijMenu();
 			//update for bbcode hiding the path by wh at 2011/9/26
 			//if (!o.showPathSelector) {
@@ -1893,7 +1895,58 @@
 				//end for change happens
 			});
 		},
+		
+		_addDefaultFontStyleToDesignView: function () {
+			var self = this,
+			o = self.options,
+			doc = self._getDesignViewDocument(),
+			defaultFontName = o.defaultFontName,
+			defaultFontSize = o.defaultFontSize,
+			defaultFontNameKey = "", defaultFontSizeKey = "",
+			defaultFontStyleString = "<style type=\"text/css\"> body {";
+			
+			if ((defaultFontName === "" || defaultFontName === null) &&
+					(defaultFontSize === "" || defaultFontSize === null)){
+				return;
+			}
+			
+			if (defaultFontName !== "" && defaultFontName !== null) {
+				defaultFontStyleString += "font-family: "+ defaultFontName +";";
+			}
+			
+			if (o.defaultFontSize !== "" && o.defaultFontSize !== null) {
+				defaultFontStyleString += " font-size: "+ defaultFontSize +";";
+			}
+			
+			defaultFontStyleString += "}</style>";
+			
+			//update for fix issue 19693 by wh at 2012/2/3
+			//$(defaultFontStyleString).appendTo(doc.head);
+			window.setTimeout(function () {
+				$(defaultFontStyleString).appendTo($("head",doc));
+				}, 200);
+			//end for issue 19693
+			
+			//init the button state			
+			self._setFontStyleButtonState(defaultFontName,cmd_fontname);
+			self._setFontStyleButtonState(defaultFontSize,cmd_fontsize);
+		},
 
+		_setFontStyleButtonState:function (defaultValue, cmd) {
+			var defaultKey = "";
+			if (!defaultValue || defaultValue === null) {
+				return;
+			}
+			$.each($ribbon.wijribbon("getDropdownList", cmd),
+					function (key, value) {
+						if (value.toUpperCase() === defaultValue.toUpperCase()) {
+							defaultKey = key;
+							return false;
+						}
+					});
+					$ribbon.wijribbon(setButtonChecked, defaultKey, true, cmd);
+		},
+		
 		_setDesignModeForFF: function (self) {
 			self._getDesignViewDocument().designMode = "on";
 		},
@@ -1901,6 +1954,7 @@
 		destroy: function () {
 			///	<summary>
 			///		Destroy Editor widget and reset the DOM element.
+			/// Code Example: $("#wijeditor").wijeditor("destroy");
 			///	</summary>
 			var self = this;
 
@@ -2403,12 +2457,15 @@
 			}
 
 			contentHeight = self.editor.height() -
-				header.height() - footer.height();
+				header.outerHeight(true) - footer.outerHeight(true);
 
 			content.height(contentHeight)
 					.wijsplitter("refresh");
 
 			self._addHandlerToDesignView();
+			//for adding default font style to editor by wh at 2012/1/18 
+			self._addDefaultFontStyleToDesignView();
+			//end for adding
 			//update: contextmenu don't show when fullscreen mode
 			//update by wh at 2011/10/10
 			
@@ -3640,7 +3697,31 @@
 				$("." + css_tpl_desfield, $dlg).val(template.desc);
 			}
 		},
-
+		
+		refresh: function () {
+			///<summary>
+			///Adjust the editor layout.
+			/// Code Example:$("#wijeditor").wijeditor("refresh");
+			///</summary>
+			var self = this,
+			element = self.element,
+			header = self._getHeader(),
+			footer = self._getFooter(),
+			width = element.width(),
+			height = element.height(),
+			content = self._getContent(),
+			contentHeight;		
+			
+			self.editor.width(width).height(height);
+			
+			$ribbon.wijribbon("updateRibbonSize");
+			contentHeight = self.editor.height() -
+			header.outerHeight(true) - footer.outerHeight(true);
+			
+			content.height(contentHeight)
+			.wijsplitter("refresh");
+		},
+		
 		_onSaveTemplate: function (arg) {
 			this._triggerEvent("saveTemplate", arg);
 		},
@@ -3806,7 +3887,7 @@
 			wijWindow.setTimeout(function () {
 				$("." + css_imgdlg_width + " input", $dlg).val($('img', $dlg).width());
 				$("." + css_imgdlg_height + " input", $dlg).val($('img', $dlg).height());
-			}, 40);
+			}, 200);
 		},
 
 		submitInsertImageDialog: function () {

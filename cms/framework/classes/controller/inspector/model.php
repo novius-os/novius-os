@@ -15,7 +15,7 @@ use \Format;
 use \View;
 use \Config;
 
-class Controller_Inspector_Model extends \Controller {
+class Controller_Inspector_Model extends Controller_Extendable {
 
     protected $config = array(
         'model' => '',
@@ -43,57 +43,40 @@ class Controller_Inspector_Model extends \Controller {
 			));
 		}
 
-    	$offset = intval(Input::get('offset', 0));
-    	$limit = intval(Input::get('limit', $this->config['limit']));
-    	$items = array();
+	    $config = $this->config;
+	    $where = function($query) use ($config) {
+		    Filter::apply($query, $config);
 
-    	$model = $this->config['query']['model'];
+		    return $query;
+	    };
 
-    	$query = $model::find();
-        Filter::apply($query, $this->config);
-    	if (isset($this->config['query']['related']) && is_array($this->config['query']['related'])) {
-	    	foreach ($this->config['query']['related'] as $related) {
-	    		$query->related($related);
-	    	}
-    	}
+	    $return = $this->items(array_merge($this->config['query'], array(
+		    'callback' => array($where),
+		    'dataset' => $this->config['dataset'],
+		    'lang' => Input::get('lang', null),
+		    'limit' => intval(Input::get('limit', $this->config['limit'])),
+		    'offset' => intval(Input::get('offset', 0)),
+	    )));
 
-        if ($this->config['order_by']) {
-            $orders_by = $this->config['order_by'];
-            if (!is_array($order_by)) {
-                $orders_by = array($orders_by);
-            }
-            foreach ($orders_by as $order_by => $direction) {
-                if (!is_string($order_by)) {
-                    $order_by = $direction;
-                    $direction = 'ASC';
-                }
-                $query->order_by($order_by, $direction);
-            }
-        }
-    	$count = $query->count();
+	    $json = array(
+		    'get' => '',
+		    'query' =>  '',
+		    'query2' =>  '',
+		    'offset' => $return['offset'],
+		    'items' => $return['items'],
+		    'total' => $return['total'],
+	    );
 
-    	foreach ($query->rows_limit($limit)->rows_offset($offset)->get() as $object) {
-    		$item = array();
-    		foreach ($this->config['dataset'] as $key => $data) {
-    			if (is_callable($data)) {
-    				$item[$key] = $data($object);
-    			} else {
-    				$item[$key] = $object->{$data};
-    			}
-    		}
-    		$items[] = $item;
-    	}
+	    if (\Fuel::$env === \Fuel::DEVELOPMENT) {
+		    $json['get'] = Input::get();
+		    $json['query'] = $return['query'];
+		    $json['query2'] = $return['query2'];
+	    }
+	    if (\Input::get('debug') !== null) {
+		    \Debug::dump($json);
+		    exit();
+	    }
 
-    	$response = \Response::forge(\Format::forge()->to_json(array(
-			'get' => \Fuel::$env === \Fuel::DEVELOPMENT ? Input::get() : '',
-    		'query' => \Fuel::$env === \Fuel::DEVELOPMENT ? (string) $query->get_query() : '',
-    		'offset' => $offset,
-    		'items' => $items,
-    		'total' => $count,
-    	)), 200, array(
-    		'Content-Type' => 'application/json',
-    	));
-    	$response->send(true);
-    	exit();
+	    \Response::json($json);
     }
 }

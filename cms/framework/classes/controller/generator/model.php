@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -31,7 +31,7 @@ class Controller_Generator_Model extends Controller_Generic_Admin {
 		\Asset::add_path('static/cms/');
 		\Asset::add_path('static/cms/js/vendor/wijmo/');
 		\Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-		\Asset::css('jquery.wijmo-complete.all.2.0.0b2.min.css', array(), 'css');
+		\Asset::css('jquery.wijmo-complete.all.2.0.0.min.css', array(), 'css');
 		\Asset::css('base.css', array(), 'css');
 
         return parent::after($response);

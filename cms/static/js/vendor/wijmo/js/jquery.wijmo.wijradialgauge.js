@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -12,6 +12,14 @@
  *
  *
  * * Wijmo RadialGauge widget.
+ *
+ * Depends:
+ *  jQuery.1.5.1.js
+ *  jQuery.ui.core.js
+ *  jQuery.ui.widget.js
+ *	raphael.js
+ *	globalize.min.js
+ *	jquery.wijmo.raphael.js
  */
 (function ($) {
 	"use strict";
@@ -78,12 +86,12 @@
 			labels: {
 				/// <summary>
 				/// A value that indicates the style of the gauge label.
-				/// Default: {fill: "#1E395B", "font-size": "12pt", "font-weight": "800"}.
+				/// Default: {fill: "#1E395B", "font-size": 12, "font-weight": "800"}.
 				/// Type: Object.
 				/// </summary>
 				style: {
 					fill: "#1E395B",
-					"font-size": "12pt",
+					"font-size": 12,
 					"font-weight": "800"
 				},
 				/// <summary>
@@ -155,13 +163,13 @@
 				offset: 27,
 				/// <summary>
 				/// A value that indicates the style of minor tick mark.
-				/// Default: {fill: "#1E395B", stroke: "#1E395B", "stroke-width": "1"}.
+				/// Default: {fill: "#1E395B", stroke: "#1E395B", "stroke-width": 1}.
 				/// Type: Object.
 				/// </summary>
 				style: {
 					fill: "#1E395B",
 					stroke: "#1E395B",
-					"stroke-width": "1"
+					"stroke-width": 1
 				},
 				/// <summary>
 				/// A value that indicates whether show the minor tick.
@@ -226,13 +234,13 @@
 				/// <summary>
 				/// A value that indicates the style of the gauge face.
 				/// Default: {fill: ""r(0.9, 0.60)#FFFFFF-#D9E3F0"", 
-				/// stroke: "#7BA0CC", "stroke-width": "4"}.
+				/// stroke: "#7BA0CC", "stroke-width": 4}.
 				/// Type: Object.
 				/// </summary>
 				style: {
 					fill: "r(0.9, 0.60)#FFFFFF-#D9E3F0",
 					stroke: "#7BA0CC",
-					"stroke-width": "4"
+					"stroke-width": 4
 				}
 			}
 		},

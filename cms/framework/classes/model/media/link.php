@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Model_Media_Link extends \Orm\Model {
+class Model_Media_Link extends \Cms\Orm\Model {
     protected static $_table_name = 'os_media_link';
     protected static $_primary_key = array('medil_id');
 

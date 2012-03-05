@@ -13,7 +13,7 @@ namespace Cms;
 use Fuel\Core\File;
 use Fuel\Core\View;
 
-class Controller_Tray_Plugins extends Controller_Generic_Admin {
+class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
 
     public function action_index() {
 
@@ -23,6 +23,7 @@ class Controller_Tray_Plugins extends Controller_Generic_Admin {
         $plugins['local'] = File::read_dir($LOCAL, 1);
 
         foreach ($plugins['local'] as $plugin => $foo) {
+			$plugin = trim($plugin, '/\\');
             $metadata = @include $LOCAL.$plugin.DS.'config'.DS.'metadata.php';
 			unset($plugins['local'][$plugin]);
             $plugins['local'][trim($plugin, '/\\')] = $metadata;
@@ -61,8 +62,6 @@ class Controller_Tray_Plugins extends Controller_Generic_Admin {
         $this->template->body->set('installed', $app_installed);
         $this->template->body->set('others', $app_others);
         $this->template->body->set('allow_upload', \Config::get('allow_plugin_upload', false));
-
-		return $this->template;
     }
 
 	public function action_add($app) {

@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -13,21 +13,21 @@
 require(['domReady'], function (domReady) {
 	domReady(function () {
 		$nos.nos.tabs.update({
-			label : '<?= !empty($user) ? $user->user_fullname : $group->group_name ?>',
+			label : '<?= !empty($user) ? $user->fullname() : $group->group_name ?>',
 			iconUrl : 'static/cms/img/icons/tick.png'
 		});
 	});
 });
 </script>
 
-<h1>Modify permissions for <?= !empty($user) ? 'user '.$user->user_fullname : $group->group_name ?></h1>
+<h1>Modify permissions for <?= !empty($user) ? 'user '.$user->fullname() : $group->group_name ?></h1>
 
 <form action="" method="POST">
   <input type="hidden" name="group_id" value="<?= $group->group_id ?>" />
 
 <?php
 foreach ($apps as $app => $perms) {
-	
+
 	\Config::load("$app::permissions", true);
 	$keys = \Config::get("$app::permissions", array());
 	if (empty($keys)) {
@@ -46,7 +46,7 @@ foreach ($apps as $app => $perms) {
         echo $driver->display($group);
 	}
 	?>
-	   <input type="submit" value="Modify the permissions of <?= $apps[$app]['name']; /*?> <?= !empty($user) ? 'user '.$user->user_fullname : $group->group_name */ ?>">
+	   <input type="submit" value="Modify the permissions of <?= $apps[$app]['name']; /*?> <?= !empty($user) ? 'user '.$user->fullname() : $group->group_name */ ?>">
 	</div>
 <?php
 }

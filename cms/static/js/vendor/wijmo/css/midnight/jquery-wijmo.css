@@ -1897,3 +1897,12 @@ div.wijmo-wijribbon-simple span.ui-icon, div.wijmo-wijribbon .ui-state-active .u
 {
     background: none;
 }
+/*fix for 19332 : [C1EventsCalendar] Borders and lines of time slot are not displayed clearly when “Theme” is set as midnight:*/
+.wijmo-wijev-view .ui-widget-content
+{
+    border-color: #838388;
+}
+div.wijmo-wijev .wijmo-wijev-view .ui-state-highlight
+{	
+	background-color: #515152;
+}

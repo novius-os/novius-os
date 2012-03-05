@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window, Globalize*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -907,7 +907,8 @@
 				if (content) {
 					// content.translate(0, titleBox.height / 2 +
 					// contentBox.height / 2);
-					content.transform(Raphael.format("...T0,{0}", titleBox.height / 2 + contentBox.height / 2));
+					content.transform(Raphael.format("...T0,{0}", 
+					titleBox.height / 2 + contentBox.height / 2));
 				}
 				if (o.closeBehavior === "sticky") {
 					closeBtn = self.closeBtn(-1000, -1000, closeBtnLength);
@@ -916,15 +917,18 @@
 							o.width > contentBox.width + closeBtnLength * 2) {
 						// closeBtn.translate(o.width - closeBtnLength,
 						// closeBtnLength);
-						closeBtn.transform(Raphael.format("...T{0},{1}", o.width - closeBtnLength, closeBtnLength));
+						closeBtn.transform(Raphael.format("...T{0},{1}", 
+						o.width - closeBtnLength, closeBtnLength));
 					} else if (titleBox.width >= contentBox.width - closeBtnLength * 2) {
 						// closeBtn.translate(titleBox.width +
 						// closeBtnLength, closeBtnLength);
-						closeBtn.transform(Raphael.format("...T{0},{1}", titleBox.width + closeBtnLength, closeBtnLength));
+						closeBtn.transform(Raphael.format("...T{0},{1}", 
+						titleBox.width + closeBtnLength, closeBtnLength));
 					} else {
 						// closeBtn.translate(contentBox.width -
 						// closeBtnLength, closeBtnLength);
-						closeBtn.transform(Raphael.format("...T{0},{1}", contentBox.width - closeBtnLength, closeBtnLength));
+						closeBtn.transform(Raphael.format("...T{0},{1}", 
+						contentBox.width - closeBtnLength, closeBtnLength));
 					}
 
 					// bind click event.
@@ -1014,7 +1018,8 @@
 					elements.push(container);
 					ox = newPoint.x - lastPoint.x;
 					oy = newPoint.y - lastPoint.y;
-					anim = Raphael.animation({transform: Raphael.format("...T{0},{1}", ox, oy)}, duration);
+					anim = Raphael.animation({ transform: Raphael
+					.format("...T{0},{1}", ox, oy)}, duration);
 					if (container) {
 						// container.animate({ "translation": ox + "," + oy },
 						// duration);
@@ -1304,7 +1309,9 @@
 					}
 				}
 				if (selector) {
-					selector.die("Rtooltip");
+					selector.die("Rtooltip")
+					// for jQuery 1.7.1
+					.die(".Rtooltip");
 				}
 			},
 
@@ -1609,7 +1616,7 @@
 			// / Type: Number.
 			// / Code example:
 			// / $("#chartcore").wijchartcore({
-			// / marginTop: 25
+			// / marginTop: 20
 			// / });
 			// / </summary>
 			marginTop: 25,
@@ -1619,7 +1626,7 @@
 			// / Type: Number.
 			// / Code example:
 			// / $("#chartcore").wijchartcore({
-			// / marginRight: 25
+			// / marginRight: 20
 			// / });
 			// / </summary>
 			marginRight: 25,
@@ -1629,7 +1636,7 @@
 			// / Type: Number.
 			// / Code example:
 			// / $("#chartcore").wijchartcore({
-			// / marginBottom: 25
+			// / marginBottom: 20
 			// / });
 			// / </summary>
 			marginBottom: 25,
@@ -1639,7 +1646,7 @@
 			// / Type: Number.
 			// / Code example:
 			// / $("#chartcore").wijchartcore({
-			// / marginLeft: 25
+			// / marginLeft: 20
 			// / });
 			// / </summary>
 			marginLeft: 25,
@@ -1647,6 +1654,10 @@
 			// / A value that indicates the style of the chart text.
 			// / Default: {fill:"#888", "font-size": 10, stroke:"none"}.
 			// / Type: Object.
+			// / Code example:
+			// / $("#chartcore").wijchartcore({
+			// / textStyle: {fill: "red"}
+			// / });
 			// / </summary>
 			textStyle: {
 				fill: "#888",
@@ -1656,7 +1667,7 @@
 			// / <summary>
 			// / An object that value indicates the header of the chart element.
 			// / Type: Object.
-			// / Default: {visible:true, style:{fill:"none", stroke:"none"},
+			// / Default: { text:"",visible:true, style:{fill:"none", stroke:"none"},
 			// / textStyle:{"font-size": 18, fill:"#666", stroke:"none"},
 			// / compass:"north", orientation:"horizontal"}
 			// / Code example:
@@ -1723,7 +1734,7 @@
 			// / <summary>
 			// / An object value that indicates the footer of the chart element.
 			// / Type: Object.
-			// / Default: {visible:false, style:{fill:"#fff", stroke:"none"},
+			// / Default: {text:"",visible:false, style:{fill:"#fff", stroke:"none"},
 			// / textStyle:{fille:"#000", stroke:"none"}, compass:"south",
 			// / orientation:"horizontal"}
 			// / Code example:
@@ -1814,7 +1825,7 @@
 				// / <summary>
 				// / A value that indicates the text margin of the legend item.
 				// / Default: {left:2, top:2, right:2, bottom:2}.
-				// / Type: Number.
+				// / Type: Object.
 				// / </summary>
 				textMargin: { left: 2, top: 2, right: 2, bottom: 2 },
 				// / <summary>
@@ -1875,7 +1886,7 @@
 			// / A value that provides information about the axes.
 			// / Default: {x:{alignment:"center",
 			// / style:{stroke:"#999999","stroke-width":0.5}, visible:true,
-			// / textVisible:true, textStyle:{fill: "#888", "font-size": 15,
+			// / textVisible:true, text:"", textStyle:{fill: "#888", "font-size": 15,
 			// / "font-weight": "bold"},labels: {style: {fill: "#333",
 			// / "font-size": 11},textAlign: "near", width: null},
 			// / compass:"south",
@@ -1885,28 +1896,32 @@
 			// / style:{stroke:"#CACACA","stroke-dasharray":"- "}}},
 			// / tickMajor:{position:"none",style:{fill:"black"},factor:1},
 			// / tickMinor:{position:"none",style:{fill:"black"},factor:1},
-			// / annoMethod:"values",valueLabels:[]},
+			// / annoMethod:"values", annoFormatString:"",valueLabels:[]},
 			// / y:{alignment:"center",style:{stroke: "#999999",
-			// / "stroke-width": 0.5},visible:false, textVisible:true,
+			// / "stroke-width": 0.5},visible:false, text:"", textVisible:true,
 			// / textStyle: {fill: "#888","font-size": 15,
 			// / "font-weight": "bold"},labels: {style: {fill: "#333",
 			// / "font-size": 11},textAlign: "center", width: null},
 			// / compass:"west",
 			// / autoMin:true,autoMax:true,autoMajor:true,autoMinor:true,
 			// / gridMajor:{visible:true, style:{stroke:"#999999",
-			// / "stroke-width": "0.5","stroke-dasharray":"none"}}},
+			// / "stroke-width": 0.5,"stroke-dasharray":"none"}}},
 			// / gridMinor:{visible:false, style:{stroke:"#CACACA",
 			// / "stroke-dasharray":"- "}}},tickMajor:{position:"none",
 			// / style:{fill:"black"},factor:1},tickMinor:{position:"none",
 			// /
-			// style:{fill:"black"},factor:1},annoMethod:"values",valueLabels:[]}.
+			// style:{fill:"black"},factor:1},annoMethod:"values", annoFormatString:"",valueLabels:[]}.
 			// / Type: Object.
+			// / Code example:
+			// / $("#chartcore").wijchartcore({axis:{
+			// /	x: { text:"x" }, y: { text: "y" }
+			// / }}) 
 			// / </summary>
 			axis: {
 				// / <summary>
 				// / A value that provides information for the X axis.
 				// / Default: {alignment:"center",style:{stroke:"#999999",
-				// / "stroke-width":0.5}, visible:true, textVisible:true,
+				// / "stroke-width":0.5}, visible:true, text:"", textVisible:true,
 				// / textStyle:{fill: "#888", "font-size": 15,
 				// / "font-weight": "bold"}, labels: {style: {fill: "#333",
 				// / "font-size": 11},textAlign: "near", width: null},
@@ -1917,7 +1932,7 @@
 				// / style:{stroke:"#CACACA","stroke-dasharray":"- "}}},
 				// / tickMajor:{position:"none",style:{fill:"black"},factor:1},
 				// / tickMinor:{position:"none",style:{fill:"black"},factor:1},
-				// / annoMethod:"values",valueLabels:[]}.
+				// / annoMethod:"values", annoFormatString:"",valueLabels:[]}.
 				// / Type: Object.
 				// / </summary>
 				x: {
@@ -2227,18 +2242,18 @@
 				// / A value that provides infomation for the Y axis.
 				// / Default: {alignment:"center",style:{stroke: "#999999",
 				// / "stroke-width": 0.5},visible:false, textVisible:true,
-				// / textStyle: {fill: "#888","font-size": 15,
+				// / text:"", textStyle: {fill: "#888","font-size": 15,
 				// / "font-weight": "bold"}, labels: {style: {fill: "#333",
 				// / "font-size": 11},textAlign: "center", width: null},
 				// / compass:"west",
 				// / autoMin:true,autoMax:true,autoMajor:true,autoMinor:true,
 				// / gridMajor:{visible:true, style:{stroke:"#999999",
-				// / "stroke-width": "0.5", "stroke-dasharray":"none"}}},
+				// / "stroke-width": 0.5, "stroke-dasharray":"none"}}},
 				// / gridMinor:{visible:false, style:{stroke:"#CACACA",
 				// / "stroke-dasharray":"- "}}},tickMajor:{position:"none",
 				// / style:{fill:"black"},factor:1},tickMinor:{position:"none",
 				// / style:{fill:"black"},factor:1},annoMethod:"values",
-				// / valueLabels:[]}
+				// / annoFormatString:"", valueLabels:[]}
 				// / Type: Object.
 				// / </summary>
 				y: {
@@ -2403,7 +2418,7 @@
 					// / A value that provides information for the major grid
 					// line.
 					// / Default: {visible:true, style:{stroke:"#999999",
-					// / "stroke-width": "0.5","stroke-dasharray":"none"}}.
+					// / "stroke-width": 0.5,"stroke-dasharray":"none"}}.
 					// / Type: Object.
 					// / </summary>
 					gridMajor: {
@@ -2417,13 +2432,13 @@
 						// / <summary>
 						// / A value that indicates the style of the major grid
 						// line.
-						// / Default: {stroke:"#999999", "stroke-width": "0.5",
+						// / Default: {stroke:"#999999", "stroke-width": 0.5,
 						// / "stroke-dasharray": "none"}.
 						// / Type: Object.
 						// / </summary>
 						style: {
 							stroke: "#999999",
-							"stroke-width": "0.5",
+							"stroke-width": 0.5,
 							"stroke-dasharray": "none"
 						}
 					},
@@ -2556,12 +2571,12 @@
 			// / style: {fill: "#000000", "stroke-width": "2"},
 			// / animated: "fade", showAnimated: "fade", hideAnimated: "fade",
 			// / duration: 120, showDuration: 120, hideDuration: 120,
-			// / showDelay: 150, hideDelay: 150, easing: "",
+			// / showDelay: 0, hideDelay: 150, easing: "",
 			// / showEasing: "", hideEasing: "",
 			// / compass:"north", offsetX: 0, offsetY: 0,
 			// / showCallout: true, calloutFilled: false,
 			// / calloutFilledStyle: {fill: "#000"}}.
-			// / Type: Function.
+			// / Type: Object.
 			// / Code example:
 			// / $("#chartcore").wijchartcore({
 			// / hint: {
@@ -2615,13 +2630,13 @@
 				},
 				// / <summary>
 				// / A value that indicates the style of container.
-				// / Default: {fill: "270-#333333-#000000", "stroke-width":
-				// "2"}.
+				// / Default: {fill: "#000000", "stroke-width":
+				// 2}.
 				// / Type: Object.
 				// / </summary>
 				style: {
 					fill: "#000000",
-					"stroke-width": "2"
+					"stroke-width": 2
 				},
 				// / <summary>
 				// / A value that indicates the effect during show or hide
@@ -2746,7 +2761,7 @@
 			// / Type: Boolean.
 			// / Code example:
 			// / $("#chartcore").wijchartcore({
-			// / showChartLabels:true
+			// / showChartLabels:false
 			// / });
 			// / </summary>
 			showChartLabels: true,
@@ -2754,12 +2769,20 @@
 			// / A value that indicates style of the chart labels.
 			// / Default: {}.
 			// / Type: Object.
+			// / Code example:
+			// / $("#chartcore").wijchartcore({
+			// / chartLabelStyle: {fill: "red"}
+			// / });
 			// / </summary>
 			chartLabelStyle: {},
 			// / <summary>
 			// / A value that indicates the format string of the chart labels.
 			// / Default: "".
 			// / Type: String.
+			// / Code example:
+			// / $("#chartcore").wijchartcore({
+			// / chartLabelFormatString: "n0"
+			// / });
 			// / </summary>
 			chartLabelFormatString: "",
 			// / <summary>
@@ -2779,12 +2802,12 @@
 			// / Type: Boolean.
 			// / Code example:
 			// / $("#chartcore").wijchartcore({
-			// / shadow:true
+			// / shadow: false
 			// / });
 			// / </summary>
 			shadow: true,
 			// / <summary>
-			// / Occurs before the series changes. This event can be cancelled.
+			// / Fires before the series changes. This event can be cancelled.
 			// / "return false;" to cancel the event.
 			// / Default: null.
 			// / Type: Function.
@@ -2799,7 +2822,7 @@
 			// / </param>
 			beforeSeriesChange: null,
 			// / <summary>
-			// / Occurs when the series changes.
+			// / Fires when the series changes.
 			// / Default: null.
 			// / Type: Function.
 			// / </summary>
@@ -2811,7 +2834,7 @@
 			// / </param>
 			seriesChanged: null,
 			// / <summary>
-			// / Occurs before the canvas is painted. This event can be
+			// / Fires before the canvas is painted. This event can be
 			// cancelled.
 			// / "return false;" to cancel the event.
 			// / Default: null.
@@ -2822,7 +2845,7 @@
 			// / </param>
 			beforePaint: null,
 			// / <summary>
-			// / Occurs after the canvas is painted.
+			// / Fires after the canvas is painted.
 			// / Default: null.
 			// / Type: Function.
 			// / </summary>
@@ -3065,13 +3088,17 @@
 		},
 
 		destroy: function () {
+			///Remove the functionality completely. 
+			///This will return the element back to its pre-init state. 
 			var self = this;
 			self._unbindLiveEvents();
 			self._clearChartElement();
 			self.chartElement.removeClass("ui-widget");
 
 			$(".wijchart-canvas-object", self.chartElement[0])
-				.die(self.widgetName);
+				.die(self.widgetName)
+				// for jQuery 1.7.1
+				.die("." + self.widgetName);
 
 			if (self.element !== self.chartElement) {
 				self.chartElement.remove();
@@ -3138,11 +3165,14 @@
 		},
 
 		beginUpdate: function () {
+			///Suspend automatic updates to the chart while reseting the options.
 			var self = this;
 			self.updating++;
 		},
 
 		endUpdate: function () {
+			///Restore automatic updates to the chart after 
+			///the options has been reset.
 			var self = this;
 			self.updating--;
 			self.redraw();
@@ -3185,6 +3215,7 @@
 			self._paint();
 		},
 
+		/*
 		getSVG: function () {
 			if (Raphael.type === "SVG") {
 				return this.chartElement.html();
@@ -3218,6 +3249,7 @@
 			form.submit();
 			document.body.removeChild(form);
 		},
+		*/
 
 		/** Private methods */
 		_parseTable: function () {
@@ -3505,7 +3537,8 @@
 					box.width + 2 * headerMargin,
 					box.height + 2 * headerMargin
 				);
-				$.wijraphael.addClass($(headerContainer.node), "wijchart-header-container");
+				$.wijraphael.addClass($(headerContainer.node), 
+				"wijchart-header-container");
 				headerContainer.attr(header.style);
 				headerContainer.toBack();
 
@@ -3553,7 +3586,8 @@
 					box.width + 2 * footerMargin,
 					box.height + 2 * footerMargin
 				);
-				$.wijraphael.addClass($(footerContainer.node), "wijchart-footer-container");
+				$.wijraphael.addClass($(footerContainer.node), 
+				"wijchart-footer-container");
 
 				footerContainer.attr(footer.style);
 				footerContainer.toBack();
@@ -3583,9 +3617,9 @@
 			var self = this,
 				o = self.options,
 				legend = $.extend(true, {size: {
-						width: 22,
-						height: 10
-					}}, o.legend),
+					width: 22,
+					height: 10
+				}}, o.legend),
 				legendMargin = 2,
 				seriesStyles = o.seriesStyles,
 				tempSeriesList = [].concat(o.seriesList),
@@ -3654,13 +3688,15 @@
 					// if (series.legendEntry) {
 					if (series.legendEntry && series.display !== "exclude") {
 						text = self._text(0, 0, series.label);
-						$.wijraphael.addClass($(text.node), "wijchart-legend-text wijchart-legend");
+						$.wijraphael.addClass($(text.node), 
+						"wijchart-legend-text wijchart-legend");
 						textStyle = $.extend(true, {}, o.textStyle, legend.textStyle);
 						text.attr(textStyle);
 						self.legends.push(text);
 						chtStyle = $.extend(chartStyle, { "stroke-width": 1 });
 						icon = self.canvas.rect(0, 0, iconWidth, iconHeight);
-						$.wijraphael.addClass($(icon.node), "wijchart-legend-icon wijchart-legend");
+						$.wijraphael.addClass($(icon.node), 
+						"wijchart-legend-icon wijchart-legend");
 						icon.attr(chtStyle);
 						self.legendIcons.push(icon);
 						legendIconStyles.push(chtStyle);
@@ -3783,7 +3819,8 @@
 				icon.wijRemove();
 				icon = self.canvas.rect(x, iconY, iconWidth, iconHeight);
 				$(icon.node).data("index", seriesIdx);
-				$.wijraphael.addClass($(icon.node), "wijchart-legend-icon wijchart-legend");
+				$.wijraphael.addClass($(icon.node), 
+				"wijchart-legend-icon wijchart-legend");
 				self.legendIcons[idx] = icon;
 				chtStyle = legendIconStyles[idx];
 				if (chtStyle) {
@@ -3792,7 +3829,8 @@
 
 				// leg.translate(x + iconWidth + legendMargin + bBox.width / 2,
 				// y);
-				leg.transform(Raphael.format("...T{0},{1}", x + iconWidth + legendMargin + bBox.width / 2, y));
+				leg.transform(Raphael.format("...T{0},{1}", 
+				x + iconWidth + legendMargin + bBox.width / 2, y));
 				leg.toFront();
 				$(leg.node).data("index", seriesIdx);
 
@@ -3947,15 +3985,85 @@
 				axisTextOffset = 2,
 				xTextBounds = null,
 				yTextBounds = null,
-				extremeValue = null,
+				extremeValue = {},
 				maxtries = 5,
 				offsetX = 0,
-				offsetY = 0;
+				offsetY = 0,
+				isMultiYAxis = $.isArray(axisOption.y),
+				yAxisCount = 0, yIdx, yaxisOpt, key;
 
 			self._applyMargins();
+
+			self.isMultiYAxis = isMultiYAxis;
 			
 			if (self._isSeriesDataEmpty()) {
 				return;
+			}
+
+			if (isMultiYAxis) {
+				$.each(axisOption.y, function (i, yaxis) {
+					axisOption.y[i] = $.extend(true, {
+						alignment: "center",
+						style: {
+							stroke: "#999999",
+							"stroke-width": 0.5
+						},
+						visible: false,
+						textVisible: true,
+						text: "",
+						textStyle: {
+							fill: "#888",
+							"font-size": 15,
+							"font-weight": "bold"
+						},
+						labels: {
+							style: {
+								fill: "#333",
+								"font-size": 11
+							},
+							textAlign: "center",
+							width: null
+						},
+						compass: "west",
+						autoMin: true,
+						autoMax: true,
+						min: null,
+						max: null,
+						origin: null,
+						autoMajor: true,
+						autoMinor: true,
+						unitMajor: null,
+						unitMinor: null,
+						gridMajor: {
+							visible: true,
+							style: {
+								stroke: "#999999",
+								"stroke-width": "0.5",
+								"stroke-dasharray": "none"
+							}
+						},
+						gridMinor: {
+							visible: false,
+							style: {
+								stroke: "#CACACA",
+								"stroke-dasharray": "- "
+							}
+						},
+						tickMajor: {
+							position: "none",
+							style: { fill: "black" },
+							factor: 1
+						},
+						tickMinor: {
+							position: "none",
+							style: { fill: "black" },
+							factor: 1
+						},
+						annoMethod: "values",
+						annoFormatString: "",
+						valueLabels: []
+					}, yaxis);
+				});
 			}
 
 			if (self._hasAxes()) {
@@ -3965,8 +4073,6 @@
 					self.canvasBounds = self.innerState.canvasBounds;
 				} else {
 					xTextBounds = self._applyAxisText(axisOption.x, {});
-					yTextBounds = self._applyAxisText(axisOption.y, {});
-
 					self.axisInfo = {
 						x: {
 							id: "x",
@@ -3986,7 +4092,35 @@
 							autoMajor: true,
 							autoMinor: true
 						},
-						y: {
+						y: {}
+					};
+
+					if (isMultiYAxis) {
+						$.each(axisOption.y, function (i, axisY) {
+							yTextBounds = self._applyAxisText(axisY, {});
+							self.axisInfo.y[i.toString()] = {
+								id: "y" + i,
+								tprec: 0,
+								isTime: false,
+								offset: 0,
+								vOffset: 0,
+								max: 0,
+								min: 0,
+								majorTickRect: null,
+								minorTickRect: null,
+								annoFormatString: null,
+								textBounds: yTextBounds,
+								axisTextOffset: axisTextOffset,
+								autoMax: true,
+								autoMin: true,
+								autoMajor: true,
+								autoMinor: true
+							};
+						});				
+					} else
+					{
+						yTextBounds = self._applyAxisText(axisOption.y, {});
+						self.axisInfo.y["0"] = {
 							id: "y",
 							tprec: 0,
 							isTime: false,
@@ -4003,9 +4137,13 @@
 							autoMin: true,
 							autoMajor: true,
 							autoMinor: true
-						}
-					};
-					extremeValue = self._getDataExtreme();
+						};
+					}
+
+					self._getSeriesGroup();
+					extremeValue = self._getDataExtreme(isMultiYAxis);
+
+					// handle x axis.
 					if (axisOption.x.autoMin && self.axisInfo.x.autoMin) {
 						axisOption.x.min = extremeValue.txn;
 					} else if (axisOption.x.min && self._isDate(axisOption.x.min)) {
@@ -4018,43 +4156,57 @@
 						// if is date time, convert to number.
 						axisOption.x.max = $.toOADate(axisOption.x.max);
 					}
-					if (axisOption.y.autoMin && self.axisInfo.y.autoMin) {
-						axisOption.y.min = extremeValue.tyn;
-					} else if (axisOption.y.min && self._isDate(axisOption.y.min)) {
-						// if is date time, convert to number.
-						axisOption.y.min = $.toOADate(axisOption.y.min);
-					}
-					if (axisOption.y.autoMax && self.axisInfo.y.autoMax) {
-						axisOption.y.max = extremeValue.tyx;
-					} else if (axisOption.y.max && self._isDate(axisOption.y.max)) {
-						// if is date time, convert to number.
-						axisOption.y.max = $.toOADate(axisOption.y.max);
-					}
 
-					do {
-						offsetY = self._autoPosition(self.axisInfo, axisOption, "y");
-						offsetX = self._autoPosition(self.axisInfo, axisOption, "x");
 
-						if (offsetY === self.axisInfo.y.offset &&
-								offsetX === self.axisInfo.x.offset) {
-							maxtries = 0;
-							break;
+					$.each(extremeValue.y, function (key, exval) {
+						yAxisCount++;
+					});
+
+
+					for (yIdx = 0; yIdx < yAxisCount; yIdx++) {
+						yaxisOpt = axisOption.y[yIdx] || axisOption.y;
+						key = yIdx.toString();
+						if (yaxisOpt.autoMin && self.axisInfo.y[key].autoMin) {
+							yaxisOpt.min = extremeValue.y[key].tyn;
+						} else if (yaxisOpt.min && self._isDate(yaxisOpt.min)) {
+							// if is date time, convert to number.
+							yaxisOpt.min = $.toOADate(yaxisOpt.min);
 						}
-						if (!isNaN(offsetX) && !isNaN(offsetY)) {
-							if (offsetY !== self.axisInfo.y.offset && offsetY !== 0) {
-								self.axisInfo.y.offset = offsetY;
-								self.axisInfo.y.vOffset = offsetX;
-							}
-							if (offsetX !== self.axisInfo.x.offset && offsetX !== 0) {
-								self.axisInfo.x.offset = offsetX;
-								self.axisInfo.x.vOffset = offsetY;
-							}
+
+						if (yaxisOpt.autoMax && self.axisInfo.y[key].autoMax) {
+							yaxisOpt.max = extremeValue.y[key].tyx;
+						} else if (yaxisOpt.max && self._isDate(yaxisOpt.max)) {
+							// if is date time, convert to number.
+							yaxisOpt.max = $.toOADate(yaxisOpt.max);
 						}
-						maxtries--;
-					} while (maxtries > 0);
+
+						do {
+							offsetY = self._autoPosition(self.axisInfo, 
+							axisOption, "y", key);
+							offsetX = self._autoPosition(self.axisInfo, 
+							axisOption, "x", key);
+
+							if (offsetY === self.axisInfo.y[key].offset &&
+									offsetX === self.axisInfo.x.offset) {
+								maxtries = 0;
+								break;
+							}
+							if (!isNaN(offsetX) && !isNaN(offsetY)) {
+								if (offsetY !== self.axisInfo.y[key].offset && offsetY !== 0) {
+									self.axisInfo.y[key].offset = offsetY;
+									self.axisInfo.y[key].vOffset = offsetX;
+								}
+								if (offsetX !== self.axisInfo.x.offset && offsetX !== 0) {
+									self.axisInfo.x.offset = offsetX;
+									self.axisInfo.x.vOffset = offsetY;
+								}
+							}
+							maxtries--;
+						} while (maxtries > 0);
+					}
 
 					self._adjustPlotArea(axisOption.x, self.axisInfo.x);
-					self._adjustPlotArea(axisOption.y, self.axisInfo.y);
+					self._adjustPlotArea(axisOption.y, self.axisInfo.y, true);
 
 					self.innerState.axisInfo = self.axisInfo;
 					self.innerState.canvasBounds = self.canvasBounds;
@@ -4066,96 +4218,252 @@
 			}
 		},
 
-		_adjustPlotArea: function (axisOptions, axisInfo) {
-			var canvasBounds = this.canvasBounds;
-			axisOptions.max = axisInfo.max;
-			axisOptions.min = axisInfo.min;
 
-			switch (axisOptions.compass) {
-			case "north":
-				canvasBounds.startY += axisInfo.offset;
-				break;
-			case "south":
-				canvasBounds.endY -= axisInfo.offset;
-				break;
-			case "east":
-				canvasBounds.endX -= axisInfo.offset;
-				break;
-			case "west":
-				canvasBounds.startX += axisInfo.offset;
-				break;
+		_getSeriesGroup: function () {
+			var self = this,
+				o = self.options, 
+				group = {};
+
+			$.each(o.seriesList, function (i, serie) {
+				if (serie.yAxis) {
+					if (group[serie.yAxis.toString()]) {
+						group[serie.yAxis.toString()].push(serie);
+					}
+					else {
+						group[serie.yAxis.toString()] = [serie];
+					}
+				}
+				else {
+					if (group["0"]) {
+						group["0"].push(serie);
+					}
+					else {
+						group["0"] = [serie];
+					}
+				}
+			});
+			self.seriesGroup = group;
+		},
+
+		_adjustPlotArea: function (axisOptions, axisInfo, isYAxis) {
+			var canvasBounds = this.canvasBounds, maxKey, maxOffsets = {
+				east: Number.MIN_VALUE,
+				west: Number.MIN_VALUE,
+				south: Number.MIN_VALUE,
+				north: Number.MIN_VALUE
+			};
+
+			if (isYAxis) {
+				$.each(axisInfo, function (key, axisInf) {
+					maxKey = key;
+				});
+				$.each(axisInfo, function (key, axisInf) {
+					var opt = axisOptions[key] || axisOptions,
+						compass = opt.compass;
+					opt.max = axisInf.max;
+					opt.min = axisInf.min;
+
+					switch (compass) {
+					case "north":
+						maxOffsets.north = Math.max(axisInf.offset, maxOffsets.north);
+						break;
+					case "south":
+						maxOffsets.south = Math.max(axisInf.offset, maxOffsets.south);
+						break;
+					case "east":
+						maxOffsets.east = Math.max(axisInf.offset, maxOffsets.east);
+						break;
+					case "west":
+						maxOffsets.west = Math.max(axisInf.offset, maxOffsets.west);
+						
+						break;
+					}
+				});
+				
+				if (maxOffsets.north !== Number.MIN_VALUE) {
+					canvasBounds.startY += maxOffsets.north;
+				}
+
+				if (maxOffsets.south !== Number.MIN_VALUE) {
+					canvasBounds.endY -= maxOffsets.south;
+				}
+
+				if (maxOffsets.east !== Number.MIN_VALUE) {
+					canvasBounds.endX -= maxOffsets.east;
+				}
+				
+				if (maxOffsets.west !== Number.MIN_VALUE) {
+					canvasBounds.startX += maxOffsets.west;
+				}			
+			}
+			else {
+				axisOptions.max = axisInfo.max;
+				axisOptions.min = axisInfo.min;
+
+				switch (axisOptions.compass) {
+				case "north":
+					canvasBounds.startY += axisInfo.offset;
+					break;
+				case "south":
+					canvasBounds.endY -= axisInfo.offset;
+					break;
+				case "east":
+					canvasBounds.endX -= axisInfo.offset;
+					break;
+				case "west":
+					canvasBounds.startX += axisInfo.offset;
+					break;
+				}
 			}
 		},
 
-		_autoPosition: function (axisInfo, axisOptions, dir) {
+		_autoPosition: function (axisInfo, axisOptions, dir, key) {
 			// this._adjustCartesianCompass();
 			// base._autoPosition();
-			return this._autoPositionCartesianAxis(axisInfo, axisOptions, dir);
+			return this._autoPositionCartesianAxis(axisInfo, axisOptions, dir, key);
 		},
 
-		_autoPositionCartesianAxis: function (axisInfo, axisOptions, dir) {
+		_autoPositionCartesianAxis: function (axisInfo, axisOptions, dir, key) {
 			var self = this,
 				extent = null,
+				innerAxisInfo, innerAxisOptions,
+				oppositeAxisInfo, oppositeAxisOptions,
 				bounds = self.canvasBounds,
-				compass = axisOptions[dir].compass,
-				oppositeDir = dir === "x" ? "y" : "x",
-				origin = axisOptions[oppositeDir].origin,
-				max = axisInfo[oppositeDir].max,
-				min = axisInfo[oppositeDir].min,
-				d = 0, offset;
+				compass, origin, max, min,				
+				//oppositeDir = dir === "x" ? "y" : "x",
+
+				lastAxisOffset = self.lastAxisOffset || {},
+
+				//origin = axisOptions[oppositeDir].origin,
+				//max = axisInfo[oppositeDir].max,
+				//min = axisInfo[oppositeDir].min,
+				d = 0, offset, lastOffset;
+
+			if (dir === "y") {
+				innerAxisInfo = axisInfo.y[key];
+				innerAxisOptions = axisOptions.y[key] || axisOptions.y;
+				oppositeAxisOptions = axisOptions.x;
+				oppositeAxisInfo = axisInfo.x;
+			}
+			else {
+				innerAxisInfo = axisInfo.x;
+				innerAxisOptions = axisOptions.x;
+				oppositeAxisInfo = axisInfo.y[key];
+				oppositeAxisOptions = axisOptions.y[key] || axisOptions.y;
+			}
+			compass = innerAxisOptions.compass;
+			origin = oppositeAxisOptions.origin;
+			max = oppositeAxisInfo.max;
+			min = oppositeAxisInfo.min;
 
 			if (origin !== null && self._isDate(origin)) {
 				origin = $.toOADate(origin);
 			}
 
-			self._calculateParameters(axisInfo[dir], axisOptions[dir]);
-			extent = self._getMaxExtents(axisInfo[dir], axisOptions[dir]);
+			self._calculateParameters(innerAxisInfo, innerAxisOptions);
+			extent = self._getMaxExtents(innerAxisInfo, innerAxisOptions);
 			switch (compass) {
 			case "north":
 			case "south":
 				offset = extent.height;
-				axisInfo[dir].maxExtent = offset;
+				innerAxisInfo.maxExtent = offset;
 			
-				/*
-				if (origin !== null && origin >= min && origin <= max) {
-					if (compass === "south") {
-						d = (origin - min) / (max - min) * (bounds.endY - bounds.startY);
-					} else {
-						d = (max - origin) / (max - min) * (bounds.endY - bounds.startY);
-					}
+//				
+//				if (origin !== null && origin >= min && origin <= max) {
+//					if (compass === "south") {
+//						d = (origin - min) / (max - min) * (bounds.endY - bounds.startY);
+//					} else {
+//						d = (max - origin) / (max - min) * (bounds.endY - bounds.startY);
+//					}
 
-					offset -= d;
+//					offset -= d;
 
-					if (offset < 0) {
-						offset = 0;
-					}
-				}
-				*/
-
-				return offset;
+//					if (offset < 0) {
+//						offset = 0;
+//					}
+//				}
+				break;				
 			case "east":
 			case "west":
 				offset = extent.width;
-				axisInfo[dir].maxExtent = offset;
+				innerAxisInfo.maxExtent = offset;				
+//				if (origin !== null && origin >= min && origin <= max) {
+//					if (compass === "west") {
+//						d = (origin - min) / (max - min) * (bounds.endX - bounds.startX);
 
-				/*
-				if (origin !== null && origin >= min && origin <= max) {
-					if (compass === "west") {
-						d = (origin - min) / (max - min) * (bounds.endX - bounds.startX);
-					} else {
-						d = (max - origin) / (max - min) * (bounds.endX - bounds.startX);
-					}
+//					} else {
+//						d = (max - origin) / (max - min) * (bounds.endX - bounds.startX);
+//					}				
 
-					offset -= d;
+//					offset -= d;
 
-					if (offset < 0) {
-						offset = 0;
-					}
-				}
-				*/
-
-				return offset;
+//					if (offset < 0) {
+//						offset = 0;
+//					}
+//				}
+				break;
 			}
+			if (dir === "y" && lastAxisOffset[compass]) {
+				$.each(lastAxisOffset[compass], function (k, offsetObj) {
+					if (k !== key) {
+						lastOffset = offsetObj;
+					}
+				});
+				if (lastOffset) {
+					innerAxisInfo.preStartOffset = lastOffset;
+					offset += (lastOffset);
+				}				
+			}
+			if (dir === "y") {
+				if (lastAxisOffset[compass] === undefined) {
+					lastAxisOffset[compass] = {};
+				}
+
+				lastAxisOffset[compass][key] = offset + 
+				self._getAxisLabelBox(innerAxisOptions).width;
+				self.lastAxisOffset = lastAxisOffset;
+			}
+			
+			return offset;
+						
+		},
+
+
+		_getAxisLabelBox: function (axisOption) {
+			var self = this,
+				o = self.options,
+				text = axisOption.text,
+				marginTop = 0,
+				marginRight = 0,
+				marginLeft = 0,
+				marginBottom = 0,
+				textElement, bbox,
+				isVertical = self._isVertical(axisOption.compass),
+				textStyle = $.extend(true, {}, o.textStyle, axisOption.textStyle);
+
+			if (textStyle["margin-top"]) {
+				marginTop = parseFloat(textStyle["margin-top"]);
+			}
+			if (textStyle["margin-left"]) {
+				marginLeft = parseFloat(textStyle["margin-left"]);
+			}
+			if (textStyle["margin-right"]) {
+				marginRight = parseFloat(textStyle["margin-right"]);
+			}
+			if (textStyle["margin-bottom"]) {
+				marginBottom = parseFloat(textStyle["margin-bottom"]);
+			}
+			textElement = self._text(0, 0, text);
+			textElement.attr(textStyle);
+			if (isVertical) {
+				textElement.transform("...R-90");
+			}
+			bbox = textElement.wijGetBBox();
+			textElement.wijRemove();
+			return {
+				width: bbox.width + marginLeft + marginRight,
+				height: bbox.height + marginBottom + marginTop
+			};
 		},
 
 		_getMaxExtents: function (axisInfo, axisOptions, axisRect) {
@@ -4287,7 +4595,7 @@
 									textStyle.transform = "r-90";
 									axisInfo.textStyle = {
 											transform: "r-90"	
-									};
+										};
 								}
 								txtClone.wijRemove();
 								size = txt.wijGetBBox();
@@ -4585,20 +4893,29 @@
 				x = axisInfo.x,
 				y = axisInfo.y,
 				axisElements;
-
 			axisElements = self._paintAxis(ox, x);
 
-			if (oy.origin !== null) {
-				self._translateAxisIfNeeded(axisElements, ox.compass, 
-					oy.origin, oy.compass, y.max, y.min);
-			}
+			$.each(y, function (key, yaxis) {
+				var opt = oy[key] || oy;
+				if (opt.origin !== null) {
+					self._translateAxisIfNeeded(axisElements, ox.compass, 
+						opt.origin, opt.compass, yaxis.max, yaxis.min);
+				}
+			});
 
-			axisElements = self._paintAxis(oy, y);
-			
-			if (ox.origin !== null) {
-				self._translateAxisIfNeeded(axisElements, oy.compass, 
-					ox.origin, ox.compass, x.max, x.min);
-			}
+//			if (oy.origin !== null) {
+//				self._translateAxisIfNeeded(axisElements, ox.compass, 
+//					oy.origin, oy.compass, y.max, y.min);
+//			}
+
+			$.each(y, function (key, yaxis) {
+				var opt = oy[key] || oy;
+				axisElements = self._paintAxis(opt, yaxis);			
+				if (ox.origin !== null) {
+					self._translateAxisIfNeeded(axisElements, opt.compass, 
+						ox.origin, ox.compass, x.max, x.min);
+				}					
+			});
 		},
 
 		_translateAxisIfNeeded: function (xAxisElements, 
@@ -4712,12 +5029,18 @@
 				break;
 			case "east":
 				startPoint.x = canvasBounds.endX;
+				if (axisInfo.preStartOffset) {
+					startPoint.x += axisInfo.preStartOffset;
+				}
 				startPoint.y = canvasBounds.endY;
 				endPoint.x = canvasBounds.endX;
 				endPoint.y = canvasBounds.startY;
 				break;
-			case "west":
+			case "west":				
 				startPoint.x = canvasBounds.startX - thickness;
+				if (axisInfo.preStartOffset) {
+					startPoint.x -= axisInfo.preStartOffset;
+				}
 				startPoint.y = canvasBounds.endY;
 				endPoint.x = canvasBounds.startX - thickness;
 				endPoint.y = canvasBounds.startY;
@@ -5125,10 +5448,11 @@
 						tickY, text.toString(), labelWidth, textAlign, textStyle);
 					$.wijraphael.addClass($(txt.node), "wijchart-axis-label");
 
-					if (isVertical) {
+					//if (isVertical) {
 						// txt.translate(0, -txt.getBBox().height / 2);
-						//txt.transform(Raphael.format("...T{0},{1}", 0, -txt.getBBox().height / 2));
-					}
+						//txt.transform(Raphael.format("...T{0},{1}", 0, 
+						//-txt.getBBox().height / 2));
+					//}
 				} else {
 					txt = self._text(tickX, tickY, text.toString());
 					$.wijraphael.addClass($(txt.node), "wijchart-axis-label");
@@ -5311,7 +5635,7 @@
 			this._trigger("mouseMove", e, args);
 		},
 		
-		_click: function (e ,args) {
+		_click: function (e, args) {
 			this._trigger("click", e, args);
 		},
 		
@@ -5447,7 +5771,9 @@
 			var self = this,
 				element = this.chartElement,
 				widgetName = self.widgetName;
-			$(".wijchart-legend", element[0]).die(widgetName);
+			$(".wijchart-legend", element[0]).die(widgetName)
+			// for jQuery 1.7.1
+			.die("." + widgetName);
 			element.unbind("mousemove");
 		},
 
@@ -5991,24 +6317,32 @@
 			return Math.floor(val);
 		},
 
-		_getDataExtreme: function () {
+		_getDataExtreme: function (isMultiYAxis) {
 			var val = {
 				txx: 0,
 				txn: 0,
 				tyx: 0,
 				tyn: 0
-			};
+			}, valGroup;
 
-			this._getDataExtremes(val);
-
-			if (val.txn > val.txx) {
-				val.txn = 0;
-				val.txx = 1;
+			valGroup = this._getDataExtremes(val, isMultiYAxis);
+			if (valGroup) {
+				if (valGroup.txn > valGroup.txx) {
+					valGroup.txn = 0;
+					valGroup.txx = 1;
+				}
+				return valGroup;
 			}
-			return val;
+			else {
+				if (val.txn > val.txx) {
+					val.txn = 0;
+					val.txx = 1;
+				}
+				return val;
+			}
 		},
 
-		_getDataExtremes: function (val) {
+		_getDataExtremes: function (val, isMultiYAxis) {
 			var self = this,
 				o = self.options,
 				seriesList = o.seriesList,
@@ -6016,107 +6350,163 @@
 				is100Percent = o.is100Percent,
 				axis = o.axis,
 				axisInfo = self.axisInfo,
-				valuesX = [],
-				valuesY = [],
+				valuesX = [],				
 				lastValuesY = [],
 				valueLabels = [],
 				validValue,
-				i = 0;
+				valGroup = { y: {} };
 
 			if (!seriesList || seriesList.length === 0) {
 				return val;
 			}
+			
+			if (self.seriesGroup) {
+				$.each(self.seriesGroup, function (key, seriesL) {
+					var valuesY = [];
+					$.each(seriesL, function (i, series) {
+						if (series.type === "pie") {
+							return true;
+						}
+						// support hole.
+						series = $.extend(true, {display: "show"}, series);
+						// end comments
 
-			$.each(seriesList, function (idx, series) {
-				if (series.type === "pie") {
-					return true;
-				}
-
-				// support hole.
-				series = $.extend(true, {display: "show"}, series);
-				// end comments
-
-				var data = series.data,
-					index = 0,
-					k = 0,
-					valuesXY = [].concat(data.xy),
-					len = valuesXY.length,
-					xMinMax, 
-					yMinMax;
+						var data = series.data,
+							index = 0,
+							k = 0,
+							valuesXY = [].concat(data.xy),
+							len = valuesXY.length,
+							xMinMax, 
+							yMinMax;
 				
-				// support hole.
-				if (series.display === "exclude") {
-					return true;
-				}
-				// end comments
+						// support hole.
+						if (series.display === "exclude") {
+							return true;
+						}
+						// end comments
 
-				valuesX = [].concat(data.x);
-				valuesY = [].concat(data.y);
+						valuesX = [].concat(data.x);
+						valuesY = [].concat(data.y);
 
-				if (data.xy && len) {
-					valuesX = [];
-					valuesY = [];
+						if (data.xy && len) {
+							valuesX = [];
+							valuesY = [];
 
-					while (k < len) {
-						valuesX[index] = valuesXY[k];
-						valuesY[index] = valuesXY[k + 1];
-						k += 2;
-						index++;
-						data.x = valuesX;
-						data.y = valuesY;
-					}
-				} else if (!data.x) {
-					valuesX = [];
+							while (k < len) {
+								valuesX[index] = valuesXY[k];
+								valuesY[index] = valuesXY[k + 1];
+								k += 2;
+								index++;
+								data.x = valuesX;
+								data.y = valuesY;
+							}
+						} else if (!data.x) {
+							valuesX = [];
 
-					$.each(valuesY, function (i) {
-						valuesX.push(i);
+							$.each(valuesY, function (i) {
+								valuesX.push(i);
+							});
+
+							data.x = valuesX;
+						}
+
+						if (stacked && i > 0) {
+							$.each(valuesY, function (j) {
+								// if (j === 0) {
+								// return true;
+								// }
+
+								// valuesY[j] += valuesY[j - 1];
+								valuesY[j] += lastValuesY[j];
+							});
+						}
+						lastValuesY = valuesY;
+
+						xMinMax = self._getMinMaxValue(valuesX);
+						yMinMax = self._getMinMaxValue(valuesY);
+
+						if (i === 0) {
+							val.txx = xMinMax.max;
+							val.txn = xMinMax.min;
+							val.tyx = yMinMax.max;
+							val.tyn = yMinMax.min;
+						} else {
+							if (val.txx < xMinMax.max) {
+								val.txx = xMinMax.max;
+							}
+							if (val.txn > xMinMax.min) {
+								val.txn = xMinMax.min;
+							}
+							if (val.tyx < yMinMax.max) {
+								val.tyx = yMinMax.max;
+							}
+							if (val.tyn > yMinMax.min) {
+								val.tyn = yMinMax.min;
+							}
+						}
+						i++;									
 					});
 
-					data.x = valuesX;
-				}
-
-				if (stacked && idx > 0) {
-					$.each(valuesY, function (j) {
-						// if (j === 0) {
-						// return true;
-						// }
-
-						// valuesY[j] += valuesY[j - 1];
-						valuesY[j] += lastValuesY[j];
-					});
-				}
-				lastValuesY = valuesY;
-
-				xMinMax = self._getMinMaxValue(valuesX);
-				yMinMax = self._getMinMaxValue(valuesY);
-
-				if (i === 0) {
-					val.txx = xMinMax.max;
-					val.txn = xMinMax.min;
-					val.tyx = yMinMax.max;
-					val.tyn = yMinMax.min;
-				} else {
-					if (val.txx < xMinMax.max) {
-						val.txx = xMinMax.max;
+					if (is100Percent) {
+						val.tyx = 1;
+						val.tyn = 0;
 					}
-					if (val.txn > xMinMax.min) {
-						val.txn = xMinMax.min;
-					}
-					if (val.tyx < yMinMax.max) {
-						val.tyx = yMinMax.max;
-					}
-					if (val.tyn > yMinMax.min) {
-						val.tyn = yMinMax.min;
-					}
-				}
-				i++;
-			});
 
-			if (is100Percent) {
-				val.tyx = 1;
-				val.tyn = 0;
+					valGroup.y[key] = {tyx: val.tyx, tyn: val.tyn};
+					valGroup.txx = val.txx;
+					valGroup.txn = val.txn;
+					val.tyx = 0;
+					val.tyn = 0;
+					//val = {txx: val.txx, txn: val.txn, tyx: 0, tyn: 0 };
+
+					if (valuesY.length) {
+						validValue = $.wijchart.getFirstValidListValue(valuesY);
+						if (self._isDate(validValue)) {
+							axisInfo.y[key].isTime = true;
+						} else if (typeof (validValue) !== "number") {
+							$.each(valuesY, function (idx, valueY) {
+								// valueLabels.push({
+								// text: valueY,
+								// value: idx
+								// });
+								// Add comments by RyanWu@20110707.
+								// For fixing the issue#15881.
+								// valueLabels.push(valueY);
+								var formatString = axis.y.annoFormatString,
+									value = valueY;
+
+								if (formatString && formatString.length > 0) {
+									// value = $.format(value, formatString);
+									value = Globalize.format(value, formatString);
+								} else {
+									value = value.toString();
+								}
+
+								// valueLabels.push(value);
+								valueLabels.push({
+									text: value,
+									value: valueY,
+									gridLine: false
+								});
+								// end by RyanWu@20110707.
+							});
+
+							axis.y[parseInt(key, 10)].annoMethod = "valueLabels";
+							axis.y[parseInt(key, 10)].valueLabels = valueLabels;
+							axis.x.max = valuesY.length - 1;
+							axis.x.min = 0;
+							axis.y[parseInt(key, 10)].unitMajor = 1;
+							axis.x.unitMinor = 0.5;
+							axisInfo.y[key].autoMax = false;
+							axisInfo.y[key].autoMin = false;
+							axisInfo.y[key].autoMajor = false;
+							axisInfo.y[key].autoMinor = false;
+						}
+					}
+				});
 			}
-
+			
+			
 			if (valuesX.length) {
 				validValue = $.wijchart.getFirstValidListValue(valuesX);
 				if (self._isDate(validValue)) {
@@ -6144,51 +6534,8 @@
 				}
 			}
 
-			if (valuesY.length) {
-				validValue = $.wijchart.getFirstValidListValue(valuesY);
-				if (self._isDate(validValue)) {
-					axisInfo.y.isTime = true;
-				} else if (typeof (validValue) !== "number") {
-					$.each(valuesY, function (idx, valueY) {
-						// valueLabels.push({
-						// text: valueY,
-						// value: idx
-						// });
-						// Add comments by RyanWu@20110707.
-						// For fixing the issue#15881.
-						// valueLabels.push(valueY);
-						var formatString = axis.y.annoFormatString,
-							value = valueY;
-
-						if (formatString && formatString.length > 0) {
-							// value = $.format(value, formatString);
-							value = Globalize.format(value, formatString);
-						} else {
-							value = value.toString();
-						}
-
-						// valueLabels.push(value);
-						valueLabels.push({
-							text: value,
-							value: valueY,
-							gridLine: false
-						});
-						// end by RyanWu@20110707.
-					});
-
-					axis.y.annoMethod = "valueLabels";
-					axis.y.valueLabels = valueLabels;
-					axis.x.max = valuesY.length - 1;
-					axis.x.min = 0;
-					axis.y.unitMajor = 1;
-					axis.x.unitMinor = 0.5;
-					axisInfo.y.autoMax = false;
-					axisInfo.y.autoMin = false;
-					axisInfo.y.autoMajor = false;
-					axisInfo.y.autoMinor = false;
-				}
-			}
-			return val;
+			return valGroup;
+			//return val;
 		},
 
 		_isDate: function (obj) {

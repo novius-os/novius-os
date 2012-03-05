@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -25,8 +25,10 @@ class PubliCache {
 
     public static function delete($path)
     {
-        // Experimentalpl
+        // Disabled
+		// Experimental
         return;
+
         $dir = \Config::get('cache_dir').$path.'/';
         $files = \Fuel\Core\File::read_dir($dir, 1);
         echo '<pre>';
@@ -122,13 +124,14 @@ class PubliCache {
         if ($expires > 0 && $expires <= time()) {
             throw new CacheExpiredException();
         }
+		\Cms::main_controller()->expires = \Date::forge($expires)->format("%H:%M:%S");;
     }
 
     public function save($duration = -1, $controller = null) {
         if ($duration == -1) {
             //flock($this->_lock_fp, LOCK_UN);
             $expires = 0;
-            $this->_path = \Config::get('tmp_dir', '/tmp/'.uniqid().'.php');
+            $this->_path = \Config::get('tmp_dir', '/tmp/'.uniqid('page/').'.php');
             $this->_content = '';
         } else {
             $expires = time() + $duration;

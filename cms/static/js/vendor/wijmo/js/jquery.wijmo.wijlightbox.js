@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -314,7 +314,7 @@
 			///	<summary>
 			///	Determines the animation style when switching between pages.
 			/// Default: {
-			/// 	animated: 'fade',
+			/// 	animated: 'fade', // Possible values are 'slide', 'fade', 'none'
 			/// 	duration: 400,
 			/// 	easing: 'easeInQuad'
 			/// }
@@ -327,7 +327,7 @@
 			///  });
 			///	</summary>
 			transAnimation: {
-				animated: 'fade', // Possible values are 'slide', 'fade', 'none'
+				animated: 'fade',
 				duration: 400,
 				easing: 'easeInQuad'
 			},
@@ -355,7 +355,7 @@
 			///  });
 			///	</summary>
 			resizeAnimation: {
-				animated: 'sync', // Possible values are 'wh', 'hw', 'sync', 'none'
+				animated: 'sync',
 				duration: 400
 			},
 			///	<summary>
@@ -418,31 +418,65 @@
 			autoPlayMovies: true,
             ///	<summary>
 			///	A hash object that contains parameters for flash object.
+			/// Default: {
+			///     bgcolor: "#000000",
+			///     allowfullscreen: true
+            /// }
+			/// Type: Object
+			/// Code example:
+			///  $("#id").wijlightbox({
+			///      flashParams: {
+            ///         autostart: true,
+			///		    allowscriptaccess: 'always'
+            ///     }
+			///  });
 			///	</summary>
 			flashParams: {
 				bgcolor: "#000000",
 				allowfullscreen: true
 			},
 			///	<summary>
-			///	A hash object that contains variants for flash object.
+            ///	A hash object that contains variants for flash object.
+            /// Default: {}
+            /// Type: Object
+            /// Code example:
+            ///  $("#id").wijlightbox({
+            ///      flashVars: {
+            ///         backcolor: "0x000000",
+            ///         frontcolor: "0xCCCCCC"
+            ///     }
+            ///  });
 			///	</summary>
 			flashVars: {},
 			///	<summary>
 			///	Version of flash object.
 			/// Default: "9.0.115"
 			/// Type: String
+			/// Code example:
+			///  $("#id").wijlightbox({
+			///      flashVersion: "9.0.115"
+			///  });
 			///	</summary>
 			flashVersion: "9.0.115",
 			///	<summary>
 			///	The relative path and name of the flash vedio player.
 			/// Default: 'player\\player.swf'
 			/// Type: String
+			/// Code example:
+			///  $("#id").wijlightbox({
+			///      flvPlayer: "player\\myplayer.swf"
+			///  });
 			///	</summary>
 			flvPlayer: 'player\\player.swf',
 			///	<summary>
 			///	The relative path and name of the flash installation guide.
 			/// Default: 'player\\expressInstall.swf'
 			/// Type: String
+			/// Code example:
+			///  $("#id").wijlightbox({
+			///      flashInstall: "player\\installFlash.swf"
+			///  });
+			///	</summary>
 			///	</summary>
 			flashInstall: 'player\\expressInstall.swf',
 			/// <summary>
@@ -495,11 +529,11 @@
 		_keyDownHandler: function (event) {
 			var o = this.options, self = this;
 			if (event.keyCode && event.keyCode === $.ui.keyCode.ESCAPE) {
-				if (self.isFullSize()) {
-					self.toggleFullSize();
+				if (self._isFullSize()) {
+					self._toggleFullSize();
 				} else {
 					if (o.closeOnEscape) {
-						self.close();
+						self._close();
 					}
 				}
 
@@ -824,7 +858,7 @@
 				if (!opt.gallery) {
 					$a.bind({
 						'click': function (e) {
-							self.open($img, opt);
+							self._open($img, opt);
 							return false;
 						}
 					});
@@ -833,7 +867,7 @@
 					o.groupItems[index] = opt;
 					$a.bind({
 						'click': function (e) {
-							self.open($img, index);
+							self._open($img, index);
 							return false;
 						}
 					});
@@ -1219,7 +1253,7 @@
 						.append("<span class='ui-icon ui-icon-close'></span>")
 						.hide()
 						.click(function () {
-							self.close();
+							self._close();
 							return false;
 						});
 				} else if (name === 'fullSize' && !this.fullBtn) {
@@ -1228,7 +1262,7 @@
 						.append("<span class='ui-icon ui-icon-arrow-4-diag'></span>")
 						.hide()
 						.click(function () {
-							self.toggleFullSize();
+							self._toggleFullSize();
 							return false;
 						});
 				}
@@ -1266,7 +1300,7 @@
 				var icon = this.fullBtn.find('.ui-icon');
 				if (icon) {
 					icon.removeClass('ui-icon-arrow-4-diag ui-icon-newwin');
-					icon.addClass(this.isFullSize() ? 'ui-icon-newwin' : 'ui-icon-arrow-4-diag');
+					icon.addClass(this._isFullSize() ? 'ui-icon-newwin' : 'ui-icon-arrow-4-diag');
 				}
 			}
 		},
@@ -1513,7 +1547,7 @@
 					}
 					curImage.css({ float: '', width: '', height: '' });
 
-					if (o.autoSize && !self.isFullSize()) {
+					if (o.autoSize && !self._isFullSize()) {
 						self._resize(complete);
 					} else {
 						if ($.isFunction(complete)) {
@@ -1584,7 +1618,7 @@
 
 			var hd = animation.duration / 2,
 				animated = animation.animated,
-				movePos = self.isOpen(),
+				movePos = self._isOpen(),
 				pos1 = animated === 'wh' ? { left: rect.left} : { top: rect.top },
 				pos2 = animated === 'wh' ? { top: rect.top} : { left: rect.left },
 				size1 = animated === 'wh' ? { width: rect.width} : { height: rect.height },
@@ -1672,7 +1706,8 @@
 			);
 		},
 
-		show: function (index) {
+        show: function (index) {
+            /// <summary>Shows the content in specified index.</summary>
 			this._show(index);
 			return this;
 		},
@@ -1685,7 +1720,7 @@
 			});
 
 			self._size();
-			if (self.isOpen()) {
+			if (self._isOpen()) {
 				self._position();
 			}
 
@@ -1776,7 +1811,7 @@
 				self.container.data('playerheight.wijlightbox', player.height);
 
 				var animation = $.extend({}, self._defaults.transAnimation, o.transAnimation);
-				if (o.activeIndex === index || animation.animated === 'none' || animation.duration <= 0 || !self.isOpen()) {
+				if (o.activeIndex === index || animation.animated === 'none' || animation.duration <= 0 || !self._isOpen()) {
 					o.activeIndex = index;
 					if (prevPlayer) {
 						prevPlayer.remove();
@@ -1811,7 +1846,7 @@
 						if (prevPlayer) {
 							prevPlayer.remove();
 						}
-						if (o.autoSize && !self.isFullSize()) {
+						if (o.autoSize && !self._isFullSize()) {
 							self._resize(fadeIn);
 						} else {
 							fadeIn();
@@ -1865,7 +1900,8 @@
 			return false;
 		},
 
-		isPlaying: function () {
+        isPlaying: function () {
+            /// <summary>Determines whether the slide playing is on process.</summary>
 			return !!this.container.data('playing.wijlightbox');
 		},
 
@@ -1896,7 +1932,7 @@
 		},
 
 		play: function () {
-			/// <summary>Start displaying the iamges in order automatically.</summary>
+			/// <summary>Starts displaying the images in order automatically.</summary>
 
 			if (!this._groupMode()) { return false; }
 
@@ -1909,7 +1945,8 @@
 			this._startTimer();
 		},
 
-		stop: function () {
+        stop: function () {
+        /// <summary>Stops the slide playing mode.</summary>
 			this.container.removeData('playing.wijlightbox');
 
 			this._refreshCtrlButtons();
@@ -2023,10 +2060,10 @@
 			return rect;
 		},
 
-		close: function (rel) {
+        _close: function (rel) {
 			var o = this.options, self = this;
 
-			if (!this.isOpen()) { return; }
+			if (!this._isOpen()) { return; }
 			var data = { rel: rel };
 			if (false === this._trigger('beforeClose', null, data)) { return; }
 
@@ -2072,15 +2109,15 @@
 			return this;
 		},
 
-		isOpen: function () {
+		_isOpen: function () {
 			return !!this.container.data('open.wijlightbox');
 		},
 
-		open: function (rel, item) {
-			if (this.isOpen()) { return; }
+		_open: function (rel, item) {
+			if (this._isOpen()) { return; }
 			
 			var o = this.options, self = this;
-			if (this.isFullSize()) {
+			if (this._isFullSize()) {
 				if (this.toolBox) {
 					this.toolBox.css({top: '', right: ''});
 				}
@@ -2123,8 +2160,8 @@
 				$(document).bind('keydown.wijlightbox', $.proxy(self, '_keyDownHandler'))
 					.bind('click.wijlightbox', function (e) {
 						var srcElement = e.target || e.srcElement;
-						if (self.isOpen() && !!o.closeOnOuterClick) {
-							if (srcElement !== self.container.get(0) && $(srcElement).parents().index(self.container) < 0) { self.close(); }
+						if (self._isOpen() && !!o.closeOnOuterClick) {
+							if (srcElement !== self.container.get(0) && $(srcElement).parents().index(self.container) < 0) { self._close(); }
 						}
 					});
 
@@ -2154,17 +2191,17 @@
 			self._createText();
 		},
 
-		isFullSize: function () {
+		_isFullSize: function () {
 			return !!this.container.data('fullsize.wijlightbox');
 		},
 
-		toggleFullSize: function () {
+		_toggleFullSize: function () {
 			var o = this.options, self = this;
 
-			if (!self.isOpen()) { return; }
+			if (!self._isOpen()) { return; }
 
 			var $win = $(window);
-			if (this.isFullSize()) {
+			if (this._isFullSize()) {
 				if (self.toolBox) {
 					self.toolBox.css({top: '', right: ''});
 				}

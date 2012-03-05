@@ -9,6 +9,7 @@
 @import "compass/css3/box-sizing";
 @import "compass/css3/border-radius";
 @import "jquery.nos.nosgrid.css";
+@import "jquery.nos.nostreegrid.css";
 @import "jquery.nos.thumbnails.css";
 @import "jquery.nos.inspector-preview.css";
 
@@ -33,20 +34,26 @@
     height : 100%;
 
 	.nos-mp3grid-headerbar {
-		margin : 0px 5px;
+		margin : 0px 10px 0;
 
 		.nos-mp3grid-adds {
 			float : left;
+            margin-top: 5px;
 		}
-		.nos-mp3grid-settings {
+        .nos-mp3grid-action-secondary {
+            display : inline-block;
+            margin: 0 1em;
+        }
+		.nos-mp3grid-dropdownviews {
 			float : right;
+            margin-top: 10px;
 		}
 	}
 
 	.nos-mp3grid-splitter-v {
 		@include box-sizing(border-box);
 		position : absolute;
-        top : 40px;
+        top : 45px;
 		left : 0;
 		right : 0;
 		bottom : 0;
@@ -161,6 +168,10 @@
 
 	                .view-list {
 	                    background-image: url(../images/view-list.png);
+	                    background-position: 0 0;
+	                }
+	                .view-tree {
+	                    background-image: url(../images/view-tree.png);
 	                    background-position: 0 0;
 	                }
 	                .view-thumbs-small {
@@ -345,12 +356,14 @@
     }
 
     .droping {
+        width: 100%;
+        height: 100%;
         background-color: #DDD;
         display: inline-block;
     }
 
     .layout {
-        width: 300px;
+        width: 100%;
         height: 200px;
         border: 1px solid #BBB;
 
@@ -362,9 +375,8 @@
 
         .left-panel {
             position: relative;
-            width: 99px;
+            width: 33%;
             height: 100%;
-            border-right: 1px solid #DDD;
             float: left;
 
             .layout-inspector {
@@ -375,8 +387,8 @@
 
         .top-panel {
             position: relative;
-            width: 200px;
-            height: 79px;
+            width: 100%;
+            height: 33%;
             border-bottom: 1px solid #DDD;
 
             .layout-inspector {
@@ -387,20 +399,28 @@
 
         .right-side {
             float: left;
-            width: 200px;
+            width: 67%;
             height: 100%;
+            position: relative;
 
-            .content {
-                width: 200px;
-                height: 120px;
-                background-color: #EEE;
+            > .inside {
+                border-left: 1px solid #DDD;
+                height: 100%;
+                position: relative;
+
+                .content {
+                    width: 100%;
+                    height: 67%;
+                    background-color: #EEE;
+                }
+
             }
         }
     }
 
     .not-layout {
         margin-top: 10px;
-        width: 300px;
+        width: 100%;
         height: 30px;
         border: 1px solid #BBB;
         position: relative;
@@ -432,63 +452,65 @@
     }
 
     h2 {
+        margin-top: 10px;
         margin-bottom: 5px;
     }
 }
 
 
 .widget-columns {
-    width: 150px;
-    padding: 4px;
-    border-radius: 4px;
+    width: 100%;
     border: 1px solid #BBB;
+    height: 25px;
+    position: relative;
 
 
 
     li {
         overflow: hidden;
         position: relative;
-        height: 25px;
+        height: 100%;
         line-height: 25px;
-        background-color: #EEE;
-        margin-bottom: 3px;
-        border-radius: 2px;
+        border-right: 1px solid #EEE;
+        width: 100px;
+        background: white;
+        cursor: move;
 
-        .handle {
-            float: left;
-            height: 100%;
-            width: 10px;
-            margin-right: 5px;
-            background-color: #DDD;
-            border-radius: 2px 0 0 2px;
-            cursor: move;
+        &.last {
+            border: 0;
         }
 
-        .title-zone, .visibility-zone {
-            float: left;
+        &.moving {
+            border: 1px solid #EEE;
+        }
+
+        .title-zone {
             height: 100%;
             line-height: 25px;
             color: #4F4F4F;
             text-decoration: none;
             text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
             font-weight: bold;
-        }
-
-        .visibility-zone {
-            float: right;
-        }
-
-        &.invisible {
-            background-color: #F6F6F6;
-            .handle {
-                background-color: #E6E6E6;
-            }
+            text-align: center;
         }
 
         &.placeholder {
-            border-radius: 2px;
-            border: 1px dashed #DDD;
-            background-color: white;
+            background-color: #DDD;
+            float: left;
         }
+    }
+}
+
+.not-columns {
+    li {
+        .title-zone {
+            color: #BBB;
+        }
+    }
+}
+
+.ui-dialog  {
+    li.separator {
+        margin-top: 25px;
     }
 }

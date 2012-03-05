@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -42,11 +42,11 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button. 
+			/// data.buttonType: A string value that indicates the type name of button. 
 			/// </param>
 			buttonMouseOver: null,
 			/// <summary>
-			/// Raised when the mouse is leave the decrement button or increment button.
+			/// Raised when the mouse leaves the decrement button or increment button.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example: 
@@ -62,7 +62,7 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button. 
+			/// data.buttonType: A string value that indicates the type name of button. 
 			/// </param>
 			buttonMouseOut: null,
 			/// <summary>
@@ -82,7 +82,7 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button. 
+			/// data.buttonType: A string value that indicates the type name of button. 
 			/// </param>
 			buttonMouseDown: null,
 			/// <summary>
@@ -102,11 +102,11 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button. 
+			/// data.buttonType: A string value that indicates the type name of button. 
 			/// </param>
 			buttonMouseUp: null,
 			/// <summary>
-			/// Raised when the decrement button or incremen tbutton  has been clicked.
+			/// Raised when the decrement or increment button is clicked.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example: 
@@ -122,13 +122,18 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button.
+			/// data.buttonType: A string value that indicates the type name of button.
 			/// </param>
 			buttonClick: null,
 			/// <summary>
-			/// A value determines whether the fill may be dragged between the buttons. 
+			/// Determines whether the user is able to 
+			/// drag the fill between the buttons. 
 			/// Default: true.
 			/// Type: Boolean.
+			/// Code example:
+			///  $("#selector").wijslider({
+			///      dragFill: false
+			///  });
 			/// </summary>
 			dragFill: true,
 			/// <summary>
@@ -136,6 +141,11 @@
 			/// one another.
 			/// Default: 0.
 			/// Type: Number.
+			/// Code example:
+			///  $("#selector").wijslider({
+			///      minRange: 25
+			///  });
+			/// </summary>
 			minRange: 0
 		},
 
@@ -243,9 +253,9 @@
 			thumb = element.find(".ui-slider-handle");
 			thumbWidth = thumb.outerWidth();
 			thumbHeight = thumb.outerHeight();
-			//update code for height and width canculation at 2011/7/12
+			//update code for height and width calculation at 2011/7/12
 			//element.removeAttr("style");
-			//end for height and width canculation
+			//end for height and width calculation
 
 			if (o.orientation === "horizontal") {
 				dbtop = ctrlHeight / 2 - decreBtnHeight / 2;
@@ -316,7 +326,8 @@
 
 		destroy: function () {
 			///	<summary>
-			///		Destroy Slider widget and reset the DOM element.
+			///	Remove the slider functionality completely. 
+			/// This will return the element back to its pre-init state.
 			///	</summary>
 			var self = this, decreBtn, increBtn;
 			decreBtn = this._getDecreBtn();

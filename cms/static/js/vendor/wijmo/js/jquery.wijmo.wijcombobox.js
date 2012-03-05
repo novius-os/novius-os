@@ -1,7 +1,7 @@
 /*globals jQuery,window,document*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -17,7 +17,7 @@
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  *	jquery.ui.position.js
- *	jquery.ui.wijlist.js
+ *	jquery.wijmo.wijlist.js
  *
  */
 (function ($) {
@@ -40,6 +40,12 @@
 			/// A value that specifies the underlying data source provider of wijcombobox.
 			/// Default: null.
 			/// Type: wijdatasource/Array
+			/// Code example: 
+			/// var testArray = [ 
+		    /// {label: 'c++',value: 'c++'},  
+		    /// {label: 'java',value: 'java'},  
+		    /// {label: 'php',value: 'php'}]; 
+			/// $("#tags").wijcombobox("option", "data", testArray);
 			/// </summary>
 			/// <remarks>
 			/// This option could either be a wijdatasource object 
@@ -51,6 +57,7 @@
 			/// A value that specifies the text in the wijcombobox label.
 			/// Default: null.
 			/// Type: String.
+			/// Code example: $("#tags").wijcombobox("option", "labelText", "Text")
 			/// </summary>
 			labelText: null,
 			/// <summary>
@@ -58,6 +65,7 @@
 			/// that can be entered in the wijcombobox text box to issue an AJAX request.
 			/// Default: 4.
 			/// Type: Number.
+			/// Code example: $("#tags").wijcombobox("option", "minLength", 5)
 			/// </summary>
 			minLength: 4,
 			/// <summary>
@@ -65,6 +73,7 @@
 			/// to delay before autocomplete begins after typing stops.
 			/// Default: 300.
 			/// Type: Number.
+			/// Code example: $("#tags").wijcombobox("option", "delay", 500)
 			/// </summary>
 			delay: 300,
 			/// <summary>
@@ -72,6 +81,12 @@
 			/// when it is visible.
 			/// Default: null.
 			/// Type: Object.
+			/// Code example: 
+			/// var animationOptions = {
+            /// animated: "Drop",
+            /// duration: 1000
+            /// };
+			/// $("#tags").wijcombobox("option", "showingAnimation", animationOptions)
 			/// </summary>
 			showingAnimation: null,
 			/// <summary>
@@ -79,24 +94,33 @@
 			/// when it is hidden.
 			/// Default: null.
 			/// Type: Object.
+			/// Code example: 
+			/// var animationOptions = {
+            /// animated: "Drop",
+            /// duration: 1000
+            /// };
+			///$("#tags").wijcombobox("option", "hidingAnimation", animationOptions)
 			/// </summary>
 			hidingAnimation: null,
 			/// <summary>
 			/// A value that determines whether to show the trigger of wijcombobox.
 			/// Default: true.
 			/// Type: Boolean.
+			/// Code example: $("#tags").wijcombobox("option", "showTrigger", false)
 			/// </summary>
 			showTrigger: true,
 			/// <summary>
 			/// A value that specifies the position of the drop-down list trigger.
 			/// Default: "right".
 			/// Type: String.
+			/// Code example: $("#tags").wijcombobox("option", "triggerPosition", "left")
 			/// </summary>
 			triggerPosition: "right",
 			/// <summary>
 			/// A value that specifies the height of the drop-down list.
 			/// Default: 300.
 			/// Type: Number.
+			/// Code example: $("#tags").wijcombobox("option", "dropdownHeight", 300)
 			/// </summary>
 			/// <remarks>
 			/// If the total height of all items is less than the value of this option,
@@ -107,6 +131,7 @@
 			/// A value that specifies the width of the drop-down list.
 			/// Default: "auto".
 			/// Type: Number/String("auto").
+			/// Code example: $("#tags").wijcombobox("option", "dropdownWidth", 500)
 			/// </summary>
 			/// <remarks>
 			/// When this option is set to "auto", the width of the drop-down
@@ -118,6 +143,7 @@
 			/// when the item gains focus or is activated.
 			/// Default: false.
 			/// Type: Boolean.
+			/// Code example: $("#tags").wijcombobox("option", "selectOnItemFocus", true)
 			/// </summary>
 			selectOnItemFocus: false,
 			/// <summary>
@@ -125,6 +151,7 @@
 			/// by matching the text in the textbox after typing.
 			/// Default: true.
 			/// Type: Boolean.
+			/// Code example: $("#tags").wijcombobox("option", "autoFilter", false)
 			/// </summary>
 			autoFilter: true,
 			/// <summary>
@@ -132,6 +159,7 @@
 			/// function after typing in the text if a match exists.
 			/// Default: true.
 			/// Type: Boolean.
+			/// Code example: $("#tags").wijcombobox("option", "autoComplete", false)
 			/// </summary>
 			autoComplete: true,
 			/// <summary>
@@ -140,6 +168,7 @@
 			/// all "abc" matches are highlighted in the drop-down list.
 			/// Default: true.
 			/// Type: Boolean.
+			/// Code example: $("#tags").wijcombobox("option", "highlightMatching", false)
 			/// </summary>
 			highlightMatching: true,
 			/// <summary>
@@ -147,6 +176,9 @@
 			/// The default value of the "of" options is the input of wijcombobox.
 			/// Default: {}.
 			/// Type: Object.
+			/// Code example: 
+			/// var positionOptions = {my:"right", at:"top"};
+			/// $("#tags").wijcombobox("option", "dropDownListPosition", positionOptions)
 			/// </summary>
 			dropDownListPosition: {},
 			/// <summary>
@@ -156,22 +188,29 @@
 			///                    {name: "header3", width: 150}]
 			/// Default: [].
 			/// Type: Array.
+			/// Code example: $("#tags").wijcombobox("option", "columns", [
+			/// {name: 'header1', width: 150}, 
+			/// {name: 'header2', width: 150}, 
+			/// {name: 'header3', width: 150}
+			/// ]);
 			/// </summary>
 			columns: [],
 			/// <summary>
 			/// A value that specifies the selection mode of wijcombobox.
 			/// Default: "Single".
 			/// Type: String.
+			/// Code example: $("#tags").wijcombobox("option", "selectionMode", "multiple")
+			/// </summary>
 			/// <remarks>
 			/// Possible options are: "single" and "multiple".
 			/// </remars>
-			/// </summary>
 			selectionMode: "single",
 			/// <summary>
 			/// A value that specifies the separator for 
 			/// the multiple selected items text in the textbox.
 			/// Default: ",".
 			/// Type: String.
+			/// Code example: $("#tags").wijcombobox("option", "multipleSelectionSeparator", ";")
 			/// </summary>
 			multipleSelectionSeparator: ",",
 			/// <summary>
@@ -179,6 +218,7 @@
 			/// the text of the selected item when the focus blurs. 
 			/// Default: false.
 			/// Type: Boolean.
+			/// Code example: $("#tags").wijcombobox("option", "forceSelectionText", true)
 			/// </summary>
 			/// <remarks>
 			/// If the text does not match any item, input text will restore 
@@ -191,9 +231,9 @@
 			/// Type: Function.
 			/// Code example:
 			/// Supply a function as an option.
-			///  $("#combobox").wijbarchart({select: function(e, data) { } });
-			/// Bind to the event by type: wijcomboxselect
-			/// $("#combobox").bind("wijcomboxselect", function(e, data) {} );
+			///  $("#tags").wijcombobox({select: function(e, data) { } });
+			/// Bind to the event by type: wijcomboboxselect
+			/// $("#tags").bind("wijcomboboxselect", function(e, data) {} );
 			/// </summary>
 			/// <param name="e" type="EventObj">
 			/// EventObj that relates to this event.
@@ -211,6 +251,7 @@
 			/// A value that determines whether input is editable.
 			/// Default: true.
 			/// Type: Boolean.
+			/// Code example: $("#tags").wijcombobox("option", "isEditable", false)
 			/// </summary>
 			isEditable: true,
 			/// <summary>
@@ -220,6 +261,10 @@
 			/// to an array of Number which contains the indices of the items to select.
 			/// Default: -1.
 			/// Type: Number/Array.
+			/// Code example: $("#tags").wijcombobox("option", "selectedIndex", 0);
+			/// The following example gets the selected item:
+			/// var selectedIndex = $("#tags").wijcombobox("option","selectedIndex"); 
+			/// var selectedItem = $("#tags").wijcombobox("option","data")[selectedIndex];
 			/// </summary>
 			/// <remarks>
 			/// If no item is selected, it will return -1.
@@ -228,6 +273,9 @@
 			/// <summary>
 			/// A value that specifies the value of the item to select 
 			/// when using single mode.
+			/// Default: null.
+			/// Type: Number/String/Object.
+			/// Code example: $("#tags").wijcombobox("option", "selectedValue", "c++")
 			/// </summary>
 			/// <remarks>
 			/// If no item is selected, it will return null.
@@ -237,6 +285,10 @@
 			/// A function called when drop-donw list is opened.
 			/// Default: null.
 			/// Type: Function.
+			/// Supply a function as an option.
+			/// Code example: $("#tags").wijcombobox("open", function(e, data) {});
+			/// Bind to the event by type: wijcomboboxopen
+			/// $("#tags").bind("wijcomboboxopen", function(e, data) {} );
 			/// </summary>
 			/// <param name="e" type="EventObj">
 			/// The jquery event object.
@@ -246,6 +298,10 @@
 			/// A function called when drop-donw list is closed.
 			/// Default: null.
 			/// Type: Function.
+			/// Supply a function as an option.
+			/// Code example: $("#tags").wijcombobox("close", function(e, data) {});
+			/// Bind to the event by type: wijcomboboxclose
+			/// $("#tags").bind("wijcomboboxclose", function(e, data) {} );
 			/// </summary>
 			/// <param name="e" type="EventObj">
 			/// The jquery event object.
@@ -262,6 +318,7 @@
 			/// if wijcombobox is initialized with the width of the HTML select element, 
 			/// the text may be hidden by the scroll bar of wijcombobox. 
 			/// </remarks>
+			/// Code example: $("#tags").wijcombobox("option", "selectElementWidthFix", 5)
 			/// </summary>
 			selectElementWidthFix: 6,
 			/// <summary>
@@ -270,9 +327,9 @@
 			/// Type: Function.
 			/// Code example:
 			/// Supply a function as an option.
-			///  $("#combobox").wijbarchart({search: function(e, data) { } });
-			/// Bind to the event by type: wijcomboxsearch
-			/// $("#combobox").bind("wijcomboxsearch", function(e, data) {} );
+			///  $("#tags").wijcombobox({search: function(e, data) { } });
+			/// Bind to the event by type: wijcomboboxsearch
+			/// $("#tags").bind("wijcomboboxsearch", function(e, data) {} );
 			/// </summary>
 			/// <param name="e" type="EventObj">
 			/// The jquery event object.
@@ -288,9 +345,9 @@
 			/// Type: Function.
 			/// Code example:
 			/// Supply a function as an option.
-			///  $("#combobox").wijbarchart({changed: function(e, data) { } });
-			/// Bind to the event by type: wijcomboxchanged
-			/// $("#combobox").bind("wijcomboxchanged", function(e, data) {} );
+			///  $("#tags").wijcombobox({changed: function(e, data) { } });
+			/// Bind to the event by type: wijcomboboxchanged
+			/// $("#tags").bind("wijcomboboxchanged", function(e, data) {} );
 			/// </summary>
 			/// <param name="e" type="EventObj">
 			/// The jquery event object.
@@ -306,6 +363,9 @@
 			/// The object contains the options of wijlist.
 			/// Default: null.
 			/// Type: Object.
+			/// Code example: 
+			/// var listoptions = {addHoverItemClass: false};
+			/// $("#tags").wijcombobox("option", "listOptions", listoptions)
 			/// </summary>
 			listOptions: null
 		},
@@ -346,6 +406,7 @@
 			/// <summary>
 			/// Repaints wijcombobox. Returns true if it succeeds; 
 			/// otherwise, returns false.
+			/// Code example: $("#tags").wijcombobox("repaint");
 			/// </summary>
 			/// <returns type="Boolean">
 			/// Returns true if it succeeds; otherwise, returns false.
@@ -585,6 +646,7 @@
 									});
 								}
 							}
+							
 						}
 						else { // multiple selection mode
 							if (!self._usingRemoteData()) {
@@ -938,7 +1000,9 @@
 
 		destroy: function () {
 			/// <summary>
-			/// Destroys the wijcombobox.
+			/// Removes the wijcombobox functionality completely. 
+			/// This returns the element back to its pre-init state. 
+			/// Code example: $("#tags").wijcombobox("destroy");
 			/// </summary>
 
 			var self = this,
@@ -1055,10 +1119,14 @@
 
 		search: function (value, eventObj) {
 			/// <summary>
-			/// Searches the wijcombobox drop-down list for the given value. 
+			/// Searches the wijcombobox drop-down list for the given value.
+			/// Code example: $("#tags").wijcombobox("search", "C++");
 			/// </summary>
 			/// <param name="value" type="String">
 			/// Text to search in the drop-down list
+			/// </param>
+			/// <param name="eventObj" type="Object">
+			/// The jquery event object.
 			/// </param>
 
 			var self = this, o, datasource, d;
@@ -1178,9 +1246,10 @@
 		close: function (event, skipAnimation) {
 			/// <summary>
 			/// Closes drop-down list.
+			/// Code example: $("#tags").wijcombobox("close", null, false);
 			/// </summary>
 			/// <param name="event" type="EventObj">
-			/// EventObj width this method, normally null.
+			/// The jquery event object.
 			/// </param>
 			/// <param name="skipAnimation" type="Boolean">
 			/// A value indicating whehter to skip animation.

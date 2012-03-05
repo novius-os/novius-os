@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -15,6 +15,7 @@
  * Depends:
  *  jquery.ui.core.js
  *  jquery.ui.widget.js
+ *  jquery.wijmo.wijutil.js
  *  jquery.ui.wijsuperpanel.js
  *  
  */
@@ -40,6 +41,7 @@
 			///                  {label: "label3", value: "value3"}]
 			/// Default: [].
 			/// Type: Array.
+			/// Code example:$("#element").wijlist("option","listItems",listItems); 
 			/// </summary>
 			listItems: [],
 			/// <summary>
@@ -65,6 +67,7 @@
 			/// A value indicates the selection mode of wijlist.
 			/// Default: "single".
 			/// Type: String.
+			/// Code example:$("#element").wijlist("option","selectionMode",'single');
 			/// </summary>
 			/// <remarks>
 			/// Options are "single" and "multiple". This option should not be set 
@@ -75,6 +78,7 @@
 			/// A value determines whether to auto-size wijlist.
 			/// Default: false.
 			/// Type: String.
+			/// Code example:$("#element").wijlist("option","autoSize",true);
 			/// </summary>
 			autoSize: false,
 			/// <summary>
@@ -82,6 +86,7 @@
 			///autoSize is set to true.
 			/// Default: 5.
 			/// Type: Number.
+			/// Code example:$("#element").wijlist("option","maxItemsCount",6);
 			/// </summary>
 			maxItemsCount: 5,
 			/// <summary>
@@ -89,22 +94,25 @@
 			/// item when mouse enters.
 			/// Default: true.
 			/// Type: Boolean.
+			/// Code example:$("#element").wijlist("option","addHoverItemClass",false);
 			/// </summary>
 			addHoverItemClass: true,
 			/// <summary>
 			/// A hash value sets to supepanel options when superpanel is created.
 			/// Default: null.
 			/// Type: Object.
+			/// Code example:$("#element").wijlist("option","superPanelOptions",null);
 			/// </summary>
 			superPanelOptions: null,
 			/// <summary>
 			/// A value indicates whether wijlist is disabled.
 			/// Default: false.
 			/// Type: Boolean.
+			/// Code example:$("#element").wijlist("option","disabled",true);
 			/// </summary>
 			disabled: false,
 			/// <summary>
-			/// A function called before an item is focused.
+			/// A function called when the mouse enters the item and before any logic in the hover event is processed.
 			/// Default: null.
 			/// Type: Function.
 			/// Supply a callback function to handle the focusing event:
@@ -117,10 +125,10 @@
 			/// </param>
 			/// <param name="item" type="Object">
 			/// item to be rendered.
-			/// item.element: LI element with this item.
-			/// item.list: wijlist instance.
-			/// item.label: label of item.
-			/// item.value: value of item.
+			/// item.element: The <LI> element with this item.
+			/// item.list: The wijlist instance.
+			/// item.label: The label of the item.
+			/// item.value: The value of the item.
 			/// item.text: could be set in handler to override rendered label of item.
 			/// </param>
 			/// <returns>
@@ -128,7 +136,7 @@
 			/// </returns>
 			focusing: null,
 			/// <summary>
-			/// A function called after an item is focused.
+			/// A function called when the mouse enters the item and after logic in the hover event is processed.
 			/// Default: null.
 			/// Type: Function.
 			/// Supply a callback function to handle the focus event:
@@ -141,15 +149,15 @@
 			/// </param>
 			/// <param name="item" type="Object">
 			/// item to be rendered.
-			/// item.element: LI element with this item.
-			/// item.list: wijlist instance.
-			/// item.label: label of item.
-			/// item.value: value of item.
-			/// item.text: could be set in handler to override rendered label of item.
+			/// item.element: The <LI> element with this item.
+			/// item.list: The wijlist instance.
+			/// item.label: The label of the item.
+			/// item.value: The value of the item.
+			/// item.text: This parameter can be set in the handler to override the rendered label of the item.
 			/// </param>
 			focus: null,
 			/// <summary>
-			/// A function called when an item loses focus.
+			/// A function called when the mouse leaves the item.
 			/// Type: Function.
 			/// Default: null.
 			/// Supply a callback function to handle the blur event:
@@ -162,11 +170,11 @@
 			/// </param>
 			/// <param name="item" type="Object">
 			/// item to be rendered.
-			/// item.element: LI element with this item.
-			/// item.list: wijlist instance.
-			/// item.label: label of item.
-			/// item.value: value of item.
-			/// item.text: could be set in handler to override rendered label of item.
+			/// item.element: The <LI> element with this item.
+			/// item.list: The wijlist instance.
+			/// item.label: The label of the item.
+			/// item.value: The value of the item.
+			/// item.text: This parameter can be set in the handler to override the rendered label of the item.
 			/// </param>
 			blur: null,
 			/// <summary>
@@ -183,15 +191,15 @@
 			/// </param>
 			/// <param name="item" type="Object">
 			/// item to be rendered.
-			/// item.element: LI element with this item.
-			/// item.list: wijlist instance.
-			/// item.label: label of item.
-			/// item.value: value of item.
-			/// item.text: could be set in handler to override rendered label of item.
+			/// item.element: The <LI> element with this item.
+			/// item.list: The wijlist instance.
+			/// item.label: The label of the item.
+			/// item.value: The value of the item.
+			/// item.text: This parameter can be set in the handler to override the rendered label of the item.
 			/// </param>
 			itemRendering: null,
 			/// <summary>
-			/// A function called after a item is rendered.
+			/// A function called after a list item is rendered.
 			/// Default: null.
 			/// Type: Function.
 			/// Supply a callback function to handle the itemRendered event:
@@ -204,11 +212,11 @@
 			/// </param>
 			/// <param name="item" type="Object">
 			/// item to be rendered.
-			/// item.element: LI element with this item.
-			/// item.list: wijlist instance.
-			/// item.label: label of item.
-			/// item.value: value of item.
-			/// item.text: could be set in handler to override rendered label of item.
+			/// item.element: The <LI> element with this item.
+			/// item.list: The wijlist instance.
+			/// item.label: The label of the item.
+			/// item.value: The value of the item.
+			/// item.text: This parameter can be set in the handler to override the rendered label of the item.
 			/// </param>
 			itemRendered: null,
 			/// <summary>
@@ -224,7 +232,7 @@
 			/// The jquery event object.
 			/// </param>
 			/// <param name="list" type="Object">
-			/// list rendered.
+			/// The list to be rendered.
 			/// </param>
 			listRendered: null,
 			/// <summary>
@@ -232,17 +240,34 @@
 			/// is leaving list. 
 			/// Default: Boolean.
 			/// Type: false.
+			/// Code example:$("#element").wijlist("option","keepHightlightOnMouseLeave",true);
 			/// </summary>
 			keepHightlightOnMouseLeave: false
 		},
 
 		removeAll: function () {
+			///	<summary>
+			///	Remove all wijlist items. 
+			/// Code example: $("#element").wijlist("removeAll");
+			///	</summary>
+			
 			var self = this;
 			self.items = [];
 			self._refresh();
 		},
 
 		addItem: function (item, index) {
+			///	<summary>
+			///	Add the specified item into the list by index.
+			/// Code example: $("#element").wijlist("addItem", {label: "label1", value: "value1"});
+			///	</summary>
+			/// <param name="item" type="Object">
+			/// The item that need to be inserted.
+			/// </param>
+			/// <param name="index" type="Number">
+			/// The position of the inserted item.
+			/// </param>
+			
 			var self = this;
 			self._checkData();
 			if (index === null) {
@@ -260,6 +285,14 @@
 		},
 
 		removeItem: function (item) {
+			///	<summary>
+			///	Remove the specified item from the wijlist.
+			/// Code example: $("#element").wijlist("removeItem", {label: "label1", value: "value1"});
+			///	</summary>
+			/// <param name="item" type="Object">
+			/// Indicates the item to be removed.
+			/// </param>
+			
 			var self = this, index;
 			self._checkData();
 			index = self.indexOf(item);
@@ -269,6 +302,14 @@
 		},
 
 		indexOf: function (item) {
+			///	<summary>
+			///	Return the index of the specified item. 
+			/// Code example: $("#element").wijlist("indexOf", {label: "label1", value: "value1"});
+			///	</summary>
+			/// <param name="item" type="Object">
+			/// Indicates the specified item.
+			/// </param>
+			
 			var self = this, index = -1, i = 0, oItem;
 			self._checkData();
 			for (i = 0; i < self.items.length; i++) {
@@ -282,6 +323,14 @@
 		},
 
 		removeItemAt: function (index) {
+			///	<summary>
+			///	Remove the specified item by index from the wijlist.
+			/// Code example: $("#element").wijlist("removeItemAt", 3);
+			///	</summary>
+			/// <param name="item" type="Object">
+			/// Index of the item to be removed.
+			/// </param>
+			
 			var self = this;
 			self._checkData();
 			self.items.splice(index, 1);
@@ -390,6 +439,15 @@
 		},
 
 		setItems: function (items) {
+			///	<summary>
+			///	Sets Items to be rendered by the wijlist. 
+			/// This will return the element back to its pre-init state.
+			/// Code example: $("#element").wijlist("setItems",{label: "label1", value: "value1"});
+			///	</summary>
+			/// <param name="items" type="Array">
+			/// Items to be rendered by the wijlist. 
+			/// </param>
+			
 			this._setItemsByExtend(items, false);
 		},
 
@@ -442,6 +500,11 @@
 		},
 
 		popItem: function () {
+			///	<summary>
+			///	Remove the last item in the wijlist. 
+			/// Code example: $("#element").wijlist("popItem");
+			///	</summary>
+			
 			var self = this;
 			self._checkData();
 			self.items.pop();
@@ -451,6 +514,7 @@
 		getList: function () {
 			/// <summary>
 			/// Gets the JQuery object reference of the ul element of wijlist.
+			/// Code example: $("#element").wijlist("getList");
 			/// </summary>
 			/// <returns type="JQueryObj">
 			/// ul JQuery reference.
@@ -468,9 +532,11 @@
 		},
 
 		destroy: function () {
-			/// <summary>
-			/// Destroys wijlist.
-			/// </summary>
+			///	<summary>
+			///	Remove the wijlist functionality completely. 
+			/// This will return the element back to its pre-init state.
+			/// Code example: $("#element").wijlist("destroy");
+			///	</summary>
 
 			var self = this, ele = this.element;
 			if (self.superPanel !== undefined) {
@@ -498,6 +564,9 @@
 		activate: function (event, item, scrollTo) {
 			///	<summary>
 			///		Activates a wijlist item.
+			/// Code example: 
+			/// var item = {element:$(".wijmo-wijlist-item:first"),list:$("#list").wijlist()};
+			/// $("#element").wijlist("activate", null, item, false); 
 			///	</summary>
 			/// <param name="event" type="EventObject">
 			/// Event will raise activation.
@@ -532,6 +601,7 @@
 		deactivate: function () {
 			/// <summary>
 			/// Deactivates activated items.
+			/// Code example: $("#element").wijlist("deactivate");
 			/// </summary>
 
 			var self = this,
@@ -550,8 +620,12 @@
 
 		next: function (event) {
 			/// <summary>
-			/// Moves focus to the next item. 
+			/// Moves focus to the next item.
+			/// Code example: $("#element").wijlist("next");
 			/// </summary>
+			/// <param name="event" type="EventObject">
+			/// Event will raise activation.
+			/// </param>
 
 			this.move("next", "." + listItemCSS + ":first", event);
 		},
@@ -559,6 +633,7 @@
 		nextPage: function () {
 			/// <summary>
 			/// Turns to the next page of the list.
+			/// Code example: $("#element").wijlist("nextPage");
 			/// </summary>
 
 			this.superPanel.doScrolling("bottom", true);
@@ -567,7 +642,11 @@
 		previous: function (event) {
 			/// <summary>
 			/// Moves focus to the previous item. 
+			/// Code example: $("#element").wijlist("previous");
 			/// </summary>
+			/// <param name="event" type="EventObject">
+			/// Event will raise activation.
+			/// </param>
 
 			this.move("prev", "." + listItemCSS + ":last", event);
 		},
@@ -575,6 +654,7 @@
 		previousPage: function () {
 			/// <summary>
 			/// Turns to the previous page of the wijlist.
+			/// Code example: $("#element").wijlist("previousPage");
 			/// </summary>
 
 			this.superPanel.doScrolling("top", true);
@@ -583,6 +663,7 @@
 		first: function () {
 			/// <summary>
 			/// Tests that the focus is at the first item.
+			/// Code example: $("#element").wijlist("first");
 			/// </summary>
 
 			return this.active && !this.active.element.prev().length;
@@ -591,6 +672,7 @@
 		last: function () {
 			/// <summary>
 			/// Tests that the focus is at the last item.
+			/// Code example: $("#element").wijlist("last");
 			/// </summary>
 
 			return this.active && !this.active.element.next().length;
@@ -699,6 +781,7 @@
 		getItems: function (indices) {
 			/// <summary>
 			/// Find list items by indices or values.
+			/// Code Example:$("#element").wijlist("getItems",5);
 			/// </summary>
 			/// <param name="indices" type="Array/Number">
 			/// This parameter could be a string, number, array of string,
@@ -722,6 +805,7 @@
 		selectItems: function (indices, triggerSelected) {
 			/// <summary>
 			/// Selects item(s) in the list by item index/indices or value(s).
+			/// Code Example:$("#element").wijlist("selectItems",5, false);
 			/// </summary>
 			/// <param name="indices" type="Array/Number">
 			/// This parameter could be a string, number, array of string,
@@ -776,7 +860,8 @@
 
 		unselectItems: function (indices) {
 			/// <summary>
-			/// Unselects items by itemsÃ¢â‚¬â„¢indices.
+			/// Unselects items by items' indices.
+			/// Code Example:$("#element").wijlist("unselectItems",5);
 			/// </summary>
 			/// <param name="indices" type="Array">
 			/// Indices of items to unselect.
@@ -807,6 +892,7 @@
 		renderList: function () {
 			/// <summary>
 			/// Render items of wijlist.
+			/// Code Example:$("#element").wijlist("renderList");
 			/// </summary>
 			var self = this, ul = this.ul, o = this.options, items,
 			count, singleMode, i, item;
@@ -880,6 +966,7 @@
 		refreshSuperPanel: function () {
 			/// <summary>
 			/// Reset the layout of superpanel to reflect the change in content.
+			/// Code Example:$("#element").wijlist("refreshSuperPanel");
 			/// </summary>
 
 			var self = this, ele = this.element, o = this.options, ul = this.ul,

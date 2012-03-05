@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -14,7 +14,9 @@
 * * Wijmo ribbon widget.
 *
 * Depends:
-*
+*      jquery.ui.core.js
+*      jquery.ui.widget.js
+*      jquery.wijmo.wijtabs.js
 */
 (function ($) {
 	"use strict";
@@ -49,6 +51,29 @@
 
 	$.widget("wijmo.wijribbon", {
 		options: {
+			/// <summary>
+			/// Occurs when the command button in ribbon is clicked.
+			/// Default: null.
+			/// Type: Function.
+			/// Code example:
+			/// Supply a function as an option.
+			/// $("#wijribbon").wijribbon({click: function(e, cmd) { } });
+			/// Bind to the event by type: wijribbonclick
+			/// $("#wijribbon")
+			///.bind("wijribbonclick", function(e, cmd) {} );
+			/// </summary>
+			/// <param name="e" type="eventObj">
+			/// jQuery.Event object.
+			/// </param>
+			/// <param name="cmd" type="Object">
+			/// An object that contains all command infos of the clicked command button.
+			/// cmd.commandName: the command name of the button.
+			/// cmd.name: the parent name of the button which means 
+			///     if the drop down item is clicked, 
+			///     then the name specifies the command name of the drop down button.
+			///     Says that VeryLarge font size is clicked, 
+			///     then commandName = "verylarge", name = "fontsize".
+			/// </param>
 			click: null
 		},
 
@@ -464,7 +489,9 @@
 		},
 
 		updateRibbonSize: function () {
-			var self = this;
+			var self = this,
+				i,groupDropDown,
+				abbrevgroupContainer;
 
 			self.tabEle.children("div").each(function (i, tabPage) {
 				var $tabPage = $(tabPage),
@@ -483,11 +510,28 @@
 					$tabPage.removeClass(css_tabs_hide);
 					pageWidth = $tabPage.width();
 				}
-
+			
 				groups.each(function (j, li) {
 					var group = $(li),
 					lblDiv = group.find(">div:last"),
 					text = $.trim(lblDiv.text());
+					
+					//update by wh for refresh 2012/1/9
+					//recover the ribbon to orign
+					groupDropDown = group.children("." + css_ribbon_dropdowngroup);
+					abbrevgroupContainer = group
+						.children("." + css_ribbon_abbrevgroup);
+					if (groupDropDown) {
+						group
+						.addClass(css_ribbon + "-" + text.toLowerCase())
+						.prepend(groupDropDown.children());
+						groupDropDown.remove();
+						if (abbrevgroupContainer) {
+							abbrevgroupContainer.remove();
+						}
+					}
+					//end
+					
 					groupInfos.push({
 						width: group.outerWidth(true),
 						text: text
@@ -536,7 +580,10 @@
 					}
 					group.addClass(css);
 
-					lblDiv.addClass(css_ribbon_grouplabel);
+					lblDiv.addClass(css_ribbon_grouplabel)
+							.bind("click", function () {
+								return false;
+							});
 					group
 					.wrapInner("<div class = '" + css_ribbon_groupcontent + "'></div>");
 					group.children().bind("mouseover", function () {
@@ -860,6 +907,17 @@
 		},
 
 		setButtonDisabled: function (commandName, disabled) {
+			/// <summary>
+			/// Set the button disabled or enabled according to the command name.
+			/// Code example: $("#element").wijribbon("setButtonDisabled","undo",true);
+			/// </summary>
+			/// <param name="commandName" type="String">
+			/// The name of the command.
+			/// </param>
+			/// <param name="disabled" type="Boolean">
+			/// The disabled state of the button, true or false.
+			/// </param>
+			
 			var buttonObj = this.buttons[commandName],
 				isButtonEle = false, button, splitUi;
 			if (buttonObj && buttonObj.button) {
@@ -883,6 +941,16 @@
 		},
 
 		setButtonsDisabled: function (commands) {
+			/// <summary>
+			/// Set the buttons as disabled or enabled.
+			/// Code example: var commands = {undo:true, redo:false};
+			/// $("#element").wijribbon("setButtonsDisabled",commands);
+			/// </summary>
+			/// <param name="commands" type="Object">
+			/// An object that contains commands infos that need to change state,
+			/// key is command name, value is button disabled state, true or false.
+			/// </param>
+			
 			var self = this;
 
 			$.each(commands, function (key, value) {
@@ -891,6 +959,16 @@
 		},
 
 		setButtonsChecked: function (commands) {
+			/// <summary>
+			/// Set the buttons as checked or not.
+			/// Code example: var commands = {undo:true, redo:false};
+			/// $("#element").wijribbon("setButtonsChecked",commands);
+			/// </summary>
+			/// <param name="commands" type="Object">
+			/// An object that contains commands infos that need to change state,
+			/// key is command name, value is button checked state, true or false.
+			/// </param>
+			
 			var self = this;
 
 			$.each(commands, function (key, value) {
@@ -903,6 +981,20 @@
 		},
 
 		setButtonChecked: function (commandName, checked, name) {
+			/// <summary>
+			/// Set the button checked or not.
+			/// Code example: $("#element").wijribbon("setButtonChecked","superscript",false);
+			/// </summary>
+			/// <param name="commandName" type="String">
+			///  The command name of the button.
+			/// </param>
+			/// <param name="checked" type="Boolean">
+			///  The checked state of the button.
+			/// </param>
+			/// <param name="name" type="String">
+			///  The parent name of the button.
+			/// </param>
+			
 			var self = this, radios,
 			buttonObj = self.buttons[commandName],
 			buttonEle, listUi, label;

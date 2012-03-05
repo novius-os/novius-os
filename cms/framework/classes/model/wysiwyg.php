@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Model_Wysiwyg extends \Orm\Model {
+class Model_Wysiwyg extends \Cms\Orm\Model {
     protected static $_table_name = 'os_wysiwyg';
     protected static $_primary_key = array('wysiwyg_id');
 }

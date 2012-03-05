@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -126,6 +126,7 @@
 		},
 
 		refresh: function (e) {
+			/// Use the refresh method to set the checkbox element's style.
 			var self = this;
 			self.element.data("iconElement")
 			.toggleClass("ui-icon ui-icon-check", self.element.get(0).checked);
@@ -138,6 +139,8 @@
 		},
 
 		destroy: function () {
+			/// Remove the functionality completely. 
+			/// This will return the element back to its pre-init state.
 			var self = this, boxelement = self.element.parent().parent();
 			boxelement.children("div." + self._csspre + "-box").remove();
 			self.element.unwrap();

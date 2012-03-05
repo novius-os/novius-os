@@ -10,7 +10,8 @@
 
 // Load in the Autoloader
 require COREPATH.'classes'.DIRECTORY_SEPARATOR.'autoloader.php';
-class_alias('Fuel\\Core\\Autoloader', 'Autoloader');
+require CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'autoloader.php';
+//class_alias('Fuel\\Core\\Autoloader', 'Autoloader');
 
 // Bootstrap the framework DO NOT edit this
 require_once COREPATH.'bootstrap.php';
@@ -27,7 +28,10 @@ Autoloader::add_classes(array(
 	'Fieldset_Field' => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'fieldset_field.php',
 	'Format'         => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'format.php',
 	'Response'       => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'response.php',
+    'Controller'     => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'controller.php',
+    'Arr'            => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'arr.php',
 	'Cms\Orm\Query'  => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'orm'.DIRECTORY_SEPARATOR.'query.php',
+	'Cms\Orm\Model'  => CMSPATH.'classes'.DIRECTORY_SEPARATOR.'fuel'.DIRECTORY_SEPARATOR.'orm'.DIRECTORY_SEPARATOR.'model.php',
 ));
 
 function __($_message, $default = null)
@@ -55,7 +59,11 @@ Fuel::$env = (isset($_SERVER['FUEL_ENV']) ? $_SERVER['FUEL_ENV'] : Fuel::DEVELOP
 spl_autoload_register(function($class) {
 	$class = ltrim($class, '\\');
 	list($module, $whatever) = explode('\\', $class.'\\');
-	$module = Inflector::words_to_upper($module);
+	$module = explode('_', $module);
+	foreach ($module as &$part) {
+		$part = ucfirst($part);
+	}
+	$module = implode('_', $module);
 
 	// A module can be put inside any namespace when properly configured
 	if (!empty(Fuel::$namespace_aliases[$module])) {
@@ -67,7 +75,7 @@ spl_autoload_register(function($class) {
 		}
 	}
 	return false;
-}, true, false);
+}, true, true);
 //*/
 
 // Initialize the framework with the config file.
@@ -99,5 +107,5 @@ if (is_file(APPPATH.'bootstrap.php')) {
 	require_once APPPATH.'bootstrap.php';
 }
 
-define('CACHE_DURATION_PAGE',     30);
-define('CACHE_DURATION_FUNCTION', 30);
+define('CACHE_DURATION_PAGE',     5);
+define('CACHE_DURATION_FUNCTION', 10);

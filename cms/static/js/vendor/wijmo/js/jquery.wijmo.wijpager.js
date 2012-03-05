@@ -2,7 +2,7 @@
 /*jslint white: false */
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -173,9 +173,10 @@
 		},
 
 		destroy: function () {
-			///	<summary>
-			///	Destroy wijpager widget and reset the DOM element.
-			///	</summary>
+			/// <summary>
+			/// Destroys the wijpager widget and reset the DOM element.
+			/// Code example: $("#element").wijpager("destroy");
+			/// </summary>
 			this.element.removeClass("ui-widget wijmo-wijpager ui-helper-clearfix");
 			this.$ul.remove();
 			$.Widget.prototype.destroy.apply(this, arguments);

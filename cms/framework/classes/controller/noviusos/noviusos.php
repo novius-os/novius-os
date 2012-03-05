@@ -28,15 +28,16 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 		// Yahoo CSS Reset
 		//\Asset::css('http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css', array(), 'css');
 
+		\Asset::add_path('static/cms/js/vendor/wijmo/');
+        \Asset::css('aristo/jquery-wijmo.css', array(), 'css');
+        \Asset::css('jquery.wijmo-complete.all.2.0.0.min.css', array(), 'css');
+
 		\Asset::add_path('static/cms/');
 		// laGrid before base
 		\Asset::css('laGrid.css', array(), 'css');
+        // base after wijmo
 		\Asset::css('base.css', array(), 'css');
 		\Asset::css('form.css', array(), 'css');
-
-		\Asset::add_path('static/cms/js/vendor/wijmo/');
-        \Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-        \Asset::css('jquery.wijmo-complete.all.2.0.0b2.min.css', array(), 'css');
 
 		\Asset::add_path('static/cms/js/jquery/jquery-ui-noviusos/');
         \Asset::css('jquery.nos.ostabs.css', array(), 'css');
@@ -99,43 +100,37 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 		);
 
 		$view->set('ostabs', \Format::forge($ostabs)->to_json(), false);
-
-        $background_id = \Arr::get($user->getConfiguration(), 'misc.display.background');
-        $background = $background_id ? Model_Media_Media::find($background_id) : false;
-        $this->template->set('background', $background, false);
 		$this->template->body = $view;
 		return $this->template;
 	}
 
 	public function action_appstab()
 	{
+		\Config::load(APPPATH.'data'.DS.'config'.DS.'launchers.php', 'launchers');
+		$launchers = \Config::get('launchers', array());
 
-
-
-		\Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
-		$app_installed = \Config::get('app_installed', array());
-
-        \Config::load('cms::admin/app_default', true);
-        $app_default = \Config::get('cms::admin/app_default', array());
-        $app_installed = array_merge($app_installed, $app_default);
+        \Config::load('cms::admin/launchers_default', true);
+        $launchers_default = \Config::get('cms::admin/launchers_default', array());
+        $launchers = array_merge($launchers, $launchers_default);
         //$app_installed = \Config::mergeWithUser('misc.apps', $app_installed);
 
         $apps = array();
-        foreach ($app_installed as $key => $app) {
-            if (!empty($app['href']) && !empty($app['icon64'])) {
+        foreach ($launchers as $key => $app) {
+            if (!empty($app['url']) && !empty($app['icon64'])) {
                 $app['key'] = $key;
                 $apps[] = $app;
             }
         }
-
-        //\Debug::dump($apps);
-        //exit();
         $apps = \Arr::sort($apps, 'order', 'asc');
 
+        $user = \Session::get('logged_user', false);
+        $background_id = \Arr::get($user->getConfiguration(), 'misc.display.background');
+        $background = $background_id ? Model_Media_Media::find($background_id) : false;
 
 		$view = \View::forge('noviusos/appstab', array(
 			'apps'          => $apps,
 		));
+        $view->set('background', $background, false);
 		return $view;
 	}
 
@@ -172,13 +167,15 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
         \Response::json($json);
     }
 
-    public function convertFromPost($arr) {
-        foreach ($arr as $key => $value) {
-            if (is_array($value)) {
-                $arr[$key] = $this->convertFromPost($arr[$key]);
-            } else {
-                $arr[$key] = $arr[$key] == 'true' ? true : ($arr[$key] == 'false' ? false : $arr[$key]);
-                $arr[$key] = is_numeric($arr[$key]) ? floatval($arr[$key]) : $arr[$key];
+    protected function convertFromPost($arr) {
+        if (is_array($arr)) {
+            foreach ($arr as $key => $value) {
+                if (is_array($value)) {
+                    $arr[$key] = $this->convertFromPost($arr[$key]);
+                } else {
+                    $arr[$key] = $arr[$key] == 'true' ? true : ($arr[$key] == 'false' ? false : $arr[$key]);
+                    $arr[$key] = is_numeric($arr[$key]) ? floatval($arr[$key]) : $arr[$key];
+                }
             }
         }
         return $arr;

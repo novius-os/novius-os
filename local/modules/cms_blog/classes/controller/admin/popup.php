@@ -15,21 +15,8 @@ use Fuel\Core\View;
 
 class Controller_Admin_Popup extends \Cms\Controller_Generic_Admin {
 
-	public function after($response) {
-		\Asset::add_path('static/cms/');
-		\Asset::css('base.css', array(), 'css');
-		\Asset::css('laGrid.css', array(), 'css');
-		\Asset::css('form.css', array(), 'css');
-
-		\Asset::add_path('static/cms/js/vendor/wijmo/');
-		\Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-		\Asset::css('jquery.wijmo-complete.all.2.0.0b2.min.css', array(), 'css');
-
-		return parent::after($response);
-	}
-
 	public function action_index() {
-		$this->template->body = View::forge('cms_blog::popup');
+		$this->template->body = View::forge($this->config['views']['index']);
 		return $this->template;
 	}
 }

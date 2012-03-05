@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -154,17 +154,6 @@
 			self._attachDraggableResizableEvent();
 			self.originalPosition = o.position;
 			self.isPin = false;
-			//Add for support disabled option at 2011/7/8
-
-			//end for disabled option
-		},
-
-		_init: function () {
-			var self = this, o = self.options;
-			$.ui.dialog.prototype._init.apply(self, arguments);
-			if (o.disabled) {
-				self.disable();
-			}
 		},
 
 		_handleDisabledOption: function (disabled, ele) {
@@ -993,8 +982,14 @@
 			if (self.collapsed) {
 				self._collapseDialogContent();
 			}
-			if (self.disabledDiv && o.disabled) {
-				self.disabledDiv.show();
+
+			if (o.disabled) {
+				if (self.disabledDiv) {
+					self.disabledDiv.show();
+				}
+				else {
+					self.disable();
+				}
 			}
 		},
 

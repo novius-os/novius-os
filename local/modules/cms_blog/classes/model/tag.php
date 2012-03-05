@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -10,8 +10,8 @@
 
 namespace Cms\Blog;
 
-class Model_Tag extends \Orm\Model {
-    protected static $_table_name = 'cms_tag';
+class Model_Tag extends \Cms\Orm\Model {
+    protected static $_table_name = 'os_tag';
     protected static $_primary_key = array('tag_id');
 
     protected static $_properties = array (
@@ -50,7 +50,7 @@ class Model_Tag extends \Orm\Model {
         'blogs' => array(
             'key_from'         => 'tag_id',
             'key_through_from' => 'blgt_tag_id',
-            'table_through'    => 'cms_blog_tag',
+            'table_through'    => 'os_blog_tag',
             'key_through_to'   => 'blgt_blog_id',
             'model_to'         => '\Cms\Blog\Model_Blog',
             'key_to'           => 'blog_id',

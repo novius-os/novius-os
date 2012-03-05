@@ -13,114 +13,11 @@ namespace Cms;
 class Module {
 
     public $name;
-    public static $config_items = array();
-
-    public static function load_config($module) {
-        if (isset(static::$config_items[$module])) {
-            return static::$config_items[$module];
-        }
-
-        static::$config_items[$module] = $config;
-        return $config;
-    }
-
-    public static function save_config($module, $config) {
-
-    }
-
-    public static function generate_merged_config() {
-
-    }
-
-    protected static function read_config($module, $path = null) {
-        $search = array($path.DS.'config', APPPATH.'config'.DS.'modules'.DS.$module);
-        return static::load_config($module, true); // $reload ?
-    }
 
     public function get_config() {
         \Config::load($this->name.'::config', true);
         $config = \Config::get($this->name.'::config', array());
         return $config;
-    }
-
-    /**
-     *
-     * @param string $where :
-     *  - not_installed
-     *  - installed
-     *  - site (local)
-     *  - repository = not_installed + installed
-     *  - available = site + installed
-     *  - all =  site + installed + not_installed
-     */
-    public static function list_from($where, $hierarchy = false) {
-
-        static $list = array();
-        static $aliases = array(
-            'all'        => array('site', 'installed', 'not_installed'),
-            'repository' => array('not_installed', 'installed'),
-            'available'  => array('installed', 'site'),
-        );
-
-        // Aliases
-        if (isset($aliases[$where])) {
-            $list = array();
-            foreach ($aliases[$where] as $w) {
-                if ($hierarchy) {
-                    $list[$w] = static::list_from($w);
-                } else {
-                    $list = array_merge($list, static::list_from($w));
-                }
-            }
-            return $list;
-        } else if (isset($from[$where])) {
-            return $from[$where];
-        }
-
-        // Fetch all the modules
-        $list = array(
-            'not_installed' => array(),
-            'installed'     => array(),
-            'site'          => array(),
-        );
-
-        $modules_path    = \Config::get('modules.path');
-        $repository_path = \Config::get('modules.repository_path');
-
-        $list = array();
-
-        if ($modules_path) {
-            foreach (array_keys(\File::read_dir($modules_path, 1)) as $module) {
-                $list[$module] = array(
-                    'path' => $modules_path.$module,
-                    'type' => is_link($modules_path.$module) ? 'installed' : 'site',
-                );
-            }
-        }
-
-        if ($repository_path) {
-            foreach (array_keys(\File::read_dir($repository_path, 1)) as $module) {
-                // Ignore installed plugins
-                if (!isset($list[$module])) {
-                    $list[$module] = array(
-                        'path' => $repository_path.$module,
-                        'type' => 'not_installed',
-                    );
-                }
-            }
-        }
-
-        foreach ($list as $module => $details) {
-            $config = static::read_config($module, $details['path']);
-            $list['module']['name']    = $config['name'];
-            $list['module']['version'] = $config['version'];
-        }
-
-        foreach ($list as $module => $details) {
-            $from[$module['type']][$module] = $details;
-        }
-
-        return $from[$where];
     }
 
 	public static function forge($module_name) {
@@ -132,24 +29,28 @@ class Module {
 	}
 
 	public function install() {
-		return $this->check_install() ||
-			($this->install_templates() && $this->symlink('static') && $this->symlink('htdocs') && $this->symlink('data') && $this->symlink('cache'));
+		return $this->_refresh_properties() && ($this->check_install() ||
+			($this->symlink('static')
+				&& $this->symlink('htdocs')
+				//&& $this->symlink('data')
+				//&& $this->symlink('cache')
+			));
 	}
 
 	public function uninstall() {
-		return $this->remove_templates()
+		return $this->_refresh_properties(false)
         && $this->unsymlink('static')
-		&& $this->unsymlink('htdocs')
-		&& $this->unsymlink('data')
-		&& $this->unsymlink('cache');
+		&& $this->unsymlink('htdocs');
+		//&& $this->unsymlink('data')
+		//&& $this->unsymlink('cache');
 	}
 
 	public function check_install() {
 		return is_dir(APPPATH.'modules'.DS.$this->name)
 		&& $this->is_link('static')
-		&& $this->is_link('htdocs')
-		&& $this->is_link('data')
-		&& $this->is_link('cache');
+		&& $this->is_link('htdocs');
+		//&& $this->is_link('data')
+		//&& $this->is_link('cache');
 	}
 
 	protected function symlink($folder) {
@@ -181,12 +82,16 @@ class Module {
 		return true;
 	}
 
-    protected function install_templates() {
-        return static::refresh_templates(array('add' => $this->name));
-    }
+    static protected $properties = array('templates', 'launchers', 'wysiwyg_enhancers');
 
-    protected function remove_templates() {
-        return static::refresh_templates(array('remove' => $this->name));
+    protected function _refresh_properties($add = true) {
+        foreach (static::$properties as $property) {
+            if (!static::_refresh_property($property, array(($add ? 'add' : 'remove') => $this->name))) {
+                return false;
+            }
+        }
+        static::_refresh_dependencies(array(($add ? 'add' : 'remove') => $this->name));
+        return true;
     }
 
     /**
@@ -196,75 +101,120 @@ class Module {
      * params['remove'] : module to remove
      * @return bool
      */
-    public static function refresh_templates(array $params = array()) {
+    protected static function _refresh_property($property, array $params = array()) {
+        $add = isset($params['add']) ? $params['add'] : false;
+        $remove = isset($params['remove']) ? $params['remove'] : false;
+        $app_refresh = $add ? $add : $remove;
+
         // We get the existing templates installed in the application
-        \Config::load(APPPATH.'data'.DS.'config'.DS.'templates.php', 'templates');
-        $existing_templates = \Config::get('templates', array());
+        \Config::load(APPPATH.'data'.DS.'config'.DS.$property.'.php', $property);
+        $existing_properties = \Config::get($property, array());
 
-        // We add the module templates we want to add (params, see install_templates)
-        $new_templates = array();
+        // We add the module templates we want to add
+        $new_properties = array();
+		if ($property == 'templates') {
+			\Config::load('templates', 'local_templates');
+			$new_properties = \Config::get('local_templates', array());
+		}
 
-        if ($params['add']) {
-            \Config::load($params['add'].'::config', true);
-            $config = \Config::get($params['add'].'::config', array());
-            if ($config['templates']) {
-                foreach ($config['templates'] as $key => $tpl) {
-                    $config['templates'][$key]['module'] = $params['add'];
+        if ($add) {
+            \Config::load($add.'::metadata', true);
+            $config = \Config::get($add.'::metadata', array());
+            if (isset($config[$property])) {
+                foreach ($config[$property] as $key => $val) {
+                    $config[$property][$key]['module'] = $add;
                 }
-                $new_templates = array_merge($new_templates, $config['templates']);
+                $new_properties = array_merge($new_properties, $config[$property]);
             }
+
         }
-
-
 
         // then we get the list of installed modules
         \Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
         $app_installed = \Config::get('app_installed', array());
-
         // and add their templates to the new templates
-
-
         foreach ($app_installed as $app_name => $app) {
-            if (!($params['remove'] && $params['remove'] == $app_name)) {
-                \Config::load($app_name.'::config', true);
-                $config = \Config::get($app_name.'::config', array());
-                if ($config['templates']) {
-                    foreach ($config['templates'] as $key => $tpl) {
-                        $config['templates'][$key]['module'] = $app_name;
+            if ($app_refresh !== $app_name) {
+                \Config::load($app_name.'::metadata', true);
+                $config = \Config::get($app_name.'::metadata', array());
+                if (isset($config[$property])) {
+                    foreach ($config[$property] as $key => $val) {
+                        $config[$property][$key]['module'] = $app_name;
                     }
-                    $new_templates = array_merge($new_templates, $config['templates']);
+                    $new_properties = array_merge($new_properties, $config[$property]);
                 }
             }
         }
-
 
         // we don't replace existing templates and get templates which are deleted
-        $deleted_templates = array();
-        foreach ($existing_templates as $key => $template) {
-            if ($new_templates[$key]) {
-                if (!($params['remove'] && $params['remove'] == $template['module'])) {
-                    $new_templates[$key] = $existing_templates[$key];
+        if ($property === 'templates') {
+            $deleted_properties = array();
+            foreach ($existing_properties as $key => $val) {
+                if (!empty($new_properties[$key])) {
+                    if (!($remove && isset($val['module']) && $remove === $val['module'])) {
+                        $new_properties[$key] = $existing_properties[$key];
+                    }
+                } else {
+                    $deleted_properties[] = $key;
                 }
-            } else {
-                $deleted_templates[] = $key;
+            }
+
+            // we check that deleted templates are not used on the page
+            if ($deleted_properties) {
+                $nb = Model_Page_Page::count(array('where' => array(array('page_template', 'IN', $deleted_properties))));
+                if ($nb > 0) {
+                    throw new \Exception('Some page include those partials and can therefore not be deleted !');
+                }
             }
         }
 
-        // we check that deleted templates are not used on the page
-
-        if ($deleted_templates) {
-            $nb = Model_Page_Page::count(array('where' => array(array('page_gab', 'IN', $deleted_templates))));
-            if ($nb > 0) {
-                throw new \Exception('Some page include those partials and can therefore not be deleted !');
-            }
-        }
-
+		// Local templates get replaced, everytime and have priority over modules
+		if ($property == 'templates') {
+			$new_properties = \Arr::merge($new_properties, \Config::get('local_templates'));
+		}
 
         // if none of the page use the template, we save the new configuration
-        \Config::set('templates', $new_templates);
-        \Config::save(APPPATH.'data'.DS.'config'.DS.'templates.php', 'templates');
+        \Config::set($property, $new_properties);
+        \Config::save(APPPATH.'data'.DS.'config'.DS.$property.'.php', $property);
 
         return true;
 
+    }
+
+    protected static function _refresh_dependencies(array $params = array()) {
+        $add = isset($params['add']) ? $params['add'] : false;
+        $remove = isset($params['remove']) ? $params['remove'] : false;
+        $app_refresh = $add ? $add : $remove;
+
+        $dependencies = array();
+        if ($add) {
+            \Config::load($add.'::metadata', true);
+            $config = \Config::get($add.'::metadata', array());
+            if (isset($config['extends'])) {
+                if (!isset($dependencies[$config['extends']])) {
+                    $dependencies[$config['extends']] = array();
+                }
+                $dependencies[$config['extends']][] = $app_refresh;
+            }
+        }
+
+        \Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
+        $app_installed = \Config::get('app_installed', array());
+
+        foreach ($app_installed as $app_name => $app) {
+            if ($app_refresh !== $app_name) {
+                \Config::load($app_name.'::metadata', true);
+                $config = \Config::get($app_name.'::metadata', array());
+                if (isset($config['extends'])) {
+                    if (!isset($dependencies[$config['extends']])) {
+                        $dependencies[$config['extends']] = array();
+                    }
+                    $dependencies[$config['extends']][] = $app_name;
+                }
+            }
+        }
+
+        \Config::set('modules_dependencies', $dependencies);
+        \Config::save(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', $dependencies);
     }
 }

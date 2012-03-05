@@ -22,7 +22,7 @@ class Cms {
     public static function rewrite_url($url = null, array $rewrites = array()) {
         // No URL provided, we use the one from the main page
         if ($url === null) {
-            $url = self::main_controller()->page->get_href();
+            $url = self::main_page()->get_href();
         }
         $url  = str_replace('.html', '/', $url);
 
@@ -51,6 +51,15 @@ class Cms {
     }
 
     /**
+     * Returns the pagefrom the main request
+     *
+     * @return \Cms\Model_Page_Page
+     */
+    public static function main_page() {
+        return static::main_controller()->page;
+    }
+
+    /**
      *
      * @param  string   $where   Route for the request
      * @param  array    $args    The method parameters
@@ -70,10 +79,12 @@ class Cms {
         ob_start();
         try {
             $request  = Request::forge($where);
+
             \Cms::main_controller()->rewrite_prefix = $module;
             $response = call_user_func_array(array($request, "execute"), array($args['args']));
             \Cms::main_controller()->rewrite_prefix = null;
             $cache_cleanup = $request->controller_instance->cache_cleanup;
+
             if (!empty($cache_cleanup)) {
                 \Fuel::$profiling && \Profiler::console($cache_cleanup);
                 Cms::main_controller()->cache_cleanup[] = $cache_cleanup;
@@ -100,43 +111,112 @@ class Cms {
      */
     public static function parse_wysiwyg($content, $controller, $inline = null) {
 
+		Cms::_parse_enhancers($content);
+		Cms::_parse_medias($content);
+		Cms::_parse_internals($content);
+
+		$content = strtr($content, array(
+			'nos://anchor/' => \Cms::main_controller()->url,
+		));
+
+		foreach(Event::trigger('front.parse_wysiwyg', null, 'array') as $c) {
+			is_callable($c) && call_user_func_array($c, array(&$content));
+		}
+
+		return $content;
+    }
+
+	protected static function _parse_enhancers(&$content) {
+
         // Fetch the available functions
-        Config::load('front', true);
+        \Config::load(APPPATH.'data'.DS.'config'.DS.'wysiwyg_enhancers.php', 'wysiwyg_enhancers');
 
         \Fuel::$profiling && Profiler::mark('Recherche des fonctions dans la page');
 
 		preg_match_all('`<(\w+)\s[^>]+data-module="([^"]+)" data-config="([^"]+)">.*?</\\1>`', $content, $matches);
         foreach ($matches[2] as $match_id => $fct_id) {
-			$args = json_decode(strtr($matches[3][$match_id], array(
-				'&quot;' => '"',
-			)));
 
-            // Check if the function exists
-            $name   = $fct_id;
-            $config = Config::get("front.$name", false);
-            $found  = $config !== false;
-
-            false && \Fuel::$profiling && Profiler::console(array(
-                'function_id'   => $fct_id,
-                'function_name' => $name,
-                'controller'    => get_class($controller),
-            ));
-
-            if ($found) {
-                $function_content = self::hmvc($config['target'].'/main', array(
-                    'args'     => array($args),
-                    'module'   => $config['rewrite_prefix'] ?: $name,
-                    'inline'   => true,
-                ));
-            } else {
-                $function_content = '';
-                \Fuel::$profiling && Console::logError(new Exception(), 'Function '.$name.' not found in '.get_class($controller).'.');
-            }
-
+            $function_content = static::__parse_enhancers($fct_id, $matches[3][$match_id]);
 			$content = str_replace($matches[0][$match_id], $function_content, $content);
 		}
-        return strtr($content, array(
-            'http://virtuel_url_data' => Uri::base(false).'data/',
+
+		preg_match_all('`<(\w+)\s[^>]+data-config="([^"]+)" data-module="([^"]+)">.*?</\\1>`', $content, $matches);
+        foreach ($matches[3] as $match_id => $fct_id) {
+            $function_content = static::__parse_enhancers($fct_id, $matches[2][$match_id]);
+			$content = str_replace($matches[0][$match_id], $function_content, $content);
+		}
+	}
+
+    protected static function __parse_enhancers($fct_id, $args) {
+        $args = json_decode(strtr($args, array(
+            '&quot;' => '"',
+        )));
+
+        // Check if the function exists
+        $name   = $fct_id;
+        $config = Config::get("wysiwyg_enhancers.$name", false);
+        $found  = $config !== false;
+
+        false && \Fuel::$profiling && Profiler::console(array(
+            'function_id'   => $fct_id,
+            'function_name' => $name,
+            'controller'    => get_class($controller),
         ));
+
+        if ($found) {
+            $function_content = self::hmvc($config['target'].'/main', array(
+                'args'     => array($args),
+                'module'   => $config['rewrite_prefix'] ?: $name,
+                'inline'   => true,
+            ));
+            if (empty($function_content) && \Fuel::$env == \Fuel::DEVELOPMENT) {
+                $function_content = 'Enhancer '.$name.' ('.$config['target'].') returned empty content.';
+            }
+        } else {
+            $function_content = \Fuel::$env == \Fuel::DEVELOPMENT ? 'Function '.$name.' not found in '.get_class($controller).'.' : '';
+            \Fuel::$profiling && Console::logError(new Exception(), 'Function '.$name.' not found in '.get_class($controller).'.');
+        }
+        return $function_content;
     }
+
+	protected static function _parse_medias(&$content) {
+
+		// Replace media URL
+		preg_match_all('`nos://media/(\d+)(?:/(\d+)/(\d+))?`', $content, $matches);
+		if (!empty($matches[0])) {
+			$media_ids = array();
+			foreach ($matches[1] as $match_id => $media_id)
+			{
+				$media_ids[] = $media_id;
+			}
+			$medias = Cms\Model_Media_Media::find('all', array('where' => array(array('media_id', 'IN', $media_ids))));
+			foreach ($matches[1] as $match_id => $media_id)
+			{
+				if (!empty($matches[3][$match_id])) {
+					$media_url = $medias[$media_id]->get_public_path_resized($matches[2][$match_id], $matches[3][$match_id]);
+				} else {
+					$media_url = $medias[$media_id]->get_public_path();
+				}
+				$content = str_replace($matches[0][$match_id], $media_url, $content);
+			}
+		}
+	}
+
+	protected static function _parse_internals(&$content) {
+
+		// Replace internal links
+		preg_match_all('`nos://page/(\d+)`', $content, $matches);
+		if (!empty($matches[0])) {
+			$page_ids = array();
+			foreach ($matches[1] as $match_id => $page_id)
+			{
+				$page_ids[] = $page_id;
+			}
+			$pages = Cms\Model_Page_Page::find('all', array('where' => array(array('page_id', 'IN', $page_ids))));
+			foreach ($matches[1] as $match_id => $page_id)
+			{
+				$content = str_replace($matches[0][$match_id], $pages[$page_id]->get_href(), $content);
+			}
+		}
+	}
 }

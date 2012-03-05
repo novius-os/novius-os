@@ -42,7 +42,6 @@ if ($resized) {
 }
 
 $media = false;
-
 $res = \DB::select()->from(\Cms\Model_Media_Media::table())->where(array(
     array(DB::expr('CONCAT(media_path, media_file)'), '=', $media_url),
 ))->execute()->as_array();
@@ -83,7 +82,7 @@ if (false === $media) {
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
-        //symlink($source, $target);
+        @symlink($source, $target);
         $send_file = $source;
     }
 }

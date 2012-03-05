@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -10,15 +10,15 @@
 
 namespace Cms;
 
-class Model_Page_Root extends \Orm\Model {
-    protected static $_table_name = 'cms_racine';
-    protected static $_primary_key = array('rac_id');
+class Model_Page_Root extends \Cms\Orm\Model {
+    protected static $_table_name = 'os_page_root';
+    protected static $_primary_key = array('root_id');
 
 	protected static $_has_many = array(
 		'pages' => array(
-			'key_from'       => 'rac_id',
+			'key_from'       => 'root_id',
 			'model_to'       => '\Cms\Model_Page_Page',
-			'key_to'         => 'page_rac_id',
+			'key_to'         => 'page_root_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
@@ -32,6 +32,6 @@ class Model_Page_Root extends \Orm\Model {
      */
     public static function query($options = array())
     {
-        return parent::query($options + array('order_by' => array('rac_rang')));
+        return parent::query($options + array('order_by' => array('root_sort')));
     }
 }

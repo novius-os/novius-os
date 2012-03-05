@@ -32,41 +32,41 @@ class Controller_Admin_Page_Form extends Controller {
                 'label' => 'ID: ',
                 'widget' => 'text',
             ),
-            'page_titre' => array (
+            'page_title' => array (
                 'label' => 'Title: ',
 				'form' => array(
 					'type' => 'text',
 				),
             ),
-			'page_gab' => array(
+			'page_template' => array(
 				'label' => 'Template: ',
 				'form' => array(
 					'type' => 'select',
 					'options' => $templates,
 				),
 			),
-			'page_publier' => array(
+			'page_published' => array(
 				'label' => 'Published',
 				'form' => array(
 					'type' => 'checkbox',
 					'value' => '1',
 				),
 			),
-			'page_nom_virtuel' => array(
+			'page_virtual_name' => array(
 				'label' => 'Slug: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 20,
 				),
 			),
-			'page_titre_reference' => array(
+			'page_meta_title' => array(
 				'label' => 'SEO title: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 26,
 				),
 			),
-			'page_description' => array(
+			'page_meta_description' => array(
 				'label' => 'Description: ',
 				'form' => array(
 					'type' => 'textarea',
@@ -74,7 +74,7 @@ class Controller_Admin_Page_Form extends Controller {
 					'rows' => 6,
 				),
 			),
-			'page_keywords' => array(
+			'page_meta_keywords' => array(
 				'label' => 'Keywords: ',
 				'form' => array(
 					'type' => 'textarea',
@@ -82,7 +82,7 @@ class Controller_Admin_Page_Form extends Controller {
 					'rows' => 3,
 				),
 			),
-			'page_noindex' => array(
+			'page_meta_noindex' => array(
 				'label' => "Don't index on search engines",
 				'form' => array(
 					'type' => 'checkbox',
@@ -96,28 +96,28 @@ class Controller_Admin_Page_Form extends Controller {
 					'value' => '1',
 				),
 			),
-			'page_titre_menu' => array(
+			'page_menu_title' => array(
 				'label' => 'Menu title: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 26,
 				),
 			),
-			'page_lien_externe' => array(
+			'page_external_link' => array(
 				'label' => 'URL: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 60
 				),
 			),
-			'page_lien_externe_type' => array(
+			'page_external_link_type' => array(
 				'label' => 'Target: ',
 				'form' => array(
 					'type' => 'select',
 					'options' => array(
-						0 => 'New window',
-						1 => 'Popup',
-						2 => 'Same window',
+						Model_Page_Page::EXTERNAL_TARGET_NEW   => 'New window',
+						Model_Page_Page::EXTERNAL_TARGET_POPUP => 'Popup',
+						Model_Page_Page::EXTERNAL_TARGET_SAME  => 'Same window',
 					),
 				),
 			),
@@ -133,7 +133,7 @@ class Controller_Admin_Page_Form extends Controller {
 					),
 				),
 			),
-			'page_verrou' => array(
+			'page_lock' => array(
 				'label' => 'Lock status: ',
 				'form' => array(
 					'type' => 'select',
@@ -144,7 +144,7 @@ class Controller_Admin_Page_Form extends Controller {
 					),
 				),
 			),
-			'page_duree_vie' => array(
+			'page_cache_duration' => array(
 				'label' => 'Regenerate every',
 				'form' => array(
 					'type' => 'text',
@@ -166,7 +166,7 @@ class Controller_Admin_Page_Form extends Controller {
 
 		$editable_fields = array_diff(array_keys(Model_Page_Page::properties()), Model_Page_Page::primary_key());
 
-		$template_key = \Input::post('page_gab', $page->page_gab);
+		$template_key = \Input::post('page_template', $page->page_template);
 		if (!empty($template_id)) {
             $templates = \Config::get('templates', array());
             $template_key and $data = \Config::get('templates.'.$template_key, array(
@@ -191,8 +191,9 @@ class Controller_Admin_Page_Form extends Controller {
 
 
 					// Save wysiwyg after the page->save(), because we need page_id on creation too
+					// @todo change this to use the provider from Cms\Model
 					foreach (\Input::post('wysiwyg', array()) as $name => $content) {
-						$page->{'wysiwyg->'.$name.'->wysiwyg_text'} = $content;
+						$page->{'wysiwygs->'.$name.'->wysiwyg_text'} = $content;
 					}
 
                     $page->save();

@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -31,11 +31,11 @@
 	var require = {
 		paths: {
 			'jquery-nos': 'static/cms/js/nos',
-			'jquery': 'static/cms/js/jquery/jquery-1.7.1.min',
-			'jquery-ui' : 'static/cms/js/jquery/jquery-ui/jquery-ui-1.8.17.custom.min',
-			'link': 'static/cms/js/requirejs/link',
-			'order': 'static/cms/js/requirejs/order.min',
-			'domReady': 'static/cms/js/requirejs/domReady.min'
+			'jquery': 'static/cms/js/vendor/jquery/jquery-1.7.1.min',
+			'jquery-ui' : 'static/cms/js/vendor/jquery-ui/jquery-ui-1.8.18.custom.min',
+			'link': 'static/cms/js/vendor/requirejs/link',
+			'order': 'static/cms/js/vendor/requirejs/order.min',
+			'domReady': 'static/cms/js/vendor/requirejs/domReady.min'
 		},
 		jQuery: '1.7.1',
 		catchError: true,
@@ -49,16 +49,10 @@
 </script>
 <script src="<?= $require ?>" type="text/javascript"></script>
 <?= $js ?>
-<style type="text/css">
-    .nos-ostabs #noviusospanel {
-        <?= $background ? 'background-image: url("'.Uri::create($background->get_public_path()).'") !important;' : '' ?>
-    }
-</style>
 </head>
 
 
 <body>
-
-	<?= $body ?>
+	<?= !empty($body) ? $body : '' ?>
 </body>
 </html>

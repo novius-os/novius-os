@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_Generic_Admin extends \Fuel\Core\Controller_Template {
+class Controller_Generic_Admin extends Controller_Template_Extendable {
 
     public $template = 'cms::templates/html5';
 
@@ -24,16 +24,17 @@ class Controller_Generic_Admin extends \Fuel\Core\Controller_Template {
 		foreach (array(
 			'title' => 'Administration',
 			'base' => \Uri::base(false),
-			'require'  => 'static/cms/js/requirejs/require.js',
+			'require'  => 'static/cms/js/vendor/requirejs/require.js',
 		) as $var => $default) {
 			if (empty($this->template->$var)) {
 				$this->template->$var = $default;
 			}
 		}
+        $ret = parent::after($response);
 		$this->template->set(array(
 			'css' => \Asset::render('css'),
 			'js'  => \Asset::render('js'),
 		), false, false);
-		return parent::after($response);
+        return $ret;
 	}
 }

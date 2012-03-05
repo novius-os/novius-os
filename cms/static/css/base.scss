@@ -7,6 +7,8 @@
  * @link http://www.novius-os.org
  */
 @import "compass/reset";
+@import "compass/css3/box-shadow";
+@import "compass/css3/text-shadow";
 
 body, select, input, textarea {
 	color       : #444; /* 444 looks better than black: twitter.com/H_FJ/statuses/11800719859 */
@@ -48,15 +50,36 @@ a:hover {
 .nos-icon32-media { background-image: url(../img/32/media.png) !important; }
 .nos-icon32-root { background-image: url(../img/32/root.png) !important; }
 
+
+/*
+.ui-widget-content .nos-icon16-eye
+{
+    background-image: url(../img/icons/eye-616161.png);
+}
+*/
+.nos-icon16-eye
+{
+    background-image: url(../img/icons/eye-38667f.png);
+}
+.ui-state-highlight .nos-icon16-eye
+{
+    background-image: url(../img/icons/eye-2e83ff.png);
+}
+
 .wijmo-wijmenu, .wijmo-wijmenu-child {
 	width : auto;
 
 	.wijmo-wijmenu-link {
+        width : 100%;
+        padding : 0.3em 0;
 
 		span, label {
 			white-space: nowrap;
 		}
 	}
+    .wijmo-wijmenu-text {
+        padding : 0 0.3em;
+    }
 	input {
 		vertical-align: middle;
 	}
@@ -77,8 +100,13 @@ a:hover {
 	}
 }
 
+// Prevents flickering
+input.ui-state-disabled {
+    border-width : 1px;
+}
+
 // Right menu on form pages
-.wijmo-wijaccordion {
+.wijmo-wijaccordion, .fieldset.standalone {
 	p {
 		margin: 0.5em 0;
 	}
@@ -99,6 +127,10 @@ a:hover {
 	padding : 0.2em;
 }
 
+.ui-button-text .ui-button-text {
+    padding : 0.2em 1em;
+}
+
 .page {
 	margin-top: 3em;
 }
@@ -110,4 +142,9 @@ input.ui-widget.primary, button.ui-widget.primary {
 }
 input.ui-widget.primary.ui-state-active, button.ui-widget.ui-state-active.primary {
 	border-style : inset;
+}
+
+span.optional {
+    font-style : italic;
+    opacity    : 0.7;
 }

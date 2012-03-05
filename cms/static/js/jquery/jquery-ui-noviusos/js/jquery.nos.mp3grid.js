@@ -36,6 +36,7 @@ define([
 				showAll : 'Show all items',
 				views : 'Views',
 				viewGrid : 'Grid',
+                viewTreeGrid : 'Tree grid',
 				viewThumbnails : 'Thumbnails',
                 loading : 'Loading...'
 			},
@@ -49,16 +50,19 @@ define([
             },
             views: {},
             selectedView: null,
-            name: null
+            fromView: null,
+            name: null,
+            grid: {}
 		},
 
 		pageIndex : 0,
-		menuSettings : {},
 		showFilter : false,
 		gridRendered : false,
 		resizing : true,
 		init : false,
 		itemSelected : null,
+        variantColumnsProperties: {'visible': true, 'width': true, 'showFilter': true},
+        variantInspectorsProperties: {'hide': true, 'vertical': true},
 
 		_create: function() {
 			var self = this,
@@ -71,14 +75,11 @@ define([
 
 			self.uiAdds = $('<div></div>').addClass('nos-mp3grid-adds')
 				.appendTo(self.uiHeaderBar);
-			self.uiAddsButton = $('<button type="button"></button>').appendTo(self.uiAdds);
-			self.uiAddsDropDown = $('<button type="button"></button>').text(o.texts.addDropDown)
-				.appendTo(self.uiAdds);
-			self.uiAddsMenu = $('<ul></ul>').appendTo(self.uiAdds);
+			self.uiAddsButton = $('<button type="button"></button>').addClass('primary').appendTo(self.uiAdds);
+			//self.uiAddsMenu = $('<div></div>').appendTo(self.uiAdds);
 
-			self.uiSettings = $('<div></div>').addClass('nos-mp3grid-settings')
+			self.uiViewsDropDownContainer = $('<div></div>').addClass('nos-mp3grid-dropdownviews')
 				.appendTo(self.uiHeaderBar);
-			self.uiSettingsDropDown = $('<select></select>').appendTo(self.uiSettings);
 			//self.uiSettingsMenu = $('<ul></ul>').appendTo(self.uiSettings);
 
 			self.uiSplitterVertical = $('<div></div>').addClass('nos-mp3grid-splitter-v')
@@ -130,6 +131,8 @@ define([
 
 			self.uiGrid = $('<table></table>').appendTo(self.uiSplitterHorizontalBottom);
 
+            self.uiTreeGrid = $('<table></table>').appendTo(self.uiSplitterHorizontalBottom);
+
 			self.uiThumbnail = $('<div></div>').appendTo(self.uiSplitterHorizontalBottom);
 		},
 
@@ -141,14 +144,9 @@ define([
 				o.thumbnails = false;
 			} else {
 				o.thumbnails = $.extend({
-					thumbnailSize : 64
+					thumbnailSize : 128
 				}, o.thumbnails);
 			}
-
-			self.menuSettings.grid = {
-				content : o.label,
-				childs : {}
-			};
 
 			self._css()
                 ._uiAdds()
@@ -156,7 +154,7 @@ define([
 				._uiInspectors()
 				._uiSearchBar()
 				._uiList()
-				._uiSettings();
+				._uiViewsDropDown();
 
 			self.init = true;
 		},
@@ -171,14 +169,14 @@ define([
                     var sheet = document.styleSheets[u];
                     if (sheet.href && /wijmo/.test(sheet.href)) {
                         var rules = sheet.rules ? sheet.rules : sheet.cssRules;
-                        for (var o=0, numRules = rules.length; o<numRules; o++) {
-                            if (rules[o].selectorText === '.ui-widget-content') {
-                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel1 .wijmo-wijgrid-alternatingrow {background:' + rules[o].style['background'] + ';}';
-                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel1 .wijmo-wijgrid-alternatingrow {background:' + rules[o].style['background'] + ';}';
+                        for (var r=0, numRules = rules.length; r<numRules; r++) {
+                            if (rules[r].selectorText === '.ui-widget-content') {
+                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel1 .wijmo-wijgrid-alternatingrow {background:' + rules[r].style['background'] + ';}';
+                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel1 .wijmo-wijgrid-alternatingrow {background:' + rules[r].style['background'] + ';}';
                             }
-                            if (rules[o].selectorText === '.wijmo-wijgrid tr.wijmo-wijgrid-row.ui-state-hover, .wijmo-wijgrid .wijmo-wijgrid-current-cell, .wijmo-wijgrid td.wijmo-wijgrid-rowheader.ui-state-active') {
-                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel1 .wijmo-wijgrid-alternatingrow.ui-state-hover {background:' + rules[o].style['background'] + ';}';
-                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel1 .wijmo-wijgrid-alternatingrow.ui-state-hover {background:' + rules[o].style['background'] + ';}';
+                            if (rules[r].selectorText === '.wijmo-wijgrid tr.wijmo-wijgrid-row.ui-state-hover, .wijmo-wijgrid .wijmo-wijgrid-current-cell, .wijmo-wijgrid td.wijmo-wijgrid-rowheader.ui-state-active') {
+                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel2 .wijmo-wijsplitter-h-panel1 .wijmo-wijgrid-alternatingrow.ui-state-hover {background:' + rules[r].style['background'] + ';}';
+                                css += '.nos-mp3grid .nos-mp3grid-splitter-v .wijmo-wijsplitter-v-panel1 .wijmo-wijgrid-alternatingrow.ui-state-hover {background:' + rules[r].style['background'] + ';}';
                             }
                         }
                     }
@@ -203,13 +201,15 @@ define([
 			self.uiAddsButton.button({
 					label: first.label,
 					icons : {
-						primary: 'ui-icon ui-icon-circle-plus',
+						primary: 'ui-icon ui-icon-plus',
 						secondary: null
 					}
 				})
-				.click(function() {
+				.click(function(e) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
                     if ($.isFunction(first.action)) {
-                        first.action();
+                        first.action.apply();
                     } else {
                         $.nos.tabs.add({
                             iframe : true,
@@ -219,66 +219,72 @@ define([
                     }
 				});
 
-			self.uiAddsDropDown.button({
-					text: false,
-					icons: {
-						primary: "ui-icon-triangle-1-s"
-					}
-				});
-
-			self.uiAdds.buttonset();
-
-			$.each(o.adds, function() {
-				var li = $('<li></li>').appendTo(self.uiAddsMenu),
-					a = $('<a href="#"></a>').click(function() {
-							$.nos.tabs.add({
+			$.each(o.adds, function(i, add) {
+				$('<a href="#"></a>')
+                    .addClass('nos-mp3grid-action-secondary')
+                    .text(this.label)
+                    .appendTo(self.uiAdds)
+                    .click(function(e) {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        if ($.isFunction(add.action)) {
+                            add.action.apply(this);
+                        } else {
+                            $.nos.tabs.add({
                                 iframe : true,
-								url : this.url,
-								label : this.label
-							});
-						}).appendTo(li);
+                                url : this.url,
+                                label : this.label
+                            });
+                        }
+                    });
 
-				$('<span></span>').text(this.label)
-					.appendTo(a);
 			});
-			self.uiAddsMenu.wijmenu({
-					trigger : self.uiAddsDropDown,
-					triggerEvent : 'click',
-					orientation : 'vertical',
-					showAnimation : {Animated:"slide", duration: 50, easing: null},
-					hideAnimation : {Animated:"hide", duration: 0, easing: null},
-					position : {
-						my        : 'right top',
-						at        : 'right bottom',
-						collision : 'flip',
-						offset    : '0 0'
-					}
-				});
 
 			return self;
 		},
 
-		_uiSettings : function() {
+		_uiViewsDropDown : function() {
 			var self = this,
 				o = self.options;
 
-            for (var key in o.views) {
-                self.uiSettingsDropDown.append(
+            // If we're in a virtual view, we can't escape
+            if (o.views[o.selectedView] && o.views[o.selectedView].virtual) {
+                return self;
+            }
+
+			self.uiViewsDropDown = $('<select></select>').appendTo(self.uiViewsDropDownContainer);
+
+            $.each(o.views, function(key, view) {
+                // Virtual views can't be switched to
+                if (view.virtual) {
+                    return;
+                }
+                self.uiViewsDropDown.append(
                     $('<option></option>')
                         .attr({
                             'value': key,
                             'selected': (o.selectedView == key)
                         })
-                        .append(o.views[key].name)
+                        .append(view.name)
                 );
-            }
-            self.uiSettingsDropDown.append(
+            });
+
+            self.uiViewsDropDown.append(
                 $('<option></option>')
-                    .attr('value', 'edit_custom')
-                    .append('Customize view')
+                    .attr({
+                        'value': 'custom',
+                        'selected': (o.selectedView == 'custom')
+                    })
+                    .append('Custom view')
             );
 
-            self.uiSettingsDropDown.wijdropdown();
+            self.uiViewsDropDown.append(
+                $('<option></option>')
+                    .attr('value', 'edit_custom')
+                    .append('Edit custom view')
+            );
+
+            self.uiViewsDropDown.wijdropdown();
             /*
 			self.uiSettingsButton.button({
 				 label : o.texts.settings,
@@ -286,100 +292,118 @@ define([
 			});
             */
 
-                        self.uiSettingsDropDown.change(function() {
+            self.uiViewsDropDown.change(function() {
 
-                            if ($(this).val() == 'edit_custom') {
-                                var $el = self._uiSettingsMenuPopup();
-                                self.uiSettingsDialog = $.nos.dialog({title: 'Settings', contentUrl: null, content: $el, width: 500, height: 380});
-                                            $el.wijtabs({
-                                                alignment: 'left',
-                                                scrollable: true,
-                                                show: function(e, ui) {
-                                                    $(ui.panel).find('.superpanel').wijsuperpanel({
-                                                        autoRefresh: true,
-                                                        hScroller: {
-                                                            scrollMode: 'buttons'
-                                                        }
-                                                    });
-                                        var $layout = $(ui.panel).find('#layout_settings');
-                                                    $layout.find('.panels').sortable({
-                                                            connectWith: ".panels",
-                                                            update: function() {
-                                                                self._uiSettingsMenuPopupRefreshLayout($layout);
-                                                            },
-                                                            change: function() {
-                                                                self._uiSettingsMenuPopupRefreshLayout($layout);
-                                                            },
-                                                            start: function(event, ui) {
-                                                                $(ui.item).addClass('moving');
-                                                            },
-                                                            stop: function(event, ui) {
-                                                                $(ui.item).removeClass('moving');
-                                                                self._uiSettingsMenuPopupRefreshLayout($layout);
-                                                            },
-                                                            placeholder: "droping"
-                                                    });
-                                                }
-                                            });
-                                            $el.after(
-                                                $('<div></div>').css({
-                                                    textAlign: 'right'
-                                                }).append(
-                                                    $('<button />').button({
-                                                        label : o.texts.cancel,
-                                                        icons : {primary : 'ui-icon-gear'}
-                                                    }).click( function() {self.uiSettingsDialog.wijdialog('close');self.uiSettingsDialog.remove();} )
-                                                ).append(
-                                                    $('<button />').button({
-                                                        label : o.texts.save,
-                                                        icons : {primary : 'ui-icon-gear'}
-                                                    }).click( function() {self._uiSettingsMenuPopupSave();self.uiSettingsDialog.wijdialog('close');self.uiSettingsDialog.remove();} )
-                                                )
-                                            );
-                            } else {
-                                $.nos.saveUserConfiguration(o.name, {selectedView: $(this).val()});
-                                self.element.trigger('reload', {selectedView: $(this).val()});
-                            }
+                if ($(this).val() == 'edit_custom') {
+                    var $el = self._uiCustomViewDialog();
+                    self.uiCustomViewDialog = $.nos.dialog({
+                        title: o.texts.settings,
+                        contentUrl: null,
+                        content: $el,
+                        onLoad: function() {
+
+                            $el.css({height: '90%'});
+                            $el.wijtabs({
+                                alignment: 'left',
+                                scrollable: true,
+                                show: function(e, ui) {
+                                    $(ui.panel).find('.superpanel').wijsuperpanel({
+                                        autoRefresh: true,
+                                        hScroller: {
+                                            scrollMode: 'buttons'
+                                        }
+                                    });
+                                    var $layout = $(ui.panel).find('#layout_settings');
+                                    self._uiCustomViewDialogRefreshLayout($layout);
+                                    $layout.find('.panels').sortable({
+                                            connectWith: ".panels",
+                                            update: function() {
+                                                self._uiCustomViewDialogRefreshLayout($layout);
+                                            },
+                                            change: function() {
+                                                self._uiCustomViewDialogRefreshLayout($layout);
+                                            },
+                                            start: function(event, ui) {
+                                                $(ui.item).addClass('moving');
+                                                self._uiCustomViewDialogRefreshLayout($layout);
+                                            },
+                                            stop: function(event, ui) {
+                                                $(ui.item).removeClass('moving');
+                                                self._uiCustomViewDialogRefreshLayout($layout);
+                                            },
+                                            placeholder: "droping"
+                                    });
+                                    self._uiCustomViewDialogRefreshColumns($(ui.panel).find('.columns-settings'));
+                                }
+                            });
+                            //$el.css({height: self.uiCustomViewDialog.height() * 0.9});
+                            $el.after(
+                                $('<div></div>').css({
+                                    textAlign: 'right'
+                                }).append(
+                                    $('<button />').button({
+                                        label : o.texts.cancel,
+                                        icons : {primary : 'ui-icon-gear'}
+                                    }).click( function() {self.uiCustomViewDialog.wijdialog('close');self.uiCustomViewDialog.remove();} )
+                                ).append(
+                                    $('<button />').button({
+                                        label : o.texts.save,
+                                        icons : {primary : 'ui-icon-gear'}
+                                    }).click( function() {self._uiCustomViewDialogSave();self.uiCustomViewDialog.wijdialog('close');self.uiCustomViewDialog.remove();} )
+                                )
+                            );
+                        }
+                    });
+
+
+                    $(this).find('option').attr('selected', '');
+                    $(this).find('option[value=custom]').attr('selected', 'selected');
+                    $(this).wijdropdown("refresh");
+                    $.nos.saveUserConfiguration(o.name + '.selectedView', $(this).val());
+                } else {
+                    $.nos.saveUserConfiguration(o.name + '.selectedView', $(this).val());
+                    self.element.trigger('reload', {selectedView: $(this).val()});
+                }
 			});
 
 			return self;
 		},
 
 
-		_uiSettingsMenuPopup : function() {
+		_uiCustomViewDialog : function() {
 			var self = this,
 				o = self.options;
 
 			$el = $('<div><ul></ul></div>');
-			self._uiSettingsMenuPopupAddMainViewTab($el);
+			self._uiCustomViewDialogAddLayoutTab($el);
 
-			self._uiSettingsMenuPopupAddLayoutTab($el);
+            self._uiCustomViewDialogAddMainViewTab($el);
 
-			self._uiSettingsMenuPopupAddInspectorsTab($el);
-
+			self._uiCustomViewDialogAddInspectorsTab($el);
 
 			return $el;
 		},
 
-		_uiSettingsMenuPopupAddMainViewTab: function($el) {
+		_uiCustomViewDialogAddMainViewTab: function($el) {
 			var self = this,
 				o = self.options;
-			self._uiSettingsMenuPopupAddItem($el, o.texts.mainView, self._uiSettingsMenuPopupGetWidgetContentSettings('settings-main-view', o.texts.mainView, self.options));
-		},
+			self._uiCustomViewDialogAddItem($el, o.texts.mainView, self._uiCustomViewDialogGetWidgetContentSettings('settings-main-view', o.texts.mainView, self.options));
+            $el.find(' > ul > li:last').addClass('separator');
+        },
 
-		_uiSettingsMenuPopupAddInspectorsTab: function($el) {
+		_uiCustomViewDialogAddInspectorsTab: function($el) {
 			var self = this,
 				o = self.options;
 			for (var i = 0; i < o.inspectors.length; i++) {
-				self._uiSettingsMenuPopupAddItem($el, o.inspectors[i].label, self._uiSettingsMenuPopupGetWidgetContentSettings('settings-inspector-' + i, o.inspectors[i].label, o.inspectors[i]));
+				self._uiCustomViewDialogAddItem($el, o.inspectors[i].label, self._uiCustomViewDialogGetWidgetContentSettings('settings-inspector-' + i, o.inspectors[i].label, o.inspectors[i]));
 			}
 		},
 
-		_uiSettingsMenuPopupGetWidgetContentSettings: function(id, title, settings) {
+		_uiCustomViewDialogGetWidgetContentSettings: function(id, title, settings) {
 			var self = this,
 				o = self.options;
 
-			var $contentSettings = $('<div class="content-settings"></div>')
+			var $contentSettings = $('<div class="content-settings columns-settings"></div>')
 									.attr({id: id});
 
 			$contentSettings.append(
@@ -398,53 +422,90 @@ define([
 				var $columns = $('<ul class="widget-columns"></ul>');
 				var columns = settings.grid.columns;
 
-				for (var i = 0; i < columns.length; i++) {
-					$columns.append(
-						$('<li></li>')
-							.data('column-id', i)
-							.addClass(columns[i].visible !== false ? '' : 'invisible') //((typeof columns[i].visible == "undefined") ||
-							.append(
-								$('<div class="handle"></div>')
-							)
-							.append(
-								$('<div class="title-zone"></div>')
-									.append (
-										columns[i].headerText
-									)
-							)
-							.append(
-								$('<div class="visibility-zone"></div>')
-									.append (
-										$('<input type="checkbox" />')
-											.attr({checked: columns[i].visible !== false})
-											.change(
-												function() {
-													var $column = $(this).closest('li');
-													if ($(this).is(':checked')) {
-														$column.removeClass('invisible');
-													} else {
-														$column.addClass('invisible');
-													}
-												}
-											)
-										)
-									)
-							);
+                var i;
+				for (i = 0; i < columns.length; i++) {
+                    if (columns[i].visible !== false) {
+                        $columns.append(
+                            $('<li style="float: left;"></li>')
+                                .data('column-id', i)
+                                .append(
+                                    $('<div class="title-zone"></div>')
+                                        .append (
+                                            columns[i].headerText
+                                        )
+                                )
+                        );
+                    }
 				}
 
-				$columns.sortable({
-					handle: '.handle',
-					placeholder: 'placeholder'
+
+
+                $contentSettings.append($columns);
+
+                $contentSettings.append(
+					$('<h2></h2>').append(
+						'Invisible columns' // o.texts.columns ????
+					)
+				);
+
+
+                var $notColumns = $('<ul class="not-columns widget-columns"></ul>');
+
+                for (i = 0; i < columns.length; i++) {
+                    if (columns[i].visible === false) {
+                        $notColumns.append(
+                            $('<li style="float: left;"></li>')
+                                .data('column-id', i)
+                                .append(
+                                    $('<div class="title-zone"></div>')
+                                        .append (
+                                            columns[i].headerText
+                                        )
+                                )
+                        );
+                    }
+				}
+
+                $contentSettings.append($notColumns);
+
+				$contentSettings.find('.widget-columns').sortable({
+					placeholder: 'placeholder',
+                    connectWith: '.widget-columns',
+                    update: function() {
+                        self._uiCustomViewDialogRefreshColumns($(this).parent());
+                    },
+                    change: function() {
+                        self._uiCustomViewDialogRefreshColumns($(this).parent());
+                    },
+                    start: function(event, ui) {
+                        $(ui.item).addClass('moving');
+                        self._uiCustomViewDialogRefreshColumns($(this).parent());
+                    },
+                    stop: function(event, ui) {
+                        $(ui.item).removeClass('moving');
+                        self._uiCustomViewDialogRefreshColumns($(this).parent());
+                    }
 				});
 
-				$contentSettings.append($columns);
+
+
 
 			}
 
 			return $contentSettings;
 		},
 
-		_uiSettingsMenuPopupAddLayoutTab : function($el) {
+        _uiCustomViewDialogRefreshColumns : function($el) {
+            var $uls = $el.find('ul');
+            $uls.each(function() {
+                var $lis = $(this).find('li').not('.moving');
+                $lis.removeClass('last');
+                $lis.last().addClass('last');
+                $lis.css({width: ($(this).width() / $lis.length) - 1});
+            });
+        },
+
+		_uiCustomViewDialogAddLayoutTab : function($el) {
 			var self = this,
 		o = self.options;
 
@@ -463,12 +524,14 @@ define([
 					)
 					.append(
 						$('<div class="right-side"></div>')
-						.append(
-							$('<ul class="top-panel panels"></ul>')
-						)
-						.append(
-							$('<div class="content"></div>')
-						)
+                        .append($('<div class="inside"></div>')
+                            .append(
+                                $('<ul class="top-panel panels"></ul>')
+                            )
+                            .append(
+                                $('<div class="content"></div>')
+                            )
+                        )
 					)
 			);
 
@@ -477,7 +540,7 @@ define([
 						'<ul class="invisible-panel panels"></ul>'
 					);
 
-            self._uiSettingsMenuPopupAddItem($el, "Layout", $layout);
+            self._uiCustomViewDialogAddItem($el, "Layout", $layout);
 
             var $leftPanel = $layout.find('.left-panel');
             var $topPanel = $layout.find('.top-panel');
@@ -517,18 +580,18 @@ define([
 
 			$layout.append($notLayout);
 
-			self._uiSettingsMenuPopupRefreshLayout($layout);
+			self._uiCustomViewDialogRefreshLayout($layout);
 		},
 
-		_uiSettingsMenuPopupRefreshLayout : function($layout) {
+		_uiCustomViewDialogRefreshLayout : function($layout) {
 			var $leftPanel = $layout.find('.left-panel');
 			var $topPanel = $layout.find('.top-panel');
 			var $invisiblePanel = $layout.find('.invisible-panel');
 
 			var $leftLis = $leftPanel.find('li').not('.moving');
 			$leftLis.css({
-				height: (200 - $leftLis.length) / $leftLis.length,
-				width: "inherit"
+				height: ($leftPanel.height() - $leftLis.length) / $leftLis.length,
+				width: ''
 			});
 			$leftLis.removeClass('last');
 			$($leftLis[$leftLis.length - 1]).addClass('last');
@@ -537,8 +600,8 @@ define([
 			var $topLis = $topPanel.find('li').not('.moving');
 
 			$topLis.css({
-				width: (200 - $topLis.length) / $topLis.length,
-				height: "inherit"
+				width: ($topPanel.width() - $topLis.length) / $topLis.length,
+				height: ''
 			});
 			$topLis.removeClass('last');
 			$($topLis[$topLis.length - 1]).addClass('last');
@@ -557,310 +620,129 @@ define([
 			});
 		},
 
-		_uiSettingsMenuPopupSave : function() {
+		_uiCustomViewDialogSave : function() {
 			var self = this,
 		        o = self.options;
+
 
 			for (var j = 0; j < o.inspectors.length; j++) {
 				if (o.inspectors[j].grid) {
 					var gridColumns = o.inspectors[j].grid.columns;
 					var newColumns = [];
-                    self.uiSettingsDialog.find('#settings-inspector-' + j + ' .widget-columns > li').each(function(i, el) {
+                    o.inspectors[j].grid.columnsOrder = [];
+                    self.uiCustomViewDialog.find('#settings-inspector-' + j + ' > ul li').each(function(i, el) {
 						var $this = $(this);
 						var newColumn = gridColumns[$this.data('column-id')];
 
-						newColumn.dataIndex = i;
-						newColumn.leavesIdx = i;
-						newColumn.linearIdx = i;
-						newColumn.thX = i;
-						newColumn.travIdx = i;
-						newColumn.visLeavesIdx = i;
-						newColumn.visible = !$this.hasClass('invisible');
+
+						newColumn.visible = !$this.closest('ul').hasClass('not-columns');
 						newColumns.push(newColumn);
+                        o.inspectors[j].grid.columnsOrder.push(newColumn['setupkey']);
 					});
 					o.inspectors[j].grid.columns = newColumns;
 				}
 			}
-
+            o.inspectorsOrder = [];
 			var newInspectors = [];
-			var layoutSettings = self.uiSettingsDialog.find('#layout_settings');
+			var layoutSettings = self.uiCustomViewDialog.find('#layout_settings');
 			layoutSettings.find('.layout-inspector').each(function() {
 				var newInspector = self.options.inspectors[$(this).data('inspector-id')];
 				var $panel = $(this).closest('.panels');
 				newInspector.hide = $panel.hasClass('invisible-panel');
 				newInspector.vertical = $panel.hasClass('left-panel');
 				newInspectors.push(newInspector);
+                o.inspectorsOrder.push(newInspector['setupkey']);
 			});
 			self.options.inspectors = newInspectors;
 
 			newColumns = [];
 
 
-            self.uiSettingsDialog.find('#settings-main-view .widget-columns > li').each(function(i, el) {
+            o.grid.columnsOrder = [];
+            self.uiCustomViewDialog.find('#settings-main-view > ul li').each(function(i, el) {
 			    var $this = $(this),
-			        newColumn = o.grid.columns[$this.data('column-id')];
+                newColumn = o.grid.columns[$this.data('column-id')];
+                o.grid.columnsOrder.push(newColumn['setupkey']);
 
-			    newColumn.visible = !$this.hasClass('invisible');
+                newColumn.visible = !$this.closest('ul').hasClass('not-columns');
 			    newColumns.push(newColumn);
 			});
 
 			self.options.grid.columns = newColumns;
 
             self.element.find('.nos-mp3grid-inspector').remove();
-			self._uiInspectors()
+
+
+            var custom = self._saveUserConfiguration();
+
+
+
+            self.element.trigger('reload', {selectedView: 'custom', custom: custom});
+            /*
+            			self._uiInspectors()
                 ._uiList();
+                */
 		},
 
-		_uiSettingsMenuPopupAddItem : function(element, itemName, content) {
+		_uiCustomViewDialogAddItem : function(element, itemName, content) {
 			if ( typeof this.idMenu == 'undefined' ) this.idMenu = 0;
 			element.find('> ul').append('<li><a href="#settings_menu_popup_item_' + this.idMenu + '">' + itemName + '</a></li>');
 			element.append($('<div id="settings_menu_popup_item_' + this.idMenu + '"></div>').append(content));
 			this.idMenu++;
 		},
 
-		_uiSettingsMenuAdd : function(item, ul) {
-			var self = this;
+        _saveUserConfiguration: function() {
+            var self = this,
+		        o = self.options;
+            var custom = {'mp3grid': {}};
 
-			li = $('<li></li>').appendTo(ul)
-				.append(self._uiSettingsMenuRow(item.content));
+            custom['mp3grid']               = self._getInspectorsConfiguration(o);
+            custom['mp3grid']['grid']       = self._getGridConfiguration(o.grid);
+            custom['from']                  = o.selectedView != 'custom' ? o.selectedView : o.fromView;
 
-			if ($.isArray(item.childs) || $.isPlainObject(item.childs)) {
-				ul = $('<ul></ul>').appendTo(li);
-				$.each(item.childs, function() {
-					self._uiSettingsMenuAdd(this, ul);
-				});
-			}
+            $.nos.saveUserConfiguration(o.name, {selectedView: 'custom', custom: custom});
+            return custom;
+        },
 
-			return self;
-		},
+        _getGridConfiguration: function(gridFrom) {
+            var grid = {columns: {}, columnsOrder: gridFrom.columnsOrder.join(',')};
+            var orderedColumns = this._getParameters(gridFrom.columns, this.variantColumnsProperties);
 
-		_uiSettingsMenuRow : function(args) {
-			if (!$.isPlainObject(args)) {
-				args = {
-					label : args
-				};
-			}
-			args = $.extend({
-				name : '',
-				id : '',
-				value : '',
-				checked : false,
-				click : $.noop,
-				label : '',
-				radio : false
-			}, args);
+            for (var i = 0; i < gridFrom.columns.length; i++) {
+                grid.columns[gridFrom.columns[i].setupkey] = orderedColumns[i];
+            }
 
-			var span = $('<span></span>');
-			if (args.name) {
-				var checked = args.checked;
-				if ($.isFunction(checked)) {
-					checked = checked();
-				}
+            return grid;
+        },
 
-				var span2 = $('<span></span>').appendTo(span);
+        _getInspectorsConfiguration: function(optionsFrom) {
+            var newOptions = {inspectors: {}, inspectorsOrder: optionsFrom.inspectorsOrder.join(',')};
+            var orderedInspectors = this._getParameters(optionsFrom.inspectors, this.variantInspectorsProperties);
+            for (var i = 0; i < this.options.inspectors.length; i++) {
+                if (!orderedInspectors[i]['vertical']) {
+                    orderedInspectors[i]['vertical'] = false;
+                }
+                newOptions['inspectors'][optionsFrom.inspectors[i].setupkey] = orderedInspectors[i];
+                if (this.options.inspectors[i]['grid']) {
+                    newOptions['inspectors'][optionsFrom.inspectors[i].setupkey]['grid'] = this._getGridConfiguration(this.options.inspectors[i]['grid']);
+                }
+            }
+            return newOptions;
+        },
 
-				$('<input type="' + (args.radio ? 'radio' : 'checkbox') + '" name="' + args.name + '" id="' + args.id + '" value="' + args.value + '" ' + (checked ? 'checked' : '') + ' />')
-					.click(function(e) {
-						args.click.call(this, e);
-					})
-					.appendTo(span2);
-
-				$('<label for="' + args.id + '"></label>').text(args.label)
-					.appendTo(span2);
-			} else {
-				$('<span></span>').text(args.label)
-					.appendTo(span);
-			}
-
-			return span;
-		},
-
-		_gridSettingsMenu : function() {
-			var self = this,
-				o = self.options,
-				nbColumn = 0,
-				keys = ['columns', 'showFilters'];
-
-			$.each(keys, function(i, key) {
-				if (self.menuSettings.grid.childs[key]) {
-					delete self.menuSettings.grid.childs[key];
-				}
-			})
-
-			if (o.defaultView !== 'thumbnails') {
-				var columns = {},
-					showFilter = self.showFilter;
-
-			    o.grid.columns = self.uiGrid.nosgrid("option", "columns");
-
-				$.each(o.grid.columns, function (index, column) {
-					if (column.showFilter === undefined || column.showFilter) {
-						showFilter = true;
-					}
-					nbColumn++;
-					columns[index] = {
-							content : {
-								name : 'columnsGrid',
-								id : 'columnsGrid_' + index,
-								checked : column.visible,
-								click : function() {
-									o.grid.columns[index].visible = $(this).is(':checked');
-									self.uiGrid.nosgrid('doRefresh');
-									self.uiSettingsMenu.wijmenu('hideAllMenus');
-                                    self._trigger('columnVisibilityChange', null, {index : index, column : o.grid.columns[index]});
-                                },
-								label : column.headerText
-							}
-						};
-	            });
-				if (nbColumn > 1) {
-					self.menuSettings.grid.childs.columns = {
-							content : o.texts.columns,
-							childs : columns
-						};
-				}
-				if (showFilter) {
-					self.menuSettings.grid.childs.showFilters = {
-							content : {
-								name : 'showFilterGrid',
-								id : 'showFilterGrid',
-								checked : self.showFilter,
-								click : function() {
-									self.showFilter = $(this).is(':checked');
-									self._resizeList(true)
-										.uiSettingsMenu.wijmenu('hideAllMenus');
-								},
-								label : o.texts.showFiltersColumns
-							}
-						};
-				}
-			}
-
-			self._refreshSettingsMenu();
-
-			return self;
-		},
-
-		_inspectorsSettingsMenu : function() {
-			var self = this,
-				o = self.options,
-				states = ['v', 'h', ''],
-				inspectors = o.inspectors;
-
-			$.each(o.inspectors, function() {
-				var inspector = this,
-					childs = {};
-
-				$.each(states, function(i, value) {
-					var label,
-						checked = false;
-
-					switch (value) {
-						case 'v' :
-							label = o.texts.vertical;
-							checked = function() {
-								return !inspector.hide && inspector.vertical ? true : false;
-							}
-							break;
-						case 'h' :
-							label = o.texts.horizontal;
-							checked = function() {
-								return !inspector.hide && !inspector.vertical ? true : false;
-							}
-							break;
-						case '' :
-							label = o.texts.hidden;
-							checked = function() {
-								return inspector.hide || false;
-							}
-							break;
-					}
-
-					childs[label] = {
-						content : {
-							name : inspector.widget_id,
-							id : 'radio' + inspector.widget_id + '_' + value,
-							value : value,
-							checked : checked,
-							click : function() {
-								var input = $(this),
-									widget_id = input.attr('name'),
-									orientation = input.val(),
-									widget = $('#' + widget_id);
-
-								if (!orientation) {
-									inspector.hide = true;
-									if (widget.length) {
-										var menu = self.menuSettings[inspector.widget_id];
-										if ($.isPlainObject(menu) && $.isPlainObject(menu.childs) && $.isPlainObject(menu.childs.visibility)) {
-											menu.childs = menu.childs.visibility.childs;
-											self._refreshSettingsMenu();
-										}
-										widget.closest('li.ui-widget-content')
-											.remove();
-										self._resizeInspectorsV(true)
-											._resizeInspectorsH(true);
-									}
-								} else {
-									inspector.hide = false;
-									var target = orientation === 'v' ? self.uiInspectorsVertical : self.uiInspectorsHorizontal;
-									inspector.vertical = orientation === 'v';
-									if ( widget.length ) {
-										if ( !target.has(widget).length ) {
-											widget.closest('li.ui-widget-content')
-												.find("script")
-												.remove()
-												.end()
-												.css({width: '100%', height: 'auto'})
-												.appendTo(target);
-											self._resizeInspectorsV(true)
-												._resizeInspectorsH(true);
-										}
-									} else {
-										var $li = $('<li></li>').addClass('ui-widget-content')
-											.data('inspectorurl', inspector.url)
-											.appendTo(target);
-										self['_resizeInspectors' + orientation.toUpperCase()](true)
-											._loadInspector($li);
-									}
-								}
-								self.uiSettingsMenu.wijmenu('hideAllMenus');
-							},
-							label : label,
-							radio : true
-						}
-					};
-				});
-
-				self.menuSettings[inspector.widget_id] = {
-					content : inspector.label,
-					childs : childs
-				};
-			});
-
-			return self;
-		},
-
-		_addSettingsInspectorMenu : function(widget_id, key, item) {
-			var self = this,
-				o = self.options,
-				inspector = self.menuSettings[widget_id];
-
-			if (inspector) {
-				if (!inspector.childs.visibility) {
-					self.menuSettings[widget_id].childs = {
-						visibility : {
-							content : o.texts.visibility,
-							childs : inspector.childs
-						}
-					};
-				}
-				self.menuSettings[widget_id].childs[key] = item;
-				self._refreshSettingsMenu();
-			}
-
-			return self;
-		},
+        _getParameters: function(objects, selected) {
+            var newObjects = [];
+            for (var i = 0; i < objects.length; i++) {
+                var newObject = {};
+                for (var key in objects[i]) {
+                    if (selected[key]) {
+                        newObject[key] = objects[i][key];
+                    }
+                }
+                newObjects.push(newObject);
+            }
+            return newObjects;
+        },
 
 		_uiSplitters : function() {
 			var self = this,
@@ -1094,60 +976,62 @@ define([
                     }
                 });
 
-            if (o.grid) {
-                $('<label for="view_grid"></label>')
-                    .text(o.texts.viewGrid)
-                    .appendTo(self.uiViewsButtons);
-                $('<input type="radio" id="view_grid" name="view" checked="' + (o.defaultView === 'grid' ? 'checked="checked"' : '') + '" />')
-                    .appendTo(self.uiViewsButtons)
-                    .button({
-                        text : false,
-                        label: o.texts.viewGrid,
-                        icons : {
-                            primary: 'ui-icon view-list',
-                            secondary: null
-                        }
-                    })
-                    .click(function() {
-                        if (o.defaultView !== 'grid') {
-                            self.uiViewsButtons
-                                .find('button')
-                                .removeClass('ui-state-active');
-                            $(this).addClass('ui-state-active');
-                            o.defaultView = 'grid';
-                            self._uiList();
-                        }
-                    });
-            }
-            if (o.thumbnails) {
-                var sizes = [32, 64];
-                $.each(sizes, function(i, size) {
-                    $('<label for="view_thumbnails_' + size + '"></label>')
-                        .text(o.texts.viewThumbnails + ' ' + size + 'px')
+            var presentations = [
+                {
+                    id : 'treeGrid',
+                    text : o.texts.viewTreeGrid,
+                    icon : 'view-tree'
+                },
+                {
+                    id : 'grid',
+                    text : o.texts.viewGrid,
+                    icon : 'view-list'
+                },
+                {
+                    id : 'thumbnails',
+                    size : 64,
+                    text : o.texts.viewThumbnails,
+                    icon : 'view-thumbs-small'
+                },
+                {
+                    id : 'thumbnails',
+                    size : 128,
+                    text : o.texts.viewThumbnails,
+                    icon : 'view-thumbs-big'
+                }
+            ];
+
+            $.each(presentations, function() {
+                var presentation = this;
+                if (o[presentation.id]) {
+                    $('<label for="view_' + presentation.id.toLowerCase() + (presentation.size ? '_' + presentation.size : '') + '"></label>')
+                        .text(presentation.text + (presentation.size ? ' ' + presentation.size + 'px' : ''))
                         .appendTo(self.uiViewsButtons);
-                    $('<input type="radio" id="view_thumbnails_' + size + '" name="view" ' + (o.defaultView === 'thumbnails' && o.thumbnails.thumbnailSize === size ? 'checked="checked"' : '') + ' />')
+                    $('<input type="radio" id="view_' + presentation.id.toLowerCase() + (presentation.size ? '_' + presentation.size : '') + '" name="view" ' + (o.defaultView === presentation.id && (!presentation.size || presentation.size === o.thumbnails.thumbnailSize) ? 'checked="checked"' : '') + '" />')
                         .appendTo(self.uiViewsButtons)
                         .button({
                             text : false,
-                            label: o.texts.viewThumbnails + ' ' + size + 'px',
+                            label: presentation.text + (presentation.size ? ' ' + presentation.size + 'px' : ''),
                             icons : {
-                                primary: 'ui-icon ' + (size === 32 ? 'view-thumbs-small' : 'view-thumbs-big'),
+                                primary: 'ui-icon ' + presentation.icon,
                                 secondary: null
                             }
                         })
                         .click(function() {
-                            if (o.defaultView !== 'thumbnails' || o.thumbnails.thumbnailSize !== size) {
+                            if (o.defaultView !== presentation.id || (presentation.id === 'thumbnails' && o.thumbnails.thumbnailSize !== presentation.size)) {
                                 self.uiViewsButtons
                                     .find('button')
                                     .removeClass('ui-state-active');
                                 $(this).addClass('ui-state-active');
-                                o.defaultView = 'thumbnails';
-                                o.thumbnails.thumbnailSize = size;
+                                o.defaultView = presentation.id;
+                                if (presentation.size) {
+                                    o.thumbnails.thumbnailSize = presentation.size;
+                                }
                                 self._uiList();
                             }
                         });
-                })
-            }
+                }
+            });
             if (self.uiViewsButtons.find('input').length > 1) {
                 self.uiViewsButtons.buttonset();
             } else {
@@ -1170,15 +1054,17 @@ define([
 			self.uiGrid.nosgrid('destroy')
 				.empty()
 				.hide();
+            self.uiTreeGrid.hide();
 			if (o.defaultView === 'thumbnails') {
 				self.uiThumbnail.show();
 				self._uiThumbnail();
+            } else if (o.defaultView === 'treeGrid') {
+                self.uiTreeGrid.show();
+                self._uiTreeGrid();
 			} else {
 				self.uiGrid.show();
 				self._uiGrid();
 			}
-
-			self._gridSettingsMenu();
 
 			return self;
 		},
@@ -1272,7 +1158,10 @@ define([
 								data = row ? row.data : false;
 
 							if (data) {
-								self.itemSelected = row.dataRowIndex;
+                                self.itemSelected = {
+                                    model : data.item.data.noParseData._model,
+                                    id : data.item.data.noParseData.id
+                                };
                                 self.element.trigger('selectionChanged.mp3grid', data);
 							}
 						}
@@ -1284,10 +1173,15 @@ define([
 					rendered : function() {
 						self.gridRendered = true;
 						self.uiGrid.css('height', 'auto');
+                        var sel = self.uiGrid.nosgrid("selection");
+                        sel && sel.clear();
 						if (self.itemSelected !== null) {
-							var sel = self.uiGrid.nosgrid("selection");
-							sel.clear();
-							sel.addRows(self.itemSelected);
+                            // Search the selection in the data
+                            $.each(self.uiGrid.nosgrid('data') || [], function(dataRowIndex, data) {
+                                if (data._model == self.itemSelected.model && data.id == self.itemSelected.id) {
+                                    sel.addRows(dataRowIndex);
+                                }
+                            });
 						}
 					},
                     dataLoading: function(e) {
@@ -1300,6 +1194,85 @@ define([
 
 			return self;
 		},
+
+        _uiTreeGrid : function() {
+            var self = this,
+                o = self.options,
+                position = self.uiTreeGrid.offset(),
+                positionContainer = self.element.offset(),
+                height = self.element.height() - position.top + positionContainer.top;
+
+            self.uiTreeGrid.css({
+                    height : height,
+                    width : '100%'
+                }).nostreegrid($.extend(true, { // True for recursive clone
+                    treeUrl : o.treeGrid.proxyUrl,
+                    columnsAutogenerationMode : 'none',
+                    selectionMode: 'singleRow',
+                    allowSorting: true,
+                    scrollMode : 'auto',
+                    allowColSizing : true,
+                    allowColMoving : true,
+                    sorting: function(e, args) {
+                        $.each(o.grid.columns, function() {
+                            var column = this;
+                            if (column.headerText === args.column.headerText) {
+                                column.sortDirection = args.sortDirection;
+                            } else {
+                                column.sortDirection = 'none';
+                            }
+                        });
+                        self.uiViewsButtons.find('#view_grid').click().blur();
+                        return false;
+                    },
+                    cellStyleFormatter: function(args) {
+                        if (args.$cell.is('th')) {
+                            args.$cell.removeClass("ui-state-active");
+                        }
+                        if (args.state & $.wijmo.wijgrid.renderState.selected && args.$cell.hasClass('ui-state-default')) {
+                            args.$cell.removeClass("ui-state-highlight");
+                        }
+                        if (args.state & $.wijmo.wijgrid.renderState.selected) {
+                            args.$cell.removeClass("wijmo-wijgrid-current-cell");
+                        }
+                    },
+                    currentCellChanging : function () {
+                        return self.gridRendered;
+                    },
+                    currentCellChanged: function (e) {
+                        if (e) {
+                            var row = $(e.target).nostreegrid("currentCell").row(),
+                                data = row ? row.data : false;
+
+                            if (data) {
+                                self.itemSelected = row.dataRowIndex;
+                                self.element.trigger('selectionChanged.mp3grid', data);
+                            }
+                        }
+                        return true;
+                    },
+                    rendering : function() {
+                        self.gridRendered = false;
+                    },
+                    rendered : function() {
+                        self.gridRendered = true;
+                        self.uiTreeGrid.css('height', 'auto');
+                        if (self.itemSelected !== null) {
+                            var sel = self.uiTreeGrid.nosgrid("selection");
+                            sel.clear();
+                            sel.addRows(self.itemSelected);
+                        }
+                    },
+                    dataLoading: function(e) {
+                        self.uiPaginationLabel.detach();
+                    },
+                    loaded: function() {
+                        self.uiSplitterHorizontalBottom.find('.wijmo-wijgrid-footer').prepend(self.uiPaginationLabel);
+                    }
+                }, o.grid));
+
+            return self;
+        },
 
 		_uiThumbnail : function() {
 			var self = this,
@@ -1339,9 +1312,19 @@ define([
                         self.uiSplitterHorizontalBottom.find('.wijmo-wijpager').prepend(self.uiPaginationLabel);
 
 						if (self.itemSelected !== null) {
-							if (!self.uiThumbnail.thumbnails('select', self.itemSelected)) {
-								self.itemSelected = null;
-							}
+                            // Search the selection in the data
+                            var found = false;
+                            $.each(self.uiThumbnail.thumbnails('data') || [], function(dataRowIndex, data) {
+                                if (data._model == self.itemSelected.model && data.id == self.itemSelected.id) {
+                                    found = true;
+                                    if (!self.uiThumbnail.thumbnails('select', dataRowIndex)) {
+                                        self.itemSelected = null;
+                                    }
+                                }
+                            });
+                            if (!found) {
+                                self.uiThumbnail.thumbnails('unselect');
+                            }
 						}
 					},
 					reader: {
@@ -1360,9 +1343,13 @@ define([
 							self.itemSelected = null;
                             self.element.trigger('selectionChanged.mp3grid', false);
 						} else {
-							self.itemSelected = data.item.index;
+							self.itemSelected = {
+                                model : data.item.data.noParseData._model,
+                                id : data.item.data.noParseData.id
+                            };
                             self.element.trigger('selectionChanged.mp3grid', data.item.data.noParseData);
 						}
+                        log('Selection = ', self.itemSelected);
 					}
 				}, o.thumbnails));
 
@@ -1447,9 +1434,9 @@ define([
 				}
 			}
 
-            this.uiSplitterVertical.wijsplitter('option', 'splitterDistance');
+            self.uiSplitterVertical.wijsplitter('option', 'splitterDistance');
 
-            self._trigger('slidersChange', null, this.slidersSettings());
+            self._trigger('slidersChange', null, self.slidersSettings());
 
 			return self;
 		},
@@ -1465,6 +1452,12 @@ define([
                         self._uiList();
                     } else {
                         self.uiThumbnail.thumbnails('setSize', self.uiSplitterHorizontalBottom.width(), height);
+                    }
+                } else if (o.defaultView === 'treeGrid') {
+                    if (refresh) {
+                        self._uiList();
+                    } else {
+                        self.uiTreeGrid.nostreegrid('setSize', null, height);
                     }
                 } else {
                     self.uiGrid.nosgrid('setSize', null, height);
@@ -1508,18 +1501,14 @@ define([
 			return self;
 		},
 
-		_refreshSettingsMenu : function() {
-			var self = this;
-			// @todo implement
-			return self;
-		},
-
 		gridRefresh : function() {
 			var self = this,
 				o = self.options;
 
 			if (self.init) {
                 if (o.defaultView === 'thumbnails') {
+                    self._uiList();
+                } else if (o.defaultView === 'treeGrid') {
                     self._uiList();
                 } else {
                     self.uiGrid.nosgrid("ensureControl", true);

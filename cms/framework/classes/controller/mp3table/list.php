@@ -23,31 +23,46 @@ use Asset, Format, Input, Session, View, Uri;
  * @package  app
  * @extends  Controller
  */
-class Controller_Mp3table_List extends Controller {
+class Controller_Mp3table_List extends Controller_Extendable {
 
-	protected $mp3grid = array(
-        'query' => array(
-            'model' => '',
-        ),
-        'urljson' => '',
-        'i18n' => array(),
-        'dataset' => array(),
-        'inputs' => array(),
-	);
+	protected $mp3grid = array();
 
-	public function action_index()
-	{
+    public function before() {
+        parent::before();
+        if (!isset($this->config['mp3grid'])) {
+            list($module_name, $file_name) = $this->getLocation();
+            $file_name = explode('/', $file_name);
+            array_splice($file_name, count($file_name) - 1, 0, array('mp3grid'));
+            $file_name = implode('/', $file_name);
+        } else {
+            list($module_name, $file_name) = explode('::', $this->config['mp3grid']);
+        }
+
+		$this->mp3grid = \Config::mergeWithUser($module_name.'::'.$file_name, static::loadConfiguration($module_name, $file_name));
+    }
+
+	public function action_index($view = null, $delayed = false) {
 		if (!\Cms\Auth::check()) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
 		}
 
-        $controllerName = \Request::active()->controller;
+        if (empty($view)) {
+            $view = \Input::get('view', $this->mp3grid['selectedView']);
+        }
+        $this->mp3grid['selectedView'] = $view;
+
+        if (empty($this->mp3grid['custom'])) {
+            $this->mp3grid['custom'] = array(
+                'from' => 'default',
+            );
+        }
 
 		$view = View::forge('mp3table/list');
 
-
-
+        if ($delayed) {
+            $this->mp3grid['delayed'] = true;
+        }
 
 
         /*
@@ -57,9 +72,14 @@ class Controller_Mp3table_List extends Controller {
         $view->set('selectedView', \Format::forge($this->mp3grid['selectedView'])->to_json(), false);
         $view->set('name', \Format::forge($this->mp3grid['configuration_id'])->to_json(), false);
          */
+        //\Debug::dump($this->mp3grid);
         $view->set('mp3grid', \Format::forge($this->mp3grid)->to_json(), false);
 		return $view;
 	}
+
+    public function action_delayed($view = null) {
+        return $this->action_index($view, true);
+    }
 
     public function action_json()
     {
@@ -70,123 +90,41 @@ class Controller_Mp3table_List extends Controller {
 			));
 		}
 
-        $offset = intval(Input::get('offset', 0));
-        $limit = intval(Input::get('limit', \Arr::get($this->mp3grid['query'], 'limit')));
+	    $config = $this->mp3grid;
+	    $where = function($query) use ($config) {
+		    foreach ($config['inputs'] as $input => $condition) {
+			    $value = Input::get('inspectors.'.$input);
+			    if (is_callable($condition)) {
+				    $query = $condition($value, $query);
+			    }
+		    }
 
-        $items = array();
+		    Filter::apply($query, $config);
 
-        $model = $this->mp3grid['query']['model'];
+		    return $query;
+	    };
 
-        $query = \Cms\Orm\Query::forge($model, $model::connection());
-        foreach ($this->mp3grid['query']['related'] as $related) {
-            $query->related($related);
-        }
-
-        foreach ($this->mp3grid['inputs'] as $input => $condition) {
-            $value = Input::get('inspectors.'.$input);
-            if (is_callable($condition)) {
-                $query = $condition($value, $query);
-            }
-        }
-
-
-
-        $inspectors_lang = Input::get('inspectors.lang', null);
-        $translatable  = $model::observers('Cms\Orm_Translatable');
-        if ($translatable) {
-
-            if (empty($inspectors_lang)) {
-                // No inspector, we only search items in their primary language
-                $query->where($translatable['single_id_property'], 'IS NOT', null);
-            } else if (is_array($inspectors_lang)) {
-                // Multiple langs
-                $query->where($translatable['lang_property'], 'IN', $inspectors_lang);
-            } else  {
-                $query->where($translatable['lang_property'],  '=', $inspectors_lang);
-            }
-            $common_ids = array();
-            $keys = array();
-        }
-
-        Filter::apply($query, $this->mp3grid);
-
-        $count = $query->count();
-
-        // Copied over and adapted from $query->count()
-        $select = \Arr::get($model::primary_key(), 0);
-        $select = (strpos($select, '.') === false ? $query->alias().'.'.$select : $select);
-
-        // Get the columns
-        $columns = \DB::expr('DISTINCT '.\Database_Connection::instance()->quote_identifier($select).' AS group_by_pk');
-
-        // Remove the current select and
-        $new_query = call_user_func('DB::select', $columns);
-
-        // Set from table
-        $new_query->from(array($model::table(), $query->alias()));
-
-
-
-        $tmp   = $query->build_query($new_query, $columns, 'select');
-        $new_query = $tmp['query'];
-        $objects = $new_query->group_by('group_by_pk')->limit($limit)->offset($offset)->execute($query->connection())->as_array('group_by_pk');
-
-        if (!empty($objects)) {
-            $query = $model::find()->where(array($select, 'in', array_keys($objects)));
-
-            Filter::apply($query, $this->mp3grid);
-
-            foreach ($query->get() as $object) {
-                $item = array();
-                foreach ($this->mp3grid['dataset'] as $key => $data) {
-                    if (is_array($data)) {
-                        $data = $data['value'];
-                    }
-                    if (is_callable($data)) {
-                        $item[$key] = $data($object);
-                    } else {
-                        $item[$key] = $object->{$data};
-                    }
-                }
-                $items[] = $item;
-                if ($translatable) {
-                    $common_id = $object->{$translatable['common_id_property']};
-                    $keys[] = $common_id;
-                    $common_ids[$translatable['common_id_property']][] = $common_id;
-                }
-            }
-            if ($translatable) {
-                $langs = call_user_func('Cms\Orm_Translatable::orm_notify_class', $model, 'languages', $common_ids);
-                foreach ($keys as $key => $common_id) {
-                    $items[$key]['lang'] = $langs[$common_id];
-                }
-
-                foreach ($items as &$item) {
-                    $flags = '';
-                    foreach (explode(',', $item['lang']) as $lang) {
-                        switch($lang) {
-                            case 'en':
-                                $lang = 'gb';
-                                break;
-                        }
-                        $flags .= '<img src="static/cms/img/flags/'.$lang.'.png" /> ';
-                    }
-                    $item['lang'] = $flags;
-                }
-            }
-        }
+	    $return = $this->items(array_merge($this->mp3grid['query'], array(
+		    'callback' => array($where),
+		    'dataset' => $this->mp3grid['dataset'],
+		    'lang' => Input::get('inspectors.lang', null),
+	        'limit' => intval(Input::get('limit', \Arr::get($this->mp3grid['query'], 'limit'))),
+	        'offset' => intval(Input::get('offset', 0)),
+	    )));
 
         $json = array(
             'get' => '',
             'query' =>  '',
-            'offset' => $offset,
-            'items' => $items,
-            'total' => $count,
+	        'query2' =>  '',
+            'offset' => $return['offset'],
+            'items' => $return['items'],
+            'total' => $return['total'],
         );
 
         if (\Fuel::$env === \Fuel::DEVELOPMENT) {
             $json['get'] = Input::get();
-            $json['query'] = (string) $query->get_query();
+            $json['query'] = $return['query'];
+	        $json['query2'] = $return['query2'];
         }
         if (\Input::get('debug') !== null) {
             \Debug::dump($json);
@@ -231,7 +169,26 @@ class Controller_Mp3table_List extends Controller {
 		return array();
 	}
 
+	public function action_tree_json()
+	{
+		if (!\Cms\Auth::check()) {
+			\Response::json(403, array(
+				'login_page' => \Uri::base(false).'admin/login',
+			));
+		}
 
+		$json = $this->tree(array_merge(array('id' => $this->mp3grid['configuration_id']), $this->mp3grid['tree']));
+
+		if (\Fuel::$env === \Fuel::DEVELOPMENT) {
+			$json['get'] = Input::get();
+		}
+		if (\Input::get('debug') !== null) {
+			\Debug::dump($json);
+			exit();
+		}
+
+		\Response::json($json);
+	}
 }
 
 /* End of file list.php */

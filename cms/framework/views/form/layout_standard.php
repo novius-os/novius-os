@@ -1,4 +1,14 @@
+<?php
+/**
+ * NOVIUS OS - Web OS for digital communication
+ *
+ * @copyright  2011 Novius
+ * @license    GNU Affero General Public License v3 or (at your option) any later version
+ *             http://www.gnu.org/licenses/agpl-3.0.html
+ * @link http://www.novius-os.org
+ */
 
+?>
 <script type="text/javascript">
 require(['jquery-nos'], function($) {
 	$.nos.ui.form("#<?= $uniqid1 = uniqid('id_') ?>,#<?= $uniqid2 = uniqid('id_') ?>");
@@ -14,8 +24,11 @@ require(['jquery-nos'], function($) {
 				echo $fieldset->field($field)->build();
 			}
 			?>
-			<?= $fieldset->field($title)->set_template('{field}')->set_attribute('class', 'title c4')->build(); ?>
-			<?= $fieldset->field($id)->set_template('{label} {field}')->build(); ?>
+			<?= $fieldset->field($title)/*->set_attribute('placeholder', $fieldset->field($title)->label)*/->set_template('{field}')->set_attribute('class', 'title c4')->build(); ?>
+			<?php
+			$value = $fieldset->field($id)->get_value();
+			echo !empty($value) ? $fieldset->field($id)->set_template('{label} {field}')->build() : '';
+			?>
 		</div>
 		<div class="line" style="margin-bottom:1em;overflow:visible;">
 			<?php
@@ -49,7 +62,11 @@ require(['jquery-nos'], function($) {
 				<div style="overflow:visible;">
 					<?php
 					foreach ((array) $fields as $field) {
-						echo '<p>'.$fieldset->field($field)->build().'</p>';
+						try {
+							echo '<p>'.$fieldset->field($field)->build().'</p>';
+						} catch (\Exception $e) {
+							throw new \Exception("Field $field : " . $e->getMessage(), $e->getCode(), $e);
+						}
 					}
 					?>
 				</div>

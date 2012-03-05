@@ -18,21 +18,8 @@ use Asset, Format, Input, Session, View, Uri;
 
 class Controller_Admin_List extends Controller_Mp3table_List {
 
-	public function before($response = null) {
-		Config::load('cms_blog::admin/blog', true);
-		$this->mp3grid = \Config::getFromUser('cms_blog::admin/blog', array());
-
-        parent::before($response);
-	}
-
-	public function after($response) {
-		\Asset::add_path('static/modules/cms_blog/');
-		\Asset::css('admin.css', array(), 'css');
-		return parent::after($response);
-	}
-
-
     public function action_delete($id) {
+
         $success = false;
 
         $billet = Model_Blog::find_by_blog_id($id);

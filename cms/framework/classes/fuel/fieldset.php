@@ -87,7 +87,8 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	 */
 	public function populate($input, $repopulate = false) {
 		foreach ($this->fields as $f) {
-			if (substr(strtolower(\Inflector::denamespace(get_class($f))), 0, 6) == 'widget' && isset($input->{$f->name})) {
+			$class = strtolower(\Inflector::denamespace(get_class($f)));
+			if (substr($class, 0, 6) == 'widget' && isset($input->{$f->name})) {
 				$f->populate($input);
 			}
 		}
@@ -294,16 +295,20 @@ class Fieldset extends \Fuel\Core\Fieldset {
 		$validate = \Format::forge()->to_json($json);
 		$this->append(<<<JS
 <script type="text/javascript">
-require(['jquery', 'static/cms/js/jquery/jquery-validation/jquery.validate.min'], function($) {
+require(['jquery', 'static/cms/js/vendor/jquery/jquery-validation/jquery.validate.min'], function($) {
 	var json = $validate;
 	//console.log($validate);
 	$('#{$form_attributes['id']}').validate($.extend({}, json, {
 		submitHandler: function(form) {
-			require(['jquery-nos', 'static/cms/js/jquery/jquery-form/jquery.form.min'], function($) {
+			require(['jquery-nos', 'static/cms/js/vendor/jquery/jquery-form/jquery.form.min'], function($) {
 				$(form).ajaxSubmit({
 					dataType: 'json',
 					success: function(json) {
 						$.nos.ajax.success(json);
+						var callback_success = $(form).data('ajax-success');
+						if ($.isFunction(callback_success)) {
+							callback_success.call(form, json);
+						}
 					},
 					error: function() {
 						$.nos.notify('An error occured', 'error');
@@ -312,7 +317,7 @@ require(['jquery', 'static/cms/js/jquery/jquery-validation/jquery.validate.min']
 			});
 		}
 	}));
-	require(['static/cms/js/jquery/jquery-form/jquery.form.min', 'jquery-nos']);
+	require(['static/cms/js/vendor/jquery/jquery-form/jquery.form.min', 'jquery-nos']);
 });
 </script>
 JS
@@ -320,8 +325,6 @@ JS
 	}
 
 	public static function build_from_config($config, $model = null, $options = array()) {
-
-
 
 		if (is_object($model)) {
 			$instance = $model;
@@ -355,7 +358,7 @@ JS
 			call_user_func($options['extend'], $fieldset);
 		}
 
-		$instance && $fieldset->populate($instance);
+		isset($instance) && $fieldset->populate($instance);
 		if (\Input::method() == 'POST' && (empty($options['form_name']) || \Input::post('form_name') == $options['form_name'])) {
 			$fieldset->repopulate();
 			if ($fieldset->validation()->run($fieldset->value())) {
@@ -391,34 +394,25 @@ JS
 
 		foreach ($fields as $name => $config)
 		{
-			$type = \Arr::get($config, 'form.type', null);
-
 			if (!empty($config['widget']) && in_array($config['widget'], array('widget_text', 'widget_empty'))) {
 				continue;
 			}
+			$type = \Arr::get($config, 'form.type', null);
 
-			switch($type) {
-				case 'checkbox' :
-					if (empty($data[$name])) {
-						$object->$name = null;
-					}
-					break;
+			if ($type == 'submit') {
+				continue;
+			}
 
-				// Skip submit fields
-				case 'submit' :
-					continue 2;
-					break;
-
-				default :
-					if (isset($data[$name])) {
-						try {
-							$object->$name = $data[$name];
-						} catch (\Exception $e) {
-							$body = array(
-								'error' => $e->getMessage(),
-							);
-						}
-					}
+			if ($type == 'checkox' && empty($data[$name])) {
+				$object->$name = null;
+			} else if (isset($data[$name])) {
+				try {
+					$object->$name = $data[$name];
+				} catch (\Exception $e) {
+					$body = array(
+						'error' => $e->getMessage(),
+					);
+				}
 			}
 		}
 

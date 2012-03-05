@@ -1,7 +1,7 @@
 /*globals jQuery, Globalize*/
 /*
  *
- * Wijmo Library 2.0.0b2
+ * Wijmo Library 2.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -133,17 +133,17 @@
 			},
 			/// <summary>
 			/// A value that indicates whether to show animation 
-			///	and the duration for the animation when reload data.
+			///	and the duration for the animation when reloading data.
 			/// Default: {enabled:true, duration:400, easing: ">"}.
 			/// Type: Object.
 			/// Code example:
 			///  $("#barchart").wijbarchart({
-			///      animation: {enabled: true, duration: 1000, easing: "<"}
+			///      seriesTransition: {enabled: true, duration: 1000, easing: "<"}
 			///  });
 			/// </summary>
 			seriesTransition: {
 				/// <summary>
-				/// A value that determines whether to show animation when reload.
+				/// A value that determines whether to show animation when reloading data.
 				/// Default: true.
 				/// Type: Boolean.
 				/// </summary>
@@ -162,7 +162,7 @@
 				easing: ">"
 			},
 			/// <summary>
-			/// Occurs when the user clicks a mouse button.
+			/// Fires when the user clicks a mouse button.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -184,10 +184,12 @@
 			/// data.legendEntry: legend entry of the series of the bar.
 			/// data.style: style of the series of the bar.
 			/// data.type: "bar"
+			/// data.x: The x value of the bar.
+			/// data.y: the y valuue of the bar.
 			///	</param>
 			mouseDown: null,
 			/// <summary>
-			/// Occurs when the user releases a mouse button
+			/// Fires when the user releases a mouse button
 			/// while the pointer is over the chart element.
 			/// Default: null.
 			/// Type: Function.
@@ -210,10 +212,12 @@
 			/// data.legendEntry: legend entry of the series of the bar.
 			/// data.style: style of the series of the bar.
 			/// data.type: "bar"
+			/// data.x: The x value of the bar.
+			/// data.y: the y valuue of the bar.
 			///	</param>
 			mouseUp: null,
 			/// <summary>
-			/// Occurs when the user first places the pointer over the chart element.
+			/// Fires when the user first places the pointer over the chart element.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -235,10 +239,12 @@
 			/// data.legendEntry: legend entry of the series of the bar.
 			/// data.style: style of the series of the bar.
 			/// data.type: "bar"
+			/// data.x: The x value of the bar.
+			/// data.y: the y valuue of the bar.
 			///	</param>
 			mouseOver: null,
 			/// <summary>
-			/// Occurs when the user moves the pointer off of the chart element.
+			/// Fires when the user moves the pointer off of the chart element.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -260,10 +266,12 @@
 			/// data.legendEntry: legend entry of the series of the bar.
 			/// data.style: style of the series of the bar.
 			/// data.type: "bar"
+			/// data.x: The x value of the bar.
+			/// data.y: the y valuue of the bar.
 			///	</param>
 			mouseOut: null,
 			/// <summary>
-			/// Occurs when the user moves the mouse pointer
+			/// Fires when the user moves the mouse pointer
 			/// while it is over a chart element.
 			/// Default: null.
 			/// Type: Function.
@@ -286,10 +294,12 @@
 			/// data.legendEntry: legend entry of the series of the bar.
 			/// data.style: style of the series of the bar.
 			/// data.type: "bar"
+			/// data.x: The x value of the bar.
+			/// data.y: the y valuue of the bar.
 			///	</param>
 			mouseMove: null,
 			/// <summary>
-			/// Occurs when the user clicks the chart element. 
+			/// Fires when the user clicks the chart element. 
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -311,6 +321,8 @@
 			/// data.legendEntry: legend entry of the series of the bar.
 			/// data.style: style of the series of the bar.
 			/// data.type: "bar"
+			/// data.x: The x value of the bar.
+			/// data.y: the y valuue of the bar.
 			///	</param>
 			click: null
 		},
@@ -362,6 +374,12 @@
 		},
 
 		destroy: function () {
+			/// <summary>
+			/// Remove the functionality completely. This will return the 
+			/// element back to its pre-init state.
+			/// Code example:
+			/// $("#barchart").wijbarchart("destroy");
+			/// </summary>
 			var self = this,
 				element = self.chartElement,
 				fields = element.data("fields"),
@@ -391,6 +409,8 @@
 			/// <summary>
 			/// Returns the bar which has a set of the Raphael's objects(rects) 
 			/// that represents bars for the series data with the given index.
+			/// Code example:
+			/// $("#barchart").wijbarchart("getBar", 2);
 			/// </summary>
 			/// <param name="index" type="Number">
 			/// The index of the bar.
@@ -625,15 +645,16 @@
 				mouseMove = options.mouseMove,
 				click = options.click,
 				tooltip = options.tooltip,
-				xscale = getScaling(inverted, xaxis.max,
-							xaxis.min, inverted ? height : width),
-				yscale = getScaling(!inverted, yaxis.max,
-							yaxis.min, inverted ? width : height),
-				xlate = getTranslation(inverted, startLocation,
-							xaxis.max, xaxis.min, xscale),
-				ylate = getTranslation(!inverted, startLocation,
-							yaxis.max, yaxis.min, yscale),
-				fields = element.data("fields") || {},
+							xscale = getScaling(inverted, xaxis.max,
+										xaxis.min, inverted ? height : width),
+			//				yscale = getScaling(!inverted, yaxis.max,
+			//							yaxis.min, inverted ? width : height),
+							xlate = getTranslation(inverted, startLocation,
+										xaxis.max, xaxis.min, xscale),
+			//				ylate = getTranslation(!inverted, startLocation,
+			//							yaxis.max, yaxis.min, yscale),
+				yscale, ylate,
+			fields = element.data("fields") || {},
 				chartElements = fields.chartElements || {},
 				aniBarsAttr = fields.aniBarsAttr,
 			//bars = chartElements.bars,
@@ -838,7 +859,7 @@
 
 			function paintBar(rp, y, height, xAxisInfo, yAxisInfo, seriesStyle,
 					animated, shadowOffset, startLocation,
-					clusterOverlap, preY, lastY, isYTime, seriesTextStyle) {
+					clusterOverlap, preY, lastY, isYTime, seriesTextStyle, yaxis) {
 				var is100Percent = options.is100Percent,
 					xmin = xAxisInfo.min,
 					xmax = xAxisInfo.max,
@@ -863,8 +884,8 @@
 					animatedBar,
 					start = -1;
 
-				if (options.axis.y.origin !== null) {
-					start = yscale * options.axis.y.origin + ylate;
+				if (yaxis.origin !== null) {
+					start = yscale * yaxis.origin + ylate;
 				}
 
 				if (stacked) {
@@ -1121,11 +1142,24 @@
 						var idx = points.sIdx,
 							seriesStyle = seriesStyles[idx],
 							series = seriesList[idx],
-							tracker;
-						barInfo = paintBar(rp, points.y, height, xAxisInfo, yAxisInfo,
+							tracker,
+							yAxisIndex = series.yAxis || 0,
+							axisY = yaxis[yAxisIndex] || yaxis,
+							axisInfoY = yAxisInfo[yAxisIndex] || yAxisInfo;
+
+						yscale = getScaling(!inverted, axisY.max,
+										axisY.min, inverted ? width : height);
+						ylate = getTranslation(!inverted, startLocation,
+										axisY.max, axisY.min, yscale);
+
+						axisInfoY.late = ylate;
+						axisInfoY.scale = yscale;
+
+						barInfo = paintBar(rp, points.y, height, xAxisInfo, axisInfoY,
 									seriesStyle, animated, shadowOffset, startLocation,
 									clusterOverlap, sIdx > 0 ? ps[sIdx - 1].y : null,
-									ps[ps.length - 1].y, isYTime, series.textStyle);
+									ps[ps.length - 1].y, isYTime, 
+									series.textStyle, axisY);
 
 						bar = barInfo.bar;
 						tracker = bar.clone()
@@ -1371,11 +1405,7 @@
 							target = target.data("owner");
 						}
 						dataObj = target.data("wijchartDataObj");
-						bar = dataObj.bar;
-
-						if (isFunction(mouseOut)) {
-							mouseOut.call(element, e, dataObj);
-						}
+						bar = dataObj.bar;						
 
 						if (!dataObj.hoverStyle) {
 							if (bar) {
@@ -1385,6 +1415,9 @@
 							bar.attr(dataObj.style);
 						}
 
+						if (isFunction(mouseOut)) {
+							mouseOut.call(element, e, dataObj);
+						}
 						//if (tooltip) {
 						//	tooltip.hide();
 						//}
@@ -1400,11 +1433,7 @@
 							target = target.data("owner");
 						}
 						dataObj = target.data("wijchartDataObj");
-						bar = dataObj.bar;
-
-						if (isFunction(mouseMove)) {
-							mouseMove.call(element, e, dataObj);
-						}
+						bar = dataObj.bar;					
 
 						if (!dataObj.hoverStyle) {
 							if (bar) {
@@ -1412,6 +1441,10 @@
 							}
 						} else {
 							bar.attr(dataObj.hoverStyle);
+						}
+
+						if (isFunction(mouseMove)) {
+							mouseMove.call(element, e, dataObj);
 						}
 						//end of code for adding hover state effect.
 					})
@@ -1433,7 +1466,9 @@
 			}
 
 			function unbindLiveEvents() {
-				$(".wijbarchart", element[0]).die(widgetName);
+				$(".wijbarchart", element[0]).die(widgetName)
+				// for jQuery 1.7.1
+				.die("."+ widgetName);
 			}
 
 			//			function clearChartElement() {
@@ -1495,12 +1530,7 @@
 					max: xaxis.max,
 					late: xlate,
 					scale: xscale
-				}, {
-					min: yaxis.min,
-					max: yaxis.max,
-					late: ylate,
-					scale: yscale
-				}, width, height, startLocation, isYTime, isXTime);
+				}, yaxis, width, height, startLocation, isYTime, isXTime);
 
 			element.data("plotInfos", {
 				xscale: xscale,

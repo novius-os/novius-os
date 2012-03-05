@@ -12,7 +12,7 @@ define([
 ], function( $, undefined ) {
 	$.widget( "nos.thumbnails", {
 		options: {
-			thumbnailSize : 64,
+			thumbnailSize : 128,
 			pageIndex: 0,
 			pageSize: null,
 			url : '',
@@ -26,6 +26,8 @@ define([
 			dataParser : null,
 			thumbFormatter : null
 		},
+
+        _data : null,
 
 		_create: function() {
 			var self = this;
@@ -52,8 +54,8 @@ define([
 			var self = this,
 				o = self.options;
 
-			if ($.inArray(o.thumbnailSize, [32, 64]) === -1) {
-				o.thumbnailSize = 64;
+			if ($.inArray(o.thumbnailSize, [64, 128]) === -1) {
+				o.thumbnailSize = 128;
 			}
 
 			self.uiPager.wijpager({
@@ -97,7 +99,7 @@ define([
 					title : 'Test'
 				});
 
-				var el = self.uiContainer.find('.nos-thumbnails-thumb')
+				var el = self.uiContainer.find('.nos-thumbnails-thumb'),
                     container = self.uiContainer.parent();
 				self.itemDimension = {
 					width : el.outerWidth(true),
@@ -154,6 +156,7 @@ define([
 						pageCount : Math.ceil(dataSource.data.totalRows / data.data.paging.pageSize),
 						pageIndex : data.data.paging.pageIndex
 					});
+                    self._data = dataSource.data;
 					self._display(dataSource.data);
 
                     self.uiOverlay.add(self.uiOverlayText)
@@ -290,7 +293,7 @@ define([
 		},
 
 		_itemThumbnail : function(container, item, index) {
-			var self = this
+			var self = this,
 				o = self.options,
 				thumbnail = item.thumbnail || item.thumbnailAlternate;
 
@@ -304,7 +307,7 @@ define([
 		},
 
 		_loadImg : function(container, item, thumbnail) {
-			var self = this
+			var self = this,
 				o = self.options;
 
 			$('<img />')
@@ -330,7 +333,7 @@ define([
 		},
 
 		_loadImgDefault : function(container) {
-			var self = this
+			var self = this,
 				o = self.options;
 
 			$('<div></div>')
@@ -366,12 +369,16 @@ define([
 					self._trigger('selectionChanged', null, {item : data});
 				} else {
 					self._trigger('selectionChanged');
-					return false
+					return false;
 				}
 			}
 
 			return self;
 		},
+
+        unselect : function() {
+            this._trigger('selectionChanged');
+        },
 
         setSize : function(width, height) {
             var self = this;
@@ -384,6 +391,10 @@ define([
             }
 
             return self;
+        },
+
+        data : function() {
+            return this._data;
         }
 	});
 	return $;

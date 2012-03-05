@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.0.0b2
+* Wijmo Library 2.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -17,7 +17,7 @@
 *	jquery.ui.widget.js
 *	jquery.ui.resizable.js
 *	jquery.ui.mouse.js
-*	jquery.ui.wijutil.js
+*	jquery.wijmo.wijutil.js
 *
 */
 (function ($) {
@@ -158,7 +158,7 @@
 			///	A value defines the animation while the bar of splitter 
 			/// is beeing dragged.
 			/// Default: {}.
-			/// Type: Dictionary.
+			/// Type: Object.
 			///	</summary>
 			resizeSettings: {
 				animationOptions: {
@@ -193,7 +193,7 @@
 			///	<summary>
 			///	Defines the information for top or left panel of splitter.
 			/// Default: {}.
-			/// Type: Dictionary.
+			/// Type: Object.
 			///	</summary>
 			panel1: {
 				///	<summary>
@@ -221,7 +221,7 @@
 			///	<summary>
 			///	Defines the information for bottom or right panel of splitter.
 			/// Default: {}.
-			/// Type: Dictionary.
+			/// Type: Object.
 			///	</summary>
 			panel2: {
 				///	<summary>

@@ -1,8 +1,3 @@
-<?= PHP_BEGIN ?>
-    //if (in_array(PAGE_CONTRIBUTIONS, $GLOBALS['page_rail'])) {
-    //    $GLOBALS['langue'] = 'uk';
-    //}
-<?= PHP_END ?>
 <?php
     //if (in_array(PAGE_CONTRIBUTIONS, (array) $GLOBALS['page_rail'])) {
     //    $GLOBALS['langue'] = 'uk';
@@ -19,7 +14,6 @@
   <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
   <link rel="stylesheet" type="text/css" href="static/css/blog.css">
   <link rel="stylesheet" href="static/js/orangebox/css/orangebox.css" type="text/css" />
-  <script src="cms/fonctions.js" type="text/javascript"></script>
   <script type="text/javascript" src="static/js/jquery.js"></script>
   <script type="text/javascript" src="static/js/orangebox/js/orangebox.min.js"></script>
   <script type="text/javascript" src="static/js/site.js"></script>
@@ -66,5 +60,5 @@
 </html>
 
 <?php
-    Cms::main_controller()->page_title = Cms::main_controller()->page->page_titre_reference.' - Laboratoire technologique Internet : CMS, mobile, emailing, réseaux sociaux - '.NOM_SITE;
+    Cms::main_controller()->page_title = Cms::main_controller()->page->page_meta_title.' - Laboratoire technologique Internet : CMS, mobile, emailing, réseaux sociaux - '.NOM_SITE;
 ?>
