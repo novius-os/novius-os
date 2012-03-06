@@ -1634,11 +1634,6 @@
                     dialog.closest('.ui-dialog').remove();
                     dialog.remove();
                 }
-				$.nos.listener.remove('tinymce.image_close', true, close);
-				$.nos.listener.remove('tinymce.image_save', true, save);
-
-				// This event will cleanup the listeners set from within the dialog
-				$.nos.listener.fire('tinymce.image_dialog_close', true, []);
 			};
 
 			var save = function(img) {
@@ -1656,15 +1651,25 @@
 
 			$.nos.data('tinymce', this);
 
-			$.nos.listener.add('tinymce.image_close', true, close);
-			$.nos.listener.add('tinymce.image_save',  true, save);
-
             dialog = $.nos.dialog({
 				contentUrl: 'admin/tinymce/image',
 				title: editCurrentImage ? 'Edit an image' : 'Insert an image',
 				ajax: true,
                 close: close
 			});
+            dialog.bind('insert.media', function(e, img) {
+                // Cleanup
+                dialog.wijdialog('close');
+
+                var html = $('<div></div>').append($(img).addClass('nosMedia')).html();
+                if (editCurrentImage) {
+                    ed.execCommand('mceReplaceContent', false, html, {skip_undo : 1});
+                } else {
+                    ed.execCommand('mceInsertContent', false, html, {skip_undo : 1});
+                }
+                ed.execCommand("mceEndUndoLevel");
+            });
+
 		},
 
 		onModuleAdd: function(container, metadata) {

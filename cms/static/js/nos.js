@@ -52,6 +52,7 @@ define([
                         }
 
                         $.extend(true, mp3Grid.mp3grid, {
+                            locales : config.locales,
                             views : config.views,
                             name  : config.configuration_id,
                             selectedView : config.selectedView
@@ -370,9 +371,9 @@ define([
                             .attr('title', action.label)
                             .html( iconClass ? '<span class="' + iconClass +'"></span>' : '&nbsp;' + action.label + '&nbsp;')
                             .click(function(e) {
-                                action.action.apply(this, [noParseData]);
                                 e.stopImmediatePropagation();
                                 e.preventDefault();
+                                action.action.apply(this, [noParseData, uiAction]);
                             })
                             .hover(
                                 function() {
@@ -446,11 +447,11 @@ define([
                                     });
                                 } else {
 									li.click(function(e) {
-                                        // Hide me
-                                        ul.wijmenu('hideAllMenus');
-                                        action.action.apply(this, [noParseData]);
                                         e.stopImmediatePropagation();
                                         e.preventDefault();
+                                        // Hide me
+                                        ul.wijmenu('hideAllMenus');
+                                        action.action.apply(this, [noParseData, li]);
                                     });
                                 }
 							});
@@ -580,27 +581,20 @@ define([
                 }
             },
 
-            dialog : function(options, wijdialog_options) {
-
-                // If only one argument is passed, then it's the wijdialog_options
-                if (wijdialog_options == null) {
-                    wijdialog_options = options;
-                    options = {};
-                }
-
+            dialog : function(options) {
                 // Default options
-                wijdialog_options = $.extend(true, {}, {
+                options = $.extend(true, {}, {
                     width: window.innerWidth - 200,
                     height: window.innerHeight - 100,
                     modal: true,
                     captionButtons: {
                         pin: {visible: false},
-                        refresh: {visible: wijdialog_options.contentUrl != null && wijdialog_options.ajax != true},
+                        refresh: {visible: options.contentUrl != null && options.ajax != true},
                         toggle: {visible: false},
                         minimize: {visible: false},
                         maximize: {visible: false}
                     }
-                }, wijdialog_options);
+                }, options);
 
 
 				var where   = $.nos.$noviusos.ostabs ? $.nos.$noviusos.ostabs('current').panel : $('body');
@@ -608,8 +602,8 @@ define([
 
 				$.nos.data('dialog', $dialog);
 
-                if (typeof wijdialog_options['content'] != 'undefined') {
-                    $dialog.append(wijdialog_options.content);
+                if (typeof options['content'] != 'undefined') {
+                    $dialog.append(options.content);
                 }
 
                 require([
@@ -618,27 +612,27 @@ define([
                     'static/cms/js/vendor/wijmo/js/jquery.wijmo.wijdialog'
                 ], function() {
                     var proceed = true;
-					if (wijdialog_options.ajax) {
-						$dialog.load(wijdialog_options.contentUrl, {}, function(responseText, textStatus, XMLHttpRequest){
+					if (options.ajax) {
+						$dialog.load(options.contentUrl, {}, function(responseText, textStatus, XMLHttpRequest){
                             try {
                                 var json = $.parseJSON(responseText);
                                 // If the dialog ajax URL returns a valid JSON string, don't show the dialog
                                 proceed = false;
                             } catch (e) {}
                             if (proceed) {
-                                delete wijdialog_options.contentUrl;
-                                $dialog.wijdialog(wijdialog_options);
+                                delete options.contentUrl;
+                                $dialog.wijdialog(options);
                             } else {
                                 $dialog.empty();
                                 $.nos.ajax.success(json);
                             }
 						});
 					} else {
-						$dialog.wijdialog(wijdialog_options);
+						$dialog.wijdialog(options);
 					}
                     if (proceed) {
-                        if ($.isFunction(wijdialog_options['onLoad'])) {
-                            wijdialog_options['onLoad']();
+                        if ($.isFunction(options['onLoad'])) {
+                            options['onLoad']();
                         }
                         $dialog.bind('wijdialogclose', function(event, ui) {
                             //log('Fermeture et destroyage');
@@ -844,39 +838,29 @@ define([
 
                 var contentUrls = {
                     'all'   : '/admin/media/list',
-                    'image' : '/admin/media/list?view=image'
+                    'image' : '/admin/media/list?view=image_pick'
                 };
 
 				var dialog = null;
-
-				var pick_media = function(item) {
-					// Close the popup (if we have one)
-					dialog && dialog.wijdialog('close');
-
-					input.inputFileThumb({
-						file: item.thumbnail
-					});
-					input.val(item.id);
-				};
 
                 var options = $.extend({
                     title: input.attr('title') || 'File',
 					allowDelete : true,
                     choose: function(e) {
-						// The popup will trigger this event when done
-						$.nos.listener.remove('media.pick', true, pick_media);
-						$.nos.listener.add('media.pick', true, pick_media);
-
                         // Open the dialog to choose the file
 						if (dialog == null) {
 							dialog = $.nos.dialog({
 								contentUrl: contentUrls[data.mode],
 								ajax: true,
-								title: 'Choose a media file',
-								close: function() {
-									$.nos.listener.remove('media.pick', true, pick_media);
-								}
+								title: 'Choose a media file'
 							});
+                            dialog.bind('select.media', function(e, item) {
+                                input.inputFileThumb({
+                                    file: item.thumbnail
+                                });
+                                input.val(item.id);
+                                dialog.wijdialog('close');
+                            });
 						} else {
 							dialog.wijdialog('open');
 						}

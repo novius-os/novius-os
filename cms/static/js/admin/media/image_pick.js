@@ -24,17 +24,17 @@ define([
         return {
             actions : {
                 pick : {
-                    primary : true,
                     label : mp3Grid.i18n('Pick'),
                     icon : 'check',
-                    action : function(item) {
-                        $.nos.listener.fire("tinymce.image_select", true, [item]);
+                    primary : true,
+                    action : function(item, $el) {
+                        $el.closest('.ui-dialog-content').trigger('select.media', item);
                     }
                 }
             },
             mp3grid : {
                 grid : {
-                    id : 'cms_media_grid_tinymce'
+                    id : 'cms_media_grid_image'
                 },
                 values: {
                     media_extension: ['image']

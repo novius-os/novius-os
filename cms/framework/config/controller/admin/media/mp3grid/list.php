@@ -26,22 +26,13 @@ return array(
                 'static/cms/js/admin/media/media.js'
             ),
         ),
-        'image' => array(
+        'image_pick' => array(
             'name' => __('Image'),
             'virtual' => true,
             'json' => array(
                 'static/cms/js/admin/media/common.js',
                 'static/cms/js/admin/media/media.js',
-                'static/cms/js/admin/media/media_image.js'
-            ),
-        ),
-        'tinymce' => array(
-            'name' => __('TinyMCE'),
-            'virtual' => true,
-            'json' => array(
-                'static/cms/js/admin/media/common.js',
-                'static/cms/js/admin/media/media.js',
-                'static/cms/js/admin/media/media_tinymce.js'
+                'static/cms/js/admin/media/image_pick.js'
             ),
         )
     ),
