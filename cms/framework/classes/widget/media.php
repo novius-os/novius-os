@@ -62,7 +62,6 @@ class Widget_Media extends \Fieldset_Field {
 require(['jquery-nos'], function ($) {
 	$(function() {
 		$(':input#$id').each(function() {
-			log($(this).data('media-options'));
 			$.nos.media($(this), $(this).data('media-options'));
 		});
 	});
