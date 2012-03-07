@@ -16,7 +16,9 @@ define([
 			inspectors : [],
 			thumbnails : false,
 			defaultView : 'grid',
+            locales : {},
 			texts : {
+                allLanguages : 'All languages',
 				addDropDown : 'Select an action',
 				columns : 'Columns',
 				showFiltersColumns : 'Filters column header',
@@ -76,11 +78,12 @@ define([
 			self.uiAdds = $('<div></div>').addClass('nos-mp3grid-adds')
 				.appendTo(self.uiHeaderBar);
 			self.uiAddsButton = $('<button type="button"></button>').addClass('primary').appendTo(self.uiAdds);
-			//self.uiAddsMenu = $('<div></div>').appendTo(self.uiAdds);
 
-			self.uiViewsDropDownContainer = $('<div></div>').addClass('nos-mp3grid-dropdownviews')
-				.appendTo(self.uiHeaderBar);
-			//self.uiSettingsMenu = $('<ul></ul>').appendTo(self.uiSettings);
+            self.uiViewsDropDownContainer = $('<div></div>').addClass('nos-mp3grid-dropdownviews')
+                .appendTo(self.uiHeaderBar);
+
+            self.uiLangsDropDownContainer = $('<div></div>').addClass('nos-mp3grid-dropdownlang')
+                .appendTo(self.uiHeaderBar);
 
 			self.uiSplitterVertical = $('<div></div>').addClass('nos-mp3grid-splitter-v')
 				.appendTo(self.element);
@@ -154,6 +157,7 @@ define([
 				._uiInspectors()
 				._uiSearchBar()
 				._uiList()
+                ._uiLangsDropDown()
 				._uiViewsDropDown();
 
 			self.init = true;
@@ -243,6 +247,41 @@ define([
 			return self;
 		},
 
+        _uiLangsDropDown : function() {
+            var self = this,
+                o = self.options;
+
+            if ($.isEmptyObject(o.locales)) {
+                return self;
+            }
+
+            self.uiLangsDropDown = $('<select></select>').appendTo(self.uiLangsDropDownContainer);
+
+            self.uiLangsDropDown.append(
+                $('<option></option>')
+                    .attr({
+                        'value': '',
+                        'selected': (!o.selectedLang)
+                    })
+                    .append(o.texts.allLanguages)
+            );
+
+            $.each(o.locales, function(key, locale) {
+                self.uiLangsDropDown.append(
+                    $('<option></option>')
+                        .attr({
+                            'value': key,
+                            'selected': (o.selectedLang == key)
+                        })
+                        .append(locale)
+                );
+            });
+
+            self.uiLangsDropDown.wijdropdown();
+
+            return self;
+        },
+
 		_uiViewsDropDown : function() {
 			var self = this,
 				o = self.options;
@@ -285,12 +324,6 @@ define([
             );
 
             self.uiViewsDropDown.wijdropdown();
-            /*
-			self.uiSettingsButton.button({
-				 label : o.texts.settings,
-				 icons : {primary : 'ui-icon-gear'}
-			});
-            */
 
             self.uiViewsDropDown.change(function() {
 
@@ -368,7 +401,6 @@ define([
 
 			return self;
 		},
-
 
 		_uiCustomViewDialog : function() {
 			var self = this,
