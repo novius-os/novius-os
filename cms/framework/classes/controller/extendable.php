@@ -292,6 +292,13 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 			}
 			$list_models[$model['model']]['childs'] = $childs;
 		}
+        $parents = array();
+		foreach ($list_models as $model) {
+            foreach ($model['childs'] as $child) {
+                $parents[$child['model']][] = $model['model'];
+            }
+        }
+        $tree['parents'] = $parents;
 		$tree['models'] = $list_models;
 
 		$list_roots = array();
@@ -320,9 +327,9 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 		$model = \Input::get('model');
 		$deep = intval(\Input::get('deep', 1));
 
-		$tree_config = array_merge(array(
-			'id' => \Config::getBDDName(join('::', $this->getLocation())),
-		), $tree_config);
+        if (empty($tree_config['id'])) {
+            $tree_config['id'] = \Config::getBDDName(join('::', $this->getLocation()));
+        }
 
 		$tree_config = $this->build_tree($tree_config);
 
