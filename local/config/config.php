@@ -17,6 +17,10 @@ return array(
     'log_threshold'   => Fuel::L_WARNING,
 
 	'locale' => 'fr_FR.utf8',
+	'locales' => array(
+		'fr_FR' => 'Français',
+		'en_GB' => 'English',
+	),
 
 	'upload' => array(
 		'disabled_extensions' => array('php'),

@@ -497,6 +497,7 @@ if ($step == 3) {
 				'user_firstname' => \Input::post('firstname', 'Firstname'),
 				'user_email'     => \Input::post('email', ''),
 				'user_password'  => \Input::post('password', ''),
+				'user_last_connection'  => date('Y-m-d H:i:s'),
 			), true);
 
 			$user->save();

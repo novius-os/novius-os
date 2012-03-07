@@ -156,14 +156,12 @@
 					var module_id = $(this).data('module');
 					var metadata  = self.settings.theme_nos_modules[module_id];
 					var data      = $(this).data('config');
-					//console.log(metadata);
 					$.ajax({
 						url: metadata.previewUrl,
 						type: 'POST',
 						dataType: 'json',
 						data: data,
 						success: function(json) {
-							//console.log(json);
 							module.html(json.preview);
 							self.onModuleAdd(module, metadata);
 						},
@@ -1533,16 +1531,6 @@
 			var dialog = null;
 			var self   = this;
 
-            var cleanup = function() {
-				$.nos.listener.remove('wysiwyg.module.save', true, save);
-				$.nos.listener.remove('wysiwyg.module.close', true, close);
-            }
-
-            var close = function() {
-				// Close the popup (if we have one)
-				dialog && dialog.wijdialog('close');
-            }
-
             var save = function(json) {
 
 				var pr = $(json.preview);
@@ -1552,9 +1540,6 @@
 					'data-config': json.config,
 					'data-module': metadata.id
 				}).addClass('mceNonEditable');
-
-				// Close the popup (if we have one)
-				dialog && dialog.wijdialog('close');
 
                 if (edit) {
                     // @todo needs review!
@@ -1603,18 +1588,15 @@
                 return;
             }
 
-			// The popup will trigger this event when done
-			$.nos.listener.add('wysiwyg.module.save',  true, save);
-			$.nos.listener.add('wysiwyg.module.close', true, close);
-
-
 			// Open the dialog popup (it returns the node inserted in the body)
 			dialog = $.nos.dialog({
 				contentUrl: metadata.popupUrl,
-				title: metadata.title,
-                close: cleanup
+				title: metadata.title
 			});
-
+            dialog.bind('save.enhancer', function(e, json) {
+                save(json);
+                dialog.wijdialog('close');
+            });
         },
 
 		_nosImage : function(ui, val) {
@@ -1634,11 +1616,6 @@
                     dialog.closest('.ui-dialog').remove();
                     dialog.remove();
                 }
-				$.nos.listener.remove('tinymce.image_close', true, close);
-				$.nos.listener.remove('tinymce.image_save', true, save);
-
-				// This event will cleanup the listeners set from within the dialog
-				$.nos.listener.fire('tinymce.image_dialog_close', true, []);
 			};
 
 			var save = function(img) {
@@ -1656,15 +1633,25 @@
 
 			$.nos.data('tinymce', this);
 
-			$.nos.listener.add('tinymce.image_close', true, close);
-			$.nos.listener.add('tinymce.image_save',  true, save);
-
             dialog = $.nos.dialog({
 				contentUrl: 'admin/tinymce/image',
 				title: editCurrentImage ? 'Edit an image' : 'Insert an image',
 				ajax: true,
                 close: close
 			});
+            dialog.bind('insert.media', function(e, img) {
+                // Cleanup
+                dialog.wijdialog('close');
+
+                var html = $('<div></div>').append($(img).addClass('nosMedia')).html();
+                if (editCurrentImage) {
+                    ed.execCommand('mceReplaceContent', false, html, {skip_undo : 1});
+                } else {
+                    ed.execCommand('mceInsertContent', false, html, {skip_undo : 1});
+                }
+                ed.execCommand("mceEndUndoLevel");
+            });
+
 		},
 
 		onModuleAdd: function(container, metadata) {

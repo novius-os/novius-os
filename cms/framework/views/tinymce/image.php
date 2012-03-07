@@ -6,7 +6,7 @@
 	<div id="<?= $id_library ?>">
 		<?php
 		// We could load this using ajax, but it's faster to preload it directly here
-		echo Request::forge('admin/media/list/delayed')->execute(array('tinymce'))->response();
+		echo Request::forge('admin/media/list/delayed')->execute(array('image_pick'))->response();
 		?>
 	</div>
 
@@ -70,11 +70,10 @@
 require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 	$(function() {
 
-		var $container = $('#<?= $uniqid ?>');
-
-		var getMargin = function(el) {
-			return el.outerHeight(true) - el.height();
-		};
+		var $container = $('#<?= $uniqid ?>')
+			getMargin = function(el) {
+				return el.outerHeight(true) - el.height();
+			};
 
 		require(['static/cms/js/vendor/wijmo/js/jquery.wijmo.wijtabs.js'], function() {
 			setTimeout(function() {
@@ -107,8 +106,40 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 				var mp3grid_tmp = $library.children().height(height - getMargin($library.children())).attr('id');
 				$.nos.listener.fire('mp3grid.' + mp3grid_tmp, true, []);
 
+				var $dialog = $container.closest('.ui-dialog-content');
+				$dialog.bind('select.media', function(e, data) {
+					tinymce_image_select(data);
+				});
+
+				$container.find('a[data-id=close]').click(function(e) {
+					$dialog.wijdialog('close');
+					e.preventDefault();
+				});
+
+				$container.find('input[data-id=save]').click(function(e) {
+					var img = $('<img />');
+
+					if (!media || !media.id) {
+						alert(<?= \Format::forge()->to_json(__('Please choose an image first')) ?>);
+						return;
+					}
+
+					img.attr('height', $height.val());
+					img.attr('width',  $width.val());
+					img.attr('title',  $title.val());
+					img.attr('alt',    $alt.val());
+					img.attr('style',  $style.val());
+
+					img.attr('data-media', JSON.stringify(media));
+					img.attr('src', base_url + media.path);
+
+					$dialog.trigger('insert.media', img);
+					e.stopPropagation();
+					e.preventDefault();
+				});
+
 				$.nos.ui.form('#<?= $uniqid ?>');
-			}, 0);
+			}, 1);
 		});
 
 		var base_url = '<?= \Uri::base(true) ?>';
@@ -154,42 +185,6 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 				$same_title_alt.prop('checked', false).removeAttr('checked').change();
 			}
 		}
-
-		// This is called by the "Pick" action from the grid
-		$.nos.listener.add('tinymce.image_select', true, tinymce_image_select);
-
-		// This is called for cleanup in the _nosImage command from tinyMce when the popup closes
-		$.nos.listener.add('tinymce.image_select.close_dialog', true, function() {
-			$.nos.listener.remove('tinymce.image_select', true, tinymce_image_select);
-			$.nos.listener.remove('tinymce.image_dialog_close', true, arguments.callee);
-		});
-
-		$container.find('a[data-id=close]').click(function(e) {
-			$.nos.listener.fire('tinymce.image_close', true);
-			e.preventDefault();
-		});
-
-		$container.find('input[data-id=save]').click(function(e) {
-			var img = $('<img />');
-
-			if (!media || !media.id) {
-				alert(<?= \Format::forge()->to_json(__('Please choose an image first')) ?>);
-				return;
-			}
-
-			img.attr('height', $height.val());
-			img.attr('width',  $width.val());
-			img.attr('title',  $title.val());
-			img.attr('alt',    $alt.val());
-			img.attr('style',  $style.val());
-
-			img.attr('data-media', JSON.stringify(media));
-			img.attr('src', base_url + media.path);
-
-			$.nos.listener.fire('tinymce.image_save', true, [img]);
-			e.stopPropagation();
-			e.preventDefault();
-		});
 
 		$('#<?= $uniqid_form ?>').submit(function(e) {
 			$container.find('input[data-id=save]').triggerHandler('click');
@@ -240,7 +235,6 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 			// No data available yet, we need to fetch them
 			if (media_id) {
 
-				//log('get media data with ajax');
 				$.ajax({
 					method: 'GET',
 					url: base_url + 'admin/media/info/media/' + media_id,
@@ -250,7 +244,6 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 					}
 				})
 			} else {
-				//log('use current data from media');
 				tinymce_image_select($img.data('media'), $img);
 			}
 		}
