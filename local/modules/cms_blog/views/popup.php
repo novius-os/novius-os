@@ -16,6 +16,11 @@ require(['jquery-nos'], function($) {
 		$(":input[type='submit'],button").button();
 		$("select").wijdropdown();
 		$('.fieldset').wijexpander({expanded: true });
+
+		$('a[data-id=close]').click(function(e) {
+			window.parent.$(window.frameElement.parentNode).wijdialog('close');
+			e.preventDefault();
+		});
 	});
 });
 require(['jquery-nos', 'static/cms/js/vendor/jquery/jquery-form/jquery.form.min'], function($) {
@@ -24,7 +29,7 @@ require(['jquery-nos', 'static/cms/js/vendor/jquery/jquery-form/jquery.form.min'
 		$(self).ajaxSubmit({
 			dataType: 'json',
 			success: function(json) {
-				$.nos.listener.fire('wysiwyg.module.save', true, [json]);
+				window.parent.$(window.frameElement).parent().trigger('save.enhancer', json);
 			},
 			error: function(error) {
 				$.nos.notify('An error occured', 'error');
@@ -55,7 +60,7 @@ require(['jquery-nos', 'static/cms/js/vendor/jquery/jquery-form/jquery.form.min'
 	<div class="line">
 		<div class="unit col c1"></div>
 		<div class="unit col c10 ui-widget">
-			<input type="submit" value="Save" /> or Cancel
+			<input type="submit" value="Save" /> or <a data-id="close" href="#">Cancel</a>
 		</div>
 		<div class="unit lastUnit"></div>
 	</div>
