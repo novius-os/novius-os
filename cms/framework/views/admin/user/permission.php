@@ -36,13 +36,14 @@ foreach ($apps as $app => $perms) {
     ?>
     <h1 title="Application provided by <?= $apps[$app]['provider']['name']; ?>"><label><input type="checkbox" name="access[<?= $app ?>]" value="1" <?= $group->check_permission($app, 'access') ? 'checked' : '' ?> /> <?= $apps[$app]['name']; ?></label></h1>
     <div style="margin-left: 30px;">
-		<input type="hidden" name="module" value="<?= $app ?>" />
+		<input type="hidden" name="module[]" value="<?= $app ?>" />
 	<?php
     foreach ($keys as $key => $value) {
 		$driver = $group->get_permission_driver($app, $key);
 		?>
 		<h2><?= $value['label']; ?></h2>
 		<?php
+        //\Debug::dump($driver);
         echo $driver->display($group);
 	}
 	?>
@@ -54,12 +55,14 @@ foreach ($apps as $app => $perms) {
 </form>
 
 <script type="text/javascript">
+  require(["jquery"], function($) {
   $('h1 input:not(:checked)').closest('h1').next().hide();
   $('h1 input').change(function() {
-      $(this).closest('h1').next()[$(this).is(':checked') ? 'show' : 'hide']();
-	  if (!$(this).is(':checked')) {
-		  $(this).closest('form').submit();
-	  }
+        $(this).closest('h1').next()[$(this).is(':checked') ? 'show' : 'hide']();
+        if (!$(this).is(':checked')) {
+            $(this).closest('form').submit();
+        }
+    });
   });
 </script>
 

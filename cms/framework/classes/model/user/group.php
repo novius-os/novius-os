@@ -20,8 +20,7 @@ class Model_User_Group extends \Cms\Orm\Model {
 	protected $access;
 
     public function check_permission($module, $key) {
-
-		if ($key = 'access') {
+		if ($key == 'access') {
 			$this->load_access($module);
 			return $this->access->check($this, $module);
 		}
