@@ -38,7 +38,7 @@ class Filter {
      */
     static public function getColumnFromKey($query, $key, $config) {
         if (is_array($config['dataset'][$key])) {
-            if ($config['dataset'][$key]['search_relation']) {
+            if (!empty($config['dataset'][$key]['search_relation'])) {
                 $query->related($config['dataset'][$key]['search_relation']);
             }
             $column = $config['dataset'][$key]['search_column'];

@@ -58,6 +58,9 @@ class Module {
 			$private = APPPATH.'modules'.DS.$this->name.DS.$folder;
 			if (is_dir($private)) {
 				$public = DOCROOT.$folder.DS.'modules'.DS.$this->name;
+                if (is_link($public)) {
+                    unlink($public);
+                }
 				\Debug::dump(array($private, $public));
 				return symlink($private, $public);
 			}
@@ -77,7 +80,7 @@ class Module {
 		$private = APPPATH.'modules'.DS.$this->name.DS.$folder;
 		if (file_exists($private)) {
 			$public = DOCROOT.$folder.DS.'modules'.DS.$this->name;
-			return is_link($public);
+			return is_link($public) && readlink($public) == $private;
 		}
 		return true;
 	}
