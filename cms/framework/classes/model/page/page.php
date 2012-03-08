@@ -45,8 +45,8 @@ class Model_Page_Page extends \Cms\Orm\Model {
 	);
 
 	protected static $_behaviors = array(
-		'Cms\Orm_Translatable' => array(
-			'events' => array('before_insert', 'after_insert', 'before_save'),
+		'Cms\Orm_Behaviour_Translatable' => array(
+			'events' => array('before_insert', 'after_insert', 'before_save', 'before_change_parent', 'after_change_parent'),
 			'lang_property'      => 'page_lang',
 			'common_id_property' => 'page_lang_common_id',
 			'single_id_property' => 'page_lang_single_id',
@@ -63,6 +63,15 @@ class Model_Page_Page extends \Cms\Orm\Model {
                 'page_home',
                 'page_cache_duration',
             ),
+		),
+		'Cms\Orm_Behaviour_Tree' => array(
+			'events' => array('before'),
+			'parent_relation' => 'parent',
+			'children_relation' => 'children',
+		),
+		'Cms\Orm_Behaviour_Sortable' => array(
+			'events' => array('after_sort'),
+			'sort_property' => 'page_sort',
 		),
 	);
 

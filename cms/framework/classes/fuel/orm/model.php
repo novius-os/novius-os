@@ -10,6 +10,9 @@
 
 namespace Cms\Orm;
 
+class UnknownBehaviorException extends \Exception {};
+class UnknownMethodBehaviorException extends \Exception {};
+
 use Arr;
 use DB;
 use Event;
@@ -75,7 +78,7 @@ class Model extends \Orm\Model {
 		$class = get_called_class();
 		$init = array_key_exists($class, static::$_observers_cached);
 
-		call_user_func_array('parent::observers', func_get_args());
+		parent::observers($specific, $default);
 
 		if ( !$init)
 		{
@@ -143,11 +146,7 @@ class Model extends \Orm\Model {
 	public function __call($method, $args) {
 		try {
 			return static::_callBehavior($this, $method, $args);
-		} catch (\Exception $e) {
-			if ($e->getMessage() !== 'no behavior') {
-				throw $e;
-			}
-		}
+		} catch (\Cms\Orm\UnknownBehaviorException $e) {}
 
 		return parent::__call($method, $args);
 	}
@@ -155,11 +154,7 @@ class Model extends \Orm\Model {
 	public static function __callStatic($method, $args) {
 		try {
 			return static::_callBehavior(get_called_class(), $method, $args);
-		} catch (\Exception $e) {
-			if ($e->getMessage() !== 'no behavior') {
-				throw $e;
-			}
-		}
+		} catch (\Cms\Orm\UnknownBehaviorException $e) {}
 
 		return parent::__callStatic($method, $args);
 	}
@@ -170,21 +165,29 @@ class Model extends \Orm\Model {
 			$events = isset($settings['events']) ? $settings['events'] : array();
 			if ( ! class_exists($behavior))
 			{
-				$behavior_class = \Inflector::get_namespace($behavior).'Observer_'.\Inflector::denamespace($behavior);
-				if ( ! class_exists($behavior_class))
-				{
-					throw new \UnexpectedValueException($behavior);
-				}
-
-				// Add the observer with the full classname for next usage
-				unset(static::$_behaviors_cached[$behavior]);
-				static::$_behaviors_cached[$behavior_class] = $events;
-				$behavior = $behavior_class;
+                throw new \UnexpectedValueException($behavior);
 			}
 
-			return call_user_func_array(array($behavior, 'behavior'), array($context, $method, $args));
+            try {
+                return call_user_func_array(array($behavior, 'behavior'), array($context, $method, $args));
+            } catch (\Cms\Orm\UnknownMethodBehaviorException $e) {}
 		}
-		throw new \Exception('no behavior');
+		throw new \Cms\Orm\UnknownBehaviorException();
+	}
+
+	private static function _callAllBehaviors($context, $method, $args) {
+		foreach (static::behaviors() as $behavior => $settings)
+		{
+			$events = isset($settings['events']) ? $settings['events'] : array();
+			if ( ! class_exists($behavior))
+			{
+                throw new \UnexpectedValueException($behavior);
+			}
+
+            try {
+                call_user_func_array(array($behavior, 'behavior'), array($context, $method, $args));
+            } catch (\Cms\Orm\UnknownMethodBehaviorException $e) {}
+		}
 	}
 
 	public static function add_properties($properties) {
@@ -202,7 +205,7 @@ class Model extends \Orm\Model {
 	public static function search($where, $order_by = array(), $options = array()) {
 
 		try {
-			static::_callBehavior(get_called_class(), 'before_search', array(&$where, &$order_by, &$options));
+			static::_callAllBehaviors(get_called_class(), 'before_search', array(&$where, &$order_by, &$options));
 		} catch (\Exception $e) {
 			if ($e->getMessage() !== 'no behavior') {
 				throw $e;
@@ -263,7 +266,7 @@ class Model extends \Orm\Model {
 					}
 				}
 				// Create a new relation if it doesn't exist yet
-				$wysiwyg                        = new Model_Wysiwyg();
+				$wysiwyg                        = new \Cms\Model_Wysiwyg();
 				$wysiwyg->wysiwyg_text          = $value;
 				$wysiwyg->wysiwyg_join_table    = static::$_table_name;
 				$wysiwyg->wysiwyg_key           = $key;
@@ -294,13 +297,13 @@ class Model extends \Orm\Model {
 				}
 
 				// Create a new relation if it doesn't exist yet
-				$medil                   = new Model_Media_Link();
+				$medil                   = new \Cms\Model_Media_Link();
 				$medil->medil_from_table = static::$_table_name;
 				$medil->medil_key        = $key;
 				$medil->medil_foreign_id = $this->id;
 				$medil->medil_media_id   = $value;
 				// Don't save the link here, it's done with cascade_save = true
-				$this->medias[] = $medil;
+				$this->linked_medias[] = $medil;
 
 				return $value;
 			}

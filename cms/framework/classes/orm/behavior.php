@@ -24,6 +24,7 @@ abstract class Orm_Behavior extends \Orm\Observer
 				return call_user_func_array(array(static::instance($model_class), $method), $args);
 			}
 		}
+        throw new Orm\UnknownMethodBehaviorException();
 	}
 
 	public static function instance($model_class)

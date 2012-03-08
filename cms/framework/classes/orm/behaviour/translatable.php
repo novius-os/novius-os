@@ -10,16 +10,8 @@
 
 namespace Cms;
 
-class Orm_Translatable extends Orm_Behavior
+class Orm_Behaviour_Translatable extends Orm_Behavior
 {
-	public static function orm_notify_class($model_class, $event, $data)
-	{
-		if (method_exists(static::instance($model_class), $event))
-		{
-			return static::instance($model_class)->{$event}($data);
-		}
-	}
-
 	protected $_class = null;
 
 	/**
@@ -82,6 +74,43 @@ class Orm_Translatable extends Orm_Behavior
             foreach ($this->_properties['invariant_fields'] as $invariant) {
                 $obj->$invariant = $obj_main->$invariant;
             }
+        }
+    }
+
+    /**
+     * Check if the parent exists in all the langages of the child
+     * @param \Cms\Orm\Model $obj
+     */
+    public function before_change_parent(\Cms\Orm\Model $obj) {
+
+        // This event has been sent from the tree behaviour, so we don't need to check it exists
+        $new_parent = $obj->find_parent();
+
+        $langs_parent   = $new_parent->get_other_lang();
+        $langs_parent[] = $new_parent->get_lang();
+
+        $langs_self   = $this->get_other_lang($obj);
+        $langs_self[] = $this->get_lang($obj);
+
+        $missing_langs = array_diff($langs_self, $langs_parent);
+        if (!empty($missing_langs)) {
+            throw new \Exception('Cannot move this element here because the parent does not exists in the following langages: '.implode(', ', $missing_langs));
+        }
+    }
+
+    /**
+     * Check if the parent exists in all the langages of the child
+     * @param \Cms\Orm\Model $obj
+     */
+    public function after_change_parent(\Cms\Orm\Model $obj) {
+
+        // This event has been sent from the tree behaviour, so we don't need to check it exists
+        $new_parent = $obj->find_parent();
+
+        foreach ($this->find_lang($obj, 'all') as $item) {
+            $parent = $new_parent->find_lang($item->get_lang());
+            $item->set_parent_no_observers($parent);
+            $item->save();
         }
     }
 

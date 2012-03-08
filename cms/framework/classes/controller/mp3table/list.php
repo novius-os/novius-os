@@ -170,6 +170,67 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 			));
 		}
 
+        $tree_config = $this->mp3grid['tree'];
+        $tree_config['id'] =  $this->mp3grid['configuration_id'];
+        $tree_config = $this->build_tree($tree_config);
+
+        if (\Input::get('move') == 'true') {
+
+            $model_from    = \Input::get('itemModel');
+            $model_from_id = \Input::get('itemId');
+
+            $model_to =  \Input::get('targetModel');
+            $model_to_id = \Input::get('targetId');
+
+            if (empty($tree_config['models'][$model_from])) {
+                return;
+            }
+            if (empty($tree_config['models'][$model_to])) {
+                return;
+            }
+
+            $from = $model_from::find($model_from_id);
+            if (empty($from)) {
+                return;
+            }
+
+            $to = $model_to::find($model_to_id);
+            if (empty($to)) {
+                return;
+            }
+
+            $where = \Input::get('targetType');
+            //\Debug::dump($tree_config);
+
+            // Change parent for tree relations
+            $behaviour_tree = $model_from::behaviors('Cms\Orm_Behaviour_Tree');
+            if (!empty($behaviour_tree)) {
+                $parent = ($where == 'in' ? $to : $to->get_parent());
+                $from->set_parent($parent);
+            }
+
+            // Change sort order
+            $behaviour_sort = $model_from::behaviors('Cms\Orm_Behaviour_Sortable');
+            if (!empty($behaviour_sort)) {
+                switch($where) {
+                    case 'before':
+                        // move_before($which)
+                        $from->move_before($to);
+                        break;
+
+                    case 'after':
+                        // move_after($which)
+                        $from->move_after($to);
+                        break;
+
+                    // Will only occur when behaviour_tree exists
+                    case 'in':
+                        $from->move_to_last_position();
+                        break;
+                }
+            }
+        }
+
 		$json = $this->tree(array_merge(array('id' => $this->mp3grid['configuration_id']), $this->mp3grid['tree']));
 
 		if (\Fuel::$env === \Fuel::DEVELOPMENT) {
