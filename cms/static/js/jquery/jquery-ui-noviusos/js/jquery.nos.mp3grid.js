@@ -1086,7 +1086,9 @@ define([
 			self.uiGrid.nosgrid('destroy')
 				.empty()
 				.hide();
-            self.uiTreeGrid.hide();
+            self.uiTreeGrid.nostreegrid('destroy')
+                .empty()
+                .hide();
 			if (o.defaultView === 'thumbnails') {
 				self.uiThumbnail.show();
 				self._uiThumbnail();
@@ -1190,10 +1192,7 @@ define([
 								data = row ? row.data : false;
 
 							if (data) {
-                                self.itemSelected = {
-                                    model : data.item.data.noParseData._model,
-                                    id : data.item.data.noParseData.id
-                                };
+                                self.itemSelected = $.extend({}, data);
                                 self.element.trigger('selectionChanged.mp3grid', data);
 							}
 						}
@@ -1210,7 +1209,7 @@ define([
 						if (self.itemSelected !== null) {
                             // Search the selection in the data
                             $.each(self.uiGrid.nosgrid('data') || [], function(dataRowIndex, data) {
-                                if (data._model == self.itemSelected.model && data.id == self.itemSelected.id) {
+                                if (data._model == self.itemSelected._model && data._id == self.itemSelected._id) {
                                     sel.addRows(dataRowIndex);
                                 }
                             });
@@ -1277,7 +1276,7 @@ define([
                                 data = row ? row.data : false;
 
                             if (data) {
-                                self.itemSelected = row.dataRowIndex;
+                                self.itemSelected = $.extend({}, data);
                                 self.element.trigger('selectionChanged.mp3grid', data);
                             }
                         }
@@ -1289,10 +1288,14 @@ define([
                     rendered : function() {
                         self.gridRendered = true;
                         self.uiTreeGrid.css('height', 'auto');
+                        var sel = self.uiTreeGrid.nostreegrid("selection");
+                        sel && sel.clear();
                         if (self.itemSelected !== null) {
-                            var sel = self.uiTreeGrid.nosgrid("selection");
-                            sel.clear();
-                            sel.addRows(self.itemSelected);
+                            $.each(self.uiTreeGrid.nostreegrid('data') || [], function(dataRowIndex, data) {
+                                if (data._model == self.itemSelected._model && data._id == self.itemSelected._id) {
+                                    sel.addRows(dataRowIndex);
+                                }
+                            });
                         }
                     },
                     dataLoading: function(e) {
@@ -1347,7 +1350,7 @@ define([
                             // Search the selection in the data
                             var found = false;
                             $.each(self.uiThumbnail.thumbnails('data') || [], function(dataRowIndex, data) {
-                                if (data._model == self.itemSelected.model && data.id == self.itemSelected.id) {
+                                if (data._model == self.itemSelected._model && data._id == self.itemSelected._id) {
                                     found = true;
                                     if (!self.uiThumbnail.thumbnails('select', dataRowIndex)) {
                                         self.itemSelected = null;
@@ -1375,13 +1378,9 @@ define([
 							self.itemSelected = null;
                             self.element.trigger('selectionChanged.mp3grid', false);
 						} else {
-							self.itemSelected = {
-                                model : data.item.data.noParseData._model,
-                                id : data.item.data.noParseData.id
-                            };
+							self.itemSelected = $.extend({}, data.item.data.noParseData);
                             self.element.trigger('selectionChanged.mp3grid', data.item.data.noParseData);
 						}
-                        log('Selection = ', self.itemSelected);
 					}
 				}, o.thumbnails));
 
