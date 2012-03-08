@@ -16,7 +16,6 @@ use Fuel\Core\View;
 class Controller_Admin_Popup extends \Cms\Controller_Generic_Admin {
 
 	public function action_index() {
-		$this->template->body = View::forge($this->config['views']['index']);
-		return $this->template;
+		return View::forge($this->config['views']['index']);
 	}
 }

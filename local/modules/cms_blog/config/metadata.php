@@ -32,8 +32,13 @@ return array(
             'desc'  => '',
             'target' => 'cms_blog/front',
             'iconUrl' => 'static/modules/cms_blog/img/16/blog.png',
-            'popupUrl' => 'admin/cms_blog/popup',
             'previewUrl' => 'admin/cms_blog/preview',
+	        'dialog' => array(
+		        'contentUrl' => 'admin/cms_blog/popup',
+		        'width' => 450,
+		        'height' => 180,
+		        'ajax' => true,
+	        ),
         ),
     ),
 );

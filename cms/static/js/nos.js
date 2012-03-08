@@ -582,6 +582,18 @@ define([
             },
 
             dialog : function(options) {
+
+                if (options.destroyOnClose) {
+                    var oldClose = options.close;
+                    options.close = function() {
+                        if ($.isFunction(oldClose)) {
+                            oldClose.apply(this, arguments);
+                        }
+                        $(this).wijdialog('destroy')
+                            .remove();
+                    };
+                }
+
                 // Default options
                 options = $.extend(true, {}, {
                     width: window.innerWidth - 200,
@@ -589,13 +601,12 @@ define([
                     modal: true,
                     captionButtons: {
                         pin: {visible: false},
-                        refresh: {visible: options.contentUrl != null && options.ajax != true},
+                        refresh: {visible: options.contentUrl != null && !options.ajax},
                         toggle: {visible: false},
                         minimize: {visible: false},
                         maximize: {visible: false}
                     }
                 }, options);
-
 
 				var where   = $.nos.$noviusos.ostabs ? $.nos.$noviusos.ostabs('current').panel : $('body');
 				var $dialog = $(document.createElement('div')).appendTo(where);
@@ -606,40 +617,34 @@ define([
                     $dialog.append(options.content);
                 }
 
-                require([
-                    //'link!static/cms/js/vendor/wijmo/css/jquery.wijmo-open.2.0.0.css',
-                    //'static/cms/js/wijmo/wijmo/js/jquery.wijmo.wijutil',
-                    'static/cms/js/vendor/wijmo/js/jquery.wijmo.wijdialog'
-                ], function() {
-                    var proceed = true;
-					if (options.ajax) {
-						$dialog.load(options.contentUrl, {}, function(responseText, textStatus, XMLHttpRequest){
-                            try {
-                                var json = $.parseJSON(responseText);
-                                // If the dialog ajax URL returns a valid JSON string, don't show the dialog
-                                proceed = false;
-                            } catch (e) {}
-                            if (proceed) {
-                                delete options.contentUrl;
-                                $dialog.wijdialog(options);
-                            } else {
-                                $dialog.empty();
-                                $.nos.ajax.success(json);
-                            }
-						});
-					} else {
-						$dialog.wijdialog(options);
-					}
-                    if (proceed) {
-                        if ($.isFunction(options['onLoad'])) {
-                            options['onLoad']();
+                var proceed = true;
+                if (options.ajax) {
+                    $dialog.load(options.contentUrl, $.isPlainObject(options.ajax) ? options.ajax : {}, function(responseText, textStatus, XMLHttpRequest){
+                        try {
+                            var json = $.parseJSON(responseText);
+                            // If the dialog ajax URL returns a valid JSON string, don't show the dialog
+                            proceed = false;
+                        } catch (e) {}
+                        if (proceed) {
+                            delete options.contentUrl;
+                            $dialog.wijdialog(options);
+                        } else {
+                            $dialog.empty();
+                            $.nos.ajax.success(json);
                         }
-                        $dialog.bind('wijdialogclose', function(event, ui) {
-                            //log('Fermeture et destroyage');
-                            $dialog.closest('.ui-dialog').hide().appendTo(where);
-                        });
+                    });
+                } else {
+                    $dialog.wijdialog(options);
+                }
+                if (proceed) {
+                    if ($.isFunction(options['onLoad'])) {
+                        options['onLoad']();
                     }
-                });
+                    $dialog.bind('wijdialogclose', function(event, ui) {
+                        //log('Fermeture et destroyage');
+                        $dialog.closest('.ui-dialog').hide().appendTo(where);
+                    });
+                }
 
                 return $dialog;
             },
