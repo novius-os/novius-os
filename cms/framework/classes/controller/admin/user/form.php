@@ -10,166 +10,256 @@
 
 namespace Cms;
 
-class Controller_Admin_User_Form extends Controller_Extendable {
+class Controller_Admin_User_Form extends \Cms\Controller_Generic_Admin {
 
     public function action_add() {
 
-		return \View::forge('admin/user/form/add', array(
-			'fieldset_add' => static::fieldset_add()->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
-		), false);
+        $user = Model_User_User::forge();
+
+        return \View::forge('cms::admin/user/user_add', array(
+            'fieldset' => static::fieldset_add($user)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
+        ), false);
     }
 
-    public function action_edit($id) {
+    public function action_edit($id = false) {
+        if ($id === false) {
+            $user = null;
+        } else {
+            $user = Model_User_User::find($id);
+        }
+        $group = reset($user->groups);
 
-        return \View::forge('admin/user/form/edit', array(
-			'user' => Model_User_User::find($id),
-			'fieldset_edit'     => static::fieldset_edit($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
-			'fieldset_password' => static::fieldset_password($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
-		), false);
+
+        \Config::load('cms::admin/native_apps', 'natives_apps');
+        $natives_apps = \Config::get('natives_apps', array());
+
+        \Config::load(APPPATH.'data'.DS.'config'.DS.'app_installed.php', 'app_installed');
+        $apps = \Config::get('app_installed', array());
+
+        $apps = array_merge($natives_apps, $apps);
+
+        return \View::forge('cms::admin/user/user_edit', array(
+            'user'   => $user,
+            'fieldset' => static::fieldset_edit($user)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
+            'permissions' => \View::forge('admin/user/permission', array(
+                'user' => $user,
+                'group' => $group,
+                'apps' => $apps,
+            ), false),
+        ), false);
     }
 
-	public static function fieldset_add() {
+    public function action_save_permissions() {
 
+        $group = Model_User_Group::find(\Input::post('group_id'));
 
-        \Config::load('cms::admin/user/form', true);
-		$fields = \Config::get('cms::admin/user/form.fields', array());
+		$modules = \Input::post('module');
+        foreach ($modules as $module) {
+            $access = Model_User_Permission::find('first', array('where' => array(
+                array('perm_group_id', $group->group_id),
+                array('perm_module', 'access'),
+                array('perm_key', $module),
+            )));
 
-		$form = \Fieldset::build_from_config($fields, '\Cms\Model_User', array(
-			'complete' => function($data) {
-				$user = new \Cms\Model_User_User();
-				foreach ($data as $name => $value) {
-					if (substr($name, 0, 5) == 'user_') {
-						$user->$name = $value;
-					}
-				}
+            // Grant of remove access to the module
+            if (empty($_POST['access'][$module]) && !empty($access)) {
+                $access->delete();
+                \Response::json(array(
+                    'notify' => 'Access successfully denied.',
+                ));
+            }
 
-				try {
-					$user->save();
-					$body = array(
-						'notify' => 'User saved successfully.',
-						'redirect' => 'admin/admin/user/form/edit/'.$user->user_id,
-					);
-				} catch (\Exception $e) {
-					$body = array(
-						'error' => $e->getMessage(),
-					);
-				}
+            if (!empty($_POST['access'][$module]) && empty($access)) {
+                $access = new Model_User_Permission();
+                $access->perm_group_id   = $group->group_id;
+                $access->perm_module     = 'access';
+                $access->perm_identifier = '';
+                $access->perm_key        = $module;
+                $access->save();
+            }
 
-				\Response::json($body);
-			}
-		));
+            \Config::load('applications', true);
+            $apps = \Config::get('applications', array());
 
-		$form->js_validation();
-		return $form;
-	}
+            \Config::load("$module::permissions", true);
+            $permissions = \Config::get("$module::permissions", array());
 
-	public static function fieldset_edit($id) {
-        $user = Model_User_User::find($id);
-        $configuration = static::loadConfiguration('cms', 'controller/admin/user/form');
+            foreach ($permissions as $identifier => $whatever) {
+                $driver = $group->get_permission_driver($module, $identifier);
+                $driver->save($group, (array) $_POST['permission'][$module][$identifier]);
+            }
+        }
+		\Response::json(array(
+            'notify' => 'Permissions successfully saved.',
+        ));
+    }
 
-        $fields = $configuration['fields'];
+    public static function fieldset_add($user) {
 
-        //\Config::load('cms::admin/user/form', true);
-		//$fields = $this->config['fields']; //\Config::get('cms::admin/user/form.fields', array());
-
-		$fieldset_edit = \Fieldset::build_from_config($fields, $user, array(
-			'form_name' => 'edit_user_infos',
-			'success' => function() {
-				return array(
-					'notify' => 'User saved successfully.',
-					'listener' => array(
-						'event' => 'reload',
-						'target' => 'cms_user',
-					),
-				);
-			},
-			'extend' => function($fieldset)  {
-				$fieldset->field('user_name')->add_rule('min_length', 3);
-				$fieldset->field('user_firstname')->add_rule('min_length', 3);
-			},
-		));
-		$fieldset_edit->js_validation();
-		return $fieldset_edit;
-	}
-
-	public static function fieldset_password($id) {
-
-        $fields = array (
+        $fields = array(
             'user_id' => array (
-                'label' => 'ID',
+                'label' => __('ID: '),
                 'widget' => 'text',
             ),
-            'user_fullname' => array (
-                'label' => 'Full name',
-                'widget' => 'text',
-            ),
-            'old_password' => array (
-                'label' => 'Old password',
+            'user_name' => array (
+                'label' => __('Family name'),
                 'widget' => '',
+                'validation' => array(
+                    'required',
+                ),
+            ),
+            'user_firstname' => array (
+                'label' => __('First name'),
+                'widget' => '',
+                'validation' => array(
+                    'required',
+                ),
+            ),
+            'user_email' => array(
+                'label' => __('Email: '),
+                'widget' => '',
+                'validation' => array(
+                    'required',
+                    'valid_email',
+                ),
+            ),
+            'user_last_connection' => array (
+                'label' => __('Last login: '),
+                'add' => false,
+                'widget' => 'date_select',
+                'form' => array(
+                    'readonly' => true,
+                    'date_format' => 'eu_full',
+                ),
+            ),
+            'user_password' => array (
+                'label' => __('Password: '),
                 'form' => array(
                     'type' => 'password',
+                    'value' => '',
                 ),
                 'validation' => array(
                     'required',
                     'min_length' => array(6),
                 ),
             ),
-            //*
-            'new_password' => array (
-                'label' => 'New password',
+            'password_confirmation' => array (
+                'label' => __('Password (confirmation): '),
                 'form' => array(
                     'type' => 'password',
                 ),
                 'validation' => array(
-                    'required',
-                    'min_length' => array(6),
-                ),
-            ),
-            'new_password_confirmation' => array (
-                'label' => 'Confirmation',
-                'form' => array(
-                    'type' => 'password',
-                ),
-                'validation' => array(
-					'match_field' => array('new_password'), // All rules will be satisfied
+                    'required', // To show the little star
+                    'match_field' => array('user_password'),
                 ),
             ),
             'save' => array(
-                'label' => '',
                 'form' => array(
                     'type' => 'submit',
-                    'value' => 'Save',
+                    'tag'  => 'button',
+                    'class' => 'primary',
+                    'value' => __('Save'),
+                    'data-icon' => 'check',
                 ),
             ),
         );
 
-        $user = Model_User_User::find($id);
+        $fieldset = \Fieldset::build_from_config($fields, $user, array(
+            'success' => function() use ($user) {
+                return array(
+                    'notify' => 'User successfully created.',
+                    'replaceTab' => 'admin/admin/user/form/edit/'.$user->user_id,
+                );
+            }
+        ));
 
-		$fieldset_password = \Fieldset::build_from_config($fields, $user, array(
-			'form_name' => 'edit_user_passwd',
-			'extend' => function($fieldset) use ($user) {
-				$fieldset->field('old_password')->add_rule(array(
-					'check_old_password' => function($value) use ($user) {
-						return $user->check_password($value);
-					}
-				));
-			},
-			'before_save' => function($user, $data) {
-				if (!empty($data['new_password'])) {
-					$user->user_password = $data['new_password'];
-				}
-			},
-			'success' => function() {
-				return array(
-					'notify' => 'Password changed successfully.',
-					'listener' => array(
-						'event' => 'reload',
-						'target' => 'cms_user',
-					),
-				);
-			}
-		));
-		$fieldset_password->js_validation();
-		return $fieldset_password;
-	}
+        $fieldset->js_validation();
+        return $fieldset;
+    }
+
+    public static function fieldset_edit($user) {
+
+        $fields = array(
+            'user_id' => array (
+                'label' => __('ID: '),
+                'widget' => 'text',
+            ),
+            'user_name' => array (
+                'label' => __('Family name'),
+                'widget' => '',
+                'validation' => array(
+                    'required',
+                ),
+            ),
+            'user_firstname' => array (
+                'label' => __('First name'),
+                'widget' => '',
+                'validation' => array(
+                    'required',
+                ),
+            ),
+            'user_email' => array(
+                'label' => __('Email: '),
+                'widget' => '',
+                'validation' => array(
+                    'required',
+                    'valid_email',
+                ),
+            ),
+            'user_last_connection' => array (
+                'label' => __('Last login: '),
+                'add' => false,
+                'widget' => 'date_select',
+                'form' => array(
+                    'readonly' => true,
+                    'date_format' => 'eu_full',
+                ),
+            ),
+            'password_reset' => array (
+                'label' => __('Password: '),
+                'form' => array(
+                    'type' => 'password',
+                    'value' => '',
+                ),
+                'validation' => array(
+                    'min_length' => array(6),
+                ),
+            ),
+            'password_confirmation' => array (
+                'label' => __('Password (confirmation): '),
+                'form' => array(
+                    'type' => 'password',
+                ),
+                'validation' => array(
+                    'match_field' => array('password_reset'),
+                ),
+            ),
+            'save' => array(
+                'form' => array(
+                    'type' => 'submit',
+                    'tag'  => 'button',
+                    'class' => 'primary',
+                    'value' => __('Save'),
+                    'data-icon' => 'check',
+                ),
+            ),
+        );
+
+        $fieldset = \Fieldset::build_from_config($fields, $user, array(
+            'before_save' => function($user, $data) {
+                if (!empty($data['password_reset'])) {
+                    $user->user_password = $data['password_reset'];
+                    $notify = 'Password successfully changed.';
+                }
+            },
+            'success' => function($user, $data) {
+                return array(
+                     'notify' => $user->is_changed('user_password') ? 'New password successfully set.' : 'User successfully saved.',
+                );
+            }
+        ));
+
+        $fieldset->js_validation();
+        return $fieldset;
+    }
 }

@@ -7,16 +7,21 @@
  * @link http://www.novius-os.org
  */ 
 body {
-	background: #333;
+  background: url("../img/wallpapers/circles.jpg");
+  background-size: cover;
 }
 #login {
-	background: #fff;
-	width: 440px;
-	margin: 100px auto;
-	text-align: center;
-	border-radius: 10px;
-	padding: 1em;
-	border: 4px solid #000;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px outset rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  height: 360px;
+  left: 50%;
+  margin: -195px 0 0 -235px;
+  padding: 15px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  width: 440px;
 }
 #login label {
 	display: inline-block;

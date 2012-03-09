@@ -40,12 +40,11 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="width:100%; height:100%;">
-                <?= $hide_widget_media_path ? '' :  $fieldset->field('medif_parent_id')->label; ?>
-                <?= $fieldset->field('medif_parent_id')->build(); ?>
-            </td>
+            <th><?= $hide_widget_media_path ? '' :  $fieldset->field('medif_parent_id')->label; ?></th>
+            <td></td>
         </tr>
     </table>
+    <?= $fieldset->field('medif_parent_id')->build(); ?>
     <p>
         <?= $fieldset->field('save')->build(); ?>
         &nbsp; <?= __('or') ?> &nbsp;

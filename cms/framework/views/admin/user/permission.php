@@ -9,20 +9,12 @@
  */
 
 ?>
-<script type="text/javascript">
-require(['domReady'], function (domReady) {
-	domReady(function () {
-		$nos.nos.tabs.update({
-			label : '<?= !empty($user) ? $user->fullname() : $group->group_name ?>',
-			iconUrl : 'static/cms/img/icons/tick.png'
-		});
-	});
-});
-</script>
 
-<h1>Modify permissions for <?= !empty($user) ? 'user '.$user->fullname() : $group->group_name ?></h1>
+<h1><?= strtr(__('Modify permissions for {username}'), array(
+    '{username}' => !empty($user) ? $user->fullname() : $group->group_name,
+)) ?></h1>
 
-<form action="" method="POST">
+<form action="admin/admin/user/form/save_permissions" method="POST" id="<?= $uniqid = uniqid('id_') ?>">
   <input type="hidden" name="group_id" value="<?= $group->group_id ?>" />
 
 <?php
@@ -55,14 +47,30 @@ foreach ($apps as $app => $perms) {
 </form>
 
 <script type="text/javascript">
-  require(["jquery"], function($) {
-  $('h1 input:not(:checked)').closest('h1').next().hide();
-  $('h1 input').change(function() {
-        $(this).closest('h1').next()[$(this).is(':checked') ? 'show' : 'hide']();
-        if (!$(this).is(':checked')) {
-            $(this).closest('form').submit();
-        }
+    require(["jquery"], function($) {
+
+        var $form = $('#<?= $uniqid ?>');
+
+        $form.submit(function(e) {
+            e.preventDefault();
+            $(this).ajaxSubmit({
+                dataType: 'json',
+                success: function(json) {
+                    $.nos.ajax.success(json);
+                },
+                error: function() {
+                    $.nos.notify('An error occured', 'error');
+                }
+            });
+        });
+
+        $('h1 input:not(:checked)').closest('h1').next().hide();
+        $('h1 input').change(function() {
+            $(this).closest('h1').next()[$(this).is(':checked') ? 'show' : 'hide']();
+            if (!$(this).is(':checked')) {
+                $(this).closest('form').submit();
+            }
+        });
     });
-  });
 </script>
 

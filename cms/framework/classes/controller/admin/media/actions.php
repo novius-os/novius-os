@@ -34,7 +34,6 @@ class Controller_Admin_Media_Actions extends Controller_Extendable {
                 'media'       => $media,
                 'usage_count' => count($media->link),
             ));
-            throw new \Exception($count);
         } catch (\Exception $e) {
             // Easy debug
             if (\Fuel::$env == \Fuel::DEVELOPMENT && !\Input::is_ajax()) {

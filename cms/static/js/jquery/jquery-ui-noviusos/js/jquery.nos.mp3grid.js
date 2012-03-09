@@ -1146,7 +1146,7 @@ define([
 							if (dataSource.data.totalRows === 0) {
 								self.uiPaginationLabel.text(o.texts.showNoItem);
                                 self.uiNbResult.text(o.texts.showNoItem);
-							} else if (dataSource.data.totalRows === 0) {
+							} else if (dataSource.data.totalRows === 1) {
 								self.uiPaginationLabel.text(o.texts.showOneItem);
                                 self.uiNbResult.text('1 ' + o.texts.item);
 							} else {
@@ -1188,6 +1188,7 @@ define([
 								data = row ? row.data : false;
 
 							if (data) {
+
                                 self.itemSelected = $.extend({}, data);
                                 self.element.trigger('selectionChanged.mp3grid', data);
 							}
@@ -1328,7 +1329,7 @@ define([
                         if (dataSource.data.totalRows === 0) {
                             self.uiPaginationLabel.text(o.texts.showNoItem);
                             self.uiNbResult.text(o.texts.showNoItem);
-                        } else if (dataSource.data.totalRows === 0) {
+                        } else if (dataSource.data.totalRows === 1) {
                             self.uiPaginationLabel.text(o.texts.showOneItem);
                             self.uiNbResult.text('1 ' + o.texts.item);
                         } else {

@@ -343,7 +343,7 @@ JS
 		$fieldset = \Fieldset::forge(uniqid(), array(
 			'inline_errors'  => true,
 			'auto_id'		 => true,
-			'required_mark'  => ' *',
+			'required_mark'  => '&nbsp;*',
 			'error_template' => '{error_msg}',
 			'error_class'    => 'error',
 			'form_template' => "\n\t\t{open}\n\t\t<table class=\"fieldset\">\n{fields}\n\t\t</table>\n\t\t{close}\n",
@@ -358,7 +358,19 @@ JS
 			call_user_func($options['extend'], $fieldset);
 		}
 
-		isset($instance) && $fieldset->populate($instance);
+        // Populate for data
+        if (isset($instance)) {
+            $populate = array();
+            foreach ($instance as $k => $field) {
+                // Don't populate password fields
+                if (\Arr::get($config, "$k.form.type") == 'password') {
+                    continue;
+                }
+                $populate[$k] = $field;
+            }
+            $fieldset->populate($populate);
+        }
+
 		if (\Input::method() == 'POST' && (empty($options['form_name']) || \Input::post('form_name') == $options['form_name'])) {
 			$fieldset->repopulate();
 			if ($fieldset->validation()->run($fieldset->value())) {
@@ -378,7 +390,7 @@ JS
 		return $fieldset;
 	}
 
-    public static function defaultComplete ($data, $object, $fields, $options) {
+    public static function defaultComplete($data, $object, $fields, $options) {
 
 		if (!is_object($object)) {
 			return;
@@ -423,14 +435,15 @@ JS
 
 		// Will trigger cascade_save for media and wysiwyg
 		try {
-			$object->save();
-
 			if (!empty($options['success']) && is_callable($options['success']))
 			{
 				$body = call_user_func($options['success'], $object, $data);
-			} else {
+                $object->save();
+			}
+            else
+            {
 				$body = array(
-					'notify' => 'Operation completed successfully.',
+					'notify' => __('Operation completed successfully.'),
 				);
 			}
 		} catch (Exception $e) {

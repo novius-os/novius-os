@@ -51,6 +51,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
     }
 
     protected static function getLocation() {
+        // @todo use get_called_class() instead
         $controller = explode('\\', \Request::active()->controller);
         $module_name = strtolower($controller[0]);
         $file_name   = strtolower(str_replace('_', DS, $controller[1]));
@@ -68,7 +69,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
     protected static function loadConfiguration($module_name, $file_name) {
         \Config::load($module_name.'::'.$file_name, true);
         $config = \Config::get($module_name.'::'.$file_name);
-        $ret = \Config::load(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', true);
+        \Config::load(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', true);
         $dependencies = \Config::get(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', array());
         if (!empty($dependencies[$module_name])) {
             foreach ($dependencies[$module_name] as $dependency) {

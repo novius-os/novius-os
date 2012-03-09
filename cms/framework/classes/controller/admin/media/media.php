@@ -51,12 +51,12 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
                 'form' => array(
                     'type' => 'text',
                 ),
-                'label' => __('Slug: '),
+                'label' => __('SEO, Media URL: '),
             ),
             'save' => array(
                 'form' => array(
                     'type' => 'submit',
-                    //'tag'  => 'button',
+                    'tag'  => 'button',
                     'class' => 'primary',
                     'value' => __('Add'),
                     'data-icon' => 'check',
@@ -85,6 +85,13 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
                     'value' => $media->media_id,
                 ),
             ),
+            'media_path_id' => array(
+                'widget' =>  'media_folder',
+                'form' => array(
+                    'value' => $media->media_path_id,
+                ),
+                'label' => __('Choose a folder where to put your media:'),
+            ),
             'media' => array(
                 'form' => array(
                     'type' => 'file',
@@ -103,14 +110,14 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
                     'type' => 'text',
                     'value' => $filename,
                 ),
-                'label' => __('Slug: '),
+                'label' => __('SEO, Media URL: '),
             ),
             'save' => array(
                 'form' => array(
                     'type' => 'submit',
-                    //'tag'  => 'button',
+                    'tag'  => 'button',
                     'class' => 'primary',
-                    'value' => __('Edit'),
+                    'value' => __('Save'),
                     'data-icon' => 'check',
                 ),
             ),
@@ -163,7 +170,7 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
             }
 
             if (false === $media->check_and_filter_slug()) {
-                throw new \Exception(__('Generated slug was empty.'));
+                throw new \Exception(__('Generated media URL (SEO) was empty.'));
             }
             if (false === $media->refresh_path()) {
                 throw new \Exception(__("The parent folder doesn't exists."));
@@ -231,8 +238,9 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
             } else {
                 $pathinfo = pathinfo(APPPATH.$media->get_public_path());
             }
-            $media->media_title = \Input::post('media_title', '');
-            $media->media_file  = \Input::post('slug', '');
+            $media->media_title   = \Input::post('media_title', '');
+            $media->media_file    = \Input::post('slug', '');
+            $media->media_path_id = \Input::post('media_path_id', 1);
 
             // Empty title = auto-generated from file name
             if (empty($media->media_title)) {
@@ -251,12 +259,14 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
             }
 
             if (false === $media->check_and_filter_slug()) {
-                throw new \Exception(__('Generated slug was empty.'));
+                throw new \Exception(__('Generated media URL (SEO) was empty.'));
+            }
+            if (false === $media->refresh_path()) {
+                throw new \Exception(__("The parent folder doesn't exists."));
             }
 
             $dest = APPPATH.$media->get_public_path();
-
-            if ($old_media->media_file != $media->media_file) {
+            if ($old_media->get_public_path() != $media->get_public_path()) {
                 if (is_file($dest)) {
                     throw new \Exception(__('A file with the same name already exists.'));
                 }

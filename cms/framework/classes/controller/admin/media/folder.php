@@ -56,7 +56,7 @@ class Controller_Admin_Media_Folder extends Controller_Extendable {
             'save' => array(
                 'form' => array(
                     'type' => 'submit',
-                    //'tag'  => 'button',
+                    'tag'  => 'button',
                     'class' => 'primary',
                     'value' => __('Add'),
                     'data-icon' => 'check',
@@ -98,9 +98,9 @@ class Controller_Admin_Media_Folder extends Controller_Extendable {
             'save' => array(
                 'form' => array(
                     'type' => 'submit',
-                    //'tag'  => 'button',
+                    'tag'  => 'button',
                     'class' => 'primary',
-                    'value' => __('Edit'),
+                    'value' => __('Save'),
                     'data-icon' => 'check',
                 ),
             ),
@@ -133,7 +133,7 @@ class Controller_Admin_Media_Folder extends Controller_Extendable {
 
             $path = Model_Media_Folder::friendly_slug($path, '-', true);
             if (empty($path)) {
-                throw new \Exception(__('Generated slug was empty.'));
+                throw new \Exception(__('Generated folder URL (SEO) was empty.'));
             }
 
 			$folder->medif_parent_id = \Input::post('medif_parent_id', 1);
@@ -191,7 +191,7 @@ class Controller_Admin_Media_Folder extends Controller_Extendable {
 
             $path = Model_Media_Folder::friendly_slug($path, '-', true);
             if (empty($path)) {
-                throw new \Exception(__('Generated slug was empty.'));
+                throw new \Exception(__('Generated folder URL (SEO)  was empty.'));
             }
 
             if (false === $folder->set_path($path)) {

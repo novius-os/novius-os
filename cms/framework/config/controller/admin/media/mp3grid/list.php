@@ -44,15 +44,13 @@ return array(
         'Ext.' => __('Ext.'),
         'Edit' => __('Edit'),
         'Delete' => __('Delete'),
-        'Visualize' => __('Visualize'),
+        'Visualise' => __('Visualise'),
         'Pick' => __('Pick'),
         'Folder' => __('Folder'),
         'Folders' => __('Folders'),
         'Type of file' => __('Type of file'),
-        'Id' => __('Id'),
-        'Extension' => __('Extension'),
-        'File name' => __('File name'),
-        'Path' => __('Path'),
+        'File name:' => __('File name:'),
+        'Path:' => __('Path:'),
         'Upload a new file' => __('Upload a new file'),
 
         'addDropDown' => __('Select an action'),
@@ -82,6 +80,9 @@ return array(
 		'file_name' => 'media_file',
 		'path' => function($object) {
             return $object->get_public_path();
+        },
+		'path_folder' => function($object) {
+            return dirname($object->get_public_path());
         },
 		'image' => function($object) {
             return $object->is_image();

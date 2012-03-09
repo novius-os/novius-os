@@ -671,6 +671,9 @@ define([
                     if (json.closeTab) {
                         $.nos.tabs.close();
                     }
+                    if (json.replaceTab) {
+                        $.nos.tabs.replace(json.replaceTab);
+                    }
                 },
                 error: function(x, e) {
 					// http://www.maheshchari.com/jquery-ajax-error-handling/
@@ -934,6 +937,15 @@ define([
                         if (noviusos.length) {
                             noviusos.ostabs('remove', index);
                         }
+                        return true;
+                    },
+                    replace : function(url) {
+                        if (window.parent != window && window.parent.$nos) {
+                            return window.parent.$nos.nos.tabs.replace(url);
+                        }
+                        var index = this.current();
+                        this.add({url : url}, false);
+                        this.close(index);
                         return true;
                     },
                     /** Save tabs in user configuration file
