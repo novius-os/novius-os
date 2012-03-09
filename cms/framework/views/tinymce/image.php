@@ -1,14 +1,12 @@
+<?php
+	$mp3view = (string) Request::forge('admin/media/list/index')->execute(array('image_pick'))->response();
+?>
 <div id="<?= $uniqid = uniqid('tabs_') ?>">
 	<ul class="tabs">
 		<li><a href="#<?= $id_library = $uniqid.'_library' ?>"><?= __('1. Pick your image') ?></a></li>
 		<li><a href="#<?= $id_properties = $uniqid.'_properties' ?>"><?= __('2. Set the properties') ?></a></li>
 	</ul>
-	<div id="<?= $id_library ?>">
-		<?php
-		// We could load this using ajax, but it's faster to preload it directly here
-		echo Request::forge('admin/media/list/delayed')->execute(array('image_pick'))->response();
-		?>
-	</div>
+	<div id="<?= $id_library ?>"></div>
 
 	<form action="#" id="<?= $uniqid_form = uniqid('form_') ?>">
 		<div id="<?= $id_properties ?>">
@@ -102,9 +100,9 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 				$properties.height(height - getMargin($properties));
 				$library.css({padding:0, margin:0}).height(height);
 
-				// Now tabs are created and the appropriate dimensions are set, load the mp3grid
+				// Now tabs are created and the appropriate dimensions are set, initialize the mp3grid
 				var mp3grid_tmp = $library.children().height(height - getMargin($library.children())).attr('id');
-				$.nos.listener.fire('mp3grid.' + mp3grid_tmp, true, []);
+				$library.html(<?= \Format::forge()->to_json($mp3view) ?>);
 
 				var $dialog = $container.closest('.ui-dialog-content');
 				$dialog.bind('select.media', function(e, data) {

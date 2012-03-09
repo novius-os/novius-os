@@ -76,8 +76,7 @@ define([
                             }
                         }
 
-                        $.nos.listener.add('mp3grid.' + id, true, function() {
-                            div.removeAttr('id')
+                        div.removeAttr('id')
                             .mp3grid(params.mp3grid);
                             container
                             .bind({
@@ -93,12 +92,6 @@ define([
                                     div.mp3grid('refresh');
                                 }
                             });
-                            $.nos.listener.remove('mp3grid.' + id, true, arguments.callee);
-                        });
-
-                        if (null == config.delayed || !config.delayed) {
-                            $.nos.listener.fire('mp3grid.' + id, true, []);
-                        }
 
                         if (params.refresh) {
                             container.bind('refresh.' + params.refresh, function() {
