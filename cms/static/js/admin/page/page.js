@@ -30,13 +30,13 @@ define([
             mp3grid : {
                 adds : {
                     page : {
-                        label : mp3Grid.i18n('Add a Page'),
+                        label : mp3Grid.i18n('Add a page'),
                         url : 'admin/admin/page/page/add'
-                    },
+                    }/*,
                     root : {
                         label : mp3Grid.i18n('Add a root'),
                         url : 'admin/admin/page/root/add'
-                    }
+                    }*/
                 },
                 grid : {
                     proxyUrl : 'admin/admin/page/list/json',
@@ -63,6 +63,7 @@ define([
                     roots : {
                         widget_id : 'cms_page_roots',
                         vertical : true,
+                        hide : true,
                         label : mp3Grid.i18n('Roots'),
                         url : 'admin/admin/page/inspector/root/list',
                         inputName : 'rac_id',

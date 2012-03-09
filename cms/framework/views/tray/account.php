@@ -54,11 +54,8 @@
 			});
 		});
 
-        require(['static/cms/js/vendor/wijmo/js/jquery.wijmo.wijtabs.js'], function() {
-                $('#tabs').wijtabs({
-                    alignment: 'left'
-                });
-            }
-        );
+        $('#tabs').wijtabs({
+            alignment: 'left'
+        });
     });
 </script>

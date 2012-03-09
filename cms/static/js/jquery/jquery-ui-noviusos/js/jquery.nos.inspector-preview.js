@@ -90,9 +90,16 @@ define([
 
                 $.each(o.actions, function() {
                     var action = this;
+                    var iconClass = false;
+                    if (action.iconClasses) {
+                        iconClass = action.iconClasses;
+                    } else if (action.icon) {
+                        iconClass = 'ui-icon ui-icon-' + action.icon;
+                    }
+                    var text;
                     if (action.primary) {
-                        var text = action.icon ? '<span class="ui-button-icon-primary ui-icon ui-icon-' + action.icon + ' wijmo-wijmenu-icon-left"></span>' : '';
-                            text += '<span class="ui-button-text">' + action.label + '</span>';
+                        text = (iconClass ? '<span class="ui-button-icon-primary ' + iconClass +' wijmo-wijmenu-icon-left"></span>' : '');
+                        text += '<span class="ui-button-text">' + action.label + '</span>';
                         $('<button></button>')
                             .addClass('ui-button ui-button-text' + (action.icon ? '-icon-primary' : '') + ' ui-widget ui-state-default ui-corner-all')
                             .appendTo(self.uiFooter)
@@ -105,16 +112,18 @@ define([
                             .click(function(e) {
                                 e.preventDefault();
                                 e.stopImmediatePropagation();
-                                action.action.apply(this, [self.data]);
+                                action.action.apply(this, [self.data, this]);
                             })
                     } else {
+                        text = (iconClass ? '<span class="' + iconClass +'"></span> ' : '');
+                        text += '<span class="ui-button-text">' + action.label + '</span>';
                         $('<a href="#"></a>')
                             .appendTo(self.uiFooter)
-                            .text(action.label)
+                            .html(text)
                             .click(function(e) {
                                 e.preventDefault();
                                 e.stopImmediatePropagation();
-                                action.action.apply(this, [self.data]);
+                                action.action.apply(this, [self.data, this]);
                             })
                     }
                 });
@@ -137,7 +146,7 @@ define([
 		},
 
 		_loadImg : function(item, thumbnail) {
-			var self = this
+			var self = this,
 				o = self.options;
 
 			$('<img />')
@@ -151,13 +160,35 @@ define([
 					var img = $(this),
 						height = img.height();
 
-					$('<div></div>')
+					var div = $('<div></div>')
 						.addClass('nos-inspector-preview-thumb')
 						.css({
 							backgroundImage :'url("' + img.attr('src') +'")',
 							height : (height <= 100 ? height : 100) + 'px'
 						})
 						.prependTo(self.uiContainer);
+
+                        var action = null;
+                        $.each(o.actions, function() {
+                            if (this.name == o.actionThumbnail) {
+                                action = this;
+                            }
+                        });
+
+                        if (action !== null) {
+                            div
+                                .attr({
+                                    title : action.label
+                                })
+                                .css({
+                                    cursor : 'pointer'
+                                })
+                                .click(function(e) {
+                                    e.preventDefault();
+                                    e.stopImmediatePropagation();
+                                    action.action.apply(this, [self.data]);
+                                });
+                        }
 					img.remove();
 				})
 				.css({
@@ -189,7 +220,7 @@ define([
 				var tr = $('<tr></tr>').addClass('wijmo-wijgrid-row ui-widget-content wijmo-wijgrid-datarow' + (i%2 ? ' wijmo-wijgrid-alternatingrow' : ''))
 					.appendTo(table);
 
-				$('<td><div></div></td>').addClass('wijgridtd wijdata-type-string')
+				$('<th><div></div></th>').addClass('wijgridtd wijdata-type-string')
 					.appendTo(tr)
 					.find('div')
 					.addClass('wijmo-wijgrid-innercell')

@@ -33,13 +33,19 @@
 
 			.nos-inspector-preview-metadata {
 			    width : 100%;
+
+                th {
+                    font-weight : bold;
+                    text-align : right;
+                }
 			}
 		}
 	}
 
 	.nos-inspector-preview-footer {
 	    width : 100%;
-        margin-bottom : 24px;
+        margin : 12px 0 24px;
+        text-align : center;
 
         .ui-button {
             margin-right: 0.4em;

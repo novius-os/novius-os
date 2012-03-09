@@ -24,7 +24,7 @@ define([
                             ajax : true,
                             title: mp3Grid.i18n('Edit a media')._(),
                             width: 850,
-                            height: 250
+                            height: 400
                         });
                     }
                 },
@@ -43,14 +43,42 @@ define([
                         });
                     }
                 },
-                visualize : {
-                    name : 'visualize',
+                visualise : {
+                    name : 'visualise',
                     //primary : true,
                     //icon : 'search',
                     iconClasses : 'nos-icon16 nos-icon16-eye',
-                    label : mp3Grid.i18n('Visualize'),
-                    action : function(item) {
-                        window.open(item.path);
+                    label : mp3Grid.i18n('Visualise'),
+                    action : function(item, ui) {
+
+                        if (!item.image) {
+                            window.open(item.path);
+                            return;
+                        }
+
+                        // Create the lightbox
+                        var lightbox = $('<div><a href="/' + item.path + '" rel="wijlightbox"><img src="/' + item.path + '" title="' + item.title + '" style="width:0;height:0;" /></a></div>')
+                        .css({
+                            position : 'absolute',
+                            dislplay : 'none',
+                            width : 1,
+                            height: 1
+                        })
+                        .css($(ui || this).offset())
+                        .appendTo(document.body)
+                        .wijlightbox({
+                            textPosition : 'outside',
+                            player : 'img',
+                            dialogButtons: 'fullsize',
+                            modal : true,
+                            close : function(e) {
+                                lightbox.wijlightbox('destroy');
+                                lightbox.remove();
+                            }
+                        });
+
+                        // Open it
+                        lightbox.find('a').triggerHandler('click');
                     }
                 }
             },
@@ -60,6 +88,7 @@ define([
             },
             refresh : 'cms_media_media',
             mp3grid : {
+                splittersVertical : 300,
                 adds : {
                     media : {
                         label : mp3Grid.i18n('Add a media'),
@@ -93,7 +122,8 @@ define([
                         extension : {
                             headerText : mp3Grid.i18n('Ext.'),
                             dataKey : 'extension',
-                            width : 1,
+                            width : 60,
+                            ensurePxWidth : true,
                             allowSizing : false
                         },
                         title : {
@@ -102,7 +132,7 @@ define([
                             sortDirection : 'ascending'
                         },
                         actions : {
-                            actions : ['edit', 'delete', 'visualize']
+                            actions : ['edit', 'delete', 'visualise']
                         }
                     }
                 },
@@ -116,7 +146,7 @@ define([
                         };
                         return data;
                     },
-                    actions : ['edit', 'delete', 'visualize']
+                    actions : ['edit', 'delete', 'visualise']
                 },
                 defaultView : 'thumbnails',
                 inspectorsOrder : 'preview,folders,extensions',
@@ -239,30 +269,23 @@ define([
                         preview : true,
                         options : {
                             meta : {
-                                id : {
-                                    label : mp3Grid.i18n('Id')
-                                },
-                                extensions : {
-                                    label : mp3Grid.i18n('Extension')
-                                },
                                 fileName : {
-                                    label : mp3Grid.i18n('File name')
+                                    label : mp3Grid.i18n('File name:')
                                 },
-                                path : {
-                                    label : mp3Grid.i18n('Path')
+                                pathFolder : {
+                                    label : mp3Grid.i18n('Path:')
                                 }
                             },
-                            actions : ['edit', 'delete', 'visualize'],
+                            actions : ['edit', 'delete', 'visualise'],
+                            actionThumbnail: 'visualise',
                             dataParser : function(item) {
                                 var data = {
                                     title : item.title,
                                     thumbnail : (item.image ? item.thumbnail.replace(/64/g, 256) : item.thumbnailAlternate),
                                     thumbnailAlternate : (item.image ? item.thumbnailAlternate : ''),
                                     meta : {
-                                        id : item.id,
-                                        extension : item.extension,
                                         fileName : item.file_name,
-                                        path : item.path
+                                        pathFolder : item.path_folder + '/'
                                     }
                                 };
                                 return data;

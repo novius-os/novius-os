@@ -33,7 +33,12 @@
             <th><?= $fieldset->field('slug')->label ?></th>
             <td><?= $fieldset->field('slug')->build() ?> <label><input type="checkbox" data-id="same_title" <?= $checked ? 'checked' : '' ?>> <?= __('Generate from title') ?></label></td>
         </tr>
+        <tr>
+            <th><?= $hide_widget_media_path ? '' :  $fieldset->field('media_path_id')->label; ?></th>
+            <td></td>
+        </tr>
     </table>
+    <?= $fieldset->field('media_path_id')->build(); ?>
     <p>
         <?= $fieldset->field('save')->build(); ?>
         &nbsp; <?= __('or') ?> &nbsp;

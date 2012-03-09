@@ -9,27 +9,9 @@
  */
 ?>
 <div id="<?= $uniqid = uniqid('id_') ?>" class="fieldset standalone">
-    <p><?php
-    if ($usage_count == 0) {
-        ?>
-        <p><?= __('The media is not used anywhere and can be safely deleted.') ?></p>
-        <p><?= __('Please confirm the suppression below.') ?></p>
-        <?php
-    } else {
-        ?>
-        <p><?= strtr(__(
-                $usage_count == 1 ? 'The media is used <strong>one time</strong> by your applications.'
-                                  : 'The media is used <strong>{count} times</strong> by your applications.'
-        ), array(
-            '{count}' => $usage_count,
-        )) ?></p>
-        <p><?= __('To confirm the deletion, you need to enter this number in the field below') ?></p>
-        <p><?= strtr(__('Yes, I want to delete all {count} usage of the media.'), array(
-            '{count}' => '<input data-id="verification" data-verification="'.$usage_count.'" size="'.(strlen($usage_count) + 1).'" />',
-        )); ?></p>
-        <?php
-    }
-    ?></p>
+
+    <p><?= __('Deleting a user is permanent, there is no undo.') ?></p>
+    <p><?= __('Please confirm the deletion:'); ?></p>
     <p>
         <button class="primary ui-state-error" data-icon="trash" data-id="confirmation"><?= __('Confirm the deletion') ?></button>
         &nbsp; <?= __('or') ?> &nbsp;
@@ -42,7 +24,6 @@ require(['jquery-nos'], function($) {
     $.nos.ui.form('#<?= $uniqid ?>');
     $(function() {
         var $container    = $('#<?= $uniqid ?>');
-        var $verification = $container.find('input[data-id=verification]');
         var $confirmation = $container.find('button[data-id=confirmation]');
 
         var $dialog       = $.nos.data('dialog');
@@ -56,15 +37,11 @@ require(['jquery-nos'], function($) {
 
         $confirmation.click(function(e) {
             e.preventDefault();
-            if ($verification.length && $verification.val() != $verification.data('verification')) {
-                $.nos.notify(<?= \Format::forge()->to_json(__('Wrong confirmation')); ?>, 'error');
-                return;
-            }
             $.nos.ajax.request({
-                url : 'admin/admin/media/actions/delete_media_confirm',
+                url : 'admin/admin/user/user/delete_user_confirm',
                 method : 'POST',
                 data : {
-                    id : <?= $media->media_id ?>
+                    id : <?= $user->user_id ?>
                 },
                 success : function(json) {
                     closeDialog();

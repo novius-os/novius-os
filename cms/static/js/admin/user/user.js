@@ -19,10 +19,26 @@ define([
             actions : {
                 edit : {
                     label : mp3Grid.i18n('Edit'),
-                    action : function(item) {
+                    icon : 'pencil',
+                    primary : true,
+                    action : function(item, ui) {
                         $.nos.tabs.add({
                             url : 'admin/admin/user/form/edit/' + item.id,
                             label : item.title
+                        });
+                    }
+                },
+                'delete' : {
+                    label : mp3Grid.i18n('Delete'),
+                    icon : 'trash',
+                    primary : true,
+                    action : function(item, ui) {
+                        $.nos.dialog({
+                            contentUrl: 'admin/admin/user/user/delete_user/' + item.id,
+                            ajax : true,
+                            title: mp3Grid.i18n('Delete a user')._(),
+                            width: 400,
+                            height: 150
                         });
                     }
                 }
@@ -43,7 +59,7 @@ define([
                     proxyUrl : 'admin/admin/user/list/json',
                     columns : {
                         user : {
-                            headerText : mp3Grid.i18n('User'),
+                            headerText : mp3Grid.i18n('Name'),
                             dataKey : 'fullname',
                             sortDirection : 'ascending'
                         },
@@ -51,32 +67,8 @@ define([
                             headerText : mp3Grid.i18n('Email'),
                             dataKey : 'email'
                         },
-                        permissions : {
-                            headerText : mp3Grid.i18n('Permissions'),
-                            allowSizing : false,
-                            width : 1,
-                            showFilter : false,
-                            cellFormatter : function(args) {
-                                if ($.isPlainObject(args.row.data)) {
-                                    args.$container.css("text-align", "center");
-                                    $("<a href=\"admin/admin/user/group/permission/edit?user_id=" + args.row.data.id + "\"></a>")
-                                        .addClass("ui-state-default")
-                                        .append("<img src=\"static/cms/img/icons/tick.png\" />")
-                                        .appendTo(args.$container)
-                                        .click(function() {
-                                            $.nos.tabs.add({
-                                                iframe : true,
-                                                url: this.href
-                                            });
-                                            return false;
-                                        });
-
-                                    return true;
-                                }
-                            }
-                        },
                         actions : {
-                            actions : ['edit']
+                            actions : ['edit', 'delete']
                         }
                     }
                 }

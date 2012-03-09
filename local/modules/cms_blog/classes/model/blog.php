@@ -27,7 +27,7 @@ class Model_Blog extends \Cms\Orm\Model {
     );
 
 	protected static $_behaviors = array(
-		'Cms\Orm_Translatable' => array(
+		'Cms\Orm_Behaviour_Translatable' => array(
 			'events' => array('before_insert', 'after_insert', 'before_save'),
 			'lang_property'      => 'blog_lang',
 			'common_id_property' => 'blog_lang_common_id',

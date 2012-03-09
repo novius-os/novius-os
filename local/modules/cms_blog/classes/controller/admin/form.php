@@ -17,7 +17,7 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
         if ($id === false) {
             $object = null;
         } else {
-            $object = Model_Blog::find('first', array('where' => array('blog_id' => $id)));
+            $object = Model_Blog::find($id);
         }
         return \View::forge($this->config['views']['edit'], array(
             'object'   => $object,
@@ -26,16 +26,6 @@ class Controller_Admin_Form extends \Cms\Controller_Generic_Admin {
     }
 
     public static function fieldset($fields, $object) {
-
-        \Config::load('app::templates', true);
-        $templates = array();
-        foreach (\Config::get('app::templates', array()) as $tpl_id => $template) {
-            $templates[(int) substr($tpl_id, 3)] = $template['title'];
-        }
-
-        //$fields = $this->config['fields']($object);
-
-        //$editable_fields = array_diff(array_keys(Model_Blog::properties()), Model_Blog::primary_key());
 
         $fieldset = \Fieldset::build_from_config($fields, $object, array(
             'save' => function($data) use ($object, $fields) {
