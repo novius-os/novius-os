@@ -68,7 +68,7 @@ define([
                             connector = div.parents('.nos-connector'),
                             params = mp3Grid.build();
 
-                        if ($.isPlainObject(params.tab)) {
+                        if ($.isPlainObject(params.tab) && !$.isEmptyObject(params.tab)) {
                             try {
                                 $.nos.tabs.update(div, params.tab);
                             } catch (e) {
