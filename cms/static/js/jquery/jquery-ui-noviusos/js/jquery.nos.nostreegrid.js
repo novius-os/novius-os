@@ -421,13 +421,7 @@ define([
             var self = this,
                 o = self.options,
                 dragNode = self.dragged.data('treeNode'),
-                dropNode = dropped.data('treeNode'),
-                targets = {
-                    'in' : 'moveInConfirm',
-                    'after' : 'moveAfterConfirm',
-                    'before' : 'moveBeforeConfirm'
-                },
-                text = o.texts[targets[self.dropTarget]];
+                dropNode = dropped.data('treeNode');
 
             $.ajax({
                 async : true,
@@ -442,7 +436,6 @@ define([
                 },
                 dataType : 'json',
                 success : function (data, textStatus) {
-                    log('success', data);
                     self.draggedIndex = false;
                     self._removeNode(dragNode);
                     if (self.dropTarget === 'in') {
@@ -493,9 +486,9 @@ define([
                 removeLength = 0,
                 data = self.data();
             $.each(data, function(i, item) {
-                var remove = node.treeHash == item.treeHash || $.inArray(node.treeHash, item.treePath) !== -1;
+                var remove = node.treeHash === item.treeHash || $.inArray(node.treeHash, item.treePath) !== -1;
                 if (remove) {
-                    if (!removeIndex) {
+                    if (removeIndex === false) {
                         removeIndex = i;
                     }
                     removeLength++;
@@ -504,7 +497,7 @@ define([
                     return false;
                 }
             });
-            if (removeIndex) {
+            if (removeIndex !== false) {
                 Array.prototype.splice.apply(data, [removeIndex, removeLength]);
             }
 

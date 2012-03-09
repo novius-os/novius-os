@@ -1575,7 +1575,7 @@
 				ed.execCommand("mceEndUndoLevel");
 			};
 
-            if (!metadata.popupUrl) {
+            if (!$.isPlainObject(metadata.dialog) || !metadata.dialog.contentUrl) {
                 $.ajax({
                     url: metadata.previewUrl,
                     type: 'POST',
@@ -1589,10 +1589,50 @@
             }
 
 			// Open the dialog popup (it returns the node inserted in the body)
-			dialog = $.nos.dialog({
-				contentUrl: metadata.popupUrl,
-				title: metadata.title
-			});
+            if (metadata.dialog.ajax || !edit) {
+                dialog = $.nos.dialog($.extend({
+                    destroyOnClose : true,
+                    title: metadata.title
+                }, edit ? $.extend({}, metadata.dialog, {ajax : edit.data('config')}) : metadata.dialog));
+            } else {
+                dialog = $.nos.dialog($.extend({
+                    destroyOnClose : true,
+                    title: metadata.title
+                }, $.extend({}, metadata.dialog, {contentUrl : null})));
+
+                var form = $('<form></form>')
+                        .attr('action', metadata.dialog.contentUrl)
+                        .attr('method', 'post')
+                        .attr('target', 'tinymce_dialog')
+                        .appendTo(dialog),
+                    iframe = $('<iframe></iframe>')
+                        .attr('src', /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank')
+                        .attr('frameborder', '0')
+                        .attr('name', 'tinymce_dialog')
+                        .css({
+                            width : '100%',
+                            height : '99%'
+                        })
+                        .appendTo(dialog),
+                    addInput = function(key, val) {
+                        if ($.isArray(val)) {
+                            $.each(val, function(i, val) {
+                                addInput(key + '[]', val);
+                            });
+                        } else {
+                            $('<input type="hidden" name="' + key + '">').attr('value', val)
+                                .appendTo(form);
+                        }
+                    };
+
+                $.each(edit.data('config') || {}, function(key, val) {
+                    addInput(key, val);
+                });
+                dialog.css('padding', '0px');
+
+                form.submit();
+            }
+
             dialog.bind('save.enhancer', function(e, json) {
                 save(json);
                 dialog.wijdialog('close');
@@ -1610,34 +1650,13 @@
 
 			var dialog = null;
 
-			var close = function() {
-                if (dialog) {
-                    dialog.wijdialog('destroy');
-                    dialog.closest('.ui-dialog').remove();
-                    dialog.remove();
-                }
-			};
-
-			var save = function(img) {
-				// Cleanup
-				dialog.wijdialog('close');
-
-				var html = $('<div></div>').append(img.addClass('nosMedia')).html();
-				if (editCurrentImage) {
-					ed.execCommand('mceReplaceContent', false, html, {skip_undo : 1});
-				} else {
-					ed.execCommand('mceInsertContent', false, html, {skip_undo : 1});
-				}
-				ed.execCommand("mceEndUndoLevel");
-			}
-
 			$.nos.data('tinymce', this);
 
             dialog = $.nos.dialog({
+                destroyOnClose : true,
 				contentUrl: 'admin/tinymce/image',
 				title: editCurrentImage ? 'Edit an image' : 'Insert an image',
-				ajax: true,
-                close: close
+				ajax: true
 			});
             dialog.bind('insert.media', function(e, img) {
                 // Cleanup
@@ -1670,7 +1689,7 @@
 			if (container.is('span')) {
 				container.addClass('nosModuleInline')
 				container.append(document.createTextNode(' '));
-                if (metadata.popupUrl) {
+                if ($.isPlainObject(metadata.dialog) && metadata.dialog.contentUrl) {
                     container.append(editLink);
                 }
 				container.append(deleteLink);
@@ -1680,7 +1699,7 @@
 				container.addClass('nosModule');
 				container.prepend(insertBefore.addClass('nos_module_action_block'));
 				container.prepend(insertAfter.addClass('nos_module_action_block'));
-                if (metadata.popupUrl) {
+                if ($.isPlainObject(metadata.dialog) && metadata.dialog.contentUrl) {
                     container.prepend(editLink.addClass('nos_module_action_block'));
                 }
 				container.prepend(deleteLink.addClass('nos_module_action_block'));

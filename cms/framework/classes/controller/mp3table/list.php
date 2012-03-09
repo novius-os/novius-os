@@ -41,7 +41,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 		$this->mp3grid = \Config::mergeWithUser($module_name.'::'.$file_name, static::loadConfiguration($module_name, $file_name));
     }
 
-	public function action_index($view = null, $delayed = false) {
+	public function action_index($view = null) {
 		if (!\Cms\Auth::check()) {
 			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
@@ -60,19 +60,11 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 
 		$view = View::forge('mp3table/list');
 
-        if ($delayed) {
-            $this->mp3grid['delayed'] = true;
-        }
-
 		$locales = \Config::get('locales', array());
 
         $view->set('mp3grid', \Format::forge(array_merge(array('locales' => $locales), $this->mp3grid))->to_json(), false);
 		return $view;
 	}
-
-    public function action_delayed($view = null) {
-        return $this->action_index($view, true);
-    }
 
     public function action_json()
     {
