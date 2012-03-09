@@ -34,7 +34,10 @@ define([
                             success: function(response) {
                                 if (response.success) {
                                     $.nos.notify("Suppression réalisée !");
-                                    $("#mp3grid").mp3grid("gridRefresh");
+                                    $.nos.fireEvent({
+                                        event : 'reload',
+                                        target : 'cms_blog'
+                                    })
                                 } else {
                                     $.nos.notify("Erreur lors de la suppression !", "error");
                                 }
@@ -120,7 +123,10 @@ define([
                                                     success: function(response) {
                                                         if (response.success) {
                                                             $.nos.notify("Suppression réalisée !");
-                                                            $("#mp3grid").mp3grid("gridRefreshAll");
+                                                            $.nos.fireEvent({
+                                                                event : 'reload',
+                                                                target : 'cms_blog'
+                                                            })
                                                         } else {
                                                             $.nos.notify("Erreur lors de la suppression !", "error");
                                                         }
@@ -169,7 +175,10 @@ define([
                                                     success: function(response) {
                                                         if (response.success) {
                                                             $.nos.notify("Suppression réalisée !");
-                                                            $("#mp3grid").mp3grid("gridRefreshAll");
+                                                            $.nos.fireEvent({
+                                                                event : 'reload',
+                                                                target : 'cms_blog'
+                                                            })
                                                         } else {
                                                             $.nos.notify("Erreur lors de la suppression !", "error");
                                                         }

@@ -22,7 +22,7 @@ require([
                     }).hide(),
                 inspector = $('<table></table>').insertAfter(label_custom),
                 parent = inspector.parent().bind({
-                        inspectorResize: function() {
+                        widgetResize: function() {
                             label_custom.appendTo(parent);
                             inspector.nosgrid('setSize', parent.width(), parent.height());
                         }

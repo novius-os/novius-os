@@ -58,7 +58,7 @@ define([
 
                 $(window).resize(function() {
                     if (o.selected) {
-                        self.panels.eq(o.selected).trigger('panelResize.ostabs');
+                        self._firePanelEvent(self.panels.eq(o.selected), {event : 'resizePanel'});
                     }
                 });
 			},
@@ -450,13 +450,14 @@ define([
 				}
 
                 function fireCallbacks($panel) {
-                    var callbacks = $panel.data('callbacks.ostabs');
+                    var callbacks = $panel.data('callbacks.ostabs'),
+                        connector = $panel.find('.nos-connector');
 
-                    if ($.isArray(callbacks)) {
-                        $.each(callbacks, function(i, callback) {
-                            $panel.trigger(callback.type, callback.data);
+                    if ($.isPlainObject(callbacks)) {
+                        $.each(callbacks, function(i, event) {
+                            self._firePanelEvent(connector, event);
                         });
-                        callbacks = [];
+                        callbacks = {};
                     }
                 }
 
@@ -475,7 +476,7 @@ define([
 								//$( this ).removeClass( "nos-ostabs-hide" );
 								resetStyle( $show, showFx );
                                 fireCallbacks($show);
-                                $show.trigger( "showPanel.ostabs");
+                                self._firePanelEvent($show, {event : 'showPanel'});
 							});
 					}
 					: function( clicked, $show ) {
@@ -487,7 +488,7 @@ define([
 						$li.addClass( "nos-ostabs-selected ui-state-active" ).removeClass( 'ui-state-pined' );
 						$show.removeClass( "nos-ostabs-hide" );
                         fireCallbacks($show);
-                        $show.trigger( "showPanel.ostabs");
+                        self._firePanelEvent($show, {event : 'showPanel'});
 					};
 
 				// Hide a tab, $show is optional...
@@ -1081,9 +1082,9 @@ define([
 					this.xhr = $.ajax({
 						url: url,
 						success: function( r ) {
-							$( '<div></div>' ).addClass( 'nos-ostabs-panel-content' )
+							$( '<div></div>' ).addClass( 'nos-ostabs-panel-content nos-connector' )
                                 .data( 'nos-ostabs-index', index )
-								.prependTo( panel.data('callbacks.ostabs', []) )
+								.prependTo( panel.data('callbacks.ostabs', {}) )
 								.html( r );
 
 							$.data( a, "cache.tabs", true );
@@ -1098,12 +1099,12 @@ define([
 				} else {
 					$( '<iframe ' + ($.browser.msie ? 'allowTransparency="true" ' : '') + 'src="' + url + '" frameborder="0"></iframe>' )
 						.data( 'nos-ostabs-index', index )
-						.addClass( 'nos-ostabs-panel-content' )
+						.addClass( 'nos-ostabs-panel-content nos-connector' )
 						.bind( 'load', function() {
 							self._cleanup();
 							self._trigger( "load", null, self._ui( self.lis[index] ) );
 						})
-						.prependTo( panel.data('callbacks.ostabs', []) );
+						.prependTo( panel.data('callbacks.ostabs', {}) );
 
 					$.data( a, "cache.tabs", true );
 				}
@@ -1137,26 +1138,41 @@ define([
 				return tabs;
 			},
 
-            triggerPanels : function(type, data) {
+            triggerPanels : function(event) {
                 var self = this,
                     o = this.options;
+
+                if (!$.isPlainObject(event)) {
+                    event = {
+                        event : event
+                    };
+                }
 
                 $.each(self.panels, function(i) {
                     var $panel = $(this);
                     if (i === o.selected) {
-                        $panel.trigger(type, data);
+                        $panel.trigger(event.event + (event.type ? '.' + event.type : ''), event.data || null);
                     } else {
-                        var callbacks = $panel.data('callbacks.tabs');
-                        if ($.isArray(callbacks)) {
-                            callbacks.push({
-                                type : type,
-                                data : data
-                            });
+                        var callbacks = $panel.data('callbacks.ostabs');
+                        if ($.isPlainObject(callbacks)) {
+                            callbacks[event.event + (event.type ? '.' + event.type : '')] = event;
                         }
                     }
                 });
 
                 return self;
+            },
+
+            _firePanelEvent : function($connector, event) {
+                var $connector = $connector.is('.nos-connector') ? $connector : $connector.find('.nos-connector');
+
+                if ($connector.is('iframe')) {
+                    if ($connector[0].contentDocument.$) {
+                        $connector[0].contentDocument.$('body').trigger(event.event + (event.type ? '.' + event.type : ''), event.data || null);
+                    }
+                } else {
+                    $connector.trigger(event.event + (event.type ? '.' + event.type : ''), event.data || null);
+                }
             },
 
             current: function() {

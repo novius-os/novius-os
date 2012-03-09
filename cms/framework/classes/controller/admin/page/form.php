@@ -200,7 +200,10 @@ class Controller_Admin_Page_Form extends Controller {
 
 					$body = array(
 						'notify' => 'Page edited successfully.',
-						'listener_fire' => array('cms_page.refresh' => true),
+						'fireEvent' => array(
+							'event' => 'reload',
+							'target' => 'cms_page',
+						),
 					);
 				} catch (\Exception $e) {
 					$body = array(

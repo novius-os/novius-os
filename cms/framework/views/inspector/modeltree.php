@@ -16,9 +16,13 @@ require([
 	], function( $, table, undefined ) {
 		$(function() {
 			var inspector = $('#<?= $id ?>').removeAttr('id'),
-				parent = inspector.parent().bind({
-						inspectorResize: function() {
+				parent = inspector.parent()
+					.on({
+						widgetResize : function() {
                             inspector.nostreegrid('setSize', parent.width(), parent.height());
+						},
+						widgetReload : function() {
+							inspector.nostreegrid('reload');
 						}
 					}),
                 inspectorData = parent.data('inspector'),
@@ -51,15 +55,11 @@ require([
                         inspector.css("height", "auto");
                     },
                     columns: inspectorData.treeGrid.columns
-                });
-
-			$nos.nos.listener.add(inspectorData.widget_id + '.refresh', true, function() {
-                    parent.triggerHandler('inspectorResize');
-                });
-			$nos.nos.listener.add(inspectorData.widget_id + '.reload', true, function() {
-					inspector.nostreegrid('reload');
-				});
-
+                })
+	            .closest('.nos-connector')
+	            .on('reload.' + inspectorData.widget_id, function() {
+		            parent.trigger('widgetReload');
+	            });
 		});
 	});
 </script>

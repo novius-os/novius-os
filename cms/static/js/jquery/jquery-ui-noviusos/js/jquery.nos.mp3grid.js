@@ -395,7 +395,7 @@ define([
                     $.nos.saveUserConfiguration(o.name + '.selectedView', $(this).val());
                 } else {
                     $.nos.saveUserConfiguration(o.name + '.selectedView', $(this).val());
-                    self.element.trigger('reload', {selectedView: $(this).val()});
+                    self.element.trigger('reloadView', {selectedView: $(this).val()});
                 }
 			});
 
@@ -709,11 +709,7 @@ define([
 
 
 
-            self.element.trigger('reload', {selectedView: 'custom', custom: custom});
-            /*
-            			self._uiInspectors()
-                ._uiList();
-                */
+            self.element.trigger('reloadView', {selectedView: 'custom', custom: custom});
 		},
 
 		_uiCustomViewDialogAddItem : function(element, itemName, content) {
@@ -930,7 +926,7 @@ define([
                         .click(function(e) {
                             e.preventDefault();
                             $(this).parent().remove();
-                            self.gridRefresh();
+                            self.gridReload();
                         })
                         .appendTo(span);
 
@@ -941,7 +937,7 @@ define([
                         }
                     });
 
-                    self.gridRefresh();
+                    self.gridReload();
                 };
 
             $li.data('inspector', inspector);
@@ -982,12 +978,12 @@ define([
 					}
 
 					if ($.inArray(event.keyCode, [keyCode.ENTER, keyCode.NUMPAD_ENTER]) != -1) {
-						self.gridRefresh();
+						self.gridReload();
 						return false;
 					}
 
 					self.timeoutSearchInput = setTimeout(function() {
-                        self.gridRefresh();
+                        self.gridReload();
                     }, 500);
 				});
 
@@ -996,7 +992,7 @@ define([
 					self.uiSearchInput.val('');
                     self.uiInspectorsTags.wijsuperpanel('destroy');
 					self.uiInspectorsTags.empty();
-					self.gridRefresh();
+					self.gridReload();
 				});
 
             self.uiInspectorsTags.height(self.uiInputContainer.height())
@@ -1416,7 +1412,7 @@ define([
 			return inspectors;
 		},
 
-		_resizeInspectorsV : function(refresh) {
+		_resizeInspectorsV : function(reload) {
 			var self = this;
 
 		    if (self.resizing) {
@@ -1433,7 +1429,7 @@ define([
 
 				if (inspectors.length) {
 					inspectors.css('height', ( self.uiInspectorsVertical.height() / inspectors.length )  + 'px')
-						.trigger('inspectorResize', {refresh : refresh || false});
+						.trigger(reload ? 'widgetReload' : 'widgetResize');
 				} else {
 					self._hideSplitterV();
 				}
@@ -1442,7 +1438,7 @@ define([
 			return self;
 		},
 
-		_resizeInspectorsH : function(refresh) {
+		_resizeInspectorsH : function(reload) {
 			var self = this;
 
 		    if (self.resizing) {
@@ -1459,7 +1455,7 @@ define([
 
 				if (inspectors.length) {
 					inspectors.css('width', ( self.uiInspectorsHorizontal.width() / inspectors.length )  + 'px')
-						.trigger('inspectorResize', {refresh : refresh || false});
+						.trigger(reload ? 'widgetReload' : 'widgetResize');
 				} else {
 					self._hideSplitterH();
 				}
@@ -1472,27 +1468,27 @@ define([
 			return self;
 		},
 
-        _resizeList : function(refresh) {
+        _resizeList : function(reload) {
             var self = this,
                 o = self.options;
 
             if (self.init) {
                 var height = self.uiSplitterHorizontalBottom.height() - self.uiSearchBar.outerHeight(true);
                 if (o.defaultView === 'thumbnails') {
-                    if (refresh) {
+                    if (reload) {
                         self._uiList();
                     } else {
                         self.uiThumbnail.thumbnails('setSize', self.uiSplitterHorizontalBottom.width(), height);
                     }
                 } else if (o.defaultView === 'treeGrid') {
-                    if (refresh) {
+                    if (reload) {
                         self._uiList();
                     } else {
                         self.uiTreeGrid.nostreegrid('setSize', null, height);
                     }
                 } else {
                     self.uiGrid.nosgrid('setSize', null, height);
-                    if (refresh) {
+                    if (reload) {
                         var heights = $.nos.grid.getHeights();
                         self.uiGrid.nosgrid('option', 'pageSize', Math.floor((height - heights.footer - heights.header - (self.showFilter ? heights.filter : 0)) / heights.row));
                     }
@@ -1532,7 +1528,7 @@ define([
 			return self;
 		},
 
-		gridRefresh : function() {
+		gridReload : function() {
 			var self = this,
 				o = self.options;
 
@@ -1549,7 +1545,7 @@ define([
 			return self;
 		},
 
-        refresh : function() {
+        resize : function() {
             var self = this,
                 o = self.options;
 

@@ -58,7 +58,7 @@ define([
                 label : mp3Grid.i18n('Media center'),
                 iconUrl : 'static/cms/img/32/media.png'
             },
-            refresh : 'cms_media_media',
+            reload : 'cms_media_media',
             mp3grid : {
                 adds : {
                     media : {

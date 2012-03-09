@@ -77,7 +77,10 @@ class Controller_Admin_User_Form extends Controller_Extendable {
 			'success' => function() {
 				return array(
 					'notify' => 'User saved successfully.',
-					'listener_fire' => array('cms_user.refresh' => true),
+					'listener' => array(
+						'event' => 'reload',
+						'target' => 'cms_user',
+					),
 				);
 			},
 			'extend' => function($fieldset)  {
@@ -159,7 +162,10 @@ class Controller_Admin_User_Form extends Controller_Extendable {
 			'success' => function() {
 				return array(
 					'notify' => 'Password changed successfully.',
-					'listener_fire' => array('cms_user.refresh' => true),
+					'listener' => array(
+						'event' => 'reload',
+						'target' => 'cms_user',
+					),
 				);
 			}
 		));
