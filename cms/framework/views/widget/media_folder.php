@@ -76,12 +76,12 @@ require(['jquery-nos'], function ($) {
                 }
             ]
         });
+        // Clear the selection
+        $table.wijgrid('currentCell', -1, -1);
+        $table.wijgrid('selection').clear();
+        // Before setting the correct one
         if (currentCell) {
             $table.wijgrid('currentCell', currentCell[0], currentCell[1]);
-        } else {
-            log('Clearing selection');
-            $table.wijgrid('currentCell', -1, -1);
-            $table.wijgrid('selection').clear();
         }
     }, 10);
 });

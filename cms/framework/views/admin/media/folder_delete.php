@@ -17,10 +17,13 @@
         <?php
     } else {
         ?>
-        <p><?= strtr(__('There are <strong>{count} medias</strong> in this folder.'), array(
+        <p><?= strtr(__(
+                $media_count == 1 ? 'There are <strong>{count} medias</strong> in this folder.'
+                                  : 'There is <strong>one media</strong> in this folder.'
+        ), array(
             '{count}' => $media_count,
         )) ?></p>
-        <p><?= __('To confirm the supression, you need to enter this number in the field below') ?></p>
+        <p><?= __('To confirm the deletion, you need to enter this number in the field below') ?></p>
         <p><?= strtr(__('Yes, I want to delete all {count} files from the media centre.'), array(
             '{count}' => '<input data-id="verification" data-verification="'.$media_count.'" size="'.(strlen($media_count) + 1).'" />',
         )); ?></p>
@@ -28,7 +31,7 @@
     }
     ?></p>
     <p>
-        <button class="primary" data-icon="trash" data-id="confirmation"><?= __('Confirm the supression') ?></button>
+        <button class="primary ui-state-error" data-icon="trash" data-id="confirmation"><?= __('Confirm the deletion') ?></button>
         &nbsp; <?= __('or') ?> &nbsp;
         <a href="#" data-id="cancel"><?= __('Cancel') ?></a>
     </p>

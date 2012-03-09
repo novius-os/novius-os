@@ -1148,7 +1148,7 @@ define([
 							if (dataSource.data.totalRows === 0) {
 								self.uiPaginationLabel.text(o.texts.showNoItem);
                                 self.uiNbResult.text(o.texts.showNoItem);
-							} else if (dataSource.data.totalRows === 0) {
+							} else if (dataSource.data.totalRows === 1) {
 								self.uiPaginationLabel.text(o.texts.showOneItem);
                                 self.uiNbResult.text('1 ' + o.texts.item);
 							} else {
@@ -1191,8 +1191,8 @@ define([
 
 							if (data) {
                                 self.itemSelected = {
-                                    model : data.item.data.noParseData._model,
-                                    id : data.item.data.noParseData.id
+                                    model : data._model,
+                                    id : data._id
                                 };
                                 self.element.trigger('selectionChanged.mp3grid', data);
 							}
@@ -1210,7 +1210,7 @@ define([
 						if (self.itemSelected !== null) {
                             // Search the selection in the data
                             $.each(self.uiGrid.nosgrid('data') || [], function(dataRowIndex, data) {
-                                if (data._model == self.itemSelected.model && data.id == self.itemSelected.id) {
+                                if (data._model == self.itemSelected.model && data._id == self.itemSelected.id) {
                                     sel.addRows(dataRowIndex);
                                 }
                             });
@@ -1329,7 +1329,7 @@ define([
                         if (dataSource.data.totalRows === 0) {
                             self.uiPaginationLabel.text(o.texts.showNoItem);
                             self.uiNbResult.text(o.texts.showNoItem);
-                        } else if (dataSource.data.totalRows === 0) {
+                        } else if (dataSource.data.totalRows === 1) {
                             self.uiPaginationLabel.text(o.texts.showOneItem);
                             self.uiNbResult.text('1 ' + o.texts.item);
                         } else {

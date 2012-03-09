@@ -27,9 +27,9 @@ a:hover {
 	color   : #036;
 }
 
-.nos-icon16 {display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; width: 16px; height: 16px; line-height: 16px; }
-.nos-icon24 {display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; width: 24px; height: 24px; line-height: 24px; }
-.nos-icon32 {display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; width: 32px; height: 32px; line-height: 32px; }
+.nos-icon16 {display: inline-block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; width: 16px; height: 16px; line-height: 16px; vertical-align: middle; }
+.nos-icon24 {display: inline-block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; width: 24px; height: 24px; line-height: 24px; vertical-align: middle; }
+.nos-icon32 {display: inline-block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; width: 32px; height: 32px; line-height: 32px; vertical-align: middle; }
 
 .nos-icon16-empty { background-image: none; }
 .nos-icon16-language { background-image: url(../img/16/language.png); }
@@ -98,6 +98,24 @@ a:hover {
 	&:after {
 		content: '';
 	}
+}
+
+.wijmo-wijtabs.ui-tabs-left {
+    .ui-tabs-nav {
+        padding : 0;
+        position: absolute;
+        border-top: 0;
+        border-bottom: 0;
+        border-left: 0;
+        min-height: auto;
+
+        li:first-child {
+            margin-top : 0.3em;
+        }
+    }
+    .wijmo-wijtabs-content {
+        min-height: 300px;
+    }
 }
 
 // Prevents flickering

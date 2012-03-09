@@ -35,16 +35,22 @@
 .nos-inspector-preview .wijmo-wijsuperpanel-contentwrapper .nos-inspector-preview-container .nos-inspector-preview-metadata {
   width: 100%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.inspector-preview\.scss}line{font-family:\0000340}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.inspector-preview\.scss}line{font-family:\0000337}}
+.nos-inspector-preview .wijmo-wijsuperpanel-contentwrapper .nos-inspector-preview-container .nos-inspector-preview-metadata th {
+  font-weight: bold;
+  text-align: right;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.inspector-preview\.scss}line{font-family:\0000345}}
 .nos-inspector-preview .nos-inspector-preview-footer {
   width: 100%;
-  margin-bottom: 24px;
+  margin: 12px 0 24px;
+  text-align: center;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.inspector-preview\.scss}line{font-family:\0000344}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.inspector-preview\.scss}line{font-family:\0000350}}
 .nos-inspector-preview .nos-inspector-preview-footer .ui-button {
   margin-right: 0.4em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.inspector-preview\.scss}line{font-family:\0000347}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/js\/jquery\/jquery-ui-noviusos\/css\/jquery\.nos\.inspector-preview\.scss}line{font-family:\0000353}}
 .nos-inspector-preview .nos-inspector-preview-footer a {
   padding: 0.2em 0.5em 0;
 }

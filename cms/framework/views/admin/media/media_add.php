@@ -25,7 +25,7 @@
         </tr>
         <tr>
             <th><?= $fieldset->field('media_title')->label ?></th>
-            <td><?= $fieldset->field('media_title')->build() ?> <span class="optional"><?= __('Optional') ?></span></td>
+            <td><?= $fieldset->field('media_title')->build() ?></td>
         </tr>
         </tr>
         <tr>
@@ -33,12 +33,11 @@
             <td><?= $fieldset->field('slug')->build() ?> <label><input type="checkbox" data-id="same_title" checked> <?= __('Generate from title') ?></label></td>
         </tr>
         <tr>
-            <td colspan="2" style="width:100%; height:100%;">
-                <?= $hide_widget_media_path ? '' :  $fieldset->field('media_path_id')->label; ?>
-                <?= $fieldset->field('media_path_id')->build(); ?>
-            </td>
+            <th><?= $hide_widget_media_path ? '' :  $fieldset->field('media_path_id')->label; ?></th>
+            <td></td>
         </tr>
     </table>
+    <?= $fieldset->field('media_path_id')->build(); ?>
     <p>
         <?= $fieldset->field('save')->build(); ?>
         &nbsp; <?= __('or') ?> &nbsp;

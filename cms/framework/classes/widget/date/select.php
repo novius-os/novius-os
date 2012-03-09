@@ -142,7 +142,12 @@ class Widget_Date_Select extends \Fieldset_Field {
             if (empty($this->attributes['date_format'])) {
                 $html = $this->value;
             } else {
-                $html = (string) \Date::create_from_string($this->value, 'mysql')->format($this->attributes['date_format']);
+                try {
+                    $html = (string) \Date::create_from_string($this->value, 'mysql')->format($this->attributes['date_format']);
+                } catch (\Exception $e) {
+                    // Input pattern not recognized
+                    $html = $this->value;
+                }
             }
         } else {
             $this->parts->set_config('field_template', '{label} {field}');

@@ -23,7 +23,7 @@ return array (
             ),
         ),
         'user_firstname' => array (
-            'label' => 'Full name',
+            'label' => 'First name',
             'widget' => '',
             'validation' => array(
                 'required',
@@ -72,6 +72,8 @@ return array (
 			'label' => '',
 			'form' => array(
 				'type' => 'submit',
+                'tag' => 'button',
+                'data-icon' => 'check',
 				'value' => 'Save',
 			),
 		),
