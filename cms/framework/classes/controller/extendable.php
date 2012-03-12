@@ -414,7 +414,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 				}),
 				'dataset' => array_merge($tree_model['dataset'], array(
 					'treeChilds' => function($object) use ($controler, $tree_config, $params, $child, $pk) {
-						if ($params['deep'] > 1 || \Session::get('tree.'.$tree_config['id'].'.'.$child['model'].'|'.$object->{$pk})) {
+						if ($params['deep'] > 1 && \Session::get('tree.'.$tree_config['id'].'.'.$child['model'].'|'.$object->{$pk}, true)) {
 							$items = $controler->tree_items($tree_config, array(
 								'model' => $child['model'],
 								'id' => $object->{$pk},
