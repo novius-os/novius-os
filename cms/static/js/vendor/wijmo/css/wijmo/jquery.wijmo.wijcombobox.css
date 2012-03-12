@@ -29,7 +29,7 @@
 }
 .wijmo-wijcombobox-loading
 {
-    background: transparent url('images/ui-anim_basic_16x16.gif') right center no-repeat;
+    background: transparent url('../images/ui-anim_basic_16x16.gif') right center no-repeat;
 }
 /* dropdown list trigger
  ----------------------------------*/

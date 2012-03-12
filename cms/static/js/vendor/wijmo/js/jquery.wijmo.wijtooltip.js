@@ -1,7 +1,7 @@
 /*globals window document clearTimeout setTimeout jQuery */
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -1093,6 +1093,17 @@
 			var obj = { data: "" }, retValue;
 			if ($.isFunction(content)) {
 				retValue = content.call(this.element, obj);
+				if (obj.data !== "") {
+					return obj.data;
+				}
+				else {
+					return retValue;
+				}
+			} else if (window[content] && 
+					$.isFunction(window[content])) {
+				// if window[content/title] is a function, then get the
+				// function value.
+				retValue = window[content].call(this.element, obj);
 				if (obj.data !== "") {
 					return obj.data;
 				}

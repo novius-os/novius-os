@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -145,8 +145,21 @@
 		},
 
 		_create: function () {
-			var self = this,
+			var self = this, a,
 				o = self.options;
+
+			//Add support for jUICE!
+			if ($.isArray(o.buttons)) {
+				$.each(o.buttons, function (idx, value) {
+					var c = value.click;
+					if (c && (typeof c === "string") && window[c]) {
+						value.click = window[c];
+					}
+				});
+			}
+
+
+
 			$.ui.dialog.prototype._create.apply(self, arguments);
 			self.uiDialog.addClass("wijmo-wijdialog");
 			self._initWijWindow();
@@ -154,6 +167,11 @@
 			self._attachDraggableResizableEvent();
 			self.originalPosition = o.position;
 			self.isPin = false;
+		},
+
+		_makeDraggable: function () {
+			$.ui.dialog.prototype._makeDraggable.apply(this, arguments);
+			this.uiDialog.draggable("option", "cancel", ".wijmo-wijdialog-captionbutton");
 		},
 
 		_handleDisabledOption: function (disabled, ele) {
@@ -286,7 +304,7 @@
 			$('<iframe style="width:100%;height:99%;" frameborder="0"></iframe>');
 			if (typeof url === "string" && url.length > 0) {
 				self.element.addClass("wijmo-wijdialog-hasframe");
-				innerFrame.attr("src", url);
+				//innerFrame.attr("src", url);
 				self.element.append(innerFrame);
 				self.innerFrame = innerFrame;
 			}

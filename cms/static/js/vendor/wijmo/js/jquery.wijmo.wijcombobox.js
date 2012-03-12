@@ -1,7 +1,7 @@
 /*globals jQuery,window,document*/
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -621,6 +621,9 @@
 									self.selectedItem = item;
 									oldIndex = o.selectedIndex;
 									o.selectedIndex = newIndex;
+									//update for get selected value by wh at 2012/2/29
+									o.selectedValue = self.selectedItem.value;
+									//end for get selected value
 									// fire select change event 
 									if (self._select !== undefined) {
 										self._select[0].selectedIndex = o.selectedIndex;
@@ -1077,6 +1080,9 @@
 			else if (key === "data") {
 				self.selectedItem = null;
 				self.options.selectedIndex = -1;
+				//update for get selectedvalue option by wh at 2012/2/29
+				self.options.selectedValue = null;
+				//end for get selectedValue option				
 				self._input.val("");
 			}
 			//end by RyanWu@20110119.

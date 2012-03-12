@@ -1,10 +1,16 @@
 /*globals jQuery,$,window,alert,document,confirm,location,setTimeout, Globalize,
-clearTimeout,amplify*/
+amplify*/
 /*jslint white: false */
 /*jslint nomen: false*/
+/*jslint browser: true*/
+/*jslint continue: true*/
+/*jslint devel: true*/
+/*jslint forin: true*/
+/*jslint maxlen: 110*/
+
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -13,39 +19,26 @@ clearTimeout,amplify*/
 * licensing@wijmo.com
 * http://www.wijmo.com/license
 *
-* * Wijmo Expander widget.
+* * Wijmo events calendar widget.
 * 
 * Depends:
-*	jquery.glob.js
 *	jquery.ui.core.js
 *	jquery.ui.widget.js
-*	jquery.wijmo.wijutil.js
-*	jquery.ui.wijpopup.js
-*	jquery.wijmo.wijcalendar.js
-*	jquery.wijmo.wijdialog.js
-*	jquery.effects.core.js
-*	jquery.effects.blind.js
-*	jquery.effects.slide.js
-*	jquery.effects.scale.js
+*	globalize.js
 *	jquery.mousewheel.js
 *   jquery.plugin.wijtextselection.js
+*	jquery.wijmo.wijutil.js
 *	jquery.wijmo.wijinputcore.js
 *	jquery.wijmo.wijinputdate.js
+*   jquery.wijmo.wijinputnumber.js
+*	jquery.wijmo.wijcalendar.js
+*   jquery.wijmo.wijdialog.js
+*   jquery.wijmo.wijcombobox.js
+*	jquery.wijmo.wijdatepager.js
+Following dependencies are needed if you wish to enable built-in client side data-storage:
+*   amplify.core.js
+*	amplify.store.js 
 
-
-*  jquery.wijmo.wijevcal.js
-
-*	jquery.wijmo.wijinputnumber.js
-
-
-*  jquery.ui.position.js
-*  json2.js
-*  jquery.wijmo.wijutil.js
-*  jquery.wijmo.wijdialog.js
-*  jquery.wijmo.wijexpander.js
-
-*  jquery.wijmo.wijlist.js
-*  jquery.wijmo.wijcombobox.js
 
 
 
@@ -71,8 +64,7 @@ block comments:
 
 		///		parentRecurrenceId - String, id of the event object that 
 		///				defines the recurrence criteria for this event object. 
-		///				If an event is recurring (see isRecurring)
-		///				it represents an occurrence in the series that is 
+		///				If an event is recurring it represents an occurrence in the series that is 
 		///				started and defined by a specific pattern event. 
 		///				Use the getPatern method in order to obtain the pattern 
 		///				of the current event. A pattern event can be recognized by its 
@@ -103,7 +95,8 @@ block comments:
 		///					of the recurrence. 
 		///					The interval field works in conjunction with 
 		///					the "recurrenceType" field to determine the cycle of the recurrence. 
-		///					The maximum allowable value is 99 for weekly patterns and 999 for daily patterns.
+		///					The maximum allowable value is 99 for weekly patterns and 999 
+		///					for daily patterns.
 		///					The default value is 1.
 		///					For example, if the recurrenceType is set 
 		///					to daily, and the "interval" is set to 3, 
@@ -202,11 +195,9 @@ block comments:
 		///					to be finite and the "noEndDate" field is false. 
 		///					If neither patternEndDate nor occurrences is set, 
 		///					the pattern is considered infinite and "noEndDate" is true.
-		///				exceptions - Array, holds the list of event objects that 
+		///				exceptions - Array, holds the list of event object ids that 
 		///					define the exceptions to that series of events. 
-		///					Event objects are added to the exceptions whenever a field 
-		///					in the corresponding event object is altered.
-		///				removedOccurrences - Array, holds the list of event objects 
+		///				removedOccurrences - Array, holds the list of event object's ids
 		///					removed from that series of events. 
 
 
@@ -231,9 +222,10 @@ block comments:
 	function _generateGuid() {
 		var result, i, j;
 		result = "";
-		for (j = 0; j < 32; j++) {
-			if (j == 8 || j == 12 || j == 16 || j == 20)
+		for (j = 0; j < 32; j += 1) {
+			if (j === 8 || j === 12 || j === 16 || j === 20) {
 				result = result + "-";
+			}
 			i = Math.floor(Math.random() * 16).toString(16).toUpperCase();
 			result = result + i;
 		}
@@ -242,15 +234,14 @@ block comments:
 	/////////////// abstract data layer implementation 
 	// (web sql database / amplify.store)
 
-	var database, isAmplifyStoreUsed = false,
-		amplifyTables;
+	var database, databaseName = "C1EventsCalendarDB", databaseVer = "1.1",
+		isAmplifyStoreUsed = false, amplifyTables;
 
 	function ensureTableCreated(tableName, fields, callback) {
 		/*				ensureTableCreated("events",
 		"(id TEXT PRIMARY KEY, calendar TEXT, subject TEXT, location TEXT, " +
 		"start TIMESTAMP, end TIMESTAMP, description TEXT)");*/
 		if (isAmplifyStoreUsed) {
-
 			amplifyTables = amplify.store("wijevcal_tables1");
 			if (!amplifyTables) {
 				amplifyTables = {};
@@ -282,7 +273,7 @@ block comments:
 		}
 	}
 
-	function executeSql(sqlCommand, params, successHandler, errorHandler) {		
+	function executeSql(sqlCommand, params, successHandler, errorHandler) {
 		/*
 		executeSql("SELECT * FROM events", []
 
@@ -293,7 +284,7 @@ block comments:
 		o.start.getTime(), o.end.getTime(), o.description],
 
 		*/
-		var data = { rowsAffected: 0, rows: [] }, o, i, fieldCount, rs,
+		var data = { rowsAffected: 0, rows: [] }, o, i,
 			selectRegexp, insertRegexp, match, tblName, tblDesc, tblData, k,
 			paramsDesc, paramName, s, orConditions;
 		if (!params) {
@@ -390,7 +381,6 @@ block comments:
 				}
 			}
 		} else {
-
 			if (!database) {
 				errorHandler("Local data storage not found.");
 				return;
@@ -612,7 +602,8 @@ block comments:
 
 			/// <summary>
 			/// Indicates whether the right pane will be visible. 
-			///	By default the right pane are empty. You can use this pane in order to provide additional custom UI.
+			///	By default the right pane are empty. 
+			///	You can use this pane in order to provide additional custom UI.
 			/// Default: false
 			/// Type: Boolean.
 			/// Code example:
@@ -1381,23 +1372,40 @@ block comments:
 
 		},
 		_initLocalDataStorage: function () {
-
 			/* local data storage initialization >> */
 			try {
-				if (window.openDatabase) {
-					this.log("Using Web SQL Database for the local data storage.");
-					database = window.openDatabase("EventsCalendarDB", "1.1",
+				if (window.amplify && window.amplify.store) {
+					try {
+						amplifyTables = amplify.store("wijevcal_tables1");
+						isAmplifyStoreUsed = true;
+						this.log("Using amplify.store for the local data storage");
+					} catch (amplex) {
+						this.log("amplify.store exception:" + amplex);
+						// attempt to load data using web service or custom methods
+						this._loadData();
+						return;
+					}
+					//amplify.store("key", "test-1")
+				}
+				else if (window.openDatabase) {
+					try {
+						database = window.openDatabase(databaseName, databaseVer,
 							"Wijmo Events Calendar Offline DB", 200000);
+					} catch (ex) {
+						this.log("web sql database error: " + ex);
+						// attempt to load data using web service or custom methods
+						this._loadData();
+						return;
+					}
 					if (!database) {
-						alert("Failed to open the database on disk." +
+						this.log("Failed to open the database on disk." +
 						" This is probably because the version was bad or" +
 						" there is not enough space left in this domain's quota");
+						// attempt to load data using web service or custom methods
+						this._loadData();
+						return;
 					}
-				}
-				else if (window.amplify && window.amplify.store) {
-					this.log("Using amplify.store for the local data storage");
-					isAmplifyStoreUsed = true;
-					//amplify.store("key", "test-1")
+					this.log("Using Web SQL Database for the local data storage.");
 				}
 				else {
 					this.log("Couldn't open built-in local data storage." +
@@ -1411,6 +1419,7 @@ block comments:
 				ensureTableCreated("calendars",
 			"(id TEXT PRIMARY KEY, name TEXT, location TEXT, description TEXT, " +
 			"color TEXT, tag TEXT)");
+
 				ensureTableCreated("events",
 			"(id TEXT PRIMARY KEY, calendar TEXT, subject TEXT, location TEXT, " +
 				"start TIMESTAMP, end TIMESTAMP, description TEXT, color TEXT, " +
@@ -1426,7 +1435,7 @@ block comments:
 				NONE		
 				*/
 			} catch (err) {
-				alert(err);
+				this.log("local datastorage initialization error:" + err);
 			}
 			/* << end of local data storage initialization */
 		},
@@ -1506,7 +1515,7 @@ block comments:
 			o.calendars = [];
 			calendarsById = this._calendarsById = {};
 
-			var loadCalendarsCallback = function (calendars) {
+			loadCalendarsCallback = function (calendars) {
 				if (!calendars) {
 					return;
 				}
@@ -1563,7 +1572,7 @@ block comments:
 
 			o.appointments = [];
 			appointmentsById = this._appointmentsById = {};
-			loadEventsCallback = function (events) {				
+			loadEventsCallback = function (events) {
 				if (!events) {
 					return;
 				}
@@ -1584,21 +1593,8 @@ block comments:
 					events = events.events;
 				}
 				for (i = 0; i < events.length; i += 1) {
-					appt = self._cloneObj(events[i]);
-					appt.start = new Date(appt.start);
-					appt.end = new Date(appt.end);
-					if (typeof appt.allday === "string") {
-						if (appt.allday === "false") {
-							appt.allday = false;
-						}
-						if (appt.allday === "true") {
-							appt.allday = true;
-						}
-					}
-					self._deSerializeProperties(appt.properties, appt);
-					appt.prevData = self._cloneObj(appt);
-					o.appointments.push(appt);
-					appointmentsById[appt.id] = appt;
+					appt = self._readEventData(events[i]);
+					self._storeEventWithSort(appt);
 				}
 				self._onAppointmentsChanged();
 				self._trigger("initialized");
@@ -1618,7 +1614,7 @@ block comments:
 					success: loadEventsCallback
 				});
 			} else {
-				
+
 				query = "SELECT * FROM events where ";
 				for (i = 0; i < o.visibleCalendars.length; i += 1) {
 					if (i > 0) {
@@ -1628,25 +1624,10 @@ block comments:
 				}
 				executeSql(query,
 				[],
-				function (data) {					
+				function (data) {
 					for (i = 0, count = data.rows.length; i < count; i += 1) {
-						appt = self._cloneObj(data.rows.item(i));
-						appt.start = new Date(appt.start);
-						appt.end = new Date(appt.end);
-
-
-						if (typeof appt.allday === "string") {
-							if (appt.allday === "false") {
-								appt.allday = false;
-							}
-							if (appt.allday === "true") {
-								appt.allday = true;
-							}
-						}
-						self._deSerializeProperties(appt.properties, appt);
-						appt.prevData = self._cloneObj(appt);
-						o.appointments.push(appt);
-						appointmentsById[appt.id] = appt;
+						appt = self._readEventData(data.rows.item(i));
+						self._storeEventWithSort(appt);
 					}
 					self._onAppointmentsChanged();
 					self._trigger("initialized");
@@ -1656,261 +1637,29 @@ block comments:
 			}
 
 		},
-		_prepareEventsForView: function () {
-			this._eventsView = [];
-			var o = this.options, appts = o.appointments, appt, occurrenceAppt, pattern,
-				i, j, icnt, jcnt, maxOccurrenceCount = 100, patternStart,
-				patternStartTime, patternEndTime;
-			for (i = 0, icnt = appts.length; i < icnt; i++) {
-				appt = appts[i];
-				if (appt.recurrenceState === "master") {
-					pattern = appt.recurrencePattern;
-					// populate pattern:
-					jcnt = pattern.occurrences || maxOccurrenceCount;
-					patternStart = pattern.patternStartDate || appt.start;
-					patternStartTime = pattern.startTime || appt.start;
-					patternEndTime = pattern.endTime || appt.end;
-					switch (pattern.recurrenceType) {
-						case "daily":
-							for (j = 0; j < jcnt; j++) {
-								occurrenceAppt = this._cloneObj(appt);
-								occurrenceAppt.parentRecurrenceId = appt.id;
-								occurrenceAppt.recurrenceState = "occurrence";
-								occurrenceAppt.start = this._setTime(
-												this._addDays(patternStart, j),
-												patternStartTime);
-								occurrenceAppt.end = this._setTime(
-												occurrenceAppt.start,
-												patternEndTime, patternStartTime);
-								occurrenceAppt.recurrencePattern = null;
-								this._eventsView.push(occurrenceAppt);
-							}
-							break;
-						case "workdays":
-							for (j = 0; j < jcnt; j++) {
-								occurrenceAppt = this._cloneObj(appt);
-								occurrenceAppt.parentRecurrenceId = appt.id;
-								occurrenceAppt.recurrenceState = "occurrence";
-								occurrenceAppt.start = this._setTime(
-												this._addDays(patternStart, j),
-												patternStartTime);
-								//getDay() : Sunday is 0, Monday is 1, and so on.
-								if (occurrenceAppt.start.getDay() === 0 ||
-										occurrenceAppt.start.getDay() === 6) {
-									continue;
-								}
-								occurrenceAppt.end = this._setTime(
-												occurrenceAppt.start,
-												patternEndTime, patternStartTime);
-								occurrenceAppt.recurrencePattern = null;
-								this._eventsView.push(occurrenceAppt);
-							}
-							break;
-						case "weekly":
-							for (j = 0; j < jcnt; j++) {
-								occurrenceAppt = this._cloneObj(appt);
-								occurrenceAppt.parentRecurrenceId = appt.id;
-								occurrenceAppt.recurrenceState = "occurrence";
-								occurrenceAppt.start = this._setTime(
-												this._addDays(patternStart, j * 7),
-												patternStartTime);
-								occurrenceAppt.end = this._setTime(
-												occurrenceAppt.start,
-												patternEndTime, patternStartTime);
-								occurrenceAppt.recurrencePattern = null;
-								this._eventsView.push(occurrenceAppt);
-							}
-							break;
-						case "monthly":
-							for (j = 0; j < jcnt; j++) {
-								occurrenceAppt = this._cloneObj(appt);
-								occurrenceAppt.parentRecurrenceId = appt.id;
-								occurrenceAppt.recurrenceState = "occurrence";
 
-								occurrenceAppt.start = this._setTime(
-												new Date(patternStart),
-													patternStartTime);
-								occurrenceAppt.start.setMonth(
-									occurrenceAppt.start.getMonth() + j);
-								occurrenceAppt.end = this._setTime(
-												occurrenceAppt.start,
-												patternEndTime, patternStartTime);
-								occurrenceAppt.recurrencePattern = null;
-								this._eventsView.push(occurrenceAppt);
-							}
-							break;
-						case "yearly":
-							for (j = 0; j < jcnt; j++) {
-								occurrenceAppt = this._cloneObj(appt);
-								occurrenceAppt.parentRecurrenceId = appt.id;
-								occurrenceAppt.recurrenceState = "occurrence";
-
-								occurrenceAppt.start = this._setTime(
-												new Date(patternStart),
-													patternStartTime);
-								occurrenceAppt.start.setYear(
-									occurrenceAppt.start.getFullYear() + j);
-								occurrenceAppt.end = this._setTime(
-												occurrenceAppt.start,
-												patternEndTime, patternStartTime);
-								occurrenceAppt.recurrencePattern = null;
-								this._eventsView.push(occurrenceAppt);
-							}
-							break;
-						case "monthlyNth":
-							break;
-						case "yearlyNth":
-							break;
-					}
-
-					//
-					// qq: take into account exceptions and removed occurrences	
-
-				} else {
-					this._eventsView.push(appt);
+		_readEventData: function (data) {
+			var appt = this._cloneObj(data);
+			appt.start = new Date(appt.start);
+			appt.end = new Date(appt.end);
+			if (typeof appt.allday === "string") {
+				if (appt.allday === "false") {
+					appt.allday = false;
+				}
+				if (appt.allday === "true") {
+					appt.allday = true;
 				}
 			}
-
-
-			///		parentRecurrenceId - String, id of the event object that 
-			///				defines the recurrence criteria for this event object. 
-			///				If an event is recurring (see isRecurring)
-			///				it represents an occurrence in the series that is 
-			///				started and defined by a specific pattern event. 
-			///				Use the getPatern method in order to obtain the pattern 
-			///				of the current event. A pattern event can be recognized by its 
-			///				recurrenceState field set to the "master" value. 
-			///				The recurrence information defined by the pattern event
-			///				can be accessed  via the recurrencePattern field of the event. 
-			///				If this event is a not member of a recurrence, 
-			///				or is itself a root event, this field will be null. 
-			///		recurrenceState - String, indicates the recurrence state of the event. 
-			///				(possible values are "notRecurring"(or null), "master", "occurrence", 
-			///				"exception", "removed")
-			///		recurrencePattern - Object, represents the recurrence attributes 
-			///				of an event. Only master events can have this field
-			///				(recurrenceState is "master")
-			///				Object syntax:
-			///				parentRecurrenceId - String, id of the event object
-			///					which represents the master event for this 
-			///					recurrencePattern object.
-			///				recurrenceType - String, determines the type of recurrence:
-			///					daily - the recurring event reoccurs on a daily basis.
-			///					workdays - the recurring event reoccurs every working day.
-			///					weekly - the recurring event reoccurs on a weekly basis.
-			///					monthly - the recurring event reoccurs on a monthly basis. 
-			///					monthlyNth - the recurring event reoccurs every N months. 			
-			///					yearly - the recurring event reoccurs on an yearly basis.
-			///					yearlyNth - the recurring event reoccurs every N years.
-			///				interval - Number, specifies the interval between occurrences 
-			///					of the recurrence. 
-			///					The interval field works in conjunction with 
-			///					the "recurrenceType" field to determine the cycle of the recurrence. 
-			///					The maximum allowable value is 99 for weekly patterns and 999 for daily patterns.
-			///					The default value is 1.
-			///					For example, if the recurrenceType is set 
-			///					to daily, and the "interval" is set to 3, 
-			///					the recurrence will occur every third day.
-			///				startTime - Date, indicates the start time for the given 
-			///					occurrence of the recurrence pattern. 
-			///				endTime - Date, indicates the end time for the given 
-			///					occurrence of the recurrence pattern. 
-			///				patternStartDate - Date, indicates the start date of the 
-			///					recurrence pattern.
-			///				patternEndDate - Date, indicates the end date of the 
-			///					recurrence pattern.
-			///					This field is optional but must be coordinated 
-			///					with other fields when setting up a recurrence pattern. 
-			///					If this field or the "occurrences" field is set, 
-			///					the pattern is considered to be finite, and the "noEndDate"
-			///					field is false. 
-			///					If neither "patternEndDate" nor "occurrences" is set, 
-			///					the pattern is considered infinite and "noEndDate" is true. 
-			///					The "interval" field must be set before 
-			///					setting "patternEndDate".
-			///				occurrences - Number, the number of occurrences for the 
-			///					recurrence pattern.	This field allows the definition of 
-			///					a recurrence pattern that is only valid for the specified 
-			///					number of subsequent occurrences. 
-			///					For example, you can set this property to 10 for a formal 
-			///					training  course that will be held on the next ten Thursday 
-			///					evenings. The default value is 0. This field must be 
-			///					coordinated with other fields when setting up a recurrence pattern. 
-			///					If the "patternEndDate" field or the "occurrences" field 
-			///					is set, the pattern is considered to be finite and the 
-			///					"noEndDate" field is false. 
-			///					If neither "patternEndDate" nor "occurrences" is set, 
-			///					the pattern is considered infinite and "noEndDate" is true.
-			///				instance - String, determines the week in a month in which 
-			///					the event will occur. This field is only valid for recurrences of 
-			///					the "monthlyNth" and "yearlyNth" types and allows the definition 
-			///					of a recurrence pattern that is only valid for the Nth occurrence, 
-			///					such as "the 2nd Sunday in March" pattern. 
-			///					The default value is "first".
-			///					Possible values are:
-			///						first - the recurring event will occur on the specified 
-			///							day or days of the first week in the month. 
-			///						second - The recurring event will occur on the specified 
-			///							day or days of the second week in the month. 
-			///						third = - The recurring event will occur on the specified 
-			///							day or days of the third week in the month. 
-			///						fourth - The recurring event will occur on the specified 
-			///							day or days of the fourth week in the month.
-			///						last - The recurring event will occur on the specified 
-			///							day or days of the last week in the month. 
-			///				dayOfWeekMask - String, contains set of values representing the mask 
-			///					for week days on which the recurring event occurs. 
-			///					Monthly and yearly patterns are only valid for a single day. 
-			///					The default value is "none".
-			///					When the "RecurrenceType" field is set to "daily", 
-			///					the "DayOfWeekMask" field can only be set to "everyDay"; 
-			///					setting the field to any other value will result in an exception.
-			///					When the "recurrenceType" field is set to 
-			///					"workdays", the "dayOfWeekMask" field 
-			///					can only be set to "workDays"; setting the field 
-			///					to any other value will result in an exception.
-			///					When the "recurrenceType" field is set to 
-			///					"weekly", the "dayOfWeekMask" field 
-			///					cannot be set to "none"; doing so will result 
-			///					in an exception being thrown.
-			///					When the recurrenceType" field is set to 
-			///					"monthly" or "yearly" the "dayOfWeekMask" field is not applicable.
-			///					Possible values are:
-			///						none - no specific value; the actual value is obtained from 
-			///							the root event object. 
-			///						sunday - specifies Sunday.
-			///						monday - Specifies Monday.
-			///						tuesday - Specifies Tuesday. 
-			///						wednesday - Specifies Wednesday.
-			///						thursday - Specifies Thursday.
-			///						friday - Specifies Friday.
-			///						saturday - Specifies Saturday.
-			///						weekendDays - Specifies Saturday and Sunday (or what ever days according 
-			///							to the settings of the C1EventsCalendar).
-			///						workDays - Specifies work days (all days except weekend).
-			///						everyDay - Specifies every day of the week.
-			///				dayOfMonth - Number, the number of the day in its respective month on which 
-			///					each occurrence will occur. Applicable only when the recurrenceType 
-			///					field is set to "monthly" or "yearly".
-			///					The default value is 1.
-			///				monthOfYear - Number, indicates which month of the year is valid 
-			///					for the specified recurrence pattern. Can be a number from 1 to 12.
-			///					This field is only valid for recurrence patterns whose recurrenceType" 
-			///					field is set to "yearlyNth" or "yearly".
-			///					The default value is 1.
-			///				noEndDate - Boolean, indicates if the recurrence pattern is endless.
-			///					The default value is True. This field must be coordinated with 
-			///					other fields when setting up a recurrence pattern. If the patternEndDate field
-			///					or the occurrences field is set, the pattern is considered 
-			///					to be finite and the "noEndDate" field is false. 
-			///					If neither patternEndDate nor occurrences is set, 
-			///					the pattern is considered infinite and "noEndDate" is true.
-			///				exceptions - Array, holds the list of event objects that 
-			///					define the exceptions to that series of events. 
-			///					Event objects are added to the exceptions whenever a field 
-			///					in the corresponding event object is altered.
-			///				removedOccurrences - Array, holds the list of event objects 
-			///					removed from that series of events. 
+			if (appt.start.getTime() >= appt.end.getTime()) {
+				// duration can not be 0.
+				appt.end = this._addMinutes(appt.start, this.options.timeInterval);
+			}
+			this._deSerializeProperties(appt.properties, appt);
+			appt.prevData = this._cloneObj(appt);
+			return appt;
+		},
+		_prepareEventsForView: function () {
+			this._eventsView = this.getOccurrences();
 		},
 
 		_cloneObj: function (o1) {
@@ -2148,7 +1897,7 @@ block comments:
 								startDate = this._editEventDialog
 										.find(".wijmo-wijev-start")
 										.wijinputdate("option", "date");
-							if (args.date.getDate() != startDate.getDate()) {
+							if (args.date.getDate() !== startDate.getDate()) {
 								args.date.setDate(startDate.getDate());
 								this._editEventDialog
 										.find(".wijmo-wijev-start-time")
@@ -2189,7 +1938,7 @@ block comments:
 								endDate = this._editEventDialog
 										.find(".wijmo-wijev-end")
 										.wijinputdate("option", "date");
-							if (args.date.getDate() != endDate.getDate()) {
+							if (args.date.getDate() !== endDate.getDate()) {
 								args.date.setDate(endDate.getDate());
 								this._editEventDialog
 										.find(".wijmo-wijev-end-time")
@@ -2239,7 +1988,7 @@ block comments:
 							this._editEventDialog.find(".wijmo-wijev-calendar")
 									.wijdropdown()
 							.bind("change", function (e) {
-								var cal = self._calendarsById[this.value]
+								var cal = self._calendarsById[this.value];
 								if (cal && cal.color) {
 									self._addColorClass(
 									self._editEventDialog.find(".wijmo-wijev-color"),
@@ -2317,34 +2066,6 @@ block comments:
 												alert("show custom recurrence pattern.");
 												break;
 										}
-										///		recurrencePattern - Object, represents the recurrence attributes 
-										///				of an event. Only master events can have this field
-										///				(recurrenceState is "master")
-										///				Object syntax:
-										///				parentRecurrenceId - String, id of the event object
-										///					which represents the master event for this 
-										///					recurrencePattern object.
-										///				recurrenceType - String, determines the type of recurrence:
-										///					daily - the recurring event reoccurs on a daily basis.
-										///					workdays - the recurring event reoccurs every working day.
-										///					monthly - the recurring event reoccurs on a monthly basis. 
-										///					monthlyNth - the recurring event reoccurs every N months. 
-										///					weekly - the recurring event reoccurs on a weekly basis.
-										///					yearly - the recurring event reoccurs on an yearly basis.
-										///					yearlyNth - the recurring event reoccurs every N years.
-										///				startTime - Date, indicates the start time for the given 
-										///					occurrence of the recurrence pattern. 
-										///				endTime - Date, indicates the end time for the given 
-										///					occurrence of the recurrence pattern. 
-										///				patternStartDate - Date, indicates the start date of the 
-										///					recurrence pattern.
-
-										///		recurrenceState - String, indicates the recurrence state of the event. 
-										///				(possible values are "notRecurring"(or null), "master", "occurrence", 
-										///				"exception", "removed")
-
-
-
 									});
 							this._dropDownInitialized = true;
 						} else {
@@ -2386,14 +2107,14 @@ block comments:
 							colors = o.colors,
 							s = "";
 			if (colors && colors.length > 0) {
-				for (i = 0; i < colors.length; i++) {
+				for (i = 0; i < colors.length; i += 1) {
 					s += "<span class=\"wijmo-wijev-listcolor wijmo-wijev-event-color-" +
 							colors[i] + "\">&nbsp;</span>";
 				}
 			}
 			if (!this._colorMenu) {
 				this._colorMenu =
-								$("<div class=\"wijmo-wijev-color-menu ui-widget-content ui-corner-all\"></div>");
+				$("<div class=\"wijmo-wijev-color-menu ui-widget-content ui-corner-all\"></div>");
 				this._editEventDialog.append(this._colorMenu);
 				this._colorMenu.wijpopup({ autoHide: true /*qq*/ });
 			}
@@ -2493,7 +2214,9 @@ block comments:
 			} else {
 				dlg.find(".wijmo-wijev-delete").show();
 			}
-			cal = this._calendarsById[dlg.find(".wijmo-wijev-calendar")[0].value];
+			if (dlg.find(".wijmo-wijev-calendar").length > 0) {
+				cal = this._calendarsById[dlg.find(".wijmo-wijev-calendar")[0].value];
+			}
 			color = appt.color;
 			if (!color && cal && cal.color) {
 				color = cal.color;
@@ -2556,7 +2279,7 @@ block comments:
 				match;
 			if (el.length > 0) {
 				match = regexp.exec(el[0].className);
-				if (match != null && match.length > 1) {
+				if (match && match.length > 1) {
 					return match[1];
 				}
 			}
@@ -2593,8 +2316,18 @@ block comments:
 			}
 			$select.html(s).val(selectedVal);
 		},
-		_fillColorSelect: function ($select, selectedVal, addDefault) {
+		_fillColorSelect: function (select, selectedVal) {
+			var s = "", o = this.options, colors = o.colors, i;
 
+			if (colors) {
+				for (i = 0; i < colors.length; i += 1) {
+					s += "<option" +
+(selectedVal === colors[i] ? " selected=\"selected\"" : "") +
+					" value=\"" + colors[i] +
+				"\">" + colors[i] + "</option>";
+				}
+			}
+			select.html(s);
 		},
 
 
@@ -2607,7 +2340,7 @@ block comments:
 			this._editCalendarDialog.find(".wijmo-wijev-name").val(cal.name || "");
 			this._editCalendarDialog.find(".wijmo-wijev-location").val(cal.location || "");
 			this._editCalendarDialog.find(".wijmo-wijev-description").val(cal.description || "");
-			this._fillColorSelect(this._editCalendarDialog.find(".color"),
+			this._fillColorSelect(this._editCalendarDialog.find(".wijmo-wijev-color"),
 														cal.color);
 		},
 		/*--------*/
@@ -2628,9 +2361,13 @@ block comments:
 				.live("click." + this.wijevcalnamespacekey,
 				$.proxy(this._onAppointmentClick, this));*/
 
-				this.element.find(".wijmo-wijev-dayview .wijmo-wijev-daycolumn .wijmo-wijev-appointment")
+				this.element.find(".wijmo-wijev-dayview .wijmo-wijev-appointment")
 					.live("mousedown." + this.wijevcalnamespacekey,
 								$.proxy(this._onDayViewAppointmentMouseDown, this));
+				this.element.find(".wijmo-wijev-monthview .wijmo-wijev-appointment")
+					.live("mousedown." + this.wijevcalnamespacekey,
+								$.proxy(this._onMonthViewAppointmentMouseDown, this));
+
 				this.element.find(".wijmo-wijev-dayview .wijmo-wijev-timeinterval")
 					.live("click." + this.wijevcalnamespacekey,
 								$.proxy(this._onDayViewTimeIntervalClick, this));
@@ -2639,6 +2376,9 @@ block comments:
 								$.proxy(this._onDayViewAllDayCellClick, this));
 
 				this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcellheader")
+					.live("click." + this.wijevcalnamespacekey,
+								$.proxy(this._onMonthViewDayLabelClick, this));
+				this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcell-showmore")
 					.live("click." + this.wijevcalnamespacekey,
 								$.proxy(this._onMonthViewDayLabelClick, this));
 				this.element.find(".wijmo-wijev-weekview .wijmo-wijev-daylabel")
@@ -2657,15 +2397,19 @@ block comments:
 			if (this._eventsAttached) {
 				this.element.find(".wijmo-wijev-appointment")
 					.die("click." + this.wijevcalnamespacekey);
-				this.element.find(".wijmo-wijev-dayview .wijmo-wijev-daycolumn .wijmo-wijev-appointment")
+				this.element.find(
+				".wijmo-wijev-dayview .wijmo-wijev-daycolumn .wijmo-wijev-appointment")
 					.die("mousedown." + this.wijevcalnamespacekey);
-				this.element.find(".wijmo-wijev-dayview .wijmo-wijev-dayheadercolumn .wijmo-wijev-daylabel")
+				this.element.find(
+				".wijmo-wijev-dayview .wijmo-wijev-dayheadercolumn .wijmo-wijev-daylabel")
 					.die("click." + this.wijevcalnamespacekey);
 				this.element.find(".wijmo-wijev-dayview .wijmo-wijev-timeinterval")
 					.die("click." + this.wijevcalnamespacekey);
 				this.element.find(".wijmo-wijev-dayview .wijmo-wijev-allday-cell")
 					.die("click." + this.wijevcalnamespacekey);
 				this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcellheader")
+					.die("click." + this.wijevcalnamespacekey);
+				this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcell-showmore")
 					.die("click." + this.wijevcalnamespacekey);
 				this.element.find(".wijmo-wijev-weekview .wijmo-wijev-daylabel")
 					.die("click." + this.wijevcalnamespacekey);
@@ -3053,7 +2797,7 @@ block comments:
 			}
 			this.showLoadingLabel("Creating event...");
 
-			var addEventErrorCallback = function (e) {
+			addEventErrorCallback = function (e) {
 				self.hideLoadingLabel();
 				self.status("Unable to add event '" + o.subject + "': " + e, "error");
 				if (o.prevData) {
@@ -3068,15 +2812,14 @@ block comments:
 				}
 			};
 
-			var addEventCallback = function (result) {
+			addEventCallback = function (result) {
 				if (self._handleServerError(result)) {
 					addEventErrorCallback(result);
 					return;
 				}
 				self._readUpdatedServerDataIfAny(result, o);
 				if (!self._appointmentsById[o.id]) {
-					self.options.appointments.push(o);
-					self._appointmentsById[o.id] = o;
+					self._storeEventWithSort(o);
 					self.status("Event '" + o.subject + "' added.");
 				} else {
 					self.status("Event '" + o.subject + "' added.");
@@ -3129,6 +2872,26 @@ block comments:
 			}
 		},
 
+		_storeEventWithSort: function (o) {
+			// fix for
+			// [19618] [C1EventsCalendar] Request to provide sorting behavior 
+			// in C1EventsCalendar with all view types:
+			var apps = this.options.appointments, i, c;
+			this._appointmentsById[o.id] = o;
+			for (i = 0, c = apps.length; i < c; i += 1) {
+				if (apps[i].start > o.start) {
+					apps.splice(i, 0, o);
+					return;
+				} else if (apps[i].start.getTime() === o.start.getTime()) {
+					if (apps[i].subject > o.subject) {
+						apps.splice(i, 0, o);
+						return;
+					}
+				}
+			}
+			apps.push(o);
+		},
+
 		_readUpdatedServerDataIfAny: function (result, o) {
 			var k = null, j;
 			if (typeof result === "string" &&
@@ -3137,13 +2900,17 @@ block comments:
 				try {
 					k = this._jsonParse(result);
 				} catch (ex) {
-					self.status("Unable to read updated server data. " +
+					this.status("Unable to read updated server data. " +
 							ex, "warning");
 				}
 				if (k) {
 					for (j in k) {
 						if (k[j]) {
 							o[j] = k[j];
+							/*
+							if (k.hasOwnProperty(j)) {
+							o[j] = k[j];
+							}*/
 						}
 					}
 				}
@@ -3199,7 +2966,7 @@ block comments:
 			}
 			this.showLoadingLabel("Updating event...");
 
-			var updateEventErrorCallback = function (e) {
+			updateEventErrorCallback = function (e) {
 				self.hideLoadingLabel();
 				self.status("Unable to update event '" + o.subject + "': " + e, "error");
 				if (o.prevData) {
@@ -3220,15 +2987,14 @@ block comments:
 				return;
 			}
 
-			var updateEventCallback = function (result) {
+			updateEventCallback = function (result) {
 				if (self._handleServerError(result)) {
 					updateEventErrorCallback(result);
 					return;
 				}
 				self._readUpdatedServerDataIfAny(result, o);
 				if (!self._appointmentsById[o.id]) {
-					self.options.appointments.push(o);
-					self._appointmentsById[o.id] = o;
+					self._storeEventWithSort(o);
 					self.status("Event '" + o.subject + "' added.");
 				} else {
 					self.status("Event '" + o.subject + "' updated.");
@@ -3305,8 +3071,8 @@ block comments:
 			///				If this event is a not member of a recurrence, 
 			///				or is itself a root event, this field will be null. 
 			///		recurrenceState - String, indicates the recurrence state of the event. 
-			///				(possible values are "notRecurring"(or null), "master", "occurrence", 
-			///				"exception", "removed")
+			///				(possible values are "notRecurring"(or null), 
+			///					"master", "occurrence","exception", "removed")
 			///		recurrencePattern - Object, represents the recurrence attributes 
 			try {
 				s = this._jsonStringify(props);
@@ -3318,43 +3084,56 @@ block comments:
 		},
 
 		_deSerializeProperties: function (s, appt) {
-			var props = {};
-			if (!s) {
-				return;
-			}
-			if (typeof s === "string") {
-				try {
-					props = this._jsonParse(s);
-				} catch (ex) {
-					this.status("Unable to load additional event properties. " +
+			var props = {}, pattern;
+			if (s) {
+				if (typeof s === "string") {
+					try {
+						props = this._jsonParse(s);
+					} catch (ex) {
+						this.status("Unable to load additional event properties. " +
 																	ex, "error");
-					return;
+						return;
+					}
+				} else {
+					props = s;
 				}
-			} else {
-				props = s;
-			}
 
-			if (props.parentRecurrenceId) {
-				appt.parentRecurrenceId = props.parentRecurrenceId;
+				if (props.parentRecurrenceId) {
+					appt.parentRecurrenceId = props.parentRecurrenceId;
+				}
+				if (props.recurrenceState) {
+					appt.recurrenceState = props.recurrenceState;
+				}
+				if (props.recurrencePattern) {
+					appt.recurrencePattern = props.recurrencePattern;
+				}
+				if (props.color) {
+					appt.color = props.color;
+				}
+				if (props.allday) {
+					appt.allday = props.allday;
+				}
 			}
-			if (props.recurrenceState) {
-				appt.recurrenceState = props.recurrenceState;
+			if (appt && appt.recurrencePattern) {
+				// ensure recurrencePattern date properties loaded correctly:
+				pattern = appt.recurrencePattern;
+				pattern.patternStartDate = pattern.patternStartDate ?
+						new Date(pattern.patternStartDate) : pattern.patternStartDate;
+				pattern.startTime = pattern.startTime ?
+						new Date(pattern.startTime) : pattern.startTime;
+				pattern.endTime = pattern.endTime ?
+						new Date(pattern.endTime) : pattern.endTime;
+				// duration can not be 0.
+				if (pattern.startTime.getTime() >= pattern.endTime.getTime()) {
+					pattern.endTime = this._addMinutes(pattern.startTime,
+														this.options.timeInterval);
+				}
 			}
-			if (props.recurrencePattern) {
-				appt.recurrencePattern = props.recurrencePattern;
-			}
-			if (props.color) {
-				appt.color = props.color;
-			}
-			if (props.allday) {
-				appt.allday = props.allday;
-			}
-
 		},
 		_jsonStringify: function (o) {
 			var s;
 			if (window.__JSONC1) {
-				s = __JSONC1.stringify(o);
+				s = window.__JSONC1.stringify(o);
 			} else if (window.JSON) {
 				s = JSON.stringify(o);
 			} else {
@@ -3363,22 +3142,23 @@ block comments:
 			return s;
 		},
 		_jsonParse: function (s) {
-			var o;
+			var o, reISO, reMsAjax;
 			if (window.__JSONC1) {
 				o = window.__JSONC1.parse(s);
 			} else if (window.JSON) {
-				var reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
-				var reMsAjax = /^\/Date\((d|-|.*)\)\/$/;
+				reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
+				reMsAjax = /^\/Date\((d|-|.*)\)\/$/;
 				o = window.JSON.parse(s,
 					function (key, value) {
 						if (typeof value === 'string') {
-							var a = reISO.exec(value);
-							if (a)
+							var a = reISO.exec(value), b;
+							if (a) {
 								return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3],
 					+a[4], +a[5], +a[6]));
+							}
 							a = reMsAjax.exec(value);
 							if (a) {
-								var b = a[1].split(/[-,.]/);
+								b = a[1].split(/[-,.]/);
 								return new Date(+b[0]);
 							}
 						}
@@ -3388,6 +3168,310 @@ block comments:
 				throw "JSON variable not found.";
 			}
 			return o;
+		},
+
+		/// <summary>
+		/// Retrieves the array which contains 
+		/// the full list of Event objects in the specified time interval. 
+		///	Note, this method will create instances of the Event
+		/// object for recurring events.
+		/// </summary>
+		/// <param name="start">The Date value which specifies 
+		/// the start date and time of the interval.</param>
+		/// <param name="end">The Date value which specifies 
+		/// the end date and time of the interval.</param>
+		getOccurrences: function (start, end) {
+			var o = this.options, appts = o.appointments, appt, occurrenceAppt, pattern,
+				i, j, icnt, jcnt, maxOccurrenceCount = 100, patternStart,
+				patternStartTime, patternEndTime, eventsArr = [];
+			for (i = 0, icnt = appts.length; i < icnt; i += 1) {
+				appt = appts[i];
+				if (appt.recurrenceState === "master") {
+					pattern = appt.recurrencePattern;
+					// populate pattern:
+
+					jcnt = pattern.occurrences || maxOccurrenceCount;
+					patternStart = pattern.patternStartDate || appt.start;
+					patternStartTime = pattern.startTime || appt.start;
+					patternEndTime = pattern.endTime || appt.end;
+					//alert("pattern.recurrenceType=" + pattern.recurrenceType);
+					switch (pattern.recurrenceType) {
+						case "daily":
+							for (j = 0; j < jcnt; j += 1) {
+								occurrenceAppt = this._cloneObj(appt);
+								occurrenceAppt.parentRecurrenceId = appt.id;
+								occurrenceAppt.recurrenceState = "occurrence";
+
+								occurrenceAppt.start = this._setTime(
+												this._addDays(patternStart, j),
+												patternStartTime);
+								occurrenceAppt.end = this._setTime(
+												occurrenceAppt.start,
+												patternEndTime, patternStartTime);
+								occurrenceAppt.recurrencePattern = null;
+								if (this._testIsEventInTimeInterval(occurrenceAppt, start, end)) {
+									eventsArr.push(occurrenceAppt);
+								}
+							}
+							break;
+						case "workdays":
+							for (j = 0; j < jcnt; j += 1) {
+								occurrenceAppt = this._cloneObj(appt);
+								occurrenceAppt.parentRecurrenceId = appt.id;
+								occurrenceAppt.recurrenceState = "occurrence";
+								occurrenceAppt.start = this._setTime(
+												this._addDays(patternStart, j),
+												patternStartTime);
+								//getDay() : Sunday is 0, Monday is 1, and so on.
+								if (occurrenceAppt.start.getDay() === 0 ||
+										occurrenceAppt.start.getDay() === 6) {
+									continue;
+								}
+								occurrenceAppt.end = this._setTime(
+												occurrenceAppt.start,
+												patternEndTime, patternStartTime);
+								occurrenceAppt.recurrencePattern = null;
+								if (this._testIsEventInTimeInterval(occurrenceAppt, start, end)) {
+									eventsArr.push(occurrenceAppt);
+								}
+							}
+							break;
+						case "weekly":
+							for (j = 0; j < jcnt; j += 1) {
+								occurrenceAppt = this._cloneObj(appt);
+								occurrenceAppt.parentRecurrenceId = appt.id;
+								occurrenceAppt.recurrenceState = "occurrence";
+								occurrenceAppt.start = this._setTime(
+												this._addDays(patternStart, j * 7),
+												patternStartTime);
+								occurrenceAppt.end = this._setTime(
+												occurrenceAppt.start,
+												patternEndTime, patternStartTime);
+								occurrenceAppt.recurrencePattern = null;
+								if (this._testIsEventInTimeInterval(occurrenceAppt, start, end)) {
+									eventsArr.push(occurrenceAppt);
+								}
+							}
+							break;
+						case "monthly":
+							for (j = 0; j < jcnt; j += 1) {
+								occurrenceAppt = this._cloneObj(appt);
+								occurrenceAppt.parentRecurrenceId = appt.id;
+								occurrenceAppt.recurrenceState = "occurrence";
+
+								occurrenceAppt.start = this._setTime(
+												new Date(patternStart),
+													patternStartTime);
+								occurrenceAppt.start.setMonth(
+									occurrenceAppt.start.getMonth() + j);
+								occurrenceAppt.end = this._setTime(
+												occurrenceAppt.start,
+												patternEndTime, patternStartTime);
+								occurrenceAppt.recurrencePattern = null;
+								if (this._testIsEventInTimeInterval(occurrenceAppt, start, end)) {
+									eventsArr.push(occurrenceAppt);
+								}
+							}
+							break;
+						case "yearly":
+							for (j = 0; j < jcnt; j += 1) {
+								occurrenceAppt = this._cloneObj(appt);
+								occurrenceAppt.parentRecurrenceId = appt.id;
+								occurrenceAppt.recurrenceState = "occurrence";
+
+								occurrenceAppt.start = this._setTime(
+												new Date(patternStart),
+													patternStartTime);
+								occurrenceAppt.start.setYear(
+									occurrenceAppt.start.getFullYear() + j);
+								occurrenceAppt.end = this._setTime(
+												occurrenceAppt.start,
+												patternEndTime, patternStartTime);
+								occurrenceAppt.recurrencePattern = null;
+								if (this._testIsEventInTimeInterval(occurrenceAppt, start, end)) {
+									eventsArr.push(occurrenceAppt);
+								}
+							}
+							break;
+						case "monthlyNth":
+							break;
+						case "yearlyNth":
+							break;
+					}
+
+					//
+					// qq: take into account exceptions and removed occurrences	
+
+				} else {
+					if (this._testIsEventInTimeInterval(appt, start, end)) {
+						eventsArr.push(appt);
+					}
+				}
+			}
+			return eventsArr;
+
+
+			///		parentRecurrenceId - String, id of the event object that 
+			///				defines the recurrence criteria for this event object. 
+			///				If an event is recurring (see isRecurring)
+			///				it represents an occurrence in the series that is 
+			///				started and defined by a specific pattern event. 
+			///				Use the getPatern method in order to obtain the pattern 
+			///				of the current event. A pattern event can be recognized by its 
+			///				recurrenceState field set to the "master" value. 
+			///				The recurrence information defined by the pattern event
+			///				can be accessed  via the recurrencePattern field of the 
+			///				event.
+			///				If this event is a not member of a recurrence, 
+			///				or is itself a root event, this field will be null. 
+			///		recurrenceState - String, indicates the recurrence state of 
+			///				the event.
+			///				(possible values are "notRecurring"(or null), "master", 
+			///				"occurrence", "exception", "removed")
+			///		recurrencePattern - Object, represents the recurrence attributes 
+			///				of an event. Only master events can have this field
+			///				(recurrenceState is "master")
+			///				Object syntax:
+			///				parentRecurrenceId - String, id of the event object
+			///					which represents the master event for this 
+			///					recurrencePattern object.
+			///				recurrenceType - String, determines the type of recurrence:
+			///					daily - the recurring event reoccurs on a daily basis.
+			///					workdays - the recurring event reoccurs every working 
+			///								day.
+			///					weekly - the recurring event reoccurs on
+			///							a weekly basis.
+			///					monthly - the recurring event reoccurs on
+			///							a monthly basis. 
+			///					monthlyNth - the recurring event reoccurs 
+			///							every N months.			
+			///					yearly - the recurring event reoccurs on 
+			///							an yearly basis.
+			///					yearlyNth - the recurring event reoccurs every N years.
+			///				interval - Number, specifies the interval between 
+			///							occurrences of the recurrence. 
+			///					The interval field works in conjunction with 
+			///					the "recurrenceType" field to determine the cycle 
+			///					of the recurrence. 
+			///					The maximum allowable value is 99 for weekly patterns 
+			///					and 999 for daily patterns.
+			///					The default value is 1.
+			///					For example, if the recurrenceType is set 
+			///					to daily, and the "interval" is set to 3, 
+			///					the recurrence will occur every third day.
+			///				startTime - Date, indicates the start time for the given 
+			///					occurrence of the recurrence pattern. 
+			///				endTime - Date, indicates the end time for the given 
+			///					occurrence of the recurrence pattern. 
+			///				patternStartDate - Date, indicates the start date of the 
+			///					recurrence pattern.
+			///				patternEndDate - Date, indicates the end date of the 
+			///					recurrence pattern.
+			///					This field is optional but must be coordinated 
+			///					with other fields when setting up a recurrence pattern. 
+			///					If this field or the "occurrences" field is set, 
+			///					the pattern is considered to be finite, and the "noEndDate"
+			///					field is false. 
+			///					If neither "patternEndDate" nor "occurrences" is set, 
+			///					the pattern is considered infinite and "noEndDate" is true. 
+			///					The "interval" field must be set before 
+			///					setting "patternEndDate".
+			///				occurrences - Number, the number of occurrences for the 
+			///					recurrence pattern.	This field allows the definition of 
+			///					a recurrence pattern that is only valid for the specified 
+			///					number of subsequent occurrences. 
+			///					For example, you can set this property to 10 for a formal 
+			///					training  course that will be held on the next ten Thursday 
+			///					evenings. The default value is 0. This field must be 
+			///					coordinated with other fields when setting up a recurrence pattern. 
+			///					If the "patternEndDate" field or the "occurrences" field 
+			///					is set, the pattern is considered to be finite and the 
+			///					"noEndDate" field is false. 
+			///					If neither "patternEndDate" nor "occurrences" is set, 
+			///					the pattern is considered infinite and "noEndDate" is true.
+			///				instance - String, determines the week in a month in which 
+			///					the event will occur. This field is only valid for recurrences of 
+			///					the "monthlyNth" and "yearlyNth" types and allows the definition 
+			///					of a recurrence pattern that is only valid for the Nth occurrence, 
+			///					such as "the 2nd Sunday in March" pattern. 
+			///					The default value is "first".
+			///					Possible values are:
+			///						first - the recurring event will occur on the specified 
+			///							day or days of the first week in the month. 
+			///						second - The recurring event will occur on the specified 
+			///							day or days of the second week in the month. 
+			///						third = - The recurring event will occur on the specified 
+			///							day or days of the third week in the month. 
+			///						fourth - The recurring event will occur on the specified 
+			///							day or days of the fourth week in the month.
+			///						last - The recurring event will occur on the specified 
+			///							day or days of the last week in the month. 
+			///				dayOfWeekMask - String, contains set of values representing the mask 
+			///					for week days on which the recurring event occurs. 
+			///					Monthly and yearly patterns are only valid for a single day. 
+			///					The default value is "none".
+			///					When the "RecurrenceType" field is set to "daily", 
+			///					the "DayOfWeekMask" field can only be set to "everyDay"; 
+			///					setting the field to any other value will result in an exception.
+			///					When the "recurrenceType" field is set to 
+			///					"workdays", the "dayOfWeekMask" field 
+			///					can only be set to "workDays"; setting the field 
+			///					to any other value will result in an exception.
+			///					When the "recurrenceType" field is set to 
+			///					"weekly", the "dayOfWeekMask" field 
+			///					cannot be set to "none"; doing so will result 
+			///					in an exception being thrown.
+			///					When the recurrenceType" field is set to 
+			///					"monthly" or "yearly" the "dayOfWeekMask" field is not applicable.
+			///					Possible values are:
+			///						none - no specific value; the actual value is obtained from 
+			///							the root event object. 
+			///						sunday - specifies Sunday.
+			///						monday - Specifies Monday.
+			///						tuesday - Specifies Tuesday. 
+			///						wednesday - Specifies Wednesday.
+			///						thursday - Specifies Thursday.
+			///						friday - Specifies Friday.
+			///						saturday - Specifies Saturday.
+			///						weekendDays - Specifies Saturday and Sunday 
+			///									(or what ever days according 
+			///									to the settings of the C1EventsCalendar).
+			///						workDays - Specifies work days (all days except weekend).
+			///						everyDay - Specifies every day of the week.
+			///				dayOfMonth - Number, the number of the day in its respective month on which 
+			///					each occurrence will occur. Applicable only when the recurrenceType 
+			///					field is set to "monthly" or "yearly".
+			///					The default value is 1.
+			///				monthOfYear - Number, indicates which month of the year is valid 
+			///					for the specified recurrence pattern. Can be a number from 1 to 12.
+			///					This field is only valid for recurrence patterns whose recurrenceType" 
+			///					field is set to "yearlyNth" or "yearly".
+			///					The default value is 1.
+			///				noEndDate - Boolean, indicates if the recurrence pattern is endless.
+			///					The default value is True. This field must be coordinated with 
+			///					other fields when setting up a recurrence pattern. 
+			///					If the patternEndDate field or the occurrences field is set, 
+			///					the pattern is considered to be finite and the "noEndDate" 
+			///					field is false. 
+			///					If neither patternEndDate nor occurrences is set, 
+			///					the pattern is considered infinite and "noEndDate" is true.
+			///				exceptions - Array, holds the list of event objects that 
+			///					define the exceptions to that series of events. 
+			///					Event objects are added to the exceptions whenever a field 
+			///					in the corresponding event object is altered.
+			///				removedOccurrences - Array, holds the list of event objects 
+			///					removed from that series of events. 
+		},
+
+
+		_testIsEventInTimeInterval: function (appt, start, end) {
+			if (!start || !end) {
+				return true;
+			}
+			if (appt.start < end && appt.end > start) {
+				return true;
+			}
+			return false;
 		},
 
 		/// <summary>
@@ -3410,7 +3494,7 @@ block comments:
 				id = id.id;
 			}
 			var o = this._appointmentsById[id], i, appts, deleteEventCallback,
-					deleteEventErrorCallback, self = this;
+					deleteEventErrorCallback, self = this, k;
 			if (!this._trigger("beforeDeleteEvent", null,
 					{ data: o })) {
 				return false;
@@ -3418,7 +3502,7 @@ block comments:
 			this.showLoadingLabel("Deleting event...");
 
 			deleteEventErrorCallback = function (e) {
-				self.status("Unable to delete event '" + o.subject + "': " + e);
+				self.status("Unable to delete event '" + (o ? o.subject : "undefined") + "': " + e);
 				self.hideLoadingLabel();
 				if (errorCallback) {
 					errorCallback(e);
@@ -3789,13 +3873,25 @@ block comments:
 					appt.start = new Date(o.selectedDates[0]);
 					appt.end = this._addMinutes(appt.start, o.timeInterval);
 				}
+			} else {
+				this._editEventDialog._arrowTarget = targetCell;
+				/*this._editEventDialog.wijpopup("show",
+				{
+				of: target,
+				my: "left center",
+				at: "right center",
+				offset: "-10 0",
+				collision: "fit"
+				});*/
+
 			}
 			this._bindApptToDialog(appt);
 			this._editEventDialog.wijpopup("show",
 				{ of: targetCell,
 					my: "left center",
 					at: "right center",
-					offset: (targetCell && e ? Math.round(e.offsetX - targetCell.width()) : 10) + " 0",
+					offset: (targetCell && e ?
+							Math.round(e.offsetX - targetCell.width()) : 10) + " 0",
 					collision: "fit"
 				});
 		},
@@ -3906,12 +4002,16 @@ block comments:
 				s = "<div class=\"wijmo-wijev-daycolumn\">";
 				isOddRow = true;
 				while (curMinute < lastMinute) {
-					cellClass = "wijmo-wijev-timeinterval ui-widget-content wijmo-wijev-minute-" + curMinute;
+					cellClass =
+						"wijmo-wijev-timeinterval ui-widget-content wijmo-wijev-minute-" +
+																			curMinute;
 					if (isOddRow) {
 						cellClass += " wijmo-wijev-oddrow";
 					}
 					isOddRow = !isOddRow;
-					timeRulerCellClass = "wijmo-wijev-timerulerinterval ui-widget-content wijmo-wijev-minute-" + curMinute;
+					timeRulerCellClass =
+						"wijmo-wijev-timerulerinterval ui-widget-content wijmo-wijev-minute-" +
+																			curMinute;
 					s += "<div class=\"" + cellClass + "\" style=\"height: " +
 										o.timeIntervalHeight + "px\"></div>";
 					curMinute += o.timeInterval;
@@ -4030,11 +4130,13 @@ block comments:
 				dayHeaderColumns = headercontainer.find(".wijmo-wijev-dayheadercolumn"),
 				dayColumns = scrollcontent.find(".wijmo-wijev-daycolumn"),
 				title = this.element.find(".wijmo-wijev-view .wijmo-wijev-header-title"),
-				headerTitleH = title.is(":visible") ? title.outerHeight(true) : 0,
+				headerTitleH,
 				viewWidth, allDayCellH, allDayApptH, allDayLabelH, maxAllDayApptCount,
 				curAllDayApptCount,
 				timeRulerOuterWidth = timeruler.outerWidth(), i,
 				dayscontainerWidth, dayscontainerHeight, columnOuterWidth;
+			this._updateHeaderTitleText(); // ensure header title visibility
+			headerTitleH = title.is(":visible") ? title.outerHeight(true) : 0;
 			this._invalidateView();
 
 			if (!this._maxAllDayEventCount) {
@@ -4141,14 +4243,12 @@ block comments:
 		},
 
 		_updateListViewDetails: function () {
-			var o = this.options;
 			if (!this._listViewDetailsInit) {
 				this._listViewDetailsInit = true;
 				this.element
 					.find(".wijmo-wijev-list-details .wijmo-wijev-agenda-container")
 																.wijsuperpanel();
 			}
-
 			this._loadAgendaList(this.element
 					.find(".wijmo-wijev-list-details  .wijmo-wijev-agenda-container"),
 					null, null, true);
@@ -4335,8 +4435,7 @@ block comments:
 				viewStart = selectedDates[0],
 				viewEnd, allDayCellChanged,
 				apptVisual, visualStartDt, visualEndDt, visualStartMin, visualEndMin,
-				visualStartPx, visualEndPx, conflictColumns = [],
-				titleFmt = o.eventTitleFormat;
+				visualStartPx, visualEndPx, conflictColumns = [];
 			viewEnd = selectedDates[selectedDates.length - 1];
 			viewEnd = new Date(viewEnd.getFullYear(), viewEnd.getMonth(),
 								viewEnd.getDate(), 23, 59, 59);
@@ -4357,26 +4456,14 @@ block comments:
 
 								if (this.isAllDayEvent(appt)) {
 									allDayCellChanged = true;
-									//<li class=""><div class="wijmo-wijev-agenda-event-color wijmo-wijev-event-color-default"><div></div>
-									//</div><div class="wijmo-wijev-agenda-event-title">asas</div>
-									//<div class="wijmo-wijev-agenda-event-time">12:00 AM to 12:00 AM</div></li>
-
-									apptVisual = $("<div class=\"wijmo-wijev-appointment" +
-										" " +
-								this._eventIdToCssClass(appt.id) + "\">" +
-"<div class=\"" +
-" wijmo-wijev-colordot wijmo-wijev-event-color-" + (appt.color || "default") +
-"\"></div>" +
-"<div class=\"wijmo-wijev-event-title\">" +
-										appt.subject +
-"</div>" +
-									"</div>");
+									apptVisual = $(this._getAllDayEventMarkup(appt));
 
 									$(dayHeaderColumns[j])
 										.find(".wijmo-wijev-allday-cell")
 										.append(apptVisual);
 
 								} else {
+
 									visualStartDt = appt.start;
 									visualEndDt = appt.end;
 									if (visualStartDt < curDayStart) {
@@ -4394,23 +4481,9 @@ block comments:
 												o.timeIntervalHeight / o.timeInterval);
 									visualEndPx = Math.round(visualEndMin *
 												o.timeIntervalHeight / o.timeInterval);
-									apptVisual =
-			$("<div class=\"wijmo-wijev-appointment wijmo-wijev-event-color-" +
-										(appt.color || "default") + " " +
-								this._eventIdToCssClass(appt.id) + "\">" +
-								"<div class=\"wijmo-wijev-content\"><div class=\"wijmo-wijev-title\">" +
-									this._formatString(titleFmt,
-											appt.start, appt.end,
-											appt.subject, appt.location,
-											""
-									/*"<strong>ICONS</strong>"*/) +
 
-								"</div></div>" +
-								"<div class=\"wijmo-wijev-resizer\">" +
-								"<div class=\"ui-icon ui-icon-grip-solid-horizontal\">" +
-								"&nbsp;</div></div>" +
 
-								"</div>");
+									apptVisual = $(this._getEventMarkup(appt));
 									apptVisual.css("top", visualStartPx);
 									apptVisual.outerHeight(visualEndPx - visualStartPx);
 									$(dayColumns[j]).append(apptVisual);
@@ -4427,11 +4500,6 @@ block comments:
 						dayColumns[j]._cached = true;
 						conflictColumns.push(dayColumns[j]);
 					} //<if(!dayColumns[j]._cached
-					else {
-
-					}
-
-
 				} //<for (j = 0 
 			}
 			this._dayColumnsToResolve = conflictColumns;
@@ -4459,6 +4527,37 @@ block comments:
 				}
 				//this._dayViewScrollToEvent = null;
 			}
+		},
+
+		_getAllDayEventMarkup: function (appt) {
+			return "<div class=\"wijmo-wijev-appointment " +
+									this._eventIdToCssClass(appt.id) + "\">" +
+					"<div class=\"" +
+	" wijmo-wijev-colordot wijmo-wijev-event-color-" + (appt.color || "default") +
+				"\"></div>" +
+			"<div class=\"wijmo-wijev-event-title\">" +
+										appt.subject +
+			"</div>" +
+				"</div>";
+		},
+
+		_getEventMarkup: function (appt) {
+			return "<div class=\"wijmo-wijev-appointment wijmo-wijev-event-color-" +
+										(appt.color || "default") + " " +
+								this._eventIdToCssClass(appt.id) + "\">" +
+								"<div class=\"wijmo-wijev-content\"><div class=\"wijmo-wijev-title\">" +
+									this._formatString(this.options.eventTitleFormat,
+											appt.start, appt.end,
+											appt.subject, appt.location,
+											""
+			/*"<strong>ICONS</strong>"*/) +
+
+								"</div></div>" +
+								"<div class=\"wijmo-wijev-resizer\">" +
+								"<div class=\"ui-icon ui-icon-grip-solid-horizontal\">" +
+								"&nbsp;</div></div>" +
+
+							"</div>";
 		},
 
 		_resolveDayViewAppointmentConflictsCb1: function () {
@@ -4574,6 +4673,7 @@ block comments:
 
 		},
 		_onAppointmentClick: function (e) {
+
 			var target = $(e.target), appt;
 			if (this._apptDragResizeFlag) {
 				return;
@@ -4583,17 +4683,7 @@ block comments:
 			}
 			if (target.length > 0) {
 				appt = this.findEventById(target[0].className);
-				this._ensureEditEventDialogCreated();
-				this._bindApptToDialog(appt);
-				this._editEventDialog._arrowTarget = target;
-				this._editEventDialog.wijpopup("show",
-									{
-										of: target,
-										my: "left center",
-										at: "right center",
-										offset: "-10 0",
-										collision: "fit"
-									});
+				this.showEditEventDialog(appt, target, e);
 			}
 		},
 		///
@@ -4613,6 +4703,19 @@ block comments:
 			return null;
 		},
 
+		// month view appointment drag/drop
+		_onMonthViewAppointmentMouseDown: function (e) {
+			var target = $(e.target),
+				appt = target.hasClass("wijmo-wijev-appointment") ?
+							target : target.parents(".wijmo-wijev-appointment");
+			e.preventDefault();
+			this.__targetAppt = appt;
+			$(document).bind("mouseup.tmp_wijevcal",
+								$.proxy(this._onMonthViewAppointmentMouseUp, this));
+			this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcellcontainer")
+								.bind("mouseover.tmp_wijevcal",
+								$.proxy(this._onMonthViewCellMouseOver, this));
+		},
 		// day view appointment drag/drop/resize/inline edit
 		_onDayViewAppointmentMouseDown: function (e) {
 			var target = $(e.target),
@@ -4638,6 +4741,9 @@ block comments:
 			this.element.find(".wijmo-wijev-dayview .wijmo-wijev-daycolumn")
 								.bind("mouseover.tmp_wijevcal",
 								$.proxy(this._onDayViewColumnMouseOver, this));
+			this.element.find(".wijmo-wijev-dayview .wijmo-wijev-allday-cell")
+								.bind("mouseover.tmp_wijevcal",
+								$.proxy(this._onDayViewAllDayMouseOver, this));
 		},
 
 		_onDayViewAppointmentMouseMove: function (e) {
@@ -4687,11 +4793,17 @@ block comments:
 			$(document).unbind(".tmp_wijevcal");
 			this.element.find(".wijmo-wijev-dayview .wijmo-wijev-daycolumn")
 												.unbind(".tmp_wijevcal");
+
+			this.element.find(".wijmo-wijev-dayview .wijmo-wijev-allday-cell")
+												.unbind(".tmp_wijevcal");
+
+
 			this._resolveDayViewAppointmentConflicts(
 								this.__targetAppt.parents(".wijmo-wijev-daycolumn"));
-			if (this._apptDragResizeFlag) {
+			if (this._apptDragResizeFlag || this._apptMovedFlag) {
 				var o = this.findEventById(this.__targetAppt[0].className);
 				this._onApptVisualDargOrResize(this.__targetAppt, o);
+				this._apptMovedFlag = false;
 				this.updateEvent(o);
 				window.setTimeout($.proxy(function () {
 					if (this.__targetAppt &&
@@ -4763,10 +4875,14 @@ block comments:
 				visualStartPx = visual[0].offsetTop,
 				visualEndPx = visualStartPx + visual[0].offsetHeight,
 				visualStartMin, visualEndMin, visualStartDt, visualEndDt,
-				curDayStart;
-
+				curDayStart, parentCol;
+			if (visual.parents(".wijmo-wijev-dayheadercolumn").length > 0) {
+				parentCol = visual.parents(".wijmo-wijev-dayheadercolumn")[0];
+			} else {
+				parentCol = visual.parents(".wijmo-wijev-daycolumn")[0];
+			}
 			curDayStart = this._parseDateFromClass(
-									visual.parents(".wijmo-wijev-daycolumn")[0].className,
+									parentCol.className,
 									null);
 			visualStartMin = Math.round(visualStartPx * o.timeInterval /
 														o.timeIntervalHeight);
@@ -4775,6 +4891,7 @@ block comments:
 			visualStartDt = new Date(visualStartMin * 60 * 1000 + curDayStart.getTime());
 			visualEndDt = new Date(visualEndMin * 60 * 1000 + curDayStart.getTime());
 			if (appt) {
+				appt.allday = visual.parents(".wijmo-wijev-dayheadercolumn").length > 0;
 				appt.start = visualStartDt;
 				appt.end = visualEndDt;
 				visual.find(".wijmo-wijev-title").html(this._formatString(o.eventTitleFormat,
@@ -4789,11 +4906,91 @@ block comments:
 		_onDayViewColumnMouseOver: function (e) {
 			var targetCol = $(e.target).parents(".wijmo-wijev-daycolumn"),
 				sourceCol = this.__targetAppt.parents(".wijmo-wijev-daycolumn");
-			if (targetCol.length > 0 && sourceCol.length > 0 &&
-					targetCol[0].className !== sourceCol[0].className) {
+			if (targetCol.length < 1) {
+				return;
+			}
+			if (sourceCol.length < 1) {
+				sourceCol = this.__targetAppt.parents(".wijmo-wijev-dayheadercolumn");
+				if (sourceCol.length < 1) {
+					return;
+				} else {
+
+					// move from all day event cell to time interval.
+					this.__targetAppt.html(
+this._getEventMarkup(this.findEventById(this.__targetAppt[0].className), true)
+);
+				}
+			}
+			if (targetCol[0].className !== sourceCol[0].className) {
 				this.__targetAppt[0].parentNode.removeChild(this.__targetAppt[0]);
 				this._resolveDayViewAppointmentConflicts(sourceCol);
 				this.__targetAppt.appendTo(targetCol);
+				this._apptMovedFlag = true;
+			}
+		},
+
+		_onMonthViewCellMouseOver: function (e) {
+			var target = $(e.target),
+				targetCell = target.hasClass("wijmo-wijev-monthcellcontainer") ?
+						target : target.parents(".wijmo-wijev-monthcellcontainer"),
+				sourceCell = this.__targetAppt.parents(".wijmo-wijev-monthcellcontainer");
+
+			if (targetCell.length < 1 || sourceCell.length < 1) {
+				return;
+			}
+			if (targetCell[0].className !== sourceCell[0].className) {
+				this.__targetAppt[0].parentNode.removeChild(this.__targetAppt[0]);
+				this.__targetAppt.appendTo(targetCell.find(".wijmo-wijev-monthcell"));
+			}
+		},
+
+		_onMonthViewAppointmentMouseUp: function () {
+			var appt, parentCell =
+					this.__targetAppt.parents(".wijmo-wijev-monthcellcontainer")[0],
+				curDayStart = this._parseDateFromClass(
+									parentCell.className,
+									null), daysDiff;
+
+			$(document).unbind(".tmp_wijevcal");
+			this.element.find(".wijmo-wijev-monthview .wijmo-wijev-monthcellcontainer")
+								.unbind(".tmp_wijevcal");
+
+			appt = this.findEventById(this.__targetAppt[0].className);
+			daysDiff = (curDayStart.getTime() -
+						_toDayDate(appt.start).getTime()) / (1000 * 60 * 60 * 24);
+			appt.start = this._addDays(appt.start, daysDiff);
+			appt.end = this._addDays(appt.end, daysDiff);
+			this.updateEvent(appt);
+		},
+
+		_onDayViewAllDayMouseOver: function (e) {
+			var targetCol = $(e.target).parents(".wijmo-wijev-dayheadercolumn"),
+				sourceCol = this.__targetAppt.parents(".wijmo-wijev-daycolumn"),
+				newVisual;
+			if (targetCol.length < 1) {
+				return;
+			}
+			if (sourceCol.length > 0) {
+				// update appointment element
+				// move from time interval to all day cell
+
+				newVisual = $(this._getAllDayEventMarkup(this.findEventById(this.__targetAppt[0].className)));
+				this.__targetAppt.replaceWith(newVisual);
+				this.__targetAppt = newVisual;
+
+
+			} else {
+				// move from all day cell to another all day cell
+				sourceCol = this.__targetAppt.parents(".wijmo-wijev-dayheadercolumn");
+			}
+			if (sourceCol.length < 1) {
+				return;
+			}
+			if (targetCol[0].className !== sourceCol[0].className) {
+				this.__targetAppt[0].parentNode.removeChild(this.__targetAppt[0]);
+				this._resolveDayViewAppointmentConflicts(sourceCol);
+				this.__targetAppt.appendTo($(targetCol).find(".wijmo-wijev-allday-cell"));
+				this._apptMovedFlag = true;
 			}
 		},
 
@@ -4981,10 +5178,7 @@ block comments:
 				daysCount,
 				monthcellcontainers = this.element
 											.find(".wijmo-wijev-monthcellcontainer"),
-				monthcellcontainer,
-				curDayStart, curDayEnd, o = this.options,
-				apptVisual,
-				titleFmt = o.eventTitleFormat;
+				monthcellcontainer, curDayStart, curDayEnd, apptVisual;
 			if (appts) {
 				for (j = 0, daysCount = monthcellcontainers.length;
 															j < daysCount; j += 1) {
@@ -5003,12 +5197,6 @@ block comments:
 "\"></div>" +
 "<div class=\"wijmo-wijev-event-title\">" +
 appt.subject +
-							/*_formatString(titleFmt,
-							appt.start, appt.end,
-							appt.subject, appt.location,
-							""
-							)*/
-							/*"<strong>ICONS</strong>"*/
 "</div>" +
 "</div>");
 
@@ -5019,6 +5207,31 @@ appt.subject +
 					} //<for (i = 0
 				} //<for (j = 0
 			}
+
+			// display "show more..." if needed:
+			monthcellcontainers.find(".wijmo-wijev-monthcell").each($.proxy(function (i, el) {
+				var monthcell = $(el), apps = monthcell.find(".wijmo-wijev-appointment"),
+					monthcellH = monthcell.outerHeight(),
+					appH = apps.outerHeight(),
+					appsH = apps.length * appH, hiddenCount = 0;
+
+				if (appsH > monthcellH) {
+					apps.each(function (j, a) {
+						if ((j * appH + appH) > monthcellH) {
+							a.style.display = "none";
+							hiddenCount += 1;
+						}
+					});
+					if (hiddenCount > 0) {
+						if (monthcell.find(".wijmo-wijev-monthcell-showmore").length < 1) {
+							monthcell.append(
+								$("<div class=\"wijmo-wijev-monthcell-showmore\">" +
+								hiddenCount + " more...</div>"));
+						}
+					}
+				}
+
+			}, this));
 
 		},
 
@@ -5255,7 +5468,7 @@ appt.subject +
 			}
 			if (typeof fmt === "function") {
 				funcArgs = [];
-				for (i = 1; i < args.length; i++) {
+				for (i = 1; i < args.length; i += 1) {
 					funcArgs[i - 1] = args[i];
 				}
 				return fmt.apply(this, funcArgs);
@@ -5273,7 +5486,7 @@ appt.subject +
 		},
 
 		_formatWeekTitle: function (start, end) {
-			if (start.getMonth() != end.getMonth()) {
+			if (start.getMonth() !== end.getMonth()) {
 				return this._formatString("{0:MMMM} - {1:MMMM yyyy}", start, end);
 			} else {
 				return this._formatString("{0:MMMM yyyy}", start);

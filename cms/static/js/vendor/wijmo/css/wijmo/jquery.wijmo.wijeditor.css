@@ -48,7 +48,7 @@
 {
     /*height:3em;*/
     clear: both;
-    display: block;
+    *display: inline-block;
     padding: 3px 0;
 }
 
@@ -66,6 +66,7 @@
     padding: 0.2em;
     height: 1.2em;
     display: inline-block;
+    float: left;
 }
 
 .wijmo-wijeditor .wijmo-wijeditor-footer .wijmo-wijeditor-pathselector .wijmo-wijeditor-label
@@ -564,14 +565,14 @@
 
 .wijmo-wijeditor .wijmo-wijeditor-colorcanvas .wijmo-wijeditor-wheel
 {
-    background: transparent url(images/wijeditor/wijmo-ui-editor.png) no-repeat 0 -218px;
+    background: transparent url(../images/wijeditor/wijmo-ui-editor.png) no-repeat 0 -218px;
     width: 195px;
     height: 195px;
 }
 
 .wijmo-wijeditor .wijmo-wijeditor-colorcanvas .wijmo-wijeditor-overlay
 {
-    background: transparent url(images/wijeditor/wijmo-ui-editor.png) no-repeat 0 -67px;
+    background: transparent url(../images/wijeditor/wijmo-ui-editor.png) no-repeat 0 -67px;
 }
 
 .wijmo-wijeditor .wijmo-wijeditor-colorcanvas .wijmo-wijeditor-marker
@@ -580,7 +581,7 @@
     height: 17px;
     margin: -8px 0 0 -8px;
     overflow: hidden;
-    background: transparent url(images/wijeditor/wijmo-ui-editor.png) no-repeat 0 0;
+    background: transparent url(../images/wijeditor/wijmo-ui-editor.png) no-repeat 0 0;
 }
 /* ---------------- end of color dialog css ------------------- */
 

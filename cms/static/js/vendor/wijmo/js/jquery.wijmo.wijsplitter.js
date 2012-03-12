@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -685,6 +685,7 @@
 					//element.addClass(vSplitterCssPrefix + expandedCss);
 					expander.addClass(vSplitterCssPrefix + expandedCss);
 					pnl1.css("display", "");
+					pnl2.css("display", o.panel2.collapsed ? "none" : "");
 				}
 
 				pnl1.height(height).width(distance);
@@ -717,6 +718,7 @@
 					//element.addClass(hSplitterCssPrefix + expandedCss);
 					expander.addClass(hSplitterCssPrefix + expandedCss);
 					pnl1.css("display", "");
+					pnl2.css("display", o.panel2.collapsed ? "none" : "");
 				}
 
 				pnl2Content.outerHeight(height - distance - barH, true);

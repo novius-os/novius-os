@@ -9,8 +9,8 @@
 
 define([
         'jquery',
-		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.0.min',
-		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.0.min'
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.3.min',
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.3.min'
 	], function($) {
         var undefined = void(0);
 
@@ -55,8 +55,7 @@ define([
                             locales : config.locales,
                             views : config.views,
                             name  : config.configuration_id,
-                            selectedView : config.selectedView,
-                            selectedLang : config.selectedLang
+                            selectedView : config.selectedView
                         });
                         if (onCustom) {
                             $.extend(true, mp3Grid.mp3grid, {

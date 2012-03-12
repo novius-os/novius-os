@@ -1,6 +1,6 @@
 /*globals jQuery, alert, document, window, setTimeout, $, Components, netscape */
 /*
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -2825,7 +2825,7 @@
 			self.initPreviewDialog);
 				break;
 			case cmd_cleanup:
-				self._createDialog("Clearnup source HTML document",
+				self._createDialog("Clean up source HTML document",
 			self._getDialogRes_CleanUp(),
 			self.initCleanUpDialog);
 				break;
@@ -2936,7 +2936,7 @@
 			var self = this,
 				$dlg = self.dialog;
 
-			$dlg.html("").undelegate(self.widgetName)
+			$dlg.html("").undelegate(self.widgetName).undelegate("." + self.widgetName)
 				.append(content);
 			if (!$dlg.data("wijdialog")) {
 				$dlg.wijdialog({
@@ -3696,30 +3696,6 @@
 				$("." + css_tpl_desinfo, $dlg).html(template.desc);
 				$("." + css_tpl_desfield, $dlg).val(template.desc);
 			}
-		},
-		
-		refresh: function () {
-			///<summary>
-			///Adjust the editor layout.
-			/// Code Example:$("#wijeditor").wijeditor("refresh");
-			///</summary>
-			var self = this,
-			element = self.element,
-			header = self._getHeader(),
-			footer = self._getFooter(),
-			width = element.width(),
-			height = element.height(),
-			content = self._getContent(),
-			contentHeight;		
-			
-			self.editor.width(width).height(height);
-			
-			$ribbon.wijribbon("updateRibbonSize");
-			contentHeight = self.editor.height() -
-			header.outerHeight(true) - footer.outerHeight(true);
-			
-			content.height(contentHeight)
-			.wijsplitter("refresh");
 		},
 		
 		_onSaveTemplate: function (arg) {
@@ -6667,7 +6643,55 @@
 
 		_isUrl: function (str) {
 			return new RegExp('[a-zA-z]+://[^s]+').test(str);
+		},
+		
+		//public method
+		refresh: function () {
+			///<summary>
+			///Adjust the editor layout.
+			/// Code Example:$("#wijeditor").wijeditor("refresh");
+			///</summary>
+			var self = this,
+			element = self.element,
+			header = self._getHeader(),
+			footer = self._getFooter(),
+			width = element.width(),
+			height = element.height(),
+			content = self._getContent(),
+			contentHeight;		
+			
+			self.editor.width(width).height(height);
+			
+			$ribbon.wijribbon("updateRibbonSize");
+			contentHeight = self.editor.height() -
+			header.outerHeight(true) - footer.outerHeight(true);
+			
+			content.height(contentHeight)
+			.wijsplitter("refresh");
+		},
+		
+		getText: function () {
+			///<summary>
+			/// Get text of editor.
+			/// Code Example:$("#wijeditor").wijeditor("getText");
+			///</summary>
+			var self = this;
+			
+			return self._getDesignViewText();
+		},
+		
+		setText: function (text) {
+			///<summary>
+			/// Set the text of editor.
+			/// Code Example:$("#wijeditor").wijeditor("setText", "text");
+			///</summary>
+			var self = this;
+			
+			if (text) {
+				self._setDesignViewText(text);
+			}
 		}
+		//end of public method
 	});
 } (jQuery));
 

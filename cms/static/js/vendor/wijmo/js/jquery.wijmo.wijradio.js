@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -57,17 +57,22 @@
 					targetLabel.attr("labelsign", "wij");
 					//targetLabel.attr("tabindex", 0);
 				}
+
+				if (ele.is(":disabled")) {
+					self._setOption("disabled", true);
+				}
+
 				boxElement = $("<div class='" + self._radiobuttonPre +
-				"-box ui-widget ui-state-default ui-corner-all'><span class='" +
+				"-box ui-widget " + 
+				(self.options.disabled ? "ui-state-disabled" : "ui-state-default") + 
+				" ui-corner-all'><span class='" +
 				self._radiobuttonPre + "-icon'></span></div>");
 				iconElement = boxElement.children("." + self._radiobuttonPre + "-icon");
 				radiobuttonElement.append(boxElement);
 				iconElement.addClass("ui-icon ui-icon-radio-on");
 				ele.data("iconElement", iconElement);
 				ele.data("boxElement", boxElement);
-				if (ele.is(":disabled")) {
-					self._setOption("disabled", true);
-				}
+				
 
 				boxElement.removeClass(self._radiobuttonPre + "-relative")
 				.attr("role", "radio")

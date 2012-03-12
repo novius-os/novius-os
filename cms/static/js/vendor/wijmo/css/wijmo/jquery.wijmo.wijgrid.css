@@ -8,7 +8,7 @@
 
 .wijmo-wijgrid-loading
 {
-    background: transparent url('images/waiting.gif') left top no-repeat;
+    background: transparent url('../images/waiting.gif') left top no-repeat;
     min-height: 16px;
     min-width: 16px;
 }
@@ -290,7 +290,7 @@
     border-right: 0px none;
 }
 
-/* 
+/*
  *    Scrolling
  */
 
@@ -319,7 +319,7 @@
 {
     background-color: #626262;
 }
-/*        
+/*
         .ui-wijgrid-split-area
         {
             left: 0px;
@@ -342,7 +342,7 @@
         .ui-wijgrid-splits-enabled .ui-wijgrid-split-area-nw, .ui-wijgrid-splits-enabled .ui-wijgrid-split-area-sw
         {
             overflow-y: hidden;
-        }       
+        }
 */
 
 .wijmo-wijgrid-filterlist

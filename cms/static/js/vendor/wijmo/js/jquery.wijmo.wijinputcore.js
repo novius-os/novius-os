@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -219,7 +219,7 @@
                         self._addState('active', $(this));
                         self._trigger('triggerMouseDown');
                     },
-                    'mouseup': function (e) {
+                    'click': function (e) {
                         if (!isLeftButton(e)) { return; }
                         self._stopEvent(e);
                         self._stopSpin();
@@ -286,6 +286,7 @@
                 this.disable();
             }
 
+			this.element.data('initialized', true);
             this._trigger('initialized');
         },
 
@@ -427,11 +428,13 @@
         },
 
         _raiseTextChanged: function () {
-            var txt = this.element.val();
-            if (this.element.data('preText') !== txt) {
+            var txt = this.element.val(), preText = this.element.data('preText');
+            if (!!this.element.data('initialized') && preText !== txt ) {
                 this._trigger('textChanged', null, { text: txt });
-                this.element.data('preText', txt);
+				this.element.data('changed', true);
             }
+			
+			this.element.data('preText', txt);
         },
 
         _raiseDataChanged: function () {
@@ -714,14 +717,12 @@
                     return;
                 }
             }
-
-            if (key === $.ui.keyCode.ENTER && !this.options.hideEnter) {
-                return true;
-            }
-
+			
             if (this._keyPressPreview(e)) {
                 return;
             }
+
+            if (key === $.ui.keyCode.ENTER && !this.options.hideEnter) { return true; }
 
             var selRange = this.element.wijtextselection();
             var ch = String.fromCharCode(key);
@@ -742,8 +743,9 @@
             }
         },
 
-        _isNullText: function () {
-            return this.options.showNullText && this.element.val() === this.options.nullText;
+        _isNullText: function (val) {
+			val = val || this.element.val();
+            return this.options.showNullText && val === this.options.nullText;
         },
 
         _doFocus: function () {
@@ -802,8 +804,20 @@
                 self._onChange();
                 self._updateText();
                 self._validateData();
+
+				if (!self._popupVisible() && !!self.element.data('changed')){
+					self._trigger('change');
+				}
+				
+				self.element.data('changed', false);
             }, 100);
+			
+			
         },
+		
+		_popupVisible: function(){
+			return this._isComboListVisible();
+		},
 
         _onMouseUp: function (e) {
             if (!this._isInitialized()) { return; }

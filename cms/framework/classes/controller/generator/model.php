@@ -31,7 +31,7 @@ class Controller_Generator_Model extends Controller_Generic_Admin {
 		\Asset::add_path('static/cms/');
 		\Asset::add_path('static/cms/js/vendor/wijmo/');
 		\Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-		\Asset::css('jquery.wijmo-complete.all.2.0.0.min.css', array(), 'css');
+		\Asset::css('jquery.wijmo-complete.all.2.0.3.min.css', array(), 'css');
 		\Asset::css('base.css', array(), 'css');
 
         return parent::after($response);

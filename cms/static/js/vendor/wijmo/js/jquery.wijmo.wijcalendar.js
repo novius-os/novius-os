@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -426,6 +426,11 @@
 		},
 
 		_create: function () {
+			// Add for parse date options for jUICE. D.H
+			if ($.isFunction(window["wijmoASPNetParseOptions"])) {
+				wijmoASPNetParseOptions(this.options);
+			}
+
 			this.element.addClass("wijmo-wijcalendar ui-datepicker-inline ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all").attr('role', 'grid');
 			this._previewWrapper(this.options.allowPreview);
 			this.element.data('preview.wijcalendar', false);
@@ -671,8 +676,8 @@
 		_getSelectedDates: function () {
 			return this._getDates('selectedDates');
 		},
-		
-		_onDayDragStart: function(e){
+
+		_onDayDragStart: function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 			return false;
@@ -760,7 +765,7 @@
 					maxDate = start;
 					minDate = end;
 				}
-				
+
 				var selDates = [];
 				while (true) {
 					if (minDate > maxDate) {
@@ -773,14 +778,14 @@
 				if (!bymouse) {
 					this.element.removeData("lastdate.wijcalendar");
 				}
-				
+
 				this._trigger('selectedDatesChanged', null, { dates: selDates });
 			}
 			else {
 				this.selectDate(start);
 				this._trigger('selectedDatesChanged', null, { dates: [start] });
 			}
-			
+
 			return true;
 		},
 
@@ -1482,7 +1487,7 @@
 
 		_bindEvents: function () {
 			if (!this.element.data('preview.wijcalendar') && !this.options.disabled) {
-				this.element.find('div .wijmo-wijcalendar-navbutton').unbind().bind('mouseout.wijcalendar' , function () {
+				this.element.find('div .wijmo-wijcalendar-navbutton').unbind().bind('mouseout.wijcalendar', function () {
 					var el = $(this);
 					el.removeClass('ui-state-hover');
 					if (el.hasClass('ui-datepicker-next-hover')) {
@@ -1640,7 +1645,7 @@
 			var date = this.getDisplayDate(), mv;
 			if (this._isSingleMonth()) {
 				mv = this._getMonthView(date);
-				mv.showPreview = this.options.allowPreview && !this.element.data('preview.wijcalendar') && !this.options.disabled;
+				mv.showPreview = this.options.allowPreview && !this.element.data('preview.wijcalendar');
 				return mv.getHtml();
 			}
 
@@ -2599,7 +2604,7 @@
 						case "month":
 							if (date.getMonth() === index) {
 								selected = true;
-				            }
+							}
 							v = index;
 							cellText = ms.namesAbbr[index];
 							outofRange = ((startMonth + index) < (o.minDate.getFullYear() * 12 + o.minDate.getMonth())) || ((startMonth + index) > (o.maxDate.getFullYear() * 12 + o.maxDate.getMonth()));

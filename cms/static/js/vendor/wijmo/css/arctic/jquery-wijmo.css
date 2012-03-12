@@ -2339,3 +2339,12 @@ div.wijmo-wijribbon .ui-icon, .wijmo-wijribbon-abbrevicon, div.wijmo-wijribbon-s
 {
     width: 21em;
 }
+
+.wijmo-wijeditor .wijmo-wijribbon-review .ui-button
+{
+    width: 71px;
+}
+.wijmo-wijribbon-font .wijmo-wijribbon-list .ui-button
+{
+    width: 30px;
+}

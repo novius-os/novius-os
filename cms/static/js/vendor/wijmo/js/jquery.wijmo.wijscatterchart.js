@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window, navigator*/
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -530,6 +530,7 @@
 					}
 					eles = [];
 				});
+				fields.chartElements = [];
 			}
 
 			self.canvas.clear();
@@ -554,7 +555,7 @@
 				hint: o.hint,
 				//plotInfo: plotInfo,
 				isXTime: self.axisInfo.x.isTime,
-				isYTime: self.axisInfo.y.isTime,
+				isYTime: self.axisInfo.y[0].isTime,
 				zoomOnHover: o.zoomOnHover,
 				mouseDown: $.proxy(self._mouseDown, self),
 				mouseUp: $.proxy(self._mouseUp, self),
@@ -810,6 +811,7 @@
 					dotData.markerType = type;
 					dotData.label = series.label;
 					dotData.series = series;
+					dotData.data = series.data;
 					dotData.type = "scatter";
 					$(dot.element).data("wijchartDataObj", dotData);
 					scatter.push(dot);

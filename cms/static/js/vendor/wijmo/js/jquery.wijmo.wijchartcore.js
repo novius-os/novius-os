@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window, Globalize*/
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -983,7 +983,7 @@
 				}
 				// container = self.path();
 				if (lastPoint) {
-					if (o.calloutSide || o.calloutFilled) {
+					if (o.showCallout && (o.calloutSide || o.calloutFilled)) {
 						arrPath = _getCalloutArr(lastPoint, offsetLength);
 
 						callout = self.path(arrPath.concat(" "));
@@ -1046,7 +1046,7 @@
 						callout.animate(anim);
 					}
 				} else {
-					if (o.calloutSide || o.calloutFilled) {
+					if (o.showCallout && (o.calloutSide || o.calloutFilled)) {
 						arrPath = _getCalloutArr(newPoint, offsetLength);
 						callout = self.path(arrPath.concat(" "));
 						if (o.relatedElement) {
@@ -3390,7 +3390,8 @@
 					if (eles.length) {
 						$.each(eles, function (i, ele) {
 							if (ele[0] !== null) {
-								ele.stop().wijRemove();
+								if (ele.removed && ele.removed === false)
+								//ele.stop().wijRemove();
 								ele = null;
 							}
 						});
@@ -4833,7 +4834,7 @@
 				} else {
 					// r.x = axisRect.x - sizeFactor * thickness;
 					if (!inAxisRect) {
-						if (tick === "corss") {
+						if (tick === "cross") {
 							r.width <<= 1;
 						}
 						// r.width += axisRect.width;
@@ -5000,6 +5001,9 @@
 				formatString = axisOptions.annoFormatString,
 				textStyle = null,
 				axisElements = [];
+			
+			tickRectMajor = self._getTickRect(axisInfo, axisOptions, true, false);
+			tickRectMinor = self._getTickRect(axisInfo, axisOptions, false, false);
 
 			if (!formatString || formatString.length === 0) {
 				formatString = axisInfo.annoFormatString;

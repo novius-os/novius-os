@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window, Globalize*/
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -410,20 +410,29 @@
 			switch (align) {
 			case "near":
 				offsetX = width - bounds.width / 2;
-				offsetY += bounds.height / 2;
-				top += bounds.height;
+				//offsetY += bounds.height / 2;
+				//top += bounds.height;
 				break;
 			case "center":
 				offsetX += width / 2;
-				offsetY += bounds.height / 2;
-				top += bounds.height;
+				//offsetY += bounds.height / 2;
+				//top += bounds.height;
 				break;
 			case "far":
 				offsetX += bounds.width / 2;
-				offsetY += bounds.height / 2;
-				top += bounds.height;
+				//offsetY += bounds.height / 2;
+				//top += bounds.height;
 				break;
 			}
+			//add comments to fix tfs issue 19384
+			if (rotation) {
+				offsetY += bounds.height / 2 / Math.abs(Math.sin(rotation));
+				top += bounds.height / Math.abs(Math.sin(rotation));
+			} else {
+				offsetY += bounds.height / 2;
+				top += bounds.height;
+			}
+			//end comments
 			bounds.x += offsetX;
 			bounds.y += offsetY;
 			if (rotation) {
@@ -444,9 +453,6 @@
 				$.each(texts, function (idx, txt) {
 					txt.attr({y: txt.attr("y") - bounds.height / 2});
 					textBounds[idx].y -= bounds.height / 2;
-					//self.circle(txt.attr("x"), txt.attr("y") ,1).attr({
-					//	stroke: "red"
-					//});
 				});
 				center = {
 					x: bounds.x + bounds.width / 2,
@@ -664,6 +670,10 @@
 	};
 
 	Raphael.el.wijGetBBox = function () {
+		//Add comments to fix tfs issue 19384
+		//getBBox issue is fixed in raphael2, so return getBBox() directly.
+		return this.getBBox();
+		/*
 		var self = this,
 			box = self.getBBox();
 		if (Raphael.vml && self.type === 'text') {
@@ -672,6 +682,8 @@
 			box.height = self.shape.scrollHeight;
 		}
 		return box;
+		*/
+		//end comments
 		/*
 		var self = this,
 			box = self.getBBox(),

@@ -1,7 +1,7 @@
 /*globals jQuery, Globalize*/
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -491,7 +491,7 @@
 				is100Percent: o.is100Percent,
 				clusterRadius: o.clusterRadius,
 				animation: o.animation,
-				isYTime: self.axisInfo.y.isTime,
+				isYTime: self.axisInfo.y[0].isTime,
 				isXTime: self.axisInfo.x.isTime,
 				mouseDown: $.proxy(self._mouseDown, self),
 				mouseUp: $.proxy(self._mouseUp, self),
@@ -1158,12 +1158,15 @@
 						barInfo = paintBar(rp, points.y, height, xAxisInfo, axisInfoY,
 									seriesStyle, animated, shadowOffset, startLocation,
 									clusterOverlap, sIdx > 0 ? ps[sIdx - 1].y : null,
-									ps[ps.length - 1].y, isYTime, 
+									ps[ps.length - 1].y, isYTime,
 									series.textStyle, axisY);
 
 						bar = barInfo.bar;
 						tracker = bar.clone()
-						.attr({ opacity: 0.01, fill: "white", "fill-opacity": 0.01 });
+						// In IE, if the tracker has an stroke width, 
+						// the bar will show an black border.
+						.attr({ opacity: 0.01, fill: "white", "stroke-width": 0, 
+						"fill-opacity": 0.01 });
 						addClass($(bar.node), "wijchart-canvas-object wijbarchart");
 						$(bar.node).data("wijchartDataObj", $.extend(true, {
 							index: pIdx,
@@ -1405,7 +1408,7 @@
 							target = target.data("owner");
 						}
 						dataObj = target.data("wijchartDataObj");
-						bar = dataObj.bar;						
+						bar = dataObj.bar;
 
 						if (!dataObj.hoverStyle) {
 							if (bar) {
@@ -1433,7 +1436,7 @@
 							target = target.data("owner");
 						}
 						dataObj = target.data("wijchartDataObj");
-						bar = dataObj.bar;					
+						bar = dataObj.bar;
 
 						if (!dataObj.hoverStyle) {
 							if (bar) {
@@ -1468,7 +1471,7 @@
 			function unbindLiveEvents() {
 				$(".wijbarchart", element[0]).die(widgetName)
 				// for jQuery 1.7.1
-				.die("."+ widgetName);
+				.die("." + widgetName);
 			}
 
 			//			function clearChartElement() {

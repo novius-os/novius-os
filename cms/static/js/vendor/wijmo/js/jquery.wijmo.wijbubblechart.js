@@ -1,7 +1,7 @@
 /*globals jQuery Raphael Globalize*/
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -561,8 +561,8 @@
 			//startLocation = { x: canvasBounds.startX, y: canvasBounds.startY },
 			//width = canvasBounds.endX - startLocation.x,
 			//height = canvasBounds.endY - startLocation.y,
-				xaxis = o.axis.x, //todo need add chartarea
-				yaxis = o.axis.y;
+				xaxis = self.axisInfo.x, //todo need add chartarea
+				yaxis = self.axisInfo.y[0];
 
 			if (nSeries === 0) {
 				return;
@@ -1477,7 +1477,7 @@
 						dataObj = target.data("wijchartDataObj");
 						mouseUp.call(element, e, dataObj);
 					},
-					mouseenter: function (e) {
+					mouseover: function (e) {
 						if (disabled) {
 							return;
 						}
@@ -1489,7 +1489,7 @@
 						dataObj = target.data("wijchartDataObj");
 						mouseOver.call(element, e, dataObj);
 					},
-					mouseleave: function (e) {
+					mouseout: function (e) {
 						if (disabled) {
 							return;
 						}
@@ -1553,9 +1553,9 @@
 					}
 				};
 
-				$.each(["click", "mouseenter", "mouseleave", "mousemove",
+				$.each(["click", "mouseover", "mouseout", "mousemove",
 				"mousedown", "mouseup"], function (i, n) {
-					$(".wijbubblechart-bubble", element)
+					$(".bubbletracker", element)
 					.bind(n + ".wijbubblechart", proxyObj[n]);
 				});
 			}

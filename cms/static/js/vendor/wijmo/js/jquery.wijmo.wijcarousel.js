@@ -1,7 +1,7 @@
 /*globals jQuery window */
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -676,9 +676,7 @@
 				self.list = el;
 				self.container = el.parent();
 			}
-			else {
-				return;
-			}
+			else { return; }
 
 			self.itemBound = self._getItemBound();
 
@@ -770,7 +768,7 @@
 			});
 		},
 
-		_generateMarkup: function (item) {
+		_generateMarkup: function (item) {//item is js object
 			var li, a;
 			if (!$.isPlainObject(item)) {
 				return;
@@ -988,9 +986,7 @@
 						.append($("<img>")
 						.attr("src", thumbOpt.images[idx]));
 				}
-				else {
-					return;
-				}
+				else { return; }
 			}
 			ul.append(item);
 		},

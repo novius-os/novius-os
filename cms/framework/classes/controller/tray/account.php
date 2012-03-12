@@ -21,7 +21,7 @@ class Controller_Tray_Account extends \Controller {
         \Asset::add_path('static/cms/js/vendor/wijmo/');
         \Asset::add_path('static/cms/js/jquery/jquery-ui-noviusos/');
         \Asset::css('aristo/jquery-wijmo.css', array(), 'css');
-        \Asset::css('jquery.wijmo-complete.all.2.0.0.min.css', array(), 'css');
+        \Asset::css('jquery.wijmo-complete.all.2.0.3.min.css', array(), 'css');
 
 
 		$user = \Session::get('logged_user');

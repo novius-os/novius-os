@@ -147,7 +147,7 @@
 /*     box-shadow: 0 0 50px rgba(0,0,0,0.50);
     -moz-box-shadow: 0 0 50px rgba(0,0,0,0.50);
     -webkit-box-shadow: 0 0 50px rgba(0,0,0,0.50);
-*/   
+*/
 }
 
 .wijmo-wijgallery .wijmo-wijgallery-content
@@ -247,7 +247,7 @@
     border: none;
     display: block;
     position: absolute;
-    background: transparent url('images/waiting.gif') no-repeat scroll;
+    background: transparent url('../images/waiting.gif') no-repeat scroll;
 }
 
 .wijmo-wijgallery .wijmo-wijcarousel-item
@@ -299,7 +299,7 @@
 }
 .wijmo-wijgallery .wijmo-wijgallery-current
 {
- 
+
 }
 .wijmo-wijgallery .wijmo-wijgallery-content .wijmo-wijgallery-small-image {
 /*    border-width: 5px;

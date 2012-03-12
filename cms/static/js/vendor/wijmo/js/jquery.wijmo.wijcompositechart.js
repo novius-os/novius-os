@@ -1,7 +1,7 @@
 /*globals jQuery, Globalize*/
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -663,6 +663,7 @@
 			case "column":
 				return chartElements.bars[index];
 			case "line":
+			case "area":
 				return chartElements.paths[index];
 			case "linemarkers":
 				return chartElements.markersSet[index];
@@ -742,6 +743,7 @@
 			case "line":
 			case "spline":
 			case "bezier":
+			case "area":
 				if (eles.markers) {
 					$.each(eles.markers, function (i, marker) {
 						dataObj = $(marker.node).data("wijchartDataObj");
@@ -828,6 +830,7 @@
 			case "line":
 			case "spline":
 			case "bezier":
+			case "area":
 				if (eles.markers) {
 					$.each(eles.markers, function (i, marker) {
 						marker.hide();
@@ -1064,18 +1067,18 @@
 				case "pie":
 					$.each(chart, function (idx, pie) {
 						var center = pie.center,
-					r = pie.radius || 50,
-					pieBounds = center ? {
-						startX: center.x - r,
-						startY: center.y - r,
-						endX: center.x + r,
-						endY: center.y + r
-					} : {
-						startX: bounds.startX + 10,
-						startY: bounds.startY + 10,
-						endX: bounds.startX + 10 + 2 * r,
-						endY: bounds.startY + 10 + 2 * r
-					};
+						r = pie.radius || 50,
+						pieBounds = center ? {
+							startX: center.x - r,
+							startY: center.y - r,
+							endX: center.x + r,
+							endY: center.y + r
+						} : {
+							startX: bounds.startX + 10,
+							startY: bounds.startY + 10,
+							endX: bounds.startX + 10 + 2 * r,
+							endY: bounds.startY + 10 + 2 * r
+						};
 
 						tmpOptions = $.extend(true, {}, options, {
 							bounds: pieBounds,
@@ -1083,8 +1086,11 @@
 						}, pie);
 
 						self.chartElement.wijpie(tmpOptions);
+						self.chartElement.data("fields").aniSectorAttrs = null;
+						self.chartElement.data("fields").aniLabelAttrs = null;
+						self._savechartData(type);
 					});
-					self._savechartData(type);
+					
 					break;
 				case "bar":
 				case "column":
@@ -1097,7 +1103,7 @@
 						clusterSpacing: o.clusterSpacing,
 						is100Percent: o.is100Percent,
 						clusterRadius: o.clusterRadius,
-						isYTime: self.axisInfo.y.isTime,
+						isYTime: self.axisInfo.y[0].isTime,
 						isXTime: self.axisInfo.x.isTime,
 						yAxisInfo: self.axisInfo.y,
 						yAxisIndex: yAxisIndex
@@ -1110,6 +1116,7 @@
 				case "line":
 				case "spline":
 				case "bezier":
+				case "area":
 					chartgroup = self._getyAxisGroup(chart);
 					if (!self.aniPathsAttr) {
 						self.aniPathsAttr = [];
@@ -1118,9 +1125,10 @@
 						tmpOptions = $.extend(true, {}, options, {
 							axis: o.axis,
 							isXTime: self.axisInfo.x.isTime,
-							isYTime: self.axisInfo.y.isTime,
+							isYTime: self.axisInfo.y[0].isTime,
 							aniPathsAttr: self.aniPathsAttr,
-							chartLabelEles: self.chartLabelEles
+							chartLabelEles: self.chartLabelEles,
+							type: type === "area"? "area": "line"
 						}, subchart);
 						tmpOptions.axis.y = o.axis.y[ykey] || o.axis.y;
 						self.chartElement.wijline(tmpOptions);
@@ -1134,7 +1142,7 @@
 						tmpOptions = $.extend(true, {}, options, {
 							axis: o.axis,
 							isXTime: self.axisInfo.x.isTime,
-							isYTime: self.axisInfo.y.isTime,
+							isYTime: self.axisInfo.y[0].isTime,
 							zoomOnHover: o.zoomOnHover
 						}, subchart);
 						tmpOptions.axis.y = o.axis.y[ykey] || o.axis.y;

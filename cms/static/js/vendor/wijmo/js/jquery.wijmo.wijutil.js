@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -307,6 +307,38 @@ __wijReadOptionEvents = function (eventsArr, widgetInstance) {
 	}
 };
 
+function wijmoASPNetParseOptionsReviewer(o, k) {
+    var a, v = o[k], d;
+    if (v) {
+        switch (typeof v) {
+            case "string":
+                a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?):(\d{3})Z$/.exec(v);
+                if (a) {
+                    d = new Date(+a[1], +a[2] - 1, +a[3], +a[4],
+					+a[5], +a[6], +a[7]);
+                    d.setFullYear(+a[1]);
+                    o[k] = d;
+                }
+                break;
+            case "object":
+                for (k in v) {
+                    wijmoASPNetParseOptionsReviewer(v, k);
+                }
+                break;
+        }
+    }
+}
+
+function wijmoASPNetParseOptions(o) {
+    var k;
+    if (!o) {
+        return o;
+    }
+    for (k in o) {
+        wijmoASPNetParseOptionsReviewer(o, k);
+    }
+    return o;
+}
 
 
 
