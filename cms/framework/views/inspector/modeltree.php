@@ -23,6 +23,13 @@ require([
 						},
 						widgetReload : function() {
 							inspector.nostreegrid('reload');
+						},
+						langChange : function() {
+							if (inspectorData.langChange) {
+								inspector.nostreegrid('option', 'treeOptions', {
+									lang : parent.data('nosLang') || ''
+								});
+							}
 						}
 					}),
                 inspectorData = parent.data('inspector'),
@@ -34,6 +41,9 @@ require([
                 })
                 .nostreegrid({
 		            treeUrl : inspectorData.treeGrid.treeUrl,
+		            treeOptions : {
+			            lang : parent.data('nosLang') || ''
+		            },
                     columnsAutogenerationMode : 'none',
                     scrollMode : 'auto',
                     allowColSizing : true,

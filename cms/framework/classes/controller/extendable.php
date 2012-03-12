@@ -132,7 +132,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 		    }
 	    }
 
-        $translatable  = $model::behaviors('Cms\Orm_Translatable');
+        $translatable  = $model::behaviors('Cms\Orm_Behaviour_Translatable');
         if ($translatable) {
             if (empty($config['lang'])) {
                 // No inspector, we only search items in their primary language
@@ -335,6 +335,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 		$id = \Input::get('id');
 		$model = \Input::get('model');
 		$deep = intval(\Input::get('deep', 1));
+		$lang = \Input::get('lang');
 
         if (empty($tree_config['id'])) {
             $tree_config['id'] = \Config::getBDDName(join('::', $this->getLocation()));
@@ -348,6 +349,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 				'countProcess' => true,
 				'model' => $model,
 				'id' => $id,
+				'lang' => $lang,
 			));
 
 			$json = array(
@@ -360,6 +362,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 				'model' => $model,
 				'id' => $id,
 				'deep' => $deep,
+				'lang' => $lang,
 			));
 
 			$json = array(
@@ -377,6 +380,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 			'model' => null,
 			'id' => null,
 			'deep' => 1,
+			'lang' => null,
 		), $params);
 
 		$childs = array();
@@ -398,6 +402,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 			$controler = $this;
 
 			$config = array_merge($tree_model, array(
+				'lang' => $params['lang'],
 				'callback' => array(function($query) use ($child, $tree_model) {
 					foreach($child['where'] as $where) {
 						$query->where($where);
@@ -414,6 +419,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 								'model' => $child['model'],
 								'id' => $object->{$pk},
 								'deep' => $params['deep'] - 1,
+								'lang' => $params['lang'],
 							));
 							return count($items) ? $items : 0;
 						} else {
@@ -421,6 +427,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 								'countProcess' => true,
 								'model' => $child['model'],
 								'id' => $object->{$pk},
+								'lang' => $params['lang'],
 							));
 						}
 					},

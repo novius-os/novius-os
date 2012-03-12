@@ -229,27 +229,6 @@ define([
                         label : mp3Grid.i18n('Publish date'),
                         url : 'admin/cms_blog/inspector/date/list',
                         inputName : 'blog_created_at'
-                    },
-                    language : {
-                        widget_id : 'cms_blog_language',
-                        vertical : true,
-                        label : mp3Grid.i18n('Language'),
-                        url : 'admin/cms_blog/inspector/lang/list',
-                        grid : {
-                            columns : {
-                                title : {
-                                    headerText  : mp3Grid.i18n('Language'),
-                                    dataKey : 'title'
-                                },
-                                hide : {
-                                    visible : false
-                                }
-                            }
-                        },
-                        languages : {
-                            fr : mp3Grid.i18n('Français'),
-                            en : mp3Grid.i18n('Anglais')
-                        }
                     }
                 }
             }

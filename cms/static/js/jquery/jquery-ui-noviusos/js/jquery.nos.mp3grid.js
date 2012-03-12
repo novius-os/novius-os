@@ -52,6 +52,7 @@ define([
             },
             views: {},
             selectedView: null,
+            selectedLang : null,
             fromView: null,
             name: null,
             grid: {}
@@ -213,7 +214,7 @@ define([
                     e.preventDefault();
                     e.stopImmediatePropagation();
                     if ($.isFunction(first.action)) {
-                        first.action.apply();
+                        first.action();
                     } else {
                         $.nos.tabs.add({
                             iframe : true,
@@ -236,8 +237,8 @@ define([
                         } else {
                             $.nos.tabs.add({
                                 iframe : true,
-                                url : this.url,
-                                label : this.label
+                                url : add.url,
+                                label : add.label
                             });
                         }
                     });
@@ -278,6 +279,19 @@ define([
             });
 
             self.uiLangsDropDown.wijdropdown();
+
+            self.uiLangsDropDown.change(function() {
+                var select = $(this);
+
+                o.selectedLang = select.val();
+
+                $.nos.saveUserConfiguration(o.name + '.selectedLang', o.selectedLang);
+
+                self.gridReload();
+                self.element.find('.nos-mp3grid-inspector')
+                    .data('nosLang', o.selectedLang)
+                    .trigger('langChange');
+            });
 
             return self;
         },
@@ -518,10 +532,6 @@ define([
                         self._uiCustomViewDialogRefreshColumns($(this).parent());
                     }
 				});
-
-
-
-
 			}
 
 			return $contentSettings;
@@ -539,7 +549,7 @@ define([
 
 		_uiCustomViewDialogAddLayoutTab : function($el) {
 			var self = this,
-		o = self.options;
+		        o = self.options;
 
 			var $layout = $('<form id="layout_settings"></form>');
 
@@ -616,11 +626,11 @@ define([
 		},
 
 		_uiCustomViewDialogRefreshLayout : function($layout) {
-			var $leftPanel = $layout.find('.left-panel');
-			var $topPanel = $layout.find('.top-panel');
-			var $invisiblePanel = $layout.find('.invisible-panel');
+			var $leftPanel = $layout.find('.left-panel'),
+			    $topPanel = $layout.find('.top-panel'),
+			    $invisiblePanel = $layout.find('.invisible-panel'),
+                $leftLis = $leftPanel.find('li').not('.moving');
 
-			var $leftLis = $leftPanel.find('li').not('.moving');
 			$leftLis.css({
 				height: ($leftPanel.height() - $leftLis.length) / $leftLis.length,
 				width: ''
@@ -707,8 +717,6 @@ define([
 
             var custom = self._saveUserConfiguration();
 
-
-
             self.element.trigger('reloadView', {selectedView: 'custom', custom: custom});
 		},
 
@@ -721,12 +729,13 @@ define([
 
         _saveUserConfiguration: function() {
             var self = this,
-		        o = self.options;
-            var custom = {'mp3grid': {}};
+		        o = self.options,
+                custom = {
+                    from:  o.selectedView != 'custom' ? o.selectedView : o.fromView,
+                    mp3grid: self._getInspectorsConfiguration(o)
+                };
 
-            custom['mp3grid']               = self._getInspectorsConfiguration(o);
-            custom['mp3grid']['grid']       = self._getGridConfiguration(o.grid);
-            custom['from']                  = o.selectedView != 'custom' ? o.selectedView : o.fromView;
+            custom.mp3grid.grid = self._getGridConfiguration(o.grid);
 
             $.nos.saveUserConfiguration(o.name, {selectedView: 'custom', custom: custom});
             return custom;
@@ -865,6 +874,7 @@ define([
 
 			self.uiInspectorsVertical.find('> li')
 				.add(self.uiInspectorsHorizontal.find('> li'))
+                .data('nosLang', o.selectedLang)
 				.each(function() {
 					self._loadInspector($(this));
 				});
@@ -1138,6 +1148,7 @@ define([
 							if (self.gridRendered) {
 								self.uiGrid.nosgrid("currentCell", -1, -1);
 							}
+                            dataSource.proxy.options.data.lang = o.selectedLang || '';
 							dataSource.proxy.options.data.inspectors = self._jsonInspectors();
 							dataSource.proxy.options.data.offset = r.pageIndex * r.pageSize;
 							dataSource.proxy.options.data.limit = r.pageSize;
@@ -1235,6 +1246,9 @@ define([
                     width : '100%'
                 }).nostreegrid($.extend(true, { // True for recursive clone
                     treeUrl : o.treeGrid.proxyUrl,
+                    treeOptions : {
+                        lang : o.selectedLang || ''
+                    },
                     columnsAutogenerationMode : 'none',
                     selectionMode: 'singleRow',
                     allowSorting: true,
@@ -1311,8 +1325,7 @@ define([
 				o = self.options,
 				position = self.uiThumbnail.offset(),
                 positionContainer = self.element.offset(),
-				height = self.element.height() - position.top + positionContainer.top,
-				heights = $.nos.grid.getHeights();
+				height = self.element.height() - position.top + positionContainer.top;
 
 			self.uiThumbnail.css('height', height)
 				.thumbnails($.extend({
@@ -1321,6 +1334,7 @@ define([
 					loading: function (dataSource, userData) {
 						var r = userData.data.paging;
 						self.pageIndex = r.pageIndex;
+                        dataSource.proxy.options.data.lang = o.selectedLang || '';
 						dataSource.proxy.options.data.inspectors = self._jsonInspectors();
 						dataSource.proxy.options.data.offset = r.pageIndex * r.pageSize;
 						dataSource.proxy.options.data.limit = r.pageSize;
