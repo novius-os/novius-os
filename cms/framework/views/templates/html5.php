@@ -43,7 +43,7 @@
 		deps: [
 			'jquery-ui',
 			'jquery-nos',
-			'static/cms/js/log'
+			'static/cms/js/vendor/log'
 		]
 	};
 </script>
