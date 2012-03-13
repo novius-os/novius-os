@@ -55,7 +55,8 @@ define([
                             locales : config.locales,
                             views : config.views,
                             name  : config.configuration_id,
-                            selectedView : config.selectedView
+                            selectedView : config.selectedView,
+                            selectedLang : config.selectedLang
                         });
                         if (onCustom) {
                             $.extend(true, mp3Grid.mp3grid, {
