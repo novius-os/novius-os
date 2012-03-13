@@ -31,9 +31,9 @@
 			numlist : ['numlist_desc', 'InsertOrderedList'],
 			outdent : ['outdent_desc', 'Outdent'],
 			indent : ['indent_desc', 'Indent'],
-			cut : ['cut_desc', 'Cut'],
-			copy : ['copy_desc', 'Copy'],
-			paste : ['paste_desc', 'Paste'],
+            cut : ['cut_desc', 'nosCut'],
+            copy : ['copy_desc', 'nosCopy'],
+            paste : ['paste_desc', 'nosPaste'],
 			undo : ['undo_desc', 'Undo'],
 			redo : ['redo_desc', 'Redo'],
 			link : ['link_desc', 'mceLink'],
@@ -55,7 +55,7 @@
 			anchor : ['anchor_desc', 'mceInsertAnchor'],
 			newdocument : ['newdocument_desc', 'mceNewDocument'],
 			blockquote : ['blockquote_desc', 'mceBlockQuote'],
-            module : ['module_desc', 'nosModule']
+            enhancer : ['enhancer_desc', 'nosEnhancer']
 		},
 
 		stateControls : ['bold', 'italic', 'underline', 'strikethrough', 'bullist', 'numlist', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'sub', 'sup', 'blockquote'],
@@ -67,19 +67,18 @@
 			t.url = url;
 			t.onResolveName = new tinymce.util.Dispatcher(this);
 
-			ed.forcedHighContrastMode = ed.settings.detect_highcontrast && t._isHighContrast();
-			ed.settings.skin = ed.forcedHighContrastMode ? 'highcontrast' : ed.settings.skin;
-
 			// Default settings
 			t.settings = s = extend({
 				theme_nos_path : true,
 				theme_nos_toolbar_location : 'external',
 		        theme_nos_toolbar_align : "left",
 		        theme_nos_statusbar_location : "bottom",
-				theme_nos_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
-				theme_nos_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,insertfile,media,image,cleanup,code,|,forecolor,backcolor",
-				theme_nos_buttons3 : "tablecontrols,|,removeformat,visualaid,|,sub,sup,|,charmap,advhr,|,module",
-				theme_nos_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template",
+
+                theme_nos_buttons1 : "image,file,linkcontrols,enhancer,pdw_toggle",
+                theme_nos_buttons2 : "styleselect,|,bold,italic,|,justifyleft,justifycenter,justifyright,justifyfull,|,forecolor,backcolor,|,bullist,numlist,|,cut,copy,pastecontrols,|,undo,redo,|,spellchecker,visualhtmlcontrols",
+                theme_nos_buttons3 : "tablecontrols,|,styleprops,removeformat,cleanup,code,|,underline,strikethrough,sub,sup,|,anchor,charmap,advhr,|,search,replace,|,outdent,indent,blockquote,visualchars,nonbreaking",
+
+
 				theme_nos_blockformats : "p,address,pre,h1,h2,h3,h4,h5,h6",
 				theme_nos_fonts : "Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats",
 				theme_nos_more_colors : 1,
@@ -89,7 +88,7 @@
 				theme_nos_font_sizes : "1,2,3,4,5,6,7",
 				theme_nos_font_selector : "span",
 				theme_nos_show_current_color: 0,
-				theme_nos_modules : [],
+				theme_nos_enhancers : [],
 				readonly : ed.settings.readonly
 			}, ed.settings);
 
@@ -145,16 +144,23 @@
 
 			var self = this;
 
+            // Register buttons
+            ed.addButton('image', {
+                title : 'nos.image_title',
+                label : 'nos.image_label',
+                cmd : 'nosImage'
+            });
+
 			function makeItNice(ed) {
 
 				var $body = $(ed.getBody());
-				// Rebuilds the module, as if we just inserted them (adds the action links like delete)
-				$body.find('.nosModule, .nosModuleInline').each(function() {
-					var module = $(this);
-					module.html('Loading...');
+				// Rebuilds the enhancer, as if we just inserted them (adds the action links like delete)
+				$body.find('.nosEnhancer, .nosEnhancerInline').each(function() {
+					var enhancer = $(this);
+                    enhancer.html('Loading...');
 
-					var module_id = $(this).data('module');
-					var metadata  = self.settings.theme_nos_modules[module_id];
+					var enhancer_id = $(this).data('enhancer');
+					var metadata  = self.settings.theme_nos_enhancers[enhancer_id];
 					var data      = $(this).data('config');
 					$.ajax({
 						url: metadata.previewUrl,
@@ -162,11 +168,11 @@
 						dataType: 'json',
 						data: data,
 						success: function(json) {
-							module.html(json.preview);
-							self.onModuleAdd(module, metadata);
+                            enhancer.html(json.preview);
+							self.onEnhancerAdd(enhancer, metadata);
 						},
 						error: function() {
-							module.html('Error when loading the preview of the module');
+                            enhancer.html('Error when loading the preview of the application');
 						}
 					});
 				});
@@ -177,12 +183,12 @@
 				//makeItNice(ed);
 			});
 
-			// When editing HTML content, we clean up module preview, we'll make them nice again after
+			// When editing HTML content, we clean up enhancer preview, we'll make them nice again after
 			ed.onGetContent.add(function(ed, o) {
 				var content = $(o.content);
-				// Empty module previews (data and useful informations are stored as html attributes on the higest div)
-				content.filter('.nosModule, .nosModuleInline').empty();
-				content.find('.nosModule, .nosModuleInline').empty();
+				// Empty enhancer previews (data and useful informations are stored as html attributes on the higest div)
+				content.filter('.nosEnhancer, .nosEnhancerInline').empty();
+				content.find('.nosEnhancer, .nosEnhancerInline').empty();
 				o.content = $('<div></div>').append(content).html();
 			});
 
@@ -215,7 +221,7 @@
 					if ($img.attr('width') && $img.attr('height')) {
 						src += '/' + $img.attr('width') + '/' + $img.attr('height');
 					}
-					return $('<img></img>').attr({
+					return $('<img />').attr({
 						src:    src,
 						title:  $img.attr('title'),
 						alt:    $img.attr('alt'),
@@ -225,21 +231,21 @@
 				o.content = $('<div></div>').append(content).html();
 			});
 
-			// Global onClick handlers to execute actions from the modules
+			// Global onClick handlers to execute actions from the enhancers
 			// We need that to play nicefully with undo/redo
 			ed.onClick.add(function(ed, e) {
 				var target = $(e.target);
 				var action = target.data('action');
 
-				// Modules are non-editable, so we can't add new paragraphs by pressing "Enter"
-				// This allow insertion before or after the display:block module
+				// Enhancers are non-editable, so we can't add new paragraphs by pressing "Enter"
+				// This allow insertion before or after the display:block enhancer
 
                 var p = null;
 
-				// Add a new paragraph before a display:block module
+				// Add a new paragraph before a display:block enhancer
 				if (action == 'addParagraphBefore') {
 					p = $('<p>New paragraph</p>');
-					target.closest('.nosModule, .nosModuleInline').before(p);
+					target.closest('.nosEnhancer, .nosEnhancerInline').before(p);
 					// All 3 commands are needed to select the node and focus the editor
 					ed.selection.select(p.get(0), true);
 					ed.focus(false);
@@ -249,10 +255,10 @@
 					e.preventDefault();
 				}
 
-				// Add a new paragraph after a display:block module
+				// Add a new paragraph after a display:block enhancer
 				if (action == 'addParagraphAfter') {
 					p = $('<p>New paragraph</p>');
-					target.closest('.nosModule, .nosModuleInline').after(p);
+					target.closest('.nosEnhancer, .nosEnhancerInline').after(p);
 					// All 3 commands are needed to select the node and focus the editor
 					ed.selection.select(p.get(0), true);
 					ed.focus(false);
@@ -262,15 +268,15 @@
 					e.preventDefault();
 				}
 
-				if (action == 'editModule') {
-                    var module   = target.closest('.nosModule, .nosModuleInline');
-                    var metadata = self.settings.theme_nos_modules[$(module).data('module')];
-					self._nosModule(null, metadata, module);
+				if (action == 'editEnhancer') {
+                    var enhancer   = target.closest('.nosEnhancer, .nosEnhancerInline');
+                    var metadata = self.settings.theme_nos_enhancers[$(enhancer).data('enhancer')];
+					self._nosEnhancer(null, metadata, enhancer);
 					e.preventDefault();
 				}
 
-				if (action == 'removeModule') {
-					target.closest('.nosModule, .nosModuleInline').remove();
+				if (action == 'removeEnhancer') {
+					target.closest('.nosEnhancer, .nosEnhancerInline').remove();
 					// Tell undoManager to add a checkpoint
 					ed.execCommand("mceEndUndoLevel");
 					e.preventDefault();
@@ -302,15 +308,6 @@
 				DOM.loadCSS(url + "/skins/" + ed.settings.skin + "/ui_" + s.skin_variant + ".css");
 		},
 
-		_isHighContrast : function() {
-			var actualColor, div = DOM.add(DOM.getRoot(), 'div', {'style': 'background-color: rgb(171,239,86);'});
-
-			actualColor = (DOM.getStyle(div, 'background-color', true) + '').toLowerCase().replace(/ /g, '');
-			DOM.remove(div);
-
-			return actualColor != 'rgb(171,239,86)' && actualColor != '#abef56';
-		},
-
 		createControl : function(n, cf) {
 			var cd, c;
 
@@ -318,6 +315,21 @@
 				return c;
 
 			switch (n) {
+                case "enhancer":
+                    return this._createEnhancer();
+
+                case "linkcontrols" :
+                    return this._createLink();
+
+                case "file" :
+                    return this._createFileButton();
+
+                case "pastecontrols":
+                    return this._createPaste();
+
+                case "visualhtmlcontrols" :
+                    return this._createVisualHtml();
+
 				case "styleselect":
 					return this._createStyleSelect();
 
@@ -335,28 +347,41 @@
 
 				case "backcolor":
 					return this._createBackColorMenu();
-
-                case "module":
-                    return this._createModule();
-
-                case "moduleaction":
-                    return this._createModuleAction();
 			}
 
 			if ((cd = this.controls[n]))
 				return cf.createButton(n, {title : "nos." + cd[0], cmd : cd[1], ui : cd[2], value : cd[3]});
 		},
 
-		execCommand : function(cmd, ui, val) {
-			var f = this['_' + cmd];
 
-			if (f) {
-				f.call(this, ui, val);
-				return true;
-			}
+        execCommand : function(cmd, ui, val) {
+            var f = this['_' + cmd], ed = this.editor;
 
-			return false;
-		},
+            switch (cmd) {
+                case 'nosCut':
+                case 'nosCopy':
+                case 'nosPaste':
+                    ed.windowManager.alert(ed.getLang('nos.clipboard_msg'));
+                    try {
+                        ed.getDoc().execCommand(cmd.replace('nos', ''), ui, val);
+                    } catch (ex) {
+                        if (isGecko) {
+                            ed.windowManager.alert(ed.getLang('nos.clipboard_msg'));
+                        } else {
+                            ed.windowManager.alert(ed.getLang('clipboard_no_support'));
+                        }
+                    }
+
+                    return true;
+                    break;
+                default :
+                    if (f) {
+                        f.call(this, ui, val);
+                        return true;
+                    }
+            }
+            return false;
+        },
 
 		_importClasses : function(e) {
 			var ed = this.editor, ctrl = ed.controlManager.get('styleselect');
@@ -375,6 +400,162 @@
 				});
 			}
 		},
+
+        _createLink : function() {
+            var c, t = this, s = t.settings, o = {}, v;
+
+            c = t.editor.controlManager.createSplitButton('link', {
+                title : 'nos.link_title',
+                label : 'nos.link_label',
+                onclick: function(){
+                    t.editor.execCommand('mceLink', true, '');
+                },
+                'class' : 'mce_link'
+            }, tinymce.ui.NosSplitButton);
+
+            c.onRenderMenu.add(function(c, m) {
+                m.add({
+                    title : 'nos.link_title',
+                    'class' : 'mceMenuItemTitle'
+                }).setDisabled(1);
+
+                m.add({
+                    title : 'nos.link_title',
+                    icon : 'link',
+                    onclick: function(){
+                        t.editor.execCommand('mceLink', true, '');
+                    },
+                    id : 'link'
+                });
+
+                m.add({
+                    title : 'nos.unlink_desc',
+                    icon : 'unlink',
+                    onclick: function(){
+                        t.editor.execCommand('unlink', false, '');
+                    }
+                });
+
+                m.onShowMenu.add(function(x, y, px) {
+                    var ed = t.editor, n = ed.selection.getNode(), p, file, ancre, minibaselink;
+
+                    p = DOM.getParent(n, 'A');
+                    minibaselink = !!p && t._isMiniBaseLink(DOM.getAttrib(n, 'href'));
+                    file = !!p && t._isFile(DOM.getAttrib(n, 'href'));
+                    ancre = !!p && p.name && !DOM.getAttrib(n, 'href');
+                    m.items['link'].setDisabled(file || ancre || minibaselink);
+                });
+            });
+            return c;
+        },
+
+        _createFileButton : function() {
+            var c, t = this, s = t.settings, o = {}, v;
+
+            c = t.editor.controlManager.createButton('file', {
+                title : 'nos.file_title',
+                label : 'nos.file_label',
+                'class' : 'mce_file'
+            });
+
+            return c;
+        },
+
+        _createPaste : function() {
+            var c, t = this, s = t.settings, o = {}, v;
+
+            c = t.editor.controlManager.createSplitButton('paste', {
+                title : 'nos.paste_desc',
+                cmd : 'nosPaste',
+                'class' : 'mcePasteBouton'
+            });
+
+            c.onRenderMenu.add(function(c, m) {
+                m.add({
+                    title : 'nos.paste_desc',
+                    'class' : 'mceMenuItemTitle'
+                }).setDisabled(1);
+
+                m.add({
+                    title : 'nos.paste_desc',
+                    icon : 'paste',
+                    cmd : 'nosPaste'
+                });
+
+                m.addSeparator();
+
+                m.add({
+                    title : 'paste.paste_text_desc',
+                    icon : 'pastetext',
+                    onclick : function() {
+                        t.editor.execCommand('mcePasteText', true, '');
+                    }
+                });
+
+                m.add({
+                    title : 'paste.paste_word_desc',
+                    icon : 'pasteword',
+                    onclick : function() {
+                        t.editor.execCommand('mcePasteWord', true, '');
+                    }
+                });
+
+                m.add({
+                    title : 'nos.paste_html_desc',
+                    icon : 'pastehtml',
+                    onclick : function() {
+                        t.editor.execCommand('nosPasteHtml', true, '');
+                    }
+                });
+            });
+            return c;
+        },
+
+        _createEnhancer : function() {
+            var c, t = this, s = t.settings, o = {}, v;
+            if (!s.theme_nos_enhancers) {
+                return false;
+            }
+
+            c = t.editor.controlManager.createMenuButton('enhancer', {
+                title : 'nos.enhancer_desc',
+                label : 'nos.enhancer_desc',
+                cmd : 'nosEnhancer'
+            });
+
+            c.onRenderMenu.add(function(c, m) {
+                m.settings.max_height = 300;
+                m.add({
+                    title : 'nos.enhancer_desc',
+                    'class' : 'mceMenuItemTitle'
+                }).setDisabled(1);
+
+                each(s.theme_nos_enhancers, function(f) {
+                    m.add({
+                        title : f.title,
+                        icon : f.id,
+                        id : 'enhancer_' + f.id,
+                        onclick : function() {
+                            t.editor.execCommand('nosEnhancer', false, f);
+                        }
+                    });
+                });
+            });
+
+            return c;
+        },
+
+        _createVisualHtml : function() {
+            var c, t = this, s = t.settings, o = {}, v;
+            c = t.editor.controlManager.createButton('visualhtml', {
+                title : 'nos.visualthml_desc',
+                icon: 'visualhtml',
+                onclick: function(){
+                    t.editor.execCommand('nosVisualHtml', false, '');
+                }
+            });
+            return c;
+        },
 
 		_createStyleSelect : function(n) {
 			var t = this, ed = t.editor, ctrlMan = ed.controlManager, ctrl;
@@ -1121,6 +1302,7 @@
 			cm.setActive('visualaid', ed.hasVisual);
 			t._updateUndoStatus(ed);
 			cm.setDisabled('outdent', !ed.queryCommandState('Outdent'));
+            cm.setDisabled('file', true);
 
 			p = getParent('A');
 			if (c = cm.get('link')) {
@@ -1490,41 +1672,37 @@
 			});
 		},
 
-        _createModule : function() {
-            var c, t = this, s = t.settings, o = {}, v;
-            if (!s.theme_nos_modules) {
-                return false;
-            }
+        _nosPasteHtml : function(ui, val) {
+            var ed = this.editor;
 
-            c = t.editor.controlManager.createMenuButton('module', {
-                title : 'nos.module_desc',
-                label : 'nos.module_desc',
-                cmd : 'nosModule'
+            ed.windowManager.open({
+                url : this.url + '/pastehtml.htm',
+                width : 600,
+                height : 420,
+                inline : true
+            }, {
+                theme_url : this.url
             });
-
-			c.onRenderMenu.add(function(c, m) {
-				m.settings.max_height = 300;
-				m.add({
-					title : 'nos.module_desc',
-                    'class' : 'mceMenuItemTitle'
-				}).setDisabled(1);
-
-                each(s.theme_nos_modules, function(f) {
-					m.add({
-						title : f.title,
-						icon : f.id,
-						id : 'module_' + f.id,
-						onclick : function() {
-							t.editor.execCommand('nosModule', false, f);
-						}
-					});
-				});
-			});
-
-			return c;
         },
 
-        _nosModule : function(ui, metadata, edit) {
+        _nosVisualHtml : function(ui, val) {
+            var ed = this.editor;
+            if
+                (
+                (ed.dom.select('body.debug') == '')
+
+                )
+            {
+                ed.dom.addClass(ed.dom.select('body'), 'debug');
+
+            }
+            else {
+                ed.dom.removeClass(ed.dom.select('body'), 'debug');
+
+            }
+        },
+
+        _nosEnhancer : function(ui, metadata, edit) {
             var ed = tinyMCE.activeEditor;
 
 			// Keep reference to the wijdialog node, so we can close the popup manually
@@ -1538,12 +1716,12 @@
 				pr.attr({
 					'id': '__mce_tmp',
 					'data-config': json.config,
-					'data-module': metadata.id
+					'data-enhancer': metadata.id
 				}).addClass('mceNonEditable');
 
                 if (edit) {
                     // @todo needs review!
-                    edit.empty().removeClass('mceNonEditable nosModule').data('config', '').data('module', '');
+                    edit.empty().removeClass('mceNonEditable nosEnhancer').data('config', '').data('enhancer', '');
 					ed.selection.select(edit.get(0), true);
 					ed.focus(false);
 					ed.execCommand('mceSelectNode', false, edit.get(0), {skip_undo : 1});
@@ -1559,7 +1737,7 @@
 				preview.attr('id', '');
 
 				// Add special links (this is also called onInit())
-				self.onModuleAdd(preview, metadata);
+				self.onEnhancerAdd(preview, metadata);
 
 				// @todo search why this doesn't work
 				// This is an uncessfull attempt to refocus the editor after the nonEditable block content has been added
@@ -1673,21 +1851,21 @@
 
 		},
 
-		onModuleAdd: function(container, metadata) {
+		onEnhancerAdd: function(container, metadata) {
 
             var ed = tinyMCE.activeEditor;
 			container = $(container);
 
 			// Don't bind click handlers here, it will mess up when using undo/redo, which only tracks the HTML content
 			// Instead, use a global click handler and detect the action using data-action="..."
-			// Ctrf + F using an action name (removeModule or addParagraphAfter) to find where this is :)
-			var deleteLink = $('<a href="#" data-action="removeModule">Delete</a>');
-			var editLink = $('<a href="#" data-action="editModule">Options</a>');
+			// Ctrf + F using an action name (removeEnhancer or addParagraphAfter) to find where this is :)
+			var deleteLink = $('<a href="#" data-action="removeEnhancer">Delete</a>');
+			var editLink = $('<a href="#" data-action="editEnhancer">Options</a>');
 			var insertAfter = $('<a href="#" data-action="addParagraphAfter">New paragraph after</a>');
 			var insertBefore = $('<a href="#" data-action="addParagraphBefore">New paragraph before</a>');
 
 			if (container.is('span')) {
-				container.addClass('nosModuleInline')
+				container.addClass('nosEnhancerInline')
 				container.append(document.createTextNode(' '));
                 if ($.isPlainObject(metadata.dialog) && metadata.dialog.contentUrl) {
                     container.append(editLink);
@@ -1696,13 +1874,13 @@
 				container.before($('<span> </span>'));
 				container.after($('<span> </span>'));
 			} else {
-				container.addClass('nosModule');
-				container.prepend(insertBefore.addClass('nos_module_action_block'));
-				container.prepend(insertAfter.addClass('nos_module_action_block'));
+				container.addClass('nosEnhancer');
+				container.prepend(insertBefore.addClass('nos_enhancer_action_block'));
+				container.prepend(insertAfter.addClass('nos_enhancer_action_block'));
                 if ($.isPlainObject(metadata.dialog) && metadata.dialog.contentUrl) {
-                    container.prepend(editLink.addClass('nos_module_action_block'));
+                    container.prepend(editLink.addClass('nos_enhancer_action_block'));
                 }
-				container.prepend(deleteLink.addClass('nos_module_action_block'));
+				container.prepend(deleteLink.addClass('nos_enhancer_action_block'));
 			}
 		},
 
@@ -1713,3 +1891,39 @@
 
 	tinymce.ThemeManager.add('nos', tinymce.themes.NosTheme);
 }(tinymce));
+
+(function(tinymce) {
+    var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each;
+
+    tinymce.create('tinymce.ui.NosSplitButton:tinymce.ui.SplitButton', {
+        NosSplitButton : function(id, s, ed) {
+            this.parent(id, s, ed);
+            this.classPrefix = 'mceSplitButton';
+            s.label = ed.translate(s.label);
+        },
+
+        renderHTML : function() {
+            var cp = this.classPrefix, s = this.settings, h, l, t = this, h1;
+
+            l = DOM.encode(s.label || '');
+            h = '<tbody><tr>';
+
+            if (s.image)
+                h1 = DOM.createHTML('img ', {src : s.image, role: 'presentation', 'class' : 'mceAction ' + s['class']}) + l;
+            else
+                h1 = DOM.createHTML('span', {'class' : 'mceAction ' + s['class']}, '');
+                h1 += (l ? '<span class="' + cp + 'Label">' + l + '</span>' : '');
+
+
+            h1 += DOM.createHTML('span', {'class': 'mceVoiceLabel mceIconOnly', id: t.id + '_voice', style: 'display:none;'}, s.title);
+            h += '<td >' + DOM.createHTML('a', {role: 'button', id : t.id + '_action', tabindex: '-1', href : 'javascript:;', 'class' : 'nosActionLabel mceAction ' + (l ? ' ' + cp + 'Labeled' : '') + ' ' + s['class'], onclick : "return false;", onmousedown : 'return false;', title : s.title}, h1) + '</td>';
+
+            h1 = DOM.createHTML('span', {'class' : 'mceOpen ' + s['class']}, '<span style="display:none;" class="mceIconOnly" aria-hidden="true">\u25BC</span>');
+            h += '<td >' + DOM.createHTML('a', {role: 'button', id : t.id + '_open', tabindex: '-1', href : 'javascript:;', 'class' : 'mceOpen ' + s['class'], onclick : "return false;", onmousedown : 'return false;', title : s.title}, h1) + '</td>';
+
+            h += '</tr></tbody>';
+            h = DOM.createHTML('table', { role: 'presentation',   'class' : 'mceSplitButton mceSplitButtonEnabled ' + s['class'], cellpadding : '0', cellspacing : '0', title : s.title}, h);
+            return DOM.createHTML('div', {id : t.id, role: 'button', tabindex: '0', 'aria-labelledby': t.id + '_voice', 'aria-haspopup': 'true'}, h);
+        }
+    });
+})(tinymce);

@@ -71,6 +71,12 @@
 .defaultSkin .mceSplitButtonActive a.mceAction {border:1px solid #0A246A; background-color:#C2CBE0}
 .defaultSkin .mceSplitButtonActive a.mceOpen {border-left:0;}
 
+/* SplitButton with label for Novius OS */
+.defaultSkin .mceSplitButton a.nosActionLabel {width:auto;}
+.defaultSkin .mceSplitButtonLabeled span.mceAction {float:left;}
+.defaultSkin span.mceSplitButtonLabel {display:block; font-size:10px; padding:4px 6px 0 22px; font-family:Tahoma,Verdana,Arial,Helvetica}
+.defaultSkin .mceSplitButtonDisabled .mceSplitButtonLabel {color:#888}
+
 /* ColorSplitButton */
 .defaultSkin div.mceColorSplitMenu table {background:#FFF; border:1px solid gray}
 .defaultSkin .mceColorSplitMenu td {padding:2px}
@@ -149,6 +155,7 @@
 .defaultSkin span.mce_code {background-position:-260px 0}
 .defaultSkin span.mce_hr {background-position:-360px 0}
 .defaultSkin span.mce_visualaid {background-position:-660px 0}
+.defaultSkin span.mce_visualhtml {background-position : -840px -20px;}
 .defaultSkin span.mce_charmap {background-position:-240px 0}
 .defaultSkin span.mce_paste {background-position:-560px 0}
 .defaultSkin span.mce_copy {background-position:-700px 0}
@@ -216,15 +223,19 @@
 
 
 
-.defaultSkin span.mce_module, .defaultSkin span.mce_moduleaction {
-    background : url(../../img/module.gif) no-repeat 1px 1px;
+.defaultSkin span.mce_enhancer {
+    background : url(../../img/enhancer.gif) no-repeat 1px 1px;
 }
-.defaultSkin .mce_module .mceButtonLabel, .defaultSkin .mce_moduleaction .mceButtonLabel {
+.defaultSkin span.mce_file {
+	background : url(../../img/file.gif) no-repeat 1px 1px;
+}
+.defaultSkin .mce_enhancer .mceButtonLabel {
     font-size : 11px;
 }
-.defaultSkin .mceMenu .mce_modulemodif {
-    background : url(../../img/module.gif) no-repeat 1px 1px;
+
+.defaultSkin .mcePasteBouton span.mceAction {
+	background : url(../../img/icons.gif) -560px 0;
 }
-.defaultSkin .mceMenu .mce_moduledel {
-    background : url(../../img/delete.gif) no-repeat 1px 1px;
+.defaultSkin span.mce_pastehtml {
+	background : url(../../img/pastehtml.gif) no-repeat 1px 1px;
 }
