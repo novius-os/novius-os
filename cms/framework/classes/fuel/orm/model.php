@@ -162,7 +162,6 @@ class Model extends \Orm\Model {
 	private static function _callBehavior($context, $method, $args) {
 		foreach (static::behaviors() as $behavior => $settings)
 		{
-			$events = isset($settings['events']) ? $settings['events'] : array();
 			if ( ! class_exists($behavior))
 			{
                 throw new \UnexpectedValueException($behavior);
@@ -175,10 +174,9 @@ class Model extends \Orm\Model {
 		throw new \Cms\Orm\UnknownBehaviorException();
 	}
 
-	private static function _callAllBehaviors($context, $method, $args) {
+	public static function _callAllBehaviors($context, $method, $args) {
 		foreach (static::behaviors() as $behavior => $settings)
 		{
-			$events = isset($settings['events']) ? $settings['events'] : array();
 			if ( ! class_exists($behavior))
 			{
                 throw new \UnexpectedValueException($behavior);
@@ -193,6 +191,24 @@ class Model extends \Orm\Model {
 	public static function add_properties($properties) {
 		static::$_properties = Arr::merge(static::$_properties, $properties);
 	}
+
+    public function import_dataset_behaviours(&$dataset) {
+		try {
+            static::_callAllBehaviors(get_called_class(), 'dataset', array(&$dataset, $this));
+        } catch (\Exception $e) {}
+    }
+
+    public function form_processing_behaviours($data, &$json_response) {
+		try {
+            static::_callAllBehaviors($this, 'form_processing', array($data, &$json_response));
+        } catch (\Exception $e) {}
+    }
+
+    public function form_fieldset_fields(&$fieldset) {
+		try {
+            static::_callAllBehaviors($this, 'form_fieldset_fields', array(&$fieldset));
+        } catch (\Exception $e) {}
+    }
 
 	/**
 	 * Alias to Model:find('all')

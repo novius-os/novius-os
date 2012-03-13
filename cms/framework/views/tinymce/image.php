@@ -17,7 +17,7 @@
 				</tr>
 				<tr>
 					<th><label><?= __('Description:') ?> </label></th>
-					<td><input type="text" name="alt" data-id="alt" size="30" /> &nbsp; <label><input type="checkbox" data-id="same_title_alt" checked> &nbsp;<?= __('Same as title') ?></label></td>
+					<td><input type="text" name="alt" data-id="alt" size="30" /> &nbsp; <label><input type="checkbox" data-id="same_title_alt" checked> &nbsp;<?= strtr(__('Use {field}'), array('{field}' => __('title'))) ?></label></td>
 				</tr>
 				<tr>
 					<th><label><?= __('Width:') ?> </label></th>

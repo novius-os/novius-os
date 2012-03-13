@@ -22,7 +22,17 @@ return array(
 				'dataset' => array(
 					'id' => 'page_id',
 					'title' => 'page_title',
-					'url' => 'page_virtual_url',
+					'url' => function($page) {
+                        return $page->get_href();
+                    },
+                    'visualise' => function($page) {
+                        return $page->get_href(array('absolute' => true));
+                    },
+                    'actions' => array(
+                        'delete' => function($page) {
+                            return $page->page_lock != $page::LOCK_DELETION;
+                        }
+                    ),
 				),
 			),
 		),
@@ -47,7 +57,7 @@ return array(
     ),
     'i18n' => array(
         'Pages' => __('Pages'),
-        'Add a Page' => __('Add a Page'),
+        'Add a Page' => __('Add a page'),
         'Add a root' => __('Add a root'),
         'Title' => __('Title'),
         'Roots' => __('Roots'),
@@ -75,7 +85,17 @@ return array(
 	'dataset' => array(
 		'id' => 'page_id',
 		'title' => 'page_title',
-        'url' => 'page_virtual_url',
+        'url' => function($page) {
+            return $page->get_href();
+        },
+        'visualise' => function($page) {
+            return $page->get_href(array('absolute' => true));
+        },
+        'actions' => array(
+            'delete' => function($page) {
+                return $page->page_lock != Model_Page_Page::LOCK_DELETION;
+            }
+        ),
 	),
 	'inputs' => array(
 		'root_id' => function($value, $query) {

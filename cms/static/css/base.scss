@@ -166,3 +166,19 @@ span.optional {
     font-style : italic;
     opacity    : 0.7;
 }
+
+img.publication_status {
+    vertical-align: middle;
+}
+
+.publishable {
+    .ui-button-text {
+        padding : 0;
+        width : 20px;
+        height : 20px;
+
+        img {
+            vertical-align : middle;
+        }
+    }
+}

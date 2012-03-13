@@ -19,11 +19,32 @@ define([
             actions : {
                 edit : {
                     label : mp3Grid.i18n('Edit'),
+                    name : 'edit',
+                    primary : true,
+                    icon : 'pencil',
                     action : function(item) {
                         $.nos.tabs.add({
                             url : 'admin/admin/page/form/edit/' + item.id,
                             label : item.title
                         });
+                    }
+                },
+                'delete' : {
+                    label : mp3Grid.i18n('Delete'),
+                    name : 'delete',
+                    primary : true,
+                    icon : 'trash',
+                    action : function(item) {
+                        $.nos.notify('Not implemented (yet)');
+                    }
+                },
+                'visualise' : {
+                    label : mp3Grid.i18n('Visualise'),
+                    name : 'visualise',
+                    primary : true,
+                    iconClasses : 'nos-icon16 nos-icon16-eye',
+                    action : function(item) {
+                        window.open(item.visualise);
                     }
                 }
             },
@@ -48,10 +69,15 @@ define([
                         },
                         url : {
                             headerText : mp3Grid.i18n('Virtual url'),
+                            visible : false,
+                            dataKey : 'url'
+                        },
+                        published : {
+                            headerText : mp3Grid.i18n('Status'),
                             dataKey : 'url'
                         },
                         actions : {
-                            actions : ['edit']
+                            actions : ['edit', 'delete', 'visualise']
                         }
                     }
                 },

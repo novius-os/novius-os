@@ -362,8 +362,17 @@ define([
                         var uiAction = $('<th></th>')
                             .addClass("ui-state-default")
                             .attr('title', action.label)
-                            .html( iconClass ? '<span class="' + iconClass +'"></span>' : '&nbsp;' + action.label + '&nbsp;')
+                            .html( iconClass ? '<span class="' + iconClass +'"></span>' : '&nbsp;' + action.label + '&nbsp;');
+
+                        // Check whether action name is disabled
+                        if (action.name && noParseData.actions && noParseData.actions[action.name] == false) {
+                            uiAction.addClass('ui-state-disabled')
                             .click(function(e) {
+                                e.stopImmediatePropagation();
+                                e.preventDefault();
+                            });
+                        } else {
+                            uiAction.click(function(e) {
                                 e.stopImmediatePropagation();
                                 e.preventDefault();
                                 action.action.apply(this, [noParseData, uiAction]);
@@ -376,6 +385,8 @@ define([
                                     $(this).removeClass("ui-state-hover");
                                 }
                             );
+                        }
+
                         if (iconClass) {
                             uiAction.css({
                                 width : 20,
@@ -432,6 +443,7 @@ define([
 									.find('a')
 									.html(text);
 
+                                // Check whether action name is disabled
                                 if (action.name && noParseData.actions && noParseData.actions[action.name] == false) {
                                     li.addClass('ui-state-disabled')
                                     .click(function(e) {
@@ -894,7 +906,10 @@ define([
 						});
 						$("select", context).wijdropdown();
 						$(":input[type=checkbox]", context).wijcheckbox();
-						$('.expander', context).wijexpander({expanded: true});
+						$('.expander', context).each(function() {
+                            var $this = $(this);
+                            $this.wijexpander($.extend({expanded: true}, $this.data('wijexpander-options')));
+                        });
 						$('.accordion', context).wijaccordion({
 							header: "h3"
 						});

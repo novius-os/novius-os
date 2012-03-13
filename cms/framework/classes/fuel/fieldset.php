@@ -305,10 +305,7 @@ require(['jquery', 'static/cms/js/vendor/jquery/jquery-validation/jquery.validat
 					dataType: 'json',
 					success: function(json) {
 						$.nos.ajax.success(json);
-						var callback_success = $(form).data('ajax-success');
-						if ($.isFunction(callback_success)) {
-							callback_success.call(form, json);
-						}
+                        $(form).triggerHandler('ajax_success', [json]);
 					},
 					error: function() {
 						$.nos.notify('An error occured', 'error');
@@ -343,6 +340,7 @@ JS
 		$fieldset = \Fieldset::forge(uniqid(), array(
 			'inline_errors'  => true,
 			'auto_id'		 => true,
+            'auto_id_prefix' => '', // Temporary fix to fuel bug
 			'required_mark'  => '&nbsp;*',
 			'error_template' => '{error_msg}',
 			'error_class'    => 'error',
@@ -352,6 +350,10 @@ JS
 		if (!empty($options['form_name'])) {
 			$fieldset->form_name($options['form_name']);
 		}
+        if (isset($instance)) {
+            // Let behaviours do their job (publication for example)
+            $instance->form_fieldset_fields($config);
+        }
 		$fieldset->add_widgets($config, $options);
 
 		if (!empty($options['extend']) && is_callable($options['extend'])) {
@@ -360,6 +362,7 @@ JS
 
         // Populate for data
         if (isset($instance)) {
+
             $populate = array();
             foreach ($instance as $k => $field) {
                 // Don't populate password fields
@@ -404,6 +407,9 @@ JS
 			};
 		}
 
+        $json_response = array();
+
+        $pk = $object->primary_key();
 		foreach ($fields as $name => $config)
 		{
 			if (!empty($config['widget']) && in_array($config['widget'], array('widget_text', 'widget_empty'))) {
@@ -417,16 +423,17 @@ JS
 
 			if ($type == 'checkox' && empty($data[$name])) {
 				$object->$name = null;
-			} else if (isset($data[$name])) {
+			} else if (isset($data[$name]) && !in_array($name, $pk)) {
 				try {
 					$object->$name = $data[$name];
 				} catch (\Exception $e) {
-					$body = array(
-						'error' => $e->getMessage(),
-					);
+					$json_response['error'] = $e->getMessage();
 				}
 			}
 		}
+
+        // Let behaviours do their job (publication for example)
+        $object->form_processing_behaviours($data, $json_response);
 
 		if (!empty($options['before_save']) && is_callable($options['before_save']))
 		{
@@ -437,25 +444,22 @@ JS
 		try {
 			if (!empty($options['success']) && is_callable($options['success']))
 			{
-				$body = call_user_func($options['success'], $object, $data);
+				$json_response = \Arr::merge($json_response, call_user_func($options['success'], $object, $data));
                 $object->save();
 			}
             else
             {
-				$body = array(
-					'notify' => __('Operation completed successfully.'),
-				);
+                $object->save();
+				$json_response['notify'] = __('Operation completed successfully.');
 			}
 		} catch (Exception $e) {
 			if (empty($options['error']) && is_callable($options['error'])) {
-				$body = call_user_func($options['error'], $e, $object, $data);
+				$json_response = call_user_func($options['error'], $e, $object, $data);
 			} else {
-				$body = array(
-					'error' => $e->getMessage(),
-				);
+				$json_response['error'] = $e->getMessage();
 			}
 		}
 
-		\Response::json($body);
+		\Response::json($json_response);
 	}
 }

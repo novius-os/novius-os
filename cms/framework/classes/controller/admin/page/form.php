@@ -13,7 +13,7 @@ namespace Cms;
 class Controller_Admin_Page_Form extends Controller {
 
     public function action_edit($id) {
-        return \View::forge('cms::admin/page/form/edit', array(
+        return \View::forge('cms::admin/page/form_edit', array(
 			'page' => Model_Page_Page::find($id),
 			'fieldset' => static::fieldset($id)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
 		), false);
@@ -45,15 +45,8 @@ class Controller_Admin_Page_Form extends Controller {
 					'options' => $templates,
 				),
 			),
-			'page_published' => array(
-				'label' => 'Published',
-				'form' => array(
-					'type' => 'checkbox',
-					'value' => '1',
-				),
-			),
 			'page_virtual_name' => array(
-				'label' => 'Slug: ',
+				'label' => 'URL: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 20,
@@ -90,14 +83,14 @@ class Controller_Admin_Page_Form extends Controller {
 				),
 			),
 			'page_menu' => array(
-				'label' => "Show in the menu",
+				'label' => "Shows in the menu",
 				'form' => array(
 					'type' => 'checkbox',
 					'value' => '1',
 				),
 			),
 			'page_menu_title' => array(
-				'label' => 'Menu title: ',
+				'label' => 'What\'s the page called in the menu: ',
 				'form' => array(
 					'type' => 'text',
 					'size' => 26,
@@ -138,9 +131,9 @@ class Controller_Admin_Page_Form extends Controller {
 				'form' => array(
 					'type' => 'select',
 					'options' => array(
-						0 => 'Unlocked',
-						1 => 'Deletion',
-						2 => 'Modification',
+						Model_Page_Page::LOCK_UNLOCKED => 'Unlocked',
+						Model_Page_Page::LOCK_DELETION => 'Deletion',
+						Model_Page_Page::LOCK_EDITION  => 'Modification',
 					),
 				),
 			),
@@ -155,6 +148,7 @@ class Controller_Admin_Page_Form extends Controller {
 				'label' => '',
 				'form' => array(
 					'type' => 'submit',
+                    'tag' => 'button',
 					'value' => 'Save',
 					'class' => 'primary',
 					'data-icon' => 'check',
@@ -164,53 +158,13 @@ class Controller_Admin_Page_Form extends Controller {
 
         $page = Model_Page_Page::find($id);
 
-		$editable_fields = array_diff(array_keys(Model_Page_Page::properties()), Model_Page_Page::primary_key());
-
-		$template_key = \Input::post('page_template', $page->page_template);
-		if (!empty($template_id)) {
-            $templates = \Config::get('templates', array());
-            $template_key and $data = \Config::get('templates.'.$template_key, array(
-				'layout' => array(),
-			));
-		}
-
 		$fieldset = \Fieldset::build_from_config($fields, $page, array(
-			'complete' => function($data) use ($page, $fields, $editable_fields) {
-
-				try {
-					foreach ($data as $name => $value) {
-						if (in_array($name, $editable_fields)) {
-							$page->$name = $value;
-						}
-					}
-					foreach ($fields as $name => $f) {
-						if (empty($data[$name]) && \Arr::get($f, 'form.type', null) == 'checkbox') {
-							$page->$name = 0;
-						}
-					}
-
-
-					// Save wysiwyg after the page->save(), because we need page_id on creation too
-					// @todo change this to use the provider from Cms\Model
-					foreach (\Input::post('wysiwyg', array()) as $name => $content) {
-						$page->{'wysiwygs->'.$name.'->wysiwyg_text'} = $content;
-					}
-
-                    $page->save();
-
-					$body = array(
-						'notify' => 'Page edited successfully.',
-						'listener_fire' => array('cms_page.refresh' => true),
-					);
-				} catch (\Exception $e) {
-					$body = array(
-						'error' => \Fuel::$env == \Fuel::DEVELOPMENT ? $e->getMessage() : 'An error occured.',
-					);
-				}
-
-				\Response::json($body);
-			}
-		));
+            'success' => function() {
+                return array(
+                    'notify' => 'Page sucessfully saved.',
+                );
+            }
+        ));
 		$fieldset->js_validation();
 		return $fieldset;
 	}

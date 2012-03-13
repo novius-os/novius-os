@@ -73,6 +73,9 @@ class Model_Page_Page extends \Cms\Orm\Model {
 			'events' => array('after_sort'),
 			'sort_property' => 'page_sort',
 		),
+		'Cms\Orm_Behaviour_Publishable' => array(
+			'publication_bool_property' => 'page_published',
+		),
 	);
 
 	const TYPE_CLASSIC       = 0;
@@ -85,6 +88,10 @@ class Model_Page_Page extends \Cms\Orm\Model {
     const EXTERNAL_TARGET_NEW   = 0;
     const EXTERNAL_TARGET_POPUP = 1;
     const EXTERNAL_TARGET_SAME  = 2;
+
+    const LOCK_UNLOCKED = 0;
+    const LOCK_DELETION = 1;
+    const LOCK_EDITION  = 2;
 
     /**
      * Alias to Model:find('all') with appropriate sort for Model_Page_Page

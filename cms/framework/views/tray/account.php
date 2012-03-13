@@ -45,7 +45,7 @@
     require(['jquery-nos'], function($) {
 		$.nos.ui.form('#<?= $uniqid ?>');
 		$(function() {
-			$('#<?= $fieldset_display->form()->get_attribute('id') ?>').data('ajax-success', function(json) {
+			$('#<?= $fieldset_display->form()->get_attribute('id') ?>').bind('ajax_success', function(e, json) {
 				if (json.wallpaper_url) {
 					$('#noviusospanel').css('background-image', 'url("' + json.wallpaper_url + '")');
 				} else {

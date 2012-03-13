@@ -51,10 +51,12 @@ require(['jquery-nos'], function($) {
 		</div>
 	</div>
 	<div class="unit col c3" style="position:relative;z-index:98;text-align:center;">
-        <?php if ($published) { ?>
-		<p style="margin: 0 0 1em;"><?= $fieldset->field($published)->set_template('{field} {label}')->build() ?></p>
-        <?php } ?>
-		<p><?= $fieldset->field($save)->set_template('{field}')->build() ?> &nbsp; or &nbsp; <a href="#" onclick="javascript:$.nos.tabs.close();return false;">Cancel</a></p>
+		<p><?= $fieldset->field($save)->set_template('{field}')->build() ?> &nbsp; or &nbsp; <a href="#" onclick="javascript:$.nos.tabs.close();return false;"><?= __('Cancel') ?></a></p>
+        <?php
+            echo \View::forge('form/publishable', array(
+                'object' => $object,
+            ));
+        ?>
 	</div>
 	<div class="unit col c1 lastUnit"></div>
 </div>
@@ -82,7 +84,11 @@ require(['jquery-nos'], function($) {
                         <?php
                         foreach ((array) $fields as $field) {
                             try {
-                                echo '<p>'.$fieldset->field($field)->build().'</p>';
+                                if ($field instanceof \View) {
+                                    echo $field;
+                                } else {
+                                    echo '<p>'.$fieldset->field($field)->build().'</p>';
+                                }
                             } catch (\Exception $e) {
                                 throw new \Exception("Field $field : " . $e->getMessage(), $e->getCode(), $e);
                             }

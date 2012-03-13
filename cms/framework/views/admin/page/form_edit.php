@@ -20,6 +20,7 @@ require(['jquery-nos'], function ($) {
 });
 </script>
 
+
 <div id="<?= $uniqid ?>" class="page">
 <?php
 $fieldset->form()->set_config('field_template',  "\t\t<tr><th class=\"{error_class}\">{label}{required}</th><td class=\"{error_class}\">{field} {error_msg}</td></tr>\n");
@@ -32,6 +33,13 @@ foreach ($fieldset->field() as $field) {
 
 $fieldset->field('page_cache_duration')->set_template('{label} {field} seconds');
 $fieldset->field('page_lock')->set_template('{label} {field}');
+
+$checkbox = '<br /><label><input type="checkbox" data-id="same_title">'.strtr(__('Use {field}'), array('{field}' => __('title'))).'</label>';
+$fieldset->field('page_menu_title')->set_template("\t\t<span class=\"{error_class}\">{label}{required}</span>\n\t\t<br />\n\t\t<span class=\"{error_class}\">{field} $checkbox {error_msg}</span>\n");
+
+
+$short_link = \View::forge('form/short_link');
+$qrcode = \View::forge('form/qrcode');
 ?>
 
 <?= $fieldset->open('admin/admin/page/form/edit/'.$page->page_id); ?>
@@ -39,11 +47,12 @@ $fieldset->field('page_lock')->set_template('{label} {field}');
 	'css_id' => $uniqid,
 
 	'fieldset' => $fieldset,
+    // Used by the behaviours (publishable, etc.)
+    'object' => $page,
 	'medias' => array(),
 	'title' => 'page_title',
 	'id' => 'page_id',
 
-	'published' => 'page_published',
 	'save' => 'save',
 
 	'subtitle' => array('page_type', 'page_template'),
@@ -52,27 +61,32 @@ $fieldset->field('page_lock')->set_template('{label} {field}');
 		'title'    => 'Content',
 		// Wysiwyg are edge-to-edge with the border
 		'nomargin' => true,
+        'options' => array(
+            'allowExpand' => false,
+        ),
 		'content'  => '
-			<div id="external">
+			<div id="'.($uniqid_external = uniqid('external_')).'">
 				<table>
 					'.$fieldset->field('page_external_link')->build().'
 					'.$fieldset->field('page_external_link_type')->build().'
 				</table>
 			</div>
-			<div id="internal" style="display:none;">
+			<div id="'.($uniqid_internal = uniqid('internal_')).'" style="display:none;">
 				<p style="padding:1em;">We\'re sorry, internal links are not supported yet. We need a nice page selector before that.</p>
 			</div>
-			<div id="wysiwyg" style="display:none;"></div>',
+			<div id="'.($uniqid_wysiwyg = uniqid('wysiwyg_')).'" style="display:none;"></div>',
 	), false),
 
 	'menu' => array(
-		'Menu' => array('page_menu', 'page_menu_title'),
-		'SEO' => array('page_virtual_name', 'page_meta_noindex', 'page_meta_title', 'page_meta_description', 'page_meta_keywords'),
-		'Admin' => array('page_cache_duration', 'page_lock'),
+		__('Menu') => array('page_menu', 'page_menu_title'),
+        __('URL (page address)') => array('page_virtual_name', $short_link, $qrcode),
+		__('SEO') => array('page_virtual_name', 'page_meta_noindex', 'page_meta_title', 'page_meta_description', 'page_meta_keywords'),
+		__('Admin') => array('page_cache_duration', 'page_lock'),
 	),
 ), false); ?>
 <?= $fieldset->close(); ?>
 </div>
+
 
 <script type="text/javascript">
 require([
@@ -82,16 +96,18 @@ require([
 ], function(a,b,$) {
 	$(function() {
 
-		$('input[name=page_meta_noindex]').change(function() {
+        var $container = $('#<?= $uniqid ?>');
+
+		$container.find('input[name=page_meta_noindex]').change(function() {
 			$(this).closest('p').nextAll()[$(this).is(':checked') ? 'hide' : 'show']();
 		}).change();
 
 
-		$('input[name=page_menu]').change(function() {
+		$container.find('input[name=page_menu]').change(function() {
 			$(this).closest('p').nextAll()[$(this).is(':checked') ? 'show' : 'hide']();
 		}).change();
 
-		$('select[name=page_template]').bind('change', function() {
+		$container.find('select[name=page_template]').bind('change', function() {
 			$.ajax({
 				url: 'admin/admin/page/ajax/wysiwyg/<?= $page->page_id ?>',
 				data: {
@@ -100,13 +116,14 @@ require([
 				dataType: 'json',
 				success: function(data) {
 
-					var ratio = $('#wysiwyg').width() * 3 / 5;
-					$('#wysiwyg').empty().css({
+                    var $wysiwyg = $container.find('#<?= $uniqid_wysiwyg ?>');
+					var ratio = $wysiwyg.width() * 3 / 5;
+					$wysiwyg.empty().css({
 						height: ratio,
 						overflow: 'visible'
 					});
 					$.each(data.layout, function(i) {
-						coords = this.split(',');
+						var coords = this.split(',');
 						var bloc = $('<div></div>').css({
 							position: 'absolute',
 							left:   Math.round(coords[0] / data.cols * 100) + '%',
@@ -125,9 +142,9 @@ require([
 								border: 0,
 								boxShadow: 'inset 0px 0px 2px 2px  #888'
 							}));
-						$('#wysiwyg').append(bloc);
+						$wysiwyg.append(bloc);
 						// The bottom row from TinyMCE is roughly 21px
-						$('#wysiwyg [name="wysiwyg[' + i + ']"]').wysiwyg({
+						$wysiwyg.find('[name="wysiwyg[' + i + ']"]').wysiwyg({
 							height: (coords[3] / data.rows * ratio) - 21
 						});
 					});
@@ -135,23 +152,44 @@ require([
 			})
 		});
 
-		$('select[name=page_type]').change(function() {
+        var $template_unit = $('select[name=page_template]').closest('div.unit');
+		$container.find('select[name=page_type]').change(function() {
 			var val = $(this).val();
 
 			if (val == <?= Cms\Model_Page_Page::TYPE_CLASSIC ?> || val == <?= Cms\Model_Page_Page::TYPE_FOLDER ?>) {
-				$('#wysiwyg').show().siblings().hide();
-				$('select[name=page_template]').closest('div.unit').show().end().change();
+				$container.find('#<?= $uniqid_wysiwyg ?>').show().siblings().hide();
+				$template_unit.show().end().change();
 			}
 
 			if (val == <?= Cms\Model_Page_Page::TYPE_EXTERNAL_LINK ?>) {
-				$('#external').show().siblings().hide();
-				$('select[name=page_template]').closest('div.unit').hide();
+				$container.find('#<?= $uniqid_external ?>').show().siblings().hide();
+				$template_unit.hide();
 			}
 
 			if (val == <?= Cms\Model_Page_Page::TYPE_INTERNAL_LINK ?>) {
-				$('#internal').show().siblings().hide();
-				$('select[name=page_template]').closest('div.unit').hide();
+				$container.find('#<?= $uniqid_internal ?>').show().siblings().hide();
+				$template_unit.hide();
 			}
 		}).change();
+
+        var $title      = $container.find('input[name=page_title]');
+		var $menu_title = $container.find('input[name=page_menu_title]');
+        var $checkbox   = $container.find('input[data-id=same_title]');
+        $title.bind('change keyup', function() {
+            if ($checkbox.is(':checked')) {
+                $menu_title.val($title.val());
+            }
+        });
+        if ($title.val() == $menu_title.val() || $menu_title.val() == '') {
+            $checkbox.attr('checked', true).wijcheckbox("refresh");
+        }
+		$checkbox.change(function() {
+			if ($(this).is(':checked')) {
+				$menu_title.attr('readonly', true).addClass('ui-state-disabled').removeClass('ui-state-default');
+                $title.triggerHandler('change');
+			} else {
+				$menu_title.removeAttr('readonly').addClass('ui-state-default').removeClass('ui-state-disabled');
+			}
+		}).triggerHandler('change');
 	});
 });</script>

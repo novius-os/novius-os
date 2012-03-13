@@ -193,12 +193,12 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 	            $dataset = $config['dataset'];
 	            $actions = \Arr::get($dataset, 'actions', array());
 	            unset($dataset['actions']);
+                $object->import_dataset_behaviours($dataset);
                 foreach ($dataset as $key => $data) {
-                    if (is_array($data)) {
-                        $data = $data['value'];
-                    }
                     if (is_callable($data)) {
-                        $item[$key] = $data($object);
+                        $item[$key] = call_user_func($data, $object);
+                    } else if (is_array($data)) {
+                        $data = $data['value'];
                     } else {
                         $item[$key] = $object->{$data};
                     }
