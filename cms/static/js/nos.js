@@ -592,7 +592,10 @@ define([
                         'link!static/cms/js/vendor/jquery/pnotify/jquery.pnotify.default.css',
                         'static/cms/js/vendor/jquery/pnotify/jquery.pnotify.min'
                     ], function() {
-                        var o = {};
+                        var o = {
+                            pnotify_history : false,
+                            pnotify_addclass : 'nos-notification'
+                        };
                         $.each( options, function(key, val) {
                             if ( key.substr( 0, 8 ) !== 'pnotify_' ) {
                                 key = 'pnotify_' + key;
