@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -18,7 +18,7 @@ require([
 			var inspector = $('#<?= $id ?>').removeAttr('id'),
 				parent = inspector.parent()
 					.bind({
-						inspectorResize: function() {
+						widgetResize: function() {
                             inspector.nosgrid('setSize', parent.width(), parent.height());
 						}
 					}),

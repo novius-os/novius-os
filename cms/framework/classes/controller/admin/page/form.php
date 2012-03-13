@@ -162,6 +162,10 @@ class Controller_Admin_Page_Form extends Controller {
             'success' => function() {
                 return array(
                     'notify' => 'Page sucessfully saved.',
+                    'fireEvent' => array(
+                        'event' => 'reload',
+                        'target' => 'cms_page',
+                    ),
                 );
             }
         ));

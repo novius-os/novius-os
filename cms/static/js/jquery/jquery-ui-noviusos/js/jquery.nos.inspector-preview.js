@@ -294,7 +294,7 @@ define([
 			return self;
 		},
 
-		refresh : function() {
+		resize : function() {
 			var self = this;
 
 			self._init();

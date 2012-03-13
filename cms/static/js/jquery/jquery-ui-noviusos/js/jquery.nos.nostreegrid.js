@@ -13,6 +13,7 @@ define([
 	$.widget( "nos.nostreegrid", $.nos.nosgrid, {
 		options: {
             treeUrl : '',
+            treeOptions : null,
             sortable : true,
             movable : true,
             data : []
@@ -129,6 +130,27 @@ define([
 
             $.nos.nosgrid.prototype._init.call(self);
 
+            self._datasource();
+            self.treeDataSource.proxy.options.data.deep = 2;
+            self.treeDataSource.load();
+		},
+
+        _setOption: function(key, value){
+            var self = this;
+
+            $.nos.nosgrid.prototype._setOption.apply(self, arguments);
+
+            if (key === 'treeOptions') {
+                self._datasource()
+                    .reload();
+            }
+
+        },
+
+        _datasource : function() {
+            var self = this,
+                o = self.options;
+
             self.treeDataSource = new wijdatasource({
                 dynamic: true,
                 proxy: new wijhttpproxy({
@@ -137,7 +159,7 @@ define([
                     error: function(jqXHR, textStatus, errorThrown) {
                         log(jqXHR, textStatus, errorThrown);
                     },
-                    data: {}
+                    data: o.treeOptions || {}
                 }),
                 loaded: function(dataSource, data) {
                     var nosGridData = self.data(),
@@ -179,9 +201,8 @@ define([
                 }
             });
 
-            self.treeDataSource.proxy.options.data.deep = 2;
-            self.treeDataSource.load();
-		},
+            return self;
+        },
 
         _dragInit : function() {
             var self = this,

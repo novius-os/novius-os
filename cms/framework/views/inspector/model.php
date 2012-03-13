@@ -18,12 +18,17 @@ require([
 		$(function() {
 			var inspector = $('#<?= $id ?>').removeAttr('id'),
 				parent = inspector.parent()
-					.bind({
-						inspectorResize: function(e, data) {
-                            inspector.nosgrid('setSize', parent.width(), parent.height());
-                            if ($.isPlainObject(data) && data.refresh) {
-                                inspector.nosgrid('option', 'pageSize', Math.floor((parent.height() - table_heights.footer - table_heights.header - (showFilter ? table_heights.filter : 0)) / table_heights.row));
-                            }
+					.on({
+						widgetResize : function() {
+	                        inspector.nosgrid('setSize', parent.width(), parent.height());
+						},
+						widgetReload : function() {
+							inspector.nosgrid('option', 'pageSize', Math.floor((parent.height() - table_heights.footer - table_heights.header - (showFilter ? table_heights.filter : 0)) / table_heights.row));
+						},
+						langChange : function() {
+							if (inspectorData.langChange) {
+								inspector.nosgrid('ensureControl', true);
+							}
 						}
 					}),
                 inspectorData = parent.data('inspector'),
@@ -58,6 +63,7 @@ require([
                         }),
                         loading: function (dataSource, userData) {
                             var r = userData.data.paging;
+	                        dataSource.proxy.options.data.lang = parent.data('nosLang') || '';
                             dataSource.proxy.options.data.offset = r.pageIndex * r.pageSize;
                             dataSource.proxy.options.data.limit = r.pageSize;
                         },
@@ -85,11 +91,11 @@ require([
                         rendered = true;
                         inspector.css('height', 'auto');
                     }
-                });
-
-			$nos.nos.listener.add(inspectorData.widget_id + '.refresh', true, function() {
-				parent.trigger('inspectorResize');
-			});
+                })
+	            .closest('.nos-connector')
+	            .on('reload.' + inspectorData.widget_id, function() {
+		            parent.trigger('widgetReload');
+	            });
 		});
 	});
 </script>

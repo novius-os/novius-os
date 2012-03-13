@@ -1,7 +1,7 @@
 /*globals jQuery,window*/
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -504,6 +504,10 @@
 				});
 				self.$nodes.addClass("wijmo-wijtree-list ui-helper-reset");
 
+				if (o.showExpandCollapse === false) {
+					self.$nodes.addClass("wijmo-wijtree-allexpanded");
+				}
+
 				nodes = self._createChildNodes();
 
 				self._hasChildren = nodes.length > 0;
@@ -543,15 +547,15 @@
 			return $li;
 		},
 
-//		getChildNodes: function (node) {
-//			var expand = this._trigger("expandingPotentialParentNode", null, {
-//				node : node,
-//				params : node.options.params
-//			});
-//			if (expand !== false) {
-//				node._expandNode(true);
-//			}
-//		},
+		//		getChildNodes: function (node) {
+		//			var expand = this._trigger("expandingPotentialParentNode", null, {
+		//				node : node,
+		//				params : node.options.params
+		//			});
+		//			if (expand !== false) {
+		//				node._expandNode(true);
+		//			}
+		//		},
 
 		/*tree event*/
 		_attachEvent: function () {
@@ -775,7 +779,7 @@
 				nodeWidget = $node.data($node.data("widgetName"));
 			}
 			else if ($.isPlainObject(node)) {
-				$node = $(itemDom.replace(/\{0\}/, node.url)
+				$node = $(itemDom.replace(/\{0\}/, node.url ? node.url : "#")
 				.replace(/\{1\}/, node.text)); //node
 				self._createNodeWidget($node, node);
 				nodeWidget = $node.data($node.data("widgetName"));
@@ -912,6 +916,8 @@
 
 		_setHitArea: function (value) {
 			var self = this;
+
+			self.$nodes[value ? "addClass" : "removeClass"]("wijmo-wijtree-allexpanded");
 			self.$nodes.children("li").each(function () {
 				var nodeWidget = self._getNodeWidget($(this));
 				if (nodeWidget !== null) {
@@ -1777,8 +1783,7 @@
 				event.preventDefault();
 				event.stopPropagation();
 			}
-			else if (el.hasClass("ui-icon-triangle-1-se") ||
-			el.hasClass("ui-icon-triangle-1-e")) {
+			else if (self.$hitArea && self.$hitArea[0] === el[0]) {
 				self._expandCollapseItem(event);
 				event.preventDefault();
 				event.stopPropagation();
@@ -2225,7 +2230,7 @@
 				nodeWidget = $node.data($node.data("widgetName"));
 			}
 			else if ($.isPlainObject(node)) {
-				$node = $(itemDom.replace(/\{0\}/, node.url)
+				$node = $(itemDom.replace(/\{0\}/, node.url ? node.url : "#")
 				.replace(/\{1\}/, node.text)); //node
 				self._createNodeWidget($node, node);
 				nodeWidget = $node.data($node.data("widgetName"));
@@ -2460,9 +2465,9 @@
 		_setFocused: function (value) {
 			if (value) {
 				this.$navigateUrl.focus();
-				if ($.browser.msie || $.browser.webkit) {
-					this._setFocusNode();
-				}
+				//if ($.browser.msie || $.browser.webkit) {
+				this._setFocusNode();
+				//}
 			}
 			else {
 				this.$navigateUrl.blur();

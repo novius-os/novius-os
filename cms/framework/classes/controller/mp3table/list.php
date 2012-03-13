@@ -92,7 +92,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 	    $return = $this->items(array_merge($this->mp3grid['query'], array(
 		    'callback' => array($where),
 		    'dataset' => $this->mp3grid['dataset'],
-		    'lang' => Input::get('inspectors.lang', null),
+		    'lang' => Input::get('lang', null),
 	        'limit' => intval(Input::get('limit', \Arr::get($this->mp3grid['query'], 'limit'))),
 	        'offset' => intval(Input::get('offset', 0)),
 	    )));

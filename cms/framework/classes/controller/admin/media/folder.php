@@ -151,8 +151,9 @@ class Controller_Admin_Media_Folder extends Controller_Extendable {
 			$body = array(
 				'notify' => 'Sub-folder successfully created.',
 				'closeDialog' => true,
-				'listener_fire' => array(
-                    'cms_media_folders.reload' => true,
+				'fireEvent' => array(
+					'event' => 'reload',
+					'target' => 'cms_media_folders',
                 ),
 			);
 		} catch (\Exception $e) {
@@ -220,9 +221,9 @@ class Controller_Admin_Media_Folder extends Controller_Extendable {
 			$body = array(
 				'notify' => 'Folder successfully edited.',
 				'closeDialog' => true,
-				'listener_fire' => array(
-                    'cms_media_folders.reload' => true,
-                    'refresh.cms_media_media' => true,
+				'fireEvent' => array(
+					'event' => 'reload',
+					'target' => array('cms_media_media', 'cms_media_folders'),
                 ),
 			);
 

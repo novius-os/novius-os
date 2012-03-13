@@ -227,6 +227,6 @@
     border: none;
     display: block;
     position: relative;
-    background: transparent url('images/waiting.gif') no-repeat scroll;
+    background: transparent url('../images/waiting.gif') no-repeat scroll;
 }
 

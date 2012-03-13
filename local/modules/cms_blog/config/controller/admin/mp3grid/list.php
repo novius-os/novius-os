@@ -62,7 +62,6 @@ return array(
 	'dataset' => array(
 		'id' => 'blog_id',
 		'title' => 'blog_title',
-		'lang' => 'blog_lang',
 		'author' => array(
 			'search_relation' => 'author',
 			'search_column'   => 'author.user_name',

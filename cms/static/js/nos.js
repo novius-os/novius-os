@@ -9,8 +9,8 @@
 
 define([
         'jquery',
-		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.0.min',
-		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.0.min'
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.3.min',
+		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.3.min'
 	], function($) {
         var undefined = void(0);
 
@@ -65,10 +65,10 @@ define([
 
                         var timeout,
                             div = $('div#' + id),
-                            container = div.parents('.nos-ostabs-panel, .ui-dialog'),
+                            connector = div.parents('.nos-connector'),
                             params = mp3Grid.build();
 
-                        if ($.isPlainObject(params.tab)) {
+                        if ($.isPlainObject(params.tab) && !$.isEmptyObject(params.tab)) {
                             try {
                                 $.nos.tabs.update(div, params.tab);
                             } catch (e) {
@@ -78,28 +78,28 @@ define([
 
                         div.removeAttr('id')
                             .mp3grid(params.mp3grid);
-                            container
-                            .bind({
-                                'panelResize.ostabs' : function() {
-                                    if (timeout) {
-                                        window.clearTimeout(timeout);
-                                    }
-                                    timeout = window.setTimeout(function() {
-                                        div.mp3grid('refresh');
-                                    }, 200);
-                                },
-                                'showPanel.ostabs' :  function() {
-                                    div.mp3grid('refresh');
-                                }
-                            });
 
-                        if (params.refresh) {
-                            container.bind('refresh.' + params.refresh, function() {
-                                div.mp3grid('gridRefresh');
+                        connector.on({
+                            resizePanel : function() {
+                                if (timeout) {
+                                    window.clearTimeout(timeout);
+                                }
+                                timeout = window.setTimeout(function() {
+                                    div.mp3grid('resize');
+                                }, 200);
+                            },
+                            showPanel :  function() {
+                                div.mp3grid('resize');
+                            }
+                        });
+
+                        if (params.reload) {
+                            connector.on('reload.' + params.reload, function() {
+                                div.mp3grid('gridReload');
                             });
                         }
 
-                        div.bind('reload', function(e, newConfig) {
+                        div.bind('reloadView', function(e, newConfig) {
                             $.extend(config, newConfig);
                             var newDiv = $('<div id="' + id + '"></div>');
                             newDiv.insertAfter(div);
@@ -313,8 +313,8 @@ define([
                                                 .inspectorPreview(inspectorData.options)
                                                 .parent()
                                                 .on({
-                                                    inspectorResize: function() {
-                                                        widget.inspectorPreview('refresh');
+                                                    widgetResize: function() {
+                                                        widget.inspectorPreview('resize');
                                                     }
                                                 })
                                                 .end();
@@ -498,79 +498,14 @@ define([
 				return container;
 			},
 
-            listener : (function() {
-                var _list = {};
-                function _get(id) {
-                    var listener = id && _list[id];
-
-                    if ( !listener ) {
-                        listener = $.Callbacks();
-                        if ( id ) {
-                            _list[id] = listener;
-                        }
-                    }
-                    return listener;
+            fireEvent : function(event) {
+                if (window.parent != window && window.parent.$nos) {
+                    return window.parent.$nos.nos.fireEvent(event);
                 }
-
-                return {
-                    add: function(id, alltabs, fn) {
-                        if (fn === undefined) {
-                            fn = alltabs;
-                            alltabs = true;
-                        }
-                        if (alltabs && window.parent != window && window.parent.$nos) {
-                            $(window).unload(function() {
-                                window.parent.$nos.nos.listener.remove(id, fn);
-                            });
-                            return window.parent.$nos.nos.listener.add(id, true, fn);
-                        }
-                        return _get(id).add(fn);
-                    },
-                    remove: function(id, alltabs, fn) {
-                        if (fn === undefined) {
-                            fn = alltabs
-                            alltabs = true;
-                        }
-                        if (alltabs && window.parent != window && window.parent.$nos) {
-                            return window.parent.$nos.nos.listener.remove(id, true, fn);
-                        }
-                        return _get(id).remove(fn);
-                    },
-                    fire: function(id, alltabs, args) {
-                        if (args === undefined) {
-                            args = alltabs
-                            alltabs = true;
-                        }
-                        if (!$.isArray(args)) {
-                            args = [args];
-                        }
-                        if (alltabs && window.parent != window && window.parent.$nos) {
-                            return window.parent.$nos.nos.listener.fire(id, true, args);
-                        }
-                        if ($.nos.$noviusos) {
-                            $.nos.$noviusos.ostabs('triggerPanels', id, args);
-                            $('.ui-dialog').trigger(id, args);
-                        }
-                        //log('listener.fire.args', args);
-                        if (id.substring(id.length - 1) == '!') {
-                            triggerName = id.substring(0, id.length - 1);
-                            //log('listener.fire', triggerName + '!', args, window);
-                            _get(triggerName).fire.apply(null, args);
-                            return;
-                        }
-                        var queue = id.split( "." );
-                        var triggerName = "";
-                        for (var i=0; i<queue.length ; i++) {
-                            if (i > 0) {
-                                triggerName += ".";
-                            }
-                            triggerName += queue[i];
-                            //log('listener.fire', triggerName, args, window);
-                            _get(triggerName).fire.apply(null, args);
-                        }
-                    }
-                };
-            })(),
+                if ($.nos.$noviusos) {
+                    $.nos.$noviusos.ostabs('triggerPanels', event);
+                }
+            },
 
             dataStore : {},
             data : function (id, json) {
@@ -646,7 +581,6 @@ define([
                         options['onLoad']();
                     }
                     $dialog.bind('wijdialogclose', function(event, ui) {
-                        //log('Fermeture et destroyage');
                         $dialog.closest('.ui-dialog').hide().appendTo(where);
                     });
                 }
@@ -728,13 +662,13 @@ define([
                     if (json.notify) {
                         $.nos.notify(json.notify);
                     }
-                    if (json.listener_fire) {
-                        if ($.isPlainObject(json.listener_fire)) {
-                            $.each(json.listener_fire, function(listener_name, bubble) {
-                                $.nos.listener.fire(listener_name, bubble);
+                    if (json.fireEvent) {
+                        if ($.isArray(json.fireEvent)) {
+                            $.each(json.fireEvent, function(i, event) {
+                                $.nos.fireEvent(event);
                             });
                         } else {
-                            $.nos.listener.fire(json.listener_fire, json.listener_bubble ? true : false);
+                            $.nos.fireEvent(json.fireEvent);
                         }
                     }
                     // Call user callback

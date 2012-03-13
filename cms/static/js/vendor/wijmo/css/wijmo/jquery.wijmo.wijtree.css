@@ -82,6 +82,11 @@ wijmo-wijtree a.ui-state-default:link, wijmo-wijtree a.ui-state-default:visited,
     width:100%;
 }
 
+.wijmo-wijtree .wijmo-wijtree-allexpanded .wijmo-wijtree-item
+{
+   margin: 0 0 0 0;     
+}
+
 .wijmo-wijtree .wijmo-wijtree-list .ui-icon
 {
 	float: left;

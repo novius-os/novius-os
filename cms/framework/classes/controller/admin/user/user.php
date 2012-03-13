@@ -59,8 +59,9 @@ class Controller_Admin_User_User extends Controller_Extendable {
 
 			$body = array(
 				'notify' => 'User permanently deleted.',
-                'listener_fire' => array(
-                    'refresh.cms_user_user' => true,
+                'fireEvent' => array(
+                    'event' => 'reload',
+	                'target' => 'cms_user_user',
                 ),
 
 			);

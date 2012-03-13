@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -247,6 +247,7 @@
 
 		 _updateText: function () {
 			 if (!this._isInitialized()) { return; }
+
 			 this.options.value = this._textProvider.getValue();
 			 wijinputcore._updateText.apply(this, arguments);
 			 if (!this._textProvider.checkAndRepairBounds(false, false)) {

@@ -1,7 +1,7 @@
 /*globals window document jQuery */
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -2071,6 +2071,11 @@
 				self._bindBarEvent(c, d, dir);
 
 				content[hbar ? "height" : "width"](contentLength);
+
+				// fixed bug on forum when set contentlength ,the width or height is changed.
+//				f[hbar ? "contentWidth" : "contentHeight"] = 
+//                f.templateWrapper[hbar ? "width" : "height"]();
+	
 			}
 		},
 
@@ -2221,6 +2226,8 @@
 			if (vNeedScrollBar && !f.hScrolling) {
 				wrapper.css("float", "left");
 				f.contentWidth = wrapper.width();
+
+				//contentWidth = 
 				f.hScrolling = f.contentWidth > (contentWidth -
 				f.vbarContainer[0].offsetWidth);
 				wrapper.css("float", "");

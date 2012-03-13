@@ -25,6 +25,9 @@
     position: absolute;
     display: table;
     table-layout: fixed;
+    *position: relative;
+    *padding: 0 3px;
+    *width: 100%;
 }
 
 .wijmo-wijdatepager-pages .wijmo-wijdatepager-pagelabel
@@ -40,6 +43,8 @@
     border-radius: 8px;
     margin: 1px;
     font-weight: normal;
+    *float: left;
+
 }
 
 .wijmo-wijdatepager-pages .ui-state-active

@@ -1,7 +1,7 @@
 /*globals jQuery,document,window*/
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -158,6 +158,10 @@
 				width: eleWidth
 			});
 
+			//update for fixing can't show all dropdown items by wuhao at 2012/2/24
+			list.setOutWidth(list.parent().parent().innerWidth() - 18);
+			//end for issue
+
 			if (listContainer.data("wijsuperpanel")) {
 				listContainer.wijsuperpanel("paintPanel");
 				self.superpanel = listContainer.data("wijsuperpanel");
@@ -168,7 +172,15 @@
 			if ($.fn.bgiframe) {
 				self.superpanel.element.bgiframe();
 			}
-			list.setOutWidth(list.parent().parent().innerWidth());
+
+			//update for fixing can't show all dropdown items by wuhao at 2012/2/24
+			//list.setOutWidth(list.parent().parent().innerWidth());
+			if (!self.superpanel.vNeedScrollBar) {
+				list.setOutWidth(list.parent().parent().innerWidth());
+				self.superpanel.refresh();
+			}
+			//end for issue
+
 			listContainer.hide();
 		},
 

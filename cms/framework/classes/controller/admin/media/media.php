@@ -201,8 +201,10 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
 			$body = array(
 				'notify' => 'File successfully edited.',
 				'closeDialog' => true,
-				'listener_fire' => 'refresh.cms_media_media',
-				'listener_bubble' => true,
+				'fireEvent' => array(
+					'event' => 'reload',
+					'target' => 'cms_media_media',
+				),
 			);
         } catch (\Exception $e) {
 			$body = array(
@@ -289,8 +291,10 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
 			$body = array(
 				'notify' => 'File successfully added.',
 				'closeDialog' => true,
-				'listener_fire' => 'refresh.cms_media_media',
-				'listener_bubble' => true,
+				'fireEvent' => array(
+					'event' => 'reload',
+					'target' => 'cms_media_media',
+				),
 			);
         } catch (\Exception $e) {
 			$body = array(

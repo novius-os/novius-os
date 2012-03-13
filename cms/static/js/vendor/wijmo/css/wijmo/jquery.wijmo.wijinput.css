@@ -19,9 +19,9 @@
     float: right;
     outline: none;
     margin: 0;
-    line-height: 16px;
-    height: 16px;
-    padding: 5px;
+    line-height: normal;
+    height: auto;
+    padding: 0;
 }
 
 .wijmo-wijinput .wijmo-wijinput-trigger

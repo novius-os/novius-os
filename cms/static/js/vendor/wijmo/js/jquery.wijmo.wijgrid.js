@@ -3,7 +3,7 @@
 
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -1896,13 +1896,19 @@
 
 		_postset_disabled: function (value, oldValue) {
 			// update children widgets
-			var self = this;
+			var self = this,
+				view = this._view();
 
 			$.wijmo.wijgrid.iterateChildrenWidgets(this.outerDiv, function (index, widget) {
 				if (widget !== self) {
 					widget.option("disabled", value);
 				}
 			});
+
+
+			if (view) {
+				view.ensureDisabledState();
+			}
 		},
 
 		_postset_groupIndent: function (value, oldValue) {
@@ -2566,20 +2572,12 @@
 							.bind("click." + this.widgetName, $.proxy(this._onClick, this))
 							.bind("dblclick." + this.widgetName, $.proxy(this._onDblClick, this))
 							.bind("mousemove." + this.widgetName, $.proxy(this._onMouseMove, this))
-							.bind("mouseout." + this.widgetName, $.proxy(this._onMouseOut, this));
+							.bind("mouseout." + this.widgetName, $.proxy(this._onMouseOut, this))
+
+							// attach "onGroupExpandCollapseIconClick" event
+							.find("> tr.wijmo-wijgrid-groupheaderrow > td .wijmo-wijgrid-grouptogglebtn")
+								.bind("click." + this.widgetName, $.proxy(this._onGroupBtnClick, this));
 					}
-				}
-			}, this));
-
-			// attach "onGroupExpandCollapseIconClick" event
-			$.each(view.getJoinedTables(true, 0), $.proxy(function (index, item) {
-				if (item && typeof (item) !== "number") {
-					var domTable = item.element(); // item is a htmlTableAccessor instance
-
-					$(domTable)
-						.find("> tbody")
-						.find("> tr.wijmo-wijgrid-groupheaderrow > td .wijmo-wijgrid-grouptogglebtn")
-						.bind("click." + this.widgetName, $.proxy(this._onGroupBtnClick, this));
 				}
 			}, this));
 		},
@@ -5137,7 +5135,7 @@
 		_canDropTo: function(wijField) {
 			if ($.wijmo.c1basefield.prototype._canDropTo.apply(this, arguments)) {
 				//band can't be dropped into group area
-				return (wijField instanceof $.wijmo.c1groupedfield);
+				return !(wijField instanceof $.wijmo.c1groupedfield);
 			}
  
 			return false;
@@ -5998,7 +5996,7 @@
 				$.proxy(_applySort, this)(dataCache, sortRequest);
 
 				var totalRows = dataCache.length, // number of rows in the data source (before paging will be applied)
-					start, end, pagedData, i, j, len,
+					start, end, pagedData, i, j, len, pageCount,
 					totals = {};
 
 				// calculate totals
@@ -6006,6 +6004,12 @@
 
 				// apply paging
 				if (pageRequest) {
+					pageCount = Math.ceil(totalRows / pageRequest.pageSize) || 1;
+
+					if (pageRequest.pageIndex >= pageCount) {
+						pageRequest.pageIndex = pageCount - 1; // index of the last page
+					}
+
 					start = Math.min(dataCache.length - 1, pageRequest.pageIndex * pageRequest.pageSize);
 
 					if (start < 0) {
@@ -6260,29 +6264,33 @@
 })(jQuery);(function ($) {
 	"use strict";
 	$.extend($.wijmo.wijgrid, {
-		groupRange: function (expanded, range, sum, position) {
+		groupRange: function (expanded, range, sum, position, hasHeaderOrFooter) {
 			this.value = -1;
 
-			switch (arguments.length) {
-				case 4:
-					this.isExpanded = expanded;
-					this.cr = range;
-					this.sum = sum;
-					this.position = position;
-					break;
+			this.isExpanded = false;
+			this.cr = new $.wijmo.wijgrid.cellRange(-1, -1);
+			this.sum = -1;
+			this.position = "none";
+			this.hasHeaderOrFooter = true;
 
-				case 1:
-					this.isExpanded = expanded;
-					this.cr = new $.wijmo.wijgrid.cellRange(-1, -1);
-					this.sum = -1;
-					this.position = "none";
-					break;
+			if (expanded !== undefined) {
+				this.isExpanded = expanded;
+			}
 
-				default:
-					this.isExpanded = false;
-					this.cr = new $.wijmo.wijgrid.cellRange(-1, -1);
-					this.sum = -1;
-					this.position = "none";
+			if (range !== undefined) {
+				this.cr = range;
+			}
+
+			if (sum !== undefined) {
+				this.sum = sum;
+			}
+
+			if (position !== undefined) {
+				this.position = position;
+			}
+
+			if (hasHeaderOrFooter !== undefined) {
+				this.hasHeaderOrFooter = hasHeaderOrFooter;
 			}
 
 			this.isSubRange = function (groupRange) {
@@ -6349,17 +6357,7 @@
 				switch (groupInfo.position) {
 					case "header":
 					case "headerAndFooter":
-						rowObj = rowAccessor.item(groupRange.cr.r1);
-
-						if (rowObj) {
-							if (rowObj[0]) {
-								rowObj[0]["aria-expanded"] = "false";
-							}
-
-							if (rowObj[1]) {
-								rowObj[1]["aria-expanded"] = "false";
-							}
-						}
+						_toggleRowVisibility(rowAccessor.item(groupRange.cr.r1), undefined, false);
 
 						dataStart++;
 						break;
@@ -6367,20 +6365,7 @@
 
 				// hide child rows
 				for (i = dataStart; i <= dataEnd; i++) {
-					rowObj = rowAccessor.item(i);
-					if (rowObj) {
-						if (rowObj[0]) {
-							rowObj[0].style.display = "none";
-							rowObj[0]["aria-hidden"] = "true";
-						}
-
-						if (rowObj[1]) {
-							rowObj[1].style.display = "none";
-							rowObj[1]["aria-hidden"] = "true";
-						}
-					}
-
-					//tbody.rows[i].style.display = "none";
+					_toggleRowVisibility(rowAccessor.item(i), false);
 				}
 
 				// update isExpanded property
@@ -6388,7 +6373,7 @@
 				_updateHeaderIcon(rowAccessor, groupRange);
 
 				for (i = groupInfo.level + 1; i <= groupedColumnsCnt; i++) {
-					childRanges = groupHelper.getChildGroupRanges(leaves, groupRange.cr, /*groupRange.owner.level*/ i - 1);
+					childRanges = groupHelper.getChildGroupRanges(leaves, groupRange.cr, /*groupRange.owner.level*/i - 1);
 					for (j = 0, len = childRanges.length; j < len; j++) {
 						childRange = childRanges[j];
 						childRange.isExpanded = false;
@@ -6396,18 +6381,7 @@
 						switch (childRange.owner.position) {
 							case "header":
 							case "headerAndFooter":
-								rowObj = rowAccessor.item(childRange.cr.r1);
-
-								if (rowObj) {
-									if (rowObj[0]) {
-										rowObj[0]["aria-expanded"] = "false";
-									}
-
-									if (rowObj[1]) {
-										rowObj[1]["aria-expanded"] = "false";
-									}
-								}
-
+								_toggleRowVisibility(rowAccessor.item(childRange.cr.r1), undefined, false);
 								break;
 						}
 
@@ -6425,77 +6399,18 @@
 
 				switch (groupInfo.position) {
 					case "header":
-						rowObj = rowAccessor.item(dataStart);
-						if (rowObj) {
-							if (rowObj[0]) {
-								rowObj[0].style.display = "";
-								rowObj[0]["aria-hidden"] = "false";
-
-								if (isRoot || expandChildren) {
-									rowObj[0]["aria-expanded"] = "true";
-								}
-							}
-
-							if (rowObj[1]) {
-								rowObj[1].style.display = "";
-								rowObj[1]["aria-hidden"] = "false";
-
-								if (isRoot || expandChildren) {
-									rowObj[1]["aria-expanded"] = "true";
-								}
-							}
-						}
+						_toggleRowVisibility(rowAccessor.item(dataStart), true, isRoot || expandChildren);
 						dataStart++;
 						break;
 					case "footer":
-						rowObj = rowAccessor.item(dataEnd);
-						if (rowObj) {
-							if (rowObj[0]) {
-								rowObj[0].style.display = "";
-								rowObj[0]["aria-hidden"] = "false";
-							}
-
-							if (rowObj[1]) {
-								rowObj[1].style.display = "";
-								rowObj[1]["aria-hidden"] = "false";
-							}
-						}
+						_toggleRowVisibility(rowAccessor.item(dataEnd), true);
 						dataEnd--;
 						break;
 					case "headerAndFooter":
-						rowObj = rowAccessor.item(dataStart);
-						if (rowObj) {
-							if (rowObj[0]) {
-								rowObj[0].style.display = "";
-								rowObj[0]["aria-hidden"] = "false";
+						_toggleRowVisibility(rowAccessor.item(dataStart), true, isRoot || expandChildren);
 
-								if (isRoot || expandChildren) {
-									rowObj[0]["aria-expanded"] = "true";
-								}
-							}
-
-							if (rowObj[1]) {
-								rowObj[1].style.display = "";
-								rowObj[1]["aria-hidden"] = "false";
-
-								if (isRoot || expandChildren) {
-									rowObj[1]["aria-expanded"] = "true";
-								}
-							}
-						}
 						if (isRoot) {
-							rowObj = rowAccessor.item(dataEnd);
-							if (rowObj) {
-								if (rowObj[0]) {
-									rowObj[0].style.display = "";
-									rowObj[0]["aria-hidden"] = "false";
-								}
-
-								if (rowObj[1]) {
-									rowObj[1].style.display = "";
-									rowObj[1]["aria-hidden"] = "false";
-								}
-							}
+							_toggleRowVisibility(rowAccessor.item(dataEnd), true);
 						}
 						dataStart++;
 						dataEnd--;
@@ -6511,22 +6426,17 @@
 
 				if (groupRange.owner.level === groupedColumnsCnt) { // show data rows
 					for (i = dataStart; i <= dataEnd; i++) {
-						rowObj = rowAccessor.item(i);
-						if (rowObj) {
-							if (rowObj[0]) {
-								rowObj[0].style.display = "";
-								rowObj[0]["aria-hidden"] = "false";
-							}
-
-							if (rowObj[1]) {
-								rowObj[1].style.display = "";
-								rowObj[1]["aria-hidden"] = "false";
-							}
-						}
-
+						_toggleRowVisibility(rowAccessor.item(i), true);
 					}
 				} else {
 					childRanges = groupHelper.getChildGroupRanges(leaves, groupRange.cr, groupRange.owner.level);
+
+					if (childRanges.length && (dataStart !== childRanges[0].cr.r1)) { // 
+						// a space between parent groupHeader and first child range - show single rows (groupSingleRow = false)
+						for (i = dataStart; i < childRanges[0].cr.r1; i++) {
+							_toggleRowVisibility(rowAccessor.item(i), true);
+						}
+					}
 
 					if (expandChildren) { // throw action deeper
 						for (i = 0, len = childRanges.length; i < len; i++) {
@@ -6542,6 +6452,32 @@
 								: false;
 
 							_expand(groupHelper, rowAccessor, leaves, childRange, groupedColumnsCnt, false, childIsRoot);
+						}
+					}
+				}
+			}
+
+			function _toggleRowVisibility(rowObj, visible, expanded) {
+				if (rowObj) {
+					if (rowObj[0]) {
+						if (visible !== undefined) {
+							rowObj[0].style.display = visible ? "" : "none";
+							rowObj[0]["aria-hidden"] = visible ? "false" : "true";
+						}
+
+						if (expanded !== undefined) {
+							rowObj[0]["aria-expanded"] = expanded ? "true" : false;
+						}
+					}
+
+					if (rowObj[1]) {
+						if (visible !== undefined) {
+							rowObj[1].style.display = visible ? "" : "none";
+							rowObj[1]["aria-hidden"] = visible ? "false" : "true";
+						}
+
+						if (expanded !== undefined) {
+							rowObj[1]["aria-expanded"] = expanded ? "true" : false;
 						}
 					}
 				}
@@ -6638,15 +6574,15 @@
 				}
 				/*
 				for (i = 0, len = leaves.length; i < len; i++) {
-					leaf = leaves[i];
-					this._groupRowIdx = 0;
+				leaf = leaves[i];
+				this._groupRowIdx = 0;
 
-					if ((leaf.dynamic !== true) && leaf.groupInfo && (leaf.groupInfo.position && (leaf.groupInfo.position !== "none")) &&
-						(leaf.dataIndex >= 0) && !leaf.groupInfo.expandInfo) {
-						leaf.groupInfo.level = level;
-						leaf.groupInfo.expandInfo = [];
-						this._processRowGroup(leaf, level++);
-					}
+				if ((leaf.dynamic !== true) && leaf.groupInfo && (leaf.groupInfo.position && (leaf.groupInfo.position !== "none")) &&
+				(leaf.dataIndex >= 0) && !leaf.groupInfo.expandInfo) {
+				leaf.groupInfo.level = level;
+				leaf.groupInfo.expandInfo = [];
+				this._processRowGroup(leaf, level++);
+				}
 				}
 				*/
 				delete this._grid;
@@ -6656,7 +6592,17 @@
 
 			this._processRowGroup = function (leaf, level) {
 				var row, cellRange, isExpanded, startCollapsed, indentRow,
-					groupRange, isParentCollapsed, header, footer, i;
+					groupRange, isParentCollapsed, header, footer, i,
+					firstVisibleLeafIdx = 0,
+					hasHeaderOrFooter = true;
+
+
+				$.each(this._leaves, function (i, leaf) {
+					if (leaf.parentVis) {
+						firstVisibleLeafIdx = i;
+						return false;
+					}
+				});
 
 				for (row = 0; row < this._data.length; row++) {
 					// if (this._data[row].rowType !== "data") {
@@ -6678,18 +6624,16 @@
 					// indent
 					if (level && this._grid.options.groupIndent) {
 						for (indentRow = cellRange.r1; indentRow <= cellRange.r2; indentRow++) {
-							this._addIndent(this._data[indentRow][0], level);
+							this._addIndent(this._data[indentRow][firstVisibleLeafIdx], level);
 						}
 					}
+
+					hasHeaderOrFooter = !(leaf.groupInfo.groupSingleRow === false && (cellRange.r1 === cellRange.r2));
 
 					// insert group header/ group footer
 					switch (leaf.groupInfo.position) {
 						case "header":
-							groupRange = this._addGroupRange(leaf.groupInfo, cellRange, isExpanded);
-							this._updateByGroupRange(groupRange, level);
-
-							isParentCollapsed = this._groupHelper.isParentCollapsed(this._leaves, groupRange.cr, level);
-							header = this._buildGroupRow(groupRange, cellRange, true, isParentCollapsed);
+							groupRange = this._addGroupRange(leaf.groupInfo, cellRange, isExpanded, hasHeaderOrFooter);
 
 							for (i = cellRange.r1; i <= cellRange.r2; i++) {
 								this._data[i].__attr["aria-level"] = level + 1;
@@ -6699,6 +6643,15 @@
 
 								}
 							}
+
+							if (!hasHeaderOrFooter) {
+								break;
+							}
+
+							this._updateByGroupRange(groupRange, level);
+
+							isParentCollapsed = this._groupHelper.isParentCollapsed(this._leaves, groupRange.cr, level);
+							header = this._buildGroupRow(groupRange, cellRange, true, isParentCollapsed);
 
 							this._data.splice(cellRange.r1, 0, header); // insert group header
 
@@ -6713,7 +6666,12 @@
 							break;
 
 						case "footer":
-							groupRange = this._addGroupRange(leaf.groupInfo, cellRange, true);
+							groupRange = this._addGroupRange(leaf.groupInfo, cellRange, true, hasHeaderOrFooter);
+
+							if (!hasHeaderOrFooter) {
+								break;
+							}
+
 							this._updateByGroupRange(groupRange, level);
 
 							footer = this._buildGroupRow(groupRange, cellRange, false, false);
@@ -6731,12 +6689,7 @@
 							break;
 
 						case "headerAndFooter":
-							groupRange = this._addGroupRange(leaf.groupInfo, cellRange, isExpanded);
-							this._updateByGroupRange(groupRange, level);
-
-							isParentCollapsed = this._groupHelper.isParentCollapsed(this._leaves, groupRange.cr, level);
-							header = this._buildGroupRow(groupRange, cellRange, true, isParentCollapsed);
-							footer = this._buildGroupRow(groupRange, cellRange, false, false);
+							groupRange = this._addGroupRange(leaf.groupInfo, cellRange, isExpanded, hasHeaderOrFooter);
 
 							for (i = cellRange.r1; i <= cellRange.r2; i++) {
 								this._data[i].__attr["aria-level"] = level + 1;
@@ -6745,6 +6698,16 @@
 									this._data[i].__attr["aria-hidden"] = true;
 								}
 							}
+
+							if (!hasHeaderOrFooter) {
+								break;
+							}
+
+							this._updateByGroupRange(groupRange, level);
+
+							isParentCollapsed = this._groupHelper.isParentCollapsed(this._leaves, groupRange.cr, level);
+							header = this._buildGroupRow(groupRange, cellRange, true, isParentCollapsed);
+							footer = this._buildGroupRow(groupRange, cellRange, false, false);
 
 							this._data.splice(cellRange.r2 + 1, 0, footer);
 							footer.__attr["aria-level"] = level;
@@ -6779,7 +6742,7 @@
 					gridView = leaf.owner,
 					row = [],
 					groupByText = "",
-					//headerOffset = 0,
+				//headerOffset = 0,
 					aggregate = "",
 					tmp, cell, caption, args, span, col, bFirst, agg;
 
@@ -6918,7 +6881,7 @@
 
 						row.push({
 							html: agg.toString(),
-							__attr: { groupInfo: { leafIndex: tmp.leavesIdx, purpose: $.wijmo.wijgrid.groupRowCellPurpose.aggregateCell} } // will be passed into the cellStyleFormatter
+							__attr: { groupInfo: { leafIndex: tmp.leavesIdx, purpose: $.wijmo.wijgrid.groupRowCellPurpose.aggregateCell}} // will be passed into the cellStyleFormatter
 						});
 					}
 				}
@@ -6991,7 +6954,7 @@
 				return range;
 			};
 
-			this._addGroupRange = function (groupInfo, cellRange, isExpanded) {
+			this._addGroupRange = function (groupInfo, cellRange, isExpanded, hasHeaderOrFooter) {
 				var result = null,
 					idx = this._groupHelper.getChildGroupIndex(cellRange, groupInfo.expandInfo),
 					range, expandState, r1, r2;
@@ -7000,18 +6963,18 @@
 					result = groupInfo.expandInfo[idx];
 				} else {
 					range = new $.wijmo.wijgrid.cellRange(cellRange.r1, cellRange.r1, cellRange.r2, cellRange.r2); // clone
-					expandState = (groupInfo.position === "footer")
+					expandState = (groupInfo.position === "footer" || !hasHeaderOrFooter)
 						? true
 						: isExpanded && (groupInfo.outlineMode !== "startCollapsed");
 
-					result = new $.wijmo.wijgrid.groupRange(expandState, range, -1, groupInfo.position);
+					result = new $.wijmo.wijgrid.groupRange(expandState, range, -1, groupInfo.position, hasHeaderOrFooter);
 
 					result.owner = groupInfo;
 
 					groupInfo.expandInfo.push(result);
 				}
 
-				if (result) {
+				if (result && hasHeaderOrFooter) {
 					r1 = cellRange.r1;
 					r2 = cellRange.r2;
 
@@ -7035,10 +6998,6 @@
 				for (i = 0, len = this._leaves.length; i < len; i++) {
 					groupInfo = this._leaves[i].groupInfo;
 
-					//
-					// if (groupInfo) {
-					//
-
 					if (groupInfo && (groupInfo.level < level)) {
 
 						len2 = (groupInfo.expandInfo)
@@ -7047,9 +7006,6 @@
 
 						for (j = 0; j < len2; j++) {
 							cur = groupInfo.expandInfo[j];
-							//
-							//if (cur.cr.r1 !== groupRange.cr.r1) {
-							//
 							delta = (groupRange.position === "headerAndFooter") ? 2 : 1;
 
 							if (cur.cr.r1 >= groupRange.cr.r1 && !((cur.cr.r1 === groupRange.cr.r1) && (cur.position === "footer"))) {
@@ -7059,9 +7015,6 @@
 							if (cur.cr.r2 >= groupRange.cr.r1) {
 								cur.cr.r2 += delta;
 							}
-							//
-							//}
-							//
 						}
 					}
 				}
@@ -9097,6 +9050,28 @@
 			this._wijgrid.element.removeClass("wijmo-wijgrid-table");
 		},
 
+		ensureDisabledState: function () {
+			var disabledClass = this._wijgrid.widgetBaseClass + "-disabled ui-state-disabled",
+				disabled = this._wijgrid.options.disabled;
+
+			$.each(this.subTables(), function (key, table) {
+				if (table) {
+					var $table = $(table.element());
+
+					if (disabled) {
+						$table
+							.addClass(disabledClass)
+							.attr("aria-disabled", true);
+					}
+					else {
+						$table
+							.removeClass(disabledClass)
+							.attr("aria-disabled", false);
+					}
+				}
+			});
+		},
+
 		ensureWidth: function (index, value, oldValue) {
 			this._setColumnWidth(index, value);
 		},
@@ -9212,6 +9187,8 @@
 		_postRender: function () {
 			// disable or enable DOM selection
 			this.toggleDOMSelection(this._wijgrid.options.selectionMode === "none");
+
+			this.ensureDisabledState();
 		},
 
 		_preRender: function () {
@@ -9228,39 +9205,47 @@
 
 			if (px) {
 				$(th).setOutWidth(px);
-				$.each(cols, function(idx, col) {
+				$.each(cols, function (idx, col) {
 					$(col).setOutWidth(px);
 				});
 			}
 		},
 
-		_getColumnWidth: function(index, widthArray) {
+		_getColumnWidth: function (index, widthArray) {
 			var leaf, colWidth, maxW, joinedTables, relIdx, i, table, rows, cell, cellWidth;
+
 			if (widthArray) {
 				leaf = this._wijgrid._field("visibleLeaves")[index];
+
 				if (leaf._realWidth !== undefined) {
-					colWidth = { width: leaf._realWidth, real : true };
+					colWidth = { width: leaf._realWidth, real: true };
 				} else if (leaf.isRowHeader) {
-					colWidth = { width: this._rowHeaderSize, real : true };
+					colWidth = { width: this._rowHeaderSize, real: true };
 				} else {
 					maxW = 0;
 					joinedTables = this.getJoinedTables(true, index);
 					relIdx = joinedTables[2];
+
 					for (i = 0; i < 2; i++) {
 						table = joinedTables[i];
+
 						if (table !== null) {
 							rows = table.element().rows;
+
 							if (rows.length > 0) {
-								cell = rows[0].cells[relIdx];
+								cell = rows[rows.length - 1].cells[relIdx]; // skip header rows if possible
 								cellWidth = $(cell).outerWidth();
+
 								if (cellWidth > maxW) {
 									maxW = cellWidth;
 								}
 							}
 						}
 					}
-					colWidth = { width: maxW, real : false };
+
+					colWidth = { width: maxW, real: false };
 				}
+
 				widthArray.push(colWidth);
 			}
 		},
@@ -9301,7 +9286,7 @@
 				expandCount = 0,
 				expandWidth, remainingWidth,
 				bFirst = true;
-			
+
 			if (maxWidth <= expectedWidth) {
 				$.extend(true, widthArray, maxWidthArray);
 				if (maxWidth == expectedWidth || ensureColumnsPxWidth) {
@@ -9360,6 +9345,15 @@
 			this._contentArea = null;
 		},
 
+		ensureWidth: function (index, value, oldValue) {
+			var $table = $(this._dataTable.element()),
+				tableWidth = $table.width() + value - oldValue;
+
+			this._base(index, value, oldValue);
+
+			this._setTableWidth([$table], tableWidth, value, index);
+		},
+
 		getVisibleAreaBounds: function () {
 			var dataTableBounds = $.wijmo.wijgrid.bounds(this._dataTable.element()),
 				splitSEBounds;
@@ -9400,12 +9394,16 @@
 				var isPercentage,
 					w = leaf.width;
 
-				if (w) {
-					isPercentage = typeof w === "string";
+				if (w || (w === 0)) {
+					isPercentage = ((typeof (w) === "string") && (w.length > 1) && (w[w.length - 1] === "%"));
+
 					//convert percent to value
 					if (isPercentage) {
 						w = outerDiv.width() * parseFloat(w) / 100;
+					} else {
+						w = parseFloat(w);
 					}
+
 					if (leaf.ensurePxWidth || (leaf.ensurePxWidth === undefined && o.ensureColumnsPxWidth)) {
 						leaf._realWidth = w;
 					}
@@ -9933,6 +9931,7 @@
 			if (!this._scroller.data("wijsuperpanel")) {
 				this._scroller.wijsuperpanel({
 					//scrolled: $.proxy(this._onScrolled, this),
+					disabled: wijgrid.options.disabled,
 					scroll: $.proxy(this._onScroll, this),
 					bubbleScrollingEvent: true,
 					vScroller: { scrollBarVisibility: panelModes.vScrollBarVisibility, scrollValue: scrollValue.type === "fixed" ? scrollValue.vScrollValue : null },
@@ -10120,12 +10119,16 @@
 				var isPercentage,
 					w = leaf.width;
 
-				if (w) {
-					isPercentage = typeof w === "string";
+				if (w || (w === 0)) {
+					isPercentage = ((typeof (w) === "string") && (w.length > 1) && (w[w.length - 1] === "%"));
+
 					//convert percent to value
 					if (isPercentage) {
 						w = outerDiv.width() * parseFloat(w) / 100;
+					} else {
+						w = parseFloat(w);
 					}
+
 					if (leaf.ensurePxWidth || (leaf.ensurePxWidth === undefined && o.ensureColumnsPxWidth)) {
 						leaf._realWidth = w;
 					}
@@ -11229,7 +11232,7 @@
 
 				if (isOverFixedArea && this._scroller.data("wijsuperpanel")) {
 					vPos = this._scroller.wijsuperpanel("option", "vScroller").scrollValue;
-					
+
 					this._scroller.wijsuperpanel("doScrolling", dir);
 
 					// simulate wijsuperpanel behaviour: prevent window scrolling until superpanel is not scrolled to the end.

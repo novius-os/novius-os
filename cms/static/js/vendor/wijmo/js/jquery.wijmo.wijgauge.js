@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window*/
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -22,7 +22,9 @@
 (function ($) {
 	"use strict";
 	// do nothing if raphael not loaded
-	if (!window.Raphael) return;
+	if (!window.Raphael) {
+		return;
+	}
 
 	Raphael.fn.isoTri = function (x, y, width, height, compass) {
 		var x1 = x,
@@ -569,13 +571,13 @@
 				width = style.width,
 				height = style.height;
 
-				if (width !== "") {
-					o.width = ele.width();
-				}
+			if (width !== "") {
+				o.width = ele.width();
+			}
 				
-				if (height !== "") {
-					o.height = ele.height();
-				}
+			if (height !== "") {
+				o.height = ele.height();
+			}
 		},
 
 		_setOption: function (key, value) {

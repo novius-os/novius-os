@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window, Globalize*/
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -841,7 +841,9 @@
 				chartLabelStyle: o.chartLabelStyle,
 				chartLabelFormatString: o.chartLabelFormatString,
 				isXTime: self.axisInfo.x.isTime,
-				isYTime: self.axisInfo.y.isTime,
+				isYTime: self.axisInfo.y.isTime || 
+					self.axisInfo.y[0].isTime,
+				//isYTime: self.axisInfo.y.isTime,
 				disabled: o.disabled,
 				hint: o.hint,
 				aniPathsAttr: self.aniPathsAttr,
@@ -935,7 +937,8 @@
 			duration = ani.duration,
 			easing = ani.easing;
 		if (ani.direction === "horizontal") {
-			if (seTrans.enabled) {
+			if (fieldsAniPathAttr && fieldsAniPathAttr.length && 
+					seTrans.enabled) {
 				duration = seTrans.duration;
 				easing = seTrans.easing;
 			}
@@ -1076,6 +1079,8 @@
 					if (node && node.clipRect) {
 						attrs = this.attrs;
 						delete attrs["clip-rect"];
+						//if (!attrs.src || !attrs.src.length) {
+						//}
 						node.clipRect = null;
 						//group = $(node).parent();
 						//clipRect = group.parent();
@@ -1083,6 +1088,11 @@
 						clipRect.before(node);
 						clipRect.remove();
 						this.attr(attrs);
+						//Add comments to fix tfs issue 19385
+						if (attrs.src && attrs.src.length) {
+							this.attr({"src": attrs.src});
+						}
+						//end comments.
 					}
 				}
 			});
@@ -1667,7 +1677,7 @@
 		//Add comments by RyanWu@20110707.
 		//For supporting date time value on y axi.
 		//labelText = valY;
-		labelText = isYTime ? $.wijchart.fromOADate(valY) : valY;
+		labelText = isYTime ? $.fromOADate(valY) : valY;
 		//end by RyanWu@20110707.
 
 		if (chartLabelFormatString && chartLabelFormatString.length) {

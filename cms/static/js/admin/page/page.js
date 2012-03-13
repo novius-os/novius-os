@@ -48,6 +48,7 @@ define([
                     }
                 }
             },
+            reload : 'cms_page',
             mp3grid : {
                 adds : {
                     page : {

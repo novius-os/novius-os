@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -1034,8 +1034,12 @@
 							//the active class
 							//buttonObj.parent.children("." + css_button_text)
 							//.addClass(css_state_active);
-							radios = $(":radio", buttonObj.parent
+							//update for fixing issue 20268 by wh at 2011/3/7
+							//radios = $(":radio", buttonObj.parent
+							//		.closest("ul"));
+							radios = $(":radio", buttonObj.button
 									.closest("ul"));
+							//end for issue 20268
 							if (radios) {
 								$.each(radios, function () {
 									self._updateGroupElementTextState(this);

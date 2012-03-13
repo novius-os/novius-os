@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -171,7 +171,7 @@
         _beginUpdate: function () {
             var o = this.options,
 				strDate,
-				date;
+				date = null;
 
             if (o.minDate) {
                 if (typeof o.minDate === 'string') {
@@ -186,11 +186,8 @@
             }
 
             if (!o.date) {
-                date = new Date();
-                if (!this.element.data('elementValue')) {
-					this.element.data('nullDate', true);
-                } else {
-					strDate = this.element.data('elementValue');
+                if (!!this.element.data('elementValue')) {
+                    strDate = this.element.data('elementValue');
                 }
             } else {
                 if (typeof o.date === 'string') {
@@ -207,8 +204,8 @@
             this._safeSetDate(date);
 
             this.element.data({
-                defaultDate: new Date(o.date.getTime()),
-                preDate: new Date(o.date.getTime())
+                defaultDate: date === null ? date : new Date(o.date.getTime()),
+                preDate: date === null ? date : new Date(o.date.getTime())
             });
             this._resetTimeStamp();
             if (o.showTrigger && !this._hasComboItems()) {
@@ -259,32 +256,43 @@
 
             return true;
         },
+		
+		_checkRange: function(date){
+			var o = this.options;
+			if (!!date){
+				if (o.minDate && date < o.minDate) {
+					date = new Date(Math.max(o.minDate, date));
+				}
 
-        _safeSetDate: function (date, autoCancel) {
-            var o = this.options,
-				cache = date;
+				if (o.maxDate && date > o.maxDate) {
+					date = new Date(Math.min(o.maxDate, date));
+				}
+			}
+			
+			return date;
+		},
 
-            if (o.minDate) {
-                if (date < o.minDate) {
-                    if (autoCancel) { return false; }
-                    date = new Date(Math.max(o.minDate, date));
-                }
-            }
+        _safeSetDate: function (date) {
+            var o = this.options, cache = date;
 
-            if (o.maxDate) {
-                if (date > o.maxDate) {
-                    if (autoCancel) { return false; }
-                    date = new Date(Math.min(o.maxDate, date));
-                }
-            }
-
-            if (isNaN(date)) {
-                date = cache;
-            }
+			date = this._checkRange(date);
+			if (isNaN(date)) {
+				date = cache;
+			}
 
             o.date = date;
             return true;
         },
+		
+		_safeGetDate: function(){
+			var o = this.options, date = o.date;
+			if (!date){
+				date = new Date();
+			}
+			
+			date = this._checkRange(date);
+			return date;
+		},
 
         _setOption: function (key, value) {
             $.Widget.prototype._setOption.apply(this, arguments);
@@ -292,17 +300,14 @@
 
             switch (key) {
                 case 'date':
-                    if (!value) {
-                        value = new Date();
-                        this.element.data('nullDate', !this.isFocused());
-                    } else {
+                    if (!!value) {
                         if (typeof value === "string") {
-							value = this._strToDate(value);
+                            value = this._strToDate(value);
                         } else if (typeof value === "object") {
                             value = new Date(value.getTime());
                         } else {
-							value = new Date(value);
-						}
+                            value = new Date(value);
+                        }
 
                         if (isNaN(value)) {
                             value = new Date();
@@ -311,7 +316,7 @@
                     this._safeSetDate(value);
                     this._updateText();
                     this._highLightField();
-					
+
                     break;
 
                 case 'dateFormat':
@@ -341,10 +346,9 @@
             if (d === undefined || d === null) {
                 d = this.element.data('elementValue');
                 if (d !== undefined && d !== null && d !== "") {
-                    this.element.val(d);
-                    this._onChange();
+					this.setText(val);
                 } else {
-                    this._setData(new Date());
+                    this._setData(null);
                 }
             } else {
                 this._setData(d);
@@ -437,11 +441,13 @@
                 window.setTimeout($.proxy(function () { this._doSpin(up, true); }, this), this._calcSpinInterval());
             }
         },
+		
+		_onChange: function (e) {
+		},
 
         _afterFocused: function () {
             if (this._isNullText()) {
                 this._doFocus();
-                this.element.data('nullDate', false);
             }
 
             var self = this,
@@ -528,9 +534,16 @@
         },
 
         _keyPressPreview: function (e) {
+            var key = e.keyCode || e.which;
+			if (key === $.ui.keyCode.ENTER) {
+				if (this.isDateNull()){
+					this.options.date = new Date();
+				}
+				return false;
+			}
+		
             var range = this._textProvider.getFieldRange(this.options.activeField);
             if (range) {
-                var key = e.keyCode || e.which;
                 if (key === $.ui.keyCode.TAB) {
                     return true;
                 }
@@ -578,7 +591,8 @@
         _raiseDataChanged: function () {
             var d = this.options.date;
             var prevDt = this.element.data('preDate');
-            this.element.data('preDate', new Date(d.getTime()));
+            this.element.data('preDate', !d ? null : new Date(d.getTime()));
+			
             if ((!prevDt && d) || (prevDt && !d) || (prevDt && d && (prevDt.getTime() !== d.getTime()))) {
                 this._syncCalendar();
                 this.element.attr('aria-valuenow', d);
@@ -588,7 +602,7 @@
 
         isDateNull: function () {
             /// <summary>Determines whether the date is a null value.</summary>
-            return this.element.data('nullDate');
+			return this.options.date === null || this.options.date === undefined;
         },
 
         _isMinDate: function (date) {
@@ -607,7 +621,7 @@
             if (calendar.length != 1) { return; }
 
             this.element.data('calendar', calendar);
-            calendar.wijcalendar({ popupMode: true });
+            calendar.wijcalendar({ popupMode: true, culture: this.options.culture });
             this._syncCalendar();
 
             var self = this;
@@ -624,7 +638,7 @@
             if (!calendar) { return; }
 
             var o = this.options,
-				d = o.date;
+				d = this._safeGetDate();
             if (this._isMinDate(d)) { d = new Date(); }
 
             calendar.wijcalendar('option', 'displayDate', d);
@@ -650,11 +664,31 @@
 
             if (calendar.wijcalendar('isPopupShowing')) {
                 calendar.wijcalendar('hide');
+				this._trySetFocus();
                 return;
             }
 
             this._syncCalendar();
             calendar.wijcalendar('popup', $.extend({}, this.options.popupPosition, { of: this.outerDiv }));
+        },
+
+        _isCalendarVisible: function () {
+            if (!this._allowEdit()) { return false; }
+
+            var calendar = this.element.data('calendar');
+            if (!calendar) { return false; }
+
+            return calendar.wijcalendar('isPopupShowing');
+        },
+
+        _popupVisible: function () {
+            if (this._hasComboItems()) {
+                return this._isComboListVisible();
+            } else {
+                return this._isCalendarVisible();
+            }
+
+            return false;
         }
     }));
 
@@ -702,7 +736,7 @@
         },
 
         needToMove: function (index, pos, ch) {
-            if (!this.inputWidget._isValidDate(this.inputWidget.options.date, true)) { return false; }
+            if (!this.inputWidget._isValidDate(this.inputWidget._safeGetDate(), true)) { return false; }
 
             var desc = this.fields[index];
             if (pos === desc.maxLen) { return true; }
@@ -892,7 +926,7 @@
         },
 
         getDate: function () {
-            return (!!this.inputWidget) ? new Date(this.inputWidget.options.date.getTime()) : undefined;
+            return (!!this.inputWidget) ? new Date(this.inputWidget._safeGetDate().getTime()) : undefined;
         },
 
         setDate: function (value) {
@@ -1413,6 +1447,7 @@
             if (this.inputWidget.options.showNullText && !this.inputWidget.isFocused() && this.inputWidget.isDateNull()) {
                 return this.inputWidget.options.nullText;
             }
+
             var s = '', l = 0;
             this.desPostions = new Array(0);
             for (var i = 0; i < this.descriptors.length; i++) {
@@ -2501,11 +2536,12 @@
         },
 
         setText: function (value, allowchangeotherpart, result) {
+            var h;
             if (value.toLowerCase().indexOf('a') >= 0) {
-                var h = (this._txtProvider.getHours() * 1) % 12;
+                h = (this._txtProvider.getHours() * 1) % 12;
                 this._txtProvider.setHours(h, true);
             } else if (value.toLowerCase().indexOf('p') >= 0) {
-                var h = (this._txtProvider.getHours() * 1) % 12 + 12;
+                h = (this._txtProvider.getHours() * 1) % 12 + 12;
                 this._txtProvider.setHours(h, true);
             }
         },
@@ -2547,11 +2583,12 @@
         },
 
         setText: function (value, allowchangeotherpart, result) {
+            var h;
             if (value.toLowerCase().indexOf('a') >= 0) {
-                var h = (this._txtProvider.getHours() * 1) % 12;
+                h = (this._txtProvider.getHours() * 1) % 12;
                 this._txtProvider.setHours(h, true);
             } else if (value.toLowerCase().indexOf('p') >= 0) {
-                var h = (this._txtProvider.getHours() * 1) % 12 + 12;
+                h = (this._txtProvider.getHours() * 1) % 12 + 12;
                 this._txtProvider.setHours(h, true);
             }
 

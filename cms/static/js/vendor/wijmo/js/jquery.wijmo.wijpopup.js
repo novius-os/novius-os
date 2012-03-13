@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -183,6 +183,16 @@
         isAnimating: function () {
             return !!this.element.data("animating.wijpopup");
         },
+		
+		_pushQueue: function(){
+			var $win = $(window), arr = $win.data('wijPopupQueue'), len;
+			if (!arr){
+				arr = new Array();
+				$win.data('wijPopupQueue', arr);
+			}
+			
+			return arr.push(this);
+		},
 
         show: function (position) {
             /// <summary>Popups the element.  Position is an optional argument, it is the options object used in jquery.ui.position.</summary>
@@ -191,8 +201,13 @@
 
             if (this._trigger('showing') === false) { return; }
 
+			var self = this;
             if (this.options.autoHide) {
-                $(document).bind('mouseup.wijpopup', $.proxy(this._onDocMouseUp, this));
+				if (this._pushQueue() === 1){
+					$(document).bind('mouseup.wijpopup', function(e){
+						self._onDocMouseUp(e);
+					});
+				}
             }
 
             var effect = this.options.showEffect || "show";
@@ -211,7 +226,7 @@
                 this._showCompleted();
             }
         },
-
+		
         _showCompleted: function () {
             this.element.removeData("animating.wijpopup");
             this.element.data('visible.wijpopup', true);
@@ -234,7 +249,8 @@
 
             if (this._trigger('hiding') === false) { return; }
 
-            $(document).unbind('mouseup.wijpopup');
+            //$(document).unbind('mouseup.wijpopup');
+
             var effect = this.options.hideEffect || "hide";
             var duration = this.options.hideDuration || 300;
             var ops = this.options.hideOptions || {};
@@ -269,10 +285,32 @@
         },
 
         _onDocMouseUp: function (e) {
-            var $srcElement = $(e.target ? e.target : e.srcElement);
-            if (this.isVisible() && !!this.options.autoHide && !$srcElement.parents().hasClass('wijmo-wijcombobox-list')) {
-                if ($srcElement.get(0) != this.element.get(0) && $srcElement.parents().index(this.element) < 0) { this.hide(); }
-            }
+			var $win = $(window), 
+				$srcElement = $(e.target ? e.target : e.srcElement),
+				arr = $win.data('wijPopupQueue'), 
+				wijPop;
+				
+			if ($srcElement.parents().hasClass('wijmo-wijcombobox-list') || $srcElement.parents().hasClass('wijmo-wijcalendar')){
+				return;
+			}
+			
+			if (!!arr){
+				while( wijPop = arr.pop()){
+					if (wijPop.isVisible() && !!wijPop.options.autoHide){
+						if ($srcElement.get(0) != wijPop.element.get(0) && $srcElement.parents().index(wijPop.element) < 0) { 
+							wijPop.hide(); 
+						}else{
+							arr.push(wijPop);
+						}
+						
+						break;
+					}
+				}
+				
+				if (arr.length === 0){
+					$(document).unbind('mouseup.wijpopup');
+				}
+			}
         },
 
         _onMove: function (e) {

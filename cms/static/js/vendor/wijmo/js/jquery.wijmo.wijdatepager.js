@@ -4,7 +4,7 @@ clearTimeout,amplify*/
 /*jslint nomen: false*/
 /*
 *
-* Wijmo Library 2.0.0
+* Wijmo Library 2.0.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -400,7 +400,7 @@ clearTimeout,amplify*/
 				case "day":
 
 					dt = new Date(selectedDate.getFullYear(),
-													selectedDate.getMonth() - 1, 1);
+													selectedDate.getMonth(), 0);
 					datesDef.push({ l: Globalize.format(dt, "MMM", this._getCulture()), d: dt,
 						range: true
 					});

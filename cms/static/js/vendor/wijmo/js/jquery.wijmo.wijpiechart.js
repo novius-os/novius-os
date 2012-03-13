@@ -1,7 +1,7 @@
 /*globals Raphael,jQuery, window*/
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -487,7 +487,9 @@
 			canvasBounds.endX = canvasBounds.startX + 2 * r;
 			canvasBounds.startY += height / 2 - r;
 			canvasBounds.endY = canvasBounds.startY + 2 * r;
-
+			if (self.chartElement.data("fields")) {
+				self.chartElement.data("fields").seriesEles = null;
+			}
 			self.chartElement.wijpie({
 				canvas: self.canvas,
 				tooltip: self.tooltip,
@@ -570,7 +572,7 @@
 				mouseMove = options.mouseMove,
 				click = options.click,
 				tooltip = options.tooltip,
-				fields = element.data("fields") || {},
+				fields =  element.data("fields") || {},
 				chartElements = fields.chartElements || {},
 				aniSectorAttrs = fields.aniSectorAttrs,
 				aniLabelAttrs = fields.aniLabelAttrs,
@@ -758,11 +760,11 @@
 								//}, duration, easing);
 								sector.wijAnimate({
 									transform: Raphael.format("t{0},{1}", offset.x, offset.y)
-								});
+								}, duration, easing);
 								if (sector.tracker && !sector.tracker.removed) {
 									sector.tracker.wijAnimate({
 										transform: Raphael.format("t{0},{1}", offset.x, offset.y)
-									});
+									}, duration, easing);
 								}
 
 								explodeAnimationShowing = true;
@@ -1004,14 +1006,23 @@
 				if (innerRadius) {
 					sector.innerRadius = innerRadius;
 				}
-				
-				tracker = sector.clone().attr({opacity: 0.01, fill: "white", "fill-opacity": 0.01});
+				tracker = sector.clone();
+				// in vml, if the tracker has a stroke, the boder is black.
+				if ($.browser.msie && $.browser.version < 9) {
+					tracker.attr({opacity: 0.01, fill: "white", "stroke-width": 0, "fill-opacity": 0.01});
+				}
+				else {
+					tracker.attr({opacity: 0.01, fill: "white", "fill-opacity": 0.01});
+				}
 				addClass($(tracker.node), "wijchart-canvas-object wijpiechart pietracker wijchart-tracker" + idx);
 				$(tracker.node).data("owner", $(sector.node));
 				sector.tracker = tracker;
 				trackers.push(tracker);
-				
-				addClass($(sector.node), "wijchart-canvas-object wijpiechart");
+
+				// add class "wijmo-wijpiechart-series-n" to fix bug 18590
+				addClass($(sector.node), "wijchart-canvas-object wijpiechart wijmo-wijpiechart-series-" + idx);
+				//addClass($(sector.node), "wijchart-canvas-object wijpiechart");
+				//end comments
 				$(sector.node).data("wijchartDataObj", series);
 
 				if (showChartLabels) {

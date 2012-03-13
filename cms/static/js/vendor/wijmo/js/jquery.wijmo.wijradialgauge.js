@@ -1,7 +1,7 @@
 /*globals $, Raphael, jQuery, document, window*/
 /*
  *
- * Wijmo Library 2.0.0
+ * Wijmo Library 2.0.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -253,7 +253,7 @@
 		_init: function () {
 			var self = this,
 				o = self.options;
-			o.max = o.max > 360 ? 360 : o.max;
+			//o.max = o.max > 360 ? 360 : o.max;
 			$.wijmo.wijgauge.prototype._init.apply(self, arguments);
 		},
 
