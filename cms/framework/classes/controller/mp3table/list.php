@@ -27,8 +27,8 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 
 	protected $mp3grid = array();
 
-    public function before() {
-        parent::before();
+    public function before($response = null) {
+        parent::before($response);
         if (!isset($this->config['mp3grid'])) {
             list($module_name, $file_name) = $this->getLocation();
             $file_name = explode('/', $file_name);

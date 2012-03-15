@@ -37,9 +37,15 @@ $fieldset->field('page_lock')->set_template('{label} {field}');
 $checkbox = '<br /><label><input type="checkbox" data-id="same_title">'.strtr(__('Use {field}'), array('{field}' => __('title'))).'</label>';
 $fieldset->field('page_menu_title')->set_template("\t\t<span class=\"{error_class}\">{label}{required}</span>\n\t\t<br />\n\t\t<span class=\"{error_class}\">{field} $checkbox {error_msg}</span>\n");
 
-
-$short_link = \View::forge('form/short_link');
-$qrcode = \View::forge('form/qrcode');
+/*
+$short_url = $page->page_id; // Needs an application page
+$short_link = \View::forge('form/short_link', array(
+    'short_url' => $short_url,
+));
+$qrcode = \View::forge('form/qrcode', array(
+    'url' => $short_url,
+));
+*/
 ?>
 
 <?= $fieldset->open('admin/admin/page/form/edit/'.$page->page_id); ?>
@@ -79,8 +85,8 @@ $qrcode = \View::forge('form/qrcode');
 
 	'menu' => array(
 		__('Menu') => array('page_menu', 'page_menu_title'),
-        __('URL (page address)') => array('page_virtual_name', $short_link, $qrcode),
-		__('SEO') => array('page_virtual_name', 'page_meta_noindex', 'page_meta_title', 'page_meta_description', 'page_meta_keywords'),
+        __('URL (page address)') => array('page_virtual_name'),
+		__('SEO') => array('page_meta_noindex', 'page_meta_title', 'page_meta_description', 'page_meta_keywords'),
 		__('Admin') => array('page_cache_duration', 'page_lock'),
 	),
 ), false); ?>

@@ -60,8 +60,7 @@ require(['jquery-nos', 'static/cms/js/vendor/jquery/jquery-form/jquery.form.min'
 		var $seo_title  = $container.find('input[name=medif_path]');
 		var $same_title = $container.find('input[data-id=same_title]');
 
-        var $dialog       = $.nos.data('dialog');
-        //var $dialog       = window.parent.jQuery(':wijmo-wijdialog:last');
+        var $dialog = $container.closest(':wijmo-wijdialog');
         var closeDialog = function() {
             $dialog && $dialog
                 .wijdialog('close')

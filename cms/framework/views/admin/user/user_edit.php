@@ -51,11 +51,12 @@ foreach ($fieldset->field() as $field) {
                 <?= $fieldset->open('admin/admin/user/form/edit/'.$user->user_id); ?>
                 <?= View::forge('form/layout_standard', array(
                     'fieldset' => $fieldset,
+                    // Used by the behaviours (publishable, etc.)
+                    'object' => $user,
                     'medias' => null,
                     'title' => array('user_firstname', 'user_name'),
                     'id' => 'user_id',
 
-                    'published' => null,
                     'save' => 'save',
 
                     'subtitle' => array(),

@@ -35,7 +35,13 @@ define([
                     primary : true,
                     icon : 'trash',
                     action : function(item) {
-                        $.nos.notify('Not implemented (yet)');
+                        $.nos.dialog({
+                            contentUrl: 'admin/admin/page/form/delete_page/' + item.id,
+                            ajax : true,
+                            title: mp3Grid.i18n('Delete a page')._(),
+                            width: 500,
+                            height: 250
+                        });
                     }
                 },
                 'visualise' : {
@@ -68,6 +74,9 @@ define([
                             dataKey : 'title',
                             sortDirection : 'ascending'
                         },
+                        lang : {
+                            lang : true
+                        },
                         url : {
                             headerText : mp3Grid.i18n('Virtual url'),
                             visible : false,
@@ -75,7 +84,7 @@ define([
                         },
                         published : {
                             headerText : mp3Grid.i18n('Status'),
-                            dataKey : 'url'
+                            dataKey : 'publication_status'
                         },
                         actions : {
                             actions : ['edit', 'delete', 'visualise']

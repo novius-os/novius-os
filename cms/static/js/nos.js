@@ -365,7 +365,7 @@ define([
                             .html( iconClass ? '<span class="' + iconClass +'"></span>' : '&nbsp;' + action.label + '&nbsp;');
 
                         // Check whether action name is disabled
-                        if (action.name && noParseData.actions && noParseData.actions[action.name] == false) {
+                        if (action.name && noParseData && noParseData.actions && noParseData.actions[action.name] == false) {
                             uiAction.addClass('ui-state-disabled')
                             .click(function(e) {
                                 e.stopImmediatePropagation();
@@ -559,18 +559,48 @@ define([
 
                 var proceed = true;
                 if (options.ajax) {
-                    $dialog.load(options.contentUrl, $.isPlainObject(options.ajax) ? options.ajax : {}, function(responseText, textStatus, XMLHttpRequest){
-                        try {
-                            var json = $.parseJSON(responseText);
-                            // If the dialog ajax URL returns a valid JSON string, don't show the dialog
-                            proceed = false;
-                        } catch (e) {}
-                        if (proceed) {
-                            delete options.contentUrl;
-                            $dialog.wijdialog(options);
-                        } else {
-                            $dialog.empty();
-                            $.nos.ajax.success(json);
+                    var contentUrl = options.contentUrl;
+                    delete options.contentUrl;
+                    options.autoOpen = false;
+                    $dialog.wijdialog(options);
+
+                    // Request the remote document
+                    $.ajax({
+                        url: contentUrl,
+                        type: 'GET',
+                        dataType: "html",
+                        // Complete callback (responseText is used internally)
+                        complete: function( jqXHR, status, responseText ) {
+                            // Store the response as specified by the jqXHR object
+                            responseText = jqXHR.responseText;
+                            // If successful, inject the HTML into all the matched elements
+                            if ( jqXHR.isResolved() ) {
+                                // #4825: Get the actual response in case
+                                // a dataFilter is present in ajaxSettings
+                                jqXHR.done(function( r ) {
+                                    responseText = r;
+                                });
+
+
+
+                                try {
+                                    var json = $.parseJSON(responseText);
+                                    // If the dialog ajax URL returns a valid JSON string, don't show the dialog
+                                    proceed = false;
+                                } catch (e) {}
+
+                                if (proceed) {
+                                    $dialog.wijdialog('open');
+                                } else {
+                                    $dialog.empty();
+                                    $dialog.wijdialog('destroy');
+                                    $dialog.remove();
+                                    $.nos.ajax.success(json);
+                                }
+                                
+                                // inject the full result
+                                $dialog.html( responseText );
+                            }
                         }
                     });
                 } else {
@@ -825,10 +855,11 @@ define([
             },
 			ui : {
 				form : function(context) {
+                    context = context || 'body';
 					$(function() {
-						context = $(context) || 'body';
-						$(":input[type='text'],:input[type='password'],:input[type='email'],textarea", context).wijtextbox();
-						$(":input[type='submit'],button", context).each(function() {
+						var $container = $(context);
+						$container.find(":input[type='text'],:input[type='password'],:input[type='email'],textarea").wijtextbox();
+						$container.find(":input[type='submit'],button").each(function() {
 							var options = {};
 							var icon = $(this).data('icon');
 							if (icon) {
@@ -838,13 +869,13 @@ define([
 							}
 							$(this).button(options);
 						});
-						$("select", context).wijdropdown();
-						$(":input[type=checkbox]", context).wijcheckbox();
-						$('.expander', context).each(function() {
+						$container.find("select").wijdropdown();
+						$container.find(":input[type=checkbox]").wijcheckbox();
+						$container.find('.expander').each(function() {
                             var $this = $(this);
                             $this.wijexpander($.extend({expanded: true}, $this.data('wijexpander-options')));
                         });
-						$('.accordion', context).wijaccordion({
+						$container.find('.accordion').wijaccordion({
 							header: "h3"
 						});
 					});

@@ -10,6 +10,10 @@
 @import "compass/css3/box-shadow";
 @import "compass/css3/text-shadow";
 
+strong {
+    font-weight: bold;
+}
+
 body, select, input, textarea {
 	color       : #444; /* 444 looks better than black: twitter.com/H_FJ/statuses/11800719859 */
 	font-family : franklin gothic medium, arial, verdana, helvetica, sans-serif; /* Set your base font here, to apply evenly */

@@ -54,7 +54,7 @@ require(['jquery-nos'], function($) {
 		<p><?= $fieldset->field($save)->set_template('{field}')->build() ?> &nbsp; or &nbsp; <a href="#" onclick="javascript:$.nos.tabs.close();return false;"><?= __('Cancel') ?></a></p>
         <?php
             echo \View::forge('form/publishable', array(
-                'object' => $object,
+                'object' => !empty($object) ? $object : null,
             ));
         ?>
 	</div>

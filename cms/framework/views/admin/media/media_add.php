@@ -63,8 +63,7 @@ function($) {
 		var $slug       = $container.find('input[name=slug]');
 		var $same_title = $container.find('input[data-id=same_title]');
 
-        var $dialog       = $.nos.data('dialog');
-        //var $dialog       = window.parent.jQuery(':wijmo-wijdialog:last');
+        var $dialog = $container.closest(':wijmo-wijdialog');
         var closeDialog = function() {
             $dialog && $dialog
                 .wijdialog('close')

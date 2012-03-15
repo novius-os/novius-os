@@ -18,8 +18,8 @@
     } else {
         ?>
         <p><?= strtr(__(
-                $media_count == 1 ? 'There are <strong>{count} medias</strong> in this folder.'
-                                  : 'There is <strong>one media</strong> in this folder.'
+                $media_count == 1 ? 'There are <strong>one media</strong> in this folder.'
+                                  : 'There is <strong>{count} medias</strong> in this folder.'
         ), array(
             '{count}' => $media_count,
         )) ?></p>
@@ -45,8 +45,7 @@ require(['jquery-nos'], function($) {
         var $verification = $container.find('input[data-id=verification]');
         var $confirmation = $container.find('button[data-id=confirmation]');
 
-        var $dialog       = $.nos.data('dialog');
-        //var $dialog       = window.parent.jQuery(':wijmo-wijdialog:last');
+        var $dialog = $container.closest(':wijmo-wijdialog');
         var closeDialog = function() {
             $dialog && $dialog
                 .wijdialog('close')

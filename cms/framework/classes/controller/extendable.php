@@ -91,6 +91,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
         }
         return $dataset['actions'][$action]($item);
     }
+
     protected function items(array $config, $only_count = false)
     {
         $config = array_merge(array(
@@ -195,12 +196,15 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 	            unset($dataset['actions']);
                 $object->import_dataset_behaviours($dataset);
                 foreach ($dataset as $key => $data) {
+                    // Array with a 'value' key
+                    if (is_array($data) and !empty($data['value'])) {
+                        $data = $data['value'];
+                    }
+
                     if (is_callable($data)) {
                         $item[$key] = call_user_func($data, $object);
-                    } else if (is_array($data)) {
-                        $data = $data['value'];
                     } else {
-                        $item[$key] = $object->{$data};
+                        $item[$key] = $object->get($data);
                     }
                 }
 	            $item['actions'] = array();

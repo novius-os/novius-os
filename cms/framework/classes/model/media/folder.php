@@ -43,6 +43,14 @@ class Model_Media_Folder extends \Cms\Orm\Model {
 		),
 	);
 
+    protected static $_behaviors = array(
+		'Cms\Orm_Behaviour_Tree' => array(
+			'events' => array('before'),
+			'parent_relation' => 'parent',
+			'children_relation' => 'children',
+		),
+    );
+
 
     /**
      * Delete all the public/cache entries (image thumbnails) for this folder
@@ -80,37 +88,8 @@ class Model_Media_Folder extends \Cms\Orm\Model {
         return APPPATH.'media/'.$this->medif_path.$file;
     }
 
-    /**
-     * Get the list of all IDs of the children
-     *
-     * @param bool $include_self
-     * @return array
-     */
-    public function get_ids_children($include_self = true) {
-        $ids = array();
-        if ($include_self) {
-            $ids[] = $this->medif_id;
-        }
-        $this->_populate_id_children($this, $ids);
-        return $ids;
-    }
-
-    public function find_children_recursive($include_self = true) {
-
-        // This is weird, but it doesn't work when called directly...
-        return static::search(array(array('medif_id', 'IN', $this->get_ids_children($include_self))));
-    }
-
-    protected static function _populate_id_children($current_folder, &$array) {
-        foreach ($current_folder->children as $child) {
-            $array[] = $child->medif_id;
-            static::_populate_id_children($child, $array);
-        }
-
-    }
-
     public function count_media() {
-        /// get_ids_children($include_è_self)
+        /// get_ids_children($include_self)
         $folder_ids = $this->get_ids_children(true);
         return Model_Media_Media::count(array(
             'where' => array(

@@ -14,6 +14,16 @@ use Str;
 
 class Controller_Login extends Controller_Generic_Admin {
 
+    public function before($response = null) {
+        parent::before($response);
+
+        // If user is already logged in, proceed
+		if (\Cms\Auth::check()) {
+			\Response::redirect(urldecode(\Input::get('redirect', '/admin/')));
+			exit();
+		}
+    }
+
     public function action_login() {
 
         $error = (\Input::method() == 'POST') ? $this->post_login() : '';

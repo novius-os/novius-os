@@ -26,10 +26,9 @@ class Orm_Behaviour_Sortable extends Orm_Behavior
 	}
 
 	public function before_search(&$where, &$order_by = array(), &$options = array()) {
-		$sort = $order_by['default_sort'];
-        if (!empty($sort)) {
+        if (!empty($order_by['default_sort'])) {
             unset($order_by['default_sort']);
-            $order_by[$this->_properties['sort_property']] = $sort;
+            $order_by[$this->_properties['sort_property']] = $order_by['default_sort'];
         }
 	}
 

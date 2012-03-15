@@ -21,23 +21,22 @@
 foreach ($apps as $app => $perms) {
 
 	\Config::load("$app::permissions", true);
-	$keys = \Config::get("$app::permissions", array());
-	if (empty($keys)) {
-		continue;
-	}
     ?>
     <h1 title="Application provided by <?= $apps[$app]['provider']['name']; ?>"><label><input type="checkbox" name="access[<?= $app ?>]" value="1" <?= $group->check_permission($app, 'access') ? 'checked' : '' ?> /> <?= $apps[$app]['name']; ?></label></h1>
     <div style="margin-left: 30px;">
 		<input type="hidden" name="module[]" value="<?= $app ?>" />
 	<?php
-    foreach ($keys as $key => $value) {
-		$driver = $group->get_permission_driver($app, $key);
-		?>
-		<h2><?= $value['label']; ?></h2>
-		<?php
-        //\Debug::dump($driver);
-        echo $driver->display($group);
-	}
+	$keys = \Config::get("$app::permissions", array());
+	if (!empty($keys)) {
+        foreach ($keys as $key => $value) {
+            $driver = $group->get_permission_driver($app, $key);
+            ?>
+            <h2><?= $value['label']; ?></h2>
+            <?php
+            //\Debug::dump($driver);
+            echo $driver->display($group);
+        }
+    }
 	?>
 	   <input type="submit" value="Modify the permissions of <?= $apps[$app]['name']; /*?> <?= !empty($user) ? 'user '.$user->fullname() : $group->group_name */ ?>">
 	</div>

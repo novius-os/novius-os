@@ -46,7 +46,7 @@ class Model_Page_Page extends \Cms\Orm\Model {
 
 	protected static $_behaviors = array(
 		'Cms\Orm_Behaviour_Translatable' => array(
-			'events' => array('before_insert', 'after_insert', 'before_save', 'before_change_parent', 'after_change_parent'),
+			'events' => array('before_insert', 'after_insert', 'before_save', 'after_delete', 'before_change_parent', 'after_change_parent'),
 			'lang_property'      => 'page_lang',
 			'common_id_property' => 'page_lang_common_id',
 			'single_id_property' => 'page_lang_single_id',
@@ -65,7 +65,7 @@ class Model_Page_Page extends \Cms\Orm\Model {
             ),
 		),
 		'Cms\Orm_Behaviour_Tree' => array(
-			'events' => array('before'),
+			'events' => array('before_search', 'after_delete'),
 			'parent_relation' => 'parent',
 			'children_relation' => 'children',
 		),
@@ -104,37 +104,6 @@ class Model_Page_Page extends \Cms\Orm\Model {
     public static function search($where, $order_by = array(), $options = array()) {
         isset($order_by['page_sort']) or $order_by['page_sort'] = 'ASC';
         return parent::search($where, $order_by, $options);
-    }
-
-    /**
-     * Returns all the direct children of the page
-     *
-     * @param  array  $where
-     * @param  array  $order_by
-     * @param  array  $options
-     * @see \Cms\Model_Page_Page::search
-     * @return array of \Cms\Model_Page_Page
-     */
-    public function children($where = array(), $order_by = array(), $options = array()) {
-        $where[] = array('page_parent_id', $this->page_id);
-        return static::search($where, $order_by, $options);
-    }
-
-    /**
-     * Find a page with the pair $id (of the main language) + $lang
-     *
-     * @param  int     $id
-     * @param  string  $lang
-     * @param array    $options
-     * @return \Cms\Model_Page_Page
-     */
-    public static function find_by_id_lang($id, $lang, $options = array()) {
-        return static::find('first', \Arr::merge($options, array(
-            'where' => array(
-                array('page_lang_common_id', $id),
-                array('page_lang', $lang),
-            )
-        )));
     }
 
     /**

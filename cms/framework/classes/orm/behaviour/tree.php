@@ -44,14 +44,54 @@ class Orm_Behaviour_Tree extends Orm_Behavior
 		foreach ($where as $k => $w) {
 			if ($w[0] == 'parent') {
                 $property = $this->_parent_relation->key_from[0];
-				if ($w[1] == null) {
+				if ($w[1] === null) {
 					$where[$k] = array($property, 'IS', null);
-				} else  {
-					$where[$k] = array($property, $w[1]->id);
+				} else {
+                    $id = $w[1]->id;
+                    if (empty($id)) {
+                        unset($where[$k]);
+                    } else {
+                        $where[$k] = array($property, $id);
+                    }
 				}
 			}
 		}
 	}
+
+    /**
+     * Deletes the children recursively
+     */
+    public function before_delete(\Cms\Orm\Model $object) {
+        $this->delete_children($object);
+    }
+
+    /**
+     * Delete all the children of the item.
+     * (will only affect the current language, by design)
+     *
+     * @param type $object
+     */
+    public function delete_children($object) {
+        foreach ($this->find_children($object) as $child) {
+            $child->delete();
+        }
+    }
+
+    /**
+     * Returns all the direct children of the object
+     *
+     * @param  \Cms\Orm\Model  $object
+     * @param  array  $where
+     * @param  array  $order_by
+     * @param  array  $options
+     * @see \Cms\Model_Page_Page::search
+     * @return array of \Cms\Model_Page_Page
+     */
+    public function find_children($object, $where = array(), $order_by = array(), $options = array()) {
+        // Search items whose parent is self
+        $where[] = array('parent', $object);
+        return $object->search($where, $order_by, $options);
+    }
 
     /**
      * Find the parent of the object
@@ -83,6 +123,40 @@ class Orm_Behaviour_Tree extends Orm_Behavior
         $object->save();
         $object->observe('after_change_parent');
 	}
+
+    /**
+     * Get the list of all IDs of the children
+     *
+     * @param bool $include_self
+     * @return array
+     */
+    public function get_ids_children($object, $include_self = true) {
+        $ids = array();
+        if ($include_self) {
+            $ids[] = $object->get(\Arr::get($object->primary_key(), 0));
+        }
+        $this->_populate_id_children($object, $this->_properties['children_relation'], $ids);
+        return $ids;
+    }
+
+    public function find_children_recursive($object, $include_self = true) {
+
+        // This is weird, but it doesn't work when called directly...
+        $ids = $this->get_ids_children($object, $include_self);
+        if (empty($ids)) {
+            return array();
+        }
+        return $object::search(array(array(\Arr::get($object->primary_key(), 0), 'IN', $this->get_ids_children($object, $include_self))));
+    }
+
+    protected static function _populate_id_children($current_item, $children_relation, &$array) {
+        $pk = \Arr::get($current_item->primary_key(), 0);
+        foreach ($current_item->get($children_relation) as $child) {
+            $array[] = $child->get($pk);
+            static::_populate_id_children($child, $children_relation, $array);
+        }
+
+    }
 
 	public function set_parent_no_observers($object, $parent = null) {
         // Fetch the relation

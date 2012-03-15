@@ -93,7 +93,7 @@ return array(
         },
         'actions' => array(
             'delete' => function($page) {
-                return $page->page_lock != Model_Page_Page::LOCK_DELETION;
+                return $page->page_lock != Cms\Model_Page_Page::LOCK_DELETION;
             }
         ),
 	),
