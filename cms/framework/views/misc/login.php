@@ -21,7 +21,7 @@ require(['jquery-nos'], function($) {
 <div id="login">
 	<img src="static/cms/img/logo.png" />
 	<?php if (!empty($error)) { ?>
-		<p class="ui-state-error">
+		<p class="ui-widget ui-state-error">
 			<span class="ui-icon ui-icon-alert" style="display:inline-block; vertical-align:middle;"></span> <?= $error ?>
 		</p>
 	<?php } ?>
