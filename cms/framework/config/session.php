@@ -48,7 +48,7 @@ return array(
     'cookie_http_only'    => ini_get('session.cookie_httponly'),
 
     // if true, the session expires when the browser is closed (optional, default = false)
-    'expire_on_close'    => false,
+    'expire_on_close'    => true,
 
     // session expiration time, <= 0 means 2 years! (optional, default = 2 hours)
     'expiration_time'    => ini_get('session.cookie_lifetime'),

@@ -290,7 +290,7 @@ function addKeyboardNavigation(){
 	cells[0].tabindex=0;
 	tinyMCEPopup.dom.addClass(cells[0], "mceFocus");
 	if (tinymce.isGecko) {
-		cells[0].focus();		
+		cells[0].focus();
 	} else {
 		setTimeout(function(){
 			cells[0].focus();
@@ -302,7 +302,7 @@ function addKeyboardNavigation(){
 function renderCharMapHTML() {
 	var charsPerRow = 20, tdWidth=20, tdHeight=20, i;
 	var html = '<div id="charmapgroup" aria-labelledby="charmap_label" tabindex="0" role="listbox">'+
-	'<table role="presentation" border="0" cellspacing="1" cellpadding="0" width="' + (tdWidth*charsPerRow) + 
+	'<table role="presentation" border="0" cellspacing="1" cellpadding="0" width="' + (tdWidth*charsPerRow) +
 	'"><tr height="' + tdHeight + '">';
 	var cols=-1;
 
@@ -314,7 +314,7 @@ function renderCharMapHTML() {
 			previewCharFn = 'previewChar(\'' + charmap[i][1].substring(1,charmap[i][1].length) + '\',\'' + charmap[i][0].substring(1,charmap[i][0].length) + '\',\'' + charmap[i][3] + '\');';
 			html += ''
 				+ '<td class="charmap">'
-				+ '<a class="charmaplink" role="button" onmouseover="'+previewCharFn+'" onfocus="'+previewCharFn+'" href="javascript:void(0)" onclick="insertChar(\'' + charmap[i][1].substring(2,charmap[i][1].length-1) + '\');" onclick="return false;" onmousedown="return false;" title="' + charmap[i][3] + ' '+ tinyMCEPopup.editor.translate("advanced_dlg.charmap_usage")+'">'
+				+ '<a class="charmaplink" role="button" onmouseover="'+previewCharFn+'" onfocus="'+previewCharFn+'" href="javascript:void(0)" onclick="insertChar(\'' + charmap[i][1].substring(2,charmap[i][1].length-1) + '\');" onclick="return false;" onmousedown="return false;" title="' + charmap[i][3] + ' '+ tinyMCEPopup.editor.translate("nos_dlg.charmap_usage")+'">'
 				+ charmap[i][1]
 				+ '</a></td>';
 			if ((cols+1) % charsPerRow == 0)

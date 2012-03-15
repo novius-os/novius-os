@@ -55,7 +55,8 @@ define([
                             locales : config.locales,
                             views : config.views,
                             name  : config.configuration_id,
-                            selectedView : config.selectedView
+                            selectedView : config.selectedView,
+                            selectedLang : config.selectedLang
                         });
                         if (onCustom) {
                             $.extend(true, mp3Grid.mp3grid, {
@@ -634,7 +635,10 @@ define([
                         'link!static/cms/js/vendor/jquery/pnotify/jquery.pnotify.default.css',
                         'static/cms/js/vendor/jquery/pnotify/jquery.pnotify.min'
                     ], function() {
-                        var o = {};
+                        var o = {
+                            pnotify_history : false,
+                            pnotify_addclass : 'nos-notification'
+                        };
                         $.each( options, function(key, val) {
                             if ( key.substr( 0, 8 ) !== 'pnotify_' ) {
                                 key = 'pnotify_' + key;

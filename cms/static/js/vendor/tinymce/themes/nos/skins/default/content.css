@@ -21,16 +21,42 @@ cite {border-bottom:1px dashed blue}
 acronym {border-bottom:1px dotted #CCC; cursor:help}
 abbr {border-bottom:1px dashed #CCC; cursor:help}
 
-/* IE */
-* html body {
-scrollbar-3dlight-color:#F0F0EE;
-scrollbar-arrow-color:#676662;
-scrollbar-base-color:#F0F0EE;
-scrollbar-darkshadow-color:#DDD;
-scrollbar-face-color:#E0E0DD;
-scrollbar-highlight-color:#F0F0EE;
-scrollbar-shadow-color:#F0F0EE;
-scrollbar-track-color:#F5F5F5;
+/*debug mode*/
+body.debug p {
+	border              : 1px dashed #F00;
+	background-color    : #FAF4F4;
+}
+body.debug h1 {
+	border              : 1px dashed #00F;
+	background-color    : #F4F4FA;
+}
+body.debug h2 {
+	border              : 1px dashed #0F0;
+	background-color    : #F4FAF4;
+}
+body.debug h3 {
+	border              : 1px dashed #FF0;
+	background-color    : #FAFAF4;
+}
+body.debug h4 {
+	border              : 1px dashed #F90;
+	background-color    : #FAF4E4;
+}
+body.debug h5 {
+	border              : 1px dashed #09F;
+	background-color    : #E4F4FA;
+}
+body.debug h6 {
+	border              : 1px dashed #F09;
+	background-color    : #FAE4F4;
+}
+body.debug ul {
+	border              : 1px dashed #F0F;
+	background-color    : #FAE4FA;
+}
+body.debug ol {
+	border              : 1px dashed #EE00EF;
+	background-color    : #FFAFFF;
 }
 
 img:-moz-broken {-moz-force-broken-image-icon:1; width:24px; height:24px}
@@ -49,16 +75,36 @@ font[face=mceinline] {font-family:inherit !important}
 .mceItemIframe {background-image:url(../../img/iframe.gif)}
 .mcePageBreak {display:block;border:0;width:100%;height:12px;border-top:1px dotted #ccc;margin-top:15px;background:#fff url(../../img/pagebreak.gif) no-repeat center top;}
 
-.nosModule {
+.nosEnhancer {
 	border:1px dotted red;
 	padding:5px;
 }
-.nosModuleActionBlock, .nos_module_action_block {
+.nos_enhancer_action {
+	display: inline-block;
+	text-indent: -1000;
+	width : 16px;
+	height : 16px;
+	vertical-align: middle;
+	margin-right: 3px;
+	background-position:center; background-repeat:no-repeat;
+}
+.nos_enhancer_action_block {
 	float : right;
-	padding: 0 3px;
 	display:none;
 }
-.nosModule:hover .nosModuleActionBlock, .nosModule:hover .nos_module_action_block {
+.nosEnhancer:hover .nos_enhancer_action_block {
     cursor: pointer;
 	display : block;
+}
+.nos_enhancer_action_before {
+	background-image:url(../../img/insert_before.png)
+}
+.nos_enhancer_action_after {
+	background-image:url(../../img/insert_after.png)
+}
+.nos_enhancer_action_edit {
+	background-image:url(../../img/edit.png)
+}
+.nos_enhancer_action_delete {
+	background-image:url(../../img/delete.png)
 }

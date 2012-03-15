@@ -363,3 +363,8 @@ img.publication_status {
 .publishable .ui-button-text img {
   vertical-align: middle;
 }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/css\/base\.scss}line{font-family:\00003189}}
+.nos-notification {
+  top: 69px;
+}
