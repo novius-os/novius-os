@@ -59,18 +59,6 @@ body.debug ol {
 	background-color    : #FFAFFF;
 }
 
-/* IE */
-* html body {
-scrollbar-3dlight-color:#F0F0EE;
-scrollbar-arrow-color:#676662;
-scrollbar-base-color:#F0F0EE;
-scrollbar-darkshadow-color:#DDD;
-scrollbar-face-color:#E0E0DD;
-scrollbar-highlight-color:#F0F0EE;
-scrollbar-shadow-color:#F0F0EE;
-scrollbar-track-color:#F5F5F5;
-}
-
 img:-moz-broken {-moz-force-broken-image-icon:1; width:24px; height:24px}
 font[face=mceinline] {font-family:inherit !important}
 *[contentEditable]:focus {outline:0}
@@ -91,12 +79,32 @@ font[face=mceinline] {font-family:inherit !important}
 	border:1px dotted red;
 	padding:5px;
 }
-.nosEnhancerActionBlock, .nos_module_action_block {
+.nos_enhancer_action {
+	display: inline-block;
+	text-indent: -1000;
+	width : 16px;
+	height : 16px;
+	vertical-align: middle;
+	margin-right: 3px;
+	background-position:center; background-repeat:no-repeat;
+}
+.nos_enhancer_action_block {
 	float : right;
-	padding: 0 3px;
 	display:none;
 }
-.nosEnhancer:hover .nosEnhancerActionBlock, .nosEnhancer:hover .nos_module_action_block {
+.nosEnhancer:hover .nos_enhancer_action_block {
     cursor: pointer;
 	display : block;
+}
+.nos_enhancer_action_before {
+	background-image:url(../../img/insert_before.png)
+}
+.nos_enhancer_action_after {
+	background-image:url(../../img/insert_after.png)
+}
+.nos_enhancer_action_edit {
+	background-image:url(../../img/edit.png)
+}
+.nos_enhancer_action_delete {
+	background-image:url(../../img/delete.png)
 }

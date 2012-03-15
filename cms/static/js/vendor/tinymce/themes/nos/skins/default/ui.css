@@ -239,3 +239,12 @@
 .defaultSkin span.mce_pastehtml {
 	background : url(../../img/pastehtml.gif) no-repeat 1px 1px;
 }
+.defaultSkin span.mce_brclearall {
+	background : url(../../img/brclearall.gif) no-repeat 1px 1px;
+}
+.defaultSkin span.mce_toolbar_toggle_open {
+	background : url(../../img/toolbar_toggle_open.png) no-repeat 1px 1px;
+}
+.defaultSkin span.mce_toolbar_toggle_close {
+	background : url(../../img/toolbar_toggle_close.png) no-repeat 1px 1px;
+}

@@ -67,6 +67,7 @@ tinyMCE.addI18n('en.nos',{
 	"outdent_desc":"Decrease Indent",
 	"numlist_desc":"Insert/Remove Numbered List",
 	"bullist_desc":"Insert/Remove Bulleted List",
+    "justify_select":"Alignement",
 	"justifyfull_desc":"Align Full",
 	"justifyright_desc":"Align Right",
 	"justifycenter_desc":"Align Center",
@@ -76,8 +77,18 @@ tinyMCE.addI18n('en.nos',{
 	"rich_text_area":"Rich Text Area",
 	"shortcuts_desc":"Accessability Help",
     toolbar:"Toolbar",
+    "brclearall_desc" : "New line under the image",
     enhancer_desc:"Application",
+    enhancer_delete:"Delete",
+    enhancer_options:"Options",
+    enhancer_p_after:"New paragraph after",
+    enhancer_p_before:"New paragraph before",
     file_title:"Insert document / Not yet implement",
     file_label:"Document",
-    "visualthml_desc" : "Show paragraph in box"
+    visualthml_desc : "Show paragraph in box",
+    media_title: "Insert/Edit Embedded Media",
+    media_label: "Embedded Media",
+    toolbar_toggle_title: "Show / Hide more toolbars",
+    toolbar_toggle_label_close: "Less toolbars",
+    toolbar_toggle_label_open: "More toolbars"
 });

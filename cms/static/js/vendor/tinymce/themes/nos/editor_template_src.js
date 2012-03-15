@@ -23,10 +23,6 @@
 			italic : ['italic_desc', 'Italic'],
 			underline : ['underline_desc', 'Underline'],
 			strikethrough : ['striketrough_desc', 'Strikethrough'],
-			justifyleft : ['justifyleft_desc', 'JustifyLeft'],
-			justifycenter : ['justifycenter_desc', 'JustifyCenter'],
-			justifyright : ['justifyright_desc', 'JustifyRight'],
-			justifyfull : ['justifyfull_desc', 'JustifyFull'],
 			bullist : ['bullist_desc', 'InsertUnorderedList'],
 			numlist : ['numlist_desc', 'InsertOrderedList'],
 			outdent : ['outdent_desc', 'Outdent'],
@@ -36,11 +32,6 @@
             paste : ['paste_desc', 'nosPaste'],
 			undo : ['undo_desc', 'Undo'],
 			redo : ['redo_desc', 'Redo'],
-			link : ['link_desc', 'mceLink'],
-			unlink : ['unlink_desc', 'unlink'],
-			image : ['image_desc', 'nosImage'],
-			cleanup : ['cleanup_desc', 'mceCleanup'],
-			help : ['help_desc', 'mceHelp'],
 			code : ['code_desc', 'mceCodeEditor'],
 			hr : ['hr_desc', 'InsertHorizontalRule'],
 			removeformat : ['removeformat_desc', 'RemoveFormat'],
@@ -51,14 +42,14 @@
 			backcolor : ['backcolor_desc', 'HiliteColor'],
 			backcolorpicker : ['backcolor_desc', 'mceBackColor'],
 			charmap : ['charmap_desc', 'mceCharMap'],
-			visualaid : ['visualaid_desc', 'mceToggleVisualAid'],
 			anchor : ['anchor_desc', 'mceInsertAnchor'],
 			newdocument : ['newdocument_desc', 'mceNewDocument'],
 			blockquote : ['blockquote_desc', 'mceBlockQuote'],
-            enhancer : ['enhancer_desc', 'nosEnhancer']
-		},
+            brclearall : ['brclearall_desc', 'nosBrClearAll'],
+            image : ['image_title', 'nosImage', null, null, 'image_label']
+        },
 
-		stateControls : ['bold', 'italic', 'underline', 'strikethrough', 'bullist', 'numlist', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'sub', 'sup', 'blockquote'],
+		stateControls : ['bold', 'italic', 'underline', 'strikethrough', 'bullist', 'numlist', 'sub', 'sup', 'blockquote'],
 
 		init : function(ed, url) {
 			var t = this, s, v, o;
@@ -74,11 +65,29 @@
 		        theme_nos_toolbar_align : "left",
 		        theme_nos_statusbar_location : "bottom",
 
-                theme_nos_buttons1 : "image,file,linkcontrols,enhancer,pdw_toggle",
-                theme_nos_buttons2 : "styleselect,|,bold,italic,|,justifyleft,justifycenter,justifyright,justifyfull,|,forecolor,backcolor,|,bullist,numlist,|,cut,copy,pastecontrols,|,undo,redo,|,spellchecker,visualhtmlcontrols",
-                theme_nos_buttons3 : "tablecontrols,|,styleprops,removeformat,cleanup,code,|,underline,strikethrough,sub,sup,|,anchor,charmap,advhr,|,search,replace,|,outdent,indent,blockquote,visualchars,nonbreaking",
+                theme_nos_buttons1 : "tablecontrols",
+                theme_nos_buttons2 : "underline,strikethrough,sub,sup,|,forecolor,backcolor,|,outdent,indent,blockquote,|,anchor,charmap,hr,nonbreaking,brclearall,|,styleprops,removeformat",
+                theme_nos_buttons3 : "search,replace,|,spellchecker,|,newdocument,visualhtmlcontrols,code",
+                theme_nos_buttons4 : "image,nosmedia,linkcontrols,enhancer",
+                theme_nos_buttons5 : "styleselect,bold,italic,justifycontrols,bullist,numlist,|,cut,copy,pastecontrols,undo,redo,|,toolbar_toggle",
 
-
+                theme_nos_style_formats : [
+                    { block : 'p', title : 'nos.paragraph'},
+                    { block : 'address', title : 'nos.address'},
+                    { block : 'pre', title : 'nos.pre'},
+                    { block : 'h1', title : 'nos.h1'},
+                    { block : 'h2', title : 'nos.h2'},
+                    { block : 'h3', title : 'nos.h3'},
+                    { block : 'h4', title : 'nos.h4'},
+                    { block : 'h5', title : 'nos.h5'},
+                    { block : 'h6', title : 'nos.h6'},
+                    { block : 'div', title : 'nos.div'},
+                    { block : 'blockquote', title : 'nos.blockquote'},
+                    { block : 'code', title : 'nos.code'},
+                    { block : 'dt', title : 'nos.dt'},
+                    { block : 'dd', title : 'nos.dd'},
+                    { block : 'samp', title : 'nos.samp'}
+                ],
 				theme_nos_blockformats : "p,address,pre,h1,h2,h3,h4,h5,h6",
 				theme_nos_fonts : "Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats",
 				theme_nos_more_colors : 1,
@@ -144,11 +153,11 @@
 
 			var self = this;
 
-            // Register buttons
-            ed.addButton('image', {
-                title : 'nos.image_title',
-                label : 'nos.image_label',
-                cmd : 'nosImage'
+            ed.addButton('nosmedia', {
+                title : 'nos.media_title',
+                label : 'nos.media_label',
+                class : 'mce_media',
+                cmd : 'mceMedia'
             });
 
 			function makeItNice(ed) {
@@ -177,11 +186,6 @@
 					});
 				});
 			}
-
-			ed.onInit.add(function(ed) {
-
-				//makeItNice(ed);
-			});
 
 			// When editing HTML content, we clean up enhancer preview, we'll make them nice again after
 			ed.onGetContent.add(function(ed, o) {
@@ -321,11 +325,17 @@
                 case "linkcontrols" :
                     return this._createLink();
 
+                case "justifycontrols" :
+                    return this._createJustify();
+
                 case "file" :
                     return this._createFileButton();
 
                 case "pastecontrols":
                     return this._createPaste();
+
+                case "toolbar_toggle" :
+                    return this._createToolbarToggle();
 
                 case "visualhtmlcontrols" :
                     return this._createVisualHtml();
@@ -350,7 +360,7 @@
 			}
 
 			if ((cd = this.controls[n]))
-				return cf.createButton(n, {title : "nos." + cd[0], cmd : cd[1], ui : cd[2], value : cd[3]});
+				return cf.createButton(n, {title : "nos." + cd[0], cmd : cd[1], ui : cd[2], value : cd[3], label : cd[4] ? "nos." + cd[4] : ''});
 		},
 
 
@@ -365,7 +375,7 @@
                     try {
                         ed.getDoc().execCommand(cmd.replace('nos', ''), ui, val);
                     } catch (ex) {
-                        if (isGecko) {
+                        if (this.isGecko) {
                             ed.windowManager.alert(ed.getLang('nos.clipboard_msg'));
                         } else {
                             ed.windowManager.alert(ed.getLang('clipboard_no_support'));
@@ -383,28 +393,10 @@
             return false;
         },
 
-		_importClasses : function(e) {
-			var ed = this.editor, ctrl = ed.controlManager.get('styleselect');
-
-			if (ctrl.getLength() == 0) {
-				each(ed.dom.getClasses(), function(o, idx) {
-					var name = 'style_' + idx;
-
-					ed.formatter.register(name, {
-						inline : 'span',
-						attributes : {'class' : o['class']},
-						selector : '*'
-					});
-
-					ctrl.add(o['class'], name);
-				});
-			}
-		},
-
         _createLink : function() {
             var c, t = this, s = t.settings, o = {}, v;
 
-            c = t.editor.controlManager.createSplitButton('link', {
+            c = t.editor.controlManager.createSplitButton('linkcontrols', {
                 title : 'nos.link_title',
                 label : 'nos.link_label',
                 onclick: function(){
@@ -433,17 +425,20 @@
                     icon : 'unlink',
                     onclick: function(){
                         t.editor.execCommand('unlink', false, '');
-                    }
+                    },
+                    id : 'unlink'
                 });
 
-                m.onShowMenu.add(function(x, y, px) {
-                    var ed = t.editor, n = ed.selection.getNode(), p, file, ancre, minibaselink;
+                m.onShowMenu.add(function(m) {
+                    var ed = t.editor, n = ed.selection.getNode(), p, link, anchor;
 
                     p = DOM.getParent(n, 'A');
-                    minibaselink = !!p && t._isMiniBaseLink(DOM.getAttrib(n, 'href'));
-                    file = !!p && t._isFile(DOM.getAttrib(n, 'href'));
-                    ancre = !!p && p.name && !DOM.getAttrib(n, 'href');
-                    m.items['link'].setDisabled(file || ancre || minibaselink);
+                    link = !!p;
+                    anchor = link && !!p.name;
+
+                    m.items['link'].setDisabled(anchor);
+                    m.items['link'].setActive(link && !anchor);
+                    m.items['unlink'].setDisabled(!link);
                 });
             });
             return c;
@@ -456,6 +451,95 @@
                 title : 'nos.file_title',
                 label : 'nos.file_label',
                 'class' : 'mce_file'
+            });
+
+            return c;
+        },
+
+        _createToolbarToggle : function() {
+            var c, t = this, s = t.settings, o = {}, v, ed = t.editor, tbIds = new Array(), toolbars = ['1', '2', '3'], i;
+
+            for(i = 0; i < toolbars.length; i++){
+                tbIds[i] = ed.getParam('', 'toolbar' + (toolbars[i]).replace(' ',''));
+            }
+
+            c = t.editor.controlManager.createButton('toolbar_toggle', {
+                title : 'nos.toolbar_toggle_title',
+                label : 'nos.toolbar_toggle_label_open',
+                'class' : 'mce_toolbar_toggle_open',
+                cmd : 'mceToggleToolbars'
+            });
+
+            var resizeIframe = function(ed, dy) {
+                    if (s.theme_nos_toolbar_location === 'external') {
+                        var toolbar = DOM.get(ed.id + '_external');
+
+                        $(toolbar).css('top', ($(toolbar).position().top + dy) + 'px');
+                    } else {
+                        var ifr = ed.getContentAreaContainer().firstChild;
+
+                        DOM.setStyle(ifr, 'height',DOM.getSize(ifr).h + dy); // Resize iframe
+                        ed.theme.deltaHeight += dy; // For resize cookie
+                    }
+                },
+                setState = function(state) {
+                    c.setActive(state);
+                    DOM.setAttrib(DOM.select('.mceIcon', c.id), 'class', 'mceIcon');
+                    DOM.addClass(DOM.select('.mceIcon', c.id), state ? 'mce_toolbar_toggle_close' : 'mce_toolbar_toggle_open');
+                    DOM.setHTML(DOM.select('.mceButtonLabel', c.id), ed.getLang(state ? 'nos.toolbar_toggle_label_close' : 'nos.toolbar_toggle_label_open', 0));
+                };
+
+            // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
+            ed.addCommand('mceToggleToolbars', function() {
+
+                var cm = ed.controlManager, id, j, Cookie = tinymce.util.Cookie, Open_Toolbar, Toggle = Cookie.getHash("TinyMCE_toggle") || new Object(), resize = 0;
+                for(j = 0; j < tbIds.length; j++){
+
+                    obj = ed.controlManager.get(tbIds[j]);
+                    if(typeof obj =="undefined") {
+                        continue;
+                    }
+                    id = obj.id;
+
+                    if (DOM.isHidden(id)) {
+                        Open_Toolbar = 1;
+                        DOM.show(id);
+                        resize = resize - 26;
+                    } else {
+                        Open_Toolbar = 0;
+                        DOM.hide(id);
+                        resize = resize + 26;
+                    }
+                }
+                resizeIframe(ed, resize);
+                setState(Open_Toolbar);
+
+                Toggle[ed.id] = Open_Toolbar;
+                Cookie.setHash("TinyMCE_toggle", Toggle);
+            });
+
+            ed.onPostRender.add(function(){
+                var toggle = tinymce.util.Cookie.getHash("TinyMCE_toggle") || new Object(), resize = 0, run = false;
+
+                // Check if value is stored in cookie
+                if(toggle[ed.id] == null){
+                    run = true;
+                } else if(toggle[ed.id] === "0"){
+                    run = true;
+                }
+
+                if (run) {
+                    var cm = ed.controlManager, tdId, id;
+
+                    for(i = 0; i < toolbars.length; i++){
+                        tbId = ed.getParam('', 'toolbar' + (toolbars[i]).replace(' ',''));
+                        id = ed.controlManager.get(tbId).id;
+                        DOM.hide(id);
+                        resize = resize + 26;
+                    }
+                    resizeIframe(ed, resize);
+                    setState(0);
+                }
             });
 
             return c;
@@ -557,89 +641,6 @@
             return c;
         },
 
-		_createStyleSelect : function(n) {
-			var t = this, ed = t.editor, ctrlMan = ed.controlManager, ctrl;
-
-			// Setup style select box
-			ctrl = ctrlMan.createListBox('styleselect', {
-				title : 'nos.style_select',
-				onselect : function(name) {
-					var matches, formatNames = [];
-
-					each(ctrl.items, function(item) {
-						formatNames.push(item.value);
-					});
-
-					ed.focus();
-					ed.undoManager.add();
-
-					// Toggle off the current format
-					matches = ed.formatter.matchAll(formatNames);
-					if (!name || matches[0] == name) {
-						if (matches[0])
-							ed.formatter.remove(matches[0]);
-					} else
-						ed.formatter.apply(name);
-
-					ed.undoManager.add();
-					ed.nodeChanged();
-
-					return false; // No auto select
-				}
-			});
-
-			// Handle specified format
-			ed.onInit.add(function() {
-				var counter = 0, formats = ed.getParam('style_formats');
-
-				if (formats) {
-					each(formats, function(fmt) {
-						var name, keys = 0;
-
-						each(fmt, function() {keys++;});
-
-						if (keys > 1) {
-							name = fmt.name = fmt.name || 'style_' + (counter++);
-							ed.formatter.register(name, fmt);
-							ctrl.add(fmt.title, name);
-						} else
-							ctrl.add(fmt.title);
-					});
-				} else {
-					each(ed.getParam('theme_nos_styles', '', 'hash'), function(val, key) {
-						var name;
-
-						if (val) {
-							name = 'style_' + (counter++);
-
-							ed.formatter.register(name, {
-								inline : 'span',
-								classes : val,
-								selector : '*'
-							});
-
-							ctrl.add(t.editor.translate(key), name);
-						}
-					});
-				}
-			});
-
-			// Auto import classes if the ctrl box is empty
-			if (ctrl.getLength() == 0) {
-				ctrl.onPostRender.add(function(ed, n) {
-					if (!ctrl.NativeListBox) {
-						Event.add(n.id + '_text', 'focus', t._importClasses, t);
-						Event.add(n.id + '_text', 'mousedown', t._importClasses, t);
-						Event.add(n.id + '_open', 'focus', t._importClasses, t);
-						Event.add(n.id + '_open', 'mousedown', t._importClasses, t);
-					} else
-						Event.add(n.id, 'focus', t._importClasses, t);
-				});
-			}
-
-			return ctrl;
-		},
-
 		_createFontSelect : function() {
 			var c, t = this, ed = t.editor;
 
@@ -732,38 +733,214 @@
 			return c;
 		},
 
-		_createBlockFormats : function() {
-			var c, fmts = {
-				p : 'nos.paragraph',
-				address : 'nos.address',
-				pre : 'nos.pre',
-				h1 : 'nos.h1',
-				h2 : 'nos.h2',
-				h3 : 'nos.h3',
-				h4 : 'nos.h4',
-				h5 : 'nos.h5',
-				h6 : 'nos.h6',
-				div : 'nos.div',
-				blockquote : 'nos.blockquote',
-				code : 'nos.code',
-				dt : 'nos.dt',
-				dd : 'nos.dd',
-				samp : 'nos.samp'
-			}, t = this;
+        _createJustify : function(n) {
+            var t = this, ed = t.editor, ctrlMan = ed.controlManager, ctrl,
+                tab_justify = {
+                    justifyleft : {
+                        title : 'nos.justifyleft_desc',
+                            cmd : 'JustifyLeft'
+                    },
+                    justifycenter : {
+                        title : 'nos.justifycenter_desc',
+                            cmd : 'JustifyCenter'
+                    },
+                    justifyright : {
+                        title : 'nos.justifyright_desc',
+                            cmd : 'JustifyRight'
+                    },
+                    justifyfull : {
+                        title : 'nos.justifyfull_desc',
+                            cmd : 'JustifyFull'
+                    }
+                };
+;
 
-			c = t.editor.controlManager.createListBox('formatselect', {title : 'nos.block', onselect : function(v) {
-				t.editor.execCommand('FormatBlock', false, v);
-				return false;
-			}});
+            ctrl = ctrlMan.createListBox('justifycontrols', {
+                title : 'nos.justify_select',
+                onselect : function(name) {
+                    var align = tab_justify[name];
 
-			if (c) {
-				each(t.editor.getParam('theme_nos_blockformats', t.settings.theme_nos_blockformats, 'hash'), function(v, k) {
-					c.add(t.editor.translate(k != v ? k : fmts[v]), v, {'class' : 'mce_formatPreview mce_' + v});
-				});
-			}
+                    ed.execCommand(align.cmd, false);
 
-			return c;
-		},
+                    return false; // No auto select
+                }
+            }, tinymce.ui.NosListBox);
+
+            ed.onInit.add(function() {
+                var counter = 0;
+
+                each(tab_justify, function(item, key) {
+                    ctrl.add(item.title, key, tinymce.extend(item, {
+                        icon : key
+                    }));
+                });
+            });
+
+            return ctrl;
+        },
+
+        _createStyleSelect : function(n) {
+            var t = this, ed = t.editor, ctrlMan = ed.controlManager, ctrl;
+
+            // Setup style select box
+            ctrl = ctrlMan.createListBox('styleselect', {
+                title : 'nos.style_select',
+                onselect : function(name) {
+                    var matches, formatNames = [];
+
+                    each(ctrl.items, function(item) {
+                        formatNames.push(item.value);
+                    });
+
+                    ed.focus();
+                    ed.undoManager.add();
+
+                    // Toggle off the current format
+                    matches = ed.formatter.matchAll(formatNames);
+                    if (!name || matches[0] == name)
+                        ed.formatter.remove(matches[0]);
+                    else
+                        ed.formatter.apply(name);
+
+                    ed.undoManager.add();
+                    ed.nodeChanged();
+
+                    return false; // No auto select
+                }
+            });
+
+            var formats = ed.getParam('theme_nos_style_formats', t.settings.theme_nos_style_formats);
+
+            ed.onInit.add(function() {
+                var counter = 0;
+
+                each(formats, function(fmt) {
+                    var name, keys = 0;
+
+                    each(fmt, function() {keys++;});
+
+                    if (keys > 1) {
+                        name = fmt.name = fmt.name || 'style_' + (counter++);
+                        ed.formatter.register(name, fmt);
+                        ctrl.add(fmt.title, name);
+                    } else
+                        ctrl.add(fmt.title);
+                });
+            });
+
+            ctrl.onRenderMenu.add(function(c, m) {
+                m.onShowMenu.add(function() {
+                    if (!m.updatestyle) {
+                        var first = true, i = 0, f, fake, mceText, body = t.editor.getBody(), bgbody = t.editor.dom.getStyle('tinymce', 'background-color', true);
+
+                        each(m.items, function(item, id) {
+                            var fmt = formats[i], tr;
+                            tr = DOM.select('#'+ id);
+                            tr = tr[0];
+                            if (first) {
+                                first = false;
+                                return;
+                            }
+                            if (fmt.inline || fmt.block) {
+                                fake = t.editor.dom.add(body, fmt.inline ? fmt.inline : fmt.block, {
+                                    'class':fmt.classes,
+                                    style: 'display:none;'// + (fmt.styles ? fmt.styles : '')
+                                }, 'test' + fmt.title);
+
+                                mceText = DOM.select('span.mceText', tr);
+                                each(['font-family','font-size','font-style','color','font-weight','font-variant','text-decoration','text-transformation'], function(r) {
+                                    f = t.editor.dom.getStyle(fake, r, true);
+                                    DOM.setStyle(mceText, r, f);
+                                });
+
+                                f = t.editor.dom.getStyle(fake, 'background-color', true);
+                                DOM.setStyle(tr, 'background-color', f == 'transparent' ? bgbody : f);
+                                t.editor.dom.remove(fake);
+                            }
+
+                            i++;
+                        });
+                        m.updatestyle = true;
+
+                        var table = DOM.getRect('menu_' + m.id + '_tbl');
+                        DOM.setStyle('menu_' + m.id, 'width', table.w);
+                        DOM.setStyle('menu_' + m.id + '_co', 'width', table.w);
+                        DOM.setStyle('menu_' + m.id + '_co', 'overflow-y', 'auto');
+                    }
+                });
+            });
+
+            return ctrl;
+        },
+
+        _createBlockFormats : function() {
+            var c, fmts = {
+                p : 'nos.paragraph',
+                address : 'nos.address',
+                pre : 'nos.pre',
+                h1 : 'nos.h1',
+                h2 : 'nos.h2',
+                h3 : 'nos.h3',
+                h4 : 'nos.h4',
+                h5 : 'nos.h5',
+                h6 : 'nos.h6',
+                div : 'nos.div',
+                blockquote : 'nos.blockquote',
+                code : 'nos.code',
+                dt : 'nos.dt',
+                dd : 'nos.dd',
+                samp : 'nos.samp'
+            }, t = this, fmt_site, bgbody;
+
+            c = t.editor.controlManager.createListBox('formatselect', {
+                title : 'nos.block',
+                cmd : 'FormatBlock'
+            });
+
+            if (c) {
+                fmts_site = t.editor.getParam('theme_nos_blockformats', t.settings.theme_nos_blockformats, 'hash');
+                each(fmts_site, function(v, k) {
+                    c.add(t.editor.translate(k != v ? k : fmts[v]), v, {'class' : 'mce_formatPreview mce_' + v});
+                });
+
+                c.onRenderMenu.add(function(c, m) {
+                    m.onShowMenu.add(function() {
+                        var f;
+
+                        if (!m.updatestyle) {
+                            bgbody = t.editor.dom.getStyle('tinymce', 'background-color', true);
+
+                            each(fmts_site, function(h, l) {
+                                co = t.editor.getBody();
+                                co = co.insertBefore(t.editor.dom.create(h, {
+                                    id: 'fake_'+ h,
+                                    style: 'display:none;'
+                                }, 'test' + h), co.firstChild);
+                                each(['font-family','font-size','font-style','color','font-weight','font-variant','text-decoration','text-transformation'], function(r) {
+                                    f = t.editor.dom.getStyle('fake_'+ h, r, true);
+                                    DOM.setStyle(DOM.select('.mce_'+ h +' span.mceText'), r, f);
+                                });
+                                f = t.editor.dom.getStyle('fake_'+ h, 'background-color', true);
+                                DOM.setStyle(DOM.select('.mce_'+ h), 'background-color', f == 'transparent' ? bgbody : f);
+                                t.editor.dom.remove('fake_' + h);
+                            });
+
+
+                            m.updatestyle = true;
+                        }
+
+                        var table;
+                        table = DOM.getRect('menu_' + m.id + '_tbl');
+                        DOM.setStyle('menu_' + m.id, 'width', table.w);
+                        DOM.setStyle('menu_' + m.id, 'height', table.h);
+                        DOM.setStyle('menu_' + m.id + '_co', 'width', table.w);
+                        DOM.setStyle('menu_' + m.id + '_co', 'height', table.h);
+                    });
+                });
+            }
+
+            return c;
+        },
 
 		_createForeColorMenu : function() {
 			var c, t = this, s = t.settings, o = {}, v;
@@ -881,28 +1058,6 @@
 					return Event.cancel(e);
 				}
 			});
-/*
-			if (DOM.get(ed.id + '_path_row')) {
-				Event.add(ed.id + '_tbl', 'mouseover', function(e) {
-					var re;
-
-					e = e.target;
-
-					if (e.nodeName == 'SPAN' && DOM.hasClass(e.parentNode, 'mceButton')) {
-						re = DOM.get(ed.id + '_path_row');
-						t.lastPath = re.innerHTML;
-						DOM.setHTML(re, e.parentNode.title);
-					}
-				});
-
-				Event.add(ed.id + '_tbl', 'mouseout', function(e) {
-					if (t.lastPath) {
-						DOM.setHTML(ed.id + '_path_row', t.lastPath);
-						t.lastPath = 0;
-					}
-				});
-			}
-*/
 
 			if (!ed.getParam('accessibility_focus'))
 				Event.add(DOM.add(p, 'a', {href : '#'}, '<!-- IE -->'), 'focus', function() {tinyMCE.get(ed.id).focus();});
@@ -946,9 +1101,9 @@
 		getInfo : function() {
 			return {
 				longname : 'Nos theme',
-				author : 'Moxiecode Systems AB',
-				authorurl : 'http://tinymce.moxiecode.com',
-				version : tinymce.majorVersion + "." + tinymce.minorVersion
+				author : 'Novius-OS',
+				authorurl : 'http://www.novius-os.org',
+				version : '0.1'
 			}
 		},
 
@@ -1299,23 +1454,17 @@
 				}
 			};
 
-			cm.setActive('visualaid', ed.hasVisual);
 			t._updateUndoStatus(ed);
 			cm.setDisabled('outdent', !ed.queryCommandState('Outdent'));
-            cm.setDisabled('file', true);
+
+            // mode debug
+            cm.setActive('visualhtml',!(ed.dom.select('body.debug') == ''));
 
 			p = getParent('A');
-			if (c = cm.get('link')) {
-				if (!p || !p.name) {
-					c.setDisabled(!p && co);
-					c.setActive(!!p);
-				}
-			}
-
-			if (c = cm.get('unlink')) {
-				c.setDisabled(!p && co);
-				c.setActive(!!p && !p.name);
-			}
+            if (c = cm.get('linkcontrols')) {
+                c.setDisabled(co);
+                c.setActive(!!p);
+            }
 
 			if (c = cm.get('anchor')) {
 				c.setActive(!co && !!p && p.name);
@@ -1326,7 +1475,8 @@
 				c.setActive(!co && !!p && n.className.indexOf('mceItem') == -1);
 
 			if (c = cm.get('styleselect')) {
-				t._importClasses();
+                c.showMenu();
+                c.hideMenu();
 
 				formatNames = [];
 				each(c.items, function(item) {
@@ -1336,6 +1486,14 @@
 				matches = ed.formatter.matchAll(formatNames);
 				c.select(matches[0]);
 			}
+
+            if (c = cm.get('justifycontrols')) {
+                each(c.items, function(item, i) {
+                    if (ed.queryCommandState(item.cmd)) {
+                        c.selectByIndex(i)
+                    }
+                });
+            }
 
 			if (c = cm.get('formatselect')) {
 				p = getParent(DOM.isBlock);
@@ -1563,31 +1721,6 @@
 			});
 		},
 
-		_mceHelp : function() {
-			var ed = this.editor;
-
-			ed.windowManager.open({
-				url : this.url + '/about.htm',
-				width : 480,
-				height : 380,
-				inline : true
-			}, {
-				theme_url : this.url
-			});
-		},
-
-		_mceShortcuts : function() {
-			var ed = this.editor;
-			ed.windowManager.open({
-				url: this.url + '/shortcuts.htm',
-				width: 480,
-				height: 380,
-				inline: true
-			}, {
-				theme_url: this.url
-			});
-		},
-
 		_mceColorPicker : function(u, v) {
 			var ed = this.editor;
 
@@ -1619,11 +1752,6 @@
 			}, {
 				theme_url : this.url
 			});
-		},
-
-		_mceImage : function(ui, val) {
-			// Don't use the native image editing. We have our own.
-			return this._nosImage(ui, val);
 		},
 
 		_mceLink : function(ui, val) {
@@ -1683,6 +1811,14 @@
             }, {
                 theme_url : this.url
             });
+        },
+
+        _nosBrClearAll : function(ui, val) {
+            var ed = this.editor;
+
+            br = '<br style="clear: both"/>';
+
+            ed.execCommand("mceInsertContent", false, br);
         },
 
         _nosVisualHtml : function(ui, val) {
@@ -1859,10 +1995,18 @@
 			// Don't bind click handlers here, it will mess up when using undo/redo, which only tracks the HTML content
 			// Instead, use a global click handler and detect the action using data-action="..."
 			// Ctrf + F using an action name (removeEnhancer or addParagraphAfter) to find where this is :)
-			var deleteLink = $('<a href="#" data-action="removeEnhancer">Delete</a>');
-			var editLink = $('<a href="#" data-action="editEnhancer">Options</a>');
-			var insertAfter = $('<a href="#" data-action="addParagraphAfter">New paragraph after</a>');
-			var insertBefore = $('<a href="#" data-action="addParagraphBefore">New paragraph before</a>');
+			var deleteLink = $('<a href="#" data-action="removeEnhancer">Delete</a>')
+                    .attr('title', ed.getLang('nos.enhancer_delete'))
+                    .addClass('nos_enhancer_action nos_enhancer_action_delete'),
+			    editLink = $('<a href="#" data-action="editEnhancer">Options</a>')
+                    .attr('title', ed.getLang('nos.enhancer_options'))
+                    .addClass('nos_enhancer_action nos_enhancer_action_edit'),
+			    insertAfter = $('<a href="#" data-action="addParagraphAfter">New paragraph after</a>')
+                    .attr('title', ed.getLang('nos.enhancer_p_after'))
+                    .addClass('nos_enhancer_action nos_enhancer_action_after'),
+			    insertBefore = $('<a href="#" data-action="addParagraphBefore">New paragraph before</a>')
+                    .attr('title', ed.getLang('nos.enhancer_p_before'))
+                    .addClass('nos_enhancer_action nos_enhancer_action_before');
 
 			if (container.is('span')) {
 				container.addClass('nosEnhancerInline')
@@ -1875,12 +2019,12 @@
 				container.after($('<span> </span>'));
 			} else {
 				container.addClass('nosEnhancer');
+                container.prepend(insertAfter.addClass('nos_enhancer_action_block'));
 				container.prepend(insertBefore.addClass('nos_enhancer_action_block'));
-				container.prepend(insertAfter.addClass('nos_enhancer_action_block'));
                 if ($.isPlainObject(metadata.dialog) && metadata.dialog.contentUrl) {
                     container.prepend(editLink.addClass('nos_enhancer_action_block'));
                 }
-				container.prepend(deleteLink.addClass('nos_enhancer_action_block'));
+                container.prepend(deleteLink.addClass('nos_enhancer_action_block'));
 			}
 		},
 
@@ -1924,6 +2068,68 @@
             h += '</tr></tbody>';
             h = DOM.createHTML('table', { role: 'presentation',   'class' : 'mceSplitButton mceSplitButtonEnabled ' + s['class'], cellpadding : '0', cellspacing : '0', title : s.title}, h);
             return DOM.createHTML('div', {id : t.id, role: 'button', tabindex: '0', 'aria-labelledby': t.id + '_voice', 'aria-haspopup': 'true'}, h);
+        }
+    });
+})(tinymce);
+
+(function(tinymce) {
+    var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each;
+
+    tinymce.create('tinymce.ui.NosListBox:tinymce.ui.ListBox', {
+        NosListBox : function(id, s, ed) {
+            this.parent(id, s, ed);
+        },
+
+        renderMenu : function() {
+            var t = this, m;
+
+            m = t.settings.control_manager.createDropMenu(t.id + '_menu', {
+                menu_line : 1,
+                'class' : t.classPrefix + 'Menu',
+                max_width : 150,
+                max_height : 150
+            });
+
+            m.onHideMenu.add(function() {
+                t.hideMenu();
+                t.focus();
+            });
+
+            m.add({
+                title : t.settings.title,
+                'class' : 'mceMenuItemTitle',
+                onclick : function() {
+                    if (t.settings.onselect('') !== false)
+                        t.select(''); // Must be runned after
+                }
+            });
+
+            each(t.items, function(o) {
+                // No value then treat it as a title
+                if (o.value === undefined) {
+                    m.add({
+                        title : o.title,
+                        role : "option",
+                        'class' : 'mceMenuItemTitle',
+                        onclick : function() {
+                            if (t.settings.onselect('') !== false)
+                                t.select(''); // Must be runned after
+                        }
+                    });
+                } else {
+                    o.id = DOM.uniqueId();
+                    o.role= "option";
+                    o.onclick = function() {
+                        if (t.settings.onselect(o.value) !== false)
+                            t.select(o.value); // Must be runned after
+                    };
+
+                    m.add(o);
+                }
+            });
+
+            t.onRenderMenu.dispatch(t, m);
+            t.menu = m;
         }
     });
 })(tinymce);

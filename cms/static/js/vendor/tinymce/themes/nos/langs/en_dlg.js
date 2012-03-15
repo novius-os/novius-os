@@ -24,6 +24,7 @@ tinyMCE.addI18n('en.nos_dlg',{
 	"code_title":"HTML Source Editor",
 	"anchor_name":"Anchor Name",
 	"anchor_title":"Insert/Edit Anchor",
+    "anchor_invalid":"Please specify a valid anchor name.",
 	"accessibility_help":"Accessibility Help",
 	"accessibility_usage_title":"General Usage",
 	"":""

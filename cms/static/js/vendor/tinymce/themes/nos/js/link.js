@@ -12,7 +12,7 @@ var LinkDialog = {
 		var f = document.forms[0], ed = tinyMCEPopup.editor;
 
 		// Setup browse button
-		document.getElementById('hrefbrowsercontainer').innerHTML = getBrowserHTML('hrefbrowser', 'href', 'file', 'theme_advanced_link');
+		document.getElementById('hrefbrowsercontainer').innerHTML = getBrowserHTML('hrefbrowser', 'href', 'file', 'theme_nos_link');
 		if (isVisible('hrefbrowser'))
 			document.getElementById('href').style.width = '180px';
 
@@ -87,10 +87,10 @@ var LinkDialog = {
 	},
 
 	checkPrefix : function(n) {
-		if (n.value && Validator.isEmail(n) && !/^\s*mailto:/i.test(n.value) && confirm(tinyMCEPopup.getLang('advanced_dlg.link_is_email')))
+		if (n.value && Validator.isEmail(n) && !/^\s*mailto:/i.test(n.value) && confirm(tinyMCEPopup.getLang('nos_dlg.link_is_email')))
 			n.value = 'mailto:' + n.value;
 
-		if (/^\s*www\./i.test(n.value) && confirm(tinyMCEPopup.getLang('advanced_dlg.link_is_external')))
+		if (/^\s*www\./i.test(n.value) && confirm(tinyMCEPopup.getLang('nos_dlg.link_is_external')))
 			n.value = 'http://' + n.value;
 	},
 
@@ -112,7 +112,7 @@ var LinkDialog = {
 	fillClassList : function(id) {
 		var dom = tinyMCEPopup.dom, lst = dom.get(id), v, cl;
 
-		if (v = tinyMCEPopup.getParam('theme_advanced_styles')) {
+		if (v = tinyMCEPopup.getParam('theme_nos_styles')) {
 			cl = [];
 
 			tinymce.each(v.split(';'), function(v) {
@@ -137,10 +137,10 @@ var LinkDialog = {
 		var dom = tinyMCEPopup.dom, lst = dom.get(id), v;
 
 		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('not_set'), '');
-		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('advanced_dlg.link_target_same'), '_self');
-		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('advanced_dlg.link_target_blank'), '_blank');
+		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('nos_dlg.link_target_same'), '_self');
+		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('nos_dlg.link_target_blank'), '_blank');
 
-		if (v = tinyMCEPopup.getParam('theme_advanced_link_targets')) {
+		if (v = tinyMCEPopup.getParam('theme_nos_link_targets')) {
 			tinymce.each(v.split(','), function(v) {
 				v = v.split('=');
 				lst.options[lst.options.length] = new Option(v[0], v[1]);
