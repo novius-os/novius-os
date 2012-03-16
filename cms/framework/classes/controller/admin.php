@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_Admin extends Controller {
+class Controller_Admin extends \Fuel\Core\Controller {
 
 	// Admin entry point
 	public function action_dispatch() {
