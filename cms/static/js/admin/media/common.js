@@ -20,7 +20,7 @@ define([
                     label : mp3Grid.i18n('Edit'),
                     action : function(item) {
                         $.nos.dialog({
-                            contentUrl: 'admin/admin/media/media/edit/' + item.id,
+                            contentUrl: 'admin/cms/media/media/edit/' + item.id,
                             ajax : true,
                             title: mp3Grid.i18n('Edit a media')._(),
                             width: 850,
@@ -35,7 +35,7 @@ define([
                     label : mp3Grid.i18n('Delete'),
                     action : function(item) {
                         $.nos.dialog({
-                            contentUrl: 'admin/admin/media/actions/delete_media/' + item.id,
+                            contentUrl: 'admin/cms/media/actions/delete_media/' + item.id,
                             ajax : true,
                             title: mp3Grid.i18n('Delete a media')._(),
                             width: 400,
@@ -94,7 +94,7 @@ define([
                         label : mp3Grid.i18n('Add a media'),
                         action : function() {
                             $.nos.dialog({
-                                contentUrl: 'admin/admin/media/media/add',
+                                contentUrl: 'admin/cms/media/media/add',
                                 ajax : true,
                                 title: mp3Grid.i18n('Add a media')._(),
                                 width: 850,
@@ -106,7 +106,7 @@ define([
                         label : mp3Grid.i18n('Add a folder'),
                         action : function() {
                             $.nos.dialog({
-                                contentUrl: 'admin/admin/media/folder/add',
+                                contentUrl: 'admin/cms/media/folder/add',
                                 ajax : true,
                                 title: 'Add a folder',
                                 width: 600,
@@ -117,7 +117,7 @@ define([
                 },
                 grid : {
                     id : 'cms_media_grid',
-                    proxyUrl : 'admin/admin/media/list/json',
+                    proxyUrl : 'admin/cms/media/list/json',
                     columns : {
                         extension : {
                             headerText : mp3Grid.i18n('Ext.'),
@@ -155,10 +155,10 @@ define([
                         vertical : true,
                         widget_id : 'cms_media_folders',
                         label : mp3Grid.i18n('Folders'),
-                        url : 'admin/admin/media/inspector/folder/list',
+                        url : 'admin/cms/media/inspector/folder/list',
                         inputName : 'folder_id',
                         treeGrid : {
-                            treeUrl : 'admin/admin/media/inspector/folder/json',
+                            treeUrl : 'admin/cms/media/inspector/folder/json',
                             columns : {
                                 title : {
                                     headerText : mp3Grid.i18n('Folder'),
@@ -173,7 +173,7 @@ define([
                                             icon : 'plus',
                                             action : function(item) {
                                                 $.nos.dialog({
-                                                    contentUrl: 'admin/admin/media/media/add/' + item.id,
+                                                    contentUrl: 'admin/cms/media/media/add/' + item.id,
                                                     ajax : true,
                                                     title: 'Add a media in the "' + item.title + '" folder',
                                                     width: 650,
@@ -187,7 +187,7 @@ define([
                                             icon : 'folder-open',
                                             action : function(item) {
                                                 $.nos.dialog({
-                                                    contentUrl: 'admin/admin/media/folder/add/' + item.id,
+                                                    contentUrl: 'admin/cms/media/folder/add/' + item.id,
                                                     ajax : true,
                                                     title: 'Add a sub-folder in "' + item.title + '"',
                                                     width: 600,
@@ -201,7 +201,7 @@ define([
                                             icon : 'pencil',
                                             action : function(item) {
                                                 $.nos.dialog({
-                                                    contentUrl: 'admin/admin/media/folder/edit/' + item.id,
+                                                    contentUrl: 'admin/cms/media/folder/edit/' + item.id,
                                                     ajax : true,
                                                     title: 'Edit the "' + item.title + '" folder',
                                                     width: 600,
@@ -215,7 +215,7 @@ define([
                                             icon : 'trash',
                                             action : function(item) {
                                                 $.nos.dialog({
-                                                    contentUrl: 'admin/admin/media/actions/delete_folder/' + item.id,
+                                                    contentUrl: 'admin/cms/media/actions/delete_folder/' + item.id,
                                                     ajax : true,
                                                     title: 'Delete the "' + item.title + '" folder',
                                                     width: 400,
@@ -232,7 +232,7 @@ define([
                         vertical : true,
                         widget_id : 'cms_media_extensions',
                         label : mp3Grid.i18n('Type of file'),
-                        url : 'admin/admin/media/inspector/extension/list',
+                        url : 'admin/cms/media/inspector/extension/list',
                         inputName : 'media_extension[]',
                         grid : {
                             columns : {

@@ -48,7 +48,7 @@ $qrcode = \View::forge('form/qrcode', array(
 */
 ?>
 
-<?= $fieldset->open('admin/admin/page/form/edit/'.$page->page_id); ?>
+<?= $fieldset->open('admin/cms/page/form/edit/'.$page->page_id); ?>
 <?= View::forge('form/layout_standard', array(
 	'css_id' => $uniqid,
 
@@ -115,7 +115,7 @@ require([
 
 		$container.find('select[name=page_template]').bind('change', function() {
 			$.ajax({
-				url: 'admin/admin/page/ajax/wysiwyg/<?= $page->page_id ?>',
+				url: 'admin/cms/page/ajax/wysiwyg/<?= $page->page_id ?>',
 				data: {
 					template_id: $(this).val()
 				},

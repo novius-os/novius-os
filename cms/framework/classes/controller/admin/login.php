@@ -12,7 +12,7 @@ namespace Cms;
 
 use Str;
 
-class Controller_Login extends Controller_Generic_Admin {
+class Controller_Admin_Login extends Controller_Generic_Admin {
 
     public function before($response = null) {
         parent::before($response);

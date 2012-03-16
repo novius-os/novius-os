@@ -25,7 +25,7 @@ require(['jquery-nos'], function ($) {
 	<div class="line myBody">
 		<div class="unit col c1"></div>
 		<div class="unit col c7 ui-widget">
-			<?= $fieldset_edit->open('admin/admin/user/form/edit/'.$user->user_id); ?>
+			<?= $fieldset_edit->open('admin/cms/user/form/edit/'.$user->user_id); ?>
 			<?= $fieldset_edit->field('user_name')
 				->set_template('{field}')
 				->set_attribute('class', 'title c3');
@@ -54,7 +54,7 @@ require(['jquery-nos'], function ($) {
 			<div class="expander">
 				<h3>Change password</h3>
 				<div>
-				<?= $fieldset_password->open('admin/admin/user/form/edit/'.$user->user_id); ?>
+				<?= $fieldset_password->open('admin/cms/user/form/edit/'.$user->user_id); ?>
 					<table>
 						<?php
 						foreach ($fieldset_password->field() as $f) {

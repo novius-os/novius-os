@@ -38,7 +38,7 @@ require(['jquery-nos'], function($) {
         $confirmation.click(function(e) {
             e.preventDefault();
             $.nos.ajax.request({
-                url : 'admin/admin/user/user/delete_user_confirm',
+                url : 'admin/cms/user/user/delete_user_confirm',
                 method : 'POST',
                 data : {
                     id : <?= $user->user_id ?>

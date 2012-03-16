@@ -10,7 +10,7 @@
 
 namespace Cms;
 
-class Controller_Admin_Media_Info extends Controller_Noviusos_Noviusos {
+class Controller_Admin_Media_Info extends Controller_Admin_Noviusos {
 
 	public function action_media($id)
 	{

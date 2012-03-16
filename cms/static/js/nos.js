@@ -598,7 +598,7 @@ define([
                                     $dialog.remove();
                                     $.nos.ajax.success(json);
                                 }
-                                
+
                                 // inject the full result
                                 $dialog.html( responseText );
                             }
@@ -818,8 +818,8 @@ define([
             media : function(input, data) {
 
                 var contentUrls = {
-                    'all'   : '/admin/media/list',
-                    'image' : '/admin/media/list?view=image_pick'
+                    'all'   : '/admin/cms/media/list',
+                    'image' : '/admin/cms/media/list?view=image_pick'
                 };
 
 				var dialog = null;
@@ -896,7 +896,7 @@ define([
 
                 saveUserConfiguration: function(key, configuration) {
                     this.ajax.request({
-                        url: '/admin/noviusos/noviusos/save_user_configuration',
+                        url: '/admin/cms/noviusos/save_user_configuration',
                         data: {
                             key: key,
                             configuration: configuration

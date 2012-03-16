@@ -1968,7 +1968,7 @@
 
             dialog = $.nos.dialog({
                 destroyOnClose : true,
-				contentUrl: 'admin/tinymce/image',
+				contentUrl: 'admin/cms/wysiwyg/image',
 				title: editCurrentImage ? 'Edit an image' : 'Insert an image',
 				ajax: true
 			});

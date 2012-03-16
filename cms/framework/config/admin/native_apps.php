@@ -12,7 +12,7 @@ return array(
     'nos_page' =>
     array(
         'name' => 'Page',
-        'url' => 'admin/admin/page/list/index',
+        'url' => 'admin/cms/page/list/index',
         'iconUrl' => 'static/cms/img/32/page.png',
         'icon64' => 'static/cms/img/64/page.png',
         'provider' =>
@@ -23,7 +23,7 @@ return array(
     'nos_media' =>
     array(
         'name' => 'Media centre',
-        'url' => 'admin/admin/media/list/index',
+        'url' => 'admin/cms/media/list/index',
         'iconUrl' => 'static/cms/img/32/media.png',
         'icon64' => 'static/cms/img/64/media.png',
         'provider' =>
@@ -34,7 +34,7 @@ return array(
     'nos_user' =>
     array(
         'name' => 'Users',
-        'url' => 'admin/admin/user/list/index',
+        'url' => 'admin/cms/user/list/index',
         'iconUrl' => 'static/cms/img/32/user.png',
         'icon64' => 'static/cms/img/64/user.png',
         'provider' =>

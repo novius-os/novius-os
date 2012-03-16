@@ -14,7 +14,7 @@
     '{username}' => !empty($user) ? $user->fullname() : $group->group_name,
 )) ?></h1>
 
-<form action="admin/admin/user/form/save_permissions" method="POST" id="<?= $uniqid = uniqid('id_') ?>">
+<form action="admin/cms/user/form/save_permissions" method="POST" id="<?= $uniqid = uniqid('id_') ?>">
   <input type="hidden" name="group_id" value="<?= $group->group_id ?>" />
 
 <?php

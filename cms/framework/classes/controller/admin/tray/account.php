@@ -13,7 +13,7 @@ namespace Cms;
 use Fuel\Core\File;
 use Fuel\Core\View;
 
-class Controller_Tray_Account extends \Controller {
+class Controller_Admin_Tray_Account extends \Controller {
 
     public function action_index() {
 
@@ -39,7 +39,7 @@ class Controller_Tray_Account extends \Controller {
 
 	public function action_disconnect() {
 		\Session::destroy();
-		\Response::redirect('/admin/login/reset');
+		\Response::redirect('/admin/cms/login/reset');
 		exit();
 	}
 

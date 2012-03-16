@@ -23,7 +23,7 @@
         }
     }
     ?>
-    <?= $fieldset->open('admin/admin/media/folder/do'); ?>
+    <?= $fieldset->open('admin/cms/media/folder/do'); ?>
     <table class="fieldset">
         <tr>
             <th><?= $fieldset->field('medif_title')->label; ?></th>

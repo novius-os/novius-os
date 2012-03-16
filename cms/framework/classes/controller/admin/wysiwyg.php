@@ -2,7 +2,11 @@
 
 namespace Cms;
 
-class Controller_Wysiwyg extends \Controller {
+class Controller_Admin_Wysiwyg extends \Controller {
+
+	public function action_image() {
+		return \View::forge('cms::tinymce/image');
+	}
 
 	public function action_modules() {
 

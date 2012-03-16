@@ -1,7 +1,7 @@
 <?php
 /**
  * NOVIUS OS - Web OS for digital communication
- * 
+ *
  * @copyright  2011 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
@@ -9,12 +9,13 @@
  */
 
 return array(
-	'_root_' => 'cms/admin/dispatch/',
-	'admin' => 'cms/admin/dispatch/',
-	
-	'admin/(:any)' => 'cms/admin/dispatch/$1',
+	'_root_' => 'cms/admin/noviusos/index',
+	'admin' => 'cms/admin/noviusos/index',
+
+	//'admin/cms/(:any)' => 'cms/$1',
+	'admin/(:segment)/(:any)' => '$1/admin/$2',
 	//'(:any)' => 'cms/admin/dispatch/$1',
-	
+
 	'_404_' => null,
 );
 

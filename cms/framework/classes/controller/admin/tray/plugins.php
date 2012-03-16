@@ -13,7 +13,7 @@ namespace Cms;
 use Fuel\Core\File;
 use Fuel\Core\View;
 
-class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
+class Controller_Admin_Tray_Plugins extends Controller_Admin_Noviusos {
 
     public function action_index() {
 
@@ -75,7 +75,7 @@ class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
 			\Config::save(APPPATH.'data'.DS.'config'.DS.'app_installed.php', $app_installed);
 		}
 
-		\Response::redirect('admin/tray/plugins');
+		\Response::redirect('admin/cms/tray/plugins');
 	}
 
 	public function action_remove($app) {
@@ -88,17 +88,17 @@ class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
 			\Config::save(APPPATH.'data'.DS.'config'.DS.'app_installed.php', $app_installed);
 		}
 
-		\Response::redirect('admin/tray/plugins');
+		\Response::redirect('admin/cms/tray/plugins');
 	}
 
 	public function action_upload() {
 
 		if (\Config::get('allow_plugin_upload', false) == false) {
-			Response::redirect('admin/tray/plugins');
+			Response::redirect('admin/cms/tray/plugins');
 		}
 
 		if (empty($_FILES['zip'])) {
-			\Response::redirect('admin/tray/plugins');
+			\Response::redirect('admin/cms/tray/plugins');
 		}
 
 		if (!is_uploaded_file($_FILES['zip']['tmp_name'])) {
@@ -106,7 +106,7 @@ class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
 				'title' => 'Upload error.',
 				'type' => 'error',
 			));
-			\Response::redirect('admin/tray/plugins');
+			\Response::redirect('admin/cms/tray/plugins');
 		}
 
 		if ($_FILES['zip']['error'] != UPLOAD_ERR_OK) {
@@ -114,7 +114,7 @@ class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
 				'title' => 'Upload error n°'.$_FILES['zip']['error'].'.',
 				'type' => 'error',
 			));
-			\Response::redirect('admin/tray/plugins');
+			\Response::redirect('admin/cms/tray/plugins');
 		}
 
 		$files = array();
@@ -138,7 +138,7 @@ class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
 				'title' => $name.' already exists in you module directory.',
 				'type' => 'error',
 			));
-			\Response::redirect('admin/tray/plugins');
+			\Response::redirect('admin/cms/tray/plugins');
 		}
 		$root = ($count == 1 ? $root_files[0] : '');
 
@@ -150,7 +150,7 @@ class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
 				'title' => 'This is not a valid module archive.',
 				'type' => 'error',
 			));
-			\Response::redirect('admin/tray/plugins');
+			\Response::redirect('admin/cms/tray/plugins');
 		}
 
 		$path = APPPATH.'modules'.DS.$metadata['install_folder'];
@@ -159,7 +159,7 @@ class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
 				'title' => $metadata['install_folder'].' already exists in you module directory.',
 				'type' => 'error',
 			));
-			\Response::redirect('admin/tray/plugins');
+			\Response::redirect('admin/cms/tray/plugins');
 		}
 
 		usort($files, function($a, $b) {
@@ -187,7 +187,7 @@ class Controller_Tray_Plugins extends Controller_Noviusos_Noviusos {
 		} catch (\Exception $e) {
 			\Fuel\Core\File::delete_dir($path, true, true);
 		}
-		\Response::redirect('admin/tray/plugins');
+		\Response::redirect('admin/cms/tray/plugins');
 	}
 
 	/**

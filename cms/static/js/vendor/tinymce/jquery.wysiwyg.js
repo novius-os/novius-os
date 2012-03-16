@@ -6,7 +6,7 @@
 		var self = $(this);
 		$.ajax({
 			dataType: 'json',
-			url: 'admin/wysiwyg/modules',
+			url: 'admin/cms/wysiwyg/modules',
 			success: function(enhancers) {
 				options = $.extend({
 					// Location of TinyMCE script

@@ -26,7 +26,7 @@ class Controller_Inspector_Model extends Controller_Extendable {
     public function action_list()
     {
 		if (!\Cms\Auth::check()) {
-			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
+			\Response::redirect('/admin/cms/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
 		}
 
@@ -39,7 +39,7 @@ class Controller_Inspector_Model extends Controller_Extendable {
     {
 		if (!\Cms\Auth::check()) {
 			\Response::json(403, array(
-				'login_page' => \Uri::base(false).'admin/login',
+				'login_page' => \Uri::base(false).'admin/cms/login',
 			));
 		}
 

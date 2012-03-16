@@ -9,7 +9,7 @@
  */
 ?>
 <?php
-	$mp3view = (string) Request::forge('admin/media/list/index')->execute(array('image_pick'))->response();
+	$mp3view = (string) Request::forge('cms/admin/media/list/index')->execute(array('image_pick'))->response();
 ?>
 <div id="<?= $uniqid = uniqid('tabs_') ?>">
 	<ul class="tabs">

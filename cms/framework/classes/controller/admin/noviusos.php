@@ -10,13 +10,15 @@
 
 namespace Cms;
 
-class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
+class Controller_Admin_Noviusos extends Controller_Template_Extendable {
+
+	public $template = 'cms::templates/html5';
 
 	public function before($response = null) {
 		parent::before($response);
 
 		if (!\Cms\Auth::check()) {
-			\Response::redirect('/admin/login' . ($_SERVER['REDIRECT_URL'] ? '?redirect='.urlencode($_SERVER['REDIRECT_URL']) : ''));
+			\Response::redirect('/admin/cms/login' . ($_SERVER['REDIRECT_URL'] ? '?redirect='.urlencode($_SERVER['REDIRECT_URL']) : ''));
 			exit();
 		}
 
@@ -43,7 +45,22 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
         \Asset::css('jquery.nos.ostabs.css', array(), 'css');
         \Asset::css('jquery.nos.mp3grid.css', array(), 'css');
 
-		return parent::after($response);
+		foreach (array(
+			         'title' => 'Administration',
+			         'base' => \Uri::base(false),
+			         'require'  => 'static/cms/js/vendor/requirejs/require.js',
+		         ) as $var => $default) {
+			if (empty($this->template->$var)) {
+				$this->template->$var = $default;
+			}
+		}
+		$ret = parent::after($response);
+		$this->template->set(array(
+			'css' => \Asset::render('css'),
+			'js'  => \Asset::render('js'),
+		), false, false);
+
+		return $ret;
 	}
 
 	public function action_index()
@@ -57,7 +74,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 			'trayTabs' => array(
 				array(
                     'iframe' => true,
-					'url' => 'admin/tray/plugins',
+					'url' => 'admin/cms/tray/plugins',
 					'iconClasses' => 'nos-icon24 nos-icon24-noviusstore',
 					'label' => 'Novius store',
 					'iconSize' => 24,
@@ -77,7 +94,7 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 					'iconSize' => 24,
 				),
 				array(
-					'url' => 'admin/tray/account',
+					'url' => 'admin/cms/tray/account',
 					'iconClasses' => 'nos-icon24 nos-icon24-account',
 					'label' => 'Account',
 					'iconSize' => 24,
@@ -85,14 +102,14 @@ class Controller_Noviusos_Noviusos extends Controller_Generic_Admin {
 			),
 			'appsTab' => array(
 				'panelId' => 'noviusospanel',
-				'url' => 'admin/noviusos/noviusos/appstab',
+				'url' => 'admin/cms/noviusos/appstab',
 				'iconClasses' => 'nos-icon32',
 				'iconSize' => 32,
 				'label' => 'Novius OS',
 			),
 			'newTab' => array(
 				'panelId' => 'noviusospanel',
-				'url' => 'admin/noviusos/noviusos/appstab',
+				'url' => 'admin/cms/noviusos/appstab',
 				'iconClasses' => 'nos-icon16 nos-icon16-add',
 				'iconSize' => 16,
 			),

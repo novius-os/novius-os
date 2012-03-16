@@ -41,7 +41,7 @@ class Controller_Admin_User_Form extends \Cms\Controller_Generic_Admin {
         return \View::forge('cms::admin/user/user_edit', array(
             'user'   => $user,
             'fieldset' => static::fieldset_edit($user)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>'),
-            'permissions' => \View::forge('admin/user/permission', array(
+            'permissions' => \View::forge('cms/admin/user/permission', array(
                 'user' => $user,
                 'group' => $group,
                 'apps' => $apps,
@@ -168,7 +168,7 @@ class Controller_Admin_User_Form extends \Cms\Controller_Generic_Admin {
             'success' => function() use ($user) {
                 return array(
                     'notify' => 'User successfully created.',
-                    'replaceTab' => 'admin/admin/user/form/edit/'.$user->user_id,
+                    'replaceTab' => 'admin/cms/user/form/edit/'.$user->user_id,
                 );
             }
         ));

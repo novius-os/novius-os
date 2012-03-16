@@ -17,7 +17,7 @@
     $form_attributes['enctype'] = 'multipart/form-data';
     $fieldset->set_config('form_attributes', $form_attributes);
     ?>
-    <?= $fieldset->open('admin/admin/media/media/update'); ?>
+    <?= $fieldset->open('admin/cms/media/media/update'); ?>
     <?= $fieldset->field('media_id')->build(); ?>
     <table>
         <tr>

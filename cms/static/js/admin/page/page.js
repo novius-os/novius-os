@@ -24,7 +24,7 @@ define([
                     icon : 'pencil',
                     action : function(item) {
                         $.nos.tabs.add({
-                            url : 'admin/admin/page/form/edit/' + item.id,
+                            url : 'admin/cms/page/form/edit/' + item.id,
                             label : item.title
                         });
                     }
@@ -36,7 +36,7 @@ define([
                     icon : 'trash',
                     action : function(item) {
                         $.nos.dialog({
-                            contentUrl: 'admin/admin/page/form/delete_page/' + item.id,
+                            contentUrl: 'admin/cms/page/form/delete_page/' + item.id,
                             ajax : true,
                             title: mp3Grid.i18n('Delete a page')._(),
                             width: 500,
@@ -59,15 +59,15 @@ define([
                 adds : {
                     page : {
                         label : mp3Grid.i18n('Add a page'),
-                        url : 'admin/admin/page/page/add'
+                        url : 'admin/cms/page/page/add'
                     }/*,
                     root : {
                         label : mp3Grid.i18n('Add a root'),
-                        url : 'admin/admin/page/root/add'
+                        url : 'admin/cms/page/root/add'
                     }*/
                 },
                 grid : {
-                    proxyUrl : 'admin/admin/page/list/json',
+                    proxyUrl : 'admin/cms/page/list/json',
                     columns : {
                         title : {
                             headerText : mp3Grid.i18n('Title'),
@@ -92,7 +92,7 @@ define([
                     }
                 },
                 treeGrid : {
-                    proxyUrl : 'admin/admin/page/list/tree_json'
+                    proxyUrl : 'admin/cms/page/list/tree_json'
                 },
                 defaultView : 'treeGrid',
                 inspectors : {
@@ -101,10 +101,10 @@ define([
                         vertical : true,
                         hide : true,
                         label : mp3Grid.i18n('Roots'),
-                        url : 'admin/admin/page/inspector/root/list',
+                        url : 'admin/cms/page/inspector/root/list',
                         inputName : 'rac_id',
                         grid : {
-                            urlJson : 'admin/admin/page/inspector/root/json',
+                            urlJson : 'admin/cms/page/inspector/root/json',
                             columns : {
                                 title : {
                                     headerText : mp3Grid.i18n('Root'),

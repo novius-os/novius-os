@@ -40,7 +40,7 @@ foreach ($fieldset->field() as $field) {
 ?>
 
 <div class="page line ui-widget" id="<?= $uniqid = uniqid('id_'); ?>">
-    <?= $fieldset->open('admin/admin/user/form/add'); ?>
+    <?= $fieldset->open('admin/cms/user/form/add'); ?>
     <?= View::forge('form/layout_standard', array(
         'fieldset' => $fieldset,
         'medias' => null,

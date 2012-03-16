@@ -10,7 +10,7 @@
 
 namespace Test;
 
-class Controller_Admin_Media extends \Cms\Controller_Noviusos_Noviusos
+class Controller_Admin_Media extends \Cms\Controller_Admin_Noviusos
 {
 	public function action_index()
 	{

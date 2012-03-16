@@ -46,9 +46,9 @@ class Widget_Media_Folder extends \Fieldset_Field {
 			}
 		}
 		$this->set_attribute('data-widget-options', htmlspecialchars(\Format::forge()->to_json($this->options)));
-        return (string) parent::build().\Request::forge('admin/media/inspector/folder/list')->execute(array(array('widget/media_folder', array(
+        return (string) parent::build().\Request::forge('cms/admin/media/inspector/folder/list')->execute(array('widget/media_folder', array(
             'input_id' => $this->get_attribute('id'),
             'selected' => $folder_id,
-        ))))->response();
+        )))->response();
     }
 }

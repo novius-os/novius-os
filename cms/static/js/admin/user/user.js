@@ -23,7 +23,7 @@ define([
                     primary : true,
                     action : function(item, ui) {
                         $.nos.tabs.add({
-                            url : 'admin/admin/user/form/edit/' + item.id,
+                            url : 'admin/cms/user/form/edit/' + item.id,
                             label : item.title
                         });
                     }
@@ -34,7 +34,7 @@ define([
                     primary : true,
                     action : function(item, ui) {
                         $.nos.dialog({
-                            contentUrl: 'admin/admin/user/user/delete_user/' + item.id,
+                            contentUrl: 'admin/cms/user/user/delete_user/' + item.id,
                             ajax : true,
                             title: mp3Grid.i18n('Delete a user')._(),
                             width: 400,
@@ -49,14 +49,14 @@ define([
                         label : mp3Grid.i18n('Add a user'),
                         action : function() {
                             $.nos.tabs.add({
-                                url : 'admin/admin/user/form/add',
+                                url : 'admin/cms/user/form/add',
                                 label : mp3Grid.i18n('Add a user')._()
                             });
                         }
                     }
                 },
                 grid : {
-                    proxyUrl : 'admin/admin/user/list/json',
+                    proxyUrl : 'admin/cms/user/list/json',
                     columns : {
                         user : {
                             headerText : mp3Grid.i18n('Name'),

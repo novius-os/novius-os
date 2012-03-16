@@ -17,7 +17,7 @@
     $form_attributes['enctype'] = 'multipart/form-data';
     $fieldset->set_config('form_attributes', $form_attributes);
     ?>
-    <?= $fieldset->open('admin/admin/media/media/upload'); ?>
+    <?= $fieldset->open('admin/cms/media/media/upload'); ?>
     <table>
         <tr>
             <th><?= $fieldset->field('media')->label ?></th>

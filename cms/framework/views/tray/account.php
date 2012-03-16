@@ -16,7 +16,7 @@
 
 			<h1 class="title" style="float:left;"><?= $logged_user->fullname(); ?></h1>
 
-			<a style="float:right;overflow:auto;" href="admin/tray/account/disconnect">
+			<a style="float:right;overflow:auto;" href="admin/cms/tray/account/disconnect">
 				<button data-icon="power"><?= __('Disconnect') ?></button>
 			</a>
 

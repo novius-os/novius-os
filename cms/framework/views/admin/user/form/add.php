@@ -26,7 +26,7 @@ require(['jquery-nos'], function ($) {
 	<div class="line myBody">
 		<div class="unit col c1"></div>
 		<div class="unit col c7 ui-widget">
-			<?= $fieldset_add->open('admin/admin/user/form/add/'); ?>
+			<?= $fieldset_add->open('admin/cms/user/form/add/'); ?>
 			<div class="expander">
 				<h3>Add a new user</h3>
 				<div>

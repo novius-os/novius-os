@@ -43,7 +43,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 
 	public function action_index($view = null) {
 		if (!\Cms\Auth::check()) {
-			\Response::redirect('/admin/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
+			\Response::redirect('/admin/cms/login?redirect='.urlencode($_SERVER['REDIRECT_URL']));
 			exit();
 		}
 
@@ -71,7 +71,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 
 		if (!\Cms\Auth::check()) {
 			\Response::json(403, array(
-				'login_page' => \Uri::base(false).'admin/login',
+				'login_page' => \Uri::base(false).'admin/cms/login',
 			));
 		}
 
@@ -158,7 +158,7 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
 	{
 		if (!\Cms\Auth::check()) {
 			\Response::json(403, array(
-				'login_page' => \Uri::base(false).'admin/login',
+				'login_page' => \Uri::base(false).'admin/cms/login',
 			));
 		}
 

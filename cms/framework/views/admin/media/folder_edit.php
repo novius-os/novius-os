@@ -23,7 +23,7 @@
         }
     }
     ?>
-    <?= $fieldset->open('admin/admin/media/folder/do_edit'); ?>
+    <?= $fieldset->open('admin/cms/media/folder/do_edit'); ?>
     <?= $fieldset->field('medif_id')->build(); ?>
     <table class="fieldset">
         <tr>

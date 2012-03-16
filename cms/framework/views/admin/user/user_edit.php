@@ -48,7 +48,7 @@ foreach ($fieldset->field() as $field) {
                 <li><a href="#permissions"><?= __('Permissions') ?></a></li>
             </ul>
             <div id="details">
-                <?= $fieldset->open('admin/admin/user/form/edit/'.$user->user_id); ?>
+                <?= $fieldset->open('admin/cms/user/form/edit/'.$user->user_id); ?>
                 <?= View::forge('form/layout_standard', array(
                     'fieldset' => $fieldset,
                     // Used by the behaviours (publishable, etc.)

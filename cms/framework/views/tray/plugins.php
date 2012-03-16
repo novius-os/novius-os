@@ -35,8 +35,8 @@
 						<tr>
 							<td><?= isset($metadata['name']) ? $metadata['name'] : $app ?></td>
 							<td>
-								<a href="admin/tray/plugins/remove/<?= $app ?>">remove</a>
-								<?= !empty($metadata['dirty']) ? '- [<a href="admin/tray/plugins/add/'.$app.'">repair install</a>]' : '' ?>
+								<a href="admin/cms/tray/plugins/remove/<?= $app ?>">remove</a>
+								<?= !empty($metadata['dirty']) ? '- [<a href="admin/cms/tray/plugins/add/'.$app.'">repair install</a>]' : '' ?>
 							</td>
 						</tr>
 						<?php } ?>
@@ -62,7 +62,7 @@
 				<?php foreach ($others as $app => $metadata) { ?>
 						<tr>
 							<td><?= isset($metadata['name']) ? $metadata['name'] : $app ?> </td>
-							<td><a href="admin/tray/plugins/add/<?= $app ?>">add</a></td>
+							<td><a href="admin/cms/tray/plugins/add/<?= $app ?>">add</a></td>
 						</tr>
 						<?php } ?>
 					</tbody>
@@ -79,7 +79,7 @@
 			<p>&nbsp;</p>
 			<h1 class="title"><?= Cms\I18n::get('Install from a .zip file') ?></h1>
 
-			<form method="post" action="/admin/tray/plugins/upload" enctype="multipart/form-data">
+			<form method="post" action="/admin/cms/tray/plugins/upload" enctype="multipart/form-data">
 				<input type="file" name="zip" />
 				<input type="submit" value="Upload the application" />
 			</form>
