@@ -393,7 +393,14 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 		} else {
 			$tree_model = $tree_config['models'][$params['model']];
 			foreach ($tree_model['childs'] as $child) {
-				$child['where'] = array(array($child['fk'] => $params['id']));
+				$model = $child['model'];
+				if (empty($params['lang']) && $model::behaviors('Cms\Orm_Behaviour_Translatable')) {
+					$item = $model::find($params['id']);
+					$langs = $item->get_all_lang();
+					$child['where'] = array(array($child['fk'], 'IN', array_keys($langs)));
+				} else {
+					$child['where'] = array(array($child['fk'] => $params['id']));
+				}
 				$childs[]       = $child;
 			}
 		}

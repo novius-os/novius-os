@@ -221,6 +221,8 @@ class Controller_Mp3table_List extends Controller_Generic_Admin {
                         break;
                 }
             }
+
+	        \Response::json(array());
         }
 
 		$json = $this->tree(array_merge(array('id' => $this->mp3grid['configuration_id']), $this->mp3grid['tree']));
