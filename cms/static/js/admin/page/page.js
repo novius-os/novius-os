@@ -56,7 +56,7 @@ define([
             },
             reload : 'cms_page',
             mp3grid : {
-                adadmin: {
+                adds: {
                     page : {
                         label : mp3Grid.i18n('Add a page'),
                         action : function() {
