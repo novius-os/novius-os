@@ -11,23 +11,31 @@
 ?>
 <script type="text/javascript">
 require(['jquery-nos'], function($) {
-	$.nos.ui.form('#login');
-	$(function() {
-		var $email = $('#email');
-		$email.select();
-	});
+    $.nos.ui.form('#login');
+    $(function() {
+        <?php if (!empty($error)) { ?>
+        $.nos.notify(<?= json_encode(array(
+            'title' => $error,
+            'type' => 'error',
+            'addclass' => 'nos-login-error',
+        )) ?>);
+        <?php } ?>
+        var $email = $('#email');
+        $email.select();
+    });
 });
 </script>
+<style type="text/css">
+.nos-login-error {
+    left: 50%;
+    margin-left: -150px;
+}
+</style>
 <div id="login">
-	<img src="static/cms/img/logo.png" />
-	<?php if (!empty($error)) { ?>
-		<p class="ui-state-error">
-			<span class="ui-icon ui-icon-alert" style="display:inline-block; vertical-align:middle;"></span> <?= $error ?>
-		</p>
-	<?php } ?>
-	<form method="POST" action="">
-		<p><input type="email" name="email" id="email" value="<?= \Input::post('email', ''); ?>" placeholder="Email" /></p>
-		<p><input type="password" name="password" placeholder="Password" /></p>
-		<p><input type="submit" value="Dive in"></p>
-	</form>
+    <img src="static/cms/img/logo.png" />
+    <form method="POST" action="">
+        <p><input type="email" name="email" id="email" value="<?= \Input::post('email', ''); ?>" placeholder="Email" /></p>
+        <p><input type="password" name="password" placeholder="Password" /></p>
+        <p><input type="submit" value="Dive in"></p>
+    </form>
 </div>

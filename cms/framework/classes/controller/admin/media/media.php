@@ -26,43 +26,20 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
         }
 
 		$folder = Model_Media_Folder::find($folder_id);
-        $fieldset = \Fieldset::build_from_config(array(
+        $fields = \Config::load('cms::controller/admin/media/form_media', true);
+
+        $fields = \Arr::merge($fields, array(
             'media_path_id' => array(
                 'widget' => $hide_widget_media_path ? null : 'media_folder',
-                'form' => array(
-                    'type'  => 'hidden',
-                    'value' => $folder->medif_id,
-                ),
-                'label' => __('Choose a folder where to put your media:'),
-            ),
-            'media' => array(
-                'form' => array(
-                    'type' => 'file',
-                ),
-                'label' => __('File from your hard drive: '),
-            ),
-            'media_title' => array(
-                'form' => array(
-                    'type' => 'text',
-                ),
-                'label' => __('Title: '),
-            ),
-            'slug' => array(
-                'form' => array(
-                    'type' => 'text',
-                ),
-                'label' => __('SEO, Media URL: '),
             ),
             'save' => array(
                 'form' => array(
-                    'type' => 'submit',
-                    'tag'  => 'button',
-                    'class' => 'primary',
                     'value' => __('Add'),
-                    'data-icon' => 'check',
-                ),
+                )
             ),
         ));
+
+        $fieldset = \Fieldset::build_from_config($fields);
 
 		return \View::forge('cms::admin/media/media_add', array(
             'fieldset' => $fieldset,
@@ -78,7 +55,9 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
         $ext = $pathinfo['extension'];
         $filename = $pathinfo['filename'];
 
-        $fieldset = \Fieldset::build_from_config(array(
+        $fields = \Config::load('cms::controller/admin/media/form_media', true);
+
+        $fields = \Arr::merge($fields, array(
             'media_id' => array(
                 'form' => array(
                     'type' => 'hidden',
@@ -90,38 +69,20 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
                 'form' => array(
                     'value' => $media->media_path_id,
                 ),
-                'label' => __('Choose a folder where to put your media:'),
-            ),
-            'media' => array(
-                'form' => array(
-                    'type' => 'file',
-                ),
-                'label' => __('File from your hard drive: '),
             ),
             'media_title' => array(
                 'form' => array(
-                    'type' => 'text',
                     'value' => $media->media_title,
                 ),
-                'label' => __('Title: '),
             ),
             'slug' => array(
                 'form' => array(
-                    'type' => 'text',
                     'value' => $filename,
-                ),
-                'label' => __('SEO, Media URL: '),
-            ),
-            'save' => array(
-                'form' => array(
-                    'type' => 'submit',
-                    'tag'  => 'button',
-                    'class' => 'primary',
-                    'value' => __('Save'),
-                    'data-icon' => 'check',
                 ),
             ),
         ));
+
+        $fieldset = \Fieldset::build_from_config($fields);
 
 		return \View::forge('cms::admin/media/media_edit', array(
             'fieldset' => $fieldset,

@@ -120,7 +120,9 @@ class Orm_Behaviour_Tree extends Orm_Behavior
 
         $this->set_parent_no_observers($object, $parent);
         $object->observe('before_change_parent');
-        $object->save();
+        if (!$object->is_new()) {
+            $object->save();
+        }
         $object->observe('after_change_parent');
 	}
 

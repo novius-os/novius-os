@@ -19,6 +19,7 @@ class Orm_Behaviour_Translatable extends Orm_Behavior
 	 * common_id_property
 	 * single_id_property
      * invariant_fields
+     * default_lang
 	 */
 	protected $_properties = array();
 
@@ -40,11 +41,11 @@ class Orm_Behaviour_Translatable extends Orm_Behavior
 		$lang_property      = $this->_properties['lang_property'];
 
         if (empty($object->$common_id_property)) {
-            $object->$common_id_property = 0;
+            $object->set($common_id_property, 0);
         }
         if (empty($object->$lang_property)) {
             // @todo: decide whether we force a lang or we use NULL instead
-            $object->$lang_property = Arr::get($this->_properties['default_lang'], \Config::get('default_lang', 'en_GB'));
+            $object->set($lang_property, \Arr::get($this->_properties, 'default_lang', \Config::get('default_lang', 'en_GB')));
         }
 	}
     /**
@@ -52,14 +53,29 @@ class Orm_Behaviour_Translatable extends Orm_Behavior
      * @param Model $object
 	 * @return  void
      */
-	public function after_insert_insert(\Cms\Orm\Model $object)
+	public function after_insert(\Cms\Orm\Model $object)
 	{
 		$common_id_property = $this->_properties['common_id_property'];
+        $single_id_property = $this->_properties['single_id_property'];
 
+        // It's a new main language
         if ($object->$common_id_property == 0) {
             // __get() magic method will retrieve $_primary_key[0]
-            $object->$common_id_property = $this->id;
-            $object->save();
+            $object->$common_id_property = $object->id;
+            $object->$single_id_property = $object->id;
+
+            $update = \DB::update($object->table())->set(array(
+                $common_id_property => $object->id,
+                $single_id_property => $object->id,
+            ));
+            foreach ($object->primary_key() as $pk) {
+                $update->where($pk, $object->get($pk));
+            }
+            $update->execute();
+
+            // Database were updated using DB directly, because save() triggers all the observers, and we don't need that
+            // $object->update() would be better here, because save() triggers all the observers, and we don't need that
+            // $object->save();
         }
 	}
 
@@ -69,17 +85,26 @@ class Orm_Behaviour_Translatable extends Orm_Behavior
      * @param Model $object
      */
     public function before_save(\Cms\Orm\Model $object) {
-        if (!$object->is_main_lang()) {
-            $obj_main = $object->find_main_lang();
+        if ($this->is_main_lang($object) || $object->is_new()) {
+            return;
+        }
+        $obj_main = $this->find_main_lang($object);
+
+        // No main language found => we just created a new main item :)
+        if (empty($ob_main)) {
+            $single_property = $this->_properties['single_id_property'];
+            $object->set($single_property, $object->id);
+        } else {
+            // The main language exists => update the common properties
             foreach ($this->_properties['invariant_fields'] as $invariant) {
-                $object->$invariant = $obj_main->$invariant;
+                $object->set($invariant, $obj_main->get($invariant));
             }
         }
     }
 
     public function after_delete(\Cms\Orm\Model $object) {
 
-        if (!$object->is_main_lang()) {
+        if (!$this->is_main_lang($object)) {
             return;
         }
 
@@ -113,8 +138,7 @@ class Orm_Behaviour_Translatable extends Orm_Behavior
         // This event has been sent from the tree behaviour, so we don't need to check it exists
         $new_parent = $object->find_parent();
 
-        $langs_parent   = $new_parent->get_other_lang();
-        $langs_parent[] = $new_parent->get_lang();
+        $langs_parent   = $new_parent->get_all_lang();
 
         $langs_self   = $this->get_other_lang($object);
         $langs_self[] = $this->get_lang($object);
@@ -137,7 +161,8 @@ class Orm_Behaviour_Translatable extends Orm_Behavior
         foreach ($this->find_lang($object, 'all') as $item) {
             $parent = $new_parent->find_lang($item->get_lang());
             $item->set_parent_no_observers($parent);
-            $item->save();
+
+            //$item->save();
         }
     }
 

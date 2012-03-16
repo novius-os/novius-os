@@ -12,7 +12,7 @@
 <script type="text/javascript">
 require(['jquery-nos'], function ($) {
 	$(function () {
-		$.nos.tabs.update($('#<?= $uniqid = uniqid('id_') ?>'), {
+		$.nos.tabs.update({
 			label : <?= json_encode($page->page_title) ?>,
 			iconUrl : 'static/cms/img/16/page.png'
 		});
@@ -21,7 +21,7 @@ require(['jquery-nos'], function ($) {
 </script>
 
 
-<div id="<?= $uniqid ?>" class="page">
+<div id="<?= $uniqid = uniqid('id_') ?>" class="page">
 <?php
 $fieldset->form()->set_config('field_template',  "\t\t<tr><th class=\"{error_class}\">{label}{required}</th><td class=\"{error_class}\">{field} {error_msg}</td></tr>\n");
 
@@ -48,7 +48,7 @@ $qrcode = \View::forge('form/qrcode', array(
 */
 ?>
 
-<?= $fieldset->open('admin/admin/page/form/edit/'.$page->page_id); ?>
+<?= $fieldset->open('admin/admin/page/page/edit/'.$page->page_id); ?>
 <?= View::forge('form/layout_standard', array(
 	'css_id' => $uniqid,
 

@@ -432,20 +432,28 @@ JS
 			}
 		}
 
-        // Let behaviours do their job (publication for example)
-        $object->form_processing_behaviours($data, $json_response);
-
-		if (!empty($options['before_save']) && is_callable($options['before_save']))
-		{
-			call_user_func($options['before_save'], $object, $data);
-		}
-
 		// Will trigger cascade_save for media and wysiwyg
 		try {
+            // Let behaviours do their job (publication for example)
+            $object->form_processing_behaviours($data, $json_response);
+
+            if (!empty($options['before_save']) && is_callable($options['before_save']))
+            {
+                call_user_func($options['before_save'], $object, $data);
+            }
+
 			if (!empty($options['success']) && is_callable($options['success']))
 			{
-				$json_response = \Arr::merge($json_response, call_user_func($options['success'], $object, $data));
-                $object->save();
+                if ($object->is_new()) {
+                    // The callback is called after save() to access the ID
+                    $object->save();
+                    $json_user = call_user_func($options['success'], $object, $data);
+                } else {
+                    // The callback is called before save() to allow a check for is_changed() properties
+                    $json_user = call_user_func($options['success'], $object, $data);
+                    $object->save();
+                }
+                $json_response = \Arr::merge($json_response, $json_user);
 			}
             else
             {

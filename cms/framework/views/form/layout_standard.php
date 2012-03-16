@@ -15,6 +15,14 @@ require(['jquery-nos'], function($) {
 });
 </script>
 
+<?php
+foreach ($fieldset->field() as $field) {
+	if ($field->type == 'hidden') {
+		echo $field->build();
+	}
+}
+?>
+
 <div class="line ui-widget" id="<?= $uniqid1 ?>">
 	<div class="unit col c1"></div>
 	<div class="unit col c7" id="line_first" style="z-index:99;">
@@ -51,7 +59,7 @@ require(['jquery-nos'], function($) {
 		</div>
 	</div>
 	<div class="unit col c3" style="position:relative;z-index:98;text-align:center;">
-		<p><?= $fieldset->field($save)->set_template('{field}')->build() ?> &nbsp; or &nbsp; <a href="#" onclick="javascript:$.nos.tabs.close();return false;"><?= __('Cancel') ?></a></p>
+		<p><?= $fieldset->field($save)->set_template('{field}')->build() ?> &nbsp; <?= __('or') ?> &nbsp; <a href="#" onclick="javascript:$.nos.tabs.close();return false;"><?= __('Cancel') ?></a></p>
         <?php
             echo \View::forge('form/publishable', array(
                 'object' => !empty($object) ? $object : null,
