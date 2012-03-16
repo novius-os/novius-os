@@ -12,7 +12,9 @@ namespace Cms;
 
 use Str;
 
-class Controller_Admin_Login extends Controller_Generic_Admin {
+class Controller_Admin_Login extends Controller_Template_Extendable {
+
+	public $template = 'cms::templates/html5';
 
     public function before($response = null) {
         parent::before($response);
@@ -24,7 +26,7 @@ class Controller_Admin_Login extends Controller_Generic_Admin {
 		}
     }
 
-    public function action_login() {
+    public function action_index() {
 
         $error = (\Input::method() == 'POST') ? $this->post_login() : '';
 
@@ -49,7 +51,21 @@ class Controller_Admin_Login extends Controller_Generic_Admin {
 		\Asset::css('aristo/jquery-wijmo.css', array(), 'css');
 		\Asset::css('jquery.wijmo-complete.all.2.0.3.min.css', array(), 'css');
 
-		return parent::after($response);
+		foreach (array(
+			         'title' => 'Administration',
+			         'base' => \Uri::base(false),
+			         'require'  => 'static/cms/js/vendor/requirejs/require.js',
+		         ) as $var => $default) {
+			if (empty($this->template->$var)) {
+				$this->template->$var = $default;
+			}
+		}
+		$ret = parent::after($response);
+		$this->template->set(array(
+			'css' => \Asset::render('css'),
+			'js'  => \Asset::render('js'),
+		), false, false);
+		return $ret;
 	}
 
 	protected function post_login() {
