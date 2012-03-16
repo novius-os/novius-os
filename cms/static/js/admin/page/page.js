@@ -24,7 +24,7 @@ define([
                     icon : 'pencil',
                     action : function(item) {
                         $.nos.tabs.add({
-                            url : 'admin/cms/page/form/edit/' + item.id,
+                            url : 'admin/cms/page/page/edit/' + item.id,
                             label : item.title
                         });
                     }
@@ -36,7 +36,7 @@ define([
                     icon : 'trash',
                     action : function(item) {
                         $.nos.dialog({
-                            contentUrl: 'admin/cms/page/form/delete_page/' + item.id,
+                            contentUrl: 'admin/cms/page/page/delete_page/' + item.id,
                             ajax : true,
                             title: mp3Grid.i18n('Delete a page')._(),
                             width: 500,
@@ -56,10 +56,15 @@ define([
             },
             reload : 'cms_page',
             mp3grid : {
-                adds : {
+                adadmin: {
                     page : {
                         label : mp3Grid.i18n('Add a page'),
-                        url : 'admin/cms/page/page/add'
+                        action : function() {
+                            $.nos.tabs.add({
+                                url: 'admin/cms/page/page/add',
+                                title: mp3Grid.i18n('Add a page')._()
+                            });
+                        }
                     }/*,
                     root : {
                         label : mp3Grid.i18n('Add a root'),

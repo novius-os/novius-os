@@ -17,12 +17,10 @@ class Controller_Admin_Tray_Account extends \Controller {
 
     public function action_index() {
 
-
         \Asset::add_path('static/cms/js/vendor/wijmo/');
         \Asset::add_path('static/cms/js/jquery/jquery-ui-noviusos/');
         \Asset::css('aristo/jquery-wijmo.css', array(), 'css');
         \Asset::css('jquery.wijmo-complete.all.2.0.3.min.css', array(), 'css');
-
 
 		$user = \Session::get('logged_user');
 		$fieldset_infos    = static::fieldset_edit($user)->set_config('field_template', '<tr><th>{label}{required}</th><td class="{error_class}">{field} {error_msg}</td></tr>');
@@ -42,7 +40,6 @@ class Controller_Admin_Tray_Account extends \Controller {
 		\Response::redirect('/admin/cms/login/reset');
 		exit();
 	}
-
 
     public static function fieldset_display($user) {
 
@@ -71,7 +68,6 @@ class Controller_Admin_Tray_Account extends \Controller {
 				$body = array();
 
                 try {
-
                     $configuration = $user->getConfiguration();
 					if (!empty($data['background'])) {
 						$media = Model_Media_Media::find($data['background']);

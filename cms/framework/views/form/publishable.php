@@ -48,7 +48,7 @@ require(['jquery-nos'], function($) {
         }
     };
 
-    var initial_status = '<?= empty($object) ? 'undefined' : ($published ? 'yes' : 'no') ?>';
+    var initial_status = '<?= empty($object) || $object->is_new() ? 'undefined' : ($published ? 'yes' : 'no') ?>';
 
     $(function() {
         var $buttonset = $('#<?= $buttonset ?>');
