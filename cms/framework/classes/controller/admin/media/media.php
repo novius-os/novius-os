@@ -31,7 +31,10 @@ class Controller_Admin_Media_Media extends Controller_Extendable {
         $fields = \Arr::merge($fields, array(
             'media_path_id' => array(
                 'widget' => $hide_widget_media_path ? null : 'media_folder',
-            ),
+		        'form' => array(
+			        'value' => $folder->medif_id,
+		        ),
+	        ),
             'save' => array(
                 'form' => array(
                     'value' => __('Add'),
