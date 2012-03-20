@@ -8,10 +8,13 @@
 /local/logs
 /local/media
 /local/modules/novius_publinova
+/local/modules/labs_cheatsheet
 /logs/
 noviusos.komodoproject
 .project
 /public/cache
+/public/media
+/public/data
 /public/htdocs/cms
 /public/htdocs/modules
 /public/static/cms
