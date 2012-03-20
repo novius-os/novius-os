@@ -5,13 +5,13 @@
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
- * 
+ *
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * licensing@wijmo.com
  * http://www.wijmo.com/license
  *
  * * Wijmo CheckBoxDecorator widget.
- * 
+ *
  * Depends:
  *  jquery-1.4.2.js
  *	jquery.ui.core.js
@@ -102,6 +102,9 @@
 				});
 
 				boxElement.bind("click.checkbox", function (e) {
+					if (o.disabled) {
+						return;
+					}
 					ele.get(0).checked = !ele.get(0).checked;
 					ele.change();
 					ele.focus();
@@ -139,7 +142,7 @@
 		},
 
 		destroy: function () {
-			/// Remove the functionality completely. 
+			/// Remove the functionality completely.
 			/// This will return the element back to its pre-init state.
 			var self = this, boxelement = self.element.parent().parent();
 			boxelement.children("div." + self._csspre + "-box").remove();

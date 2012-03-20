@@ -4,7 +4,7 @@
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
- * 
+ *
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * licensing@wijmo.com
  * http://www.wijmo.com/license
@@ -16,7 +16,7 @@
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  *	jquery.ui.position.js
- *	jquery.effects.core.js	
+ *	jquery.effects.core.js
  *	jquery.cookie.js
  *  jquery.wijmo.wijsuperpanel.js
  *	jquery.wijmo.wijutil.js
@@ -46,7 +46,7 @@
 			 ///     Possible values are: 'top', 'bottom', 'left' and 'right'.
              ///     Type: String
              ///     Default: 'top'
-             ///     Code Example:  
+             ///     Code Example:
 		     ///     $('.selector').wijtabs({alignment: 'top'});
 		     ///	</summary>
 			 alignment: 'top',
@@ -54,7 +54,7 @@
 			 ///	Determines whether the tab can be dragged to a new position.
 			 ///	Type: Boolean
 			 ///	Default: false
-			 ///	Code Example:  
+			 ///	Code Example:
 			 ///	$('.selector').wijtabs({sortable: false});
 			 ///	</summary>
 			 sortable: false,
@@ -62,60 +62,60 @@
 			 ///	Determines whether to wrap to the next line or scrolling is enabled when the tabs exceed the specified width
 			 ///	Type: Boolean
 			 ///	Default: false
-			 ///	Code Example:  
+			 ///	Code Example:
 			 ///	$('.selector').wijtabs({scrollable: false});
 			 ///	</summary>
 			 scrollable: false,
 			 ///	<summary>
 			 ///	Additional Ajax options to consider when loading tab content (see $.ajax).
-			 ///	Type: object 
-			 ///	Default: null 
-			 ///	Code Example:  
+			 ///	Type: object
+			 ///	Default: null
+			 ///	Code Example:
 			 ///	$( ".selector" ).wijtabs({ ajaxOptions: { async: false } });
 			 ///	</summary>
 			 ajaxOptions: null,
 			 ///	<summary>
-			 ///	Whether or not to cache remote tabs content, e.g. load only once or with every click. 
-			 ///	Cached content is being lazy loaded, e.g once and only once for the first click. 
-			 ///	Note that to prevent the actual Ajax requests from being cached by the browser you need to provide an extra cache: 
+			 ///	Whether or not to cache remote tabs content, e.g. load only once or with every click.
+			 ///	Cached content is being lazy loaded, e.g once and only once for the first click.
+			 ///	Note that to prevent the actual Ajax requests from being cached by the browser you need to provide an extra cache:
 			 ///	false flag to ajaxOptions.
 			 ///	Type: Boolean
 			 /// 	Default: false
-			 /// 	Code Example:  
+			 /// 	Code Example:
 			 /// 	$('.selector').wijtabs({cache: false});
 			 ///	</summary>
 			 cache: false,
 			 ///	<summary>
-			 ///	Store the latest selected tab in a cookie. 
-			 ///	The cookie is then used to determine the initially selected tab if the selected option is not defined. 
-			 ///	Requires cookie plugin. The object needs to have key/value pairs of the form the cookie plugin expects as options. 
+			 ///	Store the latest selected tab in a cookie.
+			 ///	The cookie is then used to determine the initially selected tab if the selected option is not defined.
+			 ///	Requires cookie plugin. The object needs to have key/value pairs of the form the cookie plugin expects as options.
 			 /// 	Type: object
 			 /// 	Default: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
-			 /// 	Code Example: 
+			 /// 	Code Example:
 			 /// 	$('.selector').wijtabs({cookie: { expires: 7, path: '/', domain: 'jquery.com', secure: true }});
 			 ///	</summary>
 			 cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 			 ///	<summary>
-			 ///	Determines whether a tab can be collapsed by a user. When this is set to true, an already selected tab will be collapsed upon reselection. 
+			 ///	Determines whether a tab can be collapsed by a user. When this is set to true, an already selected tab will be collapsed upon reselection.
 			 /// 	Type: Boolean
 			 /// 	Default: false
-			 /// 	Code Example: 
+			 /// 	Code Example:
 			 /// 	$('.selector').wijtabs({collapsible: false});
 			 ///	</summary>
 			 collapsible: false,
 			 ///	<summary>
-			 ///	This is an animation option for hiding the tabs panel content. 
+			 ///	This is an animation option for hiding the tabs panel content.
 			 ///	Type: object
-			 ///	Default: null 
-			 ///	Code Example: 
+			 ///	Default: null
+			 ///	Code Example:
 			 ///	$('.selector').wijtabs({hideOption: { blind: true, fade: true, duration: 200}});
 			 ///	</summary>
 			 hideOption: null, // e.g. { blind: true, fade: true, duration: 200}
 			 ///	<summary>
-			 ///	This is an animation option for showing the tabs panel content. 
+			 ///	This is an animation option for showing the tabs panel content.
 			 ///	Type: object
-			 ///	Default: null 
-			 ///	Code Example: 
+			 ///	Default: null
+			 ///	Code Example:
 			 ///	$('.selector').wijtabs({showOption: { blind: true, fade: true, duration: 200}});
 			 ///	</summary>
 			 showOption: null, // e.g. { blind: true, fade: true, duration: 200}
@@ -123,7 +123,7 @@
 			 ///	An array containing the position of the tabs (zero-based index) that should be disabled on initialization.
 			 ///	Type: Array
 			 ///	Default: []
-			 ///	Code Example: 
+			 ///	Code Example:
 			 ///	$( ".selector" ).wijtabs({ disabledIndexes: [1, 2] });
 			 ///	</summary>
 			 disabledIndexes: [],
@@ -132,38 +132,38 @@
 			 ///	</summary>
 			 event: 'click',
 			 ///	<summary>
-			 ///	If the remote tab, its anchor element that is, has no title attribute to generate an id from, 
+			 ///	If the remote tab, its anchor element that is, has no title attribute to generate an id from,
 			 ///	an id/fragment identifier is created from this prefix and a unique id returned by $.data(el), for example "ui-tabs-54".
 			 ///	Type: String
 			 ///	Default: 'ui-tabs-'
 			 ///	</summary>
 			 idPrefix: 'ui-tabs-',
 			 ///	<summary>
-			 ///	HTML template from which a new tab panel is created in case of adding a tab with the add method or 
+			 ///	HTML template from which a new tab panel is created in case of adding a tab with the add method or
 			 ///	when creating a panel for a remote tab on the fly.
 			 ///	Type: String
 			 ///	Default: ''
-			 ///	Code Example: 
+			 ///	Code Example:
 			 ///	$('.selector').wijtabs({panelTemplate: '<div></div>'});
 			 ///	</summary>
 			 panelTemplate: '',
 			 ///	<summary>
-			 ///	The HTML content of this string is shown in a tab title while remote content is loading. 
-			 ///	Pass in empty string to deactivate that behavior. 
+			 ///	The HTML content of this string is shown in a tab title while remote content is loading.
+			 ///	Pass in empty string to deactivate that behavior.
 			 ///	An span element must be present in the A tag of the title, for the spinner content to be visible.
 			 ///	Type: String
 			 ///	Default: ''
-			 /// 	Code Example: 
+			 /// 	Code Example:
 			 ///	$('.selector').wijtabs({spinner: 'Connecting…'});
 			 ///	</summary>
 			 spinner: '',
 			 ///	<summary>
-			 ///	HTML template from which a new tab is created and added. 
-			 ///	The placeholders #{href} and #{label} are replaced with the url and tab label that are passed as 
+			 ///	HTML template from which a new tab is created and added.
+			 ///	The placeholders #{href} and #{label} are replaced with the url and tab label that are passed as
 			 ///	arguments to the add method.
 			 ///	Type: String
 			 ///	Default: ''
-			 ///	Code Example:   
+			 ///	Code Example:
 			 ///	$('.selector').wijtabs({tabTemplate: '<div><a href="#{href}"><span>#{label}</span></a></div>'});
 			 ///	</summary>
 			 tabTemplate: '',
@@ -498,7 +498,7 @@
 					 } else {
 						 panel.css('width', '');
 					 }
-					 //$.effects.restore(panel, props); 
+					 //$.effects.restore(panel, props);
 					 $.effects.removeWrapper(panel); // Restore
 
 					 if (mode == 'show') { self._restoreLayout(); }
@@ -953,7 +953,7 @@
 				 }
 			 });
 
-			 var content = $('.wijmo-wijtabs-content');
+			 var content = this.element.find('.wijmo-wijtabs-content');
 			 if (content.length) {
 				 content.replaceWith(content.contents());
 			 }
@@ -968,7 +968,7 @@
 		 add: function (url, label, index) {
 			 /// 	<summary>
 			 ///	Add a new tab.
-			 ///	Code example: $("#element").wijtabs('add', url, label, [index]); 
+			 ///	Code example: $("#element").wijtabs('add', url, label, [index]);
 			 ///	</summary>
 			 /// 	<param name="url" type="String">A URL consisting of a fragment identifier only to create an in-page tab or a full url (relative or absolute, no cross-domain support) to turn the new tab into an Ajax (remote) tab.</param>
 			 /// 	<param name="label" type="String">The tab label.</param>
@@ -1040,7 +1040,7 @@
 		 remove: function (index) {
 			 /// 	<summary>
 			 ///	Remove a tab.
-			 ///	Code example: $("#element").wijtabs('remove', 1); 
+			 ///	Code example: $("#element").wijtabs('remove', 1);
 			 /// 	</summary>
 			 /// 	<param name="index" type="Number">The zero-based index of the tab to be removed.</param>
 			 var o = this.options, $li = this.lis.eq(index).remove(),
@@ -1066,7 +1066,7 @@
 		 enableTab: function (index) {
 			 /// 	<summary>
 			 ///	Enable a disabled tab.
-			 ///	Code example: $("#element").wijtabs('enableTab', 1); 
+			 ///	Code example: $("#element").wijtabs('enableTab', 1);
 			 ///	</summary>
 			 /// 	<param name="index" type="Number">The zero-based index of the tab to be enabled.</param>
 			 var o = this.options;
@@ -1085,7 +1085,7 @@
 		 disableTab: function (index) {
 			 /// 	<summary>
 			 ///	Disabled a tab.
-			 ///	Code example: $("#element").wijtabs('disableTab', 1); 
+			 ///	Code example: $("#element").wijtabs('disableTab', 1);
 			 ///	</summary>
 			 /// 	<param name="index" type="Number">The zero-based index of the tab to be disabled.</param>
 			 var self = this, o = this.options;
@@ -1105,7 +1105,7 @@
 		 select: function (index) {
 			 /// 	<summary>
 			 ///	Select a tab, as if it were clicked.
-			 ///	Code example: $("#element").wijtabs('select', 1); 
+			 ///	Code example: $("#element").wijtabs('select', 1);
 			 ///	</summary>
 			 /// 	<param name="index" type="Number">The zero-based index of the tab to be selected or the id selector of the panel the tab is associated with.</param>
 			 if (typeof index == 'string') {
@@ -1124,10 +1124,10 @@
 
 		 load: function (index) {
 			 /// 	<summary>
-			 ///	Reload the content of an Ajax tab programmatically. 
-			 ///	This method always loads the tab content from the remote location, even if cache is set to true. 
+			 ///	Reload the content of an Ajax tab programmatically.
+			 ///	This method always loads the tab content from the remote location, even if cache is set to true.
 			 ///	The second argument is the zero-based index of the tab to be reloaded.
-			 ///	Code example: $("#element").wijtabs('load', 1); 
+			 ///	Code example: $("#element").wijtabs('load', 1);
 			 ///	</summary>
 			 /// 	<param name="index" type="Number">The zero-based index of the tab to be loaded</param>
 			 var self = this, o = this.options, a = this.anchors.eq(index)[0], url = $.data(a, 'load.tabs');
@@ -1193,8 +1193,8 @@
 		 abort: function () {
 			 /// 	<summary>
 			 ///	Terminate all running tab ajax requests and animations.
-			 ///	Code example: $("#element").wijtabs('abort'); 
-			 ///	</summary>	    
+			 ///	Code example: $("#element").wijtabs('abort');
+			 ///	</summary>
 			 this.element.queue([]);
 			 this.panels.stop(false, true);
 
@@ -1215,12 +1215,12 @@
 
 		 url: function (index, url) {
 			 /// 	<summary>
-			 ///	Change the url from which an Ajax (remote) tab will be loaded. 
-			 ///	The specified URL will be used for subsequent loads. 
-			 ///	Note that you can not only change the URL for an existing remote tab with this method, but also turn an in-page tab into a remote tab. 
-			 ///	The second argument is the zero-based index of the tab of which its URL is to be updated. 
+			 ///	Change the url from which an Ajax (remote) tab will be loaded.
+			 ///	The specified URL will be used for subsequent loads.
+			 ///	Note that you can not only change the URL for an existing remote tab with this method, but also turn an in-page tab into a remote tab.
+			 ///	The second argument is the zero-based index of the tab of which its URL is to be updated.
 			 ///	The third is a URL the content of the tab is loaded from.
-			 ///	Code example: $("#element").wijtabs('url', 1, url); 
+			 ///	Code example: $("#element").wijtabs('url', 1, url);
 			 ///	</summary>
 			 /// 	<param name="index" type="Number">The zero-based index of the tab of which its URL is to be updated.</param>
 			 /// 	<param name="url" type="String">A URL the content of the tab is loaded from.</param>
@@ -1231,7 +1231,7 @@
 		 length: function () {
 			 /// 	<summary>
 			 ///	Retrieve the number of tabs of the first matched tab pane.
-			 ///	Code example: $("#element").wijtabs('length'); 
+			 ///	Code example: $("#element").wijtabs('length');
 			 ///	</summary>
 			 return this.anchors.length;
 		 }
