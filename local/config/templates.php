@@ -9,26 +9,34 @@
  */
 
 return array(
-    'blog_editorial' => array(
-        'file' => 'blog_editorial',
-        'title' => 'Blog éditorial',
-        'module' => 'tpl_template',
-        'cols' => 3,
+    'publi_homepage' => array(
+        'file' => 'app::templates/homepage',
+        'title' => 'Home',
+        'cols' => 1,
         'rows' => 1,
         'layout' => array(
-            'content' => '0,0,2,1',
-            'right' => '2,0,1,1',
+            'content' => '0,0,1,1',
         ),
+        'module' => '',
     ),
-    'blog' => array(
-        'file' => 'blog',
-        'title' => 'Blog',
-        'module' => 'tpl_default',
-        'cols' => 3,
+    'publi_classique' => array(
+        'file' => 'app::templates/classique',
+        'title' => 'Classique',
+        'cols' => 1,
         'rows' => 1,
         'layout' => array(
-            'content' => '0,0,2,1',
-            'right' => '2,0,1,1',
+            'content' => '0,0,1,1',
         ),
+        'module' => '',
+    ),
+    'publi_reso_generique' => array(
+        'file' => 'app::templates/reso_generique',
+        'title' => 'ResoNova',
+        'cols' => 1,
+        'rows' => 1,
+        'layout' => array(
+            'content' => '0,0,1,1',
+        ),
+        'module' => '',
     ),
 );
