@@ -16,6 +16,11 @@ return array(
 		'model' => 'Cms\Model_User_User',
 		'related' => array('groups'),
 	),
+	'search_text' => array(
+		'user_firstname',
+		'user_name',
+		'user_email',
+	),
     'selectedView' => 'default',
     'views' => array(
         'default' => array(

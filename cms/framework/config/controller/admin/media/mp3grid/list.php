@@ -17,6 +17,11 @@ return array(
 		'related' => array(),
 		'limit' => 10,
 	),
+	'search_text' => array(
+		'media_title',
+		'media_ext',
+		'media_file',
+	),
     'selectedView' => 'default',
     'views' => array(
         'default' => array(
