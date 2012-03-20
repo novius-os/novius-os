@@ -14,9 +14,11 @@ define([
 		options: {
             treeUrl : '',
             treeOptions : null,
+            treeColumnIndex : 0,
             sortable : true,
             movable : true,
-            data : []
+            data : [],
+            preOpen : null
 		},
 
         oldFirstColumn : null,
@@ -68,9 +70,9 @@ define([
 			var self = this,
 				o = self.options;
 
-            self.oldFirstColumn = $.extend(true, {}, o.columns[0]);
+            self.oldFirstColumn = $.extend(true, {}, o.columns[o.treeColumnIndex]);
 
-            o.columns[0].cellFormatter = function(args) {
+            o.columns[o.treeColumnIndex].cellFormatter = function(args) {
                 if ($.isPlainObject(args.row.data)) {
                     var tr = args.$container.closest('tr'),
                         node = args.row.data;
@@ -78,7 +80,7 @@ define([
                         $('<span></span>').text(args.row.data[args.column.dataKey])
                             .appendTo(args.$container);
                     } else if ($.isFunction(self.oldFirstColumn.cellFormatter)) {
-                        self.oldFirstColumn.oldCellFormatter.call(args);
+                        self.oldFirstColumn.cellFormatter(args);
                     }
                     if (node.treeChilds) {
                         $('<div class="nostreegrid-toggle"></div>').css({
@@ -108,21 +110,23 @@ define([
                 };
             }
 
-            o.columns.unshift({
-                allowSort : false,
-                allowMoving : false,
-                allowSizing : false,
-                width : 25,
-                ensurePxWidth : true,
-                cellFormatter : function(args) {
-                    if ($.isPlainObject(args.row.data)) {
+            if (o.movable) {
+                o.columns.unshift({
+                    allowSort : false,
+                    allowMoving : false,
+                    allowSizing : false,
+                    width : 25,
+                    ensurePxWidth : true,
+                    cellFormatter : function(args) {
+                        if ($.isPlainObject(args.row.data)) {
 
-                        args.$container.append('<div class="ui-icon ui-icon-grip-dotted-vertical nostreegrid-move-handle"></div>');
+                            args.$container.append('<div class="ui-icon ui-icon-grip-dotted-vertical nostreegrid-move-handle"></div>');
 
-                        return true;
-                    };
-                }
-            });
+                            return true;
+                        };
+                    }
+                });
+            }
 
             $.each(o.columns, function() {
                 this.sortDirection = 'none';
@@ -132,7 +136,12 @@ define([
 
             self._datasource();
             self.treeDataSource.proxy.options.data.deep = 2;
+            if ($.isPlainObject(o.preOpen)) {
+                self.treeDataSource.proxy.options.data.preOpen = o.preOpen;
+            }
             self.treeDataSource.load();
+            o.preOpen = null;
+            delete self.treeDataSource.proxy.options.data.preOpen;
 		},
 
         _setOption: function(key, value){
@@ -177,10 +186,8 @@ define([
                         };
 
                     if (!$.isPlainObject(data)) {
-                        self.treeData = self._completeChilds(null, dataSource.items);$
-                        // http://stackoverflow.com/questions/1232040/how-to-empty-an-array-in-javascript
-                        nosGridData.length = 0;
-                        $.merge(nosGridData, toArray(self.treeData));
+                        self.treeData = self._completeChilds(null, dataSource.items);
+                        Array.prototype.splice.apply(nosGridData, [0, nosGridData.length].concat(toArray(self.treeData)));
                     } else {
                         var index = $.inArray(data.node, nosGridData);
                         self._removeNode(data.node);

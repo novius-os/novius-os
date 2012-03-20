@@ -66,7 +66,7 @@ define([
 
                         var timeout,
                             div = $('div#' + id),
-                            connector = div.parents('.nos-connector'),
+                            connector = div.closest('.nos-connector'),
                             params = mp3Grid.build();
 
                         if ($.isPlainObject(params.tab) && !$.isEmptyObject(params.tab)) {

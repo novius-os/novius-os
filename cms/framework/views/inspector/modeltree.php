@@ -16,6 +16,14 @@ require([
 	], function( $, table, undefined ) {
 		$(function() {
 			var inspector = $('#<?= $id ?>').removeAttr('id'),
+				connector = inspector.closest('.nos-inspector, body')
+					.on('langChange', function() {
+						if (inspectorData.langChange) {
+							inspector.nostreegrid('option', 'treeOptions', {
+								lang : connector.data('nosLang') || ''
+							});
+						}
+					}),
 				parent = inspector.parent()
 					.on({
 						widgetResize : function() {
@@ -23,13 +31,6 @@ require([
 						},
 						widgetReload : function() {
 							inspector.nostreegrid('reload');
-						},
-						langChange : function() {
-							if (inspectorData.langChange) {
-								inspector.nostreegrid('option', 'treeOptions', {
-									lang : parent.data('nosLang') || ''
-								});
-							}
 						}
 					}),
                 inspectorData = parent.data('inspector'),
@@ -42,7 +43,7 @@ require([
                 .nostreegrid({
 		            treeUrl : inspectorData.treeGrid.treeUrl,
 		            treeOptions : {
-			            lang : parent.data('nosLang') || ''
+			            lang : connector.data('nosLang') || ''
 		            },
                     columnsAutogenerationMode : 'none',
                     scrollMode : 'auto',

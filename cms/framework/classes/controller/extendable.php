@@ -305,13 +305,6 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 			}
 			$list_models[$model['model']]['childs'] = $childs;
 		}
-        $parents = array();
-		foreach ($list_models as $model) {
-            foreach ($model['childs'] as $child) {
-                $parents[$child['model']][] = $model['model'];
-            }
-        }
-        $tree['parents'] = $parents;
 		$tree['models'] = $list_models;
 
 		$list_roots = array();
@@ -338,6 +331,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 	{
 		$id = \Input::get('id');
 		$model = \Input::get('model');
+		$selected = \Input::get('selected');
 		$deep = intval(\Input::get('deep', 1));
 		$lang = \Input::get('lang');
 
@@ -361,7 +355,25 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 				'total' => $count,
 			);
 		} else {
-			\Session::set('tree.'.$tree_config['id'].'.'.$model.'|'.$id, true);
+			if (\Input::get('move') === 'true') {
+				return $this->tree_move($tree_config, array(
+					'itemModel' => \Input::get('itemModel'),
+					'itemId' => \Input::get('itemId'),
+					'targetModel' => \Input::get('targetModel'),
+					'targetId' => \Input::get('targetId'),
+					'targetType' => \Input::get('targetType'),
+				));
+			}
+
+			if (is_array($selected) && !empty($selected['id']) && !empty($selected['model'])) {
+				$this->tree_selected($tree_config, array(
+					'model' => $selected['model'],
+					'id' => $selected['id'],
+				));
+			}
+			if ($id && $model) {
+				\Session::set('tree.'.$tree_config['id'].'.'.$model.'|'.$id, true);
+			}
 			$items = $this->tree_items($tree_config, array(
 				'model' => $model,
 				'id' => $id,
@@ -376,6 +388,102 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 		}
 		return $json;
 	}
+
+	protected function tree_move(array $tree_config, array $params)
+	{
+		$params = array_merge(array(
+			'itemModel' => null,
+			'itemId' => null,
+			'targetModel' => null,
+			'targetId' => null,
+			'targetType' => 'in',
+		), $params);
+
+		if (empty($params['itemModel']) || empty($params['itemId']) || empty($params['targetModel']) || empty($params['targetId'])) {
+			return;
+		}
+
+		$model_from = $params['itemModel'];
+		$model_from_id = $params['itemId'];
+
+		$model_to = $params['targetModel'];
+		$model_to_id = $params['targetId'];
+
+		if (empty($tree_config['models'][$model_from])) {
+			return;
+		}
+		if (empty($tree_config['models'][$model_to])) {
+			return;
+		}
+
+		$from = $model_from::find($model_from_id);
+		if (empty($from)) {
+			return;
+		}
+
+		$to = $model_to::find($model_to_id);
+		if (empty($to)) {
+			return;
+		}
+
+		// Change parent for tree relations
+		$behaviour_tree = $model_from::behaviors('Cms\Orm_Behaviour_Tree');
+		if (!empty($behaviour_tree)) {
+			$parent = ($params['targetType'] === 'in' ? $to : $to->get_parent());
+			$from->set_parent($parent);
+		}
+
+		// Change sort order
+		$behaviour_sort = $model_from::behaviors('Cms\Orm_Behaviour_Sortable');
+		if (!empty($behaviour_sort)) {
+			switch($params['targetType']) {
+				case 'before':
+					$from->move_before($to);
+					break;
+
+				case 'after':
+					$from->move_after($to);
+					break;
+
+				case 'in':
+					$from->move_to_last_position();
+					break;
+			}
+		}
+
+		\Response::json(array());
+	}
+
+	public function tree_selected(array $tree_config, array $params)
+	{
+		$params = array_merge(array(
+			'model' => null,
+			'id' => null,
+		), $params);
+
+		$model = $params['model'];
+
+		if (empty($params['id']) || empty($model) || $tree_config['models'][$model]) {
+			return false;
+		}
+
+		$item = $model::find($params['id']);
+		if (empty($item)) {
+			return;
+		}
+
+		$parent = $item->get_parent();
+		$tree_model_parent = $tree_config['models'][get_class($parent)];
+		$pk = $tree_model_parent['pk'];
+
+		\Session::set('tree.'.$tree_config['id'].'.'.$tree_model_parent['model'].'|'.$parent->{$pk}, true);
+
+		return $this->tree_selected($tree_config, array(
+			'model' => $tree_model_parent['model'],
+			'id' => $parent->{$pk},
+		));
+	}
+
 
 	public function tree_items(array $tree_config, array $params)
 	{

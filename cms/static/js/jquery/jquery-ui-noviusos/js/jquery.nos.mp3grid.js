@@ -73,6 +73,11 @@ define([
 
 			self.element.addClass('nos-mp3grid');
 
+            self.connector = self.element.closest('.nos-connector');
+            if (!self.connector.size()) {
+                self.connector = self.element;
+            }
+
 			self.uiHeaderBar = $('<div></div>').addClass('nos-mp3grid-headerbar')
 				.appendTo(self.element);
 
@@ -288,8 +293,7 @@ define([
                 $.nos.saveUserConfiguration(o.name + '.selectedLang', o.selectedLang);
 
                 self.gridReload();
-                self.element.find('.nos-mp3grid-inspector')
-                    .data('nosLang', o.selectedLang)
+                self.connector.data('nosLang', o.selectedLang)
                     .trigger('langChange');
             });
 
@@ -874,7 +878,6 @@ define([
 
 			self.uiInspectorsVertical.find('> li')
 				.add(self.uiInspectorsHorizontal.find('> li'))
-                .data('nosLang', o.selectedLang)
 				.each(function() {
 					self._loadInspector($(this));
 				});
