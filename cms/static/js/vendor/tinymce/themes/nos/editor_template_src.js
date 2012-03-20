@@ -1477,6 +1477,7 @@
 			if (c = cm.get('styleselect')) {
                 c.showMenu();
                 c.hideMenu();
+                ed.focus();
 
 				formatNames = [];
 				each(c.items, function(item) {
