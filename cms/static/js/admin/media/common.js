@@ -159,6 +159,7 @@ define([
                         inputName : 'folder_id',
                         treeGrid : {
                             treeUrl : 'admin/cms/media/inspector/folder/json',
+                            sortable : false,
                             columns : {
                                 title : {
                                     headerText : mp3Grid.i18n('Folder'),

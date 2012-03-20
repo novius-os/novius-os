@@ -40,8 +40,7 @@ require([
                     height : '100%',
                     width : '100%'
                 })
-                .nostreegrid({
-		            treeUrl : inspectorData.treeGrid.treeUrl,
+                .nostreegrid($.extend({
 		            treeOptions : {
 			            lang : connector.data('nosLang') || ''
 		            },
@@ -64,9 +63,8 @@ require([
                     rendered : function() {
                         rendered = true;
                         inspector.css("height", "auto");
-                    },
-                    columns: inspectorData.treeGrid.columns
-                })
+                    }
+                }, inspectorData.treeGrid))
 	            .closest('.nos-connector')
 	            .on('reload.' + inspectorData.widget_id, function() {
 		            parent.trigger('widgetReload');
