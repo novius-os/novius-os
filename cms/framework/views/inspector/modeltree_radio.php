@@ -9,14 +9,15 @@
  */
 	$id = uniqid('temp_');
 ?>
-<div id="<?= $id ?>" style="height:150px; width:100%"><table></table></div>
+<div id="<?= $id ?>"><table></table></div>
 <script type="text/javascript">
 	require([
 		'jquery-nos'
 	], function( $, table, undefined ) {
 		$(function() {
-			var container = $('#<?= $id ?>').removeAttr('id'),
-				params = <?= \Format::forge()->to_json($params) ?>,
+			var params = <?= \Format::forge()->to_json($params) ?>,
+				container = $('#<?= $id ?>').removeAttr('id')
+					.css('height', params.height || '150px'),
 				table = container.find('table'),
 				connector = container.closest('.nos-inspector, body')
 					.on('langChange', function() {

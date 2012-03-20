@@ -50,6 +50,7 @@ class Widget_Media_Folder extends \Fieldset_Field {
 				        'dataKey' => 'title',
 			        )
 		        ),
+		        'height' => '150px',
 		    ),
         )))->response();
     }
