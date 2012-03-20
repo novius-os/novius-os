@@ -161,9 +161,18 @@ input.ui-widget.primary, button.ui-widget.primary {
 	border-width : 2px;
 	border-style : outset;
 	font-size    : 1.1em;
+
+    .ui-button-text {
+        line-height  : 1.9em;
+    }
 }
 input.ui-widget.primary.ui-state-active, button.ui-widget.ui-state-active.primary {
 	border-style : inset;
+}
+
+
+div.blank_slate {
+    font-size : 150%;
 }
 
 span.optional {
