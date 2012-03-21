@@ -162,4 +162,12 @@ class Model_Page_Page extends \Cms\Orm\Model {
         }
         return $url;
     }
+
+    public function get_possible_lang() {
+        $parent = $this->find_parent();
+        if (!empty($parent)) {
+            return $parent->get_all_lang();
+        }
+        return array_keys(\Config::get('locales'));
+    }
 }

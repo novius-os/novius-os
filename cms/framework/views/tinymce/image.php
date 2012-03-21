@@ -16,7 +16,7 @@
 		<li><a href="#<?= $id_library = $uniqid.'_library' ?>"><?= __('1. Pick your image') ?></a></li>
 		<li><a href="#<?= $id_properties = $uniqid.'_properties' ?>"><?= __('2. Set the properties') ?></a></li>
 	</ul>
-	<div id="<?= $id_library ?>"></div>
+	<div id="<?= $id_library ?>" style="width: 100%; padding: 0;"></div>
 
 	<form action="#" id="<?= $uniqid_form = uniqid('form_') ?>">
 		<div id="<?= $id_properties ?>">
@@ -43,42 +43,18 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td> <input type="submit" class="primary" data-icon="check" data-id="save" value="<?= __('Insert this image') ?>" /> &nbsp; <?= __('or') ?> &nbsp; <a data-id="close" href="#"><?= __('Cancel') ?></a></td>
+					<td> <button type="submit" class="primary" data-icon="check" data-id="save"><?= __('Insert this image') ?></button> &nbsp; <?= __('or') ?> &nbsp; <a data-id="close" href="#"><?= __('Cancel') ?></a></td>
 				</tr>
 			</table>
 		</div>
 	</form>
 </div>
 
-<style type="text/css">
-#library {
-	width: 100%;
-	padding:0;
-}
-.wijmo-checkbox {
-	display: inline-block;
-	width: inherit;
-	vertical-align: middle;
-}
-.wijmo-checkbox label {
-	width: inherit;
-}
-
-<?= '#'.$uniqid ?> > ul {
-	width : 17%;
-}
-
-<?= '#'.$uniqid ?> > div {
-	width : 81%;
-	margin-right : 1%;
-}
-</style>
-
 <script type="text/javascript">
 require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 	$(function() {
 
-		var $container = $('#<?= $uniqid ?>')
+		var $container = $('#<?= $uniqid ?>'),
 			getMargin = function(el) {
 				return el.outerHeight(true) - el.height();
 			};
@@ -92,8 +68,14 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 						$(ui.panel).height($('#<?= $uniqid ?>').parent().height() - margin);
 					}
 				});
+                $container.find('> ul').css({
+                    width : '18%'
+                });
+                $container.find('> div').css({
+                    width : '81%'
+                });
 
-				var $dialog_content = $container.find('.ui-dialog-content');
+				var $dialog_content = $container.closest('.ui-dialog-content');
 				var $tabs = $container.find('.tabs');
 
 				var $properties = $('#<?= $id_properties ?>');
@@ -111,7 +93,6 @@ require(['jquery-nos', 'jquery-ui', 'jquery'], function($) {
 				$library.css({padding:0, margin:0}).height(height);
 
 				// Now tabs are created and the appropriate dimensions are set, initialize the mp3grid
-				var mp3grid_tmp = $library.children().height(height - getMargin($library.children())).attr('id');
 				$library.html(<?= \Format::forge()->to_json($mp3view) ?>);
 
 				var $dialog = $container.closest('.ui-dialog-content');

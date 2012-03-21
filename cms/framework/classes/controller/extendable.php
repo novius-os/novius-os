@@ -229,17 +229,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
                 foreach ($items as &$item) {
                     $flags = '';
                     foreach (explode(',', $item['lang']) as $lang) {
-                        // Convert lang_LOCALE to locale
-                        list($lang, $locale) = explode('_', $lang.'_');
-                        if (!empty($locale)) {
-                            $lang = strtolower($locale);
-                        }
-                        switch($lang) {
-                            case 'en':
-                                $lang = 'gb';
-                                break;
-                        }
-                        $flags .= '<img src="static/cms/img/flags/'.$lang.'.png" /> ';
+                        $flags .= \Cms\Helper::flag($lang);
                     }
                     $item['lang'] = $flags;
                 }

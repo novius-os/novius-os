@@ -25,31 +25,17 @@
 
     if ($children_count == 0 && $lang_count == 1) {
         ?>
-        <p><?= __('This page has no children and can be safely deleted.') ?></p>
+        <p><?= __('This page has no sub-pages and can be safely deleted.') ?></p>
         <p><?= __('Please confirm the suppression below.') ?></p>
         <?php
     } else {
-        if ($children_count > 0) {
-            ?>
-            <p><?= strtr(__(
-                    $children_count == 1 ? 'The page contains <strong>one child</strong>.'
-                                       : 'The page contains <strong>{count} children</strong>.'
-            ), array(
-                '{count}' => $children_count,
-            )) ?></p>
-            <p><?= __('To confirm the deletion, you need to enter this number in the field below') ?></p>
-            <p><?= strtr(__('Yes, I want to delete the page and all of its {count} children.'), array(
-                '{count}' => '<input data-id="verification1" data-verification="'.$children_count.'" size="'.(strlen($children_count) + 1).'" />',
-            )); ?></p>
-            <?php
-        }
         if ($lang_count > 1) {
             ?>
             <p><?= strtr(__('The page exists in <strong>{count} languages</strong>.'), array(
                 '<strong>' => '<strong title="'.implode(', ', $languages_list).'">',
                 '{count}' => $lang_count,
             )) ?></p>
-            <?= __('Delete the page in the following languages: ') ?>
+            <?= __('Delete this page in the following languages: ') ?>
             <select name="lang">
                 <option value="all"><?= __('All languages') ?></option>
                 <?php
@@ -60,6 +46,22 @@
                 }
                 ?>
             </select>
+            <p>&nbsp;</p>
+            <?php
+        }
+        if ($children_count > 0) {
+            ?>
+            <p><?= strtr(__(
+                    $children_count == 1 ? 'This page has <strong>1 sub-page</strong>.'
+                                         : 'This page has <strong>{count} sub-pages</strong>.'
+            ), array(
+                '{count}' => $children_count,
+            )) ?></p>
+            <p><?= __('To confirm the deletion, you need to enter this number in the field below') ?></p>
+            <p><?= strtr(__('Yes, I want to delete the page and all of its {count} sub-pages.'), array(
+                '{count}' => '<input data-id="verification1" data-verification="'.$children_count.'" size="'.(strlen($children_count) + 1).'" />',
+            )); ?></p>
+            <p>&nbsp;</p>
             <?php
         }
     }

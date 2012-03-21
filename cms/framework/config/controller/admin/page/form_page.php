@@ -7,9 +7,11 @@ foreach (Config::get('templates', array()) as $tpl_key => $template) {
 }
 
 return array(
-    'id' => array (
+    'page_id' => array (
         'label' => 'ID: ',
-        'widget' => 'text',
+        'form' => array(
+            'type' => 'hidden',
+        ),
     ),
     'page_title' => array(
         'label' => 'Title',
@@ -22,13 +24,6 @@ return array(
         'form' => array(
             'type' => 'select',
             'options' => $templates,
-        ),
-    ),
-    'page_lang' => array(
-        'label' => 'Create in: ',
-        'form' => array(
-            'type' => 'select',
-            'options' => Config::get('locales'),
         ),
     ),
     'page_virtual_name' => array(

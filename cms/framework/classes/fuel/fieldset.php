@@ -12,9 +12,7 @@ class Fieldset extends \Fuel\Core\Fieldset {
 
 	protected $append = array();
 
-	public function build($action = null) {
-		return parent::build($action).implode('', $this->append);
-	}
+    protected $config_used = array();
 
 	public function append($content) {
 		$this->append[] = $content;
@@ -40,7 +38,15 @@ class Fieldset extends \Fuel\Core\Fieldset {
 			? $this->form()->close().PHP_EOL
 			: $this->form()->{$this->fieldset_tag.'_close'}();
 
-		return $close.implode('', $this->append);
+        $append = array();
+        foreach ($this->append as $a) {
+            if (is_callable($a)) {
+                $append[] = call_user_func($a, $this);
+            } else {
+                $append[] = $a;
+            }
+        }
+		return $close.implode('', $append);
 	}
 
 	public function form_name($value) {
@@ -169,6 +175,9 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	}
 
 	public function add_widgets($properties, $options = array()) {
+
+        $this->config_used = $properties;
+
 		foreach ($properties as $p => $settings)
 		{
 			if (!empty($options['action']) && isset($settings[$options['action']]) && false === $settings[$options['action']]) {
@@ -249,15 +258,6 @@ class Fieldset extends \Fuel\Core\Fieldset {
 	}
 
 	public function js_validation() {
-
-		static $i = 1;
-
-		$form_attributes = $this->get_config('form_attributes', array());
-		if (empty($form_attributes['id'])) {
-			$form_attributes['id'] = 'form_id_'.$i++;
-		}
-		$this->set_config('form_attributes', $form_attributes);
-
 		$json = array();
 		foreach ($this->fields as $f) {
 
@@ -291,9 +291,13 @@ class Fieldset extends \Fuel\Core\Fieldset {
 				$json['messages'][$f->name][$js_name] = $error;
 			}
 		}
+
 		//\Debug::dump($json);
 		$validate = \Format::forge()->to_json($json);
-		$this->append(<<<JS
+		$this->append(function($fieldset) use ($validate) {
+            $form_attributes = $fieldset->get_config('form_attributes', array());
+            return
+<<<JS
 <script type="text/javascript">
 require(['jquery', 'static/cms/js/vendor/jquery/jquery-validation/jquery.validate.min'], function($) {
 	var json = $validate;
@@ -317,8 +321,8 @@ require(['jquery', 'static/cms/js/vendor/jquery/jquery-validation/jquery.validat
 	require(['static/cms/js/vendor/jquery/jquery-form/jquery.form.min', 'jquery-nos']);
 });
 </script>
-JS
-		);
+JS;
+        });
 	}
 
 	public static function build_from_config($config, $model = null, $options = array()) {
@@ -360,19 +364,7 @@ JS
 			call_user_func($options['extend'], $fieldset);
 		}
 
-        // Populate for data
-        if (isset($instance)) {
-
-            $populate = array();
-            foreach ($instance as $k => $field) {
-                // Don't populate password fields
-                if (\Arr::get($config, "$k.form.type") == 'password') {
-                    continue;
-                }
-                $populate[$k] = $field;
-            }
-            $fieldset->populate($populate);
-        }
+        $fieldset->populate_with_instance($instance);
 
 		if (\Input::method() == 'POST' && (empty($options['form_name']) || \Input::post('form_name') == $options['form_name'])) {
 			$fieldset->repopulate();
@@ -392,6 +384,53 @@ JS
 		}
 		return $fieldset;
 	}
+
+    public function readonly_lang($instance) {
+        if (empty($instance)) {
+            return;
+        }
+        $behaviour_translatable = $instance->behaviors('Cms\Orm_Behaviour_Translatable');
+        if (empty($behaviour_translatable) || $instance->is_main_lang()) {
+            return;
+        }
+        foreach ($behaviour_translatable['invariant_fields'] as $f) {
+            $field = $this->field($f);
+            if (!empty($field)) {
+                $field->set_attribute('readonly', true);
+                $field->set_attribute('disabled', true);
+            }
+        }
+    }
+
+    public function populate_with_instance($instance = null, $generate_id = true) {
+
+        if ($generate_id) {
+            $uniqid = uniqid();
+            // Generate a new ID for the form
+            $form_attributes = $this->get_config('form_attributes', array());
+            $form_attributes['id'] = 'form_id_'.$uniqid;
+            $this->set_config('auto_id_prefix', 'form'.$uniqid.'_');
+            $this->set_config('form_attributes', $form_attributes);
+        }
+
+        if (empty($instance)) {
+            return;
+        }
+
+        $populate = array();
+        foreach ($instance as $k => $field) {
+            // Don't populate password fields
+            if (\Arr::get($this->config_used, "$k.form.type") == 'password') {
+                continue;
+            }
+            // Don't populate some fields (for example, the lang)
+            if (\Arr::get($this->config_used, "$k.dont_populate", false) == true) {
+                continue;
+            }
+            $populate[$k] = $field;
+        }
+        $this->populate($populate);
+    }
 
     public static function defaultComplete($data, $object, $fields, $options) {
 

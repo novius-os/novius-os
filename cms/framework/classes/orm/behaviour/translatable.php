@@ -140,12 +140,23 @@ class Orm_Behaviour_Translatable extends Orm_Behavior
 
         $langs_parent   = $new_parent->get_all_lang();
 
-        $langs_self   = $this->get_other_lang($object);
-        $langs_self[] = $this->get_lang($object);
+        if ($object->is_new()) {
+            $lang_self = $object->get_lang();
+            if (!in_array($lang_self, $langs_parent)) {
+                throw new \Exception(strtr(__('Cannot create this element here because the parent does not exists in {lang}.'), array(
+                    '{lang}' => $lang_self,
+                )));
+            }
+        } else {
+            $langs_self   = $this->get_other_lang($object);
+            $langs_self[] = $this->get_lang($object);
 
-        $missing_langs = array_diff($langs_self, $langs_parent);
-        if (!empty($missing_langs)) {
-            throw new \Exception('Cannot move this element here because the parent does not exists in the following langages: '.implode(', ', $missing_langs));
+            $missing_langs = array_diff($langs_self, $langs_parent);
+            if (!empty($missing_langs)) {
+                throw new \Exception(strtr(__('Cannot move this element here because the parent does not exists in the following langages: {langs}'), array(
+                    '{langs}' => implode(', ', $missing_langs),
+                )));
+            }
         }
     }
 
@@ -263,6 +274,14 @@ class Orm_Behaviour_Translatable extends Orm_Behavior
 		}
 		return $all;
 	}
+
+    public function form_fieldset_fields($item, &$fieldset) {
+		$lang_property = $this->_properties['lang_property'];
+        // Empty array just so the data are retrieved from the input
+        if (isset($fieldset[$lang_property])) {
+            $fieldset[$lang_property]['dont_populate'] = true;
+        }
+    }
 
     /**
      * Returns all available languages for the requested items
