@@ -11,8 +11,8 @@ define([
 	'jquery-nos',
 	'static/cms/js/jquery/jquery-ui-noviusos/js/jquery.nos.loadspinner'
 ], function( $ ) {
+    "use strict";
 	(function(undefined ) {
-
 		$.widget( "nos.ostabs", {
 			options: {
 				initTabs: [], // e.g. [{"url":"http://www.google.com","iconUrl":"img/google-32.png","label":"Google","iconSize":32,"labelDisplay":false,"pined":true},{"url":"http://www.twitter.com","iconClasses":"ui-icon ui-icon-signal-diag","label":"Twitter","pined":true}]
@@ -188,7 +188,7 @@ define([
 						} );
 					}
 
-					newTab = this.options.newTab;
+					var newTab = this.options.newTab;
 					if ( $.isPlainObject(newTab) ) {
 						newTab = $.extend({
 							label: this.options.texts.newTab,
@@ -323,7 +323,7 @@ define([
 						a.href = "#" + id;
 						var $panel = self.element.find( "#" + id );
 						if ( !$panel.length ) {
-							$li = self.lis.eq(i);
+							var $li = self.lis.eq(i);
 							$panel = $( '<div></div>' )
 								.attr( "id", id )
 								.addClass( "nos-ostabs-panel ui-widget-content ui-corner-bottom nos-ostabs-hide" + ($li.hasClass('ui-state-pined') ? ' ui-state-pined' : ''))

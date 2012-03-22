@@ -12,7 +12,7 @@ define([
 	'static/cms/js/vendor/tinymce/jquery.wysiwyg',
 	'jquery-nos'
 ], function(a,b,$) {
-
+    "use strict";
     return function() {
 
         var $container = $(this);

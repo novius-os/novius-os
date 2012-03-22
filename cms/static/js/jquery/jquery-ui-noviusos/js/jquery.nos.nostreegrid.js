@@ -10,6 +10,7 @@
 define([
 	'jquery-nos'
 ], function( $, undefined ) {
+    "use strict";
 	$.widget( "nos.nostreegrid", $.nos.nosgrid, {
 		options: {
             treeUrl : '',
