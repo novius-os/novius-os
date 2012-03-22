@@ -4,8 +4,10 @@ namespace Cms;
 
 class Controller_Admin_Wysiwyg extends \Controller {
 
-	public function action_image() {
-		return \View::forge('cms::tinymce/image');
+	public function action_image($edit = false) {
+		$view = \View::forge('cms::tinymce/image');
+		$view->set('edit', $edit, false);
+		return $view;
 	}
 
 	public function action_modules() {

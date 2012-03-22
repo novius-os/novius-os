@@ -67,10 +67,14 @@ define([
                         .css($(ui || this).offset())
                         .appendTo(document.body)
                         .wijlightbox({
+                            zIndex : 1201,
                             textPosition : 'outside',
                             player : 'img',
                             dialogButtons: 'fullsize',
                             modal : true,
+                            open : function() {
+                                $('.wijmo-wijlightbox-overlay').css('z-index', 1200);
+                            },
                             close : function(e) {
                                 lightbox.wijlightbox('destroy');
                                 lightbox.remove();

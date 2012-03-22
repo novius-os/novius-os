@@ -94,7 +94,7 @@ define([
                     if (action.iconClasses) {
                         iconClass = action.iconClasses;
                     } else if (action.icon) {
-                        iconClass = 'ui-icon ui-icon-' + action.icon;
+                        iconClass = 'nos-icon16 ui-icon ui-icon-' + action.icon;
                     }
                     var text;
                     if (action.primary) {
@@ -102,6 +102,9 @@ define([
                         text += '<span class="ui-button-text">' + action.label + '</span>';
                         $('<button></button>')
                             .addClass('ui-button ui-button-text' + (action.icon ? '-icon-primary' : '') + ' ui-widget ui-state-default ui-corner-all')
+                            .css({
+                                marginBottom : '5px'
+                            })
                             .appendTo(self.uiFooter)
                             .html(text)
                             .hover(function() {
@@ -112,18 +115,22 @@ define([
                             .click(function(e) {
                                 e.preventDefault();
                                 e.stopImmediatePropagation();
-                                action.action.apply(this, [self.data, this]);
+                                action.action.apply(this, [self.data, $(this)]);
                             })
                     } else {
                         text = (iconClass ? '<span class="' + iconClass +'"></span> ' : '');
                         text += '<span class="ui-button-text">' + action.label + '</span>';
                         $('<a href="#"></a>')
+                            .css({
+                                display : 'inline-block',
+                                marginBottom : '5px'
+                            })
                             .appendTo(self.uiFooter)
                             .html(text)
                             .click(function(e) {
                                 e.preventDefault();
                                 e.stopImmediatePropagation();
-                                action.action.apply(this, [self.data, this]);
+                                action.action.apply(this, [self.data, $(this)]);
                             })
                     }
                 });
