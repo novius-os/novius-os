@@ -12,6 +12,7 @@ define([
 		'static/cms/js/vendor/wijmo/js/jquery.wijmo-open.all.2.0.3.min',
 		'static/cms/js/vendor/wijmo/js/jquery.wijmo-complete.all.2.0.3.min'
 	], function($) {
+        "use strict";
         var undefined = void(0);
 
         $.nos = {

@@ -10,6 +10,7 @@
 define([
 	'jquery-nos'
 ], function( $, undefined ) {
+    "use strict";
 	$.widget( "nos.nosgrid", $.wijmo.wijgrid, {
 		options: {
             texts : {

@@ -10,6 +10,7 @@
 define([
     'jquery-nos'
 ], function($) {
+    "use strict";
     return function(mp3Grid) {
         return {
             mp3grid : {
