@@ -52,7 +52,7 @@ class Orm_Behaviour_Publishable extends Orm_Behavior
 	public function published($object) {
         $bool = $this->_properties['publication_bool_property'];
         if (!empty($bool)) {
-            return (bool) $object->$bool;
+            return (bool) $object->get($bool);
         }
         // @todo publication start / end
 	}
@@ -76,8 +76,8 @@ class Orm_Behaviour_Publishable extends Orm_Behavior
         $props = $item->behaviors(__CLASS__);
         $publishable = $props['publication_bool_property'];
         // $data[$publishable] can possibly be filled with the data (see multi-line comment below)
-        $item->$publishable = (string) (int) (bool) \Input::post($publishable);
-        $response_json['publication_initial_status'] = $item->$publishable;
+        $item->set($publishable, (string) (int) (bool) \Input::post($publishable));
+        $response_json['publication_initial_status'] = $item->get($publishable);
     }
 
     /*

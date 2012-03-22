@@ -224,24 +224,24 @@ class Controller_Extendable extends \Fuel\Core\Controller {
             }
             if ($translatable) {
 	            $langs = $model::languages($common_ids);
+                foreach ($langs as $common_id => $list) {
+                    $langs[$common_id] = explode(',', $list);
+                }
                 foreach ($keys as $key => $common_id) {
                     $items[$key]['lang'] = $langs[$common_id];
                 }
+                $all_langs = array_unique(\Arr::flatten($langs));
+
 
                 foreach ($items as &$item) {
                     $flags = '';
-                    foreach (explode(',', $item['lang']) as $lang) {
-                        // Convert lang_LOCALE to locale
-                        list($lang, $locale) = explode('_', $lang.'_');
-                        if (!empty($locale)) {
-                            $lang = strtolower($locale);
+                    $langs = $item['lang'];
+                    foreach ($all_langs as $lang) {
+                        if (in_array($lang, $langs)) {
+                            $flags .= \Cms\Helper::flag($lang);
+                        } else {
+                            $flags .= \Cms\Helper::flag_empty();
                         }
-                        switch($lang) {
-                            case 'en':
-                                $lang = 'gb';
-                                break;
-                        }
-                        $flags .= '<img src="static/cms/img/flags/'.$lang.'.png" /> ';
                     }
                     $item['lang'] = $flags;
                 }
@@ -511,7 +511,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 				} else {
 					$child['where'] = array(array($child['fk'] => $params['id']));
 				}
-				$childs[]       = $child;
+				$childs[] = $child;
 			}
 		}
 
@@ -520,7 +520,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 		foreach ($childs as $child) {
 			$tree_model = $tree_config['models'][$child['model']];
 			$pk = $tree_model['pk'];
-			$controler = $this;
+			$controller = $this;
 
 			$config = array_merge($tree_model, array(
 				'lang' => $params['lang'],
@@ -534,10 +534,10 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 					return $query;
 				}),
 				'dataset' => array_merge($tree_model['dataset'], array(
-					'treeChilds' => function($object) use ($controler, $tree_config, $params, $child, $pk) {
+					'treeChilds' => function($object) use ($controller, $tree_config, $params, $child, $pk) {
 						$open = \Session::get('tree.'.$tree_config['id'].'.'.$child['model'].'|'.$object->{$pk}, null);
 						if ($open === true || ($params['deep'] > 1 && $open !== false)) {
-							$items = $controler->tree_items($tree_config, array(
+							$items = $controller->tree_items($tree_config, array(
 								'model' => $child['model'],
 								'id' => $object->{$pk},
 								'deep' => $params['deep'] - 1,
@@ -545,7 +545,7 @@ class Controller_Extendable extends \Fuel\Core\Controller {
 							));
 							return count($items) ? $items : 0;
 						} else {
-							return $controler->tree_items($tree_config, array(
+							return $controller->tree_items($tree_config, array(
 								'countProcess' => true,
 								'model' => $child['model'],
 								'id' => $object->{$pk},

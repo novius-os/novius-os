@@ -51,18 +51,18 @@ class Orm_Behaviour_Sortable extends Orm_Behavior
 	}
 
     public function get_sort(\Cms\Orm\Model $obj) {
-        $sort = $this->_properties['sort_property'];
-        return $obj->$sort;
+        $sort_property = $this->_properties['sort_property'];
+        return $obj->get($sort_property);
     }
 
-    public function set_sort(\Cms\Orm\Model $obj, $where) {
-        $sort = $this->_properties['sort_property'];
-        $obj->$sort = $where;
+    public function set_sort(\Cms\Orm\Model $obj, $sort) {
+        $sort_property = $this->_properties['sort_property'];
+        $obj->set($sort_property, $sort);
     }
 
-    protected function _move($object, $where) {
-        $sort = $this->_properties['sort_property'];
-        $object->$sort = $where;
+    protected function _move($object, $sort) {
+        $sort_property = $this->_properties['sort_property'];
+        $object->set($sort_property, $sort);
         $object->observe('before_sort');
         $object->save();
         $object->observe('after_sort');
@@ -70,7 +70,7 @@ class Orm_Behaviour_Sortable extends Orm_Behavior
 
     public function after_sort(\Cms\Orm\Model $obj) {
         $tree = $obj->behaviors('Cms\Orm_Behaviour_Tree');
-        $sort = $this->_properties['sort_property'];
+        $sort_property = $this->_properties['sort_property'];
         $conditions = array();
         if (!empty($tree)) {
             $conditions[] = array('parent', $obj->get_parent());
@@ -78,7 +78,7 @@ class Orm_Behaviour_Sortable extends Orm_Behavior
         $i = 1;
         $unsorted = $obj->search($conditions, array('default_sort' => 'ASC'));
         foreach ($unsorted as $u) {
-            $u->$sort = $i++;
+            $u->set($sort_property, $i++);
             $u->save();
             $updated[$u->get_sort()] = $u->id;
         }

@@ -19,17 +19,17 @@ class Controller_Admin_Page_Ajax extends \Controller {
 		parent::before();
 	}
 
-	public function action_wysiwyg($page_id) {
+	public function action_wysiwyg($page_id = null) {
         $id = $_GET['template_id'];
         $data = \Config::get('templates', array());
         $data = $data[$id];
 
         $data['layout'] = (array) $data['layout'];
 
-		$page = Model_Page_Page::find($page_id);
+		$page = empty($page_id) ? null : Model_Page_Page::find($page_id);
 		foreach ($data['layout'] as $wysiwyg => $coords)
 		{
-			$text = $page->wysiwygs->{$wysiwyg};
+			$text = empty($page) ? '' : $page->wysiwygs->{$wysiwyg};
 			preg_match_all('`src="nos://media/(\d+)(?:/(\d+)/(\d+))?"`', $text, $matches);
 			$ids      = array();
 			$replaces = array();
