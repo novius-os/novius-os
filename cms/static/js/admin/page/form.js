@@ -26,7 +26,6 @@ define([
 
 
         $container.find('input[name=page_menu]').change(function(e) {
-            log($(this).data('wijcheckbox'));
             if ($(this).is(':disabled')) {
                 e.preventDefault();
                 e.stopPropagation();
