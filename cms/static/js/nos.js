@@ -691,10 +691,22 @@ define([
                 },
                 success : function(json) {
                     if (json.error) {
-                        $.nos.notify(json.error, 'error');
+                        if ($.isArray(json.error)) {
+                            $.each(json.error, function() {
+                                $.nos.notify(this, 'error');
+                            });
+                        } else {
+                            $.nos.notify(json.error, 'error');
+                        }
                     }
                     if (json.notify) {
-                        $.nos.notify(json.notify);
+                        if ($.isArray(json.notify)) {
+                            $.each(json.notify, function() {
+                                $.nos.notify(this);
+                            });
+                        } else {
+                            $.nos.notify(json.notify);
+                        }
                     }
                     if (json.fireEvent) {
                         if ($.isArray(json.fireEvent)) {
