@@ -257,11 +257,11 @@ a:hover {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/css\/base\.scss}line{font-family:\0000391}}
 .wijmo-checkbox {
+  cursor: pointer;
   display: inline-block;
   width: inherit;
   vertical-align: middle;
 }
-
 @media -sass-debug-info{filename{font-family:file\:\/\/\/data\/www-local\/novius-os\/cms\/static\/css\/base\.scss}line{font-family:\0000397}}
 .wijmo-checkbox label {
   width: inherit;

@@ -10,9 +10,9 @@
 
 ?>
 
-<link type="text/css" rel="stylesheet" href="static/cms/css/permissions.css"></link>
-
-
+<script type="text/javascript">
+    require(['link!static/cms/css/permissions.css']);
+</script>
 
 
 <div class="permissions">
@@ -26,7 +26,7 @@
 				<input type="checkbox" name="access_to_everything" value="1"/>
 			</div>
 			<div class="infos">
-				<?= _('Full access for everything') ?>
+				<?= __('Full access for everything') ?>
 			</div>
 	    </div>
 
@@ -43,9 +43,15 @@ foreach ($apps as $app => $perms) {
 			<input type="checkbox" name="access[<?= $app ?>]" value="1" <?= $group->check_permission($app, 'access') ? 'checked' : '' ?> />
 		</div>
 		<div class="icon">
-			<img src="<?= $apps[$app]['icon64'] ?>" />
+			<?php
+            if (!empty($apps[$app]['icon64'])) {
+                echo '<img src="'.$apps[$app]['icon64'].'" />';
+            }
+            ?>
 		</div>
-		<div class="infos" title="Application provided by <?= $apps[$app]['provider']['name']; ?>">
+		<div class="infos" title="<?= strtr(__('Application provided by {provider_name}'), array(
+                '{provider_name}' => $apps[$app]['provider']['name'],
+            )) ?>">
 			<?= $apps[$app]['name'] ?>
 		</div>
     </div>
@@ -73,9 +79,9 @@ foreach ($apps as $app => $perms) {
 }
 ?>
 	</div>
-<center style="margin-top: 30px; margin-bottom: 20px;">
-<input type="submit" style="font-size: 2em;" value="Save the permissions">
-</center>
+    <div style="margin-top: 30px; margin-bottom: 20px; text-align: center;">
+        <button type="submit" data-icon="check" style="font-size: 2em;"><?= __('Save the permissions') ?></button>
+    </div>
 </form>
 </div>
 
@@ -87,10 +93,6 @@ foreach ($apps as $app => $perms) {
     	var $form = $('#<?= $uniqid ?>');
 
     	$.nos.ui.form($form);
-
-    	//$(".permissions .applications :input[type='checkbox']").wijcheckbox();
-
-    	//$('.permissions input[type="submit"]').wijbutton();
 
     	$(".permissions .applications .application.item :input[type='checkbox']").unbind('change').change(function() {
 			var $access_to_everything = $(this).closest('.applications').find(":input[name='access_to_everything']");
@@ -104,7 +106,7 @@ foreach ($apps as $app => $perms) {
 
 			$access_to_everything.attr('checked', all_checked);
 			$access_to_everything.wijcheckbox('refresh');
-    	});
+    	}).change();
 
     	$(".permissions .applications :input[name='access_to_everything']").unbind('change').change(function() {
     		var $all_checkboxes = $(this).closest('.applications').find(".application.item :input[type='checkbox']");
@@ -122,14 +124,6 @@ foreach ($apps as $app => $perms) {
 			}
 			$all_checkboxes.wijcheckbox('refresh');
     	});
-
-    	$(".permissions .applications .application.item :input[type='checkbox']").change();
-
-
-
-    	$(":input[name='access_to_everything']")
-
-
 
         $form.submit(function(e) {
             e.preventDefault();

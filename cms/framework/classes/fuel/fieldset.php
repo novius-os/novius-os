@@ -365,7 +365,9 @@ JS;
 			call_user_func($options['extend'], $fieldset);
 		}
 
-        $fieldset->populate_with_instance($instance);
+        if (isset($instance)) {
+            $fieldset->populate_with_instance($instance);
+        }
 
 		if (\Input::method() == 'POST' && (empty($options['form_name']) || \Input::post('form_name') == $options['form_name'])) {
 			$fieldset->repopulate();
