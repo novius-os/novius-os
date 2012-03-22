@@ -17,6 +17,7 @@ return array(
 		'related' => array('author'),
 		'limit' => 20,
 	),
+	'search_text' => 'blog_title',
 	'selectedView' => 'default',
 	'views' => array(
 		'default' => array(

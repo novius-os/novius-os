@@ -8,7 +8,6 @@ return array(
     'media_path_id' => array(
         'form' => array(
             'type'  => 'hidden',
-            'value' => $folder->medif_id,
         ),
         'label' => __('Choose a folder where to put your media:'),
     ),

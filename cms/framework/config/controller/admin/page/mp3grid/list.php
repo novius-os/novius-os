@@ -48,6 +48,7 @@ return array(
 		'model' => 'Cms\Model_Page_Page',
 		'related' => array(),
 	),
+	'search_text' => 'page_title',
     'selectedView' => 'default',
     'views' => array(
         'default' => array(

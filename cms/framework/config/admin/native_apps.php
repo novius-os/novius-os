@@ -42,4 +42,15 @@ return array(
                 'name' => 'Novius OS',
             ),
     ),
+    'nos_tray' =>
+    array(
+        'name' => 'Tray',
+        'url' => 'admin/cms/tray/plugins',
+        'iconUrl' => 'static/cms/img/32/user.png',
+        'icon64' => 'static/cms/img/64/user.png',
+        'provider' =>
+            array(
+                'name' => 'Novius OS',
+            ),
+    ),
 );

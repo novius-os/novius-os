@@ -16,6 +16,14 @@ require([
 	], function( $, table, undefined ) {
 		$(function() {
 			var inspector = $('#<?= $id ?>').removeAttr('id'),
+				connector = inspector.closest('.nos-inspector, body')
+					.on('langChange', function() {
+						if (inspectorData.langChange) {
+							inspector.nostreegrid('option', 'treeOptions', {
+								lang : connector.data('nosLang') || ''
+							});
+						}
+					}),
 				parent = inspector.parent()
 					.on({
 						widgetResize : function() {
@@ -23,13 +31,6 @@ require([
 						},
 						widgetReload : function() {
 							inspector.nostreegrid('reload');
-						},
-						langChange : function() {
-							if (inspectorData.langChange) {
-								inspector.nostreegrid('option', 'treeOptions', {
-									lang : parent.data('nosLang') || ''
-								});
-							}
 						}
 					}),
                 inspectorData = parent.data('inspector'),
@@ -39,10 +40,9 @@ require([
                     height : '100%',
                     width : '100%'
                 })
-                .nostreegrid({
-		            treeUrl : inspectorData.treeGrid.treeUrl,
+                .nostreegrid($.extend({
 		            treeOptions : {
-			            lang : parent.data('nosLang') || ''
+			            lang : connector.data('nosLang') || ''
 		            },
                     columnsAutogenerationMode : 'none',
                     scrollMode : 'auto',
@@ -63,9 +63,8 @@ require([
                     rendered : function() {
                         rendered = true;
                         inspector.css("height", "auto");
-                    },
-                    columns: inspectorData.treeGrid.columns
-                })
+                    }
+                }, inspectorData.treeGrid))
 	            .closest('.nos-connector')
 	            .on('reload.' + inspectorData.widget_id, function() {
 		            parent.trigger('widgetReload');

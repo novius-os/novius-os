@@ -10,6 +10,7 @@
 define([
 	'jquery-nos'
 ], function( $, undefined ) {
+    "use strict";
 	$.widget( "nos.mp3grid", {
 		options: {
 			adds : [],
@@ -72,6 +73,11 @@ define([
 				o = self.options;
 
 			self.element.addClass('nos-mp3grid');
+
+            self.connector = self.element.closest('.nos-connector');
+            if (!self.connector.size()) {
+                self.connector = self.element;
+            }
 
 			self.uiHeaderBar = $('<div></div>').addClass('nos-mp3grid-headerbar')
 				.appendTo(self.element);
@@ -288,8 +294,7 @@ define([
                 $.nos.saveUserConfiguration(o.name + '.selectedLang', o.selectedLang);
 
                 self.gridReload();
-                self.element.find('.nos-mp3grid-inspector')
-                    .data('nosLang', o.selectedLang)
+                self.connector.data('nosLang', o.selectedLang)
                     .trigger('langChange');
             });
 
@@ -418,9 +423,9 @@ define([
 
 		_uiCustomViewDialog : function() {
 			var self = this,
-				o = self.options;
+				o = self.options,
+                $el = $('<div><ul></ul></div>');
 
-			$el = $('<div><ul></ul></div>');
 			self._uiCustomViewDialogAddLayoutTab($el);
 
             self._uiCustomViewDialogAddMainViewTab($el);
@@ -874,7 +879,6 @@ define([
 
 			self.uiInspectorsVertical.find('> li')
 				.add(self.uiInspectorsHorizontal.find('> li'))
-                .data('nosLang', o.selectedLang)
 				.each(function() {
 					self._loadInspector($(this));
 				});
@@ -947,7 +951,11 @@ define([
                         }
                     });
 
-                    self.gridReload();
+                    if (o.defaultView === 'treeGrid') {
+                        self.uiViewsButtons.find('#view_grid').click().blur();
+                    } else {
+                        self.gridReload();
+                    }
                 };
 
             $li.data('inspector', inspector);
@@ -988,12 +996,20 @@ define([
 					}
 
 					if ($.inArray(event.keyCode, [keyCode.ENTER, keyCode.NUMPAD_ENTER]) != -1) {
-						self.gridReload();
+                        if (o.defaultView === 'treeGrid') {
+                            self.uiViewsButtons.find('#view_grid').click().blur();
+                        } else {
+                            self.gridReload();
+                        }
 						return false;
 					}
 
 					self.timeoutSearchInput = setTimeout(function() {
-                        self.gridReload();
+                        if (o.defaultView === 'treeGrid') {
+                            self.uiViewsButtons.find('#view_grid').click().blur();
+                        } else {
+                            self.gridReload();
+                        }
                     }, 500);
 				});
 
@@ -1400,29 +1416,31 @@ define([
 
 		_jsonInspectors : function() {
 			var self = this,
-				inspectors = this.options.values || {};
+				inspectors = $.extend({}, this.options.values || {});
 
-			self.uiSearchBar.find('input').each(function() {
-				var input = $(this),
-					name = input.attr('name'),
-					multiple = false;
+			self.uiInspectorsTags.find('input')
+                .add(self.uiSearchInput)
+                .each(function() {
+                    var input = $(this),
+                        name = input.attr('name'),
+                        multiple = false;
 
-				if (name.substr(-2, 2) === '[]') {
-					name = name.substr(0, name.length - 2);
-					multiple = true;
-				}
+                    if (name.substr(-2, 2) === '[]') {
+                        name = name.substr(0, name.length - 2);
+                        multiple = true;
+                    }
 
-				if (!multiple) {
-					inspectors[name] = input.val();
-				} else {
-					if (!$.isArray(inspectors[name])) {
-						inspectors[name] = [];
-						inspectors[name].push( input.val() );
-					} else if (-1 == $.inArray( input.val(), inspectors[name])) {
-						inspectors[name].push( input.val() );
-					}
-				}
-			});
+                    if (!multiple) {
+                        inspectors[name] = input.val();
+                    } else {
+                        if (!$.isArray(inspectors[name])) {
+                            inspectors[name] = [];
+                            inspectors[name].push( input.val() );
+                        } else if (-1 == $.inArray( input.val(), inspectors[name])) {
+                            inspectors[name].push( input.val() );
+                        }
+                    }
+                });
 
 			return inspectors;
 		},

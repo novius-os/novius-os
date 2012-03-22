@@ -36,19 +36,23 @@
 	if (!$hide_widget_media_path) {
 ?>
         <tr>
-            <th><?= $fieldset->field('media_path_id')->label ?></th>
-            <td></td>
+            <th style="vertical-align: top;"><?= $fieldset->field('media_path_id')->label ?></th>
+            <td style="vertical-align: top;"><?= $fieldset->field('media_path_id')->build() ?></td>
         </tr>
 <?php
 	}
 ?>
+	    <tr>
+		    <th></th>
+		    <td>
+			    <p>
+			      <?= $fieldset->field('save')->build(); ?>
+			      &nbsp; <?= __('or') ?> &nbsp;
+			      <a href="#" data-id="cancel"><?= __('Cancel') ?></a>
+			    </p>
+		    </td>
+	    </tr>
     </table>
-    <?= $fieldset->field('media_path_id')->build() ?>
-    <p>
-        <?= $fieldset->field('save')->build(); ?>
-        &nbsp; <?= __('or') ?> &nbsp;
-        <a href="#" data-id="cancel"><?= __('Cancel') ?></a>
-    </p>
     <?= $fieldset->close(); ?>
 </div>
 

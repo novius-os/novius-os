@@ -17,6 +17,12 @@ require([
 	], function( $, undefined ) {
 		$(function() {
 			var inspector = $('#<?= $id ?>').removeAttr('id'),
+				connector = inspector.closest('.nos-inspector, body')
+					.on('langChange', function() {
+						if (inspectorData.langChange) {
+							inspector.nosgrid('ensureControl', true);
+						}
+					}),
 				parent = inspector.parent()
 					.on({
 						widgetResize : function() {
@@ -24,11 +30,6 @@ require([
 						},
 						widgetReload : function() {
 							inspector.nosgrid('option', 'pageSize', Math.floor((parent.height() - table_heights.footer - table_heights.header - (showFilter ? table_heights.filter : 0)) / table_heights.row));
-						},
-						langChange : function() {
-							if (inspectorData.langChange) {
-								inspector.nosgrid('ensureControl', true);
-							}
 						}
 					}),
                 inspectorData = parent.data('inspector'),
@@ -63,7 +64,7 @@ require([
                         }),
                         loading: function (dataSource, userData) {
                             var r = userData.data.paging;
-	                        dataSource.proxy.options.data.lang = parent.data('nosLang') || '';
+	                        dataSource.proxy.options.data.lang = connector.data('nosLang') || '';
                             dataSource.proxy.options.data.offset = r.pageIndex * r.pageSize;
                             dataSource.proxy.options.data.limit = r.pageSize;
                         },
