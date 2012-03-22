@@ -35,7 +35,7 @@ $uniqids = array();
 ?>
 
 <div class="page line ui-widget" id="<?= $uniqid = uniqid('id_'); ?>">
-    <div id="<?= $uniqid_tabs = uniqid('tabs_') ?>" style="width: 92.4%; clear:both; margin:3em auto 1em;">
+    <div id="<?= $uniqid_tabs = uniqid('tabs_') ?>" style="width: 92.4%; clear:both; margin:0 auto 1em;">
         <ul style="width: 5%;">
             <?php
             $possible = $page->get_possible_lang();

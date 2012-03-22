@@ -42,7 +42,7 @@ foreach ($fieldset->field() as $field) {
 <div class="page line ui-widget" id="<?= $uniqid = uniqid('id_'); ?>">
 	<? /*<div class="unit col c1"></div>
 	<div class="unit col c10" id="line_first" style="position:relative;"> */ ?>
-        <div id="tabs" style="width: 92.4%; clear:both; margin:3em auto 1em;">
+        <div id="tabs" style="width: 92.4%; clear:both; margin:0 auto 1em;">
             <ul style="width: 15%;">
                 <li><a href="#details"><?= __('User details') ?></a></li>
                 <li><a href="#permissions"><?= __('Permissions') ?></a></li>
