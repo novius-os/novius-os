@@ -414,9 +414,6 @@ define([
                 nb = 0,
                 oItems = {};
 
-            if (childs.length) {
-                delete childs.length;
-            }
             $.each(childs, function(id, child) {
                 $.extend(child, {
                     treeHash : child._model + '|' + child._id,
