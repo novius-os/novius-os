@@ -361,9 +361,10 @@ define([
                             iconClass = 'ui-icon ui-icon-' + action.icon;
                         }
                         var uiAction = $('<th></th>')
+                            .css('white-space', 'nowrap')
                             .addClass("ui-state-default")
                             .attr('title', action.label)
-                            .html( iconClass ? '<span class="' + iconClass +'"></span>' : '&nbsp;' + action.label + '&nbsp;');
+                            .html( (iconClass ? '<span class="' + iconClass +'"></span>' : '') + (action.text || !iconClass ? '&nbsp;' + action.label + '&nbsp;' : ''));
 
                         // Check whether action name is disabled
                         if (action.name && noParseData && noParseData.actions && noParseData.actions[action.name] == false) {
@@ -388,13 +389,15 @@ define([
                             );
                         }
 
-                        if (iconClass) {
+                        if (iconClass && !action.text) {
                             uiAction.css({
                                 width : 20,
                                 textAlign : 'center'
                             }).children().css({
                                 margin : 'auto'
                             });
+                        } else if (iconClass && action.text) {
+                            uiAction.find('span').css('float', 'left');
                         }
 
                         uiAction.appendTo(container.find('tr'));
