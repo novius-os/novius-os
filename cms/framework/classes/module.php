@@ -29,10 +29,12 @@ class Module {
 	}
 
 	public function install() {
+
+		$this->addPermission();
 		return $this->_refresh_properties() && ($this->check_install() ||
 			($this->symlink('static')
 				&& $this->symlink('htdocs')
-				//&& $this->symlink('data')
+				&& $this->symlink('data')
 				//&& $this->symlink('cache')
 			));
 	}
@@ -164,8 +166,9 @@ class Module {
 
             // we check that deleted templates are not used on the page
             if ($deleted_properties) {
-                $nb = Model_Page_Page::count(array('where' => array(array('page_template', 'IN', $deleted_properties))));
-                if ($nb > 0) {
+                $pages = Model_Page_Page::find('all', array('where' => array(array('page_template', 'IN', $deleted_properties))));
+                if (count($pages) > 0) {
+                	print_r($pages);
                     throw new \Exception('Some page include those partials and can therefore not be deleted !');
                 }
             }
@@ -219,5 +222,9 @@ class Module {
 
         \Config::set('modules_dependencies', $dependencies);
         \Config::save(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', $dependencies);
+    }
+
+    public function addPermission() {
+    	Permission::add($this->name, 'access');
     }
 }

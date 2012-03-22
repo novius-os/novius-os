@@ -83,15 +83,17 @@ class Controller_Admin_User_Form extends \Cms\Controller_Generic_Admin {
 
             \Config::load("$module::permissions", true);
             $permissions = \Config::get("$module::permissions", array());
-
+/*
             foreach ($permissions as $identifier => $whatever) {
                 $driver = $group->get_permission_driver($module, $identifier);
                 $driver->save($group, (array) $_POST['permission'][$module][$identifier]);
             }
+            */
         }
 		\Response::json(array(
             'notify' => 'Permissions successfully saved.',
         ));
+
     }
 
     public static function fieldset_add($user) {

@@ -14,34 +14,19 @@
 	$id_properties = $uniqid.'_properties';
 ?>
 <style type="text/css">
-	<?= '.'.$uniqid ?> {
+	.box-sizing-border {
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
 		height: 100%;
 	}
-	<?= '#'.$uniqid ?> .wijmo-checkbox {
-		display: inline-block;
-		width: inherit;
-		vertical-align: middle;
-	}
-	<?= '#'.$uniqid ?> .wijmo-checkbox label {
-	   width: inherit;
-	}
-	<?= '#'.$uniqid ?> > ul {
-	    width : 17%;
-	}
-	<?= '#'.$uniqid ?> > div {
-		width : 81%;
-		margin-right : 1%;
-	}
 </style>
-<div id="<?= $uniqid ?>">
+<div id="<?= $uniqid ?>" class="box-sizing-border">
 	<ul>
 		<li><a href="#<?= $id_library ?>"><?= $edit ? __('Pick a new image') : __('1. Pick your image') ?></a></li>
 		<li><a href="#<?= $id_properties ?>"><?= $edit ? __('Edit properties') : __('2. Set the properties') ?></a></li>
 	</ul>
-	<div id="<?= $id_library ?>"></div>
+	<div id="<?= $id_library ?>" class="box-sizing-border"></div>
 
 	<form action="#">
 		<div id="<?= $id_properties ?>">
@@ -69,7 +54,7 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td> <input type="submit" class="primary" data-icon="check" data-id="save" value="<?= __('Insert this image') ?>" /> &nbsp; <?= __('or') ?> &nbsp; <a data-id="close" href="#"><?= __('Cancel') ?></a></td>
+					<td> <button type="submit" class="primary" data-icon="check" data-id="save"><?= __('Insert this image') ?></button> &nbsp; <?= __('or') ?> &nbsp; <a data-id="close" href="#"><?= __('Cancel') ?></a></td>
 				</tr>
 			</table>
 		</div>
@@ -82,7 +67,6 @@ require(['jquery-nos'], function($) {
 		var id = '<?= $uniqid ?>',
 			newimg = !'<?= $edit ?>',
 			$container = $('#' + id)
-				.addClass(id)
 				.find('> form')
 				.submit(function(e) {
 					$container.find('input[data-id=save]').triggerHandler('click');
@@ -118,14 +102,19 @@ require(['jquery-nos'], function($) {
 					e.stopPropagation();
 					e.preventDefault();
 				})
+				.end()
+				.find('> ul')
+				.css({
+					width : '18%'
+				})
 				.end(),
 			$dialog = $container.closest('.ui-dialog-content')
 				.bind('select.media', function(e, data) {
 					tinymce_image_select(data);
 				}),
 			$library = $container.find('div:eq(0)')
-				.addClass(id)
 				.css({
+					width : '100%',
 					padding: 0,
 					margin: 0
 				}),
@@ -237,7 +226,8 @@ require(['jquery-nos'], function($) {
 				disabledIndexes: newimg ? [1] : []
 			})
 			.find('.wijmo-wijtabs-content')
-			.addClass(id);
+			.css('width', '81%')
+			.addClass('box-sizing-border');
 		$.nos.ui.form($container);
 
 

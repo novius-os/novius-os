@@ -431,7 +431,11 @@ class Model_Media_Provider
 	public function & __get($value)
 	{
 		// Reuse the getter and fetch the media directly
-        return $this->parent->{'medias->'.$value}->media;
+        $media = $this->parent->{'medias->'.$value};
+        if ($media === null) {
+            return $media;
+        }
+        return $media->media;
 	}
 
 	public function __set($property, $value)
@@ -480,7 +484,11 @@ class Model_Wysiwyg_Provider
 
 	public function & __get($value)
 	{
-        return $this->parent->{'wysiwygs->'.$value}->get('wysiwyg_text');
+        $wysiwyg = $this->parent->{'wysiwygs->'.$value};
+        if ($wysiwyg === null) {
+            return $wysiwyg;
+        }
+        return $wysiwyg->get('wysiwyg_text');
 	}
 
 	public function __set($property, $value)

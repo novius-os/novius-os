@@ -7,14 +7,19 @@ foreach (Config::get('templates', array()) as $tpl_key => $template) {
 }
 
 return array(
-    'id' => array (
+    'page_id' => array (
         'label' => 'ID: ',
-        'widget' => 'text',
+        'form' => array(
+            'type' => 'hidden',
+        ),
     ),
     'page_title' => array(
         'label' => 'Title',
         'form' => array(
             'type' => 'text',
+        ),
+        'validation' => array(
+            'min_length' => array(6),
         ),
     ),
     'page_template' => array(
@@ -24,18 +29,14 @@ return array(
             'options' => $templates,
         ),
     ),
-    'page_lang' => array(
-        'label' => 'Create in: ',
-        'form' => array(
-            'type' => 'select',
-            'options' => Config::get('locales'),
-        ),
-    ),
     'page_virtual_name' => array(
         'label' => 'URL: ',
         'form' => array(
             'type' => 'text',
             'size' => 20,
+        ),
+        'validation' => array(
+            'min_length' => array(2),
         ),
     ),
     'page_meta_title' => array(
