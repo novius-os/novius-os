@@ -37,12 +37,16 @@ class Permission {
 	public static function add($app, $key) {
         $user = \Session::user();
         $group = reset($user->groups);
-        $access = new Model_User_Permission();
-        $access->perm_group_id   = $group->group_id;
-        $access->perm_module     = $key;
-        $access->perm_identifier = '';
-        $access->perm_key        = $app;
-        $access->save();
+        try {
+	        $access = new Model_User_Permission();
+	        $access->perm_group_id   = $group->group_id;
+	        $access->perm_module     = $key;
+	        $access->perm_identifier = '';
+	        $access->perm_key        = $app;
+	        $access->save();
+        } catch(\Exception $e) {
+
+        }
         return true;
     }
 }
