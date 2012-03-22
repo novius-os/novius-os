@@ -107,9 +107,20 @@ foreach ($apps as $app => $perms) {
     	});
 
     	$(".permissions .applications :input[name='access_to_everything']").unbind('change').change(function() {
-        	var $checkboxes = $(this).closest('.applications').find('.application input[type=checkbox]');
-        	$checkboxes.attr('checked', 'checked');
-        	$checkboxes.wijcheckbox('refresh');
+    		var $all_checkboxes = $(this).closest('.applications').find(".application.item :input[type='checkbox']");
+			var all_checked = true;
+			$all_checkboxes.each(function() {
+				if (!$(this).is(':checked')) {
+					all_checked = false;
+				}
+			});
+
+			if (all_checked) {
+				$all_checkboxes.attr('checked', false);
+			} else {
+				$all_checkboxes.attr('checked', true);
+			}
+			$all_checkboxes.wijcheckbox('refresh');
     	});
 
     	$(".permissions .applications .application.item :input[type='checkbox']").change();

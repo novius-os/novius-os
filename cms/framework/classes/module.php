@@ -29,10 +29,12 @@ class Module {
 	}
 
 	public function install() {
+
+		$this->addPermission();
 		return $this->_refresh_properties() && ($this->check_install() ||
 			($this->symlink('static')
 				&& $this->symlink('htdocs')
-				//&& $this->symlink('data')
+				&& $this->symlink('data')
 				//&& $this->symlink('cache')
 			));
 	}
@@ -220,5 +222,9 @@ class Module {
 
         \Config::set('modules_dependencies', $dependencies);
         \Config::save(APPPATH.'data'.DS.'config'.DS.'modules_dependencies.php', $dependencies);
+    }
+
+    public function addPermission() {
+    	Permission::add($this->name, 'access');
     }
 }
