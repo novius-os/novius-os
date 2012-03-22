@@ -25,8 +25,10 @@ class Controller_Extendable extends \Fuel\Core\Controller {
                     \Asset::add_path($path);
                 }
             }
+
             if (isset($this->config['assets']['css'])) {
                 foreach ($this->config['assets']['css'] as $css) {
+
                     \Asset::css($css, array(), 'css');
                 }
             }

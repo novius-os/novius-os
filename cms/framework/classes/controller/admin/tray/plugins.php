@@ -13,7 +13,8 @@ namespace Cms;
 use Fuel\Core\File;
 use Fuel\Core\View;
 
-class Controller_Admin_Tray_Plugins extends Controller_Admin_Noviusos {
+class Controller_Admin_Tray_Plugins extends Controller_Generic_Admin {
+	public $template = 'cms::templates/html5';
 
     public function action_index() {
 
@@ -215,5 +216,44 @@ class Controller_Admin_Tray_Plugins extends Controller_Admin_Noviusos {
 				$diff[$k] = array(null, $v);
 			}
 		}
+	}
+
+
+	public function after($response) {
+
+		// Yahoo CSS Reset
+		//\Asset::css('http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css', array(), 'css');
+
+		\Asset::add_path('static/cms/js/vendor/wijmo/');
+        \Asset::css('aristo/jquery-wijmo.css', array(), 'css');
+        \Asset::css('jquery.wijmo-complete.all.2.0.3.min.css', array(), 'css');
+
+		\Asset::add_path('static/cms/');
+		// laGrid before base
+		\Asset::css('laGrid.css', array(), 'css');
+        // base after wijmo
+		\Asset::css('base.css', array(), 'css');
+		\Asset::css('form.css', array(), 'css');
+
+		\Asset::add_path('static/cms/js/jquery/jquery-ui-noviusos/');
+        \Asset::css('jquery.nos.ostabs.css', array(), 'css');
+        \Asset::css('jquery.nos.mp3grid.css', array(), 'css');
+
+		foreach (array(
+			         'title' => 'Administration',
+			         'base' => \Uri::base(false),
+			         'require'  => 'static/cms/js/vendor/requirejs/require.js',
+		         ) as $var => $default) {
+			if (empty($this->template->$var)) {
+				$this->template->$var = $default;
+			}
+		}
+		$ret = parent::after($response);
+		$this->template->set(array(
+			'css' => \Asset::render('css'),
+			'js'  => \Asset::render('js'),
+		), false, false);
+
+		return $ret;
 	}
 }
