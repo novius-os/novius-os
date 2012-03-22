@@ -40,10 +40,10 @@ class Orm_Behaviour_Translatable extends Orm_Behavior
         $common_id_property = $this->_properties['common_id_property'];
         $lang_property      = $this->_properties['lang_property'];
 
-        if (empty($object->get($common_id_property))) {
+        if (empty($object->{$common_id_property})) {
             $object->set($common_id_property, 0);
         }
-        if (empty($object->get($lang_property))) {
+        if (empty($object->{$lang_property})) {
             // @todo: decide whether we force a lang or we use NULL instead
             $object->set($lang_property, \Arr::get($this->_properties, 'default_lang', \Config::get('default_lang', 'en_GB')));
         }
