@@ -15,38 +15,40 @@
     )) ?></p>
     <p>&nbsp;</p>
 
-    <p><?= __('To add add this version, you have two options: ') ?></p>
+    <p><?= __('To add this version, you have two options: ') ?></p>
     <p>&nbsp;</p>
+    <ul style="margin-left:1em;">
+        <li>
+            <span class="ui-icon ui-icon-bullet" style="display:inline-block;"></span>
+            <form action="admin/cms/page/page/form" style="display:inline-block;">
+                <?= Form::hidden('lang',      $lang) ?>
+                <?= Form::hidden('common_id', $common_id) ?>
+                <?= __('Start from scratch ') ?>
+                <button type="submit" class="primary" data-icon="plus"><?= __('Add') ?></button>
+            </form>
+        </li>
 
-    <p>
-        <form action="admin/cms/page/page/form">
-            <?= Form::hidden('lang',      $lang) ?>
-            <?= Form::hidden('common_id', $common_id) ?>
-            <?= __('Start from scratch ') ?>
-            <button type="submit" class="primary" data-icon="plus"><?= __('Add') ?></button>
-        </form>
-    </p>
-    <p>&nbsp;</p>
+        <li>
+            <span class="ui-icon ui-icon-bullet" style="display:inline-block;"></span>
+            <form action="admin/cms/page/page/form" style="display:inline-block;">
+                <?= Form::hidden('lang',      $lang) ?>
+                <?= Form::hidden('common_id', $common_id) ?>
+                <?php
+                if (count($possible) == 1) {
+                    echo Form::hidden('create_from_id', key($possible));
+                    $selected_lang = current($possible);
+                } else {
+                    $selected_lang = Form::select('create_from_id', null, $possible);
+                }
 
-    <p>
-        <form action="admin/cms/page/page/form">
-            <?= Form::hidden('lang',      $lang) ?>
-            <?= Form::hidden('common_id', $common_id) ?>
-            <?php
-            if (count($possible) == 1) {
-                echo Form::hidden('create_from_id', key($possible));
-                $selected_lang = current($possible);
-            } else {
-                $selected_lang = Form::select('create_from_id', null, $possible);
-            }
-
-            echo strtr(__('Start with the content from the {lang} version'), array(
-                '{lang}' => $selected_lang,
-            ));
-            ?>
-            <button type="submit" class="primary" data-icon="plus"><?= __('Add') ?></button>
-        </form>
-    </p>
+                echo strtr(__('Start with the content from the {lang} version'), array(
+                    '{lang}' => $selected_lang,
+                ));
+                ?>
+                <button type="submit" class="primary" data-icon="plus"><?= __('Add') ?></button>
+            </form>
+        </li>
+    </ul>
 </div>
 
 <script type="text/javascript">

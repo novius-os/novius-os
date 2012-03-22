@@ -33,4 +33,8 @@ class Helper {
         }
         return '<img src="static/cms/img/flags/'.$lang.'.png" title="'.\Arr::get(static::$locales, $locale, $locale).'" /> ';
 	}
+
+    public static function flag_empty() {
+        return '<span style="display:inline-block; width:16px;"></span> ';
+    }
 }

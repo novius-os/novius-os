@@ -303,6 +303,7 @@ require(['jquery', 'static/cms/js/vendor/jquery/jquery-validation/jquery.validat
 	var json = $validate;
 	//console.log($validate);
 	$('#{$form_attributes['id']}').validate($.extend({}, json, {
+        errorClass : 'ui-state-error',
 		submitHandler: function(form) {
 			require(['jquery-nos', 'static/cms/js/vendor/jquery/jquery-form/jquery.form.min'], function($) {
 				$(form).ajaxSubmit({

@@ -11,11 +11,18 @@
 <div id="<?= $uniqid = uniqid('id_') ?>" class="fieldset standalone">
     <input type="hidden" name="id" value="<?= $page->page_id ?>" />
     <p><?php
-    $children       = $page->find_children_recursive(false);
-    $children_count = count($children);
 
     $page_langs = $page->find_lang('all');
     $lang_count = count($page_langs);
+
+    $children = array();
+    // Count all children in the primary lang
+    foreach ($page_langs as $page) {
+        foreach ($page->find_children_recursive(false) as $child) {
+            $children[$child->page_lang_common_id] = true;
+        }
+    }
+    $children_count = count($children);
 
     $locales = \Config::get('locales', array());
     $languages_list = array();

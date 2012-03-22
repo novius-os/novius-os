@@ -18,6 +18,9 @@ return array(
         'form' => array(
             'type' => 'text',
         ),
+        'validation' => array(
+            'min_length' => array(6),
+        ),
     ),
     'page_template' => array(
         'label' => 'Template: ',
@@ -31,6 +34,9 @@ return array(
         'form' => array(
             'type' => 'text',
             'size' => 20,
+        ),
+        'validation' => array(
+            'min_length' => array(2),
         ),
     ),
     'page_meta_title' => array(
