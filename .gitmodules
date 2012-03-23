@@ -1,12 +1,3 @@
-[submodule "cms/fuel-core"]
-	path = cms/fuel-core
-	url = git://github.com/novius-os/fuelphp-core.git
-[submodule "cms/packages/orm"]
-	path = cms/packages/orm
-	url = git://github.com/fuel/orm.git
-[submodule "cms/packages/parser"]
-	path = cms/packages/parser
-	url = git://github.com/fuel/parser.git
 [submodule "local/modules/cms_blog"]
 	path = local/modules/cms_blog
 	url = git@github.com:novius-os/blog.git
