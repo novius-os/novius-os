@@ -1,6 +1,6 @@
 [submodule "local/modules/cms_blog"]
 	path = local/modules/cms_blog
-	url = git@github.com:novius-os/blog.git
+	url = git://github.com/novius-os/blog.git
 [submodule "cms"]
 	path = cms
-	url = git@github.com:novius-os/core.git
+	url = git://github.com/novius-os/core.git
