@@ -24,6 +24,6 @@ return array(
     //'display_list_item_following' => array(
     //    'fields'    => 'title',
     //    'title_tag' => 'h3',
-    //    'item_view' => 'cms_blog/item_list_short',
+    //    'item_view' => 'noviusos_blog/item_list_short',
     //),
 );

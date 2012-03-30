@@ -10,35 +10,14 @@
 
 return array(
 
-	'cms_blog' => array(
+	'noviusos_blog' => array(
 		'title' => 'Blog',
-		'id'    => 'cms_blog',
+		'id'    => 'noviusos_blog',
 		'rewrite_prefix' => 'blog',
 		'desc'  => '',
-        'target' => 'cms_blog/front',
-		'iconUrl' => 'static/modules/cms_blog/img/16/blog.png',
-		'popupUrl' => 'admin/cms_blog/popup',
-		'previewUrl' => 'admin/cms_blog/preview',
+        'target' => 'noviusos_blog/front',
+		'iconUrl' => 'static/modules/noviusos_blog/img/16/blog.png',
+		'popupUrl' => 'admin/noviusos_blog/popup',
+		'previewUrl' => 'admin/noviusos_blog/preview',
 	),
-
-	/*
-    'blog' => array (
-        'name' => 'blog',
-        'title' => 'Blog',
-        'target' => 'cms_blog/front',
-        'icon' => 'static/cms/admin/icons/blog.gif',
-    ),
-    'news' => array (
-        'name' => 'news',
-        'title' => 'Actualités',
-        'target' => 'cms_news/front/news',
-        'icon' => 'static/cms/admin/icons/actualite.gif',
-    ),
-    'codesource' => array(
-        'name' => 'codesource',
-        'title' => 'Code source',
-        'target' => 'labs_codesource/front',
-        'icon' => 'static/cms/admin/icons/actualite.gif',
-    ),
-	 */
 );
