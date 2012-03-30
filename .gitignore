@@ -15,9 +15,9 @@ noviusos.komodoproject
 /public/cache
 /public/media
 /public/data
-/public/htdocs/cms
+/public/htdocs/novius-os
 /public/htdocs/modules
-/public/static/cms
+/public/static/novius-os
 /public/static/modules
 .settings
 .sass-cache
