@@ -26,5 +26,7 @@ return array(
 		'disabled_extensions' => array('php'),
 	),
 
+	//'assets_minified' => false,
+
 	'allow_plugin_upload' => false,
 );

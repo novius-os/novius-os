@@ -23,4 +23,4 @@ noviusos.komodoproject
 .sass-cache
 *.log
 .idea/
-/local/views/cms
+/local/views/novius-os

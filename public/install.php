@@ -5,11 +5,11 @@ define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
 define('APPPATH',   realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
 define('PKGPATH',   realpath(DOCROOT.'../cms/packages/').DIRECTORY_SEPARATOR);
 define('COREPATH',  realpath(DOCROOT.'../cms/fuel-core/').DIRECTORY_SEPARATOR);
-define('CMSPATH',   realpath(DOCROOT.'../cms/framework/').DIRECTORY_SEPARATOR);
+define('NOSPATH',   realpath(DOCROOT.'../cms/framework/').DIRECTORY_SEPARATOR);
 
 
 // Boot the app
-require_once CMSPATH.'bootstrap.php';
+require_once NOSPATH.'bootstrap.php';
 
 define('ROOT',    realpath(DOCROOT.'../').DS);
 define('CMSROOT', realpath(DOCROOT.'../cms/').DS);
@@ -197,7 +197,7 @@ $tests = array(
 
 	'public.static.writeable' => array(
 		'title'        => 'DOCROOT/static/ is writeable by the webserver',
-		'description'  => 'Either the symbolic link static/cms/ or the folder static/modules/ doesn\'t exsists, so we need to be able to create them.',
+		'description'  => 'Either the symbolic link static/novius-os/ or the folder static/modules/ doesn\'t exsists, so we need to be able to create them.',
 		'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
 		'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.CMSROOT.'static '.DOCROOT.'static'.DS.'cms', 'mkdir '.DOCROOT.'static'.DS.'modules', 'chmod a+w '.DOCROOT.'static'.DS.'modules'),
 		'run_only_if'  => is_dir(DOCROOT.'static') && (!file_exists(DOCROOT.'static'.DS.'cms') || !file_exists(DOCROOT.'static'.DS.'modules')),
@@ -211,14 +211,14 @@ $tests = array(
 	),
 
 	'public.htdocs.cms.valid' => array(
-		'title'        => 'DOCROOT/htdocs/cms links to CMSPATH/htdocs',
+		'title'        => 'DOCROOT/htdocs/cms links to NOSPATH/htdocs',
 		'passed'       => is_link(DOCROOT.'htdocs'.DS.'cms') && realpath(DOCROOT.'htdocs'.DS.'cms') == CMSROOT.'htdocs',
 		'command_line' => 'ln -s '.CMSROOT.'htdocs '.DOCROOT.'htdocs'.DS.'cms',
 		'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'cms'),
 	),
 
 	'public.static.cms.valid' => array(
-		'title'        => 'DOCROOT/static/cms links to CMSPATH/static',
+		'title'        => 'DOCROOT/static/cms links to NOSPATH/static',
 		'passed'       => is_link(DOCROOT.'static'.DS.'cms') && realpath(DOCROOT.'static'.DS.'cms') == CMSROOT.'static',
 		'command_line' => 'ln -s '.CMSROOT.'static '.DOCROOT.'static'.DS.'cms',
 		'run_only_if'  => file_exists(DOCROOT.'static'.DS.'cms'),
