@@ -7,8 +7,8 @@
 /local/data
 /local/logs
 /local/media
-/local/apps/novius_publinova
-/local/apps/labs_cheatsheet
+/local/applications/novius_publinova
+/local/applications/labs_cheatsheet
 /logs/
 noviusos.komodoproject
 .project
