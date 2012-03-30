@@ -182,32 +182,32 @@ $tests = array(
 
 	'public.htdocs.writeable' => array(
 		'title'        => 'DOCROOT/htdocs/ is writeable by the webserver',
-		'description'  => 'Either the symbolic link htdocs/novius-os or the folder htdocs/modules doesn\'t exsists, so we need to be able to create them.',
+		'description'  => 'Either the symbolic link htdocs/novius-os or the folder htdocs/apps doesn\'t exsists, so we need to be able to create them.',
 		'passed'       => is_dir(DOCROOT.'htdocs') && is_writeable(DOCROOT.'htdocs'),
-		'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.NOSROOT.'htdocs '.DOCROOT.'htdocs'.DS.'novius-os', 'mkdir '.DOCROOT.'htdocs'.DS.'modules', 'chmod a+w '.DOCROOT.'htdocs'.DS.'modules'),
-		'run_only_if'  => is_dir(DOCROOT.'htdocs') && (!file_exists(DOCROOT.'htdocs'.DS.'novius-os') || !file_exists(DOCROOT.'htdocs'.DS.'modules')),
+		'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.NOSROOT.'htdocs '.DOCROOT.'htdocs'.DS.'novius-os', 'mkdir '.DOCROOT.'htdocs'.DS.'apps', 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps'),
+		'run_only_if'  => is_dir(DOCROOT.'htdocs') && (!file_exists(DOCROOT.'htdocs'.DS.'novius-os') || !file_exists(DOCROOT.'htdocs'.DS.'apps')),
 	),
 
 	'public.htdocs.modules.writeable' => array(
-		'title'        => 'DOCROOT/htdocs/modules is writeable by the webserver',
-		'passed'       => is_writeable(DOCROOT.'htdocs'.DS.'modules'),
-		'command_line' => 'chmod a+w '.DOCROOT.'htdocs'.DS.'modules',
-		'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'modules'),
+		'title'        => 'DOCROOT/htdocs/apps is writeable by the webserver',
+		'passed'       => is_writeable(DOCROOT.'htdocs'.DS.'apps'),
+		'command_line' => 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps',
+		'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'apps'),
 	),
 
 	'public.static.writeable' => array(
 		'title'        => 'DOCROOT/static/ is writeable by the webserver',
-		'description'  => 'Either the symbolic link static/novius-os/ or the folder static/modules/ doesn\'t exsists, so we need to be able to create them.',
+		'description'  => 'Either the symbolic link static/novius-os/ or the folder static/apps/ doesn\'t exsists, so we need to be able to create them.',
 		'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
-		'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.NOSROOT.'static '.DOCROOT.'static'.DS.'novius-os', 'mkdir '.DOCROOT.'static'.DS.'modules', 'chmod a+w '.DOCROOT.'static'.DS.'modules'),
-		'run_only_if'  => is_dir(DOCROOT.'static') && (!file_exists(DOCROOT.'static'.DS.'novius-os') || !file_exists(DOCROOT.'static'.DS.'modules')),
+		'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.NOSROOT.'static '.DOCROOT.'static'.DS.'novius-os', 'mkdir '.DOCROOT.'static'.DS.'apps', 'chmod a+w '.DOCROOT.'static'.DS.'apps'),
+		'run_only_if'  => is_dir(DOCROOT.'static') && (!file_exists(DOCROOT.'static'.DS.'novius-os') || !file_exists(DOCROOT.'static'.DS.'apps')),
 	),
 
 	'public.static.modules.writeable' => array(
-		'title'        => 'DOCROOT/static/modules is writeable by the webserver',
-		'passed'       => is_dir(DOCROOT.'static'.DS.'modules') && is_writeable(DOCROOT.'static'.DS.'modules'),
-		'command_line' => 'chmod a+w '.DOCROOT.'static'.DS.'modules',
-		'run_only_if'  => file_exists(DOCROOT.'static'.DS.'modules'),
+		'title'        => 'DOCROOT/static/apps is writeable by the webserver',
+		'passed'       => is_dir(DOCROOT.'static'.DS.'apps') && is_writeable(DOCROOT.'static'.DS.'apps'),
+		'command_line' => 'chmod a+w '.DOCROOT.'static'.DS.'apps',
+		'run_only_if'  => file_exists(DOCROOT.'static'.DS.'apps'),
 	),
 
 	'public.htdocs.cms.valid' => array(
@@ -323,7 +323,7 @@ if ($step == 1) {
 			}
 
 			$dir  = APPPATH.'data'.DS.'config'.DS;
-            $files = array('app_installed.php', 'templates.php', 'launchers.php', 'modules_dependencies.php');
+            $files = array('app_installed.php', 'templates.php', 'launchers.php', 'app_dependencies.php');
             foreach ($files as $file) {
                 if (!is_file($dir.$file)) {
                     File::create($dir, $file, '<?'.'php return array();');
@@ -342,8 +342,8 @@ if ($step == 1) {
 			if (!is_dir(DOCROOT.'htdocs')) {
 				File::create_dir(DOCROOT, 'htdocs');
 			}
-			if (!is_dir(DOCROOT.'htdocs'.DS.'modules')) {
-				File::create_dir(DOCROOT.'htdocs', 'modules');
+			if (!is_dir(DOCROOT.'htdocs'.DS.'apps')) {
+				File::create_dir(DOCROOT.'htdocs', 'apps');
 			}
 			if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
 				File::symlink(NOSROOT.'htdocs', DOCROOT.'htdocs'.DS.'novius-os', false);
@@ -353,8 +353,8 @@ if ($step == 1) {
 			if (!is_dir(DOCROOT.'static')) {
 				File::create_dir(DOCROOT, 'static');
 			}
-			if (!is_dir(DOCROOT.'static'.DS.'modules')) {
-				File::create_dir(DOCROOT.'static', 'modules');
+			if (!is_dir(DOCROOT.'static'.DS.'apps')) {
+				File::create_dir(DOCROOT.'static', 'apps');
 			}
 			if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
 				File::symlink(NOSROOT.'static', DOCROOT.'static'.DS.'novius-os', false);

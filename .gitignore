@@ -7,8 +7,8 @@
 /local/data
 /local/logs
 /local/media
-/local/modules/novius_publinova
-/local/modules/labs_cheatsheet
+/local/apps/novius_publinova
+/local/apps/labs_cheatsheet
 /logs/
 noviusos.komodoproject
 .project
@@ -16,9 +16,9 @@ noviusos.komodoproject
 /public/media
 /public/data
 /public/htdocs/novius-os
-/public/htdocs/modules
+/public/htdocs/apps
 /public/static/novius-os
-/public/static/modules
+/public/static/apps
 .settings
 .sass-cache
 *.log
