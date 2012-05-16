@@ -502,6 +502,16 @@ if ($step == 3) {
 
 			$user->save();
 
+            // Authorize available apps
+            $role = reset($user->roles);
+            foreach (array('nos_page', 'nos_media', 'nos_user', 'nos_tray', 'noviusos_blog') as $app) {
+                $access = Nos\Model_User_Permission::forge();
+                $access->perm_role_id     = $role->role_id;
+                $access->perm_application = 'access';
+                $access->perm_identifier  = '';
+                $access->perm_key         = $app;
+                $access->save();
+            }
 
 			header('Location: install.php?step=4');
 			exit();
