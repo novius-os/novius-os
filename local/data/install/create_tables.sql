@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `nos_media_folder` (
   PRIMARY KEY  (`medif_id`),
   KEY `medip_parent_id` (`medif_parent_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-REPLACE INTO `os_media_folder` (`medif_id`, `medif_parent_id`, `medif_path`, `medif_title`) VALUES
+REPLACE INTO `nos_media_folder` (`medif_id`, `medif_parent_id`, `medif_path`, `medif_title`) VALUES
 (1, NULL, '', 'Media centre');
 
 
