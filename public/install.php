@@ -479,7 +479,7 @@ if ($step == 2) {
 
 
 if ($step == 3) {
-	if (Nos\Model_User_User::count() > 0) {
+	if (Nos\Model_User::count() > 0) {
 		header('Location: install.php?step=4');
 		exit();
 	}
@@ -492,7 +492,7 @@ if ($step == 3) {
 			if (\Input::post('password', '') != \Input::post('password_confirmation', '')) {
 				throw new Exception('The two password don\'t match.');
 			}
-			$user = new Nos\Model_User_User(array(
+			$user = new Nos\Model_User(array(
 				'user_name'      => \Input::post('name', 'Admin name'),
 				'user_firstname' => \Input::post('firstname', 'Firstname'),
 				'user_email'     => \Input::post('email', ''),
@@ -502,6 +502,16 @@ if ($step == 3) {
 
 			$user->save();
 
+            // Authorize available apps
+            $role = reset($user->roles);
+            foreach (array('nos_page', 'nos_media', 'nos_user', 'nos_tray', 'noviusos_blog') as $app) {
+                $access = Nos\Model_User_Permission::forge();
+                $access->perm_role_id     = $role->role_id;
+                $access->perm_application = 'access';
+                $access->perm_identifier  = '';
+                $access->perm_key         = $app;
+                $access->save();
+            }
 
 			header('Location: install.php?step=4');
 			exit();
