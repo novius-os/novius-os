@@ -194,8 +194,6 @@ CREATE TABLE IF NOT EXISTS `nos_page` (
   `page_meta_description` text,
   `page_meta_keywords` text,
   `page_head_additional` text,
-  `page__couleur` varchar(255) NOT NULL default '#EE7C1C',
-  `page__lien_footer_cloud` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`page_id`),
   UNIQUE KEY `page_url_virtuel` (`page_virtual_url`),
   KEY `page_root_id` (`page_root_id`),
