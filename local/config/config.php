@@ -16,17 +16,20 @@ return array(
 
     'log_threshold'   => Fuel::L_WARNING,
 
-	'locale' => 'fr_FR.utf8',
-	'locales' => array(
-		'fr_FR' => 'Français',
-		'en_GB' => 'English',
-	),
+    'locale' => 'en_GB.utf8',
+    'locales' => array(
+        'en_GB' => 'English',
+        //'fr_FR' => 'Français',
+        //'de_DE' => 'Deutsch',
+        //'es_ES' => 'Español
+        //'it_IT' => 'Italiano',
+    ),
 
-	'upload' => array(
-		'disabled_extensions' => array('php'),
-	),
+    'upload' => array(
+        'disabled_extensions' => array('php'),
+    ),
 
-	//'assets_minified' => false,
+    //'assets_minified' => false,
 
-	'allow_plugin_upload' => false,
+    'allow_plugin_upload' => false,
 );

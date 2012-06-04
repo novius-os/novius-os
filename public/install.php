@@ -135,6 +135,7 @@ $tests = array(
 		'passed'       => is_writeable(APPPATH.'config'),
 		'command_line' => 'chmod a+w '.APPPATH.'config',
 		'description'  => 'This is required temporarly to write the db.php and crypt.php config files',
+        'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.php') or  !file_exists(APPPATH.'config'.DS.'crypt.php'),
 	),
 
 	'folder.data.writeable' => array(
@@ -239,10 +240,9 @@ $tests = array(
 	),
 
 	'folder.local.media' => array(
-		'title'           => 'APPPATH/media/ exists and is writeable by the webserver',
-		'passed'          => is_writeable(APPPATH.'media'),
-		'command_line'	  => array('mkdir '.APPPATH.'media', 'chmod a+w '.APPPATH.'media'),
-		'run_only_if'     => !is_writeable(APPPATH),
+		'title'           => 'APPPATH/data/media/ exists and is writeable by the webserver',
+		'passed'          => is_writeable(APPPATH.'data'.DS.'media'),
+		'command_line'	  => array('mkdir '.APPPATH.'data'.DS.'media', 'chmod a+w '.APPPATH.'data'.DS.'media'),
 	),
 );
 
@@ -381,6 +381,7 @@ if ($step == 1) {
 		}
 	}
 	echo '<h2>Step 1 / 3 : checking  pre-requisite</h2>';
+    echo '<p>Please note <a href="#summary">a summary</a> of the commands is available below</p>';
 	echo $step_1;
 	if ($passed) {
 		echo '<form method="POST" action="">
@@ -388,7 +389,7 @@ if ($step == 1) {
 			</form>';
 	} else {
 		$first = true;
-		$summary = array();
+		$summary = array('cd '.ROOT, '');
 		foreach ($tests as $name => $data) {
 			if ($data['is_error']) {
 				$cmd = (array) $data['command_line'];
@@ -409,7 +410,7 @@ if ($step == 1) {
 				}
 			}
 		}
-		echo '<h2>Command summary</h2>';
+		echo '<h2 id="summary">Command summary</h2>';
 		echo '<p>Relative to the root directory: <code>'.ROOT.'</code></p>';
 		echo '<code style="width: 800px;">'.implode("<br />\n", $summary).'</code>';
 		// Create everything missing except config/db.php
@@ -536,7 +537,7 @@ if ($step == 3) {
 
 if ($step == 4) {
 	?>
-	<h2>Installation is now complete!</h2>
+	<h2>Almost there...</h2>
 	<p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
 	<p>Please remove this <code>install.php</code> file.</p>
 	<code style="width:800px;">
@@ -544,6 +545,24 @@ if ($step == 4) {
 	chmod og-w <?= ROOT ?>local/config
 	</code>
 	<p>You can also edit <code>.htaccess</code> and remove the line containing <code>install.php</code>
+
+	<h2>Languages</h2>
+    <p>
+        You can edit your <strong>local/config/config.php</strong> file to configure the locales.
+    </p>
+    <p>
+        Currently, the following languages are set:
+        <ul>
+            <?php
+            foreach (\Config::get('locales') as $lang) {
+                echo '<li>'.$lang.'</li>';
+            }
+            ?>
+        </ul>
+    </p>
+    <p><a href="install.php?step=4">Refresh the page and the list of languages</a></p>
+
+	<h2>Installation is now complete!</h2>
 	<p><a href="admin/">Go to the administration panel</a></p>
 	<?php
 }
