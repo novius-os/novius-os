@@ -369,8 +369,8 @@ if ($step == 1) {
 			}
 
 			// local/media
-			if (!is_dir(APPPATH.'media')) {
-				File::create_dir(APPPATH, 'media');
+			if (!is_dir(APPPATH.'data'.DS.'media')) {
+				File::create_dir(APPPATH, 'data'.DS.'media');
 			}
 
 			header('Location: install.php?step=2');
