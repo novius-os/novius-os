@@ -380,14 +380,15 @@ if ($step == 1) {
 			echo '<p>Error : '.$e->getMessage().'</p>';
 		}
 	}
-	echo '<h2>Step 1 / 3 : checking  pre-requisite</h2>';
-    echo '<p>Please note <a href="#summary">a summary</a> of the commands is available below</p>';
-	echo $step_1;
+	echo '<h2>Step 1 / 4 : checking  pre-requisite</h2>';
 	if ($passed) {
+        echo $step_1;
 		echo '<form method="POST" action="">
 			<input type="submit" value="Move on to the next step" />
 			</form>';
 	} else {
+        echo '<p>Please note <a href="#summary">a summary</a> of the commands is available below</p>';
+        echo $step_1;
 		$first = true;
 		$summary = array('cd '.ROOT, '');
 		foreach ($tests as $name => $data) {
@@ -467,7 +468,7 @@ if ($step == 2) {
 		}
 	}
 	?>
-	<h2>Step 2 / 3 : Configuring MySQL</h2>
+	<h2>Step 2 / 4 : Configuring MySQL</h2>
 	<form action="" method="POST">
 		<p><label>Hostname: <input type="text" name="hostname" value="<?= Input::post('hostname', '') ?>" /></label></p>
 		<p><label>Username: <input type="text" name="username" value="<?= Input::post('username', '') ?>"  /></label></p>
@@ -528,7 +529,7 @@ if ($step == 3) {
 		}
 	}
 	?>
-	<h2>Step 3 / 3 : Create the first administrator account</h2>
+	<h2>Step 3 / 4 : Create the first administrator account</h2>
 	<form action="" method="POST">
 		<p><label>Name: <input type="text" name="name" value="<?= Input::post('name', 'Admin name') ?>" /></label></p>
 		<p><label>Firstname: <input type="text" name="firstname" value="<?= Input::post('firstname', 'Firstname') ?>" /></label></p>
@@ -542,7 +543,7 @@ if ($step == 3) {
 
 if ($step == 4) {
 	?>
-	<h2>Almost there...</h2>
+	<h2>Step 4 / 4 : Almost there...</h2>
 	<p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
 	<p>Please remove this <code>install.php</code> file.</p>
 	<code style="width:800px;">
@@ -551,7 +552,7 @@ if ($step == 4) {
 	</code>
 	<p>You can also edit <code>.htaccess</code> and remove the line containing <code>install.php</code>
 
-	<h2>Languages</h2>
+	<h2>Setup languages</h2>
     <p>
         You can edit your <strong>local/config/config.php</strong> file to configure the locales.
     </p>
