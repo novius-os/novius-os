@@ -499,13 +499,18 @@ if ($step == 3) {
 				'user_email'     => \Input::post('email', ''),
 				'user_password'  => \Input::post('password', ''),
 				'user_last_connection'  => date('Y-m-d H:i:s'),
+                'user_configuration' => serialize(array(
+                    'tabs'=> array(
+                        'selected' => 1,
+                    )
+                )),
 			), true);
 
 			$user->save();
 
             // Authorize available apps
             $role = reset($user->roles);
-            foreach (array('nos_page', 'nos_media', 'nos_user', 'nos_tray', 'noviusos_blog') as $app) {
+            foreach (array('nos_page', 'nos_media', 'nos_user', 'nos_tray') as $app) {
                 $access = Nos\Model_User_Permission::forge();
                 $access->perm_role_id     = $role->role_id;
                 $access->perm_application = 'access';
