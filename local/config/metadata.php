@@ -9,4 +9,5 @@
  */
 
 return array(
+    //'namespace' => 'Local', // Default is 'Local'
 );
