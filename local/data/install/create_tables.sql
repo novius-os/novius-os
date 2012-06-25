@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `nos_blog` (
   PRIMARY KEY  (`blog_id`),
   KEY `blog_author_id` (`blog_author_id`),
   KEY `blog_lang` (`blog_lang`,`blog_lang_common_id`,`blog_lang_single_id`),
-  KEY `blog_virtual_name` (`blog_virtual_name`)
+  UNIQUE KEY `blog_virtual_name` (`blog_virtual_name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
