@@ -14,7 +14,7 @@ return array(
     // Possible values: 'user' or 'group'
     'permission_mode' => 'user',
 
-    'log_threshold'   => Fuel::L_WARNING,
+    'log_threshold'   => Fuel::$env === Fuel::DEVELOPMENT ? Fuel::L_WARNING : Fuel::L_ERROR,
 
     'locale' => 'en_GB.utf8',
     'locales' => array(
@@ -29,7 +29,7 @@ return array(
         'disabled_extensions' => array('php'),
     ),
 
-    //'assets_minified' => false,
+    'assets_minified' => Fuel::$env !== Fuel::DEVELOPMENT,
 
     'allow_plugin_upload' => false,
 );
