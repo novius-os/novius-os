@@ -264,13 +264,15 @@ CREATE TABLE IF NOT EXISTS `nos_tag` (
 
 CREATE TABLE IF NOT EXISTS `nos_user` (
   `user_id` int(10) unsigned NOT NULL auto_increment,
+  `user_md5` varchar(32) NOT NULL,
   `user_name` varchar(100) NOT NULL,
   `user_firstname` varchar(100) default NULL,
   `user_email` varchar(100) NOT NULL,
   `user_password` varchar(64) NOT NULL,
   `user_last_connection` datetime default NULL,
   `user_configuration` text,
-  PRIMARY KEY  (`user_id`)
+  PRIMARY KEY  (`user_id`),
+  KEY `user_md5` (`user_md5`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
