@@ -10,7 +10,7 @@ SET time_zone = "+00:00";
 
 
 --
--- Structure de la table `nos_blog`
+-- Structure for table `nos_blog`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_blog` (
@@ -31,13 +31,13 @@ CREATE TABLE IF NOT EXISTS `nos_blog` (
   PRIMARY KEY  (`blog_id`),
   KEY `blog_author_id` (`blog_author_id`),
   KEY `blog_lang` (`blog_lang`,`blog_lang_common_id`,`blog_lang_single_id`),
-  UNIQUE KEY `blog_virtual_name` (`blog_virtual_name`)
+  KEY `blog_virtual_name` (`blog_virtual_name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_blog_category`
+-- Structure for table `nos_blog_category`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_blog_category` (
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `nos_blog_category` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_blog_category_link`
+-- Structure for table `nos_blog_category_link`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_blog_category_link` (
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `nos_blog_category_link` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_blog_tag`
+-- Structure for table `nos_blog_tag`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_blog_tag` (
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `nos_blog_tag` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_comment`
+-- Structure for table `nos_comment`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_comment` (
@@ -103,7 +103,23 @@ CREATE TABLE IF NOT EXISTS `nos_comment` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_media`
+-- Structure for table `nos_content_nuggets`
+--
+
+CREATE TABLE IF NOT EXISTS `nos_content_nuggets` (
+  `content_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content_catcher` varchar(25) DEFAULT NULL,
+  `content_model_name` varchar(100) DEFAULT NULL,
+  `content_model_id` int(10) unsigned DEFAULT NULL,
+  `content_data` text,
+  PRIMARY KEY (`content_id`),
+  UNIQUE KEY `catcher_model` (`content_catcher`,`content_model_name`,`content_model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--  --
+-- Structure for table `nos_media`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_media` (
@@ -124,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `nos_media` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_media_folder`
+-- Structure for table `nos_media_folder`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_media_folder` (
@@ -136,13 +152,13 @@ CREATE TABLE IF NOT EXISTS `nos_media_folder` (
   KEY `medip_parent_id` (`medif_parent_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 REPLACE INTO `nos_media_folder` (`medif_id`, `medif_parent_id`, `medif_path`, `medif_title`) VALUES
-(1, NULL, '/', 'Media centre');
+(1, NULL, '', 'Media centre');
 
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_media_link`
+-- Structure for table `nos_media_link`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_media_link` (
@@ -157,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `nos_media_link` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_page`
+-- Structure for table `nos_page`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_page` (
@@ -204,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `nos_page` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_page_root`
+-- Structure for table `nos_page_root`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_page_root` (
@@ -219,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `nos_page_root` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_role`
+-- Structure for table `nos_role`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_role` (
@@ -232,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `nos_role` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_role_permission`
+-- Structure for table `nos_role_permission`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_role_permission` (
@@ -246,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `nos_role_permission` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_tag`
+-- Structure for table `nos_tag`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_tag` (
@@ -259,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `nos_tag` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_user`
+-- Structure for table `nos_user`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_user` (
@@ -276,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `nos_user` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_user_role`
+-- Structure for table `nos_user_role`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_user_role` (
@@ -287,7 +303,7 @@ CREATE TABLE IF NOT EXISTS `nos_user_role` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `nos_wysiwyg`
+-- Structure for table `nos_wysiwyg`
 --
 
 CREATE TABLE IF NOT EXISTS `nos_wysiwyg` (
