@@ -443,20 +443,11 @@ if ($step == 2) {
 			'profiling'    => false,
 		);
 		try {
-			$connection = \Database_Connection::instance(Fuel::DEVELOPMENT, $config);
-			$connection->connect();
-
-			$sql_create_tables = \File::read(APPPATH.'data'.DS.'install'.DS.'create_tables.sql', true );
-
-			foreach(explode(';', $sql_create_tables) as $sql) {
-				if (!empty($sql) && trim($sql) != '') {
-					$connection->query(null, $sql, false);
-				}
-			}
-			Config::save('db', array(
-				'active'          => Fuel::DEVELOPMENT,
-				Fuel::DEVELOPMENT => $config,
-			));
+            Config::save('db', array(
+                'active'          => Fuel::DEVELOPMENT,
+                Fuel::DEVELOPMENT => $config,
+            ));
+            \Migrate::latest();
 			Crypt::_init();
 
 			header('Location: install.php?step=3');
