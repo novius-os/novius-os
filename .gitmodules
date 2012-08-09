@@ -4,3 +4,12 @@
 [submodule "local/applications/noviusos_blog"]
 	path = local/applications/noviusos_blog
 	url = git://github.com/novius-os/noviusos_blog.git
+[submodule "local/applications/noviusos_blognews"]
+	path = local/applications/noviusos_blognews
+	url = git://github.com/novius-os/noviusos_blognews.git
+[submodule "local/applications/noviusos_news"]
+	path = local/applications/noviusos_news
+	url = git://github.com/novius-os/noviusos_news.git
+[submodule "local/applications/noviusos_comments"]
+	path = local/applications/noviusos_comments
+	url = git://github.com/novius-os/noviusos_comments.git
