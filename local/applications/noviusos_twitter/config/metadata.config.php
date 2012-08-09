@@ -19,7 +19,7 @@ return array(
         'noviusos_twitter' => array(
             'title' => 'Twitter',
             'description'  => '',
-            'url' => 'admin/noviusos_twitter/form',
+            'url' => 'admin/noviusos_twitter/share/index',
             'iconUrl' => 'static/apps/noviusos_twitter/img/twitter.png',
             'onDemand' => true,
             'specified_models' => false,
