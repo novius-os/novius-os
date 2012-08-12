@@ -2,7 +2,7 @@
 
 namespace Fuel\Migrations;
 
-class Add_categories_on_blog
+class Blog_news
 {
     public function up()
     {
