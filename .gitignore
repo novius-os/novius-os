@@ -24,3 +24,4 @@ noviusos.komodoproject
 *.log
 .idea/
 /local/views/novius-os
+/local/config/development/migrations.config.php
