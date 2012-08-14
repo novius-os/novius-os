@@ -1,9 +1,8 @@
-
 .buildpath
 /local/bootstrap.php
 /local/cache
-/local/config/crypt.php
-/local/config/db.php
+/local/config/crypt.config.php
+/local/config/db.config.php
 /local/data
 /local/logs
 /local/media
