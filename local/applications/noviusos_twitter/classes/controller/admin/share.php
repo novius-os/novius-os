@@ -14,38 +14,21 @@ class Controller_Admin_Share extends \Nos\Controller
 {
     public function action_index()
     {
-        $model = \Input::get('model', null);
-        $id = \Input::get('id', null);
-
-        if (empty($model) or empty($id))
-        {
-            \Response::json(array(
-                'error' => 'Insufficient parameters.',
-            ));
-        }
-
-        try {
-            $object = $model::find($id);
-        } catch (\Exception $e) {
-            \Response::json(array(
-                'error' => 'Wrong parameters.',
-            ));
-        }
-        return \View::forge('noviusos_twitter::simple_form', array(
-            'object' => $object,
-        ), false);
+        return \Nos\Controller_Admin_DataCatcher::catcher_form(array(
+            'catcher_name' => 'noviusos_twitter_intent',
+            'view'         => 'noviusos_twitter::simple_form',
+        ));
     }
 
     public function action_save()
     {
         try {
-            $item = \Nos\Controller_Admin_DataCatcher::save_catcher_nugget('twitter_intent', array(
-                \Nos\DataCatcher::TYPE_TITLE,
-                \Nos\DataCatcher::TYPE_URL,
-            ));
+            list($item, $catcher_name) = \Nos\Controller_Admin_DataCatcher::save_catcher_nugget();
 
             $this->response(array(
-                'notify' => 'testing',
+                'notify' => strtr(__('Catcher "{catcher_name}" saved successfully.'), array(
+                    '{catcher_name}' => \Arr::get($item->data_catchers(), $catcher_name.'.title'),
+                )),
                 'intent_url' => $this->intent_url($item),
             ));
         } catch (\Exception $e) {
@@ -57,10 +40,10 @@ class Controller_Admin_Share extends \Nos\Controller
 
     public function intent_url($item)
     {
-        $nugget_intent  = $item->get_catcher_nuggets('twitter_intent')->content_data;
+        $nugget_intent  = $item->get_catcher_nuggets('noviusos_twitter_intent')->content_data;
         $nugget_default = $item->get_default_nuggets();
 
-        // The plus operator allow a merge without reindexing
+        // The plus operator allows a merge without reindexing
         $nugget = $nugget_intent + $nugget_default;
 
         return 'https://twitter.com/intent/tweet?'.http_build_query(array(

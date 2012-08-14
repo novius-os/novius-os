@@ -1,14 +1,16 @@
 <div id="<?= $uniqid = uniqid('temp_') ?>">
 <?php
 
-$nugget_intent  = $object->get_catcher_nuggets('twitter_intent')->content_data;
-$nugget_default = $object->get_default_nuggets();
+$nugget_intent  = $item->get_catcher_nuggets($catcher_name)->content_data;
+$nugget_default = $item->get_default_nuggets();
 
 echo \View::forge('nos::admin/data_catcher/form', array(
     'action' => 'admin/noviusos_twitter/share/save',
-    'item' => $object,
+    'item' => $item,
+    'catcher_name' => $catcher_name,
     // The plus operator allow a merge without reindexing
     'nugget' => $nugget_intent + $nugget_default,
+    'nugget_db' => $nugget_intent,
     'filter' => array(
         \Nos\DataCatcher::TYPE_TITLE,
         \Nos\DataCatcher::TYPE_URL,

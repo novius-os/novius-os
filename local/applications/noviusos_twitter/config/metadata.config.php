@@ -16,7 +16,7 @@ return array(
     ),
     'namespace' => 'Nos\Twitter',
     'data_catchers' => array(
-        'noviusos_twitter' => array(
+        'noviusos_twitter_intent' => array(
             'title' => 'Twitter',
             'description'  => '',
             'url' => 'admin/noviusos_twitter/share/index',
