@@ -2,7 +2,7 @@
 
 namespace Fuel\Migrations;
 
-class Media_folder_virtual_name
+class Remove_page_root
 {
     public function up()
     {
