@@ -2,27 +2,19 @@
 
 namespace Fuel\Migrations;
 
-class Created_and_updated_at
+class Content_nuggets
 {
     public function up()
     {
-        \DB::query("ALTER TABLE `nos_blog_category` ADD `cat_created_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          ADD `cat_updated_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00';")->execute();
-
-        \DB::query("ALTER TABLE `nos_news_category` ADD `cat_created_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          ADD `cat_updated_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00';")->execute();
-
-        \DB::query("ALTER TABLE `nos_page` CHANGE `page_created_at` `page_created_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          CHANGE `page_updated_at` `page_updated_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00';")->execute();
-
-        \DB::query("ALTER TABLE `nos_user` ADD `user_created_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          ADD `user_updated_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00';")->execute();
-
-        \DB::query("ALTER TABLE `nos_media` ADD `media_created_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          ADD `media_updated_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00';")->execute();
-
-        \DB::query("ALTER TABLE `nos_media_folder` ADD `medif_created_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          ADD `medif_updated_at` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00';")->execute();
+        \DB::query("CREATE TABLE IF NOT EXISTS `nos_content_nuggets` (
+          `content_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `content_catcher` varchar(25) DEFAULT NULL,
+          `content_model_name` varchar(100) DEFAULT NULL,
+          `content_model_id` int(10) unsigned DEFAULT NULL,
+          `content_data` text,
+          PRIMARY KEY (`content_id`),
+          UNIQUE KEY `catcher_model` (`content_catcher`,`content_model_name`,`content_model_id`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
     }
     public function down()
     {
