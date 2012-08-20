@@ -20,13 +20,13 @@ class Blog_news
   `cat_sort` float DEFAULT NULL,
   PRIMARY KEY (`cat_id`),
   KEY `cat_lang` (`cat_lang`,`cat_lang_common_id`,`cat_lang_single_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;")->execute();
+) DEFAULT CHARSET=utf8 ;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_blog_category_post` (
   `post_id` int(11) NOT NULL,
   `cat_id` int(11) NOT NULL,
   PRIMARY KEY (`post_id`, `cat_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_blog_post` (
   `post_id` int(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -45,14 +45,14 @@ class Blog_news
   PRIMARY KEY (`post_id`),
   UNIQUE KEY `news_virtual_name` (`post_virtual_name`),
   KEY `news_lang` (`post_lang`,`post_lang_common_id`,`post_lang_single_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;")->execute();
+) DEFAULT CHARSET=utf8 ;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_blog_tag` (
   `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `tag_label` varchar(255) NOT NULL,
   PRIMARY KEY (`tag_id`),
   UNIQUE KEY `tag_label` (`tag_label`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;")->execute();
+) DEFAULT CHARSET=utf8 ;")->execute();
 
         \DB::query("RENAME TABLE `nos_blog_tag` TO `nos_blog_tag_post` ;")->execute();
 
@@ -83,13 +83,13 @@ SELECT `blog_id`, `blog_title`, `blog_summary`, `blog_author`, `blog_author_id`,
   `cat_sort` float DEFAULT NULL,
   PRIMARY KEY (`cat_id`),
   KEY `cat_lang` (`cat_lang`,`cat_lang_common_id`,`cat_lang_single_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_news_category_post` (
   `post_id` int(11) NOT NULL,
   `cat_id` int(11) NOT NULL,
   PRIMARY KEY (`post_id`, `cat_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_news_post` (
   `post_id` int(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -108,14 +108,14 @@ SELECT `blog_id`, `blog_title`, `blog_summary`, `blog_author`, `blog_author_id`,
   PRIMARY KEY (`post_id`),
   UNIQUE KEY `news_virtual_name` (`post_virtual_name`),
   KEY `news_lang` (`post_lang`,`post_lang_common_id`,`post_lang_single_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_news_tag` (
   `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `tag_label` varchar(255) NOT NULL,
   PRIMARY KEY (`tag_id`),
   UNIQUE KEY `tag_label` (`tag_label`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_news_tag_post` (
   `post_id` int(10) unsigned NOT NULL,
@@ -123,7 +123,7 @@ SELECT `blog_id`, `blog_title`, `blog_summary`, `blog_author`, `blog_author_id`,
   PRIMARY KEY (`tag_id`, `post_id`),
   KEY `tag_id` (`tag_id`),
   KEY `post_id` (`post_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("ALTER TABLE `nos_comment` CHANGE `comm_type` `comm_from_table` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
 CHANGE `comm_parent_id` `comm_foreign_id` INT( 10 ) UNSIGNED NOT NULL DEFAULT '0';")->execute();
