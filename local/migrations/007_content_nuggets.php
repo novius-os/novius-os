@@ -14,7 +14,7 @@ class Content_nuggets
           `content_data` text,
           PRIMARY KEY (`content_id`),
           UNIQUE KEY `catcher_model` (`content_catcher`,`content_model_name`,`content_model_id`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+        ) DEFAULT CHARSET=utf8;")->execute();
     }
     public function down()
     {

@@ -21,13 +21,13 @@ class Add_categories_on_blog
   PRIMARY KEY (`blgc_id`),
   UNIQUE KEY `blgc_virtual_name` (`blgc_virtual_name`),
   KEY `blgc_parent_id` (`blgc_parent_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;")->execute();
+) DEFAULT CHARSET=utf8 ;")->execute();
 
         \DB::query("CREATE TABLE `nos_blog_category_post` (
   `blog_id` int(11) NOT NULL DEFAULT '0',
   `blgc_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`blog_id`,`blgc_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
 
     }

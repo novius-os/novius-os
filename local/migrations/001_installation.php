@@ -25,7 +25,7 @@ class Installation
   KEY `blog_author_id` (`blog_author_id`),
   KEY `blog_lang` (`blog_lang`,`blog_lang_common_id`,`blog_lang_single_id`),
   KEY `blog_virtual_name` (`blog_virtual_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_blog_category` (
   `blgc_id` int(11) NOT NULL auto_increment,
@@ -37,19 +37,19 @@ class Installation
   PRIMARY KEY  (`blgc_id`),
   KEY `blgc_parent_id` (`blgc_parent_id`),
   KEY `blgc_path_to_category` (`blgc_path_to_category`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_blog_category_link` (
   `blog_id` int(11) NOT NULL default '0',
   `blgc_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`blog_id`,`blgc_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_blog_tag` (
   `blgt_blog_id` int(11) NOT NULL,
   `blgt_tag_id` int(11) NOT NULL,
   UNIQUE KEY `blgt_blog_id` (`blgt_blog_id`,`blgt_tag_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_comment` (
   `comm_id` int(10) unsigned NOT NULL auto_increment,
@@ -67,7 +67,7 @@ class Installation
   PRIMARY KEY  (`comm_id`),
   KEY `comm_type` (`comm_type`,`comm_parent_id`),
   KEY `comm_etat` (`comm_state`,`comm_blacklist`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_media` (
   `media_id` int(10) unsigned NOT NULL auto_increment,
@@ -82,7 +82,7 @@ class Installation
   `media_height` smallint(5) unsigned default NULL,
   PRIMARY KEY  (`media_id`),
   KEY `media_path_id` (`media_folder_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_media_folder` (
   `medif_id` int(10) unsigned NOT NULL auto_increment,
@@ -91,7 +91,7 @@ class Installation
   `medif_title` varchar(50) NOT NULL,
   PRIMARY KEY  (`medif_id`),
   KEY `medip_parent_id` (`medif_parent_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("REPLACE INTO `nos_media_folder` (`medif_id`, `medif_parent_id`, `medif_path`, `medif_title`) VALUES
 (1, NULL, '/', 'Media centre');")->execute();
@@ -103,7 +103,7 @@ class Installation
   `medil_key` varchar(30) NOT NULL,
   `medil_media_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`medil_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_page` (
   `page_id` int(11) NOT NULL auto_increment,
@@ -144,7 +144,7 @@ class Installation
   KEY `page_root_id` (`page_root_id`),
   KEY `page_parent_id` (`page_parent_id`),
   KEY `page_requested_by_user_id` (`page_requested_by_user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_page_root` (
   `root_id` char(2) NOT NULL default '',
@@ -153,14 +153,14 @@ class Installation
   `root_sort` tinyint(4) default NULL,
   PRIMARY KEY  (`root_id`),
   KEY `root_default_template` (`root_default_template`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_role` (
   `role_id` int(10) unsigned NOT NULL auto_increment,
   `role_name` varchar(50) NOT NULL,
   `role_user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`role_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_role_permission` (
   `perm_role_id` int(10) unsigned NOT NULL,
@@ -168,14 +168,14 @@ class Installation
   `perm_identifier` varchar(30) NOT NULL,
   `perm_key` varchar(30) NOT NULL,
   UNIQUE KEY `perm_group_id` (`perm_role_id`,`perm_application`,`perm_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_tag` (
   `tag_id` int(11) NOT NULL auto_increment,
   `tag_label` varchar(255) NOT NULL,
   PRIMARY KEY  (`tag_id`),
   UNIQUE KEY `tag_label` (`tag_label`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_user` (
   `user_id` int(10) unsigned NOT NULL auto_increment,
@@ -188,12 +188,12 @@ class Installation
   `user_configuration` text,
   PRIMARY KEY  (`user_id`),
   KEY `user_md5` (`user_md5`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_user_role` (
   `user_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_wysiwyg` (
   `wysiwyg_id` int(10) unsigned NOT NULL auto_increment,
@@ -202,7 +202,7 @@ class Installation
   `wysiwyg_key` varchar(30) NOT NULL,
   `wysiwyg_foreign_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`wysiwyg_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;")->execute();
+) DEFAULT CHARSET=utf8;")->execute();
 
     }
 
