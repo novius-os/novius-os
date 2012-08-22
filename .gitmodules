@@ -13,3 +13,6 @@
 [submodule "local/applications/noviusos_comments"]
 	path = local/applications/noviusos_comments
 	url = git://github.com/novius-os/noviusos_comments.git
+[submodule "local/applications/noviusos_templates_basic"]
+	path = local/applications/noviusos_templates_basic
+	url = git://github.com/novius-os/noviusos_templates_basic.git
