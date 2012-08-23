@@ -19,7 +19,7 @@ return array(
     'locale' => 'en_GB.utf8',
     'locales' => array(
         'en_GB' => 'English',
-        //'fr_FR' => 'Français',
+        'fr_FR' => 'Français',
         //'de_DE' => 'Deutsch',
         //'es_ES' => 'Español
         //'it_IT' => 'Italiano',
