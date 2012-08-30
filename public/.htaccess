@@ -7,7 +7,7 @@
 
 Options +FollowSymLinks
 
-#ErrorDocument 404 /htdocs/novius-os/404.php
+ErrorDocument 404 /htdocs/novius-os/404.php
 
 <IfModule xsendfile_module>
 	XSendFile On
@@ -15,21 +15,21 @@ Options +FollowSymLinks
 </IfModule>
 
 <IfModule mod_rewrite.c>
-#    RewriteEngine   on
-#
-#    RewriteRule ^/?(static|data|htdocs|media|cache)/(.*) - [L]
-#    RewriteRule ^install.php - [L]
-#
-#    RewriteCond %{REQUEST_FILENAME} !-f
-#    RewriteCond %{REQUEST_FILENAME} !-d
-#
-#    #RewriteBase /
-#    #DirectoryIndex  /htdocs/cms/front.php                          [L]
-#
-#    RewriteRule ^/$                 	/htdocs/novius-os/front.php?URL=/     [QSA]
-#    RewriteRule ^$                  	/htdocs/novius-os/front.php?URL=/     [QSA]
-#    RewriteRule ^(.*)\.html         	/htdocs/novius-os/front.php?URL=$1    [QSA]
-#    RewriteRule ^/htdocs/novius-os/(.*)   	-                               [L]
-#    RewriteRule ^(.*)$              	/htdocs/novius-os/admin.php/$1        [N]
+    RewriteEngine   on
+
+    RewriteRule ^/?(static|data|htdocs|media|cache)/(.*) - [L]
+    RewriteRule ^install.php - [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    #RewriteBase /
+    #DirectoryIndex  /htdocs/cms/front.php                          [L]
+
+    RewriteRule ^/$                 	/htdocs/novius-os/front.php?URL=/     [QSA]
+    RewriteRule ^$                  	/htdocs/novius-os/front.php?URL=/     [QSA]
+    RewriteRule ^(.*)\.html         	/htdocs/novius-os/front.php?URL=$1    [QSA]
+    RewriteRule ^/htdocs/novius-os/(.*)   	-                               [L]
+    RewriteRule ^(.*)$              	/htdocs/novius-os/admin.php/$1        [N]
     #RewriteRule ^(.*)              	/htdocs/$1                      [L]
 </IfModule>
