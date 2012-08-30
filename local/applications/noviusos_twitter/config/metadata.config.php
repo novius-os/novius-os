@@ -14,6 +14,7 @@ return array(
     'provider' => array(
         'name' => 'Novius OS',
     ),
+    'icon16' => 'static/apps/noviusos_twitter/img/twitter.png',
     'namespace' => 'Nos\Twitter',
     'data_catchers' => array(
         'noviusos_twitter_intent' => array(
