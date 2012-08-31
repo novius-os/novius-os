@@ -29,7 +29,6 @@ class Add_categories_on_blog
   PRIMARY KEY (`blog_id`,`blgc_id`)
 ) DEFAULT CHARSET=utf8;")->execute();
 
-
     }
 
     public function down()

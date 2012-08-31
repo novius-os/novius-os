@@ -24,12 +24,12 @@ return array(
             'iconUrl' => 'static/apps/noviusos_twitter/img/twitter.png',
             'onDemand' => true,
             'specified_models' => false,
-	        'required_data' => array(
-		        \Nos\DataCatcher::TYPE_TITLE,
-	        ),
-	        'optional_data' => array(
+            'required_data' => array(
+                \Nos\DataCatcher::TYPE_TITLE,
+            ),
+            'optional_data' => array(
                 \Nos\DataCatcher::TYPE_URL,
-	        ),
+            ),
         ),
     ),
 );

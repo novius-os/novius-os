@@ -71,7 +71,6 @@ SELECT `blog_id`, `blog_title`, `blog_summary`, `blog_author`, `blog_author_id`,
 
         \DB::query("DROP TABLE IF EXISTS `nos_blog`;")->execute();
 
-
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_news_category` (
   `cat_id` int(11) NOT NULL AUTO_INCREMENT,
   `cat_title` varchar(255) NOT NULL,

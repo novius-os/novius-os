@@ -42,9 +42,10 @@ require(
 
                 if ($target.parent().is(':button')) {
                     $form.submit();
-                } else if ($target.is('a')) {
+                } elseif ($target.is('a')) {
                     $target.nosTabs('close');
                 }
+
                 return false;
             });
             $container.nosToolbar('add', $('#<?= $uniqid_tweet ?>').show());
