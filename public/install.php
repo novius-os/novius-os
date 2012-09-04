@@ -1,23 +1,39 @@
-<?php
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Novius OS - Installation</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="shortcut icon" href="static/novius-os/admin/novius-os/img/noviusos.ico">
 
-define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
-
-define('APPPATH',   realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
-define('PKGPATH',   realpath(DOCROOT.'../novius-os/packages/').DIRECTORY_SEPARATOR);
-define('COREPATH',  realpath(DOCROOT.'../novius-os/fuel-core/').DIRECTORY_SEPARATOR);
-define('NOSPATH',   realpath(DOCROOT.'../novius-os/framework/').DIRECTORY_SEPARATOR);
-
-// Boot the app
-require_once NOSPATH.'bootstrap.php';
-
-define('ROOT',    realpath(DOCROOT.'../').DS);
-define('NOSROOT', realpath(DOCROOT.'../novius-os/').DS);
-
-?>
 <style type="text/css">
-body {
-    font-family: Arial, Helvetica, sans-serif;
+html {
+    height : 100%;
 }
+body {
+   /* On step 1, this asset will probably return an HTTP status 404 Not Found */
+  background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/circles.jpg");
+  background-size: cover;
+  font-family: franklin gothic medium,arial,verdana,helvetica,sans-serif;
+}
+#blank_slate {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px outset rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  padding: 20px 40px;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  right: 50px;
+  bottom: 50px;
+  overflow: auto;
+}
+#blank_slate h1, #blank_slate img {
+    vertical-align: middle;
+    padding: 0 2em 0 1em;
+}
+
 table {
     border-collapse: collapse;
     margin: 1em auto;
@@ -65,8 +81,75 @@ p.description {
     font-style: italic;
     font-size: smaller;
 }
+
+
+input, button {
+    background:#fff;
+    -moz-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
+    -webkit-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
+    box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
+    padding: 5px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #a8a8a8;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #4f4f4f;
+    text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
+}
+
+input:focus, input:active {
+    border: solid 1px #8ab0c6;
+    outline: none;
+    -moz-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
+    -webkit-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
+    box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
+}
+input[type=submit], button {
+    padding: .4em 1em;
+    cursor: pointer;
+    color: #313131;
+    border: 1px solid #a8a8a8;
+    -moz-box-shadow: 0 0 3px #85b2cb;
+    -webkit-box-shadow: 0px 0px 3px #85b2cb;
+    box-shadow: 0px 0px 3px #85b2cb;
+    background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+    background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
+    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+}
+input[type=submit]:hover, button:hover {
+    border: solid 1px #8ab0c6;
+    background: #85b2cb linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
+    background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
+    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
+}
+input[type=submit]:active, button:active {
+    border: solid 1px #8ab0c6;
+    background: #85b2cb linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
+    background: #85b2cb -webkit-gradient(linear, left bottom, left top, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
+    background: #85b2cb -moz-linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
+}
 </style>
+</head>
+
+<body>
+    <div id="blank_slate">
 <?php
+
+define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
+
+define('APPPATH',   realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
+define('PKGPATH',   realpath(DOCROOT.'../novius-os/packages/').DIRECTORY_SEPARATOR);
+define('COREPATH',  realpath(DOCROOT.'../novius-os/fuel-core/').DIRECTORY_SEPARATOR);
+define('NOSPATH',   realpath(DOCROOT.'../novius-os/framework/').DIRECTORY_SEPARATOR);
+
+// Boot the app
+require_once NOSPATH.'bootstrap.php';
+
+define('ROOT',    realpath(DOCROOT.'../').DS);
+define('NOSROOT', realpath(DOCROOT.'../novius-os/').DS);
+
 function run_test($name)
 {
     static $results = array();
@@ -415,38 +498,57 @@ if ($step == 1) {
 }
 
 if ($step == 2) {
-    if (is_file(APPPATH.'config'.DS.'db.php')) {
-        $include = include APPPATH.'config'.DS.'db.php';
-        if ($include != 1) {
+    Config::load('db', true);
+    $active = Config::get('db.active');
+    $db = Config::get('db.'.$active.'.connection', array());
+    if (!empty($db)) {
+        try {
+            $old_level = error_reporting(0);
+            Nos\Model_User::count();
+            error_reporting($old_level);
             header('Location: install.php?step=3');
             exit();
+        } catch (\Exception $e) {
+            echo '<p>Error : '.$e->getMessage().'</p>';
         }
     }
+
     if (Input::method() == 'POST') {
         $config = array(
-            'type'            => 'mysql',
-            'connection'    => array(
-                'hostname'   => \Input::post('hostname', ''),
-                'database'   => \Input::post('database', ''),
-                'username'   => \Input::post('username', ''),
-                'password'   => \Input::post('password', ''),
-                'persistent' => false,
+            'active'          => Fuel::DEVELOPMENT,
+            Fuel::DEVELOPMENT => array(
+                'type'            => 'mysql',
+                'connection'    => array(
+                    'hostname'   => \Input::post('hostname', ''),
+                    'database'   => \Input::post('database', ''),
+                    'username'   => \Input::post('username', ''),
+                    'password'   => \Input::post('password', ''),
+                    'persistent' => false,
+                ),
+                'table_prefix' => '',
+                'charset'      => 'utf8',
+                'caching'      => false,
+                'profiling'    => false,
             ),
-            'table_prefix' => '',
-            'charset'      => 'utf8',
-            'caching'      => false,
-            'profiling'    => false,
         );
+
         try {
-            Config::save('db', array(
-                'active'          => Fuel::DEVELOPMENT,
-                Fuel::DEVELOPMENT => $config,
-            ));
-            \Migrate::latest();
+            Config::save('db', $config);
+            Config::set('db', $config);
+            // Try to connect to the DB
+            $old_level = error_reporting(0);
+            Nos\Model_User::count();
+            error_reporting($old_level);
+            Migrate::latest();
             Crypt::_init();
 
             header('Location: install.php?step=3');
             exit();
+
+        } catch (\Database_Exception $e) {
+
+            $message = $e->getMessage();
+            echo '<p>Error : Wrong credentials '.($message ? '('.$message.')' : '').'</p>';
 
         } catch (\Exception $e) {
 
@@ -454,12 +556,13 @@ if ($step == 2) {
         }
     }
     ?>
-    <h2>Step 2 / 4 : Configuring MySQL</h2>
+    <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 2 / 4</h1>
+    <h2>Configuring the MySQL database</h2>
     <form action="" method="POST">
-        <p><label>Hostname: <input type="text" name="hostname" value="<?= Input::post('hostname', '') ?>" /></label></p>
-        <p><label>Username: <input type="text" name="username" value="<?= Input::post('username', '') ?>"  /></label></p>
-        <p><label>Password: <input type="password" name="password" /></label></p>
-        <p><label>Database: <input type="text" name="database" value="<?= Input::post('database', '') ?>"  /></label></p>
+        <p><label><input type="text" name="hostname" placeholder="Hostname" value="<?= Input::post('hostname',  \Arr::get($db, 'hostname', '')) ?>" /></label></p>
+        <p><label><input type="text" name="username" placeholder="Username" value="<?= Input::post('username',  \Arr::get($db, 'username', '')) ?>"  /></label></p>
+        <p><label><input type="password" name="password" placeholder="Password" /></label></p>
+        <p><label><input type="text" name="database" placeholder="Database" value="<?= Input::post('database',  \Arr::get($db, 'database', '')) ?>"  /></label></p>
         <p><input type="submit" value="Check and save DB config" /></p>
     </form>
     <?php
@@ -488,7 +591,7 @@ if ($step == 3) {
                 'user_configuration' => serialize(array(
                     'tabs'=> array(
                         'selected' => 1,
-                    )
+                    ),
                 )),
             ), true);
 
@@ -514,28 +617,22 @@ if ($step == 3) {
         }
     }
     ?>
-    <h2>Step 3 / 4 : Create the first administrator account</h2>
+    <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 3 / 4</h1>
+    <h2>Create the first administrator account</h2>
     <form action="" method="POST">
-        <p><label>Name: <input type="text" name="name" value="<?= Input::post('name', 'Admin name') ?>" /></label></p>
-        <p><label>Firstname: <input type="text" name="firstname" value="<?= Input::post('firstname', 'Firstname') ?>" /></label></p>
-        <p><label>Email (login): <input type="email" name="email" value="<?= Input::post('email', 'admin@'.Input::server('server_name', 'domain.com')) ?>" /></label></p>
-        <p><label>Password: <input type="password" name="password" /></label></p>
-        <p><label>Password (confirmation): <input type="password" name="password_confirmation" /></label></p>
-        <p><input type="submit" value="Create the new account" /></p>
+        <p><label><input type="text" name="name" placeholder="Name" size="20" value="<?= Input::post('name', '') ?>" /></label></p>
+        <p><label><input type="text" name="firstname" placeholder="Firstname" size="20" value="<?= Input::post('firstname', '') ?>" /></label></p>
+        <p><label><input type="email" name="email" placeholder="Email / Login" size="30" value="<?= Input::post('email', '') ?>" /></label></p>
+        <p><label><input type="password" name="password" placeholder="Password" /></label></p>
+        <p><label><input type="password" name="password_confirmation" placeholder="Password confirmation" /></label></p>
+        <p><input type="submit" value="Create the first account" /></p>
     </form>
     <?php
 }
 
 if ($step == 4) {
     ?>
-    <h2>Step 4 / 4 : Almost there...</h2>
-    <p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
-    <p>Please remove this <code>install.php</code> file.</p>
-    <code style="width:800px;">
-    rm <?= ROOT ?>public/install.php<br />
-    chmod og-w <?= ROOT ?>local/config
-    </code>
-    <p>You can also edit <code>.htaccess</code> and remove the line containing <code>install.php</code>
+    <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 4 / 4</h1>
 
     <h2>Setup languages</h2>
     <p>
@@ -551,11 +648,24 @@ if ($step == 4) {
             ?>
         </ul>
     </p>
-    <p><a href="install.php?step=4">Refresh the page and the list of languages</a></p>
+    <p><a href="install.php?step=4">Refresh the list</a></p>
 
-    <h2>Installation is now complete!</h2>
-    <p><a href="admin/">Go to the administration panel</a></p>
+
+    <h2>Cleanup</h2>
+    <p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
+    <p>Please remove this <code>install.php</code> file.</p>
+    <code style="width:800px;">
+    rm <?= ROOT ?>public/install.php<br />
+    chmod og-w <?= ROOT ?>local/config
+    </code>
+    <p>You can also edit <code>.htaccess</code> and remove the line containing <code>install.php</code>
+
+    <h2>The end!</h2>
+    <p><a href="admin/"><button>Go to the administration panel</button></a></p>
     <?php
 }
 
-echo '</div>';
+?>
+</div>
+</body>
+</html>
