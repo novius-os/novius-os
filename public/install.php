@@ -181,7 +181,7 @@ $tests = array(
         'title'        => 'DOCROOT/htdocs/ is writeable by the webserver',
         'description'  => 'Either the symbolic link htdocs/novius-os or the folder htdocs/apps doesn\'t exsists, so we need to be able to create them.',
         'passed'       => is_dir(DOCROOT.'htdocs') && is_writeable(DOCROOT.'htdocs'),
-        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.NOSROOT.'htdocs '.DOCROOT.'htdocs'.DS.'novius-os', 'mkdir '.DOCROOT.'htdocs'.DS.'apps', 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps'),
+        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os', 'mkdir '.DOCROOT.'htdocs'.DS.'apps', 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps'),
         'run_only_if'  => is_dir(DOCROOT.'htdocs') && (!file_exists(DOCROOT.'htdocs'.DS.'novius-os') || !file_exists(DOCROOT.'htdocs'.DS.'apps')),
     ),
 
@@ -196,7 +196,7 @@ $tests = array(
         'title'        => 'DOCROOT/static/ is writeable by the webserver',
         'description'  => 'Either the symbolic link static/novius-os/ or the folder static/apps/ doesn\'t exsists, so we need to be able to create them.',
         'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
-        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.NOSROOT.'static '.DOCROOT.'static'.DS.'novius-os', 'mkdir '.DOCROOT.'static'.DS.'apps', 'chmod a+w '.DOCROOT.'static'.DS.'apps'),
+        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static').' '.DOCROOT.'static'.DS.'novius-os', 'mkdir '.DOCROOT.'static'.DS.'apps', 'chmod a+w '.DOCROOT.'static'.DS.'apps'),
         'run_only_if'  => is_dir(DOCROOT.'static') && (!file_exists(DOCROOT.'static'.DS.'novius-os') || !file_exists(DOCROOT.'static'.DS.'apps')),
     ),
 
@@ -210,14 +210,14 @@ $tests = array(
     'public.htdocs.cms.valid' => array(
         'title'        => 'DOCROOT/htdocs/novius-os links to NOSPATH/htdocs',
         'passed'       => is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOSROOT.'htdocs',
-        'command_line' => 'ln -s '.NOSROOT.'htdocs '.DOCROOT.'htdocs'.DS.'novius-os',
+        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
         'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
     ),
 
     'public.static.cms.valid' => array(
         'title'        => 'DOCROOT/static/novius-os links to NOSPATH/static',
         'passed'       => is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOSROOT.'static',
-        'command_line' => 'ln -s '.NOSROOT.'static '.DOCROOT.'static'.DS.'novius-os',
+        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static').' '.DOCROOT.'static'.DS.'novius-os',
         'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
     ),
 
@@ -388,7 +388,7 @@ if ($step == 1) {
         $summary = array('cd '.ROOT, '');
         foreach ($tests as $name => $data) {
             if ($data['is_error']) {
-                $cmd = (array) $data['command_line'];
+                $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
                 if (!empty($cmd[1]) && $cmd[1] == '# or') {
                     $cmd = array_slice($cmd, 2);
                 }
