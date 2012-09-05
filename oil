@@ -7,36 +7,10 @@ ini_set('display_errors', 1);
 
 define('FROM_OIL', 1);
 
-/**
- * Website document root
- */
-define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
-
-define('NOSPATH', realpath(__DIR__.'/novius-os/framework').DIRECTORY_SEPARATOR);
-
-/**
- * Path to the application directory.
- */
-define('APPPATH', realpath(__DIR__.'/local').DIRECTORY_SEPARATOR);
-
-/*define('APPLICATIONSPATH', realpath(__DIR__.'/local').DIRECTORY_SEPARATOR);*/
-
-/**
- * Path to the default packages directory.
- */
-define('PKGPATH', realpath(__DIR__.'/novius-os/packages').DIRECTORY_SEPARATOR);
-
-/**
- * The path to the framework core.
- */
-define('COREPATH', realpath(__DIR__.'/novius-os/fuel-core').DIRECTORY_SEPARATOR);
-
-// Get the start time and memory for use later
-defined('FUEL_START_TIME') or define('FUEL_START_TIME', microtime(true));
-defined('FUEL_START_MEM') or define('FUEL_START_MEM', memory_get_usage());
+$_SERVER['NOS_ROOT'] = __DIR__;
 
 // Boot the app
-require NOSPATH.'bootstrap.php';
+require __DIR__.'/novius-os/framework/bootstrap.php';
 
 Package::load('oil');
 

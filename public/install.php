@@ -215,7 +215,7 @@ $tests = array(
         'passed'       => is_writeable(APPPATH.'config'),
         'command_line' => 'chmod a+w '.APPPATH.'config',
         'description'  => 'This is required temporarly to write the db.php and crypt.php config files',
-        'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.php') or  !file_exists(APPPATH.'config'.DS.'crypt.php'),
+        'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or  !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
     ),
 
     'folder.data.writeable' => array(
@@ -231,11 +231,17 @@ $tests = array(
         'run_only_if'     => is_dir($folder_data.'config'),
     ),
 
-    'file.data.config.app.exists.writeable' => array(
-        'title'        => 'APPPATH/data/config/app_installed.php exists and is writeable',
-        'passed'       => is_writeable($folder_data.'config'.DS.'app_installed.php'),
-        'command_line' => 'echo "&lt;?php return array();" > '.$folder_data.'config'.DS.'app_installed.php',
-        'run_only_if'  => file_exists($folder_data.'config'.DS.'app_installed.php'),
+    'folder.metadata.writeable' => array(
+        'title'           => 'APPPATH/metadata/ is writeable by the webserver',
+        'passed'          => is_writeable(APPPATH.'metadata'),
+        'command_line'	  => array('chmod a+w '.APPPATH.'metadata'),
+    ),
+
+    'file.metadata.app.exists.writeable' => array(
+        'title'        => 'APPPATH/metadata/app_installed.php exists and is writeable',
+        'passed'       => is_writeable(APPPATH.'metadata'.DS.'app_installed.php'),
+        'command_line' => 'echo "&lt;?php return array();" > '.APPPATH.'metadata'.DS.'app_installed.php',
+        'run_only_if'  => file_exists(APPPATH.'metadata'.DS.'app_installed.php'),
     ),
 
     // htdocs needs to be writeable if htdocs or static doesn't exists
@@ -340,7 +346,11 @@ $passed = run_test('folder.data.writeable') && $passed;
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('folder.data.config.writeable') && $passed;
-$passed = run_test('file.data.config.app.exists.writeable') && $passed;
+
+echo '<tr class="separator"><td colspan="2"></td></tr>';
+
+$passed = run_test('folder.metadata.writeable') && $passed;
+$passed = run_test('file.metadata.app.exists.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
