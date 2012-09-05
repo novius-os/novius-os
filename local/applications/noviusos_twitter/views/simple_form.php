@@ -42,7 +42,7 @@ require(
 
                 if ($target.parent().is(':button')) {
                     $form.submit();
-                } elseif ($target.is('a')) {
+                } else if ($target.is('a')) {
                     $target.nosTabs('close');
                 }
 
