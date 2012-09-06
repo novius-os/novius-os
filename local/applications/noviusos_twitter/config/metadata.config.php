@@ -20,8 +20,11 @@ return array(
         'noviusos_twitter_intent' => array(
             'title' => 'Twitter',
             'description'  => '',
-            'url' => 'admin/noviusos_twitter/share/index',
             'iconUrl' => 'static/apps/noviusos_twitter/img/twitter.png',
+            'action' => array(
+                'action' => 'window.open',
+                'url' => 'https://twitter.com/intent/tweet?text={{'.\Nos\DataCatcher::TYPE_TITLE.'}}&url={{'.\Nos\DataCatcher::TYPE_URL.'}}',
+            ),
             'onDemand' => true,
             'specified_models' => false,
             'required_data' => array(
