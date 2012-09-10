@@ -9,28 +9,24 @@
  */
 
 return array(
-    'name'    => 'Twitter',
-    'version' => '0.9-alpha',
+    'name'    => 'Simple Facebook share',
+    'version' => '0.1',
     'provider' => array(
         'name' => 'Novius OS',
     ),
-    'icon16' => 'static/apps/noviusos_twitter/img/twitter.png',
-    'namespace' => 'Nos\Twitter',
+    'icon16' => 'static/apps/noviusos_simplefacebook/img/facebook.png',
     'data_catchers' => array(
-        'noviusos_twitter_intent' => array(
-            'title' => 'Twitter',
+        'noviusos_simplefacebook' => array(
+            'title' => 'Facebook',
             'description'  => '',
-            'iconUrl' => 'static/apps/noviusos_twitter/img/twitter.png',
+            'iconUrl' => 'static/apps/noviusos_simplefacebook/img/facebook.png',
             'action' => array(
                 'action' => 'window.open',
-                'url' => 'https://twitter.com/intent/tweet?text={{'.\Nos\DataCatcher::TYPE_TITLE.'}}&url={{'.\Nos\DataCatcher::TYPE_URL.'}}',
+                'url' => 'http://www.facebook.com/sharer/sharer.php?u={{urlencode:'.\Nos\DataCatcher::TYPE_URL.'}}',
             ),
             'onDemand' => true,
             'specified_models' => false,
             'required_data' => array(
-                \Nos\DataCatcher::TYPE_TITLE,
-            ),
-            'optional_data' => array(
                 \Nos\DataCatcher::TYPE_URL,
             ),
         ),
