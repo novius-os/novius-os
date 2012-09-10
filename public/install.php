@@ -514,7 +514,7 @@ if ($step == 2) {
     if (!empty($db)) {
         try {
             $old_level = error_reporting(0);
-            Nos\Model_User::count();
+            Database_Connection::forge()->connect();
             error_reporting($old_level);
             header('Location: install.php?step=3');
             exit();
