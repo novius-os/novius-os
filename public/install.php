@@ -543,15 +543,16 @@ if ($step == 2) {
         );
 
         try {
-            Config::save('db', $config);
             Config::set('db', $config);
             // Try to connect to the DB
             $old_level = error_reporting(0);
-            Nos\Model_User::count();
+            \View::redirect('errors'.DS.'php_error', NOSPATH.'/views/errors/empty');
             error_reporting($old_level);
+
             Migrate::latest();
             Crypt::_init();
 
+            Config::save('db', $config);
             header('Location: install.php?step=3');
             exit();
 
