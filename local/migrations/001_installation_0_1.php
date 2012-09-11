@@ -16,6 +16,8 @@ class Installation_0_1
           `cat_lang_single_id` int(11) DEFAULT NULL,
           `cat_parent_id` int(11) DEFAULT NULL,
           `cat_sort` float DEFAULT NULL,
+          `cat_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+          `cat_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
           PRIMARY KEY (`cat_id`),
           KEY `cat_lang` (`cat_lang`,`cat_lang_common_id`,`cat_lang_single_id`)
         ) DEFAULT CHARSET=utf8;")->execute();
