@@ -9,7 +9,7 @@
  */
 
 return array(
-    'name'    => 'Twitter',
+    'name'    => 'Simple Twitter share',
     'version' => '0.1',
     'provider' => array(
         'name' => 'Novius OS',
