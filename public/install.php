@@ -324,10 +324,16 @@ $tests = array(
         'run_only_if'     => !is_writeable(APPPATH),
     ),
 
-    'folder.local.media' => array(
-        'title'           => 'APPPATH/data/media/ exists and is writeable by the webserver',
-        'passed'          => is_writeable(APPPATH.'data'.DS.'media'),
-        'command_line'	  => array('mkdir '.APPPATH.'data'.DS.'media', 'chmod a+w '.APPPATH.'data'.DS.'media'),
+    'folder.local.media.exists' => array(
+        'title'           => 'APPPATH/data/media/ exists',
+        'passed'          => file_exists(APPPATH.'data'.DS.'media'),
+        'command_line'	  => 'mkdir '.APPPATH.'data'.DS.'media',
+    ),
+
+    'folder.local.media.writeable' => array(
+        'title'           => 'APPPATH/data/media/ is writeable by the webserver',
+        'passed'          => file_exists(APPPATH.'data'.DS.'media') && is_writeable(APPPATH.'data'.DS.'media'),
+        'command_line'	  => 'chmod a+w '.APPPATH.'data'.DS.'media',
     ),
 );
 
@@ -383,7 +389,8 @@ $passed = run_test('logs.fuel') && $passed;
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('folder.local.cache') && $passed;
-$passed = run_test('folder.local.media') && $passed;
+$passed = run_test('folder.local.media.exists') && $passed;
+$passed = run_test('folder.local.media.writeable') && $passed;
 
 // public/cache/media
 
@@ -551,6 +558,9 @@ if ($step == 2) {
 
             Migrate::latest();
             Crypt::_init();
+
+            // Install metadata
+            Request::forge('admin/nos/tray/appmanager/add/nos')->execute();
 
             Config::save('db', $config);
             header('Location: install.php?step=3');
