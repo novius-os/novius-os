@@ -13,13 +13,17 @@ class Installation_0_1
           `cat_virtual_name` varchar(255) NOT NULL,
           `cat_lang` varchar(5) NOT NULL,
           `cat_lang_common_id` int(11) NOT NULL,
-          `cat_lang_single_id` int(11) DEFAULT NULL,
+          `cat_lang_is_main` tinyint(1) NOT NULL DEFAULT '0',
           `cat_parent_id` int(11) DEFAULT NULL,
           `cat_sort` float DEFAULT NULL,
-          `cat_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          `cat_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `cat_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `cat_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY (`cat_id`),
-          KEY `cat_lang` (`cat_lang`,`cat_lang_common_id`,`cat_lang_single_id`)
+          KEY `cat_lang` (`cat_lang`),
+          KEY `cat_lang_common_id` (`cat_lang_common_id`, `cat_lang_is_main`),
+          KEY `cat_lang_is_main` (`cat_lang_is_main`),
+          KEY `cat_virtual_name` (`cat_virtual_name`),
+          KEY `cat_parent_id` (`cat_parent_id`)
         ) DEFAULT CHARSET=utf8;")->execute();
 
         //Table structure for table `nos_blog_category_post`
@@ -36,17 +40,20 @@ class Installation_0_1
           `post_summary` text NOT NULL,
           `post_author_alias` varchar(255) DEFAULT NULL,
           `post_author_id` int(10) unsigned DEFAULT NULL,
-          `post_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          `post_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `post_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `post_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
           `post_lang` varchar(5) NOT NULL,
           `post_lang_common_id` int(11) NOT NULL,
-          `post_lang_single_id` int(11) DEFAULT NULL,
+          `post_lang_is_main` tinyint(1) NOT NULL DEFAULT '0',
           `post_published` tinyint(1) NOT NULL,
           `post_read` int(10) unsigned NOT NULL,
           `post_virtual_name` varchar(255) NOT NULL,
           PRIMARY KEY (`post_id`),
-          UNIQUE KEY `news_virtual_name` (`post_virtual_name`),
-          KEY `news_lang` (`post_lang`,`post_lang_common_id`,`post_lang_single_id`)
+          KEY `post_lang` (`post_lang`),
+          KEY `post_lang_common_id` (`post_lang_common_id`, `post_lang_is_main`),
+          KEY `post_lang_is_main` (`post_lang_is_main`),
+          KEY `post_virtual_name` (`post_virtual_name`),
+          KEY `post_author_id` (`post_author_id`)
         )  DEFAULT CHARSET=utf8;")->execute();
 
         //Table structure for table `nos_blog_tag`
@@ -90,7 +97,7 @@ class Installation_0_1
           `content_model_id` int(10) unsigned DEFAULT NULL,
           `content_data` text,
           PRIMARY KEY (`content_id`),
-          UNIQUE KEY `catcher_model` (`content_catcher`,`content_model_name`,`content_model_id`)
+          UNIQUE KEY `content_catcher` (`content_catcher`,`content_model_name`,`content_model_id`)
         )  DEFAULT CHARSET=utf8;")->execute();
 
         //Table structure for table `nos_media`
@@ -105,10 +112,10 @@ class Installation_0_1
           `media_protected` tinyint(1) NOT NULL DEFAULT '0',
           `media_width` smallint(5) unsigned DEFAULT NULL,
           `media_height` smallint(5) unsigned DEFAULT NULL,
-          `media_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          `media_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `media_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `media_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY (`media_id`),
-          KEY `media_path_id` (`media_folder_id`)
+          KEY `media_folder_id` (`media_folder_id`)
         )  DEFAULT CHARSET=utf8;")->execute();
 
         //Table structure for table `nos_media_folder`
@@ -118,8 +125,8 @@ class Installation_0_1
           `medif_path` varchar(255) NOT NULL,
           `medif_dir_name` varchar(50) DEFAULT NULL,
           `medif_title` varchar(50) NOT NULL,
-          `medif_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          `medif_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `medif_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `medif_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY (`medif_id`),
           KEY `medip_parent_id` (`medif_parent_id`)
         )  DEFAULT CHARSET=utf8;")->execute();
@@ -145,13 +152,17 @@ class Installation_0_1
           `cat_virtual_name` varchar(255) NOT NULL,
           `cat_lang` varchar(5) NOT NULL,
           `cat_lang_common_id` int(11) NOT NULL,
-          `cat_lang_single_id` int(11) DEFAULT NULL,
+          `cat_lang_is_main` tinyint(1) NOT NULL DEFAULT '0',
           `cat_parent_id` int(11) DEFAULT NULL,
           `cat_sort` float DEFAULT NULL,
-          `cat_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          `cat_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `cat_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `cat_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY (`cat_id`),
-          KEY `cat_lang` (`cat_lang`,`cat_lang_common_id`,`cat_lang_single_id`)
+          KEY `cat_lang` (`cat_lang`),
+          KEY `cat_lang_common_id` (`cat_lang_common_id`, `cat_lang_is_main`),
+          KEY `cat_lang_is_main` (`cat_lang_is_main`),
+          KEY `cat_virtual_name` (`cat_virtual_name`),
+          KEY `cat_parent_id` (`cat_parent_id`)
         )  DEFAULT CHARSET=utf8;")->execute();
 
         //Table structure for table `nos_news_category_post`
@@ -167,17 +178,20 @@ class Installation_0_1
           `post_summary` text NOT NULL,
           `post_author_alias` varchar(255) DEFAULT NULL,
           `post_author_id` int(10) unsigned DEFAULT NULL,
-          `post_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          `post_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `post_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `post_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
           `post_lang` varchar(5) NOT NULL,
           `post_lang_common_id` int(11) NOT NULL,
-          `post_lang_single_id` int(11) DEFAULT NULL,
+          `post_lang_is_main` tinyint(1) NOT NULL DEFAULT '0',
           `post_published` tinyint(1) NOT NULL,
           `post_read` int(10) unsigned NOT NULL,
           `post_virtual_name` varchar(255) NOT NULL,
           PRIMARY KEY (`post_id`),
-          UNIQUE KEY `news_virtual_name` (`post_virtual_name`),
-          KEY `news_lang` (`post_lang`,`post_lang_common_id`,`post_lang_single_id`)
+          KEY `post_lang` (`post_lang`),
+          KEY `post_lang_common_id` (`post_lang_common_id`, `post_lang_is_main`),
+          KEY `post_lang_is_main` (`post_lang_is_main`),
+          KEY `post_virtual_name` (`post_virtual_name`),
+          KEY `post_author_id` (`post_author_id`)
         )  DEFAULT CHARSET=utf8;")->execute();
 
         //Table structure for table `nos_news_tag`
@@ -205,7 +219,7 @@ class Installation_0_1
           `page_title` varchar(255) NOT NULL DEFAULT '',
           `page_lang` varchar(5) NOT NULL,
           `page_lang_common_id` int(11) NOT NULL,
-          `page_lang_single_id` int(11) DEFAULT NULL,
+          `page_lang_is_main` tinyint(1) NOT NULL DEFAULT '0',
           `page_menu_title` varchar(255) DEFAULT NULL,
           `page_meta_title` varchar(255) DEFAULT NULL,
           `page_search_words` text,
@@ -225,14 +239,17 @@ class Installation_0_1
           `page_virtual_url` varchar(255) DEFAULT NULL,
           `page_external_link` varchar(255) DEFAULT NULL,
           `page_external_link_type` tinyint(4) DEFAULT NULL,
-          `page_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          `page_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `page_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `page_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
           `page_meta_description` text,
           `page_meta_keywords` text,
           `page_head_additional` text,
           PRIMARY KEY (`page_id`),
-          UNIQUE KEY `page_url_virtuel` (`page_virtual_url`),
+          UNIQUE KEY `page_virtual_url` (`page_virtual_url`, `page_lang`),
           KEY `page_parent_id` (`page_parent_id`),
+          KEY `page_lang` (`page_lang`),
+          KEY `page_lang_common_id` (`page_lang_common_id`, `page_lang_is_main`),
+          KEY `page_lang_is_main` (`page_lang_is_main`),
           KEY `page_requested_by_user_id` (`page_requested_by_user_id`)
         )  DEFAULT CHARSET=utf8;")->execute();
 
@@ -263,8 +280,8 @@ class Installation_0_1
           `user_password` varchar(64) NOT NULL,
           `user_last_connection` datetime DEFAULT NULL,
           `user_configuration` text,
-          `user_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-          `user_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `user_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+          `user_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY (`user_id`),
           UNIQUE KEY `user_email` (`user_email`),
           KEY `user_md5` (`user_md5`)
