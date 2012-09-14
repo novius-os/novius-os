@@ -559,10 +559,13 @@ if ($step == 2) {
             Migrate::latest();
             Crypt::_init();
 
+
             // Install metadata
-            Request::forge('admin/nos/tray/appmanager/add/nos')->execute();
+            $application = Nos\Application::forge('nos');
+            $application->install();
 
             Config::save('db', $config);
+
             header('Location: install.php?step=3');
             exit();
 
