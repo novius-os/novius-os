@@ -565,7 +565,7 @@ if ($step == 2) {
 
             // Install templates
             \Module::load('noviusos_templates_basic');
-            $application = Application::forge('noviusos_templates_basic');
+            $application = Nos\Application::forge('noviusos_templates_basic');
             $application->install();
 
             Config::save('db', $config);
