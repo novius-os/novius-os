@@ -2,7 +2,11 @@ php:
   - 5.3
 before_install:
   - git submodule update --init --recursive
+  - BRANCH=`git branch 2>/dev/null | grep "^*" | cut -c3-)`
   - git clone git://github.com/novius-os/ci.git
+  - cd ci
+  - git checkout $BRANCH
+  - cd ..
   - sudo apt-get install apache2 php5 mysql-server libapache2-mod-php5 php5-mysql
   - sudo a2enmod rewrite
   - sudo sh -c 'echo "<VirtualHost *:80>" >> /etc/apache2/sites-available/novius-os'
