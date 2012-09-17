@@ -3,7 +3,9 @@ php:
 before_install:
   - git submodule update --init --recursive
   - COMMIT=`git rev-parse HEAD`
+  - echo $COMMIT
   - BRANCH=`git branch --contains $COMMIT 2>/dev/null | grep "^*" | cut -c3-`
+  - echo $BRANCH
   - git clone git://github.com/novius-os/ci.git
   - cd ci
   - git checkout $BRANCH
