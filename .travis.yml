@@ -32,7 +32,7 @@ before_install:
   - chmod a+w local/cache
   - chmod a+w local/data/media
 before_script:
-  - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;GRANT ALL PRIVILEGES ON novius_os.* TO novius_os@localhost IDENTIFIED BY "novius-os";FLUSH PRIVILEGES;'
+  - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
   - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
