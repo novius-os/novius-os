@@ -22,7 +22,7 @@ return array(
             'iconUrl' => 'static/apps/noviusos_simplefacebook/img/facebook.png',
             'action' => array(
                 'action' => 'window.open',
-                'url' => 'http://www.facebook.com/sharer/sharer.php?u={{urlencode:'.\Nos\DataCatcher::TYPE_URL.'}}',
+                'url' => 'http://www.facebook.com/sharer/sharer.php?u={{urlencode:absolute_url}}',
             ),
             'onDemand' => true,
             'specified_models' => false,
