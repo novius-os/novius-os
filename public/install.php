@@ -669,11 +669,11 @@ if ($step == 4) {
     <p>
         Currently, the following languages are set:
         <ul>
-            <?php
-            foreach (\Config::get('locales') as $lang) {
-                echo '<li>'.$lang.'</li>';
-            }
-            ?>
+    <?php
+    foreach (\Config::get('locales') as $lang) {
+        echo '<li>'.$lang.'</li>';
+    }
+    ?>
         </ul>
     </p>
     <p><a href="install.php?step=4">Refresh the list</a></p>
