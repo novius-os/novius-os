@@ -9,6 +9,7 @@ before_install:
   - cd ..
   - sudo apt-get update
   - sudo apt-get upgrade
+  - sudo apt-get install apache2 libapache2-mod-php5
   - sudo a2enmod rewrite
   - sudo sh -c 'echo "<VirtualHost *:80>" >> /etc/apache2/sites-available/novius-os'
   - sudo sh -c 'echo " DocumentRoot `pwd`/public" >> /etc/apache2/sites-available/novius-os'
