@@ -22,7 +22,7 @@ return array(
             'iconUrl' => 'static/apps/noviusos_simpletwitter/img/twitter.png',
             'action' => array(
                 'action' => 'window.open',
-                'url' => 'https://twitter.com/intent/tweet?text={{urlencode:'.\Nos\DataCatcher::TYPE_TITLE.'}}&url={{urlencode:'.\Nos\DataCatcher::TYPE_URL.'}}',
+                'url' => 'https://twitter.com/intent/tweet?text={{urlencode:'.\Nos\DataCatcher::TYPE_TITLE.'}}&url={{urlencode:absolute_url}}',
             ),
             'onDemand' => true,
             'specified_models' => false,
