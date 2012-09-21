@@ -7,7 +7,11 @@ before_install:
   - cd ci
   - git checkout $BRANCH
   - cd ..
-  - sudo apt-get install apache2 php5 mysql-server libapache2-mod-php5 php5-mysql
+  - sudo apt-get update
+  - sudo apt-get upgrade
+  - sudo apt-get autoremove
+  - sudo apt-get dist-upgrade
+  - sudo apt-get install apache2 php5 libapache2-mod-php5 php5-mysql
   - sudo a2enmod rewrite
   - sudo sh -c 'echo "<VirtualHost *:80>" >> /etc/apache2/sites-available/novius-os'
   - sudo sh -c 'echo " DocumentRoot `pwd`/public" >> /etc/apache2/sites-available/novius-os'
