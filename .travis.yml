@@ -10,17 +10,12 @@ before_install:
   - cd ci
   - git checkout $BRANCH
   - cd ..
-  - sudo apt-get install apache2 libapache2-mod-php5
+  - sudo apt-get install apache2
+  - sudo a2enmod actions
   - sudo a2enmod rewrite
-  - sudo sh -c 'echo "<VirtualHost *:80>" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " DocumentRoot `pwd`/public" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " ServerName novius-os" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " <Directory `pwd`/public>" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " AllowOverride All" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " Options FollowSymLinks" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " </Directory>" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo "</VirtualHost>" >> /etc/apache2/sites-available/novius-os'
-  - sudo a2ensite novius-os
+  - echo "export PATH=/home/vagrant/.phpenv/bin:$PATH" | sudo tee -a /etc/apache2/envvars > /dev/null
+  - sudo cp ci/phpconfig /etc/apache2/conf.d/phpconfig
+  - cat ci/virtualhost | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo service apache2 reload
   - sudo sh -c 'echo "127.0.0.1 novius-os" >> /etc/hosts'
   - chmod a+w local/config
