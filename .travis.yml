@@ -7,12 +7,41 @@ before_install:
   - cd ci
   - git checkout $BRANCH
   - cd ..
+  - sudo apt-get install apache2 php5 libapache2-mod-php5 php5-mysql
+  - sudo a2enmod rewrite
+  - sudo sh -c 'echo "<VirtualHost *:80>" >> /etc/apache2/sites-available/novius-os'
+  - sudo sh -c 'echo " DocumentRoot `pwd`/public" >> /etc/apache2/sites-available/novius-os'
+  - sudo sh -c 'echo " ServerName novius-os" >> /etc/apache2/sites-available/novius-os'
+  - sudo sh -c 'echo " <Directory `pwd`/public>" >> /etc/apache2/sites-available/novius-os'
+  - sudo sh -c 'echo " AllowOverride All" >> /etc/apache2/sites-available/novius-os'
+  - sudo sh -c 'echo " Options FollowSymLinks" >> /etc/apache2/sites-available/novius-os'
+  - sudo sh -c 'echo " </Directory>" >> /etc/apache2/sites-available/novius-os'
+  - sudo sh -c 'echo "</VirtualHost>" >> /etc/apache2/sites-available/novius-os'
+  - sudo a2ensite novius-os
+  - sudo service apache2 reload
+  - sudo sh -c 'echo "127.0.0.1 novius-os" >> /etc/hosts'
+  - chmod a+w local/config
+  - chmod a+w local/data/
+  - chmod a+w local/metadata
+  - chmod a+w public/
+  - ln -s ../../novius-os/htdocs public/htdocs/novius-os
+  - mkdir public/htdocs/apps
+  - chmod a+w public/htdocs/apps
+  - ln -s ../../novius-os/static public/static/novius-os
+  - mkdir public/static/apps
+  - chmod a+w public/static/apps
+  - mkdir -p logs/fuel
+  - chmod a+w logs/fuel
+  - mkdir local/cache
+  - chmod a+w local/cache
+  - chmod a+w local/data/media
 before_script:
-  - pyrus install pear/PHP_CodeSniffer
+  - pear install pear/PHP_CodeSniffer
   - phpenv rehash
   - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
   - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=debug ./ci/tests/"
   - phpcs -p -s --standard=ci/phpcs/ruleset.xml ./
