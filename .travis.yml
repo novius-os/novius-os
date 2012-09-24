@@ -1,3 +1,4 @@
+language: php
 php:
   - 5.3
 before_install:
@@ -7,7 +8,7 @@ before_install:
   - cd ci
   - git checkout $BRANCH
   - cd ..
-  - sudo apt-get install apache2 php5 libapache2-mod-php5 php5-mysql php-pear
+  - sudo apt-get install apache2 php5 libapache2-mod-php5 php5-mysql
   - sudo a2enmod rewrite
   - sudo sh -c 'echo "<VirtualHost *:80>" >> /etc/apache2/sites-available/novius-os'
   - sudo sh -c 'echo " DocumentRoot `pwd`/public" >> /etc/apache2/sites-available/novius-os'
@@ -36,7 +37,7 @@ before_install:
   - chmod a+w local/cache
   - chmod a+w local/data/media
 before_script:
-  - sudo pear install pear/PHP_CodeSniffer
+  - pyrus install pear/PHP_CodeSniffer
   - phpenv rehash
   - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
   - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
