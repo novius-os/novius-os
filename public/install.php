@@ -139,15 +139,15 @@ input[type=submit]:active, button:active {
 
 define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
 
-define('APPPATH',   realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
-define('PKGPATH',   realpath(DOCROOT.'../novius-os/packages/').DIRECTORY_SEPARATOR);
-define('COREPATH',  realpath(DOCROOT.'../novius-os/fuel-core/').DIRECTORY_SEPARATOR);
-define('NOSPATH',   realpath(DOCROOT.'../novius-os/framework/').DIRECTORY_SEPARATOR);
+define('APPPATH', realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
+define('PKGPATH', realpath(DOCROOT.'../novius-os/packages/').DIRECTORY_SEPARATOR);
+define('COREPATH', realpath(DOCROOT.'../novius-os/fuel-core/').DIRECTORY_SEPARATOR);
+define('NOSPATH', realpath(DOCROOT.'../novius-os/framework/').DIRECTORY_SEPARATOR);
 
 // Boot the app
 require_once NOSPATH.'bootstrap.php';
 
-define('ROOT',    realpath(DOCROOT.'../').DS);
+define('ROOT', realpath(DOCROOT.'../').DS);
 define('NOSROOT', realpath(DOCROOT.'../novius-os/').DS);
 
 function run_test($name)
@@ -587,10 +587,10 @@ if ($step == 2) {
     <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 2 / 4</h1>
     <h2>Configuring the MySQL database</h2>
     <form action="" method="POST">
-        <p><label><input type="text" name="hostname" placeholder="Hostname" value="<?= Input::post('hostname',  \Arr::get($db, 'hostname', '')) ?>" /></label></p>
-        <p><label><input type="text" name="username" placeholder="Username" value="<?= Input::post('username',  \Arr::get($db, 'username', '')) ?>"  /></label></p>
+        <p><label><input type="text" name="hostname" placeholder="Hostname" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" /></label></p>
+        <p><label><input type="text" name="username" placeholder="Username" value="<?= Input::post('username', \Arr::get($db, 'username', '')) ?>"  /></label></p>
         <p><label><input type="password" name="password" placeholder="Password" /></label></p>
-        <p><label><input type="text" name="database" placeholder="Database" value="<?= Input::post('database',  \Arr::get($db, 'database', '')) ?>"  /></label></p>
+        <p><label><input type="text" name="database" placeholder="Database" value="<?= Input::post('database', \Arr::get($db, 'database', '')) ?>"  /></label></p>
         <p><input type="submit" value="Check and save DB config" /></p>
     </form>
     <?php
