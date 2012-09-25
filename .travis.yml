@@ -44,3 +44,4 @@ script:
   - phpcs -p -s -n --standard=ci/phpcs/ruleset.xml ./
 after_script:
   - sudo sh -c 'cat /var/log/apache2/error.log'
+
