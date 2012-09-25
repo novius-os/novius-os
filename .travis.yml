@@ -46,4 +46,3 @@ before_script:
 script:
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/"
   - phpcs -p -s --standard=ci/phpcs/ruleset.xml ./
-
