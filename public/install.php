@@ -616,11 +616,7 @@ if ($step == 3) {
                 'user_email'     => \Input::post('email', ''),
                 'user_password'  => \Input::post('password', ''),
                 'user_last_connection'  => date('Y-m-d H:i:s'),
-                'user_configuration' => serialize(array(
-                    'tabs'=> array(
-                        'selected' => 1,
-                    ),
-                )),
+                'user_configuration' => serialize(array()),
             ), true);
 
             $user->save();
@@ -689,7 +685,7 @@ if ($step == 4) {
     <p>You can also edit <code>.htaccess</code> and remove the line containing <code>install.php</code>
 
     <h2>The end!</h2>
-    <p><a href="admin/"><button>Go to the administration panel</button></a></p>
+    <p><a href="admin/?tab=admin/nos/tray/appmanager"><button>Go to the administration panel</button></a></p>
     <?php
 }
 
