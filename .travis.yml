@@ -8,7 +8,7 @@ before_install:
   - cd ci
   - git checkout $BRANCH
   - cd ..
-  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-mysql php5-sqlite
+  - sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php-pear
   - sudo a2enmod rewrite
   - cat ci/virtualhost | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo service apache2 reload
@@ -29,8 +29,7 @@ before_install:
   - chmod a+w local/cache
   - chmod a+w local/data/media
 before_script:
-  - pyrus install pear/PHP_CodeSniffer
-  - phpenv rehash
+  - pear install pear/PHP_CodeSniffer
   - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
   - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
   - "export DISPLAY=:99.0"
