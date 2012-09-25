@@ -11,7 +11,7 @@ before_install:
   - cd ci
   - git checkout $BRANCH
   - cd ..
-  - sudo sh -c 'cat /etc/apt/source.list'
+  - sudo sh -c 'cat /etc/apt/sources.list'
   - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-mysql php5-sqlite
   - sudo a2enmod rewrite
   - cat ci/virtualhost | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
