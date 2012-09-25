@@ -6,7 +6,7 @@ services:
 before_install:
   - COMMIT=`git log -n 1 2>/dev/null | grep "commit " | cut -c7-`
   - echo $COMMIT
-  - BRANCH=`git branch --contains $COMMIT 2>/dev/null | grep "^ " | cut -c3-`
+  - BRANCH=`git branch -r --contains $COMMIT 2>/dev/null | cut -c10-`
   - echo $BRANCH
   - git submodule update --init --recursive
   - git clone git://github.com/novius-os/ci.git
