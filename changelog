@@ -1,0 +1,4 @@
+Version 0.2
+
+- Rename lang, lang_common_id, lan_is_main columns. Replace lang by site. Resize lang columns.
+- In config.php, change locales by sites

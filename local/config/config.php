@@ -17,7 +17,7 @@ return array(
     'log_threshold'   => Fuel::$env === Fuel::DEVELOPMENT ? Fuel::L_WARNING : Fuel::L_ERROR,
 
     'locale' => 'en_GB.utf8',
-    'locales' => array(
+    'sites' => array(
         'en_GB' => 'English',
         'fr_FR' => 'Français',
         //'de_DE' => 'Deutsch',

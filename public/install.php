@@ -658,16 +658,16 @@ if ($step == 4) {
     ?>
     <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 4 / 4</h1>
 
-    <h2>Setup languages</h2>
+    <h2>Setup sites</h2>
     <p>
-        You can edit your <strong>local/config/config.php</strong> file to configure the locales.
+        You can edit your <strong>local/config/config.php</strong> file to configure the sites.
     </p>
     <p>
-        Currently, the following languages are set:
+        Currently, the following sites are set:
         <ul>
     <?php
-    foreach (\Config::get('locales') as $lang) {
-        echo '<li>'.$lang.'</li>';
+    foreach (\Config::get('sites') as $site) {
+        echo '<li>'.$site.'</li>';
     }
     ?>
         </ul>
