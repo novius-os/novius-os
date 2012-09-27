@@ -35,6 +35,8 @@ tar xfz novius-os.tar.gz
 rm novius-os.tar.gz
 
 echo `date +%H:%M:%S` Searching for translations
+echo -n "         "
+
 FILES=`find $ROOT/po -type f`
 
 # Saves stdout into file descriptor #6
@@ -68,11 +70,17 @@ do
     if [ -f $FILE.po ]
     then
         ((GENERATED_PO++))
+
+        # Restore stdout, output a dot, disable stdout again
+        exec 1<&6 2<&1
+        echo -n "."
+        exec 1>/dev/null 2>&1
     fi
 done
 
 # Restore stdout and close file descriptor #6
 exec 1<&6 2<&1 6<&-
+echo "";
 
 echo `date +%H:%M:%S` $GENERATED_PO .po files generated
 

@@ -26,7 +26,7 @@ foreach ($files as $file) {
 		continue;
 	}
 	$pathname = $file->getPathname();
-    $dict_name = substr(str_replace(CWD.'/lang/'.LANG.'/', '', $pathname), 0, -4);
+    $dict_name = substr(str_replace('.lang.php', '.php', str_replace(CWD.'/lang/'.LANG.'/', '', $pathname)), 0, -4);
 	$dicts[$dict_name] = include $pathname;
     foreach ($dicts[$dict_name] as $msgid => $msgstr) {
         if (empty($all[$msgid])) {
@@ -220,7 +220,7 @@ foreach ($found as $dict_name => $messages) {
 }
 
 echo "   'unused'\n";
-file_put_contents('lang/unused.php', $sprint_dict($unused));
+file_put_contents('lang/unused.lang.php', $sprint_dict($unused));
 
 
 $stats = array(
