@@ -658,16 +658,16 @@ if ($step == 4) {
     ?>
     <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 4 / 4</h1>
 
-    <h2>Setup sites</h2>
+    <h2>Setup contexts</h2>
     <p>
-        You can edit your <strong>local/config/config.php</strong> file to configure the sites.
+        You can edit your <strong>local/config/config.php</strong> file to configure the contexts.
     </p>
     <p>
-        Currently, the following sites are set:
+        Currently, the following contexts are set:
         <ul>
     <?php
-    foreach (\Config::get('sites') as $site) {
-        echo '<li>'.$site.'</li>';
+    foreach (\Config::get('contexts') as $context) {
+        echo '<li>'.$context.'</li>';
     }
     ?>
         </ul>
