@@ -122,9 +122,9 @@ class Installation_0_1
         \DB::query("CREATE TABLE IF NOT EXISTS `nos_media_folder` (
           `medif_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `medif_parent_id` int(10) unsigned DEFAULT NULL,
+          `medif_title` varchar(50) NOT NULL,
           `medif_path` varchar(255) NOT NULL,
           `medif_dir_name` varchar(50) DEFAULT NULL,
-          `medif_title` varchar(50) NOT NULL,
           `medif_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
           `medif_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY (`medif_id`),
