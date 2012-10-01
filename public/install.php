@@ -201,7 +201,12 @@ function run_test($name)
         if (!empty($options['description'])) {
             echo '<p class="description">'.$options['description'].'</p>';
         }
-        echo '<!--To solve this issue, you can execute this in a terminal : --><code>'.(is_array($options['command_line']) ? implode('<br />', $options['command_line']) : $options['command_line']).'</code>';
+        if (!empty($options['command_line'])) {
+            echo '<!--To solve this issue, you can execute this in a terminal : --><code>'.(is_array($options['command_line']) ? implode('<br />', $options['command_line']) : $options['command_line']).'</code>';
+        }
+        if (!empty($options['code'])) {
+            echo '<code>'.(is_array($options['code']) ? implode('<br />', $options['code']) : $options['code']).'</code>';
+        }
         echo '</td>';
     }
     echo '</tr>';
@@ -213,6 +218,13 @@ $folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH
 
 // @todo title_success and title_error?
 $tests = array(
+    'directive.short_open_tag' => array(
+        'title'        => 'PHP configuration directive short_open_tag = On',
+        'passed'       => ini_get('short_open_tag') != false,
+        'code'         => '# '.php_ini_loaded_file ()."\n<br />short_open_tag = On",
+        'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
+    ),
+
     'folder.config.writeable' => array(
         'title'        => 'APPPATH/config/ is writeable  by the webserver',
         'passed'       => is_writeable(APPPATH.'config'),
@@ -345,6 +357,10 @@ echo '<div style="width:800px;margin:auto;">';
 
 ob_start();
 echo '<table width="100%">';
+
+$passed = run_test('directive.short_open_tag') && $passed;
+
+echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('folder.config.writeable') && $passed;
 
@@ -490,7 +506,7 @@ if ($step == 1) {
         $first = true;
         $summary = array('cd '.ROOT, '');
         foreach ($tests as $name => $data) {
-            if ($data['is_error']) {
+            if ($data['is_error'] && (isset($data['command_line_relative']) || isset($data['command_line']))) {
                 $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
                 if (!empty($cmd[1]) && $cmd[1] == '# or') {
                     $cmd = array_slice($cmd, 2);
