@@ -7,7 +7,7 @@ class Migrate_0_1_1
     public function up()
     {
         $queries = '
-        ALTER TABLE `nos_novius_os`.`nos_news_category_post` ADD PRIMARY KEY ( `post_id` , `cat_id` );
+        ALTER TABLE `nos_news_category_post` ADD PRIMARY KEY ( `post_id` , `cat_id` );
 
         ALTER TABLE `nos_page`
             DROP `page_search_words`,
