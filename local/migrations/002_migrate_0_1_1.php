@@ -15,6 +15,8 @@ class Migrate_0_1_1
         ALTER TABLE `nos_news_tag_post` DROP INDEX `post_id`;
         ALTER TABLE `nos_news_tag_post` ADD PRIMARY KEY ( `post_id` , `tag_id` );
 
+        ALTER TABLE `nos_user` CHANGE `user_md5` `user_md5` VARCHAR( 32 ) NOT NULL;
+
         ALTER TABLE `nos_page`
             DROP `page_search_words`,
             DROP `page_raw_html`,
