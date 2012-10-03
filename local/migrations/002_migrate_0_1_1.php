@@ -23,6 +23,9 @@ class Migrate_0_1_1
             DROP `page_publication_start`,
             DROP `page_requested_by_user_id`,
             DROP `page_head_additional`;
+
+        ALTER TABLE `nos_media`
+            DROP `media_application`;
         ';
 
         foreach (explode(';', $queries) as $query) {
