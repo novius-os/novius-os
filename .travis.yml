@@ -1,23 +1,16 @@
-php:
-  - 5.3
+services:
+  - mysql
 before_install:
+  - COMMIT=`git log -n 1 2>/dev/null | grep "commit " | cut -c7-`
+  - BRANCH=`git branch -r --contains $COMMIT 2>/dev/null | cut -c10-` | head -1
   - git submodule update --init --recursive
-  - BRANCH=`git branch 2>/dev/null | grep "^ " | cut -c3-`
   - git clone git://github.com/novius-os/ci.git
   - cd ci
   - git checkout $BRANCH
   - cd ..
-  - sudo apt-get install apache2 php5 libapache2-mod-php5 php5-mysql
+  - sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php-pear
   - sudo a2enmod rewrite
-  - sudo sh -c 'echo "<VirtualHost *:80>" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " DocumentRoot `pwd`/public" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " ServerName novius-os" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " <Directory `pwd`/public>" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " AllowOverride All" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " Options FollowSymLinks" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo " </Directory>" >> /etc/apache2/sites-available/novius-os'
-  - sudo sh -c 'echo "</VirtualHost>" >> /etc/apache2/sites-available/novius-os'
-  - sudo a2ensite novius-os
+  - cat ci/virtualhost | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo service apache2 reload
   - sudo sh -c 'echo "127.0.0.1 novius-os" >> /etc/hosts'
   - chmod a+w local/config
@@ -35,13 +28,13 @@ before_install:
   - mkdir local/cache
   - chmod a+w local/cache
   - chmod a+w local/data/media
+  - sudo pear install pear/PHP_CodeSniffer
 before_script:
-  - pyrus install pear/PHP_CodeSniffer
-  - phpenv rehash
   - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
   - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
-  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=debug ./ci/tests/"
-  - phpcs -p -s --standard=ci/phpcs/ruleset.xml ./
+  - phpcs -p -s -n --standard=ci/phpcs/ruleset.xml ./
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/ 'http://novius-os/'"
+

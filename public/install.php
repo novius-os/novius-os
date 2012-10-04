@@ -1,3 +1,6 @@
+<?php
+ob_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -139,15 +142,15 @@ input[type=submit]:active, button:active {
 
 define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
 
-define('APPPATH',   realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
-define('PKGPATH',   realpath(DOCROOT.'../novius-os/packages/').DIRECTORY_SEPARATOR);
-define('COREPATH',  realpath(DOCROOT.'../novius-os/fuel-core/').DIRECTORY_SEPARATOR);
-define('NOSPATH',   realpath(DOCROOT.'../novius-os/framework/').DIRECTORY_SEPARATOR);
+define('APPPATH', realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
+define('PKGPATH', realpath(DOCROOT.'../novius-os/packages/').DIRECTORY_SEPARATOR);
+define('COREPATH', realpath(DOCROOT.'../novius-os/fuel-core/').DIRECTORY_SEPARATOR);
+define('NOSPATH', realpath(DOCROOT.'../novius-os/framework/').DIRECTORY_SEPARATOR);
 
 // Boot the app
 require_once NOSPATH.'bootstrap.php';
 
-define('ROOT',    realpath(DOCROOT.'../').DS);
+define('ROOT', realpath(DOCROOT.'../').DS);
 define('NOSROOT', realpath(DOCROOT.'../novius-os/').DS);
 
 function run_test($name)
@@ -198,7 +201,12 @@ function run_test($name)
         if (!empty($options['description'])) {
             echo '<p class="description">'.$options['description'].'</p>';
         }
-        echo '<!--To solve this issue, you can execute this in a terminal : --><code>'.(is_array($options['command_line']) ? implode('<br />', $options['command_line']) : $options['command_line']).'</code>';
+        if (!empty($options['command_line'])) {
+            echo '<!--To solve this issue, you can execute this in a terminal : --><code>'.(is_array($options['command_line']) ? implode('<br />', $options['command_line']) : $options['command_line']).'</code>';
+        }
+        if (!empty($options['code'])) {
+            echo '<code>'.(is_array($options['code']) ? implode('<br />', $options['code']) : $options['code']).'</code>';
+        }
         echo '</td>';
     }
     echo '</tr>';
@@ -210,6 +218,13 @@ $folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH
 
 // @todo title_success and title_error?
 $tests = array(
+    'directive.short_open_tag' => array(
+        'title'        => 'PHP configuration directive short_open_tag = On',
+        'passed'       => ini_get('short_open_tag') != false,
+        'code'         => '# '.php_ini_loaded_file ()."\n<br />short_open_tag = On",
+        'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
+    ),
+
     'folder.config.writeable' => array(
         'title'        => 'APPPATH/config/ is writeable  by the webserver',
         'passed'       => is_writeable(APPPATH.'config'),
@@ -342,6 +357,10 @@ echo '<div style="width:800px;margin:auto;">';
 
 ob_start();
 echo '<table width="100%">';
+
+$passed = run_test('directive.short_open_tag') && $passed;
+
+echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('folder.config.writeable') && $passed;
 
@@ -487,7 +506,7 @@ if ($step == 1) {
         $first = true;
         $summary = array('cd '.ROOT, '');
         foreach ($tests as $name => $data) {
-            if ($data['is_error']) {
+            if ($data['is_error'] && (isset($data['command_line_relative']) || isset($data['command_line']))) {
                 $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
                 if (!empty($cmd[1]) && $cmd[1] == '# or') {
                     $cmd = array_slice($cmd, 2);
@@ -587,10 +606,10 @@ if ($step == 2) {
     <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 2 / 4</h1>
     <h2>Configuring the MySQL database</h2>
     <form action="" method="POST">
-        <p><label><input type="text" name="hostname" placeholder="Hostname" value="<?= Input::post('hostname',  \Arr::get($db, 'hostname', '')) ?>" /></label></p>
-        <p><label><input type="text" name="username" placeholder="Username" value="<?= Input::post('username',  \Arr::get($db, 'username', '')) ?>"  /></label></p>
+        <p><label><input type="text" name="hostname" placeholder="Hostname" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" /></label></p>
+        <p><label><input type="text" name="username" placeholder="Username" value="<?= Input::post('username', \Arr::get($db, 'username', '')) ?>"  /></label></p>
         <p><label><input type="password" name="password" placeholder="Password" /></label></p>
-        <p><label><input type="text" name="database" placeholder="Database" value="<?= Input::post('database',  \Arr::get($db, 'database', '')) ?>"  /></label></p>
+        <p><label><input type="text" name="database" placeholder="Database" value="<?= Input::post('database', \Arr::get($db, 'database', '')) ?>"  /></label></p>
         <p><input type="submit" value="Check and save DB config" /></p>
     </form>
     <?php
@@ -616,11 +635,7 @@ if ($step == 3) {
                 'user_email'     => \Input::post('email', ''),
                 'user_password'  => \Input::post('password', ''),
                 'user_last_connection'  => date('Y-m-d H:i:s'),
-                'user_configuration' => serialize(array(
-                    'tabs'=> array(
-                        'selected' => 1,
-                    ),
-                )),
+                'user_configuration' => serialize(array()),
             ), true);
 
             $user->save();
@@ -662,16 +677,16 @@ if ($step == 4) {
     ?>
     <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 4 / 4</h1>
 
-    <h2>Setup languages</h2>
+    <h2>Setup contexts</h2>
     <p>
-        You can edit your <strong>local/config/config.php</strong> file to configure the locales.
+        You can edit your <strong>local/config/config.php</strong> file to configure the contexts.
     </p>
     <p>
-        Currently, the following languages are set:
+        Currently, the following contexts are set:
         <ul>
     <?php
-    foreach (\Config::get('locales') as $lang) {
-        echo '<li>'.$lang.'</li>';
+    foreach (\Config::get('contexts') as $context) {
+        echo '<li>'.$context.'</li>';
     }
     ?>
         </ul>
@@ -689,7 +704,7 @@ if ($step == 4) {
     <p>You can also edit <code>.htaccess</code> and remove the line containing <code>install.php</code>
 
     <h2>The end!</h2>
-    <p><a href="admin/"><button>Go to the administration panel</button></a></p>
+    <p><a href="admin/?tab=admin/nos/tray/appmanager"><button>Go to the administration panel</button></a></p>
     <?php
 }
 
