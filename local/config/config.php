@@ -17,12 +17,48 @@ return array(
     'log_threshold'   => Fuel::$env === Fuel::DEVELOPMENT ? Fuel::L_WARNING : Fuel::L_ERROR,
 
     'locale' => 'en_GB.utf8',
+
+    'sites' => array(
+        'main' => array(
+            'title' => 'Main site',
+            'alias' => 'Main',
+        ),
+    ),
+
+    'locales' => array(
+        'fr_FR' => array(
+            'title' => 'Français',
+            'flag' => 'fr',
+        ),
+        'en_GB' => array(
+            'title' => 'English',
+            'flag' => 'gb',
+        ),
+        'ja_JP' => array(
+            'title' => '日本語',
+            'flag' => 'jp',
+        ),
+        /*'de_DE' => array(
+            'title' => 'Deutsch',
+            'flag' => 'de',
+        ),
+        'es_ES' => array(
+            'title' => 'Español',
+            'flag' => 'es',
+        ),
+        'it_IT' => array(
+            'title' => 'Italiano',
+            'flag' => 'it',
+        ),*/
+    ),
+
     'contexts' => array(
-        'en_GB' => 'English',
-        'fr_FR' => 'Français',
-        //'de_DE' => 'Deutsch',
-        //'es_ES' => 'Español
-        //'it_IT' => 'Italiano',
+        'main::en_GB' => array(),
+        'main::fr_FR' => array(),
+        'main::ja_JP' => array(),
+        /*'main::de_DE' => array(),
+        'main::es_ES' => array(),
+        'main::it_IT' => array(),*/
     ),
 
     'upload' => array(
