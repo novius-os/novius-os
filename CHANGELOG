@@ -1,0 +1,37 @@
+Novius OS framework CHANGELOG
+
+Version 0.2
+
+- Rename lang, lang_common_id, lan_is_main columns. Replace lang by context. Resize lang columns. And all variables
+- Rename behabiour Translatable by Contextable and all variables
+- In config.php, change locales by contexts
+- CRUD : rename context by situation, context_relation by environment_relation, item_context by item_environment
+
+October 3, 2012: version 0.1.1
+==============================
+
+Core
+----
+* Bugfix: non-image media now displays properly in front-office
+* Page: the boxes 'URL' and 'SEO' are now hidden when editing an external link
+* RSS: removed data catchers, replaced with a Tools_RSS class (Blog and News applications were updated accordingly)
+* CRUD: actions buttons are now refreshed upon change
+* Behaviour: the url() method now only generates URL for the authorised enhancers' item
+* Updated the front-office blank slate to remove 404 links
+* Installation: now checks the directive short_open_tag is active
+* DB cleanup: removed unused columns
+
+Comments
+--------
+* Better spam checking management (in addition to RE-Captcha)
+
+Blog & News
+-----------
+* Re-added the visualisation count stat for post items
+* Bugfix for main list pagination
+
+
+September 20, 2012: version 0.1
+===============================
+
+* Initial release
