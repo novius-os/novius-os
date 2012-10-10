@@ -23,13 +23,9 @@ ErrorDocument 404 /htdocs/novius-os/404.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
-    #RewriteBase /
-    #DirectoryIndex  /htdocs/cms/front.php                          [L]
-
-    RewriteRule ^/$                 	/htdocs/novius-os/front.php?URL=/     [QSA]
-    RewriteRule ^$                  	/htdocs/novius-os/front.php?URL=/     [QSA]
-    RewriteRule ^(.*)\.html         	/htdocs/novius-os/front.php?URL=$1    [QSA]
-    RewriteRule ^/htdocs/novius-os/(.*)   	-                               [L]
-    RewriteRule ^(.*)$              	/htdocs/novius-os/admin.php/$1        [N]
-    #RewriteRule ^(.*)              	/htdocs/$1                      [L]
+    RewriteRule ^/$                 	/htdocs/novius-os/front.php     [QSA]
+    RewriteRule ^$                  	/htdocs/novius-os/front.php     [QSA]
+    RewriteRule ^(.*)\.html         	/htdocs/novius-os/front.php     [QSA]
+    RewriteRule ^/htdocs/novius-os/(.*)   	-                           [L]
+    RewriteRule ^(.*)$              	/htdocs/novius-os/admin.php/$1  [N]
 </IfModule>
