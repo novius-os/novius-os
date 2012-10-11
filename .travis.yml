@@ -30,6 +30,7 @@ before_install:
   - chmod a+w local/data/media
   - sudo sh -c 'pear channel-discover pear.phpunit.de'
   - sudo sh -c 'pear install --alldeps pear/PHP_CodeSniffer'
+  - cat ci/phpcs/ruleset.xml
 before_script:
   - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
   - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
