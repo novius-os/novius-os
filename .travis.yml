@@ -35,6 +35,6 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
-  - phpcs -p -s -n --standard=ci/phpcs/ruleset.xml ./
+  - phpcs -s -n --standard=ci/phpcs/ruleset.xml --report-summary ./
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/ 'http://novius-os/'"
 
