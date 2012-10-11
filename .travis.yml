@@ -38,4 +38,3 @@ before_script:
 script:
   - phpcs -s -n -v --standard=ci/phpcs/ruleset.xml --extensions=php --report-summary ./
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/ 'http://novius-os/'"
-
