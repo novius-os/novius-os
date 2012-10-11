@@ -22,7 +22,9 @@ UPDATE `nos_page` SET `page_context` = CONCAT('main::', `page_context`);
 
 SQL;
         foreach (explode(PHP_EOL, $alters) as $alter) {
-            \DB::query($alter)->execute();
+            if (!empty($alter)) {
+                \DB::query($alter)->execute();
+            }
         }
     }
 
