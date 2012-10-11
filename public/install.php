@@ -685,7 +685,7 @@ if ($step == 4) {
         Currently, the following contexts are set:
         <ul>
     <?php
-    foreach (Tools_Context::contexts() as $context) {
+    foreach (Nos\Tools_Context::contexts() as $context) {
         echo '<li>'.$context.'</li>';
     }
     ?>
