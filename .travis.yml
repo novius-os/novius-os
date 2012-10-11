@@ -25,14 +25,10 @@ before_install:
   - chmod a+w local/metadata
   - chmod a+w public/
   - ln -s ../../novius-os/htdocs public/htdocs/novius-os
-  - mkdir public/htdocs/apps
   - chmod a+w public/htdocs/apps
   - ln -s ../../novius-os/static public/static/novius-os
-  - mkdir public/static/apps
   - chmod a+w public/static/apps
-  - mkdir -p logs/fuel
   - chmod a+w logs/fuel
-  - mkdir local/cache
   - chmod a+w local/cache
   - chmod a+w local/data/media
 before_script:
