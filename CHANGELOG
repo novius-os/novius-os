@@ -6,6 +6,7 @@ Version 0.2
 - Rename behabiour Translatable by Contextable and all variables
 - In config.php, change locales by contexts
 - CRUD : rename context by situation, context_relation by environment_relation, item_context by item_environment
+- Update vendors jQuery, jQuery UI, Wijmo, tinyMCE
 
 October 3, 2012: version 0.1.1
 ==============================
