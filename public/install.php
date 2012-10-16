@@ -623,7 +623,6 @@ if ($step == 4) {
     rm <?= ROOT ?>public/install.php<br />
     chmod og-w <?= ROOT ?>local/config
     </code>
-    <p>You can also edit <code>.htaccess</code> and remove the line containing <code>install.php</code>
 
     <h2>The end!</h2>
     <p><a href="admin/"><button>Go to the administration panel</button></a></p>
