@@ -26,6 +26,8 @@ SQL;
                 \DB::query($alter)->execute();
             }
         }
+
+        \File::delete_dir(\Config::get('cache_dir').'pages', true, false);
     }
 
     public function down()
