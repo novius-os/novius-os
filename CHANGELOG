@@ -7,6 +7,11 @@ Version 0.2
 - In config.php, change locales by contexts
 - CRUD : rename context by situation, context_relation by environment_relation, item_context by item_environment
 - Update vendors jQuery, jQuery UI, Wijmo, tinyMCE
+- Model_Page->get_link() become Model_Page->link()
+- Model_Page->get_href() become Model_Page->url()
+- Model_Page::get_url() become Tools_Url::page(), remove Model_Page::get_url_absolute()
+- New class helper Tools_Url
+- All functions and methods returning url use absolute url by default (Model_Page->url, Model_Page::find_url, Model_Page->link)
 
 October 3, 2012: version 0.1.1
 ==============================
