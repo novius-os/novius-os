@@ -29,7 +29,9 @@ SQL;
         }
 
         // Clear pages cache, now cache use domain
-        \File::delete_dir(\Config::get('cache_dir').'pages', true, false);
+        if (file_exists(\Config::get('cache_dir').'pages')) {
+            \File::delete_dir(\Config::get('cache_dir').'pages', true, false);
+        }
 
 
         // Update url_enhanced config file, integrate contexts
