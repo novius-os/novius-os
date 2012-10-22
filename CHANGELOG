@@ -1,5 +1,24 @@
 Novius OS framework CHANGELOG
 
+October 22, 2012: version 0.1.2
+===============================
+
+Core
+----
+* Refactoring: CRUD function form_item rename in from_item.
+* Refactoring: Novius OS can now be install in a sub-directory of a shared hosting, even if public is not the DOCUMENT_ROOT.
+* Refactoring: Install process improvement, doesn't need to create directories anymore. Only changing files permissions.
+* Bugfix: Conflict between sortable and click events for launchers in the AppTab.
+* Bugfix: In wysiwyg, hide labels of Enhancer's actions links
+* Bugfix: Appdesk now listen all langs events, in case user switch the selected lang
+* Bugfix: BD request for Appdesk json test if LIMIT is not negative
+* Bugfix: CRUD's toolbar buttons not reloaded when event is delete the current item
+
+Blog & News
+-----------
+* Bugfix: Blog and News stories, bad namespace and url for inspector's date.
+
+
 October 3, 2012: version 0.1.1
 ==============================
 
