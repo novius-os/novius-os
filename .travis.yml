@@ -19,16 +19,16 @@ before_install:
   - chmod a+w local/metadata
   - chmod a+w public/
   - ln -s ../../novius-os/htdocs public/htdocs/novius-os
-  - mkdir public/htdocs/apps
   - chmod a+w public/htdocs/apps
   - ln -s ../../novius-os/static public/static/novius-os
-  - mkdir public/static/apps
   - chmod a+w public/static/apps
-  - mkdir -p logs/fuel
   - chmod a+w logs/fuel
-  - mkdir local/cache
   - chmod a+w local/cache
   - chmod a+w local/data/media
+  - chmod a+w local/cache/media
+  - chmod a+w local/data/config
+  - chmod a+w public/cache
+  - chmod a+w public/cache/media
   - sudo sh -c 'pear channel-discover pear.phpunit.de'
   - sudo sh -c 'pear install --alldeps pear/PHP_CodeSniffer'
 before_script:

@@ -233,6 +233,18 @@ $tests = array(
         'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or  !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
     ),
 
+    'folder.cache.writeable' => array(
+        'title'        => 'APPPATH/cache/ is writeable by the webserver',
+        'passed'       => is_writeable(APPPATH.'cache'),
+        'command_line' => 'chmod a+w '.APPPATH.'cache',
+    ),
+
+    'folder.cache.media.writeable' => array(
+        'title'        => 'APPPATH/cache/media is writeable by the webserver',
+        'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
+        'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
+    ),
+
     'folder.data.writeable' => array(
         'title'        => 'APPPATH/data/ is writeable by the webserver',
         'passed'       => is_writeable($folder_data),
@@ -246,26 +258,17 @@ $tests = array(
         'run_only_if'     => is_dir($folder_data.'config'),
     ),
 
+    'folder.data.media.writeable' => array(
+        'title'           => 'APPPATH/data/media/ is writeable by the webserver',
+        'passed'          => is_writeable($folder_data.'media'),
+        'command_line'	  => array('chmod a+w '.$folder_data.'media'),
+        'run_only_if'     => is_dir($folder_data.'media'),
+    ),
+
     'folder.metadata.writeable' => array(
         'title'           => 'APPPATH/metadata/ is writeable by the webserver',
         'passed'          => is_writeable(APPPATH.'metadata'),
-        'command_line'	  => array('chmod a+w '.APPPATH.'metadata'),
-    ),
-
-    'file.metadata.app.exists.writeable' => array(
-        'title'        => 'APPPATH/metadata/app_installed.php exists and is writeable',
-        'passed'       => is_writeable(APPPATH.'metadata'.DS.'app_installed.php'),
-        'command_line' => 'echo "&lt;?php return array();" > '.APPPATH.'metadata'.DS.'app_installed.php',
-        'run_only_if'  => file_exists(APPPATH.'metadata'.DS.'app_installed.php'),
-    ),
-
-    // htdocs needs to be writeable if htdocs or static doesn't exists
-    'public.writeable' => array(
-        'description'  => 'Either public/cache/, public/htdocs/ or public/static/ doesn\'t exists, so we need to be able to create them.',
-        'title'        => 'DOCROOT is writeable',
-        'passed'       => is_writeable(DOCROOT),
-        'command_line' => array('chmod a+w '.DOCROOT),
-        'run_only_if'  => !file_exists(DOCROOT.'htdocs') || !file_exists(DOCROOT.'static') || !file_exists(DOCROOT.'cache'),
+        'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
     ),
 
     'public.cache.writeable' => array(
@@ -283,13 +286,13 @@ $tests = array(
 
     'public.htdocs.writeable' => array(
         'title'        => 'DOCROOT/htdocs/ is writeable by the webserver',
-        'description'  => 'Either the symbolic link htdocs/novius-os or the folder htdocs/apps doesn\'t exsists, so we need to be able to create them.',
-        'passed'       => is_dir(DOCROOT.'htdocs') && is_writeable(DOCROOT.'htdocs'),
-        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os', 'mkdir '.DOCROOT.'htdocs'.DS.'apps', 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps'),
-        'run_only_if'  => is_dir(DOCROOT.'htdocs') && (!file_exists(DOCROOT.'htdocs'.DS.'novius-os') || !file_exists(DOCROOT.'htdocs'.DS.'apps')),
+        'description'  => 'The symbolic link htdocs/novius-os doesn\'t exsists, so we need to be able to create it.',
+        'passed'       => is_writeable(DOCROOT.'htdocs'),
+        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
+        'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
     ),
 
-    'public.htdocs.modules.writeable' => array(
+    'public.htdocs.apps.writeable' => array(
         'title'        => 'DOCROOT/htdocs/apps is writeable by the webserver',
         'passed'       => is_writeable(DOCROOT.'htdocs'.DS.'apps'),
         'command_line' => 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps',
@@ -298,27 +301,27 @@ $tests = array(
 
     'public.static.writeable' => array(
         'title'        => 'DOCROOT/static/ is writeable by the webserver',
-        'description'  => 'Either the symbolic link static/novius-os/ or the folder static/apps/ doesn\'t exsists, so we need to be able to create them.',
+        'description'  => 'The symbolic link static/novius-os/ doesn\'t exsists, so we need to be able to create it.',
         'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
-        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static').' '.DOCROOT.'static'.DS.'novius-os', 'mkdir '.DOCROOT.'static'.DS.'apps', 'chmod a+w '.DOCROOT.'static'.DS.'apps'),
-        'run_only_if'  => is_dir(DOCROOT.'static') && (!file_exists(DOCROOT.'static'.DS.'novius-os') || !file_exists(DOCROOT.'static'.DS.'apps')),
+        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static').' '.DOCROOT.'static'.DS.'novius-os'),
+        'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
     ),
 
-    'public.static.modules.writeable' => array(
+    'public.static.apps.writeable' => array(
         'title'        => 'DOCROOT/static/apps is writeable by the webserver',
         'passed'       => is_dir(DOCROOT.'static'.DS.'apps') && is_writeable(DOCROOT.'static'.DS.'apps'),
         'command_line' => 'chmod a+w '.DOCROOT.'static'.DS.'apps',
         'run_only_if'  => file_exists(DOCROOT.'static'.DS.'apps'),
     ),
 
-    'public.htdocs.cms.valid' => array(
+    'public.htdocs.nos.valid' => array(
         'title'        => 'DOCROOT/htdocs/novius-os links to NOSPATH/htdocs',
         'passed'       => is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOSROOT.'htdocs',
         'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
         'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
     ),
 
-    'public.static.cms.valid' => array(
+    'public.static.nos.valid' => array(
         'title'        => 'DOCROOT/static/novius-os links to NOSPATH/static',
         'passed'       => is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOSROOT.'static',
         'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static').' '.DOCROOT.'static'.DS.'novius-os',
@@ -327,28 +330,8 @@ $tests = array(
 
     'logs.fuel' => array(
         'title'        => 'logs/fuel exists and is writeable by the webserver',
-        'passed'       => is_dir(ROOT.'logs/fuel') && is_writeable(ROOT.'logs/fuel'),
-        'command_line' => array('mkdir -p '.ROOT.'logs/fuel', 'chmod a+w '.ROOT.'logs/fuel'),
-        'run_only_if'  => !is_writeable(ROOT.'logs'),
-    ),
-
-    'folder.local.cache' => array(
-        'title'           => 'APPPATH/cache/ exists and is writeable by the webserver',
-        'passed'          => is_writeable(APPPATH.'cache'),
-        'command_line'	  => array('mkdir '.APPPATH.'cache', 'chmod a+w '.APPPATH.'cache'),
-        'run_only_if'     => !is_writeable(APPPATH),
-    ),
-
-    'folder.local.media.exists' => array(
-        'title'           => 'APPPATH/data/media/ exists',
-        'passed'          => file_exists(APPPATH.'data'.DS.'media'),
-        'command_line'	  => 'mkdir '.APPPATH.'data'.DS.'media',
-    ),
-
-    'folder.local.media.writeable' => array(
-        'title'           => 'APPPATH/data/media/ is writeable by the webserver',
-        'passed'          => file_exists(APPPATH.'data'.DS.'media') && is_writeable(APPPATH.'data'.DS.'media'),
-        'command_line'	  => 'chmod a+w '.APPPATH.'data'.DS.'media',
+        'passed'       => is_writeable(ROOT.'logs/fuel'),
+        'command_line' => 'chmod a+w '.ROOT.'logs/fuel',
     ),
 );
 
@@ -367,19 +350,14 @@ $passed = run_test('folder.config.writeable') && $passed;
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('folder.data.writeable') && $passed;
-
-echo '<tr class="separator"><td colspan="2"></td></tr>';
-
 $passed = run_test('folder.data.config.writeable') && $passed;
+$passed = run_test('folder.data.media.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
+$passed = run_test('folder.cache.writeable') && $passed;
+$passed = run_test('folder.cache.media.writeable') && $passed;
 $passed = run_test('folder.metadata.writeable') && $passed;
-$passed = run_test('file.metadata.app.exists.writeable') && $passed;
-
-echo '<tr class="separator"><td colspan="2"></td></tr>';
-
-$passed = run_test('public.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
@@ -389,29 +367,21 @@ $passed = run_test('public.cache.media.writeable') && $passed;
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('public.htdocs.writeable') && $passed;
-$passed = run_test('public.htdocs.modules.writeable') && $passed;
+$passed = run_test('public.htdocs.apps.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('public.static.writeable') && $passed;
-$passed = run_test('public.static.modules.writeable') && $passed;
+$passed = run_test('public.static.apps.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
-$passed = run_test('public.htdocs.cms.valid') && $passed;
-$passed = run_test('public.static.cms.valid') && $passed;
+$passed = run_test('public.htdocs.nos.valid') && $passed;
+$passed = run_test('public.static.nos.valid') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('logs.fuel') && $passed;
-
-echo '<tr class="separator"><td colspan="2"></td></tr>';
-
-$passed = run_test('folder.local.cache') && $passed;
-$passed = run_test('folder.local.media.exists') && $passed;
-$passed = run_test('folder.local.media.writeable') && $passed;
-
-// public/cache/media
 
 echo '</table>';
 
@@ -424,18 +394,8 @@ if (!$passed && $step != 1) {
 }
 
 if ($step == 1) {
-
     if (Input::method() == 'POST') {
         try {
-            // local/data
-            if (!is_dir(APPPATH.'data')) {
-                File::create_dir(APPPATH, 'data');
-            }
-
-            if (!is_dir(APPPATH.'data'.DS.'config')) {
-                File::create_dir(APPPATH.'data', 'config');
-            }
-
             $dir  = APPPATH.'data'.DS.'config'.DS;
             $files = array('app_installed.php', 'templates.php', 'launchers.php', 'app_dependencies.php');
             foreach ($files as $file) {
@@ -444,47 +404,11 @@ if ($step == 1) {
                 }
             }
 
-            // public/cache
-            if (!is_dir(DOCROOT.'cache')) {
-                File::create_dir(DOCROOT, 'cache');
-            }
-            if (!is_dir(DOCROOT.'cache'.DS.'media')) {
-                File::create_dir(DOCROOT.'cache', 'media');
-            }
-
-            // public/htdocs
-            if (!is_dir(DOCROOT.'htdocs')) {
-                File::create_dir(DOCROOT, 'htdocs');
-            }
-            if (!is_dir(DOCROOT.'htdocs'.DS.'apps')) {
-                File::create_dir(DOCROOT.'htdocs', 'apps');
-            }
             if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-                File::symlink(NOSROOT.'htdocs', DOCROOT.'htdocs'.DS.'novius-os', false);
-            }
-
-            // public/static
-            if (!is_dir(DOCROOT.'static')) {
-                File::create_dir(DOCROOT, 'static');
-            }
-            if (!is_dir(DOCROOT.'static'.DS.'apps')) {
-                File::create_dir(DOCROOT.'static', 'apps');
+                \symlink(Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs'), DOCROOT.'htdocs'.DS.'novius-os');
             }
             if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-                File::symlink(NOSROOT.'static', DOCROOT.'static'.DS.'novius-os', false);
-            }
-
-            // local/cache
-            if (!is_dir(APPPATH.'cache')) {
-                File::create_dir(APPPATH, 'cache');
-            }
-            if (!is_dir(APPPATH.'cache'.DS.'media')) {
-                File::create_dir(APPPATH.'cache', 'media');
-            }
-
-            // local/media
-            if (!is_dir(APPPATH.'data'.DS.'media')) {
-                File::create_dir(APPPATH, 'data'.DS.'media');
+                \symlink(Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static'), DOCROOT.'static'.DS.'novius-os');
             }
 
             header('Location: install.php?step=2');
@@ -503,18 +427,12 @@ if ($step == 1) {
     } else {
         echo '<p>Please note <a href="#summary">a summary</a> of the commands is available below</p>';
         echo $step_1;
-        $first = true;
         $summary = array('cd '.ROOT, '');
         foreach ($tests as $name => $data) {
             if ($data['is_error'] && (isset($data['command_line_relative']) || isset($data['command_line']))) {
                 $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
                 if (!empty($cmd[1]) && $cmd[1] == '# or') {
                     $cmd = array_slice($cmd, 2);
-                }
-                if ($first) {
-                    $first = false;
-                } else {
-                    $summary[] = '';
                 }
                 foreach ($cmd as $c) {
                     $p = strrpos($c, ROOT);
@@ -701,7 +619,6 @@ if ($step == 4) {
     rm <?= ROOT ?>public/install.php<br />
     chmod og-w <?= ROOT ?>local/config
     </code>
-    <p>You can also edit <code>.htaccess</code> and remove the line containing <code>install.php</code>
 
     <h2>The end!</h2>
     <p><a href="admin/?tab=admin/nos/tray/appmanager"><button>Go to the administration panel</button></a></p>

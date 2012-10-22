@@ -11,6 +11,9 @@
 return array(
     'profiling' => false,
 
+    // Uncomment, this line, and replace the value, if Novius-OS is installed in a subdirectory
+    //'base_url' => 'http://www.yourdomain.com/novius-os-install-dir/',
+
     // Possible values: 'user' or 'group'
     'permission_mode' => 'user',
 
