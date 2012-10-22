@@ -7,7 +7,8 @@
 
 Options +FollowSymLinks
 
-ErrorDocument 404 /novius-os/public/htdocs/novius-os/404.php
+# Replace novius-os-install-dir by the real Novius OS installed directory
+ErrorDocument 404 /novius-os-install-dir/public/htdocs/novius-os/404.php
 
 <IfModule xsendfile_module>
 	XSendFile On
