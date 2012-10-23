@@ -603,7 +603,7 @@ if ($step == 4) {
         Currently, the following contexts are set:
         <ul>
     <?php
-    foreach (Nos\Tools_Context::contexts() as $context) {
+    foreach (Nos\Tools_Context::contexts() as $context => $domains) {
         echo '<li>'.$context.'</li>';
     }
     ?>
