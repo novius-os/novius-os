@@ -1,4 +1,4 @@
-# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/0.1.1)](https://travis-ci.org/novius-os/novius-os)
+# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/0.1.2)](https://travis-ci.org/novius-os/novius-os)
 
 Turn your back office into a web OS with Novius OS, a next-generation open source CMS.
 
