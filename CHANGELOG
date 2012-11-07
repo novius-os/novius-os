@@ -13,6 +13,8 @@ Version 0.2
 - New class helper Tools_Url
 - All functions and methods returning url use absolute url by default (Model_Page->url, Model_Page::find_url, Model_Page->link)
 - Add Simple Google+ sharer
+- Click middle on Os Tabs close it
+- CRUD function from_item rename in init_item and call just if item is new.
 
 November 7, 2012: version 0.1.3
 ===============================
