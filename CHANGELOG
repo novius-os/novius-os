@@ -14,6 +14,17 @@ Version 0.2
 - All functions and methods returning url use absolute url by default (Model_Page->url, Model_Page::find_url, Model_Page->link)
 - Add Simple Google+ sharer
 
+November 7, 2012: version 0.1.3
+===============================
+
+Core
+----
+* Bugfix: Inspector tree in crud form don't use lang
+
+Blog & News
+-----------
+* Bugfix: CRUD function form_item rename in from_item.
+
 
 October 22, 2012: version 0.1.2
 ===============================
