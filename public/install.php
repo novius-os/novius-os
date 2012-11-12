@@ -621,7 +621,7 @@ if ($step == 4) {
     </code>
 
     <h2>The end!</h2>
-    <p><a href="admin/?tab=admin/nos/tray/appmanager"><button>Go to the administration panel</button></a></p>
+    <p><a href="admin/?tab=admin/noviusos_tray/appmanager"><button>Go to the administration panel</button></a></p>
     <?php
 }
 
