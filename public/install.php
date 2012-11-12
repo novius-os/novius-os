@@ -498,12 +498,11 @@ if ($step == 2) {
 
             // Install metadata
             Nos\Application::install_native_applications();
-            \Module::load('noviusos_user');
 
             // Install templates
             \Module::load('noviusos_templates_basic');
             $application = Nos\Application::forge('noviusos_templates_basic');
-            $application->install();
+            $application->install(false);
 
             Config::save('db', $config);
 
@@ -560,7 +559,7 @@ if ($step == 3) {
 
             // Authorize available apps
             $role = reset($user->roles);
-            foreach (array('noviusos_page', 'noviusos_media', 'noviusos_user', 'noviusos_tray') as $app) {
+            foreach (array('noviusos_page', 'noviusos_media', 'noviusos_user', 'noviusos_tray', 'noviusos_templates_basic') as $app) {
                 $access = Nos\User\Model_Permission::forge();
                 $access->perm_role_id     = $role->role_id;
                 $access->perm_application = 'access';
