@@ -495,10 +495,10 @@ if ($step == 2) {
 
             Migrate::latest();
             Crypt::_init();
-            \Module::load('noviusos_user');
 
             // Install metadata
             Nos\Application::install_native_applications();
+            \Module::load('noviusos_user');
 
             // Install templates
             \Module::load('noviusos_templates_basic');
