@@ -455,7 +455,7 @@ if ($step == 2) {
     Config::load('db', true);
     $active = Config::get('db.active');
     $db = Config::get('db.'.$active.'.connection', array());
-    if (!empty($db)) {
+    if (!empty($db['database'])) {
         try {
             $old_level = error_reporting(0);
             Database_Connection::instance()->connect();
@@ -488,6 +488,7 @@ if ($step == 2) {
 
         try {
             Config::set('db', $config);
+            Config::set('db.active', $config['active']);
             // Try to connect to the DB
             $old_level = error_reporting(0);
             \View::redirect('errors'.DS.'php_error', NOSPATH.'/views/errors/empty');
