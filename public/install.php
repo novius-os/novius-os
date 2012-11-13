@@ -487,8 +487,7 @@ if ($step == 2) {
         );
 
         try {
-            Config::set('db', $config);
-            Config::set('db.active', $config['active']);
+            Config::load($config, 'db'); // set config inside db and reload the cache
             // Try to connect to the DB
             $old_level = error_reporting(0);
             \View::redirect('errors'.DS.'php_error', NOSPATH.'/views/errors/empty');
