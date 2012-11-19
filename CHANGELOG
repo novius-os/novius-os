@@ -16,6 +16,7 @@ Version 0.2
 - Click middle on Os Tabs close it
 - CRUD function from_item rename in init_item and call just if item is new.
 - Fuel PHP (and packages) 1.4 (update submodules)
+- Attachment
 
 
 November 7, 2012: version 0.1.3
