@@ -277,6 +277,7 @@ $tests = array(
         'command_line' => 'chmod a+w '.DOCROOT.'cache',
         'run_only_if'  => is_dir(DOCROOT.'cache'),
     ),
+
     'public.cache.media.writeable' => array(
         'title'        => 'DOCROOT/cache/media is writeable by the webserver',
         'passed'       => is_writeable(DOCROOT.'cache'.DS.'media'),
@@ -290,6 +291,13 @@ $tests = array(
         'passed'       => is_writeable(DOCROOT.'htdocs'),
         'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
         'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
+    ),
+
+    'public.media.writeable' => array(
+        'title'        => 'DOCROOT/media/ is writeable by the webserver',
+        'passed'       => is_writeable(DOCROOT.'media'),
+        'command_line' => 'chmod a+w '.DOCROOT.'media',
+        'run_only_if'  => is_dir(DOCROOT.'media'),
     ),
 
     'public.htdocs.apps.writeable' => array(
@@ -368,6 +376,10 @@ echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('public.htdocs.writeable') && $passed;
 $passed = run_test('public.htdocs.apps.writeable') && $passed;
+
+echo '<tr class="separator"><td colspan="2"></td></tr>';
+
+$passed = run_test('public.media.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
