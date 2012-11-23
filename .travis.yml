@@ -35,6 +35,7 @@ before_install:
   - chmod a+w local/data/config
   - chmod a+w public/cache
   - chmod a+w public/cache/media
+  - chmod a+w public/media
 before_script:
   - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
   - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
