@@ -1,5 +1,30 @@
 Novius OS framework CHANGELOG
 
+November 26, 2012: version 0.1.4
+===============================
+
+Core
+----
+* Bugfix: Front post-processing has to run before the cache is written
+* Bugfix: Widget_Media with mode=all (server side)
+* Bugfix: Bahaviour sortable not completely effective
+* Bugfix: locked page can be delete via toolbar crud
+* Bugfix: regression 0.1.3, can't insert enhancer in wysiwyg
+
+
+Install
+-------
+* Bugfix: Added test on public/media (is writeable)
+
+Blog & News
+-----------
+* Bugfix: Use nosLang passed by wysiwyg for widget category in popup ehancer
+* Bugfix: Front View : don't filter object, use htmlentities on each echo
+* Bugfix: get_all method for Model_Post for front, case multiples categories query and fetch all related
+* Bugfix: front controller not use the category selected in the enhancer popup
+* Bugfix: enhancer popup not reselected category selected
+
+
 November 7, 2012: version 0.1.3
 ===============================
 
