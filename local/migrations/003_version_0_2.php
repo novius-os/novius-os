@@ -23,7 +23,7 @@ UPDATE `nos_page` SET `page_context` = CONCAT('main::', `page_context`);
 
 ALTER TABLE `nos_user_role` ADD PRIMARY KEY ( `user_id` , `role_id` );
 
-ALTER TABLE `nos_user` ADD `user_expert` tinyint(1) NOT NULL AFTER `user_configuration`;
+ALTER TABLE `nos_user` ADD `user_expert` tinyint(1) NOT NULL DEFAULT '0' AFTER `user_configuration`;
 
 SQL;
         foreach (explode(PHP_EOL, $alters) as $alter) {
