@@ -18,6 +18,7 @@ Version 0.2
 - CRUD function from_item rename in init_item and call just if item is new.
 - Fuel PHP (and packages) 1.4 (update submodules)
 - Attachment
+- Refactoring : Rename all Widget by renderer. Can impact classes names, views paths
 
 
 November 26, 2012: version 0.1.4
