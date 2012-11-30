@@ -13,7 +13,8 @@ Version 0.2
 - New class helper Tools_Url
 - All functions and methods returning url use absolute url by default (Model_Page->url, Model_Page::find_url, Model_Page->link)
 - Add Simple Google+ sharer
-- Click middle on Os Tabs close it
+- Click middle on Os Tabs close it, New button Close all other tabs
+- Appdesk : possibility to format column by php config
 - CRUD function from_item rename in init_item and call just if item is new.
 - Fuel PHP (and packages) 1.4 (update submodules)
 - Attachment
