@@ -25,6 +25,9 @@ ALTER TABLE `nos_user_role` ADD PRIMARY KEY ( `user_id` , `role_id` );
 
 ALTER TABLE `nos_user` ADD `user_expert` tinyint(1) NOT NULL DEFAULT '0' AFTER `user_configuration`;
 
+ALTER TABLE `nos_wysiwyg` ADD INDEX ( `wysiwyg_join_table` );
+ALTER TABLE `nos_wysiwyg` ADD INDEX ( `wysiwyg_foreign_id` );
+
 SQL;
         foreach (explode(PHP_EOL, $alters) as $alter) {
             if (!empty($alter)) {
