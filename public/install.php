@@ -140,18 +140,12 @@ input[type=submit]:active, button:active {
     <div id="blank_slate">
 <?php
 
-define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
-
-define('APPPATH', realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
-define('PKGPATH', realpath(DOCROOT.'../novius-os/packages/').DIRECTORY_SEPARATOR);
-define('COREPATH', realpath(DOCROOT.'../novius-os/fuel-core/').DIRECTORY_SEPARATOR);
-define('NOSPATH', realpath(DOCROOT.'../novius-os/framework/').DIRECTORY_SEPARATOR);
+$_SERVER['NOS_ROOT'] = realpath(__DIR__.DIRECTORY_SEPARATOR.'..');
 
 // Boot the app
-require_once NOSPATH.'bootstrap.php';
+require_once $_SERVER['NOS_ROOT'].DIRECTORY_SEPARATOR.'novius-os'.DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'bootstrap.php';
 
-define('ROOT', realpath(DOCROOT.'../').DS);
-define('NOSROOT', realpath(DOCROOT.'../novius-os/').DS);
+define('NOVIUSOS_PATH', realpath(DOCROOT.'..'.DS.'novius-os').DS);
 
 function run_test($name)
 {
@@ -289,7 +283,7 @@ $tests = array(
         'title'        => 'DOCROOT/htdocs/ is writeable by the webserver',
         'description'  => 'The symbolic link htdocs/novius-os doesn\'t exsists, so we need to be able to create it.',
         'passed'       => is_writeable(DOCROOT.'htdocs'),
-        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
+        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
         'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
     ),
 
@@ -311,7 +305,7 @@ $tests = array(
         'title'        => 'DOCROOT/static/ is writeable by the webserver',
         'description'  => 'The symbolic link static/novius-os/ doesn\'t exsists, so we need to be able to create it.',
         'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
-        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static').' '.DOCROOT.'static'.DS.'novius-os'),
+        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
         'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
     ),
 
@@ -324,22 +318,22 @@ $tests = array(
 
     'public.htdocs.nos.valid' => array(
         'title'        => 'DOCROOT/htdocs/novius-os links to NOSPATH/htdocs',
-        'passed'       => is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOSROOT.'htdocs',
-        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
+        'passed'       => is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
+        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
         'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
     ),
 
     'public.static.nos.valid' => array(
         'title'        => 'DOCROOT/static/novius-os links to NOSPATH/static',
-        'passed'       => is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOSROOT.'static',
-        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static').' '.DOCROOT.'static'.DS.'novius-os',
+        'passed'       => is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
+        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os',
         'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
     ),
 
     'logs.fuel' => array(
         'title'        => 'logs/fuel exists and is writeable by the webserver',
-        'passed'       => is_writeable(ROOT.'logs/fuel'),
-        'command_line' => 'chmod a+w '.ROOT.'logs/fuel',
+        'passed'       => is_writeable(NOSROOT.'logs/fuel'),
+        'command_line' => 'chmod a+w '.NOSROOT.'logs/fuel',
     ),
 );
 
@@ -417,10 +411,10 @@ if ($step == 1) {
             }
 
             if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-                \symlink(Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs'), DOCROOT.'htdocs'.DS.'novius-os');
+                \symlink(Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs'), DOCROOT.'htdocs'.DS.'novius-os');
             }
             if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-                \symlink(Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static'), DOCROOT.'static'.DS.'novius-os');
+                \symlink(Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static'), DOCROOT.'static'.DS.'novius-os');
             }
 
             header('Location: install.php?step=2');
@@ -439,7 +433,7 @@ if ($step == 1) {
     } else {
         echo '<p>Please note <a href="#summary">a summary</a> of the commands is available below</p>';
         echo $step_1;
-        $summary = array('cd '.ROOT, '');
+        $summary = array('cd '.NOSROOT, '');
         foreach ($tests as $name => $data) {
             if ($data['is_error'] && (isset($data['command_line_relative']) || isset($data['command_line']))) {
                 $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
@@ -447,16 +441,16 @@ if ($step == 1) {
                     $cmd = array_slice($cmd, 2);
                 }
                 foreach ($cmd as $c) {
-                    $p = strrpos($c, ROOT);
+                    $p = strrpos($c, NOSROOT);
                     if (!empty($p)) {
-                        $c = substr_replace($c, '', $p, strlen(ROOT));
+                        $c = substr_replace($c, '', $p, strlen(NOSROOT));
                     }
                     $summary[] = $c;
                 }
             }
         }
         echo '<h2 id="summary">Command summary</h2>';
-        echo '<p>Relative to the root directory: <code>'.ROOT.'</code></p>';
+        echo '<p>Relative to the root directory: <code>'.NOSROOT.'</code></p>';
         echo '<code style="width: 800px;">'.implode("<br />\n", $summary).'</code>';
         // Create everything missing except config/db.php
         echo '<p><a href="install.php?step=1">Re-run config check</a></p>';
@@ -627,8 +621,8 @@ if ($step == 4) {
     <p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
     <p>Please remove this <code>install.php</code> file.</p>
     <code style="width:800px;">
-    rm <?= ROOT ?>public/install.php<br />
-    chmod og-w <?= ROOT ?>local/config
+    rm <?= NOSROOT ?>public/install.php<br />
+    chmod og-w <?= NOSROOT ?>local/config
     </code>
 
     <h2>The end!</h2>
