@@ -9,27 +9,24 @@
  */
 
 return array(
-    'name'    => 'Simple Twitter share',
+    'name'    => 'Simple Google+ share',
     'version' => '0.2',
     'provider' => array(
         'name' => 'Novius OS',
     ),
-    'icon16' => 'static/apps/noviusos_simpletwitter/img/twitter.png',
+    'icon16' => 'static/apps/noviusos_simplegoogleplus/img/googleplus.png',
     'data_catchers' => array(
-        'noviusos_simpletwitter' => array(
-            'title' => 'Twitter',
+        'noviusos_simplegoogleplus' => array(
+            'title' => 'Google+',
             'description'  => '',
-            'iconUrl' => 'static/apps/noviusos_simpletwitter/img/twitter.png',
+            'iconUrl' => 'static/apps/noviusos_simplegoogleplus/img/googleplus.png',
             'action' => array(
                 'action' => 'window.open',
-                'url' => 'https://twitter.com/intent/tweet?text={{urlencode:'.\Nos\DataCatcher::TYPE_TITLE.'}}&url={{urlencode:absolute_url}}',
+                'url' => 'http://plus.google.com/share?url={{urlencode:absolute_url}}',
             ),
             'onDemand' => true,
             'specified_models' => false,
             'required_data' => array(
-                \Nos\DataCatcher::TYPE_TITLE,
-            ),
-            'optional_data' => array(
                 \Nos\DataCatcher::TYPE_URL,
             ),
         ),

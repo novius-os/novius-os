@@ -1,5 +1,82 @@
 Novius OS framework CHANGELOG
 
+Version 0.2
+
+- Rename lang, lang_common_id, lan_is_main columns. Replace lang by context. Resize lang columns. And all variables
+- Rename behabiour Translatable by Twinnable and all variables
+- In config.php, change locales by contexts
+- CRUD : rename context by situation, context_relation by environment_relation, item_context by item_environment
+- Update vendors jQuery, jQuery UI, Wijmo, tinyMCE
+- Model_Page->get_link() become Model_Page->link()
+- Model_Page->get_href() become Model_Page->url()
+- Model_Page::get_url() become Tools_Url::page(), remove Model_Page::get_url_absolute()
+- New class helper Tools_Url
+- All functions and methods returning url use absolute url by default (Model_Page->url, Model_Page::find_url, Model_Page->link)
+- Add Simple Google+ sharer
+- Click middle on Os Tabs close it, New button Close all other tabs
+- Appdesk : possibility to format column by php config
+- CRUD function from_item rename in init_item and call just if item is new.
+- Fuel PHP (and packages) 1.4 (update submodules)
+- Attachment
+- Refactoring : Rename all Widget by renderer. Can impact classes names, views paths
+
+
+November 26, 2012: version 0.1.4
+===============================
+
+Core
+----
+* Bugfix: Front post-processing has to run before the cache is written
+* Bugfix: Widget_Media with mode=all (server side)
+* Bugfix: Bahaviour sortable not completely effective
+* Bugfix: locked page can be delete via toolbar crud
+* Bugfix: regression 0.1.3, can't insert enhancer in wysiwyg
+
+
+Install
+-------
+* Bugfix: Added test on public/media (is writeable)
+
+Blog & News
+-----------
+* Bugfix: Use nosLang passed by wysiwyg for widget category in popup ehancer
+* Bugfix: Front View : don't filter object, use htmlentities on each echo
+* Bugfix: get_all method for Model_Post for front, case multiples categories query and fetch all related
+* Bugfix: front controller not use the category selected in the enhancer popup
+* Bugfix: enhancer popup not reselected category selected
+
+
+November 7, 2012: version 0.1.3
+===============================
+
+Core
+----
+* Bugfix: Inspector tree in crud form don't use lang
+
+Blog & News
+-----------
+* Bugfix: CRUD function form_item rename in from_item.
+
+
+October 22, 2012: version 0.1.2
+===============================
+
+Core
+----
+* Refactoring: CRUD function form_item rename in from_item.
+* Refactoring: Novius OS can now be install in a sub-directory of a shared hosting, even if public is not the DOCUMENT_ROOT.
+* Refactoring: Install process improvement, doesn't need to create directories anymore. Only changing files permissions.
+* Bugfix: Conflict between sortable and click events for launchers in the AppTab.
+* Bugfix: In wysiwyg, hide labels of Enhancer's actions links
+* Bugfix: Appdesk now listen all langs events, in case user switch the selected lang
+* Bugfix: BD request for Appdesk json test if LIMIT is not negative
+* Bugfix: CRUD's toolbar buttons not reloaded when event is delete the current item
+
+Blog & News
+-----------
+* Bugfix: Blog and News stories, bad namespace and url for inspector's date.
+
+
 October 3, 2012: version 0.1.1
 ==============================
 

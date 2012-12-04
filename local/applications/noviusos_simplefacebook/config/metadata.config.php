@@ -10,7 +10,7 @@
 
 return array(
     'name'    => 'Simple Facebook share',
-    'version' => '0.1',
+    'version' => '0.2',
     'provider' => array(
         'name' => 'Novius OS',
     ),
