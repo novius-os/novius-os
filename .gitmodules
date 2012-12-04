@@ -19,3 +19,9 @@
 [submodule "local/applications/noviusos_form"]
 	path = local/applications/noviusos_form
 	url = git://github.com/novius-os/noviusos_form.git
+[submodule "local/applications/noviusos_appwizard"]
+	path = local/applications/noviusos_appwizard
+	url = git://github.com/novius-os/noviusos_appwizard.git
+[submodule "local/applications/noviusos_slideshow"]
+	path = local/applications/noviusos_slideshow
+	url = git://github.com/novius-os/noviusos_slideshow.git
