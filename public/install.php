@@ -565,7 +565,7 @@ if ($step == 3) {
 
             // Authorize available apps
             $role = reset($user->roles);
-            foreach (array('noviusos_page', 'noviusos_media', 'noviusos_user', 'noviusos_tray', 'noviusos_templates_basic') as $app) {
+            foreach (array('noviusos_page', 'noviusos_media', 'noviusos_user', 'noviusos_help', 'noviusos_appmanager', 'noviusos_templates_basic') as $app) {
                 $access = Nos\User\Model_Permission::forge();
                 $access->perm_role_id     = $role->role_id;
                 $access->perm_application = 'access';
@@ -626,7 +626,7 @@ if ($step == 4) {
     </code>
 
     <h2>The end!</h2>
-    <p><a href="admin/?tab=admin/noviusos_tray/appmanager"><button>Go to the administration panel</button></a></p>
+    <p><a href="admin/?tab=admin/noviusos_appmanager/appmanager"><button>Go to the administration panel</button></a></p>
     <?php
 }
 
