@@ -28,8 +28,93 @@ ALTER TABLE `nos_user` ADD `user_expert` tinyint(1) NOT NULL DEFAULT '0' AFTER `
 ALTER TABLE `nos_wysiwyg` ADD INDEX ( `wysiwyg_join_table` );
 ALTER TABLE `nos_wysiwyg` ADD INDEX ( `wysiwyg_foreign_id` );
 
+CREATE TABLE IF NOT EXISTS `nos_form` (
+  `form_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `form_context` varchar(25) NOT NULL,
+  `form_name` varchar(255) NOT NULL,
+  `form_virtual_name` varchar(30) NOT NULL,
+  `form_manager_id` int(10) unsigned DEFAULT NULL,
+  `form_client_email_field_id` int(10) unsigned DEFAULT NULL,
+  `form_layout` text NOT NULL,
+  `form_captcha` tinyint(1) NOT NULL,
+  `form_submit_label` varchar(255) NOT NULL,
+  `form_submit_email` text,
+  `form_created_at` datetime NOT NULL,
+  `form_updated_at` datetime NOT NULL,
+  PRIMARY KEY (`form_id`),
+  KEY `form_context` (`form_context`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `nos_form_answer` (
+  `answer_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `answer_form_id` int(10) unsigned NOT NULL,
+  `answer_ip` varchar(40) NOT NULL,
+  `answer_created_at` datetime NOT NULL,
+  PRIMARY KEY (`answer_id`),
+  KEY `response_form_id` (`answer_form_id`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `nos_form_answer_field` (
+  `anfi_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `anfi_answer_id` int(10) unsigned NOT NULL,
+  `anfi_field_id` int(10) unsigned NOT NULL,
+  `anfi_field_type` varchar(100) NOT NULL,
+  `anfi_value` text NOT NULL,
+  PRIMARY KEY (`anfi_id`),
+  UNIQUE KEY `anfi_answer_id` (`anfi_answer_id`,`anfi_field_id`),
+  UNIQUE KEY `anfi_field_id` (`anfi_field_id`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `nos_form_field` (
+  `field_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `field_form_id` int(10) unsigned NOT NULL,
+  `field_type` varchar(100) NOT NULL,
+  `field_label` varchar(255) NOT NULL,
+  `field_message` text NOT NULL,
+  `field_virtual_name` varchar(30) NOT NULL,
+  `field_choices` text NOT NULL,
+  `field_created_at` datetime NOT NULL,
+  `field_mandatory` tinyint(1) NOT NULL,
+  `field_default_value` varchar(255) NOT NULL,
+  `field_details` text NOT NULL,
+  `field_style` enum('p','h1','h2','h3') NOT NULL,
+  `field_width` tinyint(4) NOT NULL,
+  `field_height` tinyint(4) NOT NULL,
+  `field_limited_to` int(11) NOT NULL,
+  `field_origin` varchar(30) NOT NULL,
+  `field_origin_var` varchar(30) NOT NULL,
+  `field_technical_id` varchar(30) NOT NULL,
+  `field_technical_css` varchar(100) NOT NULL,
+  PRIMARY KEY (`field_id`),
+  KEY `field_form_id` (`field_form_id`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `nos_slideshow` (
+  `slideshow_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `slideshow_title` varchar(255) NOT NULL,
+  `slideshow_context` varchar(25) NOT NULL,
+  `slideshow_created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `slideshow_updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`slideshow_id`),
+  KEY `slideshow_context` (`slideshow_context`),
+  KEY `slideshow_created_at` (`slideshow_created_at`),
+  KEY `slideshow_updated_at` (`slideshow_updated_at`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `nos_slideshow_image` (
+  `slidimg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `slidimg_slideshow_id` varchar(255) NOT NULL,
+  `slidimg_position` int(10) NOT NULL,
+  `slidimg_title` varchar(255) DEFAULT NULL,
+  `slidimg_description` text,
+  `slidimg_link_to_page_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`slidimg_id`),
+  KEY `slidimg_slideshow_id` (`slidimg_slideshow_id`,`slidimg_position`)
+  KEY `slidimg_position` (`slidimg_position`)
+) DEFAULT CHARSET=utf8;
 SQL;
-        foreach (explode(PHP_EOL, $alters) as $alter) {
+        foreach (explode(';', $alters) as $alter) {
+            $alter = trim(trim($alter), PHP_EOL);
             if (!empty($alter)) {
                 \DB::query($alter)->execute();
             }
