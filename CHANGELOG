@@ -19,6 +19,8 @@ Version 0.2
 - Fuel PHP (and packages) 1.4 (update submodules)
 - Attachment
 - Refactoring : Rename all Widget by renderer. Can impact classes names, views paths
+- Slideshow
+- Overload any views and config in local
 
 
 November 26, 2012: version 0.1.4
