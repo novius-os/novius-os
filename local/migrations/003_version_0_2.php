@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `nos_slideshow_image` (
   `slidimg_description` text,
   `slidimg_link_to_page_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`slidimg_id`),
-  KEY `slidimg_slideshow_id` (`slidimg_slideshow_id`,`slidimg_position`)
+  KEY `slidimg_slideshow_id` (`slidimg_slideshow_id`,`slidimg_position`),
   KEY `slidimg_position` (`slidimg_position`)
 ) DEFAULT CHARSET=utf8;
 SQL;
