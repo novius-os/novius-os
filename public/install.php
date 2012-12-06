@@ -503,7 +503,7 @@ if ($step == 2) {
             Crypt::_init();
 
             // Install metadata
-            Nos\Application::install_native_applications();
+            Nos\Application::installNativeApplications();
 
             // Install templates
             \Module::load('noviusos_templates_basic');
