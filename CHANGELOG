@@ -21,6 +21,7 @@ Version 0.2
 - Refactoring : Rename all Widget by renderer. Can impact classes names, views paths
 - Slideshow
 - Overload any views and config in local
+- Simplest enhancer popup declaration
 
 
 November 26, 2012: version 0.1.4
