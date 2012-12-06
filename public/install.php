@@ -510,7 +510,7 @@ if ($step == 2) {
             $application = Nos\Application::forge('noviusos_templates_basic');
             $application->install(false);
 
-            Config::save('db', $config);
+            Config::save('local::db', $config);
 
             header('Location: install.php?step=3');
             exit();
