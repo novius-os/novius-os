@@ -141,6 +141,8 @@ SQL;
             }
         }
         \Config::save(APPPATH.'data'.DS.'config'.DS.'url_enhanced.php', $url_enhanced_new);
+
+        \Nos\Application::installNativeApplications();
     }
 
     public function down()
