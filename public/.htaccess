@@ -22,6 +22,7 @@ ErrorDocument 404 /htdocs/novius-os/404.php
 
     RewriteRule     ^novius-os/(.*)             /htdocs/novius-os/$1            [PT]
     RewriteRule     ^(admin(|/.*))$             /htdocs/novius-os/admin.php/$1  [QSA,PT]
+    RewriteCond %{DOCUMENT_ROOT}/htdocs/novius-os/front.php -f
     RewriteRule     ^(.*/|)$                    /htdocs/novius-os/front.php     [QSA,PT]
     RewriteRule     ^(.+)\.html$                /htdocs/novius-os/front.php     [QSA,PT]
     RewriteRule     ^/(static|cache|media|data) -                               [L]
