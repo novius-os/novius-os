@@ -604,7 +604,7 @@ if ($step == 4) {
 
     <h2>Setup contexts</h2>
     <p>
-        You can edit your <strong>local/config/config.php</strong> file to configure the contexts.
+        You can edit your <strong>local/config/contexts.config.php</strong> file to configure the contexts.
     </p>
     <p>
         Currently, the following contexts are set:
