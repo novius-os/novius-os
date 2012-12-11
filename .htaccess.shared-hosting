@@ -24,6 +24,7 @@ ErrorDocument 404 /novius-os-install-dir/public/htdocs/novius-os/404.php
 
     RewriteRule     ^novius-os/(.*)                     public/htdocs/novius-os/$1            [PT]
     RewriteRule     ^(admin(|/.*))$                     public/htdocs/novius-os/admin.php/$1  [QSA,PT]
+    RewriteCond %{DOCUMENT_ROOT}/public/htdocs/novius-os/front.php -f
     RewriteRule     ^(.*/|)$                            public/htdocs/novius-os/front.php     [QSA,PT]
     RewriteRule     ^(.+)\.html$                        public/htdocs/novius-os/front.php     [QSA,PT]
     RewriteRule     ^/?(static|data|media|cache)/(.*)   public/$1/$2                    [L]
