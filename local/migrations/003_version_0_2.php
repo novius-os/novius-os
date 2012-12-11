@@ -14,12 +14,20 @@ ALTER TABLE `nos_blog_post` CHANGE `post_lang` `post_context` VARCHAR( 25 ) NOT 
 ALTER TABLE `nos_news_category` CHANGE `cat_lang` `cat_context` VARCHAR( 25 ) NOT NULL, CHANGE `cat_lang_common_id` `cat_context_common_id` INT( 11 ) NOT NULL, CHANGE `cat_lang_is_main` `cat_context_is_main` TINYINT( 1 ) NOT NULL DEFAULT '0';
 ALTER TABLE `nos_news_post` CHANGE `post_lang` `post_context` VARCHAR( 25 ) NOT NULL, CHANGE `post_lang_common_id` `post_context_common_id` INT( 11 ) NOT NULL, CHANGE `post_lang_is_main` `post_context_is_main` TINYINT( 1 ) NOT NULL DEFAULT '0';
 ALTER TABLE `nos_page` CHANGE `page_lang` `page_context` VARCHAR( 25 ) NOT NULL, CHANGE `page_lang_common_id` `page_context_common_id` INT( 11 ) NOT NULL, CHANGE `page_lang_is_main` `page_context_is_main` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `nos_role_permission` CHANGE  `perm_application`  `perm_key2` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, CHANGE  `perm_key`  `perm_application` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `nos_role_permission` CHANGE  `perm_key2`  `perm_key` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 
 UPDATE `nos_blog_category` SET `cat_context` = CONCAT('main::', `cat_context`);
 UPDATE `nos_blog_post` SET `post_context` = CONCAT('main::', `post_context`);
 UPDATE `nos_news_category` SET `cat_context` = CONCAT('main::', `cat_context`);
 UPDATE `nos_news_post` SET `post_context` = CONCAT('main::', `post_context`);
 UPDATE `nos_page` SET `page_context` = CONCAT('main::', `page_context`);
+UPDATE `nos_role_permission` SET `perm_application` = "noviusos_page" WHERE `perm_application` = "nos_page";
+UPDATE `nos_role_permission` SET `perm_application` = "noviusos_media" WHERE `perm_application` = "nos_media";
+UPDATE `nos_role_permission` SET `perm_application` = "noviusos_user" WHERE `perm_application` = "nos_user";
+INSERT INTO `nos_role_permission` (perm_key, perm_identifier, perm_application) SELECT perm_key, perm_identifier, "noviusos_appmanager" as perm_application FROM nos_role_permission WHERE `perm_application` = "nos_tray";
+UPDATE `nos_role_permission` SET `perm_application` = "noviusos_help" WHERE `perm_application` = "nos_tray";
+
 
 ALTER TABLE `nos_user_role` ADD PRIMARY KEY ( `user_id` , `role_id` );
 

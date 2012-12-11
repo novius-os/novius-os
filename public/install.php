@@ -568,9 +568,9 @@ if ($step == 3) {
             foreach (array('noviusos_page', 'noviusos_media', 'noviusos_user', 'noviusos_help', 'noviusos_appmanager', 'noviusos_templates_basic') as $app) {
                 $access = Nos\User\Model_Permission::forge();
                 $access->perm_role_id     = $role->role_id;
-                $access->perm_application = 'access';
+                $access->perm_application = $app;
                 $access->perm_identifier  = '';
-                $access->perm_key         = $app;
+                $access->perm_key         = 'access';
                 $access->save();
             }
 
