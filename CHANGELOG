@@ -22,6 +22,7 @@ Version 0.2
 - Slideshow
 - Overload any views and config in local
 - Simplest enhancer popup declaration
+- Config : upload.disabled_extensions move in novius-os.upload.disabled_extensions
 
 
 November 26, 2012: version 0.1.4
