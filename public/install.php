@@ -574,6 +574,8 @@ if ($step == 3) {
                 $access->save();
             }
 
+            File::copy(APPPATH.'config'.DS.'context.config.php.sample', APPPATH.'config'.DS.'context.config.php');
+
             header('Location: install.php?step=4');
             exit();
 
