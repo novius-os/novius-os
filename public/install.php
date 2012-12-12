@@ -217,6 +217,7 @@ $tests = array(
         'passed'       => ini_get('short_open_tag') != false,
         'code'         => '# '.php_ini_loaded_file ()."\n<br />short_open_tag = On",
         'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
+        'run_only_if'  => version_compare(PHP_VERSION,'5.4.0','<'),
     ),
 
     'folder.config.writeable' => array(
