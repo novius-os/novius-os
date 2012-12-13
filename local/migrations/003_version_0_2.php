@@ -36,6 +36,8 @@ ALTER TABLE `nos_user` ADD `user_expert` tinyint(1) NOT NULL DEFAULT '0' AFTER `
 ALTER TABLE `nos_wysiwyg` ADD INDEX ( `wysiwyg_join_table` );
 ALTER TABLE `nos_wysiwyg` ADD INDEX ( `wysiwyg_foreign_id` );
 
+ALTER TABLE `nos_user` ADD `user_lang` VARCHAR( 5 ) NOT NULL DEFAULT 'en_GB' AFTER `user_password`;
+
 CREATE TABLE IF NOT EXISTS `nos_form` (
   `form_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `form_context` varchar(25) NOT NULL,
