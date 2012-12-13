@@ -140,7 +140,7 @@ SQL;
         $url_enhanced_old = \Config::get("data::url_enhanced", array());
         $url_enhanced_new = array();
         foreach ($url_enhanced_old as $page_id) {
-            $page = \Nos\Model_Page::find($page_id);
+            $page = \Nos\Page\Model_Page::find($page_id);
             if (!empty($page)) {
                 $url_enhanced_new[$page_id] = array(
                     'url' => $page->page_entrance ? '' : $page->virtual_path(true),
