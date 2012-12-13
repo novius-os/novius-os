@@ -135,9 +135,7 @@ SQL;
 
 
         // Update url_enhanced config file, integrate contexts
-        \Config::load(APPPATH.'data'.DS.'config'.DS.'url_enhanced.php', 'data::url_enhanced');
-
-        $url_enhanced_old = \Config::get("data::url_enhanced", array());
+        $url_enhanced_old = \Nos\Config_Data::get('url_enhanced', array());
         $url_enhanced_new = array();
         foreach ($url_enhanced_old as $page_id) {
             $page = \Nos\Page\Model_Page::find($page_id);
@@ -148,7 +146,7 @@ SQL;
                 );
             }
         }
-        \Config::save(APPPATH.'data'.DS.'config'.DS.'url_enhanced.php', $url_enhanced_new);
+        \Nos\Config_Data::save('url_enhanced', $url_enhanced_new);
 
         \Nos\Application::installNativeApplications();
     }
