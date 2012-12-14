@@ -403,22 +403,24 @@ if (!$passed && $step != 1) {
 if ($step == 1) {
     if (Input::method() == 'POST') {
         try {
-            $url = str_replace('install.php?step=1', '', ltrim($_SERVER['REQUEST_URI'], '/'));
-            $base_url = \Uri::base(false).$url;
-            if (!empty($url)) {
-                $config = <<<CONFIG
+            if (!file_exists(APPPATH.'config'.DS, 'config.php')) {
+                $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
+                $base_url = \Uri::base(false).$url;
+                if (!empty($url)) {
+                    $config = <<<CONFIG
 return array(
     'base_url' => '$base_url',
 );
 CONFIG;
-                File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n".$config);
-            }
+                    File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n".$config);
+                }
 
-            $dir  = APPPATH.'data'.DS.'config'.DS;
-            $files = array('app_installed.php', 'templates.php', 'launchers.php', 'app_dependencies.php');
-            foreach ($files as $file) {
-                if (!is_file($dir.$file)) {
-                    File::create($dir, $file, '<?'.'php return array();');
+                $dir  = APPPATH.'data'.DS.'config'.DS;
+                $files = array('app_installed.php', 'templates.php', 'launchers.php', 'app_dependencies.php');
+                foreach ($files as $file) {
+                    if (!is_file($dir.$file)) {
+                        File::create($dir, $file, '<?'.'php return array();');
+                    }
                 }
             }
 
