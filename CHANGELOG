@@ -24,6 +24,21 @@ Version 0.2
 - Simplest enhancer popup declaration
 - Config : upload.disabled_extensions move in novius-os.upload.disabled_extensions
 
+December 20, 2012: version 0.1.5
+===============================
+
+Core
+----
+* Bugfix: Front - remove href when internal page no longer exists (thanks @vrcAlbert)
+* Bugfix: Fixed recursive deletion for pages and Tree behaviour
+* Bugfix: nosTabsOpen if not 3 tabs in tray (due to permissions)
+* Bugfix: '&' in virtualname prevents from reaching the page
+* Bugfix: Front - Multiple js_inline and css_inline (thanks @jguyomard)
+
+Blog & News
+-----------
+* Bugfix: check if author of post, exist before call fullname method
+* Bugfix: remove load of comments in blognews bootstrap
 
 November 26, 2012: version 0.1.4
 ===============================
