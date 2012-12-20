@@ -71,8 +71,7 @@ CREATE TABLE IF NOT EXISTS `nos_form_answer_field` (
   `anfi_field_type` varchar(100) NOT NULL,
   `anfi_value` text NOT NULL,
   PRIMARY KEY (`anfi_id`),
-  UNIQUE KEY `anfi_answer_id` (`anfi_answer_id`,`anfi_field_id`),
-  UNIQUE KEY `anfi_field_id` (`anfi_field_id`)
+  KEY `anfi_answer_id` (`anfi_answer_id`,`anfi_field_id`)
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `nos_form_field` (
