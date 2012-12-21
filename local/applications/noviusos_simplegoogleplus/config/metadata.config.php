@@ -14,7 +14,6 @@ return array(
     'provider' => array(
         'name' => 'Novius OS',
     ),
-    'icon16' => 'static/apps/noviusos_simplegoogleplus/img/googleplus.png',
     'data_catchers' => array(
         'noviusos_simplegoogleplus' => array(
             'title' => 'Google+',
@@ -30,5 +29,8 @@ return array(
                 \Nos\DataCatcher::TYPE_URL,
             ),
         ),
+    ),
+    'icons' => array(
+        16  => 'static/apps/noviusos_simplegoogleplus/img/googleplus.png',
     ),
 );

@@ -14,7 +14,6 @@ return array(
     'provider' => array(
         'name' => 'Novius OS',
     ),
-    'icon16' => 'static/apps/noviusos_simplefacebook/img/facebook.png',
     'data_catchers' => array(
         'noviusos_simplefacebook' => array(
             'title' => 'Facebook',
@@ -30,5 +29,8 @@ return array(
                 \Nos\DataCatcher::TYPE_URL,
             ),
         ),
+    ),
+    'icons' => array(
+        16  => 'static/apps/noviusos_simplefacebook/img/facebook.png',
     ),
 );

@@ -14,7 +14,6 @@ return array(
     'provider' => array(
         'name' => 'Novius OS',
     ),
-    'icon16' => 'static/apps/noviusos_simpletwitter/img/twitter.png',
     'data_catchers' => array(
         'noviusos_simpletwitter' => array(
             'title' => 'Twitter',
@@ -33,5 +32,8 @@ return array(
                 \Nos\DataCatcher::TYPE_URL,
             ),
         ),
+    ),
+    'icons' => array(
+        16  => 'static/apps/noviusos_simpletwitter/img/twitter.png',
     ),
 );
