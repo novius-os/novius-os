@@ -219,6 +219,13 @@ $tests = array(
         'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
         'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
     ),
+    'directive.magic_quotes_gpc' => array(
+        'title'        => 'PHP configuration directive magic_quotes_gpc = Off',
+        'passed'       => ini_get('magic_quotes_gpc') == false,
+        'code'         => '# '.php_ini_loaded_file ()."\n<br />magic_quotes_gpc = Off",
+        'description'  => 'It\'s <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">deprecated in PHP 5.3 and has been removed in PHP 5.4</a>. Please edit your configuration file.',
+        'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
+    ),
 
     'folder.config.writeable' => array(
         'title'        => 'APPPATH/config/ is writeable  by the webserver',
@@ -345,6 +352,7 @@ ob_start();
 echo '<table width="100%">';
 
 $passed = run_test('directive.short_open_tag') && $passed;
+$passed = run_test('directive.magic_quotes_gpc') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
