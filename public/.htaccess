@@ -9,10 +9,14 @@ Options +FollowSymLinks
 
 ErrorDocument 404 /htdocs/novius-os/404.php
 
-<IfModule xsendfile_module>
-	XSendFile On
-	XSendFileAllowAbove on
-</IfModule>
+## Post-installation optimisation
+#<IfModule xsendfile_module>
+    #XSendFile On
+
+    ## Replace "novius-os-install-dir" by the real Novius OS installed directory
+    #XSendFilePath/novius-os-install-dir/local/data
+
+#</IfModule>
 
 <IfModule mod_rewrite.c>
     RewriteEngine   on
