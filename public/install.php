@@ -16,7 +16,7 @@ html {
 }
 body {
    /* On step 1, this asset will probably return an HTTP status 404 Not Found */
-  background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/circles.jpg");
+  background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/default.jpg");
   background-size: cover;
   font-family: franklin gothic medium,arial,verdana,helvetica,sans-serif;
 }
