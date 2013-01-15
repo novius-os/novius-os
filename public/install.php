@@ -422,13 +422,13 @@ return array(
 CONFIG;
                     File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n".$config);
                 }
+            }
 
-                $dir  = APPPATH.'data'.DS.'config'.DS;
-                $files = array('app_installed.php', 'templates.php', 'launchers.php', 'app_dependencies.php');
-                foreach ($files as $file) {
-                    if (!is_file($dir.$file)) {
-                        File::create($dir, $file, '<?'.'php return array();');
-                    }
+            $dir  = APPPATH.'metadata'.DS;
+            $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
+            foreach ($files as $file) {
+                if (!is_file($dir.$file)) {
+                    File::create($dir, $file, '<?'.'php return array();');
                 }
             }
 
