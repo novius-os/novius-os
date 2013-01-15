@@ -411,7 +411,7 @@ if (!$passed && $step != 1) {
 if ($step == 1) {
     if (Input::method() == 'POST') {
         try {
-            if (!file_exists(APPPATH.'config'.DS, 'config.php')) {
+            if (!file_exists(APPPATH.'config'.DS.'config.php')) {
                 $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
                 $base_url = \Uri::base(false).$url;
                 if (!empty($url)) {
