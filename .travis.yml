@@ -39,6 +39,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 script:
   - phpcs -s -n --standard=ci/phpcs/ruleset.xml --extensions=php --report-summary ./
-  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/casperjs/demo.js"
-  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/casperjs/install.js 'http://novius-os/'"
-  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/casperjs/appmanager.js 'http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/demo.js --direct --log-level=info"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/install.js --direct --log-level=info --base_url='http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/appmanager.js --direct --log-level=info --base_url='http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/page.js --direct --log-level=info --base_url='http://novius-os/'"
