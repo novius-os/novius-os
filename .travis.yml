@@ -43,3 +43,4 @@ script:
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/install.js --direct --log-level=info --base_url='http://novius-os/'"
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/appmanager.js --direct --log-level=info --base_url='http://novius-os/'"
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/page.js --direct --log-level=info --base_url='http://novius-os/'"
+
