@@ -41,3 +41,4 @@ script:
   - phpcs -s -n --standard=ci/phpcs/ruleset.xml --extensions=php --report-summary ./
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/casperjs/demo.js"
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/casperjs/install.js 'http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/casperjs/appmanager.js 'http://novius-os/'"
