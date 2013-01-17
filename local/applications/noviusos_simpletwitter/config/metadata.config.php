@@ -14,6 +14,7 @@ return array(
     'provider' => array(
         'name' => 'Novius OS',
     ),
+    'i18n_file' => 'noviusos_simpletwitter::metadata',
     'data_catchers' => array(
         'noviusos_simpletwitter' => array(
             'title' => 'Twitter',

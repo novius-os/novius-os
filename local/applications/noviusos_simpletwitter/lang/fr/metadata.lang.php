@@ -9,5 +9,5 @@
  */
 
 return array(
-    'Simple Facebook share' => 'Partage «&nbsp;Simple Facebook&nbsp;»',
+    'Simple Twitter share' => 'Partage «&nbsp;Simple Twitter&nbsp;»',
 );
