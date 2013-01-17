@@ -16,7 +16,7 @@ html {
 }
 body {
    /* On step 1, this asset will probably return an HTTP status 404 Not Found */
-  background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/circles.jpg");
+  background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/default.jpg");
   background-size: cover;
   font-family: franklin gothic medium,arial,verdana,helvetica,sans-serif;
 }
@@ -411,7 +411,7 @@ if (!$passed && $step != 1) {
 if ($step == 1) {
     if (Input::method() == 'POST') {
         try {
-            if (!file_exists(APPPATH.'config'.DS, 'config.php')) {
+            if (!file_exists(APPPATH.'config'.DS.'config.php')) {
                 $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
                 $base_url = \Uri::base(false).$url;
                 if (!empty($url)) {
@@ -422,13 +422,13 @@ return array(
 CONFIG;
                     File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n".$config);
                 }
+            }
 
-                $dir  = APPPATH.'data'.DS.'config'.DS;
-                $files = array('app_installed.php', 'templates.php', 'launchers.php', 'app_dependencies.php');
-                foreach ($files as $file) {
-                    if (!is_file($dir.$file)) {
-                        File::create($dir, $file, '<?'.'php return array();');
-                    }
+            $dir  = APPPATH.'metadata'.DS;
+            $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
+            foreach ($files as $file) {
+                if (!is_file($dir.$file)) {
+                    File::create($dir, $file, '<?'.'php return array();');
                 }
             }
 
