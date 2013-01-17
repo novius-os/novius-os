@@ -14,6 +14,7 @@ return array(
     'provider' => array(
         'name' => 'Novius OS',
     ),
+    'i18n_file' => 'noviusos_simplefacebook::metadata',
     'data_catchers' => array(
         'noviusos_simplefacebook' => array(
             'title' => 'Facebook',
