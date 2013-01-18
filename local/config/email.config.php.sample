@@ -1,0 +1,47 @@
+<?php
+/**
+ * NOVIUS OS - Web OS for digital communication
+ *
+ * @copyright  2011 Novius
+ * @license    GNU Affero General Public License v3 or (at your option) any later version
+ *             http://www.gnu.org/licenses/agpl-3.0.html
+ * @link http://www.novius-os.org
+ */
+
+return array(
+    'defaults' => array(
+		/**
+		 * Mail driver (mail, smtp, sendmail)
+		 */
+		'driver'		=> 'mail',
+
+		/**
+		 * Whether to send as html, set to null for autodetection.
+		 */
+		'is_html'		=> null,
+
+		/**
+		 * Default sender details
+		 */
+		'from'		=> array(
+			'email'		=> 'noreply@yourdomain.com',
+			'name'		=> 'Your Domain',
+		),
+
+		/**
+		 * Path to sendmail, if you choose sendmail driver
+		 */
+		'sendmail_path' => '/usr/sbin/sendmail',
+
+		/**
+		 * SMTP settings, if you choose smtp driver
+		 */
+		'smtp'	=> array(
+			'host'		=> '',
+			'port'		=> 25,
+			'username'	=> '',
+			'password'	=> '',
+			'timeout'	=> 5,
+		),
+    ),
+);
