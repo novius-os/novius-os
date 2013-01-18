@@ -122,12 +122,20 @@ CREATE TABLE IF NOT EXISTS `nos_slideshow_image` (
   KEY `slidimg_position` (`slidimg_position`)
 ) DEFAULT CHARSET=utf8;
 SQL;
+        $noviusos_template = \Nos\Application::forge('noviusos_templates_basic');
+        if ($noviusos_template->is_installed()) {
+            $alters = <<<SQL
+UPDATE `nos_page` SET `page_template` = 'noviusos_top_menu' WHERE `page_template` = 'top_menu';
+UPDATE `nos_page` SET `page_template` = 'noviusos_left_menu' WHERE `page_template` = 'left_menu';
+SQL;
+        }
         foreach (explode(';', $alters) as $alter) {
             $alter = trim(trim($alter), PHP_EOL);
             if (!empty($alter)) {
                 \DB::query($alter)->execute();
             }
         }
+        $noviusos_template->install(false);
 
         // Clear pages cache, now cache use domain
         if (file_exists(\Config::get('cache_dir').'pages')) {
