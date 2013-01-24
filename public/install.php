@@ -245,6 +245,7 @@ $tests = array(
         'title'        => 'APPPATH/cache/media is writeable by the webserver',
         'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
         'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
+        'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
     ),
 
     'folder.data.writeable' => array(
@@ -300,6 +301,13 @@ $tests = array(
         'passed'       => is_writeable(DOCROOT.'media'),
         'command_line' => 'chmod a+w '.DOCROOT.'media',
         'run_only_if'  => is_dir(DOCROOT.'media'),
+    ),
+
+    'public.data.writeable' => array(
+        'title'        => 'DOCROOT/data/ is writeable by the webserver',
+        'passed'       => is_writeable(DOCROOT.'data'),
+        'command_line' => 'chmod a+w '.DOCROOT.'data',
+        'run_only_if'  => is_dir(DOCROOT.'data'),
     ),
 
     'public.htdocs.apps.writeable' => array(
@@ -382,6 +390,7 @@ $passed = run_test('public.htdocs.apps.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
+$passed = run_test('public.data.writeable') && $passed;
 $passed = run_test('public.media.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
