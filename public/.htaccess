@@ -14,7 +14,7 @@ ErrorDocument 404 /htdocs/novius-os/404.php
     #XSendFile On
 
     ## Replace "novius-os-install-dir" by the real Novius OS installed directory
-    #XSendFilePath/novius-os-install-dir/local/data
+    #XSendFilePath /novius-os-install-dir/local/data
 
 #</IfModule>
 
