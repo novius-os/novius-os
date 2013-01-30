@@ -11,7 +11,7 @@ Version 0.2
 - Model_Page->get_href() become Model_Page->url()
 - Model_Page::get_url() become Tools_Url::page(), remove Model_Page::get_url_absolute()
 - New class helper Tools_Url
-- All functions and methods returning url use absolute url by default (Model_Page->url, Model_Page::find_url, Model_Page->link)
+- All functions and methods returning url use absolute url by default (Model_Page->url, Model_Page::find_url, Model_Page->link, Url_Enhancer->url)
 - Add Simple Google+ sharer
 - Click middle on Os Tabs close it, New button Close all other tabs
 - Appdesk : possibility to format column by php config
