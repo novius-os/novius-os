@@ -1,4 +1,4 @@
-# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/0.1.5)](https://travis-ci.org/novius-os/novius-os)
+# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/0.2)](https://travis-ci.org/novius-os/novius-os)
 
 Create Once Publish Everywhere with Novius OS, a Cross-Channel Open Source CMS.
 
