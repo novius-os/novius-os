@@ -25,8 +25,7 @@ UPDATE `nos_page` SET `page_context` = CONCAT('main::', `page_context`);
 UPDATE `nos_role_permission` SET `perm_application` = "noviusos_page" WHERE `perm_application` = "nos_page";
 UPDATE `nos_role_permission` SET `perm_application` = "noviusos_media" WHERE `perm_application` = "nos_media";
 UPDATE `nos_role_permission` SET `perm_application` = "noviusos_user" WHERE `perm_application` = "nos_user";
-INSERT INTO `nos_role_permission` (perm_key, perm_identifier, perm_application) SELECT perm_key, perm_identifier, "noviusos_appmanager" as perm_application FROM nos_role_permission WHERE `perm_application` = "nos_tray";
-UPDATE `nos_role_permission` SET `perm_application` = "noviusos_help" WHERE `perm_application` = "nos_tray";
+UPDATE `nos_role_permission` SET `perm_application` = "noviusos_appmanager" WHERE `perm_application` = "nos_tray";
 
 
 ALTER TABLE `nos_user_role` ADD PRIMARY KEY ( `user_id` , `role_id` );
@@ -141,6 +140,8 @@ SQL;
             \File::delete_dir(\Config::get('cache_dir').'pages', true, false);
         }
 
+        // Update native apps before using them
+        \Nos\Application::installNativeApplications();
 
         // Update url_enhanced config file, integrate contexts
         $url_enhanced_old = \Nos\Config_Data::get('url_enhanced', array());
@@ -155,8 +156,6 @@ SQL;
             }
         }
         \Nos\Config_Data::save('url_enhanced', $url_enhanced_new);
-
-        \Nos\Application::installNativeApplications();
     }
 
     public function down()
