@@ -8,5 +8,5 @@ Current version: 0.1.5
 
 * [Website](http://www.novius-os.org/en/)
   * [French](http://www.novius-os.org) and [Japanese](http://www.novius-os.org/jp/) versions
-* [Installation and documentation](http://novius-os.readthedocs.org/en/latest/)
-  * [French](https://novius-os-documentation-francaise.readthedocs.org/en/latest/) version
+* [Installation and documentation](http://docs.novius-os.org/)
+  * [French](http://docs-fr.novius-os.org/) version
