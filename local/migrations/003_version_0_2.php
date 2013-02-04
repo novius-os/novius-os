@@ -143,6 +143,11 @@ SQL;
         // Update native apps before using them
         \Nos\Application::installNativeApplications();
 
+        // Reload page, since we're using a class from it after
+        \Module::unload('noviusos_page');
+        \Config::load(APPPATH.'metadata/app_namespaces.php', 'data::app_namespaces', true, true);
+        \Module::load('noviusos_page');
+
         // Update url_enhanced config file, integrate contexts
         $url_enhanced_old = \Nos\Config_Data::get('url_enhanced', array());
         $url_enhanced_new = array();
