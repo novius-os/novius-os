@@ -1,5 +1,11 @@
 services:
   - mysql
+notifications:
+  email:
+    recipients:
+      - team@novius-os.org
+    on_success: change
+    on_failure: always
 before_install:
   - BRANCH=`git symbolic-ref HEAD | sed -e 's,refs/heads/,,g'`
   - git submodule update --init --recursive
