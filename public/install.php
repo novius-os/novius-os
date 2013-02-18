@@ -660,9 +660,10 @@ if ($step == 4) {
 
     <h2>Cleanup</h2>
     <p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
-    <p>Please remove this <code>install.php</code> file.</p>
+    <p>Please remove this <code>install.php</code> and <code>index.php</code> files.</p>
     <code style="width:800px;">
     rm <?= NOSROOT ?>public/install.php<br />
+    rm <?= NOSROOT ?>public/index.php<br />
     chmod og-w <?= NOSROOT ?>local/config
     </code>
 
