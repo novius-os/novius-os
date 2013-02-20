@@ -516,17 +516,19 @@ if ($step == 2) {
         $config = array(
             'active'          => Fuel::DEVELOPMENT,
             Fuel::DEVELOPMENT => array(
-                'type'            => 'mysql',
+                'type'            => 'mysqli',
                 'connection'    => array(
                     'hostname'   => \Input::post('hostname', ''),
                     'database'   => \Input::post('database', ''),
                     'username'   => \Input::post('username', ''),
                     'password'   => \Input::post('password', ''),
                     'persistent' => false,
+                    'compress'   => false,
                 ),
+                'identifier'   => '`',
                 'table_prefix' => '',
                 'charset'      => 'utf8',
-                'caching'      => false,
+                'enable_cache' => true,
                 'profiling'    => false,
             ),
         );
