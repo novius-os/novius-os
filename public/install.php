@@ -148,6 +148,8 @@ input[type=submit]:active, button:active {
     <div id="blank_slate">
 <?php
 
+define('NOS_ENTRY_POINT', 'install');
+
 $_SERVER['NOS_ROOT'] = realpath(__DIR__.DIRECTORY_SEPARATOR.'..');
 
 // Boot the app
