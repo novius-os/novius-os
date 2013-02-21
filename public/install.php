@@ -584,15 +584,15 @@ if ($step == 2) {
         }
     }
     ?>
-<h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 2 / 4</h1>
-<h2>Configuring the MySQL database</h2>
-<form action="" method="POST">
-    <p><label><input type="text" name="hostname" placeholder="Hostname" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" /></label></p>
-    <p><label><input type="text" name="username" placeholder="Username" value="<?= Input::post('username', \Arr::get($db, 'username', '')) ?>"  /></label></p>
-    <p><label><input type="password" name="password" placeholder="Password" /></label></p>
-    <p><label><input type="text" name="database" placeholder="Database" value="<?= Input::post('database', \Arr::get($db, 'database', '')) ?>"  /></label></p>
-    <p><input type="submit" value="Check and save DB config" /></p>
-</form>
+    <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 2 / 4</h1>
+    <h2>Configuring the MySQL database</h2>
+    <form action="" method="POST">
+        <p><label><input type="text" name="hostname" placeholder="Hostname" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" /></label></p>
+        <p><label><input type="text" name="username" placeholder="Username" value="<?= Input::post('username', \Arr::get($db, 'username', '')) ?>"  /></label></p>
+        <p><label><input type="password" name="password" placeholder="Password" /></label></p>
+        <p><label><input type="text" name="database" placeholder="Database" value="<?= Input::post('database', \Arr::get($db, 'database', '')) ?>"  /></label></p>
+        <p><input type="submit" value="Check and save DB config" /></p>
+    </form>
     <?php
 }
 
@@ -643,51 +643,51 @@ if ($step == 3) {
         }
     }
     ?>
-<h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 3 / 4</h1>
-<h2>Create the first administrator account</h2>
-<form action="" method="POST">
-    <p><label><input type="text" name="name" placeholder="Name" size="20" value="<?= Input::post('name', '') ?>" /></label></p>
-    <p><label><input type="text" name="firstname" placeholder="Firstname" size="20" value="<?= Input::post('firstname', '') ?>" /></label></p>
-    <p><label><input type="email" name="email" placeholder="Email / Login" size="30" value="<?= Input::post('email', '') ?>" /></label></p>
-    <p><label><input type="password" name="password" placeholder="Password" /></label></p>
-    <p><label><input type="password" name="password_confirmation" placeholder="Password confirmation" /></label></p>
-    <p><input type="submit" value="Create the first account" /></p>
-</form>
+    <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 3 / 4</h1>
+    <h2>Create the first administrator account</h2>
+    <form action="" method="POST">
+        <p><label><input type="text" name="name" placeholder="Name" size="20" value="<?= Input::post('name', '') ?>" /></label></p>
+        <p><label><input type="text" name="firstname" placeholder="Firstname" size="20" value="<?= Input::post('firstname', '') ?>" /></label></p>
+        <p><label><input type="email" name="email" placeholder="Email / Login" size="30" value="<?= Input::post('email', '') ?>" /></label></p>
+        <p><label><input type="password" name="password" placeholder="Password" /></label></p>
+        <p><label><input type="password" name="password_confirmation" placeholder="Password confirmation" /></label></p>
+        <p><input type="submit" value="Create the first account" /></p>
+    </form>
     <?php
 }
 
 if ($step == 4) {
     ?>
-<h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 4 / 4</h1>
+    <h1><img src="static/novius-os/admin/novius-os/img/logo.png"> Step 4 / 4</h1>
 
-<h2>Setup contexts</h2>
-<p>
-    You can edit your <strong>local/config/contexts.config.php</strong> file to configure the contexts.
-</p>
-<p>
-    Currently, the following contexts are set:
-<ul>
+    <h2>Setup contexts</h2>
+    <p>
+        You can edit your <strong>local/config/contexts.config.php</strong> file to configure the contexts.
+    </p>
+    <p>
+        Currently, the following contexts are set:
+    <ul>
     <?php
     foreach (Nos\Tools_Context::contexts() as $context => $domains) {
         echo '<li>'.$context.'</li>';
     }
     ?>
-</ul>
-</p>
-<p><a href="install.php?step=4">Refresh the list</a></p>
+    </ul>
+    </p>
+    <p><a href="install.php?step=4">Refresh the list</a></p>
 
 
-<h2>Cleanup</h2>
-<p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
-<p>Please remove this <code>install.php</code> and <code>index.php</code> files.</p>
-<code style="width:800px;">
-    rm <?= NOSROOT ?>public/install.php<br />
-    rm <?= NOSROOT ?>public/index.php<br />
-    chmod og-w <?= NOSROOT ?>local/config
-</code>
+    <h2>Cleanup</h2>
+    <p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
+    <p>Please remove this <code>install.php</code> and <code>index.php</code> files.</p>
+    <code style="width:800px;">
+        rm <?= NOSROOT ?>public/install.php<br />
+        rm <?= NOSROOT ?>public/index.php<br />
+        chmod og-w <?= NOSROOT ?>local/config
+    </code>
 
-<h2>The end!</h2>
-<p><a href="admin/?tab=admin/noviusos_appmanager/appmanager"><button>Go to the administration panel</button></a></p>
+    <h2>The end!</h2>
+    <p><a href="admin/?tab=admin/noviusos_appmanager/appmanager"><button>Go to the administration panel</button></a></p>
     <?php
 }
 
