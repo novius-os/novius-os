@@ -9,7 +9,10 @@
  */
 
 $document_root = rtrim($_SERVER['DOCUMENT_ROOT'], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-$nos_dir = trim(substr($_SERVER['SCRIPT_FILENAME'], strlen($document_root), -10), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+$nos_dir = trim(substr($_SERVER['SCRIPT_FILENAME'], strlen($document_root), -10), DIRECTORY_SEPARATOR);
+if (!empty($nos_dir)) {
+    $nos_dir .= DIRECTORY_SEPARATOR;
+}
 
 $htaccess = '';
 $htaccess_save = false;
