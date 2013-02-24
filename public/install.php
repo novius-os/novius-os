@@ -12,141 +12,143 @@ ob_start();
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Novius OS - Installation</title>
-<meta name="robots" content="noindex,nofollow">
-<link rel="shortcut icon" href="static/novius-os/admin/novius-os/img/noviusos.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Novius OS - Installation</title>
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="shortcut icon" href="static/novius-os/admin/novius-os/img/noviusos.ico">
 
-<style type="text/css">
-html {
-    height : 100%;
-}
-body {
-   /* On step 1, this asset will probably return an HTTP status 404 Not Found */
-  background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/default.jpg");
-  background-size: cover;
-  font-family: franklin gothic medium,arial,verdana,helvetica,sans-serif;
-}
-#blank_slate {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px outset rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  padding: 20px 40px;
-  position: absolute;
-  top: 50px;
-  left: 50px;
-  right: 50px;
-  bottom: 50px;
-  overflow: auto;
-}
-#blank_slate h1, #blank_slate img {
-    vertical-align: middle;
-    padding: 0 2em 0 1em;
-}
+    <style type="text/css">
+        html {
+            height : 100%;
+        }
+        body {
+            /* On step 1, this asset will probably return an HTTP status 404 Not Found */
+            background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/default.jpg");
+            background-size: cover;
+            font-family: franklin gothic medium,arial,verdana,helvetica,sans-serif;
+        }
+        #blank_slate {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px outset rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px 40px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            right: 50px;
+            bottom: 50px;
+            overflow: auto;
+        }
+        #blank_slate h1, #blank_slate img {
+            vertical-align: middle;
+            padding: 0 2em 0 1em;
+        }
 
-table {
-    border-collapse: collapse;
-    margin: 1em auto;
-}
-th {
-    text-align: left;
-}
-td, th {
-    border: 1px solid #bbb;
-    padding: 5px;
-}
-td.status {
-    background-color: #fff;
-    font-weight: bold;
-    text-align: center;
-}
-tr.error td.status {
-    color: #f00;
-}
-tr.ok td.status {
-    color: #0b0;
-}
-table tr.error {
-    background: #fff5f5;
-}
-tr.error th {
-    border-bottom: none;
-}
-tr.separator td {
-    border:none;
-}
-tr.error td.description {
-    border-top: none;
-}
-table tr.ok {
-    background: #f5fff5;
-}
-code {
-    background-color: #fff;
-    border: 1px dashed #bbb;
-    display:inline-block;
-    padding: 2px;
-}
-p.description {
-    font-style: italic;
-    font-size: smaller;
-}
+        table {
+            border-collapse: collapse;
+            margin: 1em auto;
+        }
+        th {
+            text-align: left;
+        }
+        td, th {
+            border: 1px solid #bbb;
+            padding: 5px;
+        }
+        td.status {
+            background-color: #fff;
+            font-weight: bold;
+            text-align: center;
+        }
+        tr.error td.status {
+            color: #f00;
+        }
+        tr.ok td.status {
+            color: #0b0;
+        }
+        table tr.error {
+            background: #fff5f5;
+        }
+        tr.error th {
+            border-bottom: none;
+        }
+        tr.separator td {
+            border:none;
+        }
+        tr.error td.description {
+            border-top: none;
+        }
+        table tr.ok {
+            background: #f5fff5;
+        }
+        code {
+            background-color: #fff;
+            border: 1px dashed #bbb;
+            display:inline-block;
+            padding: 2px;
+        }
+        p.description {
+            font-style: italic;
+            font-size: smaller;
+        }
 
 
-input, button {
-    background:#fff;
-    -moz-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
-    -webkit-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
-    box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
-    padding: 5px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    border: 1px solid #a8a8a8;
-    font-weight: bold;
-    font-size: 1.1em;
-    color: #4f4f4f;
-    text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
-}
+        input, button {
+            background:#fff;
+            -moz-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
+            -webkit-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
+            box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
+            padding: 5px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #a8a8a8;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #4f4f4f;
+            text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
+        }
 
-input:focus, input:active {
-    border: solid 1px #8ab0c6;
-    outline: none;
-    -moz-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
-    -webkit-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
-    box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
-}
-input[type=submit], button {
-    padding: .4em 1em;
-    cursor: pointer;
-    color: #313131;
-    border: 1px solid #a8a8a8;
-    -moz-box-shadow: 0 0 3px #85b2cb;
-    -webkit-box-shadow: 0px 0px 3px #85b2cb;
-    box-shadow: 0px 0px 3px #85b2cb;
-    background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-}
-input[type=submit]:hover, button:hover {
-    border: solid 1px #8ab0c6;
-    background: #85b2cb linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
-    background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
-    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
-}
-input[type=submit]:active, button:active {
-    border: solid 1px #8ab0c6;
-    background: #85b2cb linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
-    background: #85b2cb -webkit-gradient(linear, left bottom, left top, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
-    background: #85b2cb -moz-linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
-}
-</style>
+        input:focus, input:active {
+            border: solid 1px #8ab0c6;
+            outline: none;
+            -moz-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
+            -webkit-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
+            box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
+        }
+        input[type=submit], button {
+            padding: .4em 1em;
+            cursor: pointer;
+            color: #313131;
+            border: 1px solid #a8a8a8;
+            -moz-box-shadow: 0 0 3px #85b2cb;
+            -webkit-box-shadow: 0px 0px 3px #85b2cb;
+            box-shadow: 0px 0px 3px #85b2cb;
+            background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+            background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
+            background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+        }
+        input[type=submit]:hover, button:hover {
+            border: solid 1px #8ab0c6;
+            background: #85b2cb linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
+            background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
+            background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
+        }
+        input[type=submit]:active, button:active {
+            border: solid 1px #8ab0c6;
+            background: #85b2cb linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
+            background: #85b2cb -webkit-gradient(linear, left bottom, left top, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
+            background: #85b2cb -moz-linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
+        }
+    </style>
 </head>
 
 <body>
-    <div id="blank_slate">
+<div id="blank_slate">
 <?php
+
+define('NOS_ENTRY_POINT', 'install');
 
 $_SERVER['NOS_ROOT'] = realpath(__DIR__.DIRECTORY_SEPARATOR.'..');
 
@@ -282,6 +284,19 @@ $tests = array(
         'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
     ),
 
+    'public.htaccess.removed' => array(
+        'title'        => 'DOCROOT/.htaccess is removed',
+        'passed'       => !is_file(DOCROOT.'.htaccess'),
+        'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
+        'run_only_if'  => is_file(NOSROOT.'.htaccess'),
+    ),
+
+    'public.index-php.removed' => array(
+        'title'        => 'DOCROOT/index.php is removed',
+        'passed'       => !is_file(DOCROOT.'index.php'),
+        'command_line' => 'mv '.DOCROOT.'index.php '.DOCROOT.'index.php.old',
+    ),
+
     'public.cache.writeable' => array(
         'title'        => 'DOCROOT/cache/ is writeable by the webserver',
         'passed'       => is_writeable(DOCROOT.'cache'),
@@ -369,6 +384,11 @@ echo '<table width="100%">';
 
 $passed = run_test('directive.short_open_tag') && $passed;
 $passed = run_test('directive.magic_quotes_gpc') && $passed;
+
+echo '<tr class="separator"><td colspan="2"></td></tr>';
+
+$passed = run_test('public.htaccess.removed') && $passed;
+$passed = run_test('public.index-php.removed') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
@@ -480,10 +500,7 @@ CONFIG;
                     $cmd = array_slice($cmd, 2);
                 }
                 foreach ($cmd as $c) {
-                    $p = strrpos($c, NOSROOT);
-                    if (!empty($p)) {
-                        $c = substr_replace($c, '', $p, strlen(NOSROOT));
-                    }
+                    $c = str_replace(NOSROOT, '', $c);
                     $summary[] = $c;
                 }
             }
@@ -516,17 +533,19 @@ if ($step == 2) {
         $config = array(
             'active'          => Fuel::DEVELOPMENT,
             Fuel::DEVELOPMENT => array(
-                'type'            => 'mysql',
+                'type'            => 'mysqli',
                 'connection'    => array(
                     'hostname'   => \Input::post('hostname', ''),
                     'database'   => \Input::post('database', ''),
                     'username'   => \Input::post('username', ''),
                     'password'   => \Input::post('password', ''),
                     'persistent' => false,
+                    'compress'   => false,
                 ),
+                'identifier'   => '`',
                 'table_prefix' => '',
                 'charset'      => 'utf8',
-                'caching'      => false,
+                'enable_cache' => true,
                 'profiling'    => false,
             ),
         );
@@ -647,23 +666,23 @@ if ($step == 4) {
     </p>
     <p>
         Currently, the following contexts are set:
-        <ul>
+    <ul>
     <?php
     foreach (Nos\Tools_Context::contexts() as $context => $domains) {
         echo '<li>'.$context.'</li>';
     }
     ?>
-        </ul>
+    </ul>
     </p>
     <p><a href="install.php?step=4">Refresh the list</a></p>
 
 
     <h2>Cleanup</h2>
     <p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
-    <p>Please remove this <code>install.php</code> file.</p>
+    <p>Please remove this <code>install.php</code> and <code>index.php</code> files.</p>
     <code style="width:800px;">
-    rm <?= NOSROOT ?>public/install.php<br />
-    chmod og-w <?= NOSROOT ?>local/config
+        rm <?= NOSROOT ?>public/install.php<br />
+        chmod og-w <?= NOSROOT ?>local/config
     </code>
 
     <h2>The end!</h2>

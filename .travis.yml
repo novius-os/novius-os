@@ -35,6 +35,7 @@ before_install:
   - chmod a+w public/cache
   - chmod a+w public/cache/media
   - chmod a+w public/media
+  - mv public/index.php public/index.php.old
   - sudo sh -c 'pear channel-discover pear.phpunit.de'
   - sudo sh -c 'pear install --alldeps pear/PHP_CodeSniffer'
 before_script:
