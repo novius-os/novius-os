@@ -1,157 +1,161 @@
 <?php
+/**
+ * NOVIUS OS - Web OS for digital communication
+ *
+ * @copyright  2011 Novius
+ * @license    GNU Affero General Public License v3 or (at your option) any later version
+ *             http://www.gnu.org/licenses/agpl-3.0.html
+ * @link http://www.novius-os.org
+ */
 ob_start();
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Novius OS - Installation</title>
-<meta name="robots" content="noindex,nofollow">
-<link rel="shortcut icon" href="static/novius-os/admin/novius-os/img/noviusos.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Novius OS - Installation</title>
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="shortcut icon" href="static/novius-os/admin/novius-os/img/noviusos.ico">
 
-<style type="text/css">
-html {
-    height : 100%;
-}
-body {
-   /* On step 1, this asset will probably return an HTTP status 404 Not Found */
-  background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/circles.jpg");
-  background-size: cover;
-  font-family: franklin gothic medium,arial,verdana,helvetica,sans-serif;
-}
-#blank_slate {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px outset rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  padding: 20px 40px;
-  position: absolute;
-  top: 50px;
-  left: 50px;
-  right: 50px;
-  bottom: 50px;
-  overflow: auto;
-}
-#blank_slate h1, #blank_slate img {
-    vertical-align: middle;
-    padding: 0 2em 0 1em;
-}
+    <style type="text/css">
+        html {
+            height : 100%;
+        }
+        body {
+            /* On step 1, this asset will probably return an HTTP status 404 Not Found */
+            background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/default.jpg");
+            background-size: cover;
+            font-family: franklin gothic medium,arial,verdana,helvetica,sans-serif;
+        }
+        #blank_slate {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px outset rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px 40px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            right: 50px;
+            bottom: 50px;
+            overflow: auto;
+        }
+        #blank_slate h1, #blank_slate img {
+            vertical-align: middle;
+            padding: 0 2em 0 1em;
+        }
 
-table {
-    border-collapse: collapse;
-    margin: 1em auto;
-}
-th {
-    text-align: left;
-}
-td, th {
-    border: 1px solid #bbb;
-    padding: 5px;
-}
-td.status {
-    background-color: #fff;
-    font-weight: bold;
-    text-align: center;
-}
-tr.error td.status {
-    color: #f00;
-}
-tr.ok td.status {
-    color: #0b0;
-}
-table tr.error {
-    background: #fff5f5;
-}
-tr.error th {
-    border-bottom: none;
-}
-tr.separator td {
-    border:none;
-}
-tr.error td.description {
-    border-top: none;
-}
-table tr.ok {
-    background: #f5fff5;
-}
-code {
-    background-color: #fff;
-    border: 1px dashed #bbb;
-    display:inline-block;
-    padding: 2px;
-}
-p.description {
-    font-style: italic;
-    font-size: smaller;
-}
+        table {
+            border-collapse: collapse;
+            margin: 1em auto;
+        }
+        th {
+            text-align: left;
+        }
+        td, th {
+            border: 1px solid #bbb;
+            padding: 5px;
+        }
+        td.status {
+            background-color: #fff;
+            font-weight: bold;
+            text-align: center;
+        }
+        tr.error td.status {
+            color: #f00;
+        }
+        tr.ok td.status {
+            color: #0b0;
+        }
+        table tr.error {
+            background: #fff5f5;
+        }
+        tr.error th {
+            border-bottom: none;
+        }
+        tr.separator td {
+            border:none;
+        }
+        tr.error td.description {
+            border-top: none;
+        }
+        table tr.ok {
+            background: #f5fff5;
+        }
+        code {
+            background-color: #fff;
+            border: 1px dashed #bbb;
+            display:inline-block;
+            padding: 2px;
+        }
+        p.description {
+            font-style: italic;
+            font-size: smaller;
+        }
 
 
-input, button {
-    background:#fff;
-    -moz-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
-    -webkit-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
-    box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
-    padding: 5px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    border: 1px solid #a8a8a8;
-    font-weight: bold;
-    font-size: 1.1em;
-    color: #4f4f4f;
-    text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
-}
+        input, button {
+            background:#fff;
+            -moz-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
+            -webkit-box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
+            box-shadow:inset 0 2px 2px rgba(143,143,143,0.50);
+            padding: 5px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #a8a8a8;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #4f4f4f;
+            text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
+        }
 
-input:focus, input:active {
-    border: solid 1px #8ab0c6;
-    outline: none;
-    -moz-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
-    -webkit-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
-    box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
-}
-input[type=submit], button {
-    padding: .4em 1em;
-    cursor: pointer;
-    color: #313131;
-    border: 1px solid #a8a8a8;
-    -moz-box-shadow: 0 0 3px #85b2cb;
-    -webkit-box-shadow: 0px 0px 3px #85b2cb;
-    box-shadow: 0px 0px 3px #85b2cb;
-    background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-}
-input[type=submit]:hover, button:hover {
-    border: solid 1px #8ab0c6;
-    background: #85b2cb linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
-    background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
-    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
-}
-input[type=submit]:active, button:active {
-    border: solid 1px #8ab0c6;
-    background: #85b2cb linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
-    background: #85b2cb -webkit-gradient(linear, left bottom, left top, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
-    background: #85b2cb -moz-linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
-}
-</style>
+        input:focus, input:active {
+            border: solid 1px #8ab0c6;
+            outline: none;
+            -moz-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
+            -webkit-box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
+            box-shadow:0 0 5px #85b2cb, inset 0 2px 2px #8f8f8f;
+        }
+        input[type=submit], button {
+            padding: .4em 1em;
+            cursor: pointer;
+            color: #313131;
+            border: 1px solid #a8a8a8;
+            -moz-box-shadow: 0 0 3px #85b2cb;
+            -webkit-box-shadow: 0px 0px 3px #85b2cb;
+            box-shadow: 0px 0px 3px #85b2cb;
+            background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+            background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
+            background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+        }
+        input[type=submit]:hover, button:hover {
+            border: solid 1px #8ab0c6;
+            background: #85b2cb linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
+            background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
+            background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
+        }
+        input[type=submit]:active, button:active {
+            border: solid 1px #8ab0c6;
+            background: #85b2cb linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
+            background: #85b2cb -webkit-gradient(linear, left bottom, left top, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
+            background: #85b2cb -moz-linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
+        }
+    </style>
 </head>
 
 <body>
-    <div id="blank_slate">
+<div id="blank_slate">
 <?php
 
-define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
+define('NOS_ENTRY_POINT', 'install');
 
-define('APPPATH', realpath(DOCROOT.'../local/').DIRECTORY_SEPARATOR);
-define('PKGPATH', realpath(DOCROOT.'../novius-os/packages/').DIRECTORY_SEPARATOR);
-define('COREPATH', realpath(DOCROOT.'../novius-os/fuel-core/').DIRECTORY_SEPARATOR);
-define('NOSPATH', realpath(DOCROOT.'../novius-os/framework/').DIRECTORY_SEPARATOR);
+$_SERVER['NOS_ROOT'] = realpath(__DIR__.DIRECTORY_SEPARATOR.'..');
 
 // Boot the app
-require_once NOSPATH.'bootstrap.php';
+require_once $_SERVER['NOS_ROOT'].DIRECTORY_SEPARATOR.'novius-os'.DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'bootstrap.php';
 
-define('ROOT', realpath(DOCROOT.'../').DS);
-define('NOSROOT', realpath(DOCROOT.'../novius-os/').DS);
+define('NOVIUSOS_PATH', realpath(DOCROOT.'..'.DS.'novius-os').DS);
 
 function run_test($name)
 {
@@ -223,6 +227,14 @@ $tests = array(
         'passed'       => ini_get('short_open_tag') != false,
         'code'         => '# '.php_ini_loaded_file ()."\n<br />short_open_tag = On",
         'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
+        'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
+    ),
+    'directive.magic_quotes_gpc' => array(
+        'title'        => 'PHP configuration directive magic_quotes_gpc = Off',
+        'passed'       => ini_get('magic_quotes_gpc') == false,
+        'code'         => '# '.php_ini_loaded_file ()."\n<br />magic_quotes_gpc = Off",
+        'description'  => 'It\'s <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">deprecated in PHP 5.3 and has been removed in PHP 5.4</a>. Please edit your configuration file.',
+        'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
     ),
 
     'folder.config.writeable' => array(
@@ -243,6 +255,7 @@ $tests = array(
         'title'        => 'APPPATH/cache/media is writeable by the webserver',
         'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
         'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
+        'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
     ),
 
     'folder.data.writeable' => array(
@@ -271,12 +284,26 @@ $tests = array(
         'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
     ),
 
+    'public.htaccess.removed' => array(
+        'title'        => 'DOCROOT/.htaccess is removed',
+        'passed'       => !is_file(DOCROOT.'.htaccess'),
+        'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
+        'run_only_if'  => is_file(NOSROOT.'.htaccess'),
+    ),
+
+    'public.index-php.removed' => array(
+        'title'        => 'DOCROOT/index.php is removed',
+        'passed'       => !is_file(DOCROOT.'index.php'),
+        'command_line' => 'mv '.DOCROOT.'index.php '.DOCROOT.'index.php.old',
+    ),
+
     'public.cache.writeable' => array(
         'title'        => 'DOCROOT/cache/ is writeable by the webserver',
         'passed'       => is_writeable(DOCROOT.'cache'),
         'command_line' => 'chmod a+w '.DOCROOT.'cache',
         'run_only_if'  => is_dir(DOCROOT.'cache'),
     ),
+
     'public.cache.media.writeable' => array(
         'title'        => 'DOCROOT/cache/media is writeable by the webserver',
         'passed'       => is_writeable(DOCROOT.'cache'.DS.'media'),
@@ -288,8 +315,22 @@ $tests = array(
         'title'        => 'DOCROOT/htdocs/ is writeable by the webserver',
         'description'  => 'The symbolic link htdocs/novius-os doesn\'t exsists, so we need to be able to create it.',
         'passed'       => is_writeable(DOCROOT.'htdocs'),
-        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
+        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
         'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
+    ),
+
+    'public.media.writeable' => array(
+        'title'        => 'DOCROOT/media/ is writeable by the webserver',
+        'passed'       => is_writeable(DOCROOT.'media'),
+        'command_line' => 'chmod a+w '.DOCROOT.'media',
+        'run_only_if'  => is_dir(DOCROOT.'media'),
+    ),
+
+    'public.data.writeable' => array(
+        'title'        => 'DOCROOT/data/ is writeable by the webserver',
+        'passed'       => is_writeable(DOCROOT.'data'),
+        'command_line' => 'chmod a+w '.DOCROOT.'data',
+        'run_only_if'  => is_dir(DOCROOT.'data'),
     ),
 
     'public.htdocs.apps.writeable' => array(
@@ -303,7 +344,7 @@ $tests = array(
         'title'        => 'DOCROOT/static/ is writeable by the webserver',
         'description'  => 'The symbolic link static/novius-os/ doesn\'t exsists, so we need to be able to create it.',
         'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
-        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static').' '.DOCROOT.'static'.DS.'novius-os'),
+        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
         'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
     ),
 
@@ -316,22 +357,22 @@ $tests = array(
 
     'public.htdocs.nos.valid' => array(
         'title'        => 'DOCROOT/htdocs/novius-os links to NOSPATH/htdocs',
-        'passed'       => is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOSROOT.'htdocs',
-        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
+        'passed'       => is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
+        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
         'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
     ),
 
     'public.static.nos.valid' => array(
         'title'        => 'DOCROOT/static/novius-os links to NOSPATH/static',
-        'passed'       => is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOSROOT.'static',
-        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static').' '.DOCROOT.'static'.DS.'novius-os',
+        'passed'       => is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
+        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os',
         'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
     ),
 
     'logs.fuel' => array(
         'title'        => 'logs/fuel exists and is writeable by the webserver',
-        'passed'       => is_writeable(ROOT.'logs/fuel'),
-        'command_line' => 'chmod a+w '.ROOT.'logs/fuel',
+        'passed'       => is_writeable(NOSROOT.'logs/fuel'),
+        'command_line' => 'chmod a+w '.NOSROOT.'logs/fuel',
     ),
 );
 
@@ -342,6 +383,12 @@ ob_start();
 echo '<table width="100%">';
 
 $passed = run_test('directive.short_open_tag') && $passed;
+$passed = run_test('directive.magic_quotes_gpc') && $passed;
+
+echo '<tr class="separator"><td colspan="2"></td></tr>';
+
+$passed = run_test('public.htaccess.removed') && $passed;
+$passed = run_test('public.index-php.removed') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
@@ -371,6 +418,11 @@ $passed = run_test('public.htdocs.apps.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
+$passed = run_test('public.data.writeable') && $passed;
+$passed = run_test('public.media.writeable') && $passed;
+
+echo '<tr class="separator"><td colspan="2"></td></tr>';
+
 $passed = run_test('public.static.writeable') && $passed;
 $passed = run_test('public.static.apps.writeable') && $passed;
 
@@ -396,8 +448,21 @@ if (!$passed && $step != 1) {
 if ($step == 1) {
     if (Input::method() == 'POST') {
         try {
-            $dir  = APPPATH.'data'.DS.'config'.DS;
-            $files = array('app_installed.php', 'templates.php', 'launchers.php', 'app_dependencies.php');
+            if (!file_exists(APPPATH.'config'.DS.'config.php')) {
+                $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
+                $base_url = \Uri::base(false).$url;
+                if (!empty($url)) {
+                    $config = <<<CONFIG
+return array(
+    'base_url' => '$base_url',
+);
+CONFIG;
+                    File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n".$config);
+                }
+            }
+
+            $dir  = APPPATH.'metadata'.DS;
+            $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
             foreach ($files as $file) {
                 if (!is_file($dir.$file)) {
                     File::create($dir, $file, '<?'.'php return array();');
@@ -405,10 +470,10 @@ if ($step == 1) {
             }
 
             if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-                \symlink(Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOSROOT.'htdocs'), DOCROOT.'htdocs'.DS.'novius-os');
+                \symlink(Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs'), DOCROOT.'htdocs'.DS.'novius-os');
             }
             if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-                \symlink(Nos\Tools_File::relativePath(DOCROOT.'static', NOSROOT.'static'), DOCROOT.'static'.DS.'novius-os');
+                \symlink(Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static'), DOCROOT.'static'.DS.'novius-os');
             }
 
             header('Location: install.php?step=2');
@@ -427,7 +492,7 @@ if ($step == 1) {
     } else {
         echo '<p>Please note <a href="#summary">a summary</a> of the commands is available below</p>';
         echo $step_1;
-        $summary = array('cd '.ROOT, '');
+        $summary = array('cd '.NOSROOT, '');
         foreach ($tests as $name => $data) {
             if ($data['is_error'] && (isset($data['command_line_relative']) || isset($data['command_line']))) {
                 $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
@@ -435,16 +500,13 @@ if ($step == 1) {
                     $cmd = array_slice($cmd, 2);
                 }
                 foreach ($cmd as $c) {
-                    $p = strrpos($c, ROOT);
-                    if (!empty($p)) {
-                        $c = substr_replace($c, '', $p, strlen(ROOT));
-                    }
+                    $c = str_replace(NOSROOT, '', $c);
                     $summary[] = $c;
                 }
             }
         }
         echo '<h2 id="summary">Command summary</h2>';
-        echo '<p>Relative to the root directory: <code>'.ROOT.'</code></p>';
+        echo '<p>Relative to the root directory: <code>'.NOSROOT.'</code></p>';
         echo '<code style="width: 800px;">'.implode("<br />\n", $summary).'</code>';
         // Create everything missing except config/db.php
         echo '<p><a href="install.php?step=1">Re-run config check</a></p>';
@@ -455,7 +517,7 @@ if ($step == 2) {
     Config::load('db', true);
     $active = Config::get('db.active');
     $db = Config::get('db.'.$active.'.connection', array());
-    if (!empty($db)) {
+    if (!empty($db['database'])) {
         try {
             $old_level = error_reporting(0);
             Database_Connection::instance()->connect();
@@ -471,23 +533,25 @@ if ($step == 2) {
         $config = array(
             'active'          => Fuel::DEVELOPMENT,
             Fuel::DEVELOPMENT => array(
-                'type'            => 'mysql',
+                'type'            => 'mysqli',
                 'connection'    => array(
                     'hostname'   => \Input::post('hostname', ''),
                     'database'   => \Input::post('database', ''),
                     'username'   => \Input::post('username', ''),
                     'password'   => \Input::post('password', ''),
                     'persistent' => false,
+                    'compress'   => false,
                 ),
+                'identifier'   => '`',
                 'table_prefix' => '',
                 'charset'      => 'utf8',
-                'caching'      => false,
+                'enable_cache' => true,
                 'profiling'    => false,
             ),
         );
 
         try {
-            Config::set('db', $config);
+            Config::load($config, 'db'); // set config inside db and reload the cache
             // Try to connect to the DB
             $old_level = error_reporting(0);
             \View::redirect('errors'.DS.'php_error', NOSPATH.'/views/errors/empty');
@@ -497,15 +561,14 @@ if ($step == 2) {
             Crypt::_init();
 
             // Install metadata
-            $application = Nos\Application::forge('nos');
-            $application->install();
+            Nos\Application::installNativeApplications();
 
             // Install templates
             \Module::load('noviusos_templates_basic');
             $application = Nos\Application::forge('noviusos_templates_basic');
-            $application->install();
+            $application->install(false);
 
-            Config::save('db', $config);
+            Config::save('local::db', $config);
 
             header('Location: install.php?step=3');
             exit();
@@ -534,7 +597,7 @@ if ($step == 2) {
 }
 
 if ($step == 3) {
-    if (Nos\Model_User::count() > 0) {
+    if (Nos\User\Model_User::count() > 0) {
         header('Location: install.php?step=4');
         exit();
     }
@@ -547,7 +610,7 @@ if ($step == 3) {
             if (\Input::post('password', '') != \Input::post('password_confirmation', '')) {
                 throw new Exception('The two password don\'t match.');
             }
-            $user = new Nos\Model_User(array(
+            $user = new Nos\User\Model_User(array(
                 'user_name'      => \Input::post('name', 'Admin name'),
                 'user_firstname' => \Input::post('firstname', 'Firstname'),
                 'user_email'     => \Input::post('email', ''),
@@ -560,14 +623,16 @@ if ($step == 3) {
 
             // Authorize available apps
             $role = reset($user->roles);
-            foreach (array('nos_page', 'nos_media', 'nos_user', 'nos_tray') as $app) {
-                $access = Nos\Model_User_Permission::forge();
+            foreach (array('noviusos_page', 'noviusos_media', 'noviusos_user', 'noviusos_help', 'noviusos_appmanager', 'noviusos_templates_basic') as $app) {
+                $access = Nos\User\Model_Permission::forge();
                 $access->perm_role_id     = $role->role_id;
-                $access->perm_application = 'access';
+                $access->perm_application = $app;
                 $access->perm_identifier  = '';
-                $access->perm_key         = $app;
+                $access->perm_key         = 'access';
                 $access->save();
             }
+
+            File::copy(APPPATH.'config'.DS.'contexts.config.php.sample', APPPATH.'config'.DS.'contexts.config.php');
 
             header('Location: install.php?step=4');
             exit();
@@ -597,31 +662,31 @@ if ($step == 4) {
 
     <h2>Setup contexts</h2>
     <p>
-        You can edit your <strong>local/config/config.php</strong> file to configure the contexts.
+        You can edit your <strong>local/config/contexts.config.php</strong> file to configure the contexts.
     </p>
     <p>
         Currently, the following contexts are set:
-        <ul>
+    <ul>
     <?php
     foreach (Nos\Tools_Context::contexts() as $context => $domains) {
         echo '<li>'.$context.'</li>';
     }
     ?>
-        </ul>
+    </ul>
     </p>
     <p><a href="install.php?step=4">Refresh the list</a></p>
 
 
     <h2>Cleanup</h2>
     <p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
-    <p>Please remove this <code>install.php</code> file.</p>
+    <p>Please remove this <code>install.php</code> and <code>index.php</code> files.</p>
     <code style="width:800px;">
-    rm <?= ROOT ?>public/install.php<br />
-    chmod og-w <?= ROOT ?>local/config
+        rm <?= NOSROOT ?>public/install.php<br />
+        chmod og-w <?= NOSROOT ?>local/config
     </code>
 
     <h2>The end!</h2>
-    <p><a href="admin/?tab=admin/nos/tray/appmanager"><button>Go to the administration panel</button></a></p>
+    <p><a href="admin/?tab=admin/noviusos_appmanager/appmanager"><button>Go to the administration panel</button></a></p>
     <?php
 }
 

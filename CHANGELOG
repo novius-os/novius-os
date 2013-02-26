@@ -1,17 +1,131 @@
 Novius OS framework CHANGELOG
 
-Version 0.2
+February 26, 2013: version 0.2.0.1
+==================================
+
+- Front: if access to a page which is external link, redirect
+- $.nosFormUI: Add notransform filter on checkbox
+- Install: improve symlink creation
+- Refactor routing: use REQUEST_URI instead REDIRECT_URL
+- Front: improve cache of the current page
+- Add constants for entry points of Novius OS
+- Bugfix: enhancer popup in wysiwyg for updating
+- Bugfix: front locale
+- Bugfix: event register on files that don't exist
+- Bugfix: appmanager, uninstalling one app uninstall all apps
+- Bugfix: Tools_URL::page() (missing .html)
+- Bugfix: A user can edit its own account
+- Bugfix: account editing, restored JS validation
+- Bugfix: no scroll in Novius OS tabs
+- Bugfix: Crud form, enter in a field close the tab
+- And many others minor fixes
+
+AppWizard:
+- Add the type 'image'
+- Add URL enhancer
+- Translations
+
+Form:
+- Bugfix: layout becomes all messed up when putting 2 4-width fields on the same line at the bottom
+- Bugfix: cannot move a date field just after adding it
+- Bugfix: captcha always checked
+- Bugfix: front with pagination fail if no captcha
+
+Blog / News:
+- Bugfix: post save fails when root category is selected
+- Bugfix: categories inspector won't load when just one context
+- Bugfix: bad icon URLs when not installed on root domain
+
+Slideshow:
+- Bugfix: bad icon URLs when not installed on root domain
+
+Thank for : @Victor Albert, @Pierre Vion, @JayPS, @FredDubois, @Foine, @Yves Stadler
+
+
+January 31, 2013: version 0.2
+===============================
 
 - Rename lang, lang_common_id, lan_is_main columns. Replace lang by context. Resize lang columns. And all variables
-- Rename behabiour Translatable by ContextableAndTwinnable and all variables
+- Rename behabiour Translatable by Twinnable and all variables
 - In config.php, change locales by contexts
-- CRUD : rename context by situation, context_relation by environment_relation, item_context by item_environment
+- CRUD : rename context by environment, context_relation by environment_relation, item_context by item_environment
 - Update vendors jQuery, jQuery UI, Wijmo, tinyMCE
 - Model_Page->get_link() become Model_Page->link()
 - Model_Page->get_href() become Model_Page->url()
 - Model_Page::get_url() become Tools_Url::page(), remove Model_Page::get_url_absolute()
 - New class helper Tools_Url
-- All functions and methods returning url use absolute url by default (Model_Page->url, Model_Page::find_url, Model_Page->link)
+- All functions and methods returning url use absolute url by default (Model_Page->url, Model_Page::find_url, Model_Page->link, Url_Enhancer->url, Tools_Enhancer::url_item)
+- Add Simple Google+ sharer
+- Click middle on Os Tabs close it, New button Close all other tabs
+- Appdesk : possibility to format column by php config
+- CRUD function from_item rename in init_item and call just if item is new.
+- Fuel PHP (and packages) 1.4 (update submodules)
+- Attachment
+- Refactoring : Rename all Widget by renderer. Can impact classes names, views paths
+- Slideshow
+- Form
+- App wizard
+- Overload any views and config in local
+- Simplest enhancer popup declaration
+- Config : upload.disabled_extensions move in novius-os.upload.disabled_extensions
+- Back-office available in english and french
+- PHP Event front.start have new param cache_path
+- Time picker renderer can be use outside a fieldset
+- Many UI improvements and bugfixes
+
+Thank for : @JayPS, @Shaoshiva,  @Victor Albert, @Julien Guyomard
+
+December 20, 2012: version 0.1.5
+===============================
+
+Core
+----
+* Bugfix: Front - remove href when internal page no longer exists (thanks @vrcAlbert)
+* Bugfix: Fixed recursive deletion for pages and Tree behaviour
+* Bugfix: nosTabsOpen if not 3 tabs in tray (due to permissions)
+* Bugfix: '&' in virtualname prevents from reaching the page
+* Bugfix: Front - Multiple js_inline and css_inline (thanks @jguyomard)
+
+Blog & News
+-----------
+* Bugfix: check if author of post, exist before call fullname method
+* Bugfix: remove load of comments in blognews bootstrap
+
+November 26, 2012: version 0.1.4
+===============================
+
+Core
+----
+* Bugfix: Front post-processing has to run before the cache is written
+* Bugfix: Widget_Media with mode=all (server side)
+* Bugfix: Bahaviour sortable not completely effective
+* Bugfix: locked page can be delete via toolbar crud
+* Bugfix: regression 0.1.3, can't insert enhancer in wysiwyg
+
+
+Install
+-------
+* Bugfix: Added test on public/media (is writeable)
+
+Blog & News
+-----------
+* Bugfix: Use nosLang passed by wysiwyg for widget category in popup ehancer
+* Bugfix: Front View : don't filter object, use htmlentities on each echo
+* Bugfix: get_all method for Model_Post for front, case multiples categories query and fetch all related
+* Bugfix: front controller not use the category selected in the enhancer popup
+* Bugfix: enhancer popup not reselected category selected
+
+
+November 7, 2012: version 0.1.3
+===============================
+
+Core
+----
+* Bugfix: Inspector tree in crud form don't use lang
+
+Blog & News
+-----------
+* Bugfix: CRUD function form_item rename in from_item.
 
 
 October 22, 2012: version 0.1.2

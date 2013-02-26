@@ -1,12 +1,12 @@
 .buildpath
 /local/bootstrap.php
 /local/cache
-/local/config/crypt.config.php
-/local/config/db.config.php
+/local/config/*.php
 /local/data
 /local/logs
 /local/media
 /local/metadata
+/local/applications/noviusos_monkey
 /local/applications/novius_publinova
 /local/applications/labs_cheatsheet
 /logs/
@@ -25,4 +25,4 @@ noviusos.komodoproject
 .idea/
 /local/views/novius-os
 /local/config/development/migrations.config.php
-/fuelphp.php
+/ci/

@@ -1,11 +1,12 @@
-# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/0.1.1)](https://travis-ci.org/novius-os/novius-os)
+# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/0.2)](https://travis-ci.org/novius-os/novius-os)
 
-Turn your back office into a web OS with Novius OS, a next-generation open source CMS.
+Create Once Publish Everywhere with Novius OS, a Cross-Channel Open Source CMS.
 
 Licensed under [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html) or (at your option) any later version.
 
-Current version: 0.1.2
+Current version: 0.2.0.1
 
-* [Website](http://www.novius-os.org/en/)
-  * [French](http://www.novius-os.org) and [Japanese](http://www.novius-os.org/jp/) versions
-* [Installation and documentation](https://github.com/novius-os/novius-os/wiki)
+* Website and blog: [www.novius-os.org](http://www.novius-os.org) ([Français](http://www.novius-os.org/fr/), [日本語](http://www.novius-os.org/jp/))
+* Demo: [demo.novius-os.org](demo.novius-os.org/admin)
+* How to install, documentation: [docs.novius-os.org](http://www.novius-os.org) ([Français](http://docs-fr.novius-os.org), [日本語](http://docs-ja.novius-os.org))
+* Screencasts: [youtube.com/NoviusOS](http://www.youtube.com/NoviusOS) ([Français](http://www.youtube.com/playlist?list=PL76ED1754598A4B7C))

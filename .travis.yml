@@ -1,8 +1,13 @@
 services:
   - mysql
+notifications:
+  email:
+    recipients:
+      - team@novius-os.org
+    on_success: change
+    on_failure: always
 before_install:
-  - COMMIT=`git log -n 1 2>/dev/null | grep "commit " | cut -c7-`
-  - BRANCH=`git branch -r --contains $COMMIT 2>/dev/null | cut -c10- | head -1`
+  - BRANCH=`git symbolic-ref HEAD | sed -e 's,refs/heads/,,g'`
   - git submodule update --init --recursive
   - git clone git://github.com/novius-os/ci.git
   - cd ci
@@ -29,6 +34,8 @@ before_install:
   - chmod a+w local/data/config
   - chmod a+w public/cache
   - chmod a+w public/cache/media
+  - chmod a+w public/media
+  - mv public/index.php public/index.php.old
   - sudo sh -c 'pear channel-discover pear.phpunit.de'
   - sudo sh -c 'pear install --alldeps pear/PHP_CodeSniffer'
 before_script:
@@ -38,4 +45,6 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 script:
   - phpcs -s -n --standard=ci/phpcs/ruleset.xml --extensions=php --report-summary ./
-  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test --direct --log-level=info ./ci/tests/ 'http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/install.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/appmanager.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/page.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
