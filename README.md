@@ -4,7 +4,7 @@ Create Once Publish Everywhere with Novius OS, a Cross-Channel Open Source CMS.
 
 Licensed under [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html) or (at your option) any later version.
 
-Current version: 0.2
+Current version: 0.2.0.1
 
 * Website and blog: [www.novius-os.org](http://www.novius-os.org) ([Français](http://www.novius-os.org/fr/), [日本語](http://www.novius-os.org/jp/))
 * Demo: [demo.novius-os.org](demo.novius-os.org/admin)

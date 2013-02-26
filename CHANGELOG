@@ -1,6 +1,48 @@
 Novius OS framework CHANGELOG
 
-January 31, 2012: version 0.2
+February 26, 2013: version 0.2.0.1
+==================================
+
+- Front: if access to a page which is external link, redirect
+- $.nosFormUI: Add notransform filter on checkbox
+- Install: improve symlink creation
+- Refactor routing: use REQUEST_URI instead REDIRECT_URL
+- Front: improve cache of the current page
+- Add constants for entry points of Novius OS
+- Bugfix: enhancer popup in wysiwyg for updating
+- Bugfix: front locale
+- Bugfix: event register on files that don't exist
+- Bugfix: appmanager, uninstalling one app uninstall all apps
+- Bugfix: Tools_URL::page() (missing .html)
+- Bugfix: A user can edit its own account
+- Bugfix: account editing, restored JS validation
+- Bugfix: no scroll in Novius OS tabs
+- Bugfix: Crud form, enter in a field close the tab
+- And many others minor fixes
+
+AppWizard:
+- Add the type 'image'
+- Add URL enhancer
+- Translations
+
+Form:
+- Bugfix: layout becomes all messed up when putting 2 4-width fields on the same line at the bottom
+- Bugfix: cannot move a date field just after adding it
+- Bugfix: captcha always checked
+- Bugfix: front with pagination fail if no captcha
+
+Blog / News:
+- Bugfix: post save fails when root category is selected
+- Bugfix: categories inspector won't load when just one context
+- Bugfix: bad icon URLs when not installed on root domain
+
+Slideshow:
+- Bugfix: bad icon URLs when not installed on root domain
+
+Thank for : @Victor Albert, @Pierre Vion, @JayPS, @FredDubois, @Foine, @Yves Stadler
+
+
+January 31, 2013: version 0.2
 ===============================
 
 - Rename lang, lang_common_id, lan_is_main columns. Replace lang by context. Resize lang columns. And all variables
