@@ -28,13 +28,13 @@ ErrorDocument 404 /novius-os-install-dir/public/htdocs/novius-os/404.php
     RewriteRule     ^install.php                        public/install.php                    [L]
 
     RewriteRule     ^novius-os/(.*)                     public/htdocs/novius-os/$1            [PT]
-    RewriteRule     ^(admin(|/.*))$                     public/htdocs/novius-os/admin.php/$1  [QSA,PT]
+    RewriteRule     ^(admin(|/.*))$                     public/htdocs/novius-os/admin.php  	  [QSA,PT]
     RewriteCond %{DOCUMENT_ROOT}/novius-os-install-dir/public/htdocs/novius-os/front.php -f
     RewriteRule     ^(.*/|)$                            public/htdocs/novius-os/front.php     [QSA,PT]
     RewriteCond %{DOCUMENT_ROOT}/novius-os-install-dir/public/htdocs/novius-os/front.php !-f
     RewriteRule     ^$                                  public/install.php                    [L]
     RewriteRule     ^(.+)\.html$                        public/htdocs/novius-os/front.php     [QSA,PT]
-    RewriteRule     ^/?(static|data|media|cache)/(.*)   public/$1/$2                    [L]
+    RewriteRule     ^/?(static|data|media|cache)/(.*)   public/$1/$2                    	  [L]
     RewriteRule     ^/(.*)                              public/htdocs/$1                      [L]
 </IfModule>
 
