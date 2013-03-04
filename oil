@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 
 define('FROM_OIL', 1);
 
-define('NOS_ENTRY_POINT', 'OIL');
+define('NOS_ENTRY_POINT', 'ENTRY_POINT_OIL');
 
 $_SERVER['NOS_ROOT'] = __DIR__;
 $_SERVER['REQUEST_URI'] = '/';
