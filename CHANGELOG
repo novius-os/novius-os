@@ -1,5 +1,20 @@
 Novius OS framework CHANGELOG
 
+?: version 0.2.0.2
+==================================
+
+- Standalone build of the wysiwyg renderer.
+-  now inspectors key also allow class to be written
+- Bugfix : front controller, getUrl now returns an absolute URL
+- Bugfix : popup for saving form answer attachment in media centre
+- Bugfix : media managing when not exist on disk
+- Bugfix : front, infinite loop in 404 and URL with accents
+- Bugfix : SEO data not used in front
+- Bugfix : front of slideshow javascript
+
+Thank for : @Julien Guyomard, @Pierre Vion and @Foine
+
+
 February 26, 2013: version 0.2.0.1
 ==================================
 
