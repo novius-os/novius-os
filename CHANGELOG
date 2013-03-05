@@ -3,6 +3,7 @@ Novius OS framework CHANGELOG
 ?: version 0.2.0.2
 ==================================
 
+- Adding 4 events in 404 entry
 - Standalone build of the wysiwyg renderer.
 -  now inspectors key also allow class to be written
 - Bugfix : front controller, getUrl now returns an absolute URL
