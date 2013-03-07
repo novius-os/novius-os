@@ -7,6 +7,6 @@ Licensed under [GNU Affero General Public License v3](http://www.gnu.org/license
 Current version: Novius OS Berlin (latest release 0.2.0.1)
 
 * Website and blog: [www.novius-os.org](http://www.novius-os.org) ([Français](http://www.novius-os.org/fr/), [日本語](http://www.novius-os.org/jp/))
-* Demo: [demo.novius-os.org](demo.novius-os.org/admin)
+* Demo: [demo.novius-os.org](http://demo.novius-os.org/admin)
 * How to install, documentation: [docs.novius-os.org](http://www.novius-os.org) ([Français](http://docs-fr.novius-os.org), [日本語](http://docs-ja.novius-os.org))
 * Screencasts: [youtube.com/NoviusOS](http://www.youtube.com/NoviusOS) ([Français](http://www.youtube.com/playlist?list=PL76ED1754598A4B7C))
