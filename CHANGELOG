@@ -12,6 +12,8 @@ Novius OS framework CHANGELOG
 - Bugfix : front, infinite loop in 404 and URL with accents
 - Bugfix : SEO data not used in front
 - Bugfix : front of slideshow javascript
+- Bugfix : crud popup delete, js not require wijgrid
+- Bugfix : crud delete, bad i18n message
 
 Thank for : @Julien Guyomard, @Pierre Vion and @Foine
 
