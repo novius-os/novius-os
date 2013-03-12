@@ -15,6 +15,9 @@ Novius OS framework CHANGELOG
 - Bugfix : front of slideshow javascript
 - Bugfix : crud popup delete, js not require wijgrid
 - Bugfix : crud delete, bad i18n message
+- Bugfix : enhancer in wysiwyg saved with IE have quote around attributs
+- Bugfix : wysiwyg, set document base uri
+- Bugfix : wysiwyg in IE, enhancer popup don't closing
 
 Thank for : @Julien Guyomard, @Pierre Vion and @Foine
 
