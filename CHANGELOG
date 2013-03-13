@@ -18,6 +18,7 @@ Novius OS framework CHANGELOG
 - Bugfix : enhancer in wysiwyg saved with IE have quote around attributs
 - Bugfix : wysiwyg, set document base uri
 - Bugfix : wysiwyg in IE, enhancer popup don't closing
+- Bugfix : Update crud.ctrl.php to hide translate button if just one context
 
 Thank for : @Julien Guyomard, @Pierre Vion and @Foine
 
