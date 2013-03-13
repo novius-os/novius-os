@@ -5,7 +5,8 @@ Novius OS framework CHANGELOG
 
 - Adding 4 events in 404 entry
 - Standalone build of the wysiwyg renderer.
--  now inspectors key also allow class to be written
+- now inspectors key also allow class to be written
+- Refactor OS Tabs : if not a touch device, close icon now in tab with a context menu
 - Bugfix : front controller, getUrl now returns an absolute URL
 - Bugfix : popup for saving form answer attachment in media centre
 - Bugfix : media managing when not exist on disk
@@ -14,6 +15,9 @@ Novius OS framework CHANGELOG
 - Bugfix : front of slideshow javascript
 - Bugfix : crud popup delete, js not require wijgrid
 - Bugfix : crud delete, bad i18n message
+- Bugfix : enhancer in wysiwyg saved with IE have quote around attributs
+- Bugfix : wysiwyg, set document base uri
+- Bugfix : wysiwyg in IE, enhancer popup don't closing
 
 Thank for : @Julien Guyomard, @Pierre Vion and @Foine
 
