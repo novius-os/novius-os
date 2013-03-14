@@ -22,6 +22,7 @@ return array(
     //'locale' => 'en_GB.utf8',
 
     //'novius-os' => array(
+        //'cache' => \Fuel::$env !== \Fuel::DEVELOPMENT,
         //'cache_duration_page' => 5,
         //'cache_duration_function' => 10,
 
