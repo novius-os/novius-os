@@ -7,6 +7,9 @@ Novius OS framework CHANGELOG
 - Standalone build of the wysiwyg renderer.
 - now inspectors key also allow class to be written
 - Refactor OS Tabs : if not a touch device, close icon now in tab with a context menu
+- Adding a config novius-os.cache for use of cache on front, by default true except in development
+- Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 60 by default
+- Bugfix : controller front, POST and _preview use cache
 - Bugfix : front controller, getUrl now returns an absolute URL
 - Bugfix : popup for saving form answer attachment in media centre
 - Bugfix : media managing when not exist on disk
@@ -18,6 +21,7 @@ Novius OS framework CHANGELOG
 - Bugfix : enhancer in wysiwyg saved with IE have quote around attributs
 - Bugfix : wysiwyg, set document base uri
 - Bugfix : wysiwyg in IE, enhancer popup don't closing
+- Bugfix : Update crud.ctrl.php to hide translate button if just one context
 
 Thank for : @Julien Guyomard, @Pierre Vion and @Foine
 
