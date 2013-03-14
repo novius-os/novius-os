@@ -1,5 +1,12 @@
 Novius OS framework CHANGELOG
 
+?: version 0.2.1
+==================================
+
+- Setting config novius-os.cache by default always at true
+- Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 600 by default, except in PRODUCTION at 3600
+
+
 ?: version 0.2.0.2
 ==================================
 
