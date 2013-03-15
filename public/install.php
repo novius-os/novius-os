@@ -565,7 +565,7 @@ if ($step == 2) {
             \View::redirect('errors'.DS.'php_error', NOSPATH.'views/errors/empty.view.php');
             error_reporting($old_level);
 
-            Migrate::latest();
+            Migrate::latest('nos', 'package');
             Crypt::_init();
 
             // Install metadata
