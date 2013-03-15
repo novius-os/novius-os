@@ -578,6 +578,21 @@ if ($step == 2) {
 
             Config::save('local::db', $config);
 
+            $file = APPPATH.'config'.DS.'db.config.php';
+            $handle = fopen($file, 'r+');
+            if ($handle) {
+                $content = fread($handle, filesize($file));
+                $content = preg_replace(
+                    "`'active' => 'development'`Uu",
+                    "'active' => Fuel::\$env",
+                    $content);
+
+                ftruncate($handle, 0);
+                rewind($handle);
+                fwrite($handle, $content);
+                fclose($handle);
+            }
+
             header('Location: install.php?step=3');
             exit();
 
