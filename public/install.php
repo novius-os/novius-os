@@ -258,6 +258,13 @@ $tests = array(
         'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
     ),
 
+    'folder.cache.fuelphp.writeable' => array(
+        'title'        => 'APPPATH/cache/fuelphp is writeable by the webserver',
+        'passed'       => is_writeable(APPPATH.'cache'.DS.'fuelphp'),
+        'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'fuelphp',
+        'run_only_if'  => is_dir(APPPATH.'cache'.DS.'fuelphp'),
+    ),
+
     'folder.data.writeable' => array(
         'title'        => 'APPPATH/data/ is writeable by the webserver',
         'passed'       => is_writeable($folder_data),
@@ -404,6 +411,7 @@ echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('folder.cache.writeable') && $passed;
 $passed = run_test('folder.cache.media.writeable') && $passed;
+$passed = run_test('folder.cache.fuelphp.writeable') && $passed;
 $passed = run_test('folder.metadata.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
