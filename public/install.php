@@ -546,7 +546,7 @@ if ($step == 2) {
                 'table_prefix' => '',
                 'charset'      => 'utf8',
                 'enable_cache' => true,
-                'profiling'    => false,
+                'profiling'    => true,
             ),
         );
 
