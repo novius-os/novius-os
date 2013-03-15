@@ -1,5 +1,16 @@
 Novius OS framework CHANGELOG
 
+?: version 0.2.1
+==================================
+
+- Setting config novius-os.cache by default always at true
+- Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 600 by default, except in PRODUCTION at 3600
+- Profiling is activate by default on front for DEVELOPMENT environment
+- Add a config for fuelphp cache, add local/cache/fuelphp directory, add check for it in install process
+- DB Config : active is set at current Fuel::$env in install process
+- Set $_properties in all models (core and native apps)
+
+
 ?: version 0.2.0.2
 ==================================
 
@@ -9,6 +20,7 @@ Novius OS framework CHANGELOG
 - Refactor OS Tabs : if not a touch device, close icon now in tab with a context menu
 - Adding a config novius-os.cache for use of cache on front, by default true except in development
 - Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 60 by default
+- In front controller, adding js inline accept content with <script...
 - Bugfix : controller front, POST and _preview use cache
 - Bugfix : front controller, getUrl now returns an absolute URL
 - Bugfix : popup for saving form answer attachment in media centre
@@ -22,6 +34,7 @@ Novius OS framework CHANGELOG
 - Bugfix : wysiwyg, set document base uri
 - Bugfix : wysiwyg in IE, enhancer popup don't closing
 - Bugfix : Update crud.ctrl.php to hide translate button if just one context
+- Bugfix : Update links to documentation in blank slate front
 
 Thank for : @Julien Guyomard, @Pierre Vion and @Foine
 
