@@ -8,6 +8,7 @@ Novius OS framework CHANGELOG
 - Profiling is activate by default on front for DEVELOPMENT environment
 - Add a config for fuelphp cache, add local/cache/fuelphp directory, add check for it in install process
 - DB Config : active is set at current Fuel::$env in install process
+- Set $_properties in all models (core and native apps)
 
 
 ?: version 0.2.0.2
