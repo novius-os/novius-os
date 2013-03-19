@@ -9,6 +9,7 @@ Novius OS framework CHANGELOG
 - Add a config for fuelphp cache, add local/cache/fuelphp directory, add check for it in install process
 - DB Config : active is set at current Fuel::$env in install process
 - Set $_properties in all models (core and native apps)
+- Refactor : properties cached by front controller (_page', _context_url, _page_url, _url)
 
 
 ?: version 0.2.0.2
