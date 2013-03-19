@@ -36,6 +36,7 @@ Novius OS framework CHANGELOG
 - Bugfix : wysiwyg in IE, enhancer popup don't closing
 - Bugfix : Update crud.ctrl.php to hide translate button if just one context
 - Bugfix : Update links to documentation in blank slate front
+- Bugfix : In appdesk, grid not trigger selectionChanged when is reloading and has a selected item
 
 Thank for : @Julien Guyomard, @Pierre Vion and @Foine
 
