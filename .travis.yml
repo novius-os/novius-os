@@ -14,6 +14,7 @@ before_install:
   - echo $BRANCH
   - git checkout $BRANCH
   - cd ..
+  - sudo apt-get update
   - sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php-pear
   - sudo a2enmod rewrite
   - cat ci/virtualhost | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
@@ -31,6 +32,7 @@ before_install:
   - chmod a+w local/cache
   - chmod a+w local/data/media
   - chmod a+w local/cache/media
+  - chmod a+w local/cache/fuelphp
   - chmod a+w local/data/config
   - chmod a+w public/cache
   - chmod a+w public/cache/media

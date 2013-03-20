@@ -5,7 +5,7 @@
 #             http://www.gnu.org/licenses/agpl-3.0.html
 # @link http://www.novius-os.org
 
-Options +FollowSymLinks
+Options +FollowSymLinks -Indexes
 
 ErrorDocument 404 /htdocs/novius-os/404.php
 
@@ -25,7 +25,7 @@ ErrorDocument 404 /htdocs/novius-os/404.php
     RewriteRule     -                           -                               [PT]
 
     RewriteRule     ^novius-os/(.*)             /htdocs/novius-os/$1            [PT]
-    RewriteRule     ^(admin(|/.*))$             /htdocs/novius-os/admin.php/$1  [QSA,PT]
+    RewriteRule     ^(admin(|/.*))$             /htdocs/novius-os/admin.php     [QSA,PT]
     RewriteCond %{DOCUMENT_ROOT}/htdocs/novius-os/front.php -f
     RewriteRule     ^(.*/|)$                    /htdocs/novius-os/front.php     [QSA,PT]
     RewriteRule     ^(.+)\.html$                /htdocs/novius-os/front.php     [QSA,PT]

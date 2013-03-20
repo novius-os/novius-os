@@ -155,6 +155,8 @@ $_SERVER['NOS_ROOT'] = realpath(__DIR__.DIRECTORY_SEPARATOR.'..');
 // Boot the app
 require_once $_SERVER['NOS_ROOT'].DIRECTORY_SEPARATOR.'novius-os'.DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'bootstrap.php';
 
+Fuel::$profiling = false;
+
 define('NOVIUSOS_PATH', realpath(DOCROOT.'..'.DS.'novius-os').DS);
 
 function run_test($name)
@@ -256,6 +258,13 @@ $tests = array(
         'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
         'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
         'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
+    ),
+
+    'folder.cache.fuelphp.writeable' => array(
+        'title'        => 'APPPATH/cache/fuelphp is writeable by the webserver',
+        'passed'       => is_writeable(APPPATH.'cache'.DS.'fuelphp'),
+        'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'fuelphp',
+        'run_only_if'  => is_dir(APPPATH.'cache'.DS.'fuelphp'),
     ),
 
     'folder.data.writeable' => array(
@@ -404,6 +413,7 @@ echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('folder.cache.writeable') && $passed;
 $passed = run_test('folder.cache.media.writeable') && $passed;
+$passed = run_test('folder.cache.fuelphp.writeable') && $passed;
 $passed = run_test('folder.metadata.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
@@ -546,7 +556,7 @@ if ($step == 2) {
                 'table_prefix' => '',
                 'charset'      => 'utf8',
                 'enable_cache' => true,
-                'profiling'    => false,
+                'profiling'    => true,
             ),
         );
 
@@ -554,10 +564,10 @@ if ($step == 2) {
             Config::load($config, 'db'); // set config inside db and reload the cache
             // Try to connect to the DB
             $old_level = error_reporting(0);
-            \View::redirect('errors'.DS.'php_error', NOSPATH.'/views/errors/empty');
+            \View::redirect('errors'.DS.'php_error', NOSPATH.'views/errors/empty.view.php');
             error_reporting($old_level);
 
-            Migrate::latest();
+            Migrate::latest('nos', 'package');
             Crypt::_init();
 
             // Install metadata
@@ -569,6 +579,21 @@ if ($step == 2) {
             $application->install(false);
 
             Config::save('local::db', $config);
+
+            $file = APPPATH.'config'.DS.'db.config.php';
+            $handle = fopen($file, 'r+');
+            if ($handle) {
+                $content = fread($handle, filesize($file));
+                $content = preg_replace(
+                    "`'active' => 'development'`Uu",
+                    "'active' => Fuel::\$env",
+                    $content);
+
+                ftruncate($handle, 0);
+                rewind($handle);
+                fwrite($handle, $content);
+                fclose($handle);
+            }
 
             header('Location: install.php?step=3');
             exit();
