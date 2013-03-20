@@ -11,6 +11,11 @@ Novius OS framework CHANGELOG
 - Set $_properties in all models (core and native apps)
 - Refactor : properties cached by front controller (_page', _context_url, _page_url, _url)
 
+Slideshow:
+- add HTML5 progress bar
+
+Thank for : @Fumito Mizuno
+
 
 ?: version 0.2.0.2
 ==================================
