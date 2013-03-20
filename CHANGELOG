@@ -31,6 +31,7 @@ Blog / News:
 
 Slideshow:
 - Bugfix: front of slideshow javascript
+- Bugfix: front in IE8, in onreadystatechange event, readyState is not 'complete' but 'loaded'
 
 Thank for : @Julien Guyomard, @Pierre Vion and @Foine
 
