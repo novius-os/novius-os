@@ -1,12 +1,13 @@
 Novius OS framework CHANGELOG
 
-?: version 0.2.0.2
+March 21, 2013: version 0.2.0.2
 ==================================
 
 - Adding 4 events in 404 entry
 - Standalone build of the wysiwyg renderer.
 - now inspectors key also allow class to be written
 - Refactor OS Tabs : if not a touch device, close icon now in tab with a context menu
+- Refactor : generate base_url now use server variable http_host
 - Adding a config novius-os.cache for use of cache on front, by default true except in development
 - Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 60 by default
 - In front controller, adding js inline accept content with <script...
