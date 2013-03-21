@@ -7,10 +7,10 @@ Licensed under [GNU Affero General Public License v3](http://www.gnu.org/license
 
 ## Installation
 
-* Current version: Novius OS Berlin (latest release 0.2.0.1)
+* Current version: Novius OS Berlin (latest release 0.2.0.2)
 * Several options are available: quick install via GitHub, download a ZIP, custom installation.
 * [Read the documentation](http://docs.novius-os.org/en/0.2/install/install.html) to get started ([Français](http://docs-fr.novius-os.org/en/0.2/install/install.html)).
- 
+
 ## Documentation
 
 [docs.novius-os.org](http://docs.novius-os.org) ([Français](http://docs-fr.novius-os.org), [日本語](http://docs-ja.novius-os.org))
