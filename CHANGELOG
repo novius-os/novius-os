@@ -10,6 +10,8 @@ Novius OS framework CHANGELOG
 - DB Config : active is set at current Fuel::$env in install process
 - Set $_properties in all models (core and native apps)
 - Refactor : properties cached by front controller (_page', _context_url, _page_url, _url)
+- Migrations are now dispatched per application
+- New metadata key requires which allows to define that an application requires an other
 
 Slideshow:
 - add HTML5 progress bar
@@ -17,7 +19,7 @@ Slideshow:
 Thank for : @Fumito Mizuno
 
 
-?: version 0.2.0.2
+March 22, 2013: version 0.2.0.2
 ==================================
 
 - Adding 4 events in 404 entry
