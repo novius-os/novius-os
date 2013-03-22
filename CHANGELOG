@@ -3,6 +3,7 @@ Novius OS framework CHANGELOG
 ?: version 0.2.1
 ==================================
 
+- New feature: Behaviour_Publishable now allows to choose publication start & end dates
 - Setting config novius-os.cache by default always at true
 - Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 600 by default, except in PRODUCTION at 3600
 - Profiling is activate by default on front for DEVELOPMENT environment
@@ -10,15 +11,30 @@ Novius OS framework CHANGELOG
 - DB Config : active is set at current Fuel::$env in install process
 - Set $_properties in all models (core and native apps)
 - Refactor : properties cached by front controller (_page', _context_url, _page_url, _url)
+- Migrations are now dispatched per application
+- New metadata key requires which allows to define that an application requires an other
+- The extends key now allows to disable automatic configuration recursive merge (only bootstrap loading remains int this case)
+
+Slideshow:
+- add HTML5 progress bar
+
+Thank for : @Fumito Mizuno
 
 
-?: version 0.2.0.2
+?: version 0.2.0.3
+==================================
+
+- Bugfix : front controller, getUrl() returns a bad URL for secondary contexts
+- Bugfix : Model::set() generate a NOTICE in PHP 5.4 if property name is an array
+
+March 21, 2013: version 0.2.0.2
 ==================================
 
 - Adding 4 events in 404 entry
 - Standalone build of the wysiwyg renderer.
 - now inspectors key also allow class to be written
 - Refactor OS Tabs : if not a touch device, close icon now in tab with a context menu
+- Refactor : generate base_url now use server variable http_host
 - Adding a config novius-os.cache for use of cache on front, by default true except in development
 - Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 60 by default
 - In front controller, adding js inline accept content with <script...
@@ -43,6 +59,7 @@ Blog / News:
 
 Slideshow:
 - Bugfix: front of slideshow javascript
+- Bugfix: front in IE8, in onreadystatechange event, readyState is not 'complete' but 'loaded'
 
 Thank for : @Julien Guyomard, @Pierre Vion and @Foine
 

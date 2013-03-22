@@ -7,7 +7,7 @@ notifications:
     on_success: change
     on_failure: always
 before_install:
-  - BRANCH=`git symbolic-ref HEAD | sed -e 's,refs/heads/,,g'`
+  - BRANCH=$(echo `git for-each-ref --format='%(objectname) %(refname:short)' refs/heads | awk "/^$(git rev-parse HEAD)/ {print \$2}"` | cut -d" " -f2);
   - git submodule update --init --recursive
   - git clone git://github.com/novius-os/ci.git
   - cd ci
