@@ -1,6 +1,114 @@
 Novius OS framework CHANGELOG
 
-January 31, 2012: version 0.2
+?: version 0.2.1
+==================================
+
+- New feature: Behaviour_Publishable now allows to choose publication start & end dates
+- Setting config novius-os.cache by default always at true
+- Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 600 by default, except in PRODUCTION at 3600
+- Profiling is activate by default on front for DEVELOPMENT environment
+- Add a config for fuelphp cache, add local/cache/fuelphp directory, add check for it in install process
+- DB Config : active is set at current Fuel::$env in install process
+- Set $_properties in all models (core and native apps)
+- Refactor : properties cached by front controller (_page', _context_url, _page_url, _url)
+- Migrations are now dispatched per application
+- New metadata key requires which allows to define that an application requires an other
+- The extends key now allows to disable automatic configuration recursive merge (only bootstrap loading remains int this case)
+- It is now possible to use href="##..." in enhancers ; occurences will be replaced by href="#..." without base_url in prefix.
+
+Slideshow:
+- add HTML5 progress bar
+
+Thank for : @Fumito Mizuno
+
+
+?: version 0.2.0.3
+==================================
+
+- Bugfix : front controller, getUrl() returns a bad URL for secondary contexts
+- Bugfix : Model::set() generate a NOTICE in PHP 5.4 if property name is an array
+- Bugfix : Refresh all metadata don't alter app_dependencies anymore
+
+March 21, 2013: version 0.2.0.2
+==================================
+
+- Adding 4 events in 404 entry
+- Standalone build of the wysiwyg renderer.
+- now inspectors key also allow class to be written
+- Refactor OS Tabs : if not a touch device, close icon now in tab with a context menu
+- Refactor : generate base_url now use server variable http_host
+- Adding a config novius-os.cache for use of cache on front, by default true except in development
+- Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 60 by default
+- In front controller, adding js inline accept content with <script...
+- Bugfix : controller front, POST and _preview use cache
+- Bugfix : front controller, getUrl now returns an absolute URL
+- Bugfix : front controller, context_url was set after parse wysiwyg
+- Bugfix : popup for saving form answer attachment in media centre
+- Bugfix : media managing when not exist on disk
+- Bugfix : front, infinite loop in 404 and URL with accents
+- Bugfix : SEO data not used in front
+- Bugfix : crud popup delete, js not require wijgrid
+- Bugfix : crud delete, bad i18n message
+- Bugfix : enhancer in wysiwyg saved with IE have quote around attributs
+- Bugfix : wysiwyg, set document base uri
+- Bugfix : wysiwyg in IE, enhancer popup don't closing
+- Bugfix : Update crud.ctrl.php to hide translate button if just one context
+- Bugfix : Update links to documentation in blank slate front
+- Bugfix : In appdesk, grid not trigger selectionChanged when is reloading and has a selected item
+
+Blog / News:
+- Bugfix : &nbsp; form i18n not decode for RSS title and description
+
+Slideshow:
+- Bugfix: front of slideshow javascript
+- Bugfix: front in IE8, in onreadystatechange event, readyState is not 'complete' but 'loaded'
+
+Thank for : @Julien Guyomard, @Pierre Vion and @Foine
+
+
+February 26, 2013: version 0.2.0.1
+==================================
+
+- Front: if access to a page which is external link, redirect
+- $.nosFormUI: Add notransform filter on checkbox
+- Install: improve symlink creation
+- Refactor routing: use REQUEST_URI instead REDIRECT_URL
+- Front: improve cache of the current page
+- Add constants for entry points of Novius OS
+- Bugfix: enhancer popup in wysiwyg for updating
+- Bugfix: front locale
+- Bugfix: event register on files that don't exist
+- Bugfix: appmanager, uninstalling one app uninstall all apps
+- Bugfix: Tools_URL::page() (missing .html)
+- Bugfix: A user can edit its own account
+- Bugfix: account editing, restored JS validation
+- Bugfix: no scroll in Novius OS tabs
+- Bugfix: Crud form, enter in a field close the tab
+- And many others minor fixes
+
+AppWizard:
+- Add the type 'image'
+- Add URL enhancer
+- Translations
+
+Form:
+- Bugfix: layout becomes all messed up when putting 2 4-width fields on the same line at the bottom
+- Bugfix: cannot move a date field just after adding it
+- Bugfix: captcha always checked
+- Bugfix: front with pagination fail if no captcha
+
+Blog / News:
+- Bugfix: post save fails when root category is selected
+- Bugfix: categories inspector won't load when just one context
+- Bugfix: bad icon URLs when not installed on root domain
+
+Slideshow:
+- Bugfix: bad icon URLs when not installed on root domain
+
+Thank for : @Victor Albert, @Pierre Vion, @JayPS, @FredDubois, @Foine, @Yves Stadler
+
+
+January 31, 2013: version 0.2
 ===============================
 
 - Rename lang, lang_common_id, lan_is_main columns. Replace lang by context. Resize lang columns. And all variables

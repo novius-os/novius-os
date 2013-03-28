@@ -5,7 +5,7 @@
 #             http://www.gnu.org/licenses/agpl-3.0.html
 # @link http://www.novius-os.org
 
-Options +FollowSymLinks
+Options +FollowSymLinks -Indexes
 
 ErrorDocument 404 /htdocs/novius-os/404.php
 
@@ -21,15 +21,25 @@ ErrorDocument 404 /htdocs/novius-os/404.php
 <IfModule mod_rewrite.c>
     RewriteEngine   on
 
-    RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule     -                           -                               [PT]
+    # do nothing for URL begining with a folder in static|cache|media|data|htdocs
+    RewriteRule ^(static|cache|media|data|htdocs)/  -                               [L]
 
-    RewriteRule     ^novius-os/(.*)             /htdocs/novius-os/$1            [PT]
-    RewriteRule     ^(admin(|/.*))$             /htdocs/novius-os/admin.php/$1  [QSA,PT]
+    # Abstraction of htdocs directory for php files
+    RewriteCond %{DOCUMENT_ROOT}/htdocs%{REQUEST_URI} -f
+    RewriteRule ^(.*)\.php$                         /htdocs/$1.php                  [L]
+
+    # If the file requested exist, just send it
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule .                                   -                               [L]
+
+    # Entry point for back-office controller URL
+    RewriteRule ^(admin(|/.*))$             /htdocs/novius-os/admin.php     [QSA,PT]
+
+    # Entry point for front office if Novius OS have been installed
     RewriteCond %{DOCUMENT_ROOT}/htdocs/novius-os/front.php -f
-    RewriteRule     ^(.*/|)$                    /htdocs/novius-os/front.php     [QSA,PT]
-    RewriteRule     ^(.+)\.html$                /htdocs/novius-os/front.php     [QSA,PT]
-    RewriteRule     ^/(static|cache|media|data) -                               [L]
-    RewriteRule     ^/(.*)                      /htdocs/$1                      [L]
+    RewriteRule .?                          /htdocs/novius-os/front.php     [QSA,PT]
+
+    # Else go to index.php, so to install.php
+    RewriteRule .?                          /index.php                      [QSA,PT]
 
 </IfModule>
