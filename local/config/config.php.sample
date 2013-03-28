@@ -26,6 +26,10 @@ return array(
         //'cache_duration_page' => \Fuel::$env !== \Fuel::PRODUCTION ? 3600 : 600,
         //'cache_duration_function' => \Fuel::$env !== \Fuel::PRODUCTION ? 3600 : 600,
 
+        /*'users' => array(
+            'enable_roles' => true,
+        ),*/
+
         /*'upload' => array(
             'disabled_extensions' => array('php'),
         ),*/
