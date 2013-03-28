@@ -27,6 +27,7 @@ Thank for : @Fumito Mizuno
 
 - Bugfix : front controller, getUrl() returns a bad URL for secondary contexts
 - Bugfix : Model::set() generate a NOTICE in PHP 5.4 if property name is an array
+- Bugfix : Refresh all metadata don't alter app_dependencies anymore
 
 March 21, 2013: version 0.2.0.2
 ==================================
