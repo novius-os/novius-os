@@ -7,6 +7,7 @@ Novius OS framework CHANGELOG
 - Bugfix : Model::set() generate a NOTICE in PHP 5.4 if property name is an array
 - Bugfix : Inspector tree model checkbox/radio removes sub item checked not display
 - Bugfix : Refresh all metadata don't alter app_dependencies anymore
+- Bugfix : Wysiwyg retreive nosContext when it is needed, not at init
 
 March 21, 2013: version 0.2.0.2
 ==================================
