@@ -5,6 +5,7 @@ Novius OS framework CHANGELOG
 
 - Bugfix : front controller, getUrl() returns a bad URL for secondary contexts
 - Bugfix : Model::set() generate a NOTICE in PHP 5.4 if property name is an array
+- Bugfix : Inspector tree model checkbox/radio removes sub item checked not display
 
 March 21, 2013: version 0.2.0.2
 ==================================
