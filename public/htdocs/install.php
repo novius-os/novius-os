@@ -300,12 +300,6 @@ $tests = array(
         'run_only_if'  => is_file(NOSROOT.'.htaccess'),
     ),
 
-    'public.index-php.removed' => array(
-        'title'        => 'DOCROOT/index.php is removed',
-        'passed'       => !is_file(DOCROOT.'index.php'),
-        'command_line' => 'mv '.DOCROOT.'index.php '.DOCROOT.'index.php.old',
-    ),
-
     'public.cache.writeable' => array(
         'title'        => 'DOCROOT/cache/ is writeable by the webserver',
         'passed'       => is_writeable(DOCROOT.'cache'),
@@ -397,7 +391,6 @@ $passed = run_test('directive.magic_quotes_gpc') && $passed;
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('public.htaccess.removed') && $passed;
-$passed = run_test('public.index-php.removed') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
