@@ -22,19 +22,24 @@ ErrorDocument 404 /novius-os-install-dir/public/htdocs/novius-os/404.php
 <IfModule mod_rewrite.c>
     RewriteEngine   on
 
-    RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule     -                                   -                                     [PT]
+    # Entry point for back-office controller URL
+    RewriteRule ^(admin(|/.*))$                             public/htdocs/novius-os/admin.php       [QSA,PT]
 
-    RewriteRule     ^install.php                        public/install.php                    [L]
+    # Entry point for front office
+    RewriteRule ^([^\.]*)$                                  public/htdocs/novius-os/front.php       [QSA,PT]
+    RewriteRule ^.+[\.html|/]$                              public/htdocs/novius-os/front.php       [QSA,PT]
 
-    RewriteRule     ^novius-os/(.*)                     public/htdocs/novius-os/$1            [PT]
-    RewriteRule     ^(admin(|/.*))$                     public/htdocs/novius-os/admin.php  	  [QSA,PT]
-    RewriteCond %{DOCUMENT_ROOT}/novius-os-install-dir/public/htdocs/novius-os/front.php -f
-    RewriteRule     ^(.*/|)$                            public/htdocs/novius-os/front.php     [QSA,PT]
-    RewriteCond %{DOCUMENT_ROOT}/novius-os-install-dir/public/htdocs/novius-os/front.php !-f
-    RewriteRule     ^$                                  public/install.php                    [L]
-    RewriteRule     ^(.+)\.html$                        public/htdocs/novius-os/front.php     [QSA,PT]
-    RewriteRule     ^/?(static|data|media|cache)/(.*)   public/$1/$2                    	  [L]
-    RewriteRule     ^/(.*)                              public/htdocs/$1                      [L]
+    # Novius OS is not installed, redirect to install
+    RewriteCond !%{DOCUMENT_ROOT}/novius-os-install-dir/public/htdocs/novius-os/front.php -f
+    RewriteRule ^public/htdocs/novius-os/front.php          /novius-os-install-dir/install.php      [R,L]
+
+    # do nothing for URL begining with a folder in public/(static|cache|media|data|htdocs)
+    RewriteRule ^public/(static|cache|media|data|htdocs)/   -                                       [L]
+
+    # Redirect URL not begining with public folder to public
+    RewriteRule ^(static|cache|media|data|htdocs)/(.*)      public/$1/$2                            [L]
+
+    # Abstraction of htdocs directory in public
+    RewriteRule ^(.*)                                       public/htdocs/$1                        [L]
 </IfModule>
 
