@@ -25,11 +25,12 @@ ErrorDocument 404 /htdocs/novius-os/404.php
     RewriteRule ^(admin(|/.*))$                     /htdocs/novius-os/admin.php     [QSA,PT]
 
     # Entry point for front office
-    # One for home and file without extension
-    RewriteRule ^([^\.]*)$                          /htdocs/novius-os/front.php     [QSA,PT]
+    # One for home
+    RewriteRule ^$                                  /htdocs/novius-os/front.php     [QSA,PT]
     # One for directory and html file
     RewriteRule ^.+[\.html|/]$                      /htdocs/novius-os/front.php     [QSA,PT]
 
+    # Comments this 2 lines after install for optimisation
     # Novius OS is not installed, redirect to install
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^htdocs/novius-os/front.php         /install.php                    [R,L]
