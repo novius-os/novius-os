@@ -150,7 +150,7 @@ ob_start();
 
 define('NOS_ENTRY_POINT', 'install');
 
-$_SERVER['NOS_ROOT'] = realpath(__DIR__.DIRECTORY_SEPARATOR.'..');
+$_SERVER['NOS_ROOT'] = realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..');
 
 // Boot the app
 require_once $_SERVER['NOS_ROOT'].DIRECTORY_SEPARATOR.'novius-os'.DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'bootstrap.php';
@@ -300,12 +300,6 @@ $tests = array(
         'run_only_if'  => is_file(NOSROOT.'.htaccess'),
     ),
 
-    'public.index-php.removed' => array(
-        'title'        => 'DOCROOT/index.php is removed',
-        'passed'       => !is_file(DOCROOT.'index.php'),
-        'command_line' => 'mv '.DOCROOT.'index.php '.DOCROOT.'index.php.old',
-    ),
-
     'public.cache.writeable' => array(
         'title'        => 'DOCROOT/cache/ is writeable by the webserver',
         'passed'       => is_writeable(DOCROOT.'cache'),
@@ -397,7 +391,6 @@ $passed = run_test('directive.magic_quotes_gpc') && $passed;
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('public.htaccess.removed') && $passed;
-$passed = run_test('public.index-php.removed') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
@@ -704,9 +697,9 @@ if ($step == 4) {
 
     <h2>Cleanup</h2>
     <p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
-    <p>Please remove this <code>install.php</code> and <code>index.php</code> files.</p>
+    <p>Please remove this <code>install.php</code> file.</p>
     <code style="width:800px;">
-        rm <?= NOSROOT ?>public/install.php<br />
+        rm <?= NOSROOT ?>public/htdocs/install.php<br />
         chmod og-w <?= NOSROOT ?>local/config
     </code>
 
