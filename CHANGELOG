@@ -15,6 +15,7 @@ Novius OS framework CHANGELOG
 - New metadata key requires which allows to define that an application requires an other
 - The extends key now allows to disable automatic configuration recursive merge (only bootstrap loading remains int this case)
 - It is now possible to use href="##..." in enhancers ; occurences will be replaced by href="#..." without base_url in prefix.
+- When returning a string in the disabled key, it is displayed as a title. Disabled and visible key can now be simple values, callbacks or array of callbacks.
 
 Slideshow:
 - add HTML5 progress bar
