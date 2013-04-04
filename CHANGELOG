@@ -4,18 +4,32 @@ Novius OS framework CHANGELOG
 ==================================
 
 - New feature: Behaviour_Publishable now allows to choose publication start & end dates
+- DB Config : active is set at current Fuel::$env in install process
+- Migrations are now dispatched per application
+- New metadata key 'requires' which allows to define that an application requires an other
+- The extends key, in metadata, now allows to disable automatic configuration recursive merge (only bootstrap loading remains int this case)
+- It is now possible to use href="##..." in enhancers or templates; occurences will be replaced by href="#..." without base_url in prefix.
+- CRUD: When returning a string in the disabled key, it is displayed as a title. Disabled and visible key can now be simple values, callbacks or array of callbacks.
+- Deprecated: Move Nos\Renderer_Media to Nos\Media\Renderer_Media.
+
+Front improvements:
+- Profiling is activate by default on front for DEVELOPMENT environment
+- Refactor: properties cached by front controller (_page', _context_url, _page_url, _url)
 - Setting config novius-os.cache by default always at true
 - Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 600 by default, except in PRODUCTION at 3600
-- Profiling is activate by default on front for DEVELOPMENT environment
+
+Models properties:
 - Add a config for fuelphp cache, add local/cache/fuelphp directory, add check for it in install process
-- DB Config : active is set at current Fuel::$env in install process
-- Set $_properties in all models (core and native apps)
-- Refactor : properties cached by front controller (_page', _context_url, _page_url, _url)
-- Migrations are now dispatched per application
-- New metadata key requires which allows to define that an application requires an other
-- The extends key now allows to disable automatic configuration recursive merge (only bootstrap loading remains int this case)
-- It is now possible to use href="##..." in enhancers ; occurences will be replaced by href="#..." without base_url in prefix.
-- When returning a string in the disabled key, it is displayed as a title. Disabled and visible key can now be simple values, callbacks or array of callbacks.
+- All models (core and native apps) $_properties are defined
+- Implement a cache mechanism for models properties, using fuelphp cache. Auto-refreshing when an unknown properties is called.
+
+Vendors:
+- jQuery 1.8.3
+- jQuery UI 1.9.2
+- Wijmo 2.3.7
+- tinyMCE 3.5.8
+- require.js 2.1.4
+- FuelPHP and packages 1.5
 
 Slideshow:
 - add HTML5 progress bar
