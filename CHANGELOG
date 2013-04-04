@@ -10,13 +10,26 @@ Novius OS framework CHANGELOG
 - The extends key, in metadata, now allows to disable automatic configuration recursive merge (only bootstrap loading remains int this case)
 - It is now possible to use href="##..." in enhancers or templates; occurences will be replaced by href="#..." without base_url in prefix.
 - CRUD: When returning a string in the disabled key, it is displayed as a title. Disabled and visible key can now be simple values, callbacks or array of callbacks.
-- Deprecated: Move Nos\Renderer_Media to Nos\Media\Renderer_Media.
+
+Deprecated:
+- Move Nos\Renderer_Media to Nos\Media\Renderer_Media.
+- On launchers, the 'url' key is deprecated. Use the action key.
+- The 'widget' key is deprecated in renderer configuration. Use the renderer key and update class name.
+- The 'widget_options' key is deprecated in renderer configuration. Use the renderer_options key.
+- \Config::extendable_load() is deprecated. Rename to \Config::loadConfiguration().
+- The 'publication_bool_property' key in Orm_Behaviour_Publishable configuration is deprecated. Use 'publication_state_property' instead.
 
 Front improvements:
 - Profiling is activate by default on front for DEVELOPMENT environment
-- Refactor: properties cached by front controller (_page', _context_url, _page_url, _url)
 - Setting config novius-os.cache by default always at true
 - Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 600 by default, except in PRODUCTION at 3600
+- New events front.pageFound, front.response
+- New methods getContext, disableCaching, setCacheDuration, setStatus, setHeader, getCustomData, setCustomData, sendContent, addCacheSuffixHandler
+- Status and headers are now save in cache
+- Mechanism to adapt the cache path with suffixes, depending GET parameters or what you want
+- Mechanism for after cache execution
+- Bugfix: if set, use page_cache_duration of the page
+
 
 Models properties:
 - Add a config for fuelphp cache, add local/cache/fuelphp directory, add check for it in install process
