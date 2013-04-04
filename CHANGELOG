@@ -10,6 +10,7 @@ Novius OS framework CHANGELOG
 - The extends key, in metadata, now allows to disable automatic configuration recursive merge (only bootstrap loading remains int this case)
 - It is now possible to use href="##..." in enhancers or templates; occurences will be replaced by href="#..." without base_url in prefix.
 - CRUD: When returning a string in the disabled key, it is displayed as a title. Disabled and visible key can now be simple values, callbacks or array of callbacks.
+- Move install.php and migrate.php.sample from public/ to public/htdocs/. No URL impact.
 
 Deprecated:
 - Move Nos\Renderer_Media to Nos\Media\Renderer_Media.
