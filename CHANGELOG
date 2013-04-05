@@ -4,7 +4,7 @@ Novius OS framework CHANGELOG
 ==================================
 
 - New feature: Behaviour_Publishable now allows to choose publication start & end dates
-- DB Config : installation now sets the active configuration depending on the t current Fuel::$env value
+- DB Config : installation now sets the active configuration depending on the current Fuel::$env value
 - Migrations are now dispatched per application
 - New metadata key 'requires' which allows to define that an application requires another one
 - The extends key, in metadata, now allows to disable automatic configuration recursive merge (only bootstrap loading remains in this case)
