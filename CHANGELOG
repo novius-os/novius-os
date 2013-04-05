@@ -4,38 +4,44 @@ Novius OS framework CHANGELOG
 ==================================
 
 - New feature: Behaviour_Publishable now allows to choose publication start & end dates
-- DB Config : active is set at current Fuel::$env in install process
+- DB Config : installation now sets the active configuration depending on the current Fuel::$env value
 - Migrations are now dispatched per application
-- New metadata key 'requires' which allows to define that an application requires an other
-- The extends key, in metadata, now allows to disable automatic configuration recursive merge (only bootstrap loading remains int this case)
-- It is now possible to use href="##..." in enhancers or templates; occurences will be replaced by href="#..." without base_url in prefix.
+- New metadata key 'requires' which allows to define that an application requires another one
+- The extends key, in metadata, now allows to disable automatic configuration recursive merge (only bootstrap loading remains in this case)
+- It is now possible to use href="##..." in enhancers or templates; occurences will be replaced by href="#..." without prepending the base_url.
 - CRUD: When returning a string in the disabled key, it is displayed as a title. Disabled and visible key can now be simple values, callbacks or array of callbacks.
-- Move install.php and migrate.php.sample from public/ to public/htdocs/. No URL impact.
+- Moved install.php and migrate.php.sample from public/ to public/htdocs/. No URL impact.
+- Resized images are now secured: you can't generate a lot of thumbnails and flood the server anymore
 
 Deprecated:
-- Move Nos\Renderer_Media to Nos\Media\Renderer_Media.
-- On launchers, the 'url' key is deprecated. Use the action key.
-- The 'widget' key is deprecated in renderer configuration. Use the renderer key and update class name.
-- The 'widget_options' key is deprecated in renderer configuration. Use the renderer_options key.
-- \Config::extendable_load() is deprecated. Rename to \Config::loadConfiguration().
-- The 'publication_bool_property' key in Orm_Behaviour_Publishable configuration is deprecated. Use 'publication_state_property' instead.
+- Moved Nos\Renderer_Media to Nos\Media\Renderer_Media.
+- Launchers configuration: the 'url' key is deprecated. Use 'action' instead.
+- The 'widget' key is deprecated in renderer configuration. Use the 'renderer' key and update the class name.
+- The 'widget_options' key is deprecated in renderer configuration. Use the 'renderer_options' key.
+- \Config::extendable_load() is deprecated. Renamed to \Config::loadConfiguration().
+- Orm_Behaviour_Publishable configuration: the 'publication_bool_property' key is deprecated. Use 'publication_state_property' instead.
+
+Permissions:
+- Ability to define per-application permissions with a configuration file
+- New API to check permissions for a user, or a specific role
+- Ability to enable multi-roles on the users with the novius-os.users.enable_roles configuration
 
 Front improvements:
-- Profiling is activate by default on front for DEVELOPMENT environment
+- Profiling is activated by default on front in the DEVELOPMENT environment
 - Setting config novius-os.cache by default always at true
 - Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 600 by default, except in PRODUCTION at 3600
-- New events front.pageFound, front.response
-- New methods getContext, disableCaching, setCacheDuration, setStatus, setHeader, getCustomData, setCustomData, sendContent, addCacheSuffixHandler
+- New events: 'front.pageFound' and 'front.response'
+- New methods in Controller_Front : getContext, disableCaching, setCacheDuration, setStatus, setHeader, getCustomData, setCustomData, sendContent, addCacheSuffixHandler
 - Status and headers are now save in cache
 - Mechanism to adapt the cache path with suffixes, depending GET parameters or what you want
-- Mechanism for after cache execution
+- Mechanism to execute code when using the cache
 - Bugfix: if set, use page_cache_duration of the page
 
 
 Models properties:
 - Add a config for fuelphp cache, add local/cache/fuelphp directory, add check for it in install process
-- All models (core and native apps) $_properties are defined
-- Implement a cache mechanism for models properties, using fuelphp cache. Auto-refreshing when an unknown properties is called.
+- All models (core and native apps) now defines the $_properties
+- Implement a cache mechanism on models properties, using fuelphp cache. Attempt to auto-refresh when an unknown properties is called.
 
 Vendors:
 - jQuery 1.8.3
