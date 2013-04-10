@@ -64,19 +64,25 @@ ob_start();
         tr.error td.status {
             color: #f00;
         }
+        tr.warning td.status {
+            color: #bb0;
+        }
         tr.ok td.status {
             color: #0b0;
         }
         table tr.error {
             background: #fff5f5;
         }
-        tr.error th {
+        table tr.warning {
+            background: #fffff5;
+        }
+        tr.error th, tr.warning th {
             border-bottom: none;
         }
         tr.separator td {
             border:none;
         }
-        tr.error td.description {
+        tr.error td.description, tr.warning td.description {
             border-top: none;
         }
         table tr.ok {
@@ -165,6 +171,10 @@ function run_test($name)
     $options = $GLOBALS['tests'][$name];
     $GLOBALS['tests'][$name]['is_error'] = false;
 
+    if (!isset($options['warning'])) {
+        $options['warning'] = false;
+    }
+
     if (isset($options['run_only_if'])) {
         foreach ((array) $options['run_only_if'] as $s) {
             if (is_bool($s)) {
@@ -179,7 +189,7 @@ function run_test($name)
 
     $results[$name] = $options['passed'];
 
-    $class = $options['passed'] ? 'ok' : 'error';
+    $class = $options['passed'] ? 'ok' : ($options['warning'] ? 'warning' : 'error');
 
     if ($class == 'ok' && !empty($options['hide_success_when'])) {
         return true;
@@ -203,7 +213,7 @@ function run_test($name)
         echo '<td class="status">OK</td>';
     } else {
         $GLOBALS['tests'][$name]['is_error'] = true;
-        echo '<td class="status">Error</td></tr><tr class="'.$class.'"><td class="description" colspan="2">';
+        echo '<td class="status">'.($options['warning'] ? 'Warning' : 'Error').'</td></tr><tr class="'.$class.'"><td class="description" colspan="2">';
         if (!empty($options['description'])) {
             echo '<p class="description">'.$options['description'].'</p>';
         }
@@ -217,13 +227,25 @@ function run_test($name)
     }
     echo '</tr>';
 
-    return $class == 'ok';
+    return $class != 'error';
 }
 
 $folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH.'data'.DS;
 
 // @todo title_success and title_error?
 $tests = array(
+    'requirements.gd_is_installed' => array(
+        'title'        => 'GD is installed',
+        'passed'       => function_exists("gd_info"),
+        'description'  => 'Novius OS requires the GD library. Please <a href="http://php.net/manual/en/book.image.php">install it</a>.',
+        'warning'      => true,
+    ),
+    'requirements.is_not_on_windows' => array(
+        'title'        => 'The OS is not Windows',
+        'passed'       => !in_array(PHP_OS, array('WIN32', 'WINNT')),
+        'description'  => 'Sorry, Novius OS can\'t work on Windows for the moment.',
+    ),
+
     'directive.short_open_tag' => array(
         'title'        => 'PHP configuration directive short_open_tag = On',
         'passed'       => ini_get('short_open_tag') != false,
@@ -238,7 +260,6 @@ $tests = array(
         'description'  => 'It\'s <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">deprecated in PHP 5.3 and has been removed in PHP 5.4</a>. Please edit your configuration file.',
         'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
     ),
-
     'folder.config.writeable' => array(
         'title'        => 'APPPATH/config/ is writeable  by the webserver',
         'passed'       => is_writeable(APPPATH.'config'),
@@ -384,6 +405,12 @@ echo '<div style="width:800px;margin:auto;">';
 
 ob_start();
 echo '<table width="100%">';
+
+
+$passed = run_test('requirements.gd_is_installed') && $passed;
+$passed = run_test('requirements.is_not_on_windows') && $passed;
+
+echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('directive.short_open_tag') && $passed;
 $passed = run_test('directive.magic_quotes_gpc') && $passed;
