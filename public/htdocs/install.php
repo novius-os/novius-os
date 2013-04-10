@@ -64,19 +64,25 @@ ob_start();
         tr.error td.status {
             color: #f00;
         }
+        tr.warning td.status {
+            color: #bb0;
+        }
         tr.ok td.status {
             color: #0b0;
         }
         table tr.error {
             background: #fff5f5;
         }
-        tr.error th {
+        table tr.warning {
+            background: #fffff5;
+        }
+        tr.error th, tr.warning th {
             border-bottom: none;
         }
         tr.separator td {
             border:none;
         }
-        tr.error td.description {
+        tr.error td.description, tr.warning td.description {
             border-top: none;
         }
         table tr.ok {
@@ -165,6 +171,10 @@ function run_test($name)
     $options = $GLOBALS['tests'][$name];
     $GLOBALS['tests'][$name]['is_error'] = false;
 
+    if (!isset($options['warning'])) {
+        $options['warning'] = false;
+    }
+
     if (isset($options['run_only_if'])) {
         foreach ((array) $options['run_only_if'] as $s) {
             if (is_bool($s)) {
@@ -179,7 +189,7 @@ function run_test($name)
 
     $results[$name] = $options['passed'];
 
-    $class = $options['passed'] ? 'ok' : 'error';
+    $class = $options['passed'] ? 'ok' : ($options['warning'] ? 'warning' : 'error');
 
     if ($class == 'ok' && !empty($options['hide_success_when'])) {
         return true;
@@ -203,7 +213,7 @@ function run_test($name)
         echo '<td class="status">OK</td>';
     } else {
         $GLOBALS['tests'][$name]['is_error'] = true;
-        echo '<td class="status">Error</td></tr><tr class="'.$class.'"><td class="description" colspan="2">';
+        echo '<td class="status">'.($options['warning'] ? 'Warning' : 'Error').'</td></tr><tr class="'.$class.'"><td class="description" colspan="2">';
         if (!empty($options['description'])) {
             echo '<p class="description">'.$options['description'].'</p>';
         }
@@ -217,7 +227,7 @@ function run_test($name)
     }
     echo '</tr>';
 
-    return $class == 'ok';
+    return $class != 'error';
 }
 
 $folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH.'data'.DS;
@@ -228,6 +238,7 @@ $tests = array(
         'title'        => 'GD is installed',
         'passed'       => function_exists("gd_info"),
         'description'  => 'Novius OS requires the GD library. Please <a href="http://php.net/manual/en/book.image.php">install it</a>.',
+        'warning'      => true,
     ),
     'requirements.is_not_on_windows' => array(
         'title'        => 'The OS is not Windows',
