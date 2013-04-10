@@ -1,5 +1,10 @@
 Novius OS framework CHANGELOG
 
+?: version 0.2.2
+==================================
+
+- Appdesk optimized: now inspector only load with one ajax request. Added view key to inspector configuration.
+
 ?: version 0.2.1
 ==================================
 
