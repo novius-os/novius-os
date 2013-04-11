@@ -13,6 +13,7 @@ Novius OS framework CHANGELOG
 - Moved install.php and migrate.php.sample from public/ to public/htdocs/. No URL impact.
 - Resized images are now secured: you can't generate a lot of thumbnails and flood the server anymore
 - Bugfix: form/expander and form/fields views can now deal with restricted fields
+- Crud->save() now returns dispatch event in the array form
 
 Deprecated:
 - Moved Nos\Renderer_Media to Nos\Media\Renderer_Media.
