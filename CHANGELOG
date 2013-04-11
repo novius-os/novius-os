@@ -9,6 +9,7 @@ Novius OS framework CHANGELOG
 - Bugfix : Refresh all metadata don't alter app_dependencies anymore
 - Bugfix : Wysiwyg retreive nosContext when it is needed, not at init
 - Bugfix : parse wysiwyg, looking for medias. ie : Fail if media ID 2 and ID 21 in same wysiwyg.
+- Bugfix : Wysiwyg in IE, loosing selection when popup link or image opening
 
 March 21, 2013: version 0.2.0.2
 ==================================
