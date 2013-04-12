@@ -65,7 +65,7 @@ ob_start();
             color: #f00;
         }
         tr.warning td.status {
-            color: #bb0;
+            color: #dd9700;
         }
         tr.ok td.status {
             color: #0b0;
@@ -74,7 +74,7 @@ ob_start();
             background: #fff5f5;
         }
         table tr.warning {
-            background: #fffff5;
+            background: #fff9f0;
         }
         tr.error th, tr.warning th {
             border-bottom: none;
@@ -232,6 +232,8 @@ function run_test($name)
 
 $folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH.'data'.DS;
 
+$session_save_path = \Arr::get(\Config::load('session'), 'file.path');
+
 // @todo title_success and title_error?
 $tests = array(
     'requirements.gd_is_installed' => array(
@@ -242,8 +244,14 @@ $tests = array(
     ),
     'requirements.is_not_on_windows' => array(
         'title'        => 'The OS is not Windows',
-        'passed'       => !in_array(PHP_OS, array('WIN32', 'WINNT')),
+        'passed'       => !defined('PHP_WINDOWS_VERSION_PLATFORM'),
         'description'  => 'Sorry, Novius OS can\'t work on Windows for the moment.',
+    ),
+
+    'session_path.writeable' => array(
+        'title'        => 'Session directory is writeable',
+        'passed'       => is_writable($session_save_path),
+        'description'  => 'Current session path : <strong>'.$session_save_path.'</strong>.<br />Please edit your configuration file (session.config.php : file.path key) or run <code>chmod a+w '.$session_save_path.'</code>. ',
     ),
 
     'directive.short_open_tag' => array(
@@ -261,7 +269,7 @@ $tests = array(
         'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
     ),
     'folder.config.writeable' => array(
-        'title'        => 'APPPATH/config/ is writeable  by the webserver',
+        'title'        => 'APPPATH/config/ is writeable ',
         'passed'       => is_writeable(APPPATH.'config'),
         'command_line' => 'chmod a+w '.APPPATH.'config',
         'description'  => 'This is required temporarly to write the db.php and crypt.php config files',
@@ -269,47 +277,47 @@ $tests = array(
     ),
 
     'folder.cache.writeable' => array(
-        'title'        => 'APPPATH/cache/ is writeable by the webserver',
+        'title'        => 'APPPATH/cache/ is writeable',
         'passed'       => is_writeable(APPPATH.'cache'),
         'command_line' => 'chmod a+w '.APPPATH.'cache',
     ),
 
     'folder.cache.media.writeable' => array(
-        'title'        => 'APPPATH/cache/media is writeable by the webserver',
+        'title'        => 'APPPATH/cache/media is writeable',
         'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
         'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
         'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
     ),
 
     'folder.cache.fuelphp.writeable' => array(
-        'title'        => 'APPPATH/cache/fuelphp is writeable by the webserver',
+        'title'        => 'APPPATH/cache/fuelphp is writeable',
         'passed'       => is_writeable(APPPATH.'cache'.DS.'fuelphp'),
         'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'fuelphp',
         'run_only_if'  => is_dir(APPPATH.'cache'.DS.'fuelphp'),
     ),
 
     'folder.data.writeable' => array(
-        'title'        => 'APPPATH/data/ is writeable by the webserver',
+        'title'        => 'APPPATH/data/ is writeable',
         'passed'       => is_writeable($folder_data),
         'command_line' => 'chmod a+w '.$folder_data,
     ),
 
     'folder.data.config.writeable' => array(
-        'title'           => 'APPPATH/data/config/ is writeable by the webserver',
+        'title'           => 'APPPATH/data/config/ is writeable',
         'passed'          => is_writeable($folder_data.'config'),
         'command_line'	  => array('chmod a+w '.$folder_data.'config'),
         'run_only_if'     => is_dir($folder_data.'config'),
     ),
 
     'folder.data.media.writeable' => array(
-        'title'           => 'APPPATH/data/media/ is writeable by the webserver',
+        'title'           => 'APPPATH/data/media/ is writeable',
         'passed'          => is_writeable($folder_data.'media'),
         'command_line'	  => array('chmod a+w '.$folder_data.'media'),
         'run_only_if'     => is_dir($folder_data.'media'),
     ),
 
     'folder.metadata.writeable' => array(
-        'title'           => 'APPPATH/metadata/ is writeable by the webserver',
+        'title'           => 'APPPATH/metadata/ is writeable',
         'passed'          => is_writeable(APPPATH.'metadata'),
         'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
     ),
@@ -322,21 +330,21 @@ $tests = array(
     ),
 
     'public.cache.writeable' => array(
-        'title'        => 'DOCROOT/cache/ is writeable by the webserver',
+        'title'        => 'DOCROOT/cache/ is writeable',
         'passed'       => is_writeable(DOCROOT.'cache'),
         'command_line' => 'chmod a+w '.DOCROOT.'cache',
         'run_only_if'  => is_dir(DOCROOT.'cache'),
     ),
 
     'public.cache.media.writeable' => array(
-        'title'        => 'DOCROOT/cache/media is writeable by the webserver',
+        'title'        => 'DOCROOT/cache/media is writeable',
         'passed'       => is_writeable(DOCROOT.'cache'.DS.'media'),
         'command_line' => 'chmod a+w '.DOCROOT.'cache'.DS.'media',
         'run_only_if'  => is_dir(DOCROOT.'cache'.DS.'media'),
     ),
 
     'public.htdocs.writeable' => array(
-        'title'        => 'DOCROOT/htdocs/ is writeable by the webserver',
+        'title'        => 'DOCROOT/htdocs/ is writeable',
         'description'  => 'The symbolic link htdocs/novius-os doesn\'t exsists, so we need to be able to create it.',
         'passed'       => is_writeable(DOCROOT.'htdocs'),
         'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
@@ -344,28 +352,28 @@ $tests = array(
     ),
 
     'public.media.writeable' => array(
-        'title'        => 'DOCROOT/media/ is writeable by the webserver',
+        'title'        => 'DOCROOT/media/ is writeable',
         'passed'       => is_writeable(DOCROOT.'media'),
         'command_line' => 'chmod a+w '.DOCROOT.'media',
         'run_only_if'  => is_dir(DOCROOT.'media'),
     ),
 
     'public.data.writeable' => array(
-        'title'        => 'DOCROOT/data/ is writeable by the webserver',
+        'title'        => 'DOCROOT/data/ is writeable',
         'passed'       => is_writeable(DOCROOT.'data'),
         'command_line' => 'chmod a+w '.DOCROOT.'data',
         'run_only_if'  => is_dir(DOCROOT.'data'),
     ),
 
     'public.htdocs.apps.writeable' => array(
-        'title'        => 'DOCROOT/htdocs/apps is writeable by the webserver',
+        'title'        => 'DOCROOT/htdocs/apps is writeable',
         'passed'       => is_writeable(DOCROOT.'htdocs'.DS.'apps'),
         'command_line' => 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps',
         'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'apps'),
     ),
 
     'public.static.writeable' => array(
-        'title'        => 'DOCROOT/static/ is writeable by the webserver',
+        'title'        => 'DOCROOT/static/ is writeable',
         'description'  => 'The symbolic link static/novius-os/ doesn\'t exsists, so we need to be able to create it.',
         'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
         'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
@@ -373,7 +381,7 @@ $tests = array(
     ),
 
     'public.static.apps.writeable' => array(
-        'title'        => 'DOCROOT/static/apps is writeable by the webserver',
+        'title'        => 'DOCROOT/static/apps is writeable',
         'passed'       => is_dir(DOCROOT.'static'.DS.'apps') && is_writeable(DOCROOT.'static'.DS.'apps'),
         'command_line' => 'chmod a+w '.DOCROOT.'static'.DS.'apps',
         'run_only_if'  => file_exists(DOCROOT.'static'.DS.'apps'),
@@ -394,7 +402,7 @@ $tests = array(
     ),
 
     'logs.fuel' => array(
-        'title'        => 'logs/fuel exists and is writeable by the webserver',
+        'title'        => 'logs/fuel exists and is writeable',
         'passed'       => is_writeable(NOSROOT.'logs/fuel'),
         'command_line' => 'chmod a+w '.NOSROOT.'logs/fuel',
     ),
@@ -418,6 +426,7 @@ $passed = run_test('directive.magic_quotes_gpc') && $passed;
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
 $passed = run_test('public.htaccess.removed') && $passed;
+$passed = run_test('session_path.writeable') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
