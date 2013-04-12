@@ -14,9 +14,6 @@ return array(
     // Uncomment, this line, and replace the value, if Novius-OS is installed in a subdirectory
     //'base_url' => 'http://www.yourdomain.com/novius-os-install-dir/',
 
-    // Possible values: 'user' or 'group'
-    //'permission_mode' => 'user',
-
     //'log_threshold'   => Fuel::$env === Fuel::DEVELOPMENT ? Fuel::L_WARNING : Fuel::L_ERROR,
 
     //'locale' => 'en_GB.utf8',
@@ -35,5 +32,8 @@ return array(
         ),*/
 
         //'assets_minified' => Fuel::$env !== Fuel::DEVELOPMENT,
+
+        // Uncomment this line when using a nginx server
+        //'use_xsendfile' => 'X-Accel-Redirect',
     //),
 );

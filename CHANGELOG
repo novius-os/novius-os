@@ -14,6 +14,7 @@ Novius OS framework CHANGELOG
 - Resized images are now secured: you can't generate a lot of thumbnails and flood the server anymore
 - Bugfix: form/expander and form/fields views can now deal with restricted fields
 - Crud->save() now returns dispatch event in the array form
+- Renamed configuration directive 'use_xsendfile' to 'novius-os.use_xsendfile'
 
 Deprecated:
 - Moved Nos\Renderer_Media to Nos\Media\Renderer_Media.
