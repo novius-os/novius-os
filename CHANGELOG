@@ -12,6 +12,7 @@ Novius OS framework CHANGELOG
 - Bugfix : Wysiwyg in IE, loosing selection when popup link or image opening
 - Bugfix : disconnect don't work in IE9, IE9 don't use base href in javascript
 - Bugfix : IE, bad background color in inspector grid tr hover
+- Bugfix : Template, mediaprint.css replace by print.css
 
 March 21, 2013: version 0.2.0.2
 ==================================
