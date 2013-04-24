@@ -1,7 +1,7 @@
 Novius OS framework CHANGELOG
 
-?: version 0.2.1
-==================================
+April 25, 2013: version Chiba 1
+===============================
 
 - New feature: Behaviour_Publishable now allows to choose publication start & end dates
 - DB Config : installation now sets the active configuration depending on the current Fuel::$env value
