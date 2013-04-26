@@ -6,6 +6,12 @@ Novius OS framework CHANGELOG
 - Appdesk optimized: now inspector only load with one ajax request. Added view key to inspector configuration.$
 - i18n: the default dictionary 'app::default' will now be used when none is configured with Nos\I18n::current_dictionary().
 
+Blog & news applications:
+- thumbnail is now configurable (size & link):
+    - default thumbnail size changed from 200 everywhere to 120 in the listing and 200 on the item.
+    - thumbnail can now be clicked to go on the item page (set ``thumbnail.front.list.link_to_item = false`` to restore old behaviour).
+
+
 April 25, 2013: version Chiba 1
 ===============================
 
