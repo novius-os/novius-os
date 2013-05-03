@@ -5,6 +5,7 @@ Novius OS framework CHANGELOG
 
 - Appdesk optimized: now inspector only load with one ajax request. Added view key to inspector configuration.$
 - i18n: the default dictionary 'app::default' will now be used when none is configured with Nos\I18n::current_dictionary().
+- refactoring behaviour implementation
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
