@@ -15,6 +15,6 @@ require_once $_SERVER['NOS_ROOT'].DIRECTORY_SEPARATOR.'novius-os'.DIRECTORY_SEPA
 
 define('NOVIUSOS_PATH', realpath(DOCROOT.'..'.DS.'novius-os').DS);
 
-\Nos\Application::installNativeApplications();
+\Nos\Application::migrateAll();
 
 echo 'Migration complete';
