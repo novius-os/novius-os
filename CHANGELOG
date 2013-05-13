@@ -3,6 +3,9 @@ Novius OS framework CHANGELOG
 ?: version Chiba 2
 ==================================
 
+Breaking changes:
+- Due to a security fix: now you need to add ``'isSafeHtml' => true`` in the HTML column of your dataset.
+
 - Appdesk optimized: now inspector only load with one ajax request. Added view key to inspector configuration.$
 - i18n: the default dictionary 'app::default' will now be used when none is configured with Nos\I18n::current_dictionary().
 - refactoring behaviour implementation
