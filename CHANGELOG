@@ -17,6 +17,12 @@ Blog & news applications:
     - thumbnail can now be clicked to go on the item page (set ``thumbnail.front.list.link_to_item = false`` to restore old behaviour).
 
 
+Vendors:
+- jQuery 1.9.1
+- jQuery UI 1.10.3
+- Wijmo 2013v1.4
+- require.js 2.1.6
+
 April 25, 2013: version Chiba 1
 ===============================
 
