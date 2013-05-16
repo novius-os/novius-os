@@ -3,6 +3,7 @@ Novius OS framework CHANGELOG
 ?: version Chiba 1.1
 ===============================
 
+- Improvement : Class Pagination, every page number surrounded by the same class
 - Bugfix : Selecting custom dates in inspector dates do nothing
 - Bugfix : Remove List columns cache for model properties cache conditioned by configuration (default false)
 - Bugfix : On wysiwyg in enhancers
@@ -10,7 +11,7 @@ Novius OS framework CHANGELOG
 
 Form: Minors bugfix and improvement
 
-Thank for : @Fumito Mizuno
+Thank for : @Fumito Mizuno, @Victor ALBERT, @Pierrinho
 
 April 25, 2013: version Chiba 1
 ===============================
