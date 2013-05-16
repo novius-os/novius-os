@@ -12,6 +12,17 @@ Blog & news applications:
     - default thumbnail size changed from 200 everywhere to 120 in the listing and 200 on the item.
     - thumbnail can now be clicked to go on the item page (set ``thumbnail.front.list.link_to_item = false`` to restore old behaviour).
 
+?: version Chiba 1.1
+===============================
+
+- Bugfix : Selecting custom dates in inspector dates do nothing
+- Bugfix : Remove List columns cache for model properties cache conditioned by configuration (default false)
+- Bugfix : On wysiwyg in enhancers
+- Bugfix : i18n class don't trigger event on load file
+
+Form: Minors bugfix and improvement
+
+Thank for : @Fumito Mizuno
 
 April 25, 2013: version Chiba 1
 ===============================
