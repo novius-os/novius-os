@@ -1,5 +1,17 @@
 Novius OS framework CHANGELOG
 
+?: version Chiba 1.1
+===============================
+
+- Bugfix : Selecting custom dates in inspector dates do nothing
+- Bugfix : Remove List columns cache for model properties cache conditioned by configuration (default false)
+- Bugfix : On wysiwyg in enhancers
+- Bugfix : i18n class don't trigger event on load file
+
+Form: Minors bugfix and improvement
+
+Thank for : @Fumito Mizuno
+
 April 25, 2013: version Chiba 1
 ===============================
 
