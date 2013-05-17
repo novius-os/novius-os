@@ -16,8 +16,8 @@ Blog & news applications:
     - default thumbnail size changed from 200 everywhere to 120 in the listing and 200 on the item.
     - thumbnail can now be clicked to go on the item page (set ``thumbnail.front.list.link_to_item = false`` to restore old behaviour).
 
-?: version Chiba 1.1
-===============================
+May 17, 2013: version Chiba 1.0.1
+=================================
 
 - Improvement : Class Pagination, every page number surrounded by the same class
 - Bugfix : Selecting custom dates in inspector dates do nothing
