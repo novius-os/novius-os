@@ -26,3 +26,5 @@ noviusos.komodoproject
 /local/views/novius-os
 /local/config/development/migrations.config.php
 /ci/
+composer.lock
+composer.phar
