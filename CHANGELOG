@@ -1,7 +1,7 @@
 Novius OS framework CHANGELOG
 
-?: version Chiba 1.1
-===============================
+May 17, 2013: version Chiba 1.0.1
+=================================
 
 - Improvement : Class Pagination, every page number surrounded by the same class
 - Bugfix : Selecting custom dates in inspector dates do nothing
