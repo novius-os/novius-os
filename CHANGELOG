@@ -1,5 +1,14 @@
 Novius OS framework CHANGELOG
 
+?: version Chiba 1.?
+=================================
+- Bugfix : In behaviour sortable, in event before_query, order_by can be string...
+
+Slideshow :
+- Bugfix : remove link on a slide doesn't works
+
+Thank for : @romunovius
+
 May 17, 2013: version Chiba 1.0.1
 =================================
 
