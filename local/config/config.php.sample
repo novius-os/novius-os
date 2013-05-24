@@ -14,21 +14,27 @@ return array(
     // Uncomment, this line, and replace the value, if Novius-OS is installed in a subdirectory
     //'base_url' => 'http://www.yourdomain.com/novius-os-install-dir/',
 
-    // Possible values: 'user' or 'group'
-    //'permission_mode' => 'user',
-
     //'log_threshold'   => Fuel::$env === Fuel::DEVELOPMENT ? Fuel::L_WARNING : Fuel::L_ERROR,
 
     //'locale' => 'en_GB.utf8',
 
     //'novius-os' => array(
-        //'cache_duration_page' => 5,
-        //'cache_duration_function' => 10,
+        //'cache' => true,
+        //'cache_duration_page' => \Fuel::$env !== \Fuel::PRODUCTION ? 3600 : 600,
+        //'cache_duration_function' => \Fuel::$env !== \Fuel::PRODUCTION ? 3600 : 600,
+        //'cache_model_properties' => false,
+
+        /*'users' => array(
+            'enable_roles' => true,
+        ),*/
 
         /*'upload' => array(
             'disabled_extensions' => array('php'),
         ),*/
 
         //'assets_minified' => Fuel::$env !== Fuel::DEVELOPMENT,
+
+        // Uncomment this line when using a nginx server
+        //'use_xsendfile' => 'X-Accel-Redirect',
     //),
 );

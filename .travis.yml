@@ -7,14 +7,15 @@ notifications:
     on_success: change
     on_failure: always
 before_install:
-  - BRANCH=`git symbolic-ref HEAD | sed -e 's,refs/heads/,,g'`
+  - BRANCH=$(echo `git for-each-ref --format='%(objectname) %(refname:short)' refs/heads | awk "/^$(git rev-parse HEAD)/ {print \$2}"` | cut -d" " -f2);
   - git submodule update --init --recursive
   - git clone git://github.com/novius-os/ci.git
   - cd ci
   - echo $BRANCH
   - git checkout $BRANCH
   - cd ..
-  - sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php-pear
+  - travis_retry sudo apt-get update
+  - travis_retry sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php-pear
   - sudo a2enmod rewrite
   - cat ci/virtualhost | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo service apache2 reload
@@ -31,14 +32,15 @@ before_install:
   - chmod a+w local/cache
   - chmod a+w local/data/media
   - chmod a+w local/cache/media
+  - chmod a+w local/cache/fuelphp
   - chmod a+w local/data/config
   - chmod a+w public/cache
   - chmod a+w public/cache/media
   - chmod a+w public/media
-  - mv public/index.php public/index.php.old
-  - sudo sh -c 'pear channel-discover pear.phpunit.de'
-  - sudo sh -c 'pear install --alldeps pear/PHP_CodeSniffer'
+  - travis_retry sudo sh -c 'pear channel-discover pear.phpunit.de'
+  - travis_retry sudo sh -c 'pear install --alldeps pear/PHP_CodeSniffer'
 before_script:
+  - wget http://www.novius-os.org/static/apps/noviusos_templates_basic/img/logo.png -O /tmp/logo-novius-os.png
   - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
   - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
   - "export DISPLAY=:99.0"
@@ -47,4 +49,8 @@ script:
   - phpcs -s -n --standard=ci/phpcs/ruleset.xml --extensions=php --report-summary ./
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/install.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/appmanager.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/media.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/page.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/blog.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/page-del.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/media-del.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"

@@ -1,5 +1,168 @@
 Novius OS framework CHANGELOG
 
+?: version Chiba 2
+==================================
+
+Breaking changes:
+- Due to a security fix: now you need to add ``'isSafeHtml' => true`` in the HTML column of your dataset.
+
+- Appdesk optimized: now inspector only load with one ajax request. Added view key to inspector configuration.$
+- i18n: the default dictionary 'app::default' will now be used when none is configured with Nos\I18n::current_dictionary().
+- refactoring behaviour implementation
+- Enhancer popup: ability to define a 'layout' + 'fields' configuration instead of a view, much like the CRUD
+- Added Date Time renderer to manage both date and time in the same input
+- Added align key on action configuration
+- Removing of uses of wijdropdown, wijtextbox, wijcheckbox and wijradio in back-office
+- Using .ui-priority-primary instead .primary on button and .title on textbox
+
+Blog & news applications:
+- thumbnail is now configurable (size & link):
+    - default thumbnail size changed from 200 everywhere to 120 in the listing and 200 on the item.
+    - thumbnail can now be clicked to go on the item page (set ``thumbnail.front.list.link_to_item = false`` to restore old behaviour).
+- Comments can now be moderated from the appdesk.
+
+Vendors:
+- jQuery 1.9.1
+- jQuery UI 1.10.3
+- Wijmo 2013v1.4
+- require.js 2.1.6
+
+?: version Chiba 1.?
+=================================
+- Bugfix : In behaviour sortable, in event before_query, order_by can be string...
+
+Slideshow :
+- Bugfix : remove link on a slide doesn't works
+
+Thank for : @romunovius
+
+May 17, 2013: version Chiba 1.0.1
+=================================
+
+- Improvement : Class Pagination, every page number surrounded by the same class
+- Bugfix : Selecting custom dates in inspector dates do nothing
+- Bugfix : Remove List columns cache for model properties cache conditioned by configuration (default false)
+- Bugfix : On wysiwyg in enhancers
+- Bugfix : i18n class don't trigger event on load file
+
+Form: Minors bugfix and improvement
+
+Thank for : @Fumito Mizuno, @Victor ALBERT, @Pierrinho
+
+April 25, 2013: version Chiba 1
+===============================
+
+- New feature: Behaviour_Publishable now allows to choose publication start & end dates
+- DB Config : installation now sets the active configuration depending on the current Fuel::$env value
+- Migrations are now dispatched per application
+- New metadata key 'requires' which allows to define that an application requires another one
+- The extends key, in metadata, now allows to disable automatic configuration recursive merge (only bootstrap loading remains in this case)
+- It is now possible to use href="##..." in enhancers or templates; occurences will be replaced by href="#..." without prepending the base_url.
+- CRUD: When returning a string in the disabled key, it is displayed as a title. Disabled and visible key can now be simple values, callbacks or array of callbacks.
+- Moved install.php and migrate.php.sample from public/ to public/htdocs/. No URL impact.
+- Resized images are now secured: you can't generate a lot of thumbnails and flood the server anymore
+- Bugfix: form/expander and form/fields views can now deal with restricted fields
+- Crud->save() now returns dispatch event in the array form
+- Renamed configuration directive 'use_xsendfile' to 'novius-os.use_xsendfile'
+
+Deprecated:
+- Moved Nos\Renderer_Media to Nos\Media\Renderer_Media.
+- Launchers configuration: the 'url' key is deprecated. Use 'action' instead.
+- The 'widget' key is deprecated in renderer configuration. Use the 'renderer' key and update the class name.
+- The 'widget_options' key is deprecated in renderer configuration. Use the 'renderer_options' key.
+- \Config::extendable_load() is deprecated. Renamed to \Config::loadConfiguration().
+- Orm_Behaviour_Publishable configuration: the 'publication_bool_property' key is deprecated. Use 'publication_state_property' instead.
+
+Permissions:
+- Ability to define per-application permissions with a configuration file
+- New API to check permissions for a user, or a specific role
+- Ability to enable multi-roles on the users with the novius-os.users.enable_roles configuration
+
+Front improvements:
+- Profiling is activated by default on front in the DEVELOPMENT environment
+- Setting config novius-os.cache by default always at true
+- Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 600 by default, except in PRODUCTION at 3600
+- New events: 'front.pageFound' and 'front.response'
+- New methods in Controller_Front : getContext, disableCaching, setCacheDuration, setStatus, setHeader, getCustomData, setCustomData, sendContent, addCacheSuffixHandler
+- Status and headers are now save in cache
+- Mechanism to adapt the cache path with suffixes, depending GET parameters or what you want
+- Mechanism to execute code when using the cache
+- Bugfix: if set, use page_cache_duration of the page
+
+
+Models properties:
+- Add a config for fuelphp cache, add local/cache/fuelphp directory, add check for it in install process
+- All models (core and native apps) now defines the $_properties
+- Implement a cache mechanism on models properties, using fuelphp cache. Attempt to auto-refresh when an unknown properties is called.
+
+Vendors:
+- jQuery 1.8.3
+- jQuery UI 1.9.2
+- Wijmo 2.3.7
+- tinyMCE 3.5.8
+- require.js 2.1.4
+- FuelPHP and packages 1.5
+
+Slideshow:
+- add HTML5 progress bar
+
+Blog / News:
+- Display related posts of authors
+
+Thank for : @Fumito Mizuno, @JayPS, @Victor ALBERT, @Pierrinho
+
+
+?: version 0.2.0.3
+==================================
+
+- Bugfix : front controller, getUrl() returns a bad URL for secondary contexts
+- Bugfix : Model::set() generate a NOTICE in PHP 5.4 if property name is an array
+- Bugfix : Inspector tree model checkbox/radio removes sub item checked not display
+- Bugfix : Refresh all metadata don't alter app_dependencies anymore
+- Bugfix : Wysiwyg retreive nosContext when it is needed, not at init
+- Bugfix : parse wysiwyg, looking for medias. ie : Fail if media ID 2 and ID 21 in same wysiwyg.
+- Bugfix : Wysiwyg in IE, loosing selection when popup link or image opening
+- Bugfix : disconnect don't work in IE9, IE9 don't use base href in javascript
+- Bugfix : IE, bad background color in inspector grid tr hover
+- Bugfix : Template, mediaprint.css replace by print.css
+
+March 21, 2013: version 0.2.0.2
+==================================
+
+- Adding 4 events in 404 entry
+- Standalone build of the wysiwyg renderer.
+- now inspectors key also allow class to be written
+- Refactor OS Tabs : if not a touch device, close icon now in tab with a context menu
+- Refactor : generate base_url now use server variable http_host
+- Adding a config novius-os.cache for use of cache on front, by default true except in development
+- Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 60 by default
+- In front controller, adding js inline accept content with <script...
+- Bugfix : controller front, POST and _preview use cache
+- Bugfix : front controller, getUrl now returns an absolute URL
+- Bugfix : front controller, context_url was set after parse wysiwyg
+- Bugfix : popup for saving form answer attachment in media centre
+- Bugfix : media managing when not exist on disk
+- Bugfix : front, infinite loop in 404 and URL with accents
+- Bugfix : SEO data not used in front
+- Bugfix : crud popup delete, js not require wijgrid
+- Bugfix : crud delete, bad i18n message
+- Bugfix : enhancer in wysiwyg saved with IE have quote around attributs
+- Bugfix : wysiwyg, set document base uri
+- Bugfix : wysiwyg in IE, enhancer popup don't closing
+- Bugfix : Update crud.ctrl.php to hide translate button if just one context
+- Bugfix : Update links to documentation in blank slate front
+- Bugfix : In appdesk, grid not trigger selectionChanged when is reloading and has a selected item
+
+Blog / News:
+- Bugfix : &nbsp; form i18n not decode for RSS title and description
+
+Slideshow:
+- Bugfix: front of slideshow javascript
+- Bugfix: front in IE8, in onreadystatechange event, readyState is not 'complete' but 'loaded'
+
+Thank for : @Julien Guyomard, @Pierre Vion and @Foine
+
+
 February 26, 2013: version 0.2.0.1
 ==================================
 

@@ -1,0 +1,32 @@
+{
+    "name": "novius-os/novius-os",
+    "type": "metapackage",
+    "description": "Cross-Channel Open Source CMS base on the FuelPHP framework",
+    "keywords": ["cms"],
+    "homepage": "http://www.novius-os.org",
+    "license": "AGPL V3+",
+    "authors": [
+        {
+            "name": "Novius OS Development Team",
+            "email": "team@novius-os.org"
+        }
+    ],
+    "support": {
+        "forum": "http://forums.novius-os.org"
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "monolog/monolog": "1.5.*",
+        "fuelphp/upload": "2.0"
+    },
+    "suggest": {
+        "mustache/mustache": "Allow Mustache templating with the Parser package",
+        "smarty/smarty": "Allow Smarty templating with the Parser package",
+        "twig/twig": "Allow Twig templating with the Parser package",
+        "mthaml/mthaml": "Allow Haml templating with Twig supports with the Parser package"
+    },
+    "config": {
+        "vendor-dir": "vendor"
+    },
+    "minimum-stability": "dev"
+}
