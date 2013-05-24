@@ -10,11 +10,29 @@ Breaking changes:
 - i18n: the default dictionary 'app::default' will now be used when none is configured with Nos\I18n::current_dictionary().
 - refactoring behaviour implementation
 - Enhancer popup: ability to define a 'layout' + 'fields' configuration instead of a view, much like the CRUD
+- Added Date Time renderer to manage both date and time in the same input
+- Added align key on action configuration
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
     - default thumbnail size changed from 200 everywhere to 120 in the listing and 200 on the item.
     - thumbnail can now be clicked to go on the item page (set ``thumbnail.front.list.link_to_item = false`` to restore old behaviour).
+- Comments can now be moderated from the appdesk.
+
+Vendors:
+- jQuery 1.9.1
+- jQuery UI 1.10.3
+- Wijmo 2013v1.4
+- require.js 2.1.6
+
+?: version Chiba 1.?
+=================================
+- Bugfix : In behaviour sortable, in event before_query, order_by can be string...
+
+Slideshow :
+- Bugfix : remove link on a slide doesn't works
+
+Thank for : @romunovius
 
 May 17, 2013: version Chiba 1.0.1
 =================================
@@ -28,12 +46,6 @@ May 17, 2013: version Chiba 1.0.1
 Form: Minors bugfix and improvement
 
 Thank for : @Fumito Mizuno, @Victor ALBERT, @Pierrinho
-
-Vendors:
-- jQuery 1.9.1
-- jQuery UI 1.10.3
-- Wijmo 2013v1.4
-- require.js 2.1.6
 
 April 25, 2013: version Chiba 1
 ===============================

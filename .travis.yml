@@ -14,8 +14,8 @@ before_install:
   - echo $BRANCH
   - git checkout $BRANCH
   - cd ..
-  - sudo apt-get update
-  - sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php-pear
+  - travis_retry sudo apt-get update
+  - travis_retry sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php-pear
   - sudo a2enmod rewrite
   - cat ci/virtualhost | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo service apache2 reload
@@ -37,8 +37,8 @@ before_install:
   - chmod a+w public/cache
   - chmod a+w public/cache/media
   - chmod a+w public/media
-  - sudo sh -c 'pear channel-discover pear.phpunit.de'
-  - sudo sh -c 'pear install --alldeps pear/PHP_CodeSniffer'
+  - travis_retry sudo sh -c 'pear channel-discover pear.phpunit.de'
+  - travis_retry sudo sh -c 'pear install --alldeps pear/PHP_CodeSniffer'
 before_script:
   - wget http://www.novius-os.org/static/apps/noviusos_templates_basic/img/logo.png -O /tmp/logo-novius-os.png
   - mysql -e 'CREATE DATABASE novius_os DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
