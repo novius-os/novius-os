@@ -15,6 +15,12 @@ require_once $_SERVER['NOS_ROOT'].DIRECTORY_SEPARATOR.'novius-os'.DIRECTORY_SEPA
 
 define('NOVIUSOS_PATH', realpath(DOCROOT.'..'.DS.'novius-os').DS);
 
-\Nos\Application::migrateAll();
 
-echo 'Migration complete';
+$migrations = \Nos\Application::migrateAll();
+
+
+if (\Input::get('json', false)) {
+    \Response::json(200, $migrations);
+} else {
+    echo \View::forge('nos::admin/migrations', array('migrations' => $migrations));
+}
