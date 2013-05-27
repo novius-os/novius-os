@@ -3,6 +3,7 @@ Novius OS framework CHANGELOG
 ?: version Chiba 1.?
 =================================
 - Bugfix : In behaviour sortable, in event before_query, order_by can be string...
+- Bugfix : Attachment->url() trims the end of the filename
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
