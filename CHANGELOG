@@ -12,6 +12,8 @@ Breaking changes:
 - Enhancer popup: ability to define a 'layout' + 'fields' configuration instead of a view, much like the CRUD
 - Added Date Time renderer to manage both date and time in the same input
 - Added align key on action configuration
+- Removing of uses of wijdropdown, wijtextbox, wijcheckbox and wijradio in back-office
+- Using .ui-priority-primary instead .primary on button and .title on textbox
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
