@@ -509,10 +509,10 @@ CONFIG;
             }
 
             if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-                \symlink(Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs'), DOCROOT.'htdocs'.DS.'novius-os');
+                \Nos\Tools_File::symlink(Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs'), DOCROOT.'htdocs'.DS.'novius-os');
             }
             if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-                \symlink(Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static'), DOCROOT.'static'.DS.'novius-os');
+                \Nos\Tools_File::symlink(Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static'), DOCROOT.'static'.DS.'novius-os');
             }
 
             header('Location: install.php?step=2');
