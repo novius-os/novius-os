@@ -14,6 +14,8 @@ Breaking changes:
 - Added align key on action configuration
 - Removing of uses of wijdropdown, wijtextbox, wijcheckbox and wijradio in back-office
 - Using .ui-priority-primary instead .primary on button and .title on textbox
+- Improve model properties cache : just one request columns from db by thread
+- Enhancer : add the possible key "check_container", which is callable. Can restrict the enhancer disponibility depending on container.
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
