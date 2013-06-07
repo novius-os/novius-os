@@ -242,11 +242,6 @@ $tests = array(
         'description'  => 'Novius OS requires the GD library. Please <a href="http://php.net/manual/en/book.image.php">install it</a>.',
         'warning'      => true,
     ),
-    'requirements.is_not_on_windows' => array(
-        'title'        => 'The OS is not Windows',
-        'passed'       => !defined('PHP_WINDOWS_VERSION_PLATFORM'),
-        'description'  => 'Sorry, Novius OS can\'t work on Windows for the moment.',
-    ),
 
     'session_path.writeable' => array(
         'title'        => 'Session directory is writeable',
@@ -416,7 +411,6 @@ echo '<table width="100%">';
 
 
 $passed = run_test('requirements.gd_is_installed') && $passed;
-$passed = run_test('requirements.is_not_on_windows') && $passed;
 
 echo '<tr class="separator"><td colspan="2"></td></tr>';
 
@@ -509,10 +503,10 @@ CONFIG;
             }
 
             if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-                \symlink(Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs'), DOCROOT.'htdocs'.DS.'novius-os');
+                \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os');
             }
             if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-                \symlink(Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static'), DOCROOT.'static'.DS.'novius-os');
+                \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os');
             }
 
             header('Location: install.php?step=2');

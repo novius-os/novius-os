@@ -14,6 +14,12 @@ Breaking changes:
 - Added align key on action configuration
 - Removing of uses of wijdropdown, wijtextbox, wijcheckbox and wijradio in back-office
 - Using .ui-priority-primary instead .primary on button and .title on textbox
+- Improve model properties cache : just one request columns from db by thread
+- Enhancer : add the possible key "valid_container", which is callable. Can restrict the enhancer availability depending on container.
+- Enhancer : Wrap front display in a div with classes "noviusos_enhancer" and the enhancer name (noviusos_blog, noviusos_news, noviusos_slideshow, noviusos_form)
+- treeGrid : add an option for initial depth
+- Add wysiwyg config mechanism, with a wysiwygOptions event registrable by behaviour (and use by twinnable), and wysiwyg config sample file
+- OsTabs : add reload method in API
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
@@ -31,11 +37,12 @@ Vendors:
 =================================
 - Bugfix : In behaviour sortable, in event before_query, order_by can be string...
 - Bugfix : Attachment->url() trims the end of the filename
+- Bugfix : Fieldset::defaultComplete when error option is callable
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
 
-Thank for : @romunovius
+Thank for : @romunovius, @Victor ALBERT
 
 May 17, 2013: version Chiba 1.0.1
 =================================
