@@ -12,12 +12,12 @@ return array(
     'default' => array(
     ),
 
-    'default_setup' => 'default',
+    'active_setup' => 'default',
 
     'setups' => array(
         'default' => array(),
-        'main::en_GB' => array(),
-        'main::fr_FR' => array(),
-        'main::ja_JP' => array(),
+        //'main::en_GB' => array(),
+        //'main::fr_FR' => array(),
+        //'main::ja_JP' => array(),
     ),
 );
