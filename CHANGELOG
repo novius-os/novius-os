@@ -19,6 +19,7 @@ Breaking changes:
 - Enhancer : Wrap front display in a div with classes "noviusos_enhancer" and the enhancer name (noviusos_blog, noviusos_news, noviusos_slideshow, noviusos_form)
 - treeGrid : add an option for initial depth
 - Add wysiwyg config mechanism, with a wysiwygOptions event registrable by behaviour (and use by twinnable), and wysiwyg config sample file
+- OsTabs : add reload method in API
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
