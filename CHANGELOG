@@ -16,6 +16,10 @@ Breaking changes:
 - Using .ui-priority-primary instead .primary on button and .title on textbox
 - Improve model properties cache : just one request columns from db by thread
 - Enhancer : add the possible key "check_container", which is callable. Can restrict the enhancer disponibility depending on container.
+- Enhancer : Wrap front display in a div with classes "noviusos_enhancer" and the enhancer name (noviusos_blog, noviusos_news, noviusos_slideshow, noviusos_form)
+- treeGrid : add an option for initial depth
+- Add wysiwyg config mechanism, with a wysiwygOptions event registrable by behaviour (and use by twinnable), and wysiwyg config sample file
+- OsTabs : add reload method in API
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
