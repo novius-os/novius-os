@@ -8,7 +8,7 @@ Breaking changes:
 
 - Appdesk optimized: now inspector only load with one ajax request. Added view key to inspector configuration.$
 - i18n: the default dictionary 'app::default' will now be used when none is configured with Nos\I18n::current_dictionary().
-- refactoring behaviour implementation
+- refactoring behaviour implementation (behaviour can catch model events)
 - Enhancer popup: ability to define a 'layout' + 'fields' configuration instead of a view, much like the CRUD
 - Added Date Time renderer to manage both date and time in the same input
 - Added align key on action configuration
@@ -20,6 +20,10 @@ Breaking changes:
 - treeGrid : add an option for initial depth
 - Add wysiwyg config mechanism, with a wysiwygOptions event registrable by behaviour (and use by twinnable), and wysiwyg config sample file
 - OsTabs : add reload method in API
+- Behaviour Twinnable : add findMainOrContext(), hasCommonFields(), isCommonField() methods.
+- 4 new relation types : twinnable_belongs_to, twinnable_has_one, twinnable_has_many, twinnable_many_many
+- Model now can have fields, medias and WYSIWYGs common to all contexts.
+- Model class : add addRelation, configModel, getApplication() methods.
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
