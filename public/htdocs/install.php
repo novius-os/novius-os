@@ -158,6 +158,8 @@ define('NOS_ENTRY_POINT', 'install');
 
 $_SERVER['NOS_ROOT'] = realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..');
 
+
+
 // Boot the app
 require_once $_SERVER['NOS_ROOT'].DIRECTORY_SEPARATOR.'novius-os'.DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'bootstrap.php';
 
@@ -384,14 +386,14 @@ $tests = array(
 
     'public.htdocs.nos.valid' => array(
         'title'        => 'DOCROOT/htdocs/novius-os links to NOSPATH/htdocs',
-        'passed'       => is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
+        'passed'       => \File::is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
         'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
         'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
     ),
 
     'public.static.nos.valid' => array(
         'title'        => 'DOCROOT/static/novius-os links to NOSPATH/static',
-        'passed'       => is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
+        'passed'       => \File::is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
         'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os',
         'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
     ),

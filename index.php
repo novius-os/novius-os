@@ -8,8 +8,9 @@
  * @link http://www.novius-os.org
  */
 
-$document_root = rtrim($_SERVER['DOCUMENT_ROOT'], DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-$nos_dir = trim(substr($_SERVER['SCRIPT_FILENAME'], strlen($document_root), -10), DIRECTORY_SEPARATOR);
+$document_root = rtrim(realpath($_SERVER['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+$nos_dir = trim(substr(realpath($_SERVER['SCRIPT_FILENAME']), strlen($document_root), -10), DIRECTORY_SEPARATOR);
+var_dump($nos_dir);
 if (!empty($nos_dir)) {
     $nos_dir .= DIRECTORY_SEPARATOR;
 }
@@ -38,7 +39,8 @@ if ($handle) {
 
 $public = $document_root.$nos_dir.'public'.DIRECTORY_SEPARATOR;
 $file = $public.'.htaccess';
-if (is_writable($file) && is_writable($public)) {
+$htaccess_move = !file_exists($file);
+if (!$htaccess_move && is_writable($file) && is_writable($public)) {
     $htaccess_move = rename($file, $public.'.htaccess.old');
 }
 
@@ -196,7 +198,7 @@ if (!$htaccess_save) {
 if (!$htaccess_move) {
 
     echo '<h2>Rename invalid .htaccess file in the Novius OS\'s public directory</h2>';
-    echo '<p>Rename <code>', $nos_dir, 'public/.htaccess</code> file by <code>', $nos_dir, 'public/.htaccess.old</code>.</p>';
+    echo '<p>Rename <code>', $nos_dir, 'public'.DIRECTORY_SEPARATOR.'.htaccess</code> file by <code>', $nos_dir, 'public'.DIRECTORY_SEPARATOR.'.htaccess.old</code>.</p>';
 }
 ?>
     <p><a href="install.php"><button>Go to the install wizard</button></a></p>
