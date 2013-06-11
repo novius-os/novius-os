@@ -10,7 +10,6 @@
 
 $document_root = rtrim(realpath($_SERVER['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 $nos_dir = trim(substr(realpath($_SERVER['SCRIPT_FILENAME']), strlen($document_root), -10), DIRECTORY_SEPARATOR);
-var_dump($nos_dir);
 if (!empty($nos_dir)) {
     $nos_dir .= DIRECTORY_SEPARATOR;
 }
@@ -191,7 +190,7 @@ if (!$htaccess_save) {
     echo '<h2>Create a .htaccess file in the Novius OS\'s directory</h2>';
 
     echo '<p>Create a file name <code>.htaccess</code> and write this code in it :</p>';
-    echo '<pre><code style="width:800px;">', $htaccess, '</code></pre>';
+    echo '<pre><code style="width:800px;">', htmlspecialchars($htaccess), '</code></pre>';
     echo '<p>Upload this file in the Novius OS\'s directory of your hosting server (<code>', $nos_dir, '</code>).</p>';
 }
 
