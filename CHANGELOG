@@ -24,6 +24,7 @@ Breaking changes:
 - 4 new relation types : twinnable_belongs_to, twinnable_has_one, twinnable_has_many, twinnable_many_many
 - Model now can have fields, medias and WYSIWYGs common to all contexts.
 - Model class : add addRelation, configModel, getApplication() methods.
+- Deprecated : get_url_model($item, $params) in enhancer front controller, please use getURLEnhanced($params) and $item in a key "item" of $params.
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
