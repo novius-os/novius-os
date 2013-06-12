@@ -25,6 +25,7 @@ Breaking changes:
 - Model now can have fields, medias and WYSIWYGs common to all contexts.
 - Model class : add addRelation, configModel, getApplication() methods.
 - Deprecated : get_url_model($item, $params) in enhancer front controller, please use getURLEnhanced($params) and $item in a key "item" of $params.
+- Now custom cellFormatters are allowed in appdesks
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
