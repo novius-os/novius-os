@@ -52,5 +52,6 @@ script:
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/media.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/page.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/blog.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
+  - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/new-home.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/page-del.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
   - "DISPLAY=:99.0 ./ci/casperjs/bin/casperjs test ./ci/tests/casperjs/media-del.js --direct --log-level=info --fail-fast --includes=./ci/tests/casperjs/pre.js --base_url='http://novius-os/'"
