@@ -29,6 +29,7 @@ Breaking changes:
 - Two new keys in appdesks : css and notify
 - Set home page not allowed in multi-context view
 - Delete or unpublish the home page is not allowed
+- In Nos::parse_wysiwyg(), replace anchors by URL#anchor only in front.
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
