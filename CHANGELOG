@@ -5,6 +5,7 @@ Novius OS framework CHANGELOG
 
 Breaking changes:
 - Due to a security fix: now you need to add ``'isSafeHtml' => true`` in the HTML column of your dataset.
+- Refactoring : CRUD, callback success called after item save in modification (like creation)
 
 - Appdesk optimized: now inspector only load with one ajax request. Added view key to inspector configuration.$
 - i18n: the default dictionary 'app::default' will now be used when none is configured with Nos\I18n::current_dictionary().
@@ -30,6 +31,8 @@ Breaking changes:
 - Set home page not allowed in multi-context view
 - Delete or unpublish the home page is not allowed
 - In Nos::parse_wysiwyg(), replace anchors by URL#anchor only in front.
+- Add Str::humanFileSize
+- Media : add filesize, display filesize and dimensions in appdesk preview and CRUD form
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
