@@ -48,6 +48,8 @@ Vendors:
 - Wijmo 2013v1.4
 - require.js 2.1.6
 
+Thank for : @Fumito Mizuno
+
 ?: version Chiba 1.?
 =================================
 - Bugfix : In behaviour sortable, in event before_query, order_by can be string...
