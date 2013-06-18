@@ -37,7 +37,7 @@ ErrorDocument 404 /novius-os-install-dir/public/htdocs/novius-os/404.php
 
     # Entry point for front office
     RewriteRule ^([^\.]*)$                                  public/htdocs/novius-os/front.php       [QSA,PT]
-    RewriteRule ^.+[\.html|/]$                              public/htdocs/novius-os/front.php       [QSA,PT]
+    RewriteRule ^.+(\.html|/)$                              public/htdocs/novius-os/front.php       [QSA,PT]
 
     # Novius OS is not installed, redirect to install
     RewriteCond !%{DOCUMENT_ROOT}/novius-os-install-dir/public/htdocs/novius-os/front.php -f

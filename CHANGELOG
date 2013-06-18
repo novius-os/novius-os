@@ -52,6 +52,7 @@ Vendors:
 - Bugfix : In behaviour sortable, in event before_query, order_by can be string...
 - Bugfix : Attachment->url() trims the end of the filename
 - Bugfix : Fieldset::defaultComplete when error option is callable
+- Bugfix : bad rule in .htaccess for shared hosting. Popups with a htm extension in WYSIWYG are redirected to front.
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
