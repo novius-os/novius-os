@@ -187,69 +187,153 @@ Fuel::$profiling = false;
 
 define('NOVIUSOS_PATH', realpath(DOCROOT.'..'.DS.'novius-os').DS);
 
-function run_test($name)
+class Test
 {
-    static $results = array();
-    $options = $GLOBALS['tests'][$name];
-    $GLOBALS['tests'][$name]['is_error'] = false;
+    public static $tests = array();
+    public static $passed = true;
+    protected static $run = array();
 
-    if (!isset($options['warning'])) {
-        $options['warning'] = false;
+    public static function register(array $list)
+    {
+        static::$tests = static::$tests + $list;
     }
 
-    if (isset($options['run_only_if'])) {
-        foreach ((array) $options['run_only_if'] as $s) {
-            if (is_bool($s)) {
-                if (false === $s) {
+    public static function start()
+    {
+        static::$run = array();
+    }
+
+    public static function stop()
+    {
+    }
+
+
+    public static function run($name)
+    {
+        $test =& static::$tests[$name];
+        static::$tests[$name]['is_error'] = false;
+
+        if (!isset($test['warning'])) {
+            $test['warning'] = false;
+        }
+
+        if (isset($test['run_only_if'])) {
+            foreach ((array) $test['run_only_if'] as $s) {
+                if (is_bool($s)) {
+                    if (false === $s) {
+                        return true;
+                    }
+                } elseif (!static::$tests[$s]['passed']) {
                     return true;
                 }
-            } elseif (!$GLOBALS['tests'][$s]['passed']) {
-                return true;
             }
         }
-    }
 
-    $results[$name] = $options['passed'];
+        static::$run[] = $name;
 
-    $class = $options['passed'] ? 'ok' : ($options['warning'] ? 'warning' : 'error');
+        $class = $test['passed'] ? 'ok' : ($test['warning'] ? 'warning' : 'error');
 
-    if ($class == 'ok' && !empty($options['hide_success_when'])) {
-        return true;
-    }
+        if ($class == 'ok' && !empty($test['hide_success_when'])) {
+            return true;
+        }
 
-    if ($class == 'error' && isset($options['hide_error_when'])) {
-        foreach ((array) $options['hide_error_when'] as $s) {
-            if (is_bool($s)) {
-                if (true === $s) {
+        if ($class == 'error' && isset($test['hide_error_when'])) {
+            foreach ((array) $test['hide_error_when'] as $s) {
+                if (is_bool($s)) {
+                    if (true === $s) {
+                        return true;
+                    }
+                } elseif (static::$tests[$s]['passed']) {
                     return true;
                 }
-            } elseif ($GLOBALS['tests'][$s]['passed']) {
-                return true;
             }
         }
-    }
-    echo '<tr class="'.$class.'">
-        <th>'.$options['title'].'</th>';
 
-    if ($class == 'ok') {
-        echo '<td class="status">OK</td>';
-    } else {
-        $GLOBALS['tests'][$name]['is_error'] = true;
-        echo '<td class="status">'.($options['warning'] ? 'Warning' : 'Error').'</td></tr><tr class="'.$class.'"><td class="description" colspan="2">';
-        if (!empty($options['description'])) {
-            echo '<p class="description">'.$options['description'].'</p>';
+        if ($class == 'ok') {
+            return true;
         }
-        if (!empty($options['command_line'])) {
-            echo '<!--To solve this issue, you can execute this in a terminal : --><code>'.(is_array($options['command_line']) ? implode('<br />', $options['command_line']) : $options['command_line']).'</code>';
-        }
-        if (!empty($options['code'])) {
-            echo '<code>'.(is_array($options['code']) ? implode('<br />', $options['code']) : $options['code']).'</code>';
-        }
-        echo '</td>';
-    }
-    echo '</tr>';
 
-    return $class != 'error';
+        static::$tests[$name]['is_error'] = true;
+        static::$passed = false;
+        return $class != 'error';
+    }
+
+    protected function _format_test($test)
+    {
+        $class = $test['passed'] ? 'ok' : ($test['warning'] ? 'warning' : 'error');
+        $return = array();
+        $return[] = '<tr class="'.$class.'"><th>'.$test['title'].'</th>';
+        $return[] = '<td class="status">'.($test['passed'] ? 'OK' : (!empty($test['warning']) ? 'Warning' : 'Problem')).'</td></tr>';
+        if (!$test['passed']) {
+            $return[] = '<tr class="'.$class.'"><td class="description" colspan="2">';
+            if (!empty($test['description'])) {
+                $return[] = '<p class="description">'.$test['description'].'</p>';
+            }
+            if (!empty($test['command_line'])) {
+                $return[] = '<!--To solve this issue, you can execute this in a terminal : --><code>'.(is_array($test['command_line']) ? implode('<br />', $test['command_line']) : $test['command_line']).'</code>';
+            }
+            if (!empty($test['code'])) {
+                $return[] = '<code>'.(is_array($test['code']) ? implode('<br />', $test['code']) : $test['code']).'</code>';
+            }
+            $return[] = '</td>';
+            $return[] = '</tr>';
+        }
+        return implode('', $return);
+    }
+
+    public static function results($filter = 'all')
+    {
+        if ($filter == 'all') {
+            // Show all status
+            $filter = array('success', 'warning', 'error');
+        }
+        $filter = (array) $filter;
+
+        $return = array('<table width="100%">');
+        $last_separator = 0;
+        foreach (static::$run as $name)
+        {
+            if ($name == 'separator') {
+                if ($last_separator == 0) {
+                    continue;
+                }
+                $last_separator = 0;
+                $return[] = '<tr class="separator"><td colspan="2"></td></tr>';
+            } else {
+                $test = static::$tests[$name];
+                $status = $test['passed'] ? 'success' : ($test['warning'] ? 'warning' : 'error');
+                if (in_array($status, $filter)) {
+                    $last_separator++;
+                    $return[] = static::_format_test($test);
+                }
+            }
+        }
+        $return[] = '</table>';
+        return implode('', $return);
+    }
+
+    public static function separator()
+    {
+        static::$run[] = 'separator';
+    }
+
+    public static function recap()
+    {
+        $recap = array('cd '.NOSROOT, '');
+        foreach (static::$tests as $name => $data) {
+            if (!empty($data['is_error']) && (isset($data['command_line_relative']) || isset($data['command_line']))) {
+                $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
+                if (!empty($cmd[1]) && $cmd[1] == '# or') {
+                    $cmd = array_slice($cmd, 2);
+                }
+                foreach ($cmd as $c) {
+                    $c = str_replace(NOSROOT, '', $c);
+                    $recap[] = $c;
+                }
+            }
+        }
+        return $recap;
+    }
 }
 
 $step = \Input::get('step', 0);
@@ -276,7 +360,7 @@ if ($step > 0) {
     $session_save_path = \Arr::get(\Config::load('session'), 'file.path');
 
     // @todo title_success and title_error?
-    $tests = array(
+    Test::register(array(
         'requirements.gd_is_installed' => array(
             'title'        => 'GD is installed',
             'passed'       => function_exists("gd_info"),
@@ -442,12 +526,9 @@ if ($step > 0) {
             'passed'       => is_writeable(NOSROOT.'logs/fuel'),
             'command_line' => 'chmod a+w '.NOSROOT.'logs/fuel',
         ),
-    );
+    ));
 
-    $passed = true;
     echo '<div style="width:800px;margin:auto;">';
-
-    ob_start();
 
     if ($step == 1) {
 
@@ -459,24 +540,23 @@ if ($step > 0) {
         }
     }
 
-    echo '<table width="100%">';
+    Test::start();
 
+    Test::run('requirements.gd_is_installed');
 
-    $passed = run_test('requirements.gd_is_installed') && $passed;
+    Test::separator();
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::run('directive.short_open_tag');
+    Test::run('directive.magic_quotes_gpc');
 
-    $passed = run_test('directive.short_open_tag') && $passed;
-    $passed = run_test('directive.magic_quotes_gpc') && $passed;
+    Test::separator();
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::run('public.htaccess.removed');
+    Test::run('session_path.writeable');
 
-    $passed = run_test('public.htaccess.removed') && $passed;
-    $passed = run_test('session_path.writeable') && $passed;
+    Test::separator();
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
-
-    if (run_test('folder.config.writeable')) {
+    if (Test::run('folder.config.writeable')) {
         Crypt::_init();
 
         if (!file_exists(APPPATH.'config'.DS.'config.php')) {
@@ -492,23 +572,21 @@ CONFIG;
             }
         }
 
-    } else {
-        $passed = false;
     }
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::separator();
 
-    $passed = run_test('folder.data.writeable') && $passed;
-    $passed = run_test('folder.data.config.writeable') && $passed;
-    $passed = run_test('folder.data.media.writeable') && $passed;
+    Test::run('folder.data.writeable');
+    Test::run('folder.data.config.writeable');
+    Test::run('folder.data.media.writeable');
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::separator();
 
-    $passed = run_test('folder.cache.writeable') && $passed;
-    $passed = run_test('folder.cache.media.writeable') && $passed;
-    $passed = run_test('folder.cache.fuelphp.writeable') && $passed;
+    Test::run('folder.cache.writeable');
+    Test::run('folder.cache.media.writeable');
+    Test::run('folder.cache.fuelphp.writeable');
 
-    if (run_test('folder.metadata.writeable')) {
+    if (Test::run('folder.metadata.writeable')) {
         $dir  = APPPATH.'metadata'.DS;
         $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
         foreach ($files as $file) {
@@ -516,97 +594,94 @@ CONFIG;
                 File::create($dir, $file, '<?'.'php return array();');
             }
         }
-    } else {
-        $passed = false;
     }
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::separator();
 
-    $passed = run_test('public.cache.writeable') && $passed;
-    $passed = run_test('public.cache.media.writeable') && $passed;
+    Test::run('public.cache.writeable');
+    Test::run('public.cache.media.writeable');
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::separator();
 
-    $passed = run_test('public.htdocs.writeable') && $passed;
-    $passed = run_test('public.htdocs.apps.writeable') && $passed;
+    Test::run('public.htdocs.writeable');
+    Test::run('public.htdocs.apps.writeable');
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::separator();
 
-    $passed = run_test('public.data.writeable') && $passed;
-    $passed = run_test('public.media.writeable') && $passed;
+    Test::run('public.data.writeable');
+    Test::run('public.media.writeable');
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::separator();
 
-    $passed = run_test('public.static.writeable') && $passed;
-    $passed = run_test('public.static.apps.writeable') && $passed;
+    Test::run('public.static.writeable');
+    Test::run('public.static.apps.writeable');
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::separator();
 
-    $passed = run_test('public.htdocs.nos.valid') && $passed;
-    $passed = run_test('public.static.nos.valid') && $passed;
+    Test::run('public.htdocs.nos.valid');
+    Test::run('public.static.nos.valid');
 
-    echo '<tr class="separator"><td colspan="2"></td></tr>';
+    Test::separator();
 
-    $passed = run_test('logs.fuel') && $passed;
+    Test::run('logs.fuel');
 
-    echo '</table>';
+    Test::stop();
 
-    $step_1 = ob_get_clean();
-
-    if (!$passed && $step > 1) {
+    if (!Test::$passed && $step > 1) {
         header('Location: install.php');
         exit();
     }
 }
 
 if ($step == 1) {
-
-    if (Input::method() == 'POST') {
-        try {
-            header('Location: install.php?step=2');
-            exit();
-        } catch (\Exception $e) {
-
-            echo '<p>Error : '.$e->getMessage().'</p>';
-        }
-    }
-    echo '<h2>Step 1 / 4 : server configuration</h2>';
-    if ($passed) {
-        echo $step_1;
-        echo '<form method="POST" action="">
-            <input type="submit" value="Proceed to “Step 2: database configuration”" />
-            </form>';
+    ?>
+    <h2>Step 1 / 4 : server configuration</h2>
+    <p>This step ensures Novius OS can run fine on your server.</p>
+    <?php
+    if (Test::$passed) {
+        // Warnings validates but display informations
+        ?>
+        <h2>Tests results</h2>
+        <p>Since they are quite a lot and we don't want to scare you, we've hide them. Meanwhile you can still <a id="show_tests" href="#">click here<a> to see what we did.</p>
+        <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
+        <h2>Congratulations</h2>
+        <p>Your server is compatible with Novius OS</p>
+        <button><a href="install.php?step=2'">Proceed to “Step 2: database configuration”</a></button>
+        <?php
     } else {
-        echo '<p>Please note <a href="#summary">a summary</a> of the commands is available below</p>';
-        echo $step_1;
-        $summary = array('cd '.NOSROOT, '');
-        foreach ($tests as $name => $data) {
-            if ($data['is_error'] && (isset($data['command_line_relative']) || isset($data['command_line']))) {
-                $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
-                if (!empty($cmd[1]) && $cmd[1] == '# or') {
-                    $cmd = array_slice($cmd, 2);
-                }
-                foreach ($cmd as $c) {
-                    $c = str_replace(NOSROOT, '', $c);
-                    $summary[] = $c;
-                }
-            }
-        }
-        echo '<h2 id="summary">Command summary</h2>';
-        echo '<p>Relative to the root directory: <code>'.NOSROOT.'</code></p>';
-        echo '<code style="width: 800px;">'.implode("<br />\n", $summary).'</code>';
-        // Create everything missing except config/db.php
-        echo '<p><a href="install.php?step=1">Re-run config check</a></p>';
+        ?>
+        <h2>Problems that needs attention</h2>
+        <p>Please note <a href="#recap">a recap</a> of the commands is available below</p>
+        <?= Test::results('error') ?>
+        <h2 id="recap">Command recap for Linux users</h2>
+        <p>Relative to the root directory: <code><?= NOSROOT; ?></code></p>
+        <code style="width: 800px;"><?= implode("<br />\n", Test::recap()); ?></code>
+        <p><a href="install.php?step=1">I fixed the problems above, refresh the results</a></p>
+        <h2>Other tests</h2>
+        <p>Since they're not important right now, they remain hidden. Meanwhile you can still <a id="show_tests" href="#">click here<a> to see what we did.</p>
+        <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
+        <?php
     }
+    ?>
+    <script type="text/javascript">
+        var show_tests = document.getElementById('show_tests');
+        var tests = document.getElementById('tests');
+        show_tests.addEventListener('click', function(e) {
+            tests.style.display = (tests.style.display == 'none' ? 'block' : 'none');
+        }, false);
+    </script>
+    <?php
 }
 
 if ($step == 2) {
     Config::load('db', true);
     $active = Config::get('db.active');
     $db = Config::get('db.'.$active.'.connection', array());
+    // Check database connection
     if (!empty($db['database'])) {
         try {
             $old_level = error_reporting(0);
+            // Check credentials
             Database_Connection::instance()->connect();
             error_reporting($old_level);
             header('Location: install.php?step=3');
