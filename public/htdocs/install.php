@@ -171,7 +171,7 @@ ob_start();
 <body>
 
 <h1 id="header">
-    <img src="install/logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS installation Wizard
+    <img src="install/logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS installation wizard
 </h1>
 <div id="blank_slate">
 <?php
@@ -198,15 +198,10 @@ class Test
         static::$tests = static::$tests + $list;
     }
 
-    public static function start()
+    public static function reset()
     {
         static::$run = array();
     }
-
-    public static function stop()
-    {
-    }
-
 
     public static function run($name)
     {
@@ -540,7 +535,7 @@ if ($step > 0) {
         }
     }
 
-    Test::start();
+    Test::reset();
 
     Test::run('requirements.gd_is_installed');
 
@@ -625,8 +620,6 @@ CONFIG;
 
     Test::run('logs.fuel');
 
-    Test::stop();
-
     if (!Test::$passed && $step > 1) {
         header('Location: install.php');
         exit();
@@ -646,7 +639,7 @@ if ($step == 1) {
         <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
         <h2>Congratulations</h2>
         <p>Your server is compatible with Novius OS</p>
-        <button><a href="install.php?step=2'">Proceed to “Step 2: database configuration”</a></button>
+        <button><a href="install.php?step=2">Proceed to “Step 2: database configuration”</a></button>
         <?php
     } else {
         ?>
@@ -714,10 +707,7 @@ if ($step == 2) {
 
         try {
             Config::load($config, 'db'); // set config inside db and reload the cache
-            // Try to connect to the DB
-            $old_level = error_reporting(0);
             \View::redirect('errors'.DS.'php_error', NOSPATH.'views/errors/empty.view.php');
-            error_reporting($old_level);
 
             Migrate::latest('nos', 'package');
 
