@@ -33,6 +33,7 @@ Breaking changes:
 - In Nos::parse_wysiwyg(), replace anchors by URL#anchor only in front.
 - Add Str::humanFileSize
 - Media : add filesize, display filesize and dimensions in appdesk preview and CRUD form
+- Refactoring Model_Media->get_img_tag() and get_img_tag_resized(), uses HTML::img() for returning a tag with attributs
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
