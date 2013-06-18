@@ -308,8 +308,8 @@ if ($step > 0) {
             'title'        => 'APPPATH/config/ is writeable ',
             'passed'       => is_writeable(APPPATH.'config'),
             'command_line' => 'chmod a+w '.APPPATH.'config',
-            'description'  => 'This is required temporarly to write the db.php and crypt.php config files',
-            'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or  !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
+            'description'  => 'This is required temporarily to write the db.php and crypt.php config files',
+            'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
         ),
 
         'folder.cache.writeable' => array(
@@ -381,7 +381,7 @@ if ($step > 0) {
 
         'public.htdocs.writeable' => array(
             'title'        => 'DOCROOT/htdocs/ is writeable',
-            'description'  => 'The symbolic link htdocs/novius-os doesn\'t exsists, so we need to be able to create it.',
+            'description'  => 'The symbolic link htdocs/novius-os doesn\'t exists, so we need to be able to create it.',
             'passed'       => is_writeable(DOCROOT.'htdocs'),
             'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
             'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
@@ -410,7 +410,7 @@ if ($step > 0) {
 
         'public.static.writeable' => array(
             'title'        => 'DOCROOT/static/ is writeable',
-            'description'  => 'The symbolic link static/novius-os/ doesn\'t exsists, so we need to be able to create it.',
+            'description'  => 'The symbolic link static/novius-os/ doesn\'t exists, so we need to be able to create it.',
             'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
             'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
             'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
@@ -448,6 +448,17 @@ if ($step > 0) {
     echo '<div style="width:800px;margin:auto;">';
 
     ob_start();
+
+    if ($step == 1) {
+
+        if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
+            \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os');
+        }
+        if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
+            \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os');
+        }
+    }
+
     echo '<table width="100%">';
 
 
@@ -465,7 +476,25 @@ if ($step > 0) {
 
     echo '<tr class="separator"><td colspan="2"></td></tr>';
 
-    $passed = run_test('folder.config.writeable') && $passed;
+    if (run_test('folder.config.writeable')) {
+        Crypt::_init();
+
+        if (!file_exists(APPPATH.'config'.DS.'config.php')) {
+            $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
+            $base_url = \Uri::base(false).$url;
+            if (!empty($url)) {
+                $config = <<<CONFIG
+return array(
+    'base_url' => '$base_url',
+);
+CONFIG;
+                File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n".$config);
+            }
+        }
+
+    } else {
+        $passed = false;
+    }
 
     echo '<tr class="separator"><td colspan="2"></td></tr>';
 
@@ -478,7 +507,18 @@ if ($step > 0) {
     $passed = run_test('folder.cache.writeable') && $passed;
     $passed = run_test('folder.cache.media.writeable') && $passed;
     $passed = run_test('folder.cache.fuelphp.writeable') && $passed;
-    $passed = run_test('folder.metadata.writeable') && $passed;
+
+    if (run_test('folder.metadata.writeable')) {
+        $dir  = APPPATH.'metadata'.DS;
+        $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
+        foreach ($files as $file) {
+            if (!is_file($dir.$file)) {
+                File::create($dir, $file, '<?'.'php return array();');
+            }
+        }
+    } else {
+        $passed = false;
+    }
 
     echo '<tr class="separator"><td colspan="2"></td></tr>';
 
@@ -520,36 +560,9 @@ if ($step > 0) {
 }
 
 if ($step == 1) {
+
     if (Input::method() == 'POST') {
         try {
-            if (!file_exists(APPPATH.'config'.DS.'config.php')) {
-                $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
-                $base_url = \Uri::base(false).$url;
-                if (!empty($url)) {
-                    $config = <<<CONFIG
-return array(
-    'base_url' => '$base_url',
-);
-CONFIG;
-                    File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n".$config);
-                }
-            }
-
-            $dir  = APPPATH.'metadata'.DS;
-            $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
-            foreach ($files as $file) {
-                if (!is_file($dir.$file)) {
-                    File::create($dir, $file, '<?'.'php return array();');
-                }
-            }
-
-            if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-                \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os');
-            }
-            if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-                \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os');
-            }
-
             header('Location: install.php?step=2');
             exit();
         } catch (\Exception $e) {
@@ -632,7 +645,6 @@ if ($step == 2) {
             error_reporting($old_level);
 
             Migrate::latest('nos', 'package');
-            Crypt::_init();
 
             // Install metadata
             Nos\Application::installNativeApplications();
