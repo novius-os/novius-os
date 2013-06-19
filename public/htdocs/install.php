@@ -551,7 +551,7 @@ if ($step > 0) {
 
     Test::separator();
 
-    if (Test::run('folder.config.writeable')) {
+    if (Test::run('folder.config.writeable') && $step == 1) {
         Crypt::_init();
 
         if (!file_exists(APPPATH.'config'.DS.'config.php')) {
