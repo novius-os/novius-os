@@ -4,11 +4,13 @@ Novius OS framework CHANGELOG
 =================================
 - Bugfix : In behaviour sortable, in event before_query, order_by can be string...
 - Bugfix : Attachment->url() trims the end of the filename
+- Bugfix : Fieldset::defaultComplete when error option is callable
+- Bugfix : bad rule in .htaccess for shared hosting. Popups with a htm extension in WYSIWYG are redirected to front.
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
 
-Thank for : @romunovius
+Thank for : @romunovius, @Victor ALBERT
 
 May 17, 2013: version Chiba 1.0.1
 =================================
