@@ -48,8 +48,8 @@ ob_start();
             text-decoration: inherit;
         }
         #blank_slate {
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px outset rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px outset #888888;
             border-radius: 10px;
             padding: 20px 40px;
             position: absolute;
@@ -61,6 +61,15 @@ ob_start();
         }
         #blank_slate h2 {
             padding: 0 2em 0 0;
+            color: #CB2334;
+        }
+        #blank_slate h3 {
+            color: #363636;
+        }
+        #version {
+            position: absolute;
+            right: 50px;
+            bottom: 5px;
         }
 
         table {
@@ -164,6 +173,50 @@ ob_start();
             background: #85b2cb linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
             background: #85b2cb -webkit-gradient(linear, left bottom, left top, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
             background: #85b2cb -moz-linear-gradient(bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
+        }
+
+        form label {
+            display: inline-block;
+            width: 180px;
+            font-weight: bold;
+            cursor: pointer;
+            cursor: hand;
+        }
+
+        p.error {
+            color: #ff0000;
+        }
+
+        #languages {
+            margin: 0 0 1em;
+        }
+        .languages_tip {
+            font-style: italic;
+        }
+        #languages li {
+            list-style-type: none;
+            display: block;
+            line-height: 24px;
+            cursor: move;
+            font-size: 1.1em;
+        }
+        #languages label {
+            padding: 3px;
+            cursor: pointer;
+            cursor: hand;
+            display: inline;
+            font-weight: normal;
+        }
+        #languages li.checked label {
+            font-weight: bold;
+        }
+        #languages input {
+            padding: 2px;
+            font-size: 1em;
+        }
+        #languages span.error {
+            font-weight: normal;
+            color: #ff0000;
         }
     </style>
 </head>
@@ -336,7 +389,7 @@ $step = \Input::get('step', 0);
 if ($step == 0) {
     ?>
     <h2>Thank you for downloading Novius OS</h2>
-    <p>You've done great so far. We'll now guide you through the configuration.</p>
+    <p>You've done great so far. We’ll now guide you through the configuration.</p>
     <p>This wizard is divided in 4 easy steps:</p>
     <ol>
         <li>Server configuration</li>
@@ -344,7 +397,7 @@ if ($step == 0) {
         <li>Create the first account</li>
         <li>Website configuration</li>
     </ol>
-    <p>Be sure to have your <strong>database information available</strong>, as we'll ask you for the soon.</p>
+    <p>Be sure to have your <strong>database information available</strong>, as we’ll ask you for the soon.</p>
     <button><a href="install.php?step=1">Proceed to “Step 1: server configuration”</a></button>
     <?php
 }
@@ -523,7 +576,7 @@ if ($step > 0) {
         ),
     ));
 
-    echo '<div style="width:800px;margin:auto;">';
+    ?><div style="width:800px;margin:auto;"><?php
 
     if ($step == 1) {
 
@@ -552,6 +605,7 @@ if ($step > 0) {
     Test::separator();
 
     if (Test::run('folder.config.writeable') && $step == 1) {
+        // Create the crypt.config.php file
         Crypt::_init();
 
         if (!file_exists(APPPATH.'config'.DS.'config.php')) {
@@ -634,24 +688,26 @@ if ($step == 1) {
     if (Test::$passed) {
         // Warnings validates but display informations
         ?>
-        <h2>Tests results</h2>
-        <p>Since they are quite a lot and we don't want to scare you, we've hide them. Meanwhile you can still <a id="show_tests" href="#">click here<a> to see what we did.</p>
+        <h3>Tests results</h3>
+        <p>Since they are quite a lot and we don’t want to scare you, we’ve hide them. Meanwhile you can still <a id="show_tests" href="#">click here<a> to see what we did.</p>
         <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
-        <h2>Congratulations</h2>
+
+        <h3>Congratulations</h3>
         <p>Your server is compatible with Novius OS</p>
         <button><a href="install.php?step=2">Proceed to “Step 2: database configuration”</a></button>
         <?php
     } else {
         ?>
-        <h2>Problems that needs attention</h2>
+        <h3>Problems that needs attention</h3>
         <p>Please note <a href="#recap">a recap</a> of the commands is available below</p>
         <?= Test::results('error') ?>
-        <h2 id="recap">Command recap for Linux users</h2>
+
+        <h3 id="recap">Command recap for Linux users</h3>
         <p>Relative to the root directory: <code><?= NOSROOT; ?></code></p>
         <code style="width: 800px;"><?= implode("<br />\n", Test::recap()); ?></code>
-        <p><a href="install.php?step=1">I fixed the problems above, refresh the results</a></p>
-        <h2>Other tests</h2>
-        <p>Since they're not important right now, they remain hidden. Meanwhile you can still <a id="show_tests" href="#">click here<a> to see what we did.</p>
+        <p><a href="install.php?step=1"><button>I fixed the problems above, refresh the results</button></a></p>
+        <h3>Other tests</h3>
+        <p>Since they’re not important right now, they remain hidden. Meanwhile you can still <a id="show_tests" href="#">click here<a> to see what we did.</p>
         <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
         <?php
     }
@@ -680,7 +736,7 @@ if ($step == 2) {
             header('Location: install.php?step=3');
             exit();
         } catch (\Exception $e) {
-            echo '<p>Error : '.$e->getMessage().'</p>';
+            echo '<p class="error">Error : '.$e->getMessage().'</p>';
         }
     }
 
@@ -709,7 +765,10 @@ if ($step == 2) {
             Config::load($config, 'db'); // set config inside db and reload the cache
             \View::redirect('errors'.DS.'php_error', NOSPATH.'views/errors/empty.view.php');
 
+            // Check credentials
+            $old_level = error_reporting(0);
             Migrate::latest('nos', 'package');
+            error_reporting($old_level);
 
             // Install metadata
             Nos\Application::installNativeApplications();
@@ -742,21 +801,42 @@ if ($step == 2) {
         } catch (\Database_Exception $e) {
 
             $message = $e->getMessage();
-            echo '<p>Error : Wrong credentials '.($message ? '('.$message.')' : '').'</p>';
+            ?>
+            <p class="error" title="<?= htmlspecialchars($message) ?>">
+                <strong>Wrong credentials.</strong>
+                We’re sorry, but we were unable to connect with the givent informations. Please double-check and try again.
+            </p>
+            <?php
 
         } catch (\Exception $e) {
 
-            echo '<p>Error : '.$e->getMessage().'</p>';
+            echo '<p class="error">Error : '.$e->getMessage().'</p>';
         }
     }
     ?>
     <h2>Step 2 / 4 : database configuration</h2>
+    <p>
+        This steps gather informations to use a MySQL database. Please contact your hosting provider if you don’t know them.
+    </p>
     <form action="" method="POST">
-        <p><label><input type="text" name="hostname" placeholder="Hostname" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" /></label></p>
-        <p><label><input type="text" name="username" placeholder="Username" value="<?= Input::post('username', \Arr::get($db, 'username', '')) ?>"  /></label></p>
-        <p><label><input type="password" name="password" placeholder="Password" /></label></p>
-        <p><label><input type="text" name="database" placeholder="Database" value="<?= Input::post('database', \Arr::get($db, 'database', '')) ?>"  /></label></p>
-        <p><input type="submit" value="Check and save DB config" /></p>
+        <p>
+            <label for="hostname">MySQL server</label>
+            <input type="text" name="hostname" id="hostname" placeholder="Hostname" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" />
+            A common value is <a href="#" onclick="document.getElementById('hostname').value='localhost';">localhost</a>.
+        </p>
+        <p>
+            <label for="username">MySQL username</label>
+            <input type="text" name="username" id="username" placeholder="Username" value="<?= Input::post('username', \Arr::get($db, 'username', '')) ?>"  />
+        </p>
+        <p>
+            <label for="password">MySQL password</label>
+            <input type="password" name="password" id="password" placeholder="Password" />
+        </p>
+        <p>
+            <label for="database">Name of the database</label>
+            <input type="text" name="database" id="database" placeholder="Database" value="<?= Input::post('database', \Arr::get($db, 'database', '')) ?>"  />
+        </p>
+        <p><button type="submit">Proceed to “Step 3: create the first account”</button></p>
     </form>
     <?php
 }
@@ -773,7 +853,7 @@ if ($step == 3) {
                 throw new Exception('Empty password is not allowed.');
             }
             if (\Input::post('password', '') != \Input::post('password_confirmation', '')) {
-                throw new Exception('The two password don\'t match.');
+                throw new Exception('The two passwords don\'t match.');
             }
             $user = new Nos\User\Model_User(array(
                 'user_name'      => \Input::post('name', 'Admin name'),
@@ -788,7 +868,7 @@ if ($step == 3) {
 
             // Authorize available apps
             $role = reset($user->roles);
-            foreach (array('noviusos_page', 'noviusos_media', 'noviusos_user', 'noviusos_help', 'noviusos_appmanager', 'noviusos_templates_basic') as $app) {
+            foreach (array('noviusos_page', 'noviusos_media', 'noviusos_user', 'noviusos_appmanager', 'noviusos_templates_basic') as $app) {
                 $access = Nos\User\Model_Permission::forge();
                 $access->perm_role_id      = $role->role_id;
                 $access->perm_name         = 'nos::access';
@@ -803,57 +883,233 @@ if ($step == 3) {
 
         } catch (\Exception $e) {
 
-            echo '<p>Error : '.$e->getMessage().'</p>';
+            echo '<p class="error">'.$e->getMessage().'</p>';
         }
     }
     ?>
     <h2>Step 3 / 4 : create the first administrator account</h2>
+    <p>
+        Good, we’re now ready to create your administrator account.
+    </p>
     <form action="" method="POST">
-        <p><label><input type="text" name="name" placeholder="Name" size="20" value="<?= Input::post('name', '') ?>" /></label></p>
-        <p><label><input type="text" name="firstname" placeholder="Firstname" size="20" value="<?= Input::post('firstname', '') ?>" /></label></p>
-        <p><label><input type="email" name="email" placeholder="Email / Login" size="30" value="<?= Input::post('email', '') ?>" /></label></p>
-        <p><label><input type="password" name="password" placeholder="Password" /></label></p>
-        <p><label><input type="password" name="password_confirmation" placeholder="Password confirmation" /></label></p>
-        <p><input type="submit" value="Create the first account" /></p>
+        <p>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" placeholder="Name" size="20" value="<?= Input::post('name', '') ?>" />
+            If you feel shy, the name is not mandatory…
+        </p>
+        <p>
+            <label for="firstname">Firstname</label>
+            <input type="text" name="firstname" id="firstname" placeholder="Firstname" size="20" value="<?= Input::post('firstname', '') ?>" />
+            … but please provide a firstname.
+        </p>
+        <p>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email / Login" size="30" value="<?= Input::post('email', '') ?>" />
+            You’ll need it to <strong>login</strong>.
+        </p>
+        <p>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" />
+        </p>
+        <p>
+            <label for="password_confirmation">Password confirmation</label>
+            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Password confirmation" />
+        </p>
+        <p><button type="submit">Proceed to “Step 4: website configuration”</button></p>
     </form>
+
+    <link rel="stylesheet" href="static/novius-os/admin/vendor/jquery/jquery-password_strength/jquery.password_strength.css" media="all" />
+    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery/jquery-password_strength/jquery.password_strength.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var $password = $('#password');
+
+            // Password strength
+            var strength_id = 'password_strength';
+            var $strength = $('<span id="' + strength_id + '"></span>');
+            $password.after($strength);
+
+            $password.password_strength({
+                container : '#' + strength_id,
+                texts : {
+                    1 : ' <span class="color"></span><span class="box"></span><span class="box"></span><span class="box"></span> <span class="optional">Insufficient</span>',
+                    2 : ' <span class="color"></span><span class="color"></span><span class="box"></span><span class="box"></span> <span class="optional">Weak</span>',
+                    3 : ' <span class="color"></span><span class="color"></span><span class="color"></span><span class="box"></span> <span class="optional">Average</span>',
+                    4 : ' <span class="color"></span><span class="color"></span><span class="color"></span><span class="color"></span> <span class="optional">Strong</span>',
+                    5 : ' <span class="color"></span><span class="color"></span><span class="color"></span><span class="color"></span> <span class="optional">Outstanding</span>'
+                }
+            });
+        });
+    </script>
     <?php
 }
 
 if ($step == 4) {
-    ?>
-    <h1>Step 4 / 4 : website configuration</h1>
 
-    <h2>Setup contexts</h2>
-    <p>
-        You can edit your <strong>local/config/contexts.config.php</strong> file to configure the contexts.
-    </p>
-    <p>
-        Currently, the following contexts are set:
-    <ul>
-    <?php
-    foreach (Nos\Tools_Context::contexts() as $context => $domains) {
-        echo '<li>'.$context.'</li>';
+    $available = array(
+        'en_GB' => 'English',
+        'fr_FR' => 'Français',
+        'ja_JP' => '日本語',
+        'de_DE' => 'Deutsch',
+        'es_ES' => 'Español',
+        'it_IT' => 'Italiano',
+    );
+
+    if (!is_file(APPPATH.'config/contexts.config.php')) {
+        \File::copy(APPPATH.'config/contexts.config.php.sample', APPPATH.'config/contexts.config.php');
     }
+
+    if (Input::method() == 'POST') {
+
+        try {
+
+            $languages = \Input::post('languages', array());
+            if (empty($languages)) {
+                throw new Exception('Please choose at least one language.');
+            }
+
+            $contexts = array(
+                'sites' => array(
+                    'main' => array(
+                        'title' => 'Main site',
+                        'alias' => 'Main',
+                    ),
+                ),
+            );
+            $locales = array();
+            foreach ($languages as $locale) {
+                list($lang, $country) = explode('_', $locale);
+                $locales[$locale] = array(
+                    'title' => $locale,
+                    'flag' => strtolower($country),
+                );
+                $contexts['locales'][$locale] = array(
+                    'title' => isset($available[$locale]) ? $available[$locale] : $locale,
+                    'flag' => strtolower($country),
+                );
+                $contexts['contexts']['main::'.$locale] = array();
+            }
+
+            File::update(APPPATH.'config'.DS, 'contexts.config.php', '<?'."php \n\nreturn ".str_replace('  ', "\t", var_export($contexts, true)).";\n");
+        } catch (\Exception $e) {
+            echo '<p class="error">Error : '.$e->getMessage().'</p>';
+        }
+        header('Location: install.php?step=4');
+        exit();
+    }
+
+    $locales = \Nos\Tools_Context::locales();
     ?>
-    </ul>
+    <h2>Step 4 / 4 : website configuration</h2>
+
+    <h3>Choose your languages</h3>
+    <p>
+        Novius OS can manage <strong>several websites in several languages</strong> out of the box. You can
+        configure the languages of your website below.
     </p>
-    <p><a href="install.php?step=4">Refresh the list</a></p>
 
+    <div class="languages_tip">
+        Tip: you can re-order languages using drag & drop.
+    </div>
 
-    <h2>Cleanup</h2>
-    <p>You may want to remove write permissions on the <code>local/config/</code> folder if you set it in the first step.</p>
-    <p>Please remove this <code>install.php</code> file.</p>
+    <form action="" method="POST">
+        <ul id="languages">
+            <?php
+            foreach (array_unique(array_merge(array_keys($locales), array_keys($available))) as $locale) {
+                $flag = \Nos\Tools_Context::flag('main::'.$locale);
+                ?>
+                <li>
+                    <input type="checkbox" name="languages[]" value="<?= $locale ?>" id="lang_<?= $locale ?>" <?= !empty($locales[$locale]) ? 'checked' : '' ?>>
+                    <label for="lang_<?= $locale ?>"><?= $flag ?> <?= $locale ?></label>
+                </li>
+                <?php
+            }
+            ?>
+            <li>
+                <input type="checkbox" name="languages[]" value="" id="your_locale" />
+                <label>Your language <input size="5" id="your_locale_input" placeholder="en_GB" />
+            </li>
+        </ul>
+
+        <p>If you’re a developer, you can edit the <strong>local/config/contexts.config.php</strong> file to configure them later on.</p>
+
+        <p><button type="submit">Save these languages</button> &nbsp; or &nbsp; <a href="install.php?step=5"><button type="button">I finished installing Novius OS</button></a></p>
+    </form>
+
+    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery-ui/minified/jquery.ui.core.min.js"></script>
+    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery-ui/minified/jquery.ui.widget.min.js"></script>
+    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery-ui/minified/jquery.ui.mouse.min.js"></script>
+    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery-ui/minified/jquery.ui.sortable.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var $languages = $('#languages');
+            $languages.sortable();
+            $languages.disableSelection();
+
+            $languages.find(':checkbox').on('change', function() {
+                $(this).closest('li')[$(this).is(':checked') ? 'addClass' : 'removeClass']('checked');
+            }).trigger('change');
+
+            $('#your_locale_input')
+                .on('focus', function() {
+                    $(this).closest('li').find(':checkbox').prop('checked', true).trigger('change');
+                })
+                .on('blur', function() {
+                    var $this = $(this);
+                    var val = $this.val();
+                    if (val.length == 2) {
+                        val = val.toLowerCase() + '_' + val.toUpperCase();
+                    }
+                    if (val.length !== 5 || val.substr(2, 1) != '_') {
+                        $this.val('').trigger('change');
+                        $this.nextAll().remove();
+                        return;
+                    }
+                    $this.val(val).trigger('change');
+                    var country = val.split('_');
+                    var $img = $('<img src="static/novius-os/admin/novius-os/img/flags/' + country[1].toLowerCase() + '.png" />');
+                    $img.on('error', function() {
+                        $this.nextAll().remove();
+                        $this.val('').trigger('change');
+                        $this.after('<span class="error">We could not found this locale</span>');
+                    })
+                    $this.nextAll().remove();
+                    $this.after($img);
+                }).on('change', function() {
+                    var val = $(this).val();
+                    $('#your_locale').val(val);
+                    $(this).closest('li').find(':checkbox').prop('checked', val != '').trigger('change');
+                });
+        });
+    </script>
+
+    <?php
+}
+
+if ($step == 5) {
+    ?>
+    <h2>Congratulations!</h2>
+    <p>Your now have a fresh Novius OS install to work with.</p>
+
+    <h3>Final cleanup</h3>
+    <p>You can now remove write permissions on the <code>local/config/</code> folder (if you changed it in the first step).</p>
+    <p>You should also remove or rename this install.php file, you don’t need it anymore.</p>
     <code style="width:800px;">
-        rm <?= NOSROOT ?>public/htdocs/install.php<br />
+        rm <?= NOSROOT ?>public/htdocs/install.php
         chmod og-w <?= NOSROOT ?>local/config
     </code>
 
-    <h2>The end!</h2>
-    <p><a href="admin/?tab=admin/noviusos_appmanager/appmanager"><button>Go to the administration panel</button></a></p>
+    <p>
+        <a href="admin/?tab=admin/noviusos_appmanager/appmanager"><button>Let's get started</button></a>
+    </p>
+
     <?php
 }
 
 ?>
-</div>
+</div></div>
+<div id="version">Version Chiba 1.0.1 - May 17, 2013 </div>
 </body>
 </html>

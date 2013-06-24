@@ -17,13 +17,13 @@ return array(
     ),
 
     'locales' => array(
-        'fr_FR' => array(
-            'title' => 'Français',
-            'flag' => 'fr',
-        ),
         'en_GB' => array(
             'title' => 'English',
             'flag' => 'gb',
+        ),
+        'fr_FR' => array(
+            'title' => 'Français',
+            'flag' => 'fr',
         ),
         'ja_JP' => array(
             'title' => '日本語',
