@@ -57,11 +57,15 @@ Thank for : @Fumito Mizuno
 - Bugfix : Attachment->url() trims the end of the filename
 - Bugfix : Fieldset::defaultComplete when error option is callable
 - Bugfix : bad rule in .htaccess for shared hosting. Popups with a htm extension in WYSIWYG are redirected to front.
+- Bugfix : Use the sort property of the Sortable behaviors despite of a static property
+- Bugfix : URL Enhancer don't use context when item has behaviour contextable
+- Bugfix : Behaviour publishable when not using publication_start and publication_end
+- Bugfix : Prevent from caching OS tab content
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
 
-Thank for : @romunovius, @Victor ALBERT
+Thank for : @romunovius, @Victor ALBERT, @Foine
 
 May 17, 2013: version Chiba 1.0.1
 =================================
