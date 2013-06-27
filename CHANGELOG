@@ -6,6 +6,9 @@ Novius OS framework CHANGELOG
 - Bugfix : Attachment->url() trims the end of the filename
 - Bugfix : Fieldset::defaultComplete when error option is callable
 - Bugfix : bad rule in .htaccess for shared hosting. Popups with a htm extension in WYSIWYG are redirected to front.
+- Bugfix : Use the sort property of the Sortable behaviors despite of a static property
+- Bugfix : URL Enhancer don't use context when item has behaviour contextable
+- Bugfix : Behaviour publishable when not using publication_start and publication_end
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
