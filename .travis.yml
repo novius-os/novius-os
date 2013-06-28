@@ -23,4 +23,5 @@ before_install:
 before_script:
   - sudo chmod +x ci/tools/travis.sh
 script:
-  - ci/tools/travis.sh
+  - cd ci/tools
+  - ./travis.sh
