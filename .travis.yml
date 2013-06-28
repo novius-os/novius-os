@@ -21,9 +21,6 @@ before_install:
   - sudo service apache2 reload
   - sudo sh -c 'echo "127.0.0.1 novius-os" >> /etc/hosts'
 before_script:
-  - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
   - sudo chmod +x ci/tools/travis.sh
 script:
   - ci/tools/travis.sh
