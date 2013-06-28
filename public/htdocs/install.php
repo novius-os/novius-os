@@ -306,7 +306,7 @@ class Test
         return $class != 'error';
     }
 
-    protected function _format_test($test)
+    protected static function _format_test($test)
     {
         $class = $test['passed'] ? 'ok' : ($test['warning'] ? 'warning' : 'error');
         $return = array();
