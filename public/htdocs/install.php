@@ -339,8 +339,7 @@ class Test
 
         $return = array('<table width="100%">');
         $last_separator = 0;
-        foreach (static::$run as $name)
-        {
+        foreach (static::$run as $name) {
             if ($name == 'separator') {
                 if ($last_separator == 0) {
                     continue;
@@ -1015,17 +1014,17 @@ if ($step == 4) {
 
     <form action="" method="POST">
         <ul id="languages">
-            <?php
-            foreach (array_unique(array_merge(array_keys($locales), array_keys($available))) as $locale) {
-                $flag = \Nos\Tools_Context::flag('main::'.$locale);
-                ?>
-                <li>
-                    <input type="checkbox" name="languages[]" value="<?= $locale ?>" id="lang_<?= $locale ?>" <?= !empty($locales[$locale]) ? 'checked' : '' ?>>
-                    <label for="lang_<?= $locale ?>"><?= $flag ?> <?= $locale ?></label>
-                </li>
-                <?php
-            }
-            ?>
+    <?php
+    foreach (array_unique(array_merge(array_keys($locales), array_keys($available))) as $locale) {
+        $flag = \Nos\Tools_Context::flag('main::'.$locale);
+        ?>
+        <li>
+            <input type="checkbox" name="languages[]" value="<?= $locale ?>" id="lang_<?= $locale ?>" <?= !empty($locales[$locale]) ? 'checked' : '' ?>>
+            <label for="lang_<?= $locale ?>"><?= $flag ?> <?= $locale ?></label>
+        </li>
+        <?php
+    }
+    ?>
             <li>
                 <input type="checkbox" name="languages[]" value="" id="your_locale" />
                 <label>Your language <input size="5" id="your_locale_input" placeholder="en_GB" />
