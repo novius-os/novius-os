@@ -21,7 +21,7 @@ before_install:
   - sudo service apache2 reload
   - sudo sh -c 'echo "127.0.0.1 novius-os" >> /etc/hosts'
 before_script:
-  - sudo chmod +x ci/tools/travis.sh
+  - sudo chmod +x ci/scripts/travis.sh
 script:
-  - cd ci/tools
+  - cd ci/scripts
   - ./travis.sh
