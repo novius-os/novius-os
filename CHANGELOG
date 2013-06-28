@@ -61,6 +61,7 @@ Thank for : @Fumito Mizuno
 - Bugfix : URL Enhancer don't use context when item has behaviour contextable
 - Bugfix : Behaviour publishable when not using publication_start and publication_end
 - Bugfix : Prevent from caching OS tab content
+- Bugfix : In wysiwyg, IE9 set simple quote for tag attribute, not well parse when detecting enhancer
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
