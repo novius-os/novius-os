@@ -383,6 +383,12 @@ class Test
     }
 }
 
+if (file_exists(APPPATH.'config'.DS.'config.php')) {
+    $config = \Fuel::load(APPPATH.'config'.DS.'config.php');
+} else {
+    $config = array();
+}
+
 $step = \Input::get('step', 0);
 
 if ($step == 0) {
@@ -412,7 +418,7 @@ if ($step > 0) {
             'title'        => 'GD is installed',
             'passed'       => function_exists("gd_info"),
             'description'  => 'Novius OS requires the GD library. Please <a href="http://php.net/manual/en/book.image.php">install it</a>.',
-            'warning'      => true,
+            'run_only_if'  => empty($config['cmd_convert']),
         ),
 
         'session_path.writeable' => array(
@@ -607,16 +613,23 @@ if ($step > 0) {
         // Create the crypt.config.php file
         Crypt::_init();
 
-        if (!file_exists(APPPATH.'config'.DS.'config.php')) {
+        if (empty($config) && !file_exists(APPPATH.'config'.DS.'config.php')) {
             $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
             $base_url = \Uri::base(false).$url;
             if (!empty($url)) {
-                $config = <<<CONFIG
-return array(
-    'base_url' => '$base_url',
-);
-CONFIG;
-                File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n".$config);
+                $config['base_url'] = $base_url;
+            }
+
+            // Testing common imagick path
+            foreach (array('convert', '/usr/bin/convert', '/usr/local/bin/convert') as $convert) {
+                exec($convert, $output, $return_value);
+                if ($return_value == 0) {
+                    $config['cmd_convert'] = $convert;
+                }
+            }
+
+            if (!empty($config)) {
+                File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($config, true)).";\n");
             }
         }
 
@@ -990,7 +1003,7 @@ if ($step == 4) {
                 $contexts['contexts']['main::'.$locale] = array();
             }
 
-            File::update(APPPATH.'config'.DS, 'contexts.config.php', '<?'."php \n\nreturn ".str_replace('  ', "\t", var_export($contexts, true)).";\n");
+            File::update(APPPATH.'config'.DS, 'contexts.config.php', '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($contexts, true)).";\n");
         } catch (\Exception $e) {
             echo '<p class="error">Error : '.$e->getMessage().'</p>';
         }
