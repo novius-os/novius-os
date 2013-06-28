@@ -25,4 +25,3 @@ before_script:
 script:
   - cd ci/scripts
   - ./travis.sh
-  
