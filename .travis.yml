@@ -15,7 +15,7 @@ before_install:
   - git checkout $BRANCH
   - cd ..
   - travis_retry sudo apt-get update
-  - travis_retry sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php-pear
+  - travis_retry sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php5-gd php-pear
   - sudo a2enmod rewrite
   - cat ci/data/virtualhost-dev | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo service apache2 reload
