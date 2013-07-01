@@ -605,7 +605,7 @@ if ($step == 2) {
 
     if (Input::method() == 'POST') {
         $config = array(
-            'active'          => Fuel::DEVELOPMENT,
+            'active'          => Fuel::$env,
             Fuel::$env => array(
                 'type'            => 'mysqli',
                 'connection'    => array(
@@ -649,7 +649,7 @@ if ($step == 2) {
             if ($handle) {
                 $content = fread($handle, filesize($file));
                 $content = preg_replace(
-                    "`'active' => 'development'`Uu",
+                    "`'active' => '".Fuel::$env."'`Uu",
                     "'active' => Fuel::\$env",
                     $content);
 
