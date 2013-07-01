@@ -606,7 +606,7 @@ if ($step == 2) {
     if (Input::method() == 'POST') {
         $config = array(
             'active'          => Fuel::DEVELOPMENT,
-            Fuel::DEVELOPMENT => array(
+            Fuel::$env => array(
                 'type'            => 'mysqli',
                 'connection'    => array(
                     'hostname'   => \Input::post('hostname', ''),
