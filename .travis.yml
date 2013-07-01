@@ -24,4 +24,5 @@ before_script:
   - sudo chmod +x ci/scripts/travis.sh
 script:
   - cd ci/scripts
+  - ./init.sh
   - ./travis.sh
