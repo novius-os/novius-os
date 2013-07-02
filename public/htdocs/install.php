@@ -318,20 +318,7 @@ class Test
         $return = array();
         $return[] = '<tr class="'.$class.'"><td class="status">'.($test['passed'] ? 'OK' : (!empty($test['warning']) ? 'Warning' : 'Fix me')).'</td>';
         $return[] = '<th>'.$test['title'].'</th></tr>';
-        /*if (!$test['passed']) {
-            $return[] = '<tr class="'.$class.'"><td class="description" colspan="2">';
-            if (!empty($test['description'])) {
-                $return[] = '<p class="description">'.$test['description'].'</p>';
-            }
-            if (!empty($test['command_line'])) {
-                $return[] = '<!--To solve this issue, you can execute this in a terminal : --><code>'.(is_array($test['command_line']) ? implode('<br />', $test['command_line']) : $test['command_line']).'</code>';
-            }
-            if (!empty($test['code'])) {
-                $return[] = '<code>'.(is_array($test['code']) ? implode('<br />', $test['code']) : $test['code']).'</code>';
-            }
-            $return[] = '</td>';
-            $return[] = '</tr>';
-        }*/
+
         return implode('', $return);
     }
 
@@ -370,20 +357,29 @@ class Test
         static::$run[] = 'separator';
     }
 
-    public static function recap()
+    public static function recap($command_line = true)
     {
-        $recap = array('cd '.NOSROOT, '');
+        $recap = array();
         foreach (static::$tests as $name => $data) {
-            if (!empty($data['is_error']) && (isset($data['command_line_relative']) || isset($data['command_line']))) {
-                $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
-                if (!empty($cmd[1]) && $cmd[1] == '# or') {
-                    $cmd = array_slice($cmd, 2);
-                }
-                foreach ($cmd as $c) {
-                    $c = str_replace(NOSROOT, '', $c);
-                    $recap[] = $c;
+            if (!empty($data['is_error'])) {
+                if (isset($data['command_line_relative']) || isset($data['command_line'])) {
+                    if ($command_line) {
+                        $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
+                        if (!empty($cmd[1]) && $cmd[1] == '# or') {
+                            $cmd = array_slice($cmd, 2);
+                        }
+                        foreach ($cmd as $c) {
+                            $c = str_replace(NOSROOT, '', $c);
+                            $recap[] = $c;
+                        }
+                    }
+                } else if (!$command_line && isset($data['description'])) {
+                    $recap[] = $data['description'];
                 }
             }
+        }
+        if (!empty($recap) && $command_line) {
+            return array_merge(array('cd '.NOSROOT, ''), $recap);
         }
         return $recap;
     }
@@ -424,7 +420,6 @@ if ($step > 0) {
 
     $session_save_path = \Arr::get(\Config::load('session'), 'file.path');
 
-    // @todo title_success and title_error?
     Test::register(array(
         'requirements.gd_is_installed' => array(
             'title'        => 'GD must be installed',
@@ -717,7 +712,7 @@ if ($step == 1) {
         <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
 
         <a href="install.php?step=2"><button>Perfect, proceed to step 2 ‘Set up the database’</button></a>
-    <?php
+        <?php
     } else {
         ?>
         <h3>Some tests have failed</h3>
@@ -726,11 +721,23 @@ if ($step == 1) {
         <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
 
         <h3 id="recap">Let’s fix this</h3>
-        <p>Copy and run the following commands:<br />
-           <em>(Linux commands. You have to adapt them if you’re on a different OS, sorry about that.)</em></p>
-        <textarea style="width: 800px; height: 80px;"><?= implode("\n", Test::recap()); ?></textarea>
+        <?php
+        $recap_with_description = Test::recap(false);
+        if (!empty($recap_with_description)) {
+            echo '<ul><li>' . implode('</li><li>', $recap_with_description) . '</li></ul>';
+        }
+
+        $recap_with_command_line = Test::recap(true);
+        if (!empty($recap_with_command_line)) {
+            ?>
+            <p>Copy and run the following commands:<br />
+                <em>(Linux commands. You have to adapt them if you’re on a different OS, sorry about that.)</em></p>
+            <textarea style="width: 800px; height: 80px;"><?= implode("\n", $recap_with_command_line); ?></textarea>
+            <?php
+        }
+        ?>
         <p><a href="install.php?step=1"><button>OK, I’ve fixed the problems, re-run the tests</button></a></p>
-    <?php
+        <?php
     }
     ?>
     <script type="text/javascript">
