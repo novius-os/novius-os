@@ -976,7 +976,7 @@ if ($step == 4) {
     $available = array(
         'en_GB' => 'English',
         'fr_FR' => 'Français',
-        'ja_JP' => '???',
+        'ja_JP' => '日本語',
         'de_DE' => 'Deutsch',
         'es_ES' => 'Español',
         'it_IT' => 'Italiano',
@@ -1048,7 +1048,7 @@ if ($step == 4) {
                 ?>
                 <li>
                     <input type="checkbox" name="languages[]" value="<?= $locale ?>" id="lang_<?= $locale ?>" <?= !empty($locales[$locale]) ? 'checked' : '' ?>>
-                    <label for="lang_<?= $locale ?>"><?= $flag ?> <?= $locale ?></label>
+                    <label for="lang_<?= $locale ?>"><?= $flag ?> <?= isset($available[$locale]) ? $available[$locale].' ('.$locale.')' : $locale ?></label>
                 </li>
             <?php
             }
