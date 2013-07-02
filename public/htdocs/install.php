@@ -416,292 +416,292 @@ if ($step == 0) {
         <li>Database name</li>
     </ul>
     <a href="install.php?step=1"><button>I’m ready, proceed to step 1 ‘Test the server’</button></a>
-<?php
+    <?php
 }
 
 if ($step > 0) {
-$folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH.'data'.DS;
+    $folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH.'data'.DS;
 
-$session_save_path = \Arr::get(\Config::load('session'), 'file.path');
+    $session_save_path = \Arr::get(\Config::load('session'), 'file.path');
 
-// @todo title_success and title_error?
-Test::register(array(
-    'requirements.gd_is_installed' => array(
-        'title'        => 'GD must be installed',
-        'passed'       => function_exists("gd_info"),
-        'description'  => 'Novius OS requires the GD library. Please <a href="http://php.net/manual/en/book.image.php">install it</a>.',
-        'run_only_if'  => empty($config['cmd_convert']),
-    ),
+    // @todo title_success and title_error?
+    Test::register(array(
+        'requirements.gd_is_installed' => array(
+            'title'        => 'GD must be installed',
+            'passed'       => function_exists("gd_info"),
+            'description'  => 'Novius OS requires the GD library. Please <a href="http://php.net/manual/en/book.image.php">install it</a>.',
+            'run_only_if'  => empty($config['cmd_convert']),
+        ),
 
-    'session_path.writeable' => array(
-        'title'        => 'Session directory must be writeable',
-        'passed'       => is_writable($session_save_path),
-        'description'  => 'Current session path : <strong>'.$session_save_path.'</strong>.<br />Please edit your configuration file (session.config.php : file.path key) or run <code>chmod a+w '.$session_save_path.'</code>. ',
-    ),
+        'session_path.writeable' => array(
+            'title'        => 'Session directory must be writeable',
+            'passed'       => is_writable($session_save_path),
+            'description'  => 'Current session path : <strong>'.$session_save_path.'</strong>.<br />Please edit your configuration file (session.config.php : file.path key) or run <code>chmod a+w '.$session_save_path.'</code>. ',
+        ),
 
-    'directive.short_open_tag' => array(
-        'title'        => 'PHP configuration directive short_open_tag = On',
-        'passed'       => ini_get('short_open_tag') != false,
-        'code'         => '# '.php_ini_loaded_file ()."\n<br />short_open_tag = On",
-        'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
-        'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
-    ),
-    'directive.magic_quotes_gpc' => array(
-        'title'        => 'PHP configuration directive magic_quotes_gpc = Off',
-        'passed'       => ini_get('magic_quotes_gpc') == false,
-        'code'         => '# '.php_ini_loaded_file ()."\n<br />magic_quotes_gpc = Off",
-        'description'  => 'It\'s <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">deprecated in PHP 5.3 and has been removed in PHP 5.4</a>. Please edit your configuration file.',
-        'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
-    ),
-    'folder.config.writeable' => array(
-        'title'        => 'APPPATH/config/ must be writeable ',
-        'passed'       => is_writeable(APPPATH.'config'),
-        'command_line' => 'chmod a+w '.APPPATH.'config',
-        'description'  => 'This is required temporarily to write the db.php and crypt.php config files',
-        'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
-    ),
+        'directive.short_open_tag' => array(
+            'title'        => 'PHP configuration directive short_open_tag = On',
+            'passed'       => ini_get('short_open_tag') != false,
+            'code'         => '# '.php_ini_loaded_file ()."\n<br />short_open_tag = On",
+            'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
+            'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
+        ),
+        'directive.magic_quotes_gpc' => array(
+            'title'        => 'PHP configuration directive magic_quotes_gpc = Off',
+            'passed'       => ini_get('magic_quotes_gpc') == false,
+            'code'         => '# '.php_ini_loaded_file ()."\n<br />magic_quotes_gpc = Off",
+            'description'  => 'It\'s <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">deprecated in PHP 5.3 and has been removed in PHP 5.4</a>. Please edit your configuration file.',
+            'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
+        ),
+        'folder.config.writeable' => array(
+            'title'        => 'APPPATH/config/ must be writeable ',
+            'passed'       => is_writeable(APPPATH.'config'),
+            'command_line' => 'chmod a+w '.APPPATH.'config',
+            'description'  => 'This is required temporarily to write the db.php and crypt.php config files',
+            'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
+        ),
 
-    'folder.cache.writeable' => array(
-        'title'        => 'APPPATH/cache/ must be writeable',
-        'passed'       => is_writeable(APPPATH.'cache'),
-        'command_line' => 'chmod a+w '.APPPATH.'cache',
-    ),
+        'folder.cache.writeable' => array(
+            'title'        => 'APPPATH/cache/ must be writeable',
+            'passed'       => is_writeable(APPPATH.'cache'),
+            'command_line' => 'chmod a+w '.APPPATH.'cache',
+        ),
 
-    'folder.cache.media.writeable' => array(
-        'title'        => 'APPPATH/cache/media must be writeable',
-        'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
-        'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
-        'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
-    ),
+        'folder.cache.media.writeable' => array(
+            'title'        => 'APPPATH/cache/media must be writeable',
+            'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
+            'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
+            'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
+        ),
 
-    'folder.cache.fuelphp.writeable' => array(
-        'title'        => 'APPPATH/cache/fuelphp must be writeable',
-        'passed'       => is_writeable(APPPATH.'cache'.DS.'fuelphp'),
-        'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'fuelphp',
-        'run_only_if'  => is_dir(APPPATH.'cache'.DS.'fuelphp'),
-    ),
+        'folder.cache.fuelphp.writeable' => array(
+            'title'        => 'APPPATH/cache/fuelphp must be writeable',
+            'passed'       => is_writeable(APPPATH.'cache'.DS.'fuelphp'),
+            'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'fuelphp',
+            'run_only_if'  => is_dir(APPPATH.'cache'.DS.'fuelphp'),
+        ),
 
-    'folder.data.writeable' => array(
-        'title'        => 'APPPATH/data/ must be writeable',
-        'passed'       => is_writeable($folder_data),
-        'command_line' => 'chmod a+w '.$folder_data,
-    ),
+        'folder.data.writeable' => array(
+            'title'        => 'APPPATH/data/ must be writeable',
+            'passed'       => is_writeable($folder_data),
+            'command_line' => 'chmod a+w '.$folder_data,
+        ),
 
-    'folder.data.config.writeable' => array(
-        'title'           => 'APPPATH/data/config/ must be writeable',
-        'passed'          => is_writeable($folder_data.'config'),
-        'command_line'	  => array('chmod a+w '.$folder_data.'config'),
-        'run_only_if'     => is_dir($folder_data.'config'),
-    ),
+        'folder.data.config.writeable' => array(
+            'title'           => 'APPPATH/data/config/ must be writeable',
+            'passed'          => is_writeable($folder_data.'config'),
+            'command_line'	  => array('chmod a+w '.$folder_data.'config'),
+            'run_only_if'     => is_dir($folder_data.'config'),
+        ),
 
-    'folder.data.media.writeable' => array(
-        'title'           => 'APPPATH/data/media/ must be writeable',
-        'passed'          => is_writeable($folder_data.'media'),
-        'command_line'	  => array('chmod a+w '.$folder_data.'media'),
-        'run_only_if'     => is_dir($folder_data.'media'),
-    ),
+        'folder.data.media.writeable' => array(
+            'title'           => 'APPPATH/data/media/ must be writeable',
+            'passed'          => is_writeable($folder_data.'media'),
+            'command_line'	  => array('chmod a+w '.$folder_data.'media'),
+            'run_only_if'     => is_dir($folder_data.'media'),
+        ),
 
-    'folder.metadata.writeable' => array(
-        'title'           => 'APPPATH/metadata/ must be writeable',
-        'passed'          => is_writeable(APPPATH.'metadata'),
-        'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
-    ),
+        'folder.metadata.writeable' => array(
+            'title'           => 'APPPATH/metadata/ must be writeable',
+            'passed'          => is_writeable(APPPATH.'metadata'),
+            'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
+        ),
 
-    'public.htaccess.removed' => array(
-        'title'        => 'DOCROOT/.htaccess must be removed',
-        'passed'       => !is_file(DOCROOT.'.htaccess'),
-        'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
-        'run_only_if'  => is_file(NOSROOT.'.htaccess'),
-    ),
+        'public.htaccess.removed' => array(
+            'title'        => 'DOCROOT/.htaccess must be removed',
+            'passed'       => !is_file(DOCROOT.'.htaccess'),
+            'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
+            'run_only_if'  => is_file(NOSROOT.'.htaccess'),
+        ),
 
-    'public.cache.writeable' => array(
-        'title'        => 'DOCROOT/cache/ must be writeable',
-        'passed'       => is_writeable(DOCROOT.'cache'),
-        'command_line' => 'chmod a+w '.DOCROOT.'cache',
-        'run_only_if'  => is_dir(DOCROOT.'cache'),
-    ),
+        'public.cache.writeable' => array(
+            'title'        => 'DOCROOT/cache/ must be writeable',
+            'passed'       => is_writeable(DOCROOT.'cache'),
+            'command_line' => 'chmod a+w '.DOCROOT.'cache',
+            'run_only_if'  => is_dir(DOCROOT.'cache'),
+        ),
 
-    'public.cache.media.writeable' => array(
-        'title'        => 'DOCROOT/cache/media must be writeable',
-        'passed'       => is_writeable(DOCROOT.'cache'.DS.'media'),
-        'command_line' => 'chmod a+w '.DOCROOT.'cache'.DS.'media',
-        'run_only_if'  => is_dir(DOCROOT.'cache'.DS.'media'),
-    ),
+        'public.cache.media.writeable' => array(
+            'title'        => 'DOCROOT/cache/media must be writeable',
+            'passed'       => is_writeable(DOCROOT.'cache'.DS.'media'),
+            'command_line' => 'chmod a+w '.DOCROOT.'cache'.DS.'media',
+            'run_only_if'  => is_dir(DOCROOT.'cache'.DS.'media'),
+        ),
 
-    'public.htdocs.writeable' => array(
-        'title'        => 'DOCROOT/htdocs/ must be writeable',
-        'description'  => 'The symbolic link htdocs/novius-os doesn\'t exists, so we need to be able to create it.',
-        'passed'       => is_writeable(DOCROOT.'htdocs'),
-        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
-        'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
-    ),
+        'public.htdocs.writeable' => array(
+            'title'        => 'DOCROOT/htdocs/ must be writeable',
+            'description'  => 'The symbolic link htdocs/novius-os doesn\'t exists, so we need to be able to create it.',
+            'passed'       => is_writeable(DOCROOT.'htdocs'),
+            'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
+            'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
+        ),
 
-    'public.media.writeable' => array(
-        'title'        => 'DOCROOT/media/ must be writeable',
-        'passed'       => is_writeable(DOCROOT.'media'),
-        'command_line' => 'chmod a+w '.DOCROOT.'media',
-        'run_only_if'  => is_dir(DOCROOT.'media'),
-    ),
+        'public.media.writeable' => array(
+            'title'        => 'DOCROOT/media/ must be writeable',
+            'passed'       => is_writeable(DOCROOT.'media'),
+            'command_line' => 'chmod a+w '.DOCROOT.'media',
+            'run_only_if'  => is_dir(DOCROOT.'media'),
+        ),
 
-    'public.data.writeable' => array(
-        'title'        => 'DOCROOT/data/ must be writeable',
-        'passed'       => is_writeable(DOCROOT.'data'),
-        'command_line' => 'chmod a+w '.DOCROOT.'data',
-        'run_only_if'  => is_dir(DOCROOT.'data'),
-    ),
+        'public.data.writeable' => array(
+            'title'        => 'DOCROOT/data/ must be writeable',
+            'passed'       => is_writeable(DOCROOT.'data'),
+            'command_line' => 'chmod a+w '.DOCROOT.'data',
+            'run_only_if'  => is_dir(DOCROOT.'data'),
+        ),
 
-    'public.htdocs.apps.writeable' => array(
-        'title'        => 'DOCROOT/htdocs/apps must be writeable',
-        'passed'       => is_writeable(DOCROOT.'htdocs'.DS.'apps'),
-        'command_line' => 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps',
-        'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'apps'),
-    ),
+        'public.htdocs.apps.writeable' => array(
+            'title'        => 'DOCROOT/htdocs/apps must be writeable',
+            'passed'       => is_writeable(DOCROOT.'htdocs'.DS.'apps'),
+            'command_line' => 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps',
+            'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'apps'),
+        ),
 
-    'public.static.writeable' => array(
-        'title'        => 'DOCROOT/static/ must be writeable',
-        'description'  => 'The symbolic link static/novius-os/ doesn\'t exists, so we need to be able to create it.',
-        'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
-        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
-        'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
-    ),
+        'public.static.writeable' => array(
+            'title'        => 'DOCROOT/static/ must be writeable',
+            'description'  => 'The symbolic link static/novius-os/ doesn\'t exists, so we need to be able to create it.',
+            'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
+            'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
+            'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
+        ),
 
-    'public.static.apps.writeable' => array(
-        'title'        => 'DOCROOT/static/apps must be writeable',
-        'passed'       => is_dir(DOCROOT.'static'.DS.'apps') && is_writeable(DOCROOT.'static'.DS.'apps'),
-        'command_line' => 'chmod a+w '.DOCROOT.'static'.DS.'apps',
-        'run_only_if'  => file_exists(DOCROOT.'static'.DS.'apps'),
-    ),
+        'public.static.apps.writeable' => array(
+            'title'        => 'DOCROOT/static/apps must be writeable',
+            'passed'       => is_dir(DOCROOT.'static'.DS.'apps') && is_writeable(DOCROOT.'static'.DS.'apps'),
+            'command_line' => 'chmod a+w '.DOCROOT.'static'.DS.'apps',
+            'run_only_if'  => file_exists(DOCROOT.'static'.DS.'apps'),
+        ),
 
-    'public.htdocs.nos.valid' => array(
-        'title'        => 'DOCROOT/htdocs/novius-os must link to NOSPATH/htdocs',
-        'passed'       => \File::is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
-        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
-        'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
-    ),
+        'public.htdocs.nos.valid' => array(
+            'title'        => 'DOCROOT/htdocs/novius-os must link to NOSPATH/htdocs',
+            'passed'       => \File::is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
+            'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
+            'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
+        ),
 
-    'public.static.nos.valid' => array(
-        'title'        => 'DOCROOT/static/novius-os must link to NOSPATH/static',
-        'passed'       => \File::is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
-        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os',
-        'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
-    ),
+        'public.static.nos.valid' => array(
+            'title'        => 'DOCROOT/static/novius-os must link to NOSPATH/static',
+            'passed'       => \File::is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
+            'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os',
+            'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
+        ),
 
-    'logs.fuel' => array(
-        'title'        => 'logs/fuel must be writeable',
-        'passed'       => is_writeable(NOSROOT.'logs/fuel'),
-        'command_line' => 'chmod a+w '.NOSROOT.'logs/fuel',
-    ),
-));
+        'logs.fuel' => array(
+            'title'        => 'logs/fuel must be writeable',
+            'passed'       => is_writeable(NOSROOT.'logs/fuel'),
+            'command_line' => 'chmod a+w '.NOSROOT.'logs/fuel',
+        ),
+    ));
 
-?><div><?php
+    ?><div><?php
 
-if ($step == 1) {
+    if ($step == 1) {
 
-    if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-        \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os');
-    }
-    if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-        \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os');
-    }
-}
-
-Test::reset();
-
-Test::run('requirements.gd_is_installed');
-
-Test::separator();
-
-Test::run('directive.short_open_tag');
-Test::run('directive.magic_quotes_gpc');
-
-Test::separator();
-
-Test::run('public.htaccess.removed');
-Test::run('session_path.writeable');
-
-Test::separator();
-
-if (Test::run('folder.config.writeable') && $step == 1) {
-    // Create the crypt.config.php file
-    Crypt::_init();
-
-    if (empty($config) && !file_exists(APPPATH.'config'.DS.'config.php')) {
-        $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
-        $base_url = \Uri::base(false).$url;
-        if (!empty($url)) {
-            $config['base_url'] = $base_url;
+        if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
+            \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os');
         }
+        if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
+            \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os');
+        }
+    }
 
-        // Testing common imagick path
-        foreach (array('convert', '/usr/bin/convert', '/usr/local/bin/convert') as $convert) {
-            exec($convert, $output, $return_value);
-            if ($return_value == 0) {
-                $config['cmd_convert'] = $convert;
+    Test::reset();
+
+    Test::run('requirements.gd_is_installed');
+
+    Test::separator();
+
+    Test::run('directive.short_open_tag');
+    Test::run('directive.magic_quotes_gpc');
+
+    Test::separator();
+
+    Test::run('public.htaccess.removed');
+    Test::run('session_path.writeable');
+
+    Test::separator();
+
+    if (Test::run('folder.config.writeable') && $step == 1) {
+        // Create the crypt.config.php file
+        Crypt::_init();
+
+        if (empty($config) && !file_exists(APPPATH.'config'.DS.'config.php')) {
+            $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
+            $base_url = \Uri::base(false).$url;
+            if (!empty($url)) {
+                $config['base_url'] = $base_url;
+            }
+
+            // Testing common imagick path
+            foreach (array('convert', '/usr/bin/convert', '/usr/local/bin/convert') as $convert) {
+                exec($convert, $output, $return_value);
+                if ($return_value == 0) {
+                    $config['cmd_convert'] = $convert;
+                }
+            }
+
+            if (!empty($config)) {
+                File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($config, true)).";\n");
             }
         }
 
-        if (!empty($config)) {
-            File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($config, true)).";\n");
+    }
+
+    Test::separator();
+
+    Test::run('folder.data.writeable');
+    Test::run('folder.data.config.writeable');
+    Test::run('folder.data.media.writeable');
+
+    Test::separator();
+
+    Test::run('folder.cache.writeable');
+    Test::run('folder.cache.media.writeable');
+    Test::run('folder.cache.fuelphp.writeable');
+
+    if (Test::run('folder.metadata.writeable')) {
+        $dir  = APPPATH.'metadata'.DS;
+        $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
+        foreach ($files as $file) {
+            if (!is_file($dir.$file)) {
+                File::create($dir, $file, '<?'.'php return array();');
+            }
         }
     }
 
-}
+    Test::separator();
 
-Test::separator();
+    Test::run('public.cache.writeable');
+    Test::run('public.cache.media.writeable');
 
-Test::run('folder.data.writeable');
-Test::run('folder.data.config.writeable');
-Test::run('folder.data.media.writeable');
+    Test::separator();
 
-Test::separator();
+    Test::run('public.htdocs.writeable');
+    Test::run('public.htdocs.apps.writeable');
 
-Test::run('folder.cache.writeable');
-Test::run('folder.cache.media.writeable');
-Test::run('folder.cache.fuelphp.writeable');
+    Test::separator();
 
-if (Test::run('folder.metadata.writeable')) {
-    $dir  = APPPATH.'metadata'.DS;
-    $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
-    foreach ($files as $file) {
-        if (!is_file($dir.$file)) {
-            File::create($dir, $file, '<?'.'php return array();');
-        }
+    Test::run('public.data.writeable');
+    Test::run('public.media.writeable');
+
+    Test::separator();
+
+    Test::run('public.static.writeable');
+    Test::run('public.static.apps.writeable');
+
+    Test::separator();
+
+    Test::run('public.htdocs.nos.valid');
+    Test::run('public.static.nos.valid');
+
+    Test::separator();
+
+    Test::run('logs.fuel');
+
+    if (!Test::$passed && $step > 1) {
+        header('Location: install.php');
+        exit();
     }
-}
-
-Test::separator();
-
-Test::run('public.cache.writeable');
-Test::run('public.cache.media.writeable');
-
-Test::separator();
-
-Test::run('public.htdocs.writeable');
-Test::run('public.htdocs.apps.writeable');
-
-Test::separator();
-
-Test::run('public.data.writeable');
-Test::run('public.media.writeable');
-
-Test::separator();
-
-Test::run('public.static.writeable');
-Test::run('public.static.apps.writeable');
-
-Test::separator();
-
-Test::run('public.htdocs.nos.valid');
-Test::run('public.static.nos.valid');
-
-Test::separator();
-
-Test::run('logs.fuel');
-
-if (!Test::$passed && $step > 1) {
-    header('Location: install.php');
-    exit();
-}
 }
 
 if ($step == 1) {
