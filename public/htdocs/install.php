@@ -14,7 +14,7 @@ ob_start();
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Novius OS - Installation</title>
+    <title>Novius OS - Install wizard</title>
     <meta name="robots" content="noindex,nofollow">
     <link rel="shortcut icon" href="static/novius-os/admin/novius-os/img/noviusos.ico">
 
@@ -61,7 +61,10 @@ ob_start();
         }
         #blank_slate h2 {
             padding: 0 2em 0 0;
-            color: #CB2334;
+            color: #6C9DCF;
+        }
+        #blank_slate h2 .outof {
+            color: #888;
         }
         #blank_slate h3 {
             color: #363636;
@@ -70,6 +73,9 @@ ob_start();
             position: absolute;
             right: 50px;
             bottom: 5px;
+        }
+        a {
+            color: #6C9DCF;
         }
 
         table {
@@ -84,27 +90,27 @@ ob_start();
             padding: 5px;
         }
         td.status {
-            background-color: #fff;
             font-weight: bold;
             text-align: center;
+            width: 7em;
         }
         tr.error td.status {
-            color: #f00;
+            background-color: #C40C12;
+            color: #fff;
         }
         tr.warning td.status {
-            color: #dd9700;
+            background-color: #EF9000;
+            color: #FFF;
         }
         tr.ok td.status {
-            color: #0b0;
+            background-color: #52A500;
+            color: #FFF;
         }
         table tr.error {
             background: #fff5f5;
         }
         table tr.warning {
             background: #fff9f0;
-        }
-        tr.error th, tr.warning th {
-            border-bottom: none;
         }
         tr.separator td {
             border:none;
@@ -224,7 +230,7 @@ ob_start();
 <body>
 
 <h1 id="header">
-    <img src="install/logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS installation wizard
+    <img src="install/logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS install wizard
 </h1>
 <div id="blank_slate">
 <?php
@@ -310,9 +316,9 @@ class Test
     {
         $class = $test['passed'] ? 'ok' : ($test['warning'] ? 'warning' : 'error');
         $return = array();
-        $return[] = '<tr class="'.$class.'"><th>'.$test['title'].'</th>';
-        $return[] = '<td class="status">'.($test['passed'] ? 'OK' : (!empty($test['warning']) ? 'Warning' : 'Problem')).'</td></tr>';
-        if (!$test['passed']) {
+        $return[] = '<tr class="'.$class.'"><td class="status">'.($test['passed'] ? 'OK' : (!empty($test['warning']) ? 'Warning' : 'Fix me')).'</td>';
+        $return[] = '<th>'.$test['title'].'</th></tr>';
+        /*if (!$test['passed']) {
             $return[] = '<tr class="'.$class.'"><td class="description" colspan="2">';
             if (!empty($test['description'])) {
                 $return[] = '<p class="description">'.$test['description'].'</p>';
@@ -325,7 +331,7 @@ class Test
             }
             $return[] = '</td>';
             $return[] = '</tr>';
-        }
+        }*/
         return implode('', $return);
     }
 
@@ -394,336 +400,339 @@ $step = \Input::get('step', 0);
 if ($step == 0) {
     ?>
     <h2>Thank you for downloading Novius OS</h2>
-    <p>You've done great so far. We’ll now guide you through the configuration.</p>
-    <p>This wizard is divided in 4 easy steps:</p>
+    <p>Welcome to the install wizard. You’ll be done within a few minutes, we’ll guide you through the process.</p>
+    <p>The install process is divided into <strong>four easy steps</strong>:</p>
     <ol>
-        <li>Server configuration</li>
-        <li>Database configuration</li>
-        <li>Create the first account</li>
-        <li>Website configuration</li>
+        <li>Test the server</li>
+        <li>Enter the database details</li>
+        <li>Create the first user account</li>
+        <li>Select the languages</li>
     </ol>
-    <p>Be sure to have your <strong>database information available</strong>, as we’ll ask you for the soon.</p>
-    <button><a href="install.php?step=1">Proceed to “Step 1: server configuration”</a></button>
-    <?php
+    <p><strong>Before you start</strong>, make sure to have your <strong>database details at hand</strong>.<br />
+       If you don’t have them, ask your hosting provider or system administrator for:</p>
+    <ul>
+        <li>MySQL server address</li>
+        <li>MySQL username and password</li>
+        <li>Database name</li>
+    </ul>
+    <a href="install.php?step=1"><button>I’m ready, proceed to step 1 ‘Test the server’</button></a>
+<?php
 }
 
 if ($step > 0) {
-    $folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH.'data'.DS;
+$folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH.'data'.DS;
 
-    $session_save_path = \Arr::get(\Config::load('session'), 'file.path');
+$session_save_path = \Arr::get(\Config::load('session'), 'file.path');
 
-    // @todo title_success and title_error?
-    Test::register(array(
-        'requirements.gd_is_installed' => array(
-            'title'        => 'GD is installed',
-            'passed'       => function_exists("gd_info"),
-            'description'  => 'Novius OS requires the GD library. Please <a href="http://php.net/manual/en/book.image.php">install it</a>.',
-            'run_only_if'  => empty($config['cmd_convert']),
-        ),
+// @todo title_success and title_error?
+Test::register(array(
+    'requirements.gd_is_installed' => array(
+        'title'        => 'GD must be installed',
+        'passed'       => function_exists("gd_info"),
+        'description'  => 'Novius OS requires the GD library. Please <a href="http://php.net/manual/en/book.image.php">install it</a>.',
+        'run_only_if'  => empty($config['cmd_convert']),
+    ),
 
-        'session_path.writeable' => array(
-            'title'        => 'Session directory is writeable',
-            'passed'       => is_writable($session_save_path),
-            'description'  => 'Current session path : <strong>'.$session_save_path.'</strong>.<br />Please edit your configuration file (session.config.php : file.path key) or run <code>chmod a+w '.$session_save_path.'</code>. ',
-        ),
+    'session_path.writeable' => array(
+        'title'        => 'Session directory must be writeable',
+        'passed'       => is_writable($session_save_path),
+        'description'  => 'Current session path : <strong>'.$session_save_path.'</strong>.<br />Please edit your configuration file (session.config.php : file.path key) or run <code>chmod a+w '.$session_save_path.'</code>. ',
+    ),
 
-        'directive.short_open_tag' => array(
-            'title'        => 'PHP configuration directive short_open_tag = On',
-            'passed'       => ini_get('short_open_tag') != false,
-            'code'         => '# '.php_ini_loaded_file ()."\n<br />short_open_tag = On",
-            'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
-            'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
-        ),
-        'directive.magic_quotes_gpc' => array(
-            'title'        => 'PHP configuration directive magic_quotes_gpc = Off',
-            'passed'       => ini_get('magic_quotes_gpc') == false,
-            'code'         => '# '.php_ini_loaded_file ()."\n<br />magic_quotes_gpc = Off",
-            'description'  => 'It\'s <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">deprecated in PHP 5.3 and has been removed in PHP 5.4</a>. Please edit your configuration file.',
-            'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
-        ),
-        'folder.config.writeable' => array(
-            'title'        => 'APPPATH/config/ is writeable ',
-            'passed'       => is_writeable(APPPATH.'config'),
-            'command_line' => 'chmod a+w '.APPPATH.'config',
-            'description'  => 'This is required temporarily to write the db.php and crypt.php config files',
-            'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
-        ),
+    'directive.short_open_tag' => array(
+        'title'        => 'PHP configuration directive short_open_tag = On',
+        'passed'       => ini_get('short_open_tag') != false,
+        'code'         => '# '.php_ini_loaded_file ()."\n<br />short_open_tag = On",
+        'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
+        'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
+    ),
+    'directive.magic_quotes_gpc' => array(
+        'title'        => 'PHP configuration directive magic_quotes_gpc = Off',
+        'passed'       => ini_get('magic_quotes_gpc') == false,
+        'code'         => '# '.php_ini_loaded_file ()."\n<br />magic_quotes_gpc = Off",
+        'description'  => 'It\'s <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">deprecated in PHP 5.3 and has been removed in PHP 5.4</a>. Please edit your configuration file.',
+        'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
+    ),
+    'folder.config.writeable' => array(
+        'title'        => 'APPPATH/config/ must be writeable ',
+        'passed'       => is_writeable(APPPATH.'config'),
+        'command_line' => 'chmod a+w '.APPPATH.'config',
+        'description'  => 'This is required temporarily to write the db.php and crypt.php config files',
+        'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
+    ),
 
-        'folder.cache.writeable' => array(
-            'title'        => 'APPPATH/cache/ is writeable',
-            'passed'       => is_writeable(APPPATH.'cache'),
-            'command_line' => 'chmod a+w '.APPPATH.'cache',
-        ),
+    'folder.cache.writeable' => array(
+        'title'        => 'APPPATH/cache/ must be writeable',
+        'passed'       => is_writeable(APPPATH.'cache'),
+        'command_line' => 'chmod a+w '.APPPATH.'cache',
+    ),
 
-        'folder.cache.media.writeable' => array(
-            'title'        => 'APPPATH/cache/media is writeable',
-            'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
-            'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
-            'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
-        ),
+    'folder.cache.media.writeable' => array(
+        'title'        => 'APPPATH/cache/media must be writeable',
+        'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
+        'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
+        'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
+    ),
 
-        'folder.cache.fuelphp.writeable' => array(
-            'title'        => 'APPPATH/cache/fuelphp is writeable',
-            'passed'       => is_writeable(APPPATH.'cache'.DS.'fuelphp'),
-            'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'fuelphp',
-            'run_only_if'  => is_dir(APPPATH.'cache'.DS.'fuelphp'),
-        ),
+    'folder.cache.fuelphp.writeable' => array(
+        'title'        => 'APPPATH/cache/fuelphp must be writeable',
+        'passed'       => is_writeable(APPPATH.'cache'.DS.'fuelphp'),
+        'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'fuelphp',
+        'run_only_if'  => is_dir(APPPATH.'cache'.DS.'fuelphp'),
+    ),
 
-        'folder.data.writeable' => array(
-            'title'        => 'APPPATH/data/ is writeable',
-            'passed'       => is_writeable($folder_data),
-            'command_line' => 'chmod a+w '.$folder_data,
-        ),
+    'folder.data.writeable' => array(
+        'title'        => 'APPPATH/data/ must be writeable',
+        'passed'       => is_writeable($folder_data),
+        'command_line' => 'chmod a+w '.$folder_data,
+    ),
 
-        'folder.data.config.writeable' => array(
-            'title'           => 'APPPATH/data/config/ is writeable',
-            'passed'          => is_writeable($folder_data.'config'),
-            'command_line'	  => array('chmod a+w '.$folder_data.'config'),
-            'run_only_if'     => is_dir($folder_data.'config'),
-        ),
+    'folder.data.config.writeable' => array(
+        'title'           => 'APPPATH/data/config/ must be writeable',
+        'passed'          => is_writeable($folder_data.'config'),
+        'command_line'	  => array('chmod a+w '.$folder_data.'config'),
+        'run_only_if'     => is_dir($folder_data.'config'),
+    ),
 
-        'folder.data.media.writeable' => array(
-            'title'           => 'APPPATH/data/media/ is writeable',
-            'passed'          => is_writeable($folder_data.'media'),
-            'command_line'	  => array('chmod a+w '.$folder_data.'media'),
-            'run_only_if'     => is_dir($folder_data.'media'),
-        ),
+    'folder.data.media.writeable' => array(
+        'title'           => 'APPPATH/data/media/ must be writeable',
+        'passed'          => is_writeable($folder_data.'media'),
+        'command_line'	  => array('chmod a+w '.$folder_data.'media'),
+        'run_only_if'     => is_dir($folder_data.'media'),
+    ),
 
-        'folder.metadata.writeable' => array(
-            'title'           => 'APPPATH/metadata/ is writeable',
-            'passed'          => is_writeable(APPPATH.'metadata'),
-            'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
-        ),
+    'folder.metadata.writeable' => array(
+        'title'           => 'APPPATH/metadata/ must be writeable',
+        'passed'          => is_writeable(APPPATH.'metadata'),
+        'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
+    ),
 
-        'public.htaccess.removed' => array(
-            'title'        => 'DOCROOT/.htaccess is removed',
-            'passed'       => !is_file(DOCROOT.'.htaccess'),
-            'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
-            'run_only_if'  => is_file(NOSROOT.'.htaccess'),
-        ),
+    'public.htaccess.removed' => array(
+        'title'        => 'DOCROOT/.htaccess must be removed',
+        'passed'       => !is_file(DOCROOT.'.htaccess'),
+        'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
+        'run_only_if'  => is_file(NOSROOT.'.htaccess'),
+    ),
 
-        'public.cache.writeable' => array(
-            'title'        => 'DOCROOT/cache/ is writeable',
-            'passed'       => is_writeable(DOCROOT.'cache'),
-            'command_line' => 'chmod a+w '.DOCROOT.'cache',
-            'run_only_if'  => is_dir(DOCROOT.'cache'),
-        ),
+    'public.cache.writeable' => array(
+        'title'        => 'DOCROOT/cache/ must be writeable',
+        'passed'       => is_writeable(DOCROOT.'cache'),
+        'command_line' => 'chmod a+w '.DOCROOT.'cache',
+        'run_only_if'  => is_dir(DOCROOT.'cache'),
+    ),
 
-        'public.cache.media.writeable' => array(
-            'title'        => 'DOCROOT/cache/media is writeable',
-            'passed'       => is_writeable(DOCROOT.'cache'.DS.'media'),
-            'command_line' => 'chmod a+w '.DOCROOT.'cache'.DS.'media',
-            'run_only_if'  => is_dir(DOCROOT.'cache'.DS.'media'),
-        ),
+    'public.cache.media.writeable' => array(
+        'title'        => 'DOCROOT/cache/media must be writeable',
+        'passed'       => is_writeable(DOCROOT.'cache'.DS.'media'),
+        'command_line' => 'chmod a+w '.DOCROOT.'cache'.DS.'media',
+        'run_only_if'  => is_dir(DOCROOT.'cache'.DS.'media'),
+    ),
 
-        'public.htdocs.writeable' => array(
-            'title'        => 'DOCROOT/htdocs/ is writeable',
-            'description'  => 'The symbolic link htdocs/novius-os doesn\'t exists, so we need to be able to create it.',
-            'passed'       => is_writeable(DOCROOT.'htdocs'),
-            'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
-            'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
-        ),
+    'public.htdocs.writeable' => array(
+        'title'        => 'DOCROOT/htdocs/ must be writeable',
+        'description'  => 'The symbolic link htdocs/novius-os doesn\'t exists, so we need to be able to create it.',
+        'passed'       => is_writeable(DOCROOT.'htdocs'),
+        'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
+        'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
+    ),
 
-        'public.media.writeable' => array(
-            'title'        => 'DOCROOT/media/ is writeable',
-            'passed'       => is_writeable(DOCROOT.'media'),
-            'command_line' => 'chmod a+w '.DOCROOT.'media',
-            'run_only_if'  => is_dir(DOCROOT.'media'),
-        ),
+    'public.media.writeable' => array(
+        'title'        => 'DOCROOT/media/ must be writeable',
+        'passed'       => is_writeable(DOCROOT.'media'),
+        'command_line' => 'chmod a+w '.DOCROOT.'media',
+        'run_only_if'  => is_dir(DOCROOT.'media'),
+    ),
 
-        'public.data.writeable' => array(
-            'title'        => 'DOCROOT/data/ is writeable',
-            'passed'       => is_writeable(DOCROOT.'data'),
-            'command_line' => 'chmod a+w '.DOCROOT.'data',
-            'run_only_if'  => is_dir(DOCROOT.'data'),
-        ),
+    'public.data.writeable' => array(
+        'title'        => 'DOCROOT/data/ must be writeable',
+        'passed'       => is_writeable(DOCROOT.'data'),
+        'command_line' => 'chmod a+w '.DOCROOT.'data',
+        'run_only_if'  => is_dir(DOCROOT.'data'),
+    ),
 
-        'public.htdocs.apps.writeable' => array(
-            'title'        => 'DOCROOT/htdocs/apps is writeable',
-            'passed'       => is_writeable(DOCROOT.'htdocs'.DS.'apps'),
-            'command_line' => 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps',
-            'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'apps'),
-        ),
+    'public.htdocs.apps.writeable' => array(
+        'title'        => 'DOCROOT/htdocs/apps must be writeable',
+        'passed'       => is_writeable(DOCROOT.'htdocs'.DS.'apps'),
+        'command_line' => 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps',
+        'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'apps'),
+    ),
 
-        'public.static.writeable' => array(
-            'title'        => 'DOCROOT/static/ is writeable',
-            'description'  => 'The symbolic link static/novius-os/ doesn\'t exists, so we need to be able to create it.',
-            'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
-            'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
-            'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
-        ),
+    'public.static.writeable' => array(
+        'title'        => 'DOCROOT/static/ must be writeable',
+        'description'  => 'The symbolic link static/novius-os/ doesn\'t exists, so we need to be able to create it.',
+        'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
+        'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
+        'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
+    ),
 
-        'public.static.apps.writeable' => array(
-            'title'        => 'DOCROOT/static/apps is writeable',
-            'passed'       => is_dir(DOCROOT.'static'.DS.'apps') && is_writeable(DOCROOT.'static'.DS.'apps'),
-            'command_line' => 'chmod a+w '.DOCROOT.'static'.DS.'apps',
-            'run_only_if'  => file_exists(DOCROOT.'static'.DS.'apps'),
-        ),
+    'public.static.apps.writeable' => array(
+        'title'        => 'DOCROOT/static/apps must be writeable',
+        'passed'       => is_dir(DOCROOT.'static'.DS.'apps') && is_writeable(DOCROOT.'static'.DS.'apps'),
+        'command_line' => 'chmod a+w '.DOCROOT.'static'.DS.'apps',
+        'run_only_if'  => file_exists(DOCROOT.'static'.DS.'apps'),
+    ),
 
-        'public.htdocs.nos.valid' => array(
-            'title'        => 'DOCROOT/htdocs/novius-os links to NOSPATH/htdocs',
-            'passed'       => \File::is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
-            'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
-            'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
-        ),
+    'public.htdocs.nos.valid' => array(
+        'title'        => 'DOCROOT/htdocs/novius-os must link to NOSPATH/htdocs',
+        'passed'       => \File::is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
+        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
+        'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
+    ),
 
-        'public.static.nos.valid' => array(
-            'title'        => 'DOCROOT/static/novius-os links to NOSPATH/static',
-            'passed'       => \File::is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
-            'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os',
-            'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
-        ),
+    'public.static.nos.valid' => array(
+        'title'        => 'DOCROOT/static/novius-os must link to NOSPATH/static',
+        'passed'       => \File::is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
+        'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os',
+        'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
+    ),
 
-        'logs.fuel' => array(
-            'title'        => 'logs/fuel exists and is writeable',
-            'passed'       => is_writeable(NOSROOT.'logs/fuel'),
-            'command_line' => 'chmod a+w '.NOSROOT.'logs/fuel',
-        ),
-    ));
+    'logs.fuel' => array(
+        'title'        => 'logs/fuel must be writeable',
+        'passed'       => is_writeable(NOSROOT.'logs/fuel'),
+        'command_line' => 'chmod a+w '.NOSROOT.'logs/fuel',
+    ),
+));
 
-    ?><div style="width:800px;margin:auto;"><?php
+?><div><?php
 
-    if ($step == 1) {
+if ($step == 1) {
 
-        if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-            \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os');
-        }
-        if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-            \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os');
-        }
+    if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
+        \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os');
     }
+    if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
+        \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os');
+    }
+}
 
-    Test::reset();
+Test::reset();
 
-    Test::run('requirements.gd_is_installed');
+Test::run('requirements.gd_is_installed');
 
-    Test::separator();
+Test::separator();
 
-    Test::run('directive.short_open_tag');
-    Test::run('directive.magic_quotes_gpc');
+Test::run('directive.short_open_tag');
+Test::run('directive.magic_quotes_gpc');
 
-    Test::separator();
+Test::separator();
 
-    Test::run('public.htaccess.removed');
-    Test::run('session_path.writeable');
+Test::run('public.htaccess.removed');
+Test::run('session_path.writeable');
 
-    Test::separator();
+Test::separator();
 
-    if (Test::run('folder.config.writeable') && $step == 1) {
-        // Create the crypt.config.php file
-        Crypt::_init();
+if (Test::run('folder.config.writeable') && $step == 1) {
+    // Create the crypt.config.php file
+    Crypt::_init();
 
-        if (empty($config) && !file_exists(APPPATH.'config'.DS.'config.php')) {
-            $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
-            $base_url = \Uri::base(false).$url;
-            if (!empty($url)) {
-                $config['base_url'] = $base_url;
-            }
+    if (empty($config) && !file_exists(APPPATH.'config'.DS.'config.php')) {
+        $url = str_replace(array('install.php', '?step=1'), '', ltrim($_SERVER['REQUEST_URI'], '/'));
+        $base_url = \Uri::base(false).$url;
+        if (!empty($url)) {
+            $config['base_url'] = $base_url;
+        }
 
-            // Testing common imagick path
-            foreach (array('convert', '/usr/bin/convert', '/usr/local/bin/convert') as $convert) {
-                exec($convert, $output, $return_value);
-                if ($return_value == 0) {
-                    $config['cmd_convert'] = $convert;
-                }
-            }
-
-            if (!empty($config)) {
-                File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($config, true)).";\n");
+        // Testing common imagick path
+        foreach (array('convert', '/usr/bin/convert', '/usr/local/bin/convert') as $convert) {
+            exec($convert, $output, $return_value);
+            if ($return_value == 0) {
+                $config['cmd_convert'] = $convert;
             }
         }
 
-    }
-
-    Test::separator();
-
-    Test::run('folder.data.writeable');
-    Test::run('folder.data.config.writeable');
-    Test::run('folder.data.media.writeable');
-
-    Test::separator();
-
-    Test::run('folder.cache.writeable');
-    Test::run('folder.cache.media.writeable');
-    Test::run('folder.cache.fuelphp.writeable');
-
-    if (Test::run('folder.metadata.writeable')) {
-        $dir  = APPPATH.'metadata'.DS;
-        $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
-        foreach ($files as $file) {
-            if (!is_file($dir.$file)) {
-                File::create($dir, $file, '<?'.'php return array();');
-            }
+        if (!empty($config)) {
+            File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($config, true)).";\n");
         }
     }
 
-    Test::separator();
+}
 
-    Test::run('public.cache.writeable');
-    Test::run('public.cache.media.writeable');
+Test::separator();
 
-    Test::separator();
+Test::run('folder.data.writeable');
+Test::run('folder.data.config.writeable');
+Test::run('folder.data.media.writeable');
 
-    Test::run('public.htdocs.writeable');
-    Test::run('public.htdocs.apps.writeable');
+Test::separator();
 
-    Test::separator();
+Test::run('folder.cache.writeable');
+Test::run('folder.cache.media.writeable');
+Test::run('folder.cache.fuelphp.writeable');
 
-    Test::run('public.data.writeable');
-    Test::run('public.media.writeable');
-
-    Test::separator();
-
-    Test::run('public.static.writeable');
-    Test::run('public.static.apps.writeable');
-
-    Test::separator();
-
-    Test::run('public.htdocs.nos.valid');
-    Test::run('public.static.nos.valid');
-
-    Test::separator();
-
-    Test::run('logs.fuel');
-
-    if (!Test::$passed && $step > 1) {
-        header('Location: install.php');
-        exit();
+if (Test::run('folder.metadata.writeable')) {
+    $dir  = APPPATH.'metadata'.DS;
+    $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
+    foreach ($files as $file) {
+        if (!is_file($dir.$file)) {
+            File::create($dir, $file, '<?'.'php return array();');
+        }
     }
+}
+
+Test::separator();
+
+Test::run('public.cache.writeable');
+Test::run('public.cache.media.writeable');
+
+Test::separator();
+
+Test::run('public.htdocs.writeable');
+Test::run('public.htdocs.apps.writeable');
+
+Test::separator();
+
+Test::run('public.data.writeable');
+Test::run('public.media.writeable');
+
+Test::separator();
+
+Test::run('public.static.writeable');
+Test::run('public.static.apps.writeable');
+
+Test::separator();
+
+Test::run('public.htdocs.nos.valid');
+Test::run('public.static.nos.valid');
+
+Test::separator();
+
+Test::run('logs.fuel');
+
+if (!Test::$passed && $step > 1) {
+    header('Location: install.php');
+    exit();
+}
 }
 
 if ($step == 1) {
     ?>
-    <h2>Step 1 / 4 : server configuration</h2>
-    <p>This step ensures Novius OS can run fine on your server.</p>
-    <?php
-    if (Test::$passed) {
-        // Warnings validates but display informations
-        ?>
-        <h3>Tests results</h3>
-        <p>Since they are quite a lot and we don’t want to scare you, we’ve hide them. Meanwhile you can still <a id="show_tests" href="#">click here<a> to see what we did.</p>
-        <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
+    <h2>Step 1 <span class="outof">/ 4 -</span> Test the server</h2>
+    <p>This step is to make sure your server is ready to run Novius OS.</p>
+<?php
+if (Test::$passed) {
+// Warnings validates but display informations
+?>
+    <h3>All tests passed. Your server is compatible with Novius OS.</h3>
+    <p><a id="show_tests" href="#">Get the test results</a>.</p>
+    <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
 
-        <h3>Congratulations</h3>
-        <p>Your server is compatible with Novius OS</p>
-        <button><a href="install.php?step=2">Proceed to “Step 2: database configuration”</a></button>
-        <?php
-    } else {
-        ?>
-        <h3>Problems that needs attention</h3>
-        <p>Please note <a href="#recap">a recap</a> of the commands is available below</p>
-        <?= Test::results('error') ?>
-
-        <h3 id="recap">Command recap for Linux users</h3>
-        <p>Relative to the root directory: <code><?= NOSROOT; ?></code></p>
-        <code style="width: 800px;"><?= implode("<br />\n", Test::recap()); ?></code>
-        <p><a href="install.php?step=1"><button>I fixed the problems above, refresh the results</button></a></p>
-        <h3>Other tests</h3>
-        <p>Since they’re not important right now, they remain hidden. Meanwhile you can still <a id="show_tests" href="#">click here<a> to see what we did.</p>
-        <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
-        <?php
-    }
+    <a href="install.php?step=2"><button>Perfect, proceed to step 2 ‘Set up the database’</button></a>
+<?php
+} else {
     ?>
+    <h3>Some tests have failed</h3>
+    <?= Test::results('error') ?>
+    <p>All the other tests passed. <a id="show_tests" href="#">Get the full test results</a>.</p>
+    <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
+
+    <h3 id="recap">Let’s fix this</h3>
+    <p>Copy and run the following commands:<br />
+       <em>(Linux commands. You have to adapt them if you’re on a different OS, sorry about that.)</em></p>
+    <textarea style="width: 800px; height: 80px;"><?= implode("\n", Test::recap()); ?></textarea>
+    <p><a href="install.php?step=1"><button>OK, I’ve fixed the problems, re-run the tests</button></a></p>
+<?php
+}
+?>
     <script type="text/javascript">
         var show_tests = document.getElementById('show_tests');
         var tests = document.getElementById('tests');
@@ -731,7 +740,7 @@ if ($step == 1) {
             tests.style.display = (tests.style.display == 'none' ? 'block' : 'none');
         }, false);
     </script>
-    <?php
+<?php
 }
 
 if ($step == 2) {
@@ -815,10 +824,9 @@ if ($step == 2) {
             $message = $e->getMessage();
             ?>
             <p class="error" title="<?= htmlspecialchars($message) ?>">
-                <strong>Wrong credentials.</strong>
-                We’re sorry, but we were unable to connect with the givent informations. Please double-check and try again.
+                <strong>There’s must be an error</strong> in the details you provided, as we can’t connect the database. Please double-check and try again.
             </p>
-            <?php
+        <?php
 
         } catch (\Exception $e) {
 
@@ -826,31 +834,31 @@ if ($step == 2) {
         }
     }
     ?>
-    <h2>Step 2 / 4 : database configuration</h2>
+    <h2>Step 2 <span class="outof">/ 4 -</span> Enter the database details</h2>
     <p>
-        This steps gather informations to use a MySQL database. Please contact your hosting provider if you don’t know them.
+        This step is <strong>not to create</strong> the database. At this stage, it must be ready and its details known. Ask your hosting provider or system administrator if it isn’t.
     </p>
     <form action="" method="POST">
         <p>
-            <label for="hostname">MySQL server</label>
-            <input type="text" name="hostname" id="hostname" placeholder="Hostname" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" />
-            A common value is <a href="#" onclick="document.getElementById('hostname').value='localhost';">localhost</a>.
+            <label for="hostname">MySQL server:</label>
+            <input type="text" name="hostname" id="hostname" placeholder="Server address" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" />
+            <em>A common server address is <a href="#" onclick="document.getElementById('hostname').value='localhost';">localhost</a>.</em>
         </p>
         <p>
-            <label for="username">MySQL username</label>
+            <label for="username">MySQL username:</label>
             <input type="text" name="username" id="username" placeholder="Username" value="<?= Input::post('username', \Arr::get($db, 'username', '')) ?>"  />
         </p>
         <p>
-            <label for="password">MySQL password</label>
+            <label for="password">MySQL password:</label>
             <input type="password" name="password" id="password" placeholder="Password" />
         </p>
         <p>
-            <label for="database">Name of the database</label>
+            <label for="database">Database name:</label>
             <input type="text" name="database" id="database" placeholder="Database" value="<?= Input::post('database', \Arr::get($db, 'database', '')) ?>"  />
         </p>
-        <p><button type="submit">Proceed to “Step 3: create the first account”</button></p>
+        <p><button type="submit">Save and proceed to step 3 ‘Create the first user account’</button></p>
     </form>
-    <?php
+<?php
 }
 
 if ($step == 3) {
@@ -862,10 +870,10 @@ if ($step == 3) {
         try {
             $password = \Input::post('password', '');
             if (empty($password)) {
-                throw new Exception('Empty password is not allowed.');
+                throw new Exception('You cannot leave the password blank.');
             }
             if (\Input::post('password', '') != \Input::post('password_confirmation', '')) {
-                throw new Exception('The two passwords don\'t match.');
+                throw new Exception('The passwords don’t match.');
             }
             $user = new Nos\User\Model_User(array(
                 'user_name'      => \Input::post('name', 'Admin name'),
@@ -899,35 +907,34 @@ if ($step == 3) {
         }
     }
     ?>
-    <h2>Step 3 / 4 : create the first administrator account</h2>
+    <h2>Step 3 <span class="outof">/ 4 -</span> Create the first user account</h2>
     <p>
-        Good, we’re now ready to create your administrator account.
+        We’re getting there, only two steps to go. Time to create the first administrator account:
     </p>
     <form action="" method="POST">
         <p>
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" placeholder="Name" size="20" value="<?= Input::post('name', '') ?>" />
-            If you feel shy, the name is not mandatory…
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" placeholder="Name" size="30" value="<?= Input::post('name', '') ?>" />
+            <em>If you’re on first name terms, you can leave this field blank…</em>
         </p>
         <p>
-            <label for="firstname">Firstname</label>
-            <input type="text" name="firstname" id="firstname" placeholder="Firstname" size="20" value="<?= Input::post('firstname', '') ?>" />
-            … but please provide a firstname.
+            <label for="firstname">First name:</label>
+            <input type="text" name="firstname" id="firstname" placeholder="Firstname" size="30" value="<?= Input::post('firstname', '') ?>" />
+            <em>… but do provide a first name.</em>
         </p>
         <p>
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" placeholder="Email / Login" size="30" value="<?= Input::post('email', '') ?>" />
-            You’ll need it to <strong>login</strong>.
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" placeholder="Email (used for login)" size="30" value="<?= Input::post('email', '') ?>" />
         </p>
         <p>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" placeholder="Password" />
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" placeholder="Password" size="30" />
         </p>
         <p>
-            <label for="password_confirmation">Password confirmation</label>
-            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Password confirmation" />
+            <label for="password_confirmation">Confirm the password:</label>
+            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="One more time, just to be sure" size="30" />
         </p>
-        <p><button type="submit">Proceed to “Step 4: website configuration”</button></p>
+        <p><button type="submit">Save and proceed to the final step ‘Set up the website’</button></p>
     </form>
 
     <link rel="stylesheet" href="static/novius-os/admin/vendor/jquery/jquery-password_strength/jquery.password_strength.css" media="all" />
@@ -954,7 +961,7 @@ if ($step == 3) {
             });
         });
     </script>
-    <?php
+<?php
 }
 
 if ($step == 4) {
@@ -962,7 +969,7 @@ if ($step == 4) {
     $available = array(
         'en_GB' => 'English',
         'fr_FR' => 'Français',
-        'ja_JP' => '日本語',
+        'ja_JP' => '???',
         'de_DE' => 'Deutsch',
         'es_ES' => 'Español',
         'it_IT' => 'Italiano',
@@ -1013,40 +1020,43 @@ if ($step == 4) {
 
     $locales = \Nos\Tools_Context::locales();
     ?>
-    <h2>Step 4 / 4 : website configuration</h2>
+    <h2>Step 4 <span class="outof">/ 4 -</span> Select the languages</h2>
 
-    <h3>Choose your languages</h3>
     <p>
-        Novius OS can manage <strong>several websites in several languages</strong> out of the box. You can
-        configure the languages of your website below.
+        Novius OS allows you to manage <strong>several websites in several languages</strong> out of the box, no plug-in required.
+    </p>
+    <p>
+        Select the languages your content is available in:
     </p>
 
-    <div class="languages_tip">
-        Tip: you can re-order languages using drag & drop.
-    </div>
+    <p class="languages_tip">
+        Tip: Drag & drop the languages to order them. The first language in the list will be the default language.
+    </p>
 
     <form action="" method="POST">
         <ul id="languages">
-    <?php
-    foreach (array_unique(array_merge(array_keys($locales), array_keys($available))) as $locale) {
-        $flag = \Nos\Tools_Context::flag('main::'.$locale);
-        ?>
-        <li>
-            <input type="checkbox" name="languages[]" value="<?= $locale ?>" id="lang_<?= $locale ?>" <?= !empty($locales[$locale]) ? 'checked' : '' ?>>
-            <label for="lang_<?= $locale ?>"><?= $flag ?> <?= $locale ?></label>
-        </li>
-        <?php
-    }
-    ?>
+            <?php
+            foreach (array_unique(array_merge(array_keys($locales), array_keys($available))) as $locale) {
+                $flag = \Nos\Tools_Context::flag('main::'.$locale);
+                ?>
+                <li>
+                    <input type="checkbox" name="languages[]" value="<?= $locale ?>" id="lang_<?= $locale ?>" <?= !empty($locales[$locale]) ? 'checked' : '' ?>>
+                    <label for="lang_<?= $locale ?>"><?= $flag ?> <?= $locale ?></label>
+                </li>
+            <?php
+            }
+            ?>
             <li>
                 <input type="checkbox" name="languages[]" value="" id="your_locale" />
-                <label>Your language <input size="5" id="your_locale_input" placeholder="en_GB" />
+                <label>Add another language:</label> <input size="5" id="your_locale_input" placeholder="en_GB" />
             </li>
         </ul>
+        <button type="submit" style="font-size: 0.8em; margin-left: 3em;">Save your selection, add more languages</button>
 
-        <p>If you’re a developer, you can edit the <strong>local/config/contexts.config.php</strong> file to configure them later on.</p>
+        <p style="margin: 2em 0;">Not sure whether to add a language now? You may need more languages in the future? Don’t let this step stress you!<br />
+           <strong>Languages configuration can be changed eventually</strong>. Edit, or ask a developer to edit, <code>local/config/contexts.config.php</code>.</p>
 
-        <p><button type="submit">Save these languages</button> &nbsp; or &nbsp; <a href="install.php?step=5"><button type="button">I finished installing Novius OS</button></a></p>
+        <p><a href="install.php?step=5"><button type="button">I’m done, finish the installation</button></a></p>
     </form>
 
     <script type="text/javascript" src="static/novius-os/admin/vendor/jquery/jquery-1.9.1.min.js"></script>
@@ -1085,7 +1095,7 @@ if ($step == 4) {
                     $img.on('error', function() {
                         $this.nextAll().remove();
                         $this.val('').trigger('change');
-                        $this.after('<span class="error">We could not found this locale</span>');
+                        $this.after('<span class="error">We could not found this language (locale)</span>');
                     })
                     $this.nextAll().remove();
                     $this.after($img);
@@ -1097,27 +1107,31 @@ if ($step == 4) {
         });
     </script>
 
-    <?php
+<?php
 }
 
 if ($step == 5) {
     ?>
     <h2>Congratulations!</h2>
-    <p>Your now have a fresh Novius OS install to work with.</p>
-
-    <h3>Final cleanup</h3>
-    <p>You can now remove write permissions on the <code>local/config/</code> folder (if you changed it in the first step).</p>
-    <p>You should also remove or rename this install.php file, you don’t need it anymore.</p>
-    <code style="width:800px;">
-        rm <?= NOSROOT ?>public/htdocs/install.php
-        chmod og-w <?= NOSROOT ?>local/config
-    </code>
+    <p>Your now have a shiny new Novius OS to work with:</p>
 
     <p>
-        <a href="admin/?tab=admin/noviusos_appmanager/appmanager"><button>Let's get started</button></a>
+        <a href="admin/?tab=admin/noviusos_appmanager/appmanager"><button>Go to the back-office and sign-in<br /><span style="font-size: 0.8em;">You’ll be taken to the applications manager to select the applications you need</span></button></a>
     </p>
 
-    <?php
+    <h3 style="margin-top: 4em;">Cleaning up</h3>
+    <p>If you prefer to leave things clean and tidy, you may now:</p>
+    <ul>
+        <li>Remove writing permissions for the <code>local/config/</code> folder (if you changed it during step 1),</li>
+        <li>Remove or rename this install.php file.</li>
+    </ul>
+    <p>These two operations as Linux commands:</p>
+    <textarea style="width:800px; height: 60px;">
+rm <?= NOSROOT ?>public/htdocs/install.php
+chmod og-w <?= NOSROOT ?>local/config
+    </textarea>
+
+<?php
 }
 
 ?>
