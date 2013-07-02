@@ -708,31 +708,31 @@ if ($step == 1) {
     ?>
     <h2>Step 1 <span class="outof">/ 4 -</span> Test the server</h2>
     <p>This step is to make sure your server is ready to run Novius OS.</p>
-<?php
-if (Test::$passed) {
-// Warnings validates but display informations
-?>
-    <h3>All tests passed. Your server is compatible with Novius OS.</h3>
-    <p><a id="show_tests" href="#">Get the test results</a>.</p>
-    <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
+    <?php
+    if (Test::$passed) {
+        // Warnings validates but display informations
+        ?>
+        <h3>All tests passed. Your server is compatible with Novius OS.</h3>
+        <p><a id="show_tests" href="#">Get the test results</a>.</p>
+        <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
 
-    <a href="install.php?step=2"><button>Perfect, proceed to step 2 ‘Set up the database’</button></a>
-<?php
-} else {
+        <a href="install.php?step=2"><button>Perfect, proceed to step 2 ‘Set up the database’</button></a>
+    <?php
+    } else {
+        ?>
+        <h3>Some tests have failed</h3>
+        <?= Test::results('error') ?>
+        <p>All the other tests passed. <a id="show_tests" href="#">Get the full test results</a>.</p>
+        <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
+
+        <h3 id="recap">Let’s fix this</h3>
+        <p>Copy and run the following commands:<br />
+           <em>(Linux commands. You have to adapt them if you’re on a different OS, sorry about that.)</em></p>
+        <textarea style="width: 800px; height: 80px;"><?= implode("\n", Test::recap()); ?></textarea>
+        <p><a href="install.php?step=1"><button>OK, I’ve fixed the problems, re-run the tests</button></a></p>
+    <?php
+    }
     ?>
-    <h3>Some tests have failed</h3>
-    <?= Test::results('error') ?>
-    <p>All the other tests passed. <a id="show_tests" href="#">Get the full test results</a>.</p>
-    <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
-
-    <h3 id="recap">Let’s fix this</h3>
-    <p>Copy and run the following commands:<br />
-       <em>(Linux commands. You have to adapt them if you’re on a different OS, sorry about that.)</em></p>
-    <textarea style="width: 800px; height: 80px;"><?= implode("\n", Test::recap()); ?></textarea>
-    <p><a href="install.php?step=1"><button>OK, I’ve fixed the problems, re-run the tests</button></a></p>
-<?php
-}
-?>
     <script type="text/javascript">
         var show_tests = document.getElementById('show_tests');
         var tests = document.getElementById('tests');
