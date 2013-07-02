@@ -740,7 +740,7 @@ if ($step == 1) {
             tests.style.display = (tests.style.display == 'none' ? 'block' : 'none');
         }, false);
     </script>
-<?php
+    <?php
 }
 
 if ($step == 2) {
@@ -826,7 +826,7 @@ if ($step == 2) {
             <p class="error" title="<?= htmlspecialchars($message) ?>">
                 <strong>There’s must be an error</strong> in the details you provided, as we can’t connect the database. Please double-check and try again.
             </p>
-        <?php
+            <?php
 
         } catch (\Exception $e) {
 
@@ -858,7 +858,7 @@ if ($step == 2) {
         </p>
         <p><button type="submit">Save and proceed to step 3 ‘Create the first user account’</button></p>
     </form>
-<?php
+    <?php
 }
 
 if ($step == 3) {
@@ -961,7 +961,7 @@ if ($step == 3) {
             });
         });
     </script>
-<?php
+    <?php
 }
 
 if ($step == 4) {
@@ -1107,7 +1107,7 @@ if ($step == 4) {
         });
     </script>
 
-<?php
+    <?php
 }
 
 if ($step == 5) {
@@ -1131,7 +1131,7 @@ rm <?= NOSROOT ?>public/htdocs/install.php
 chmod og-w <?= NOSROOT ?>local/config
     </textarea>
 
-<?php
+    <?php
 }
 
 ?>
