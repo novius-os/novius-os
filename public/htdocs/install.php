@@ -1133,8 +1133,7 @@ if ($step == 5) {
         <li>Remove or rename this install.php file.</li>
     </ul>
     <p>These two operations as Linux commands:</p>
-    <textarea style="width:800px; height: 60px;">
-    <?php
+    <textarea style="width:800px; height: 60px;"><?php
     echo 'rm ', NOSROOT, "public/htdocs/install.php\n";
     echo 'chmod og-w ', NOSROOT, "local/config\n";
     ?>
