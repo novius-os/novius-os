@@ -31,7 +31,6 @@ Breaking changes:
 - Set home page not allowed in multi-context view
 - Delete or unpublish the home page is not allowed
 - In Nos::parse_wysiwyg(), replace anchors by URL#anchor only in front.
-- Add Str::humanFileSize
 - Media : add filesize, display filesize and dimensions in appdesk preview and CRUD form
 - Refactoring Model_Media->get_img_tag() and get_img_tag_resized(), uses HTML::img() for returning a tag with attributs
 - Bugfix : Change interclassement on all columns use like a slug
