@@ -1134,8 +1134,10 @@ if ($step == 5) {
     </ul>
     <p>These two operations as Linux commands:</p>
     <textarea style="width:800px; height: 60px;">
-    rm <?= NOSROOT ?>public/htdocs/install.php
-    chmod og-w <?= NOSROOT ?>local/config
+    <?php
+    echo 'rm ', NOSROOT, "public/htdocs/install.php\n";
+    echo 'chmod og-w ', NOSROOT, "local/config\n";
+    ?>
     </textarea>
 
     <?php
