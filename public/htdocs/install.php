@@ -1042,17 +1042,17 @@ if ($step == 4) {
 
     <form action="" method="POST">
         <ul id="languages">
-            <?php
-            foreach (array_unique(array_merge(array_keys($locales), array_keys($available))) as $locale) {
-                $flag = \Nos\Tools_Context::flag('main::'.$locale);
-                ?>
+    <?php
+    foreach (array_unique(array_merge(array_keys($locales), array_keys($available))) as $locale) {
+        $flag = \Nos\Tools_Context::flag('main::'.$locale);
+        ?>
                 <li>
                     <input type="checkbox" name="languages[]" value="<?= $locale ?>" id="lang_<?= $locale ?>" <?= !empty($locales[$locale]) ? 'checked' : '' ?>>
                     <label for="lang_<?= $locale ?>"><?= $flag ?> <?= isset($available[$locale]) ? $available[$locale].' ('.$locale.')' : $locale ?></label>
                 </li>
-            <?php
-            }
-            ?>
+        <?php
+    }
+    ?>
             <li>
                 <input type="checkbox" name="languages[]" value="" id="your_locale" />
                 <label>Add another language:</label> <input size="5" id="your_locale_input" placeholder="en_GB" />
@@ -1134,8 +1134,8 @@ if ($step == 5) {
     </ul>
     <p>These two operations as Linux commands:</p>
     <textarea style="width:800px; height: 60px;">
-rm <?= NOSROOT ?>public/htdocs/install.php
-chmod og-w <?= NOSROOT ?>local/config
+    rm <?= NOSROOT ?>public/htdocs/install.php
+    chmod og-w <?= NOSROOT ?>local/config
     </textarea>
 
     <?php
