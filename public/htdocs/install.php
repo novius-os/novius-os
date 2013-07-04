@@ -106,20 +106,11 @@ ob_start();
             background-color: #52A500;
             color: #FFF;
         }
-        table tr.error {
-            background: #fff5f5;
-        }
-        table tr.warning {
-            background: #fff9f0;
-        }
         tr.separator td {
             border:none;
         }
         tr.error td.description, tr.warning td.description {
             border-top: none;
-        }
-        table tr.ok {
-            background: #f5fff5;
         }
         code {
             background-color: #fff;
@@ -191,6 +182,22 @@ ob_start();
 
         p.error {
             color: #ff0000;
+        }
+
+        #todo li {
+            margin-bottom: 0.5em;
+        }
+
+        #todo em {
+            color: #333;
+            font-size: 0.8em;
+        }
+        #todo em a {
+            color: #333;
+            text-decoration: none;
+        }
+        #todo em a:hover {
+            text-decoration: underline;
         }
 
         #languages {
@@ -422,37 +429,34 @@ if ($step > 0) {
 
     Test::register(array(
         'requirements.gd_is_installed' => array(
-            'title'        => 'GD must be installed',
+            'title'        => 'GD is required',
             'passed'       => function_exists("gd_info"),
-            'description'  => 'Novius OS requires the GD library. Please <a href="http://php.net/manual/en/book.image.php">install it</a>.',
+            'description'  => 'Install the <a href="http://php.net/manual/en/book.image.php" target="_blank">GD library</a>.',
             'run_only_if'  => empty($config['cmd_convert']),
         ),
 
         'session_path.writeable' => array(
             'title'        => 'Session directory must be writeable',
             'passed'       => is_writable($session_save_path),
-            'description'  => 'Current session path : <strong>'.$session_save_path.'</strong>.<br />Please edit your configuration file (session.config.php : file.path key) or run <code>chmod a+w '.$session_save_path.'</code>. ',
+            'command_line' => 'chmod a+w '.$session_save_path,
         ),
 
         'directive.short_open_tag' => array(
-            'title'        => 'PHP configuration directive short_open_tag = On',
+            'title'        => 'PHP configuration directive ‘short_open_tag’ must be on',
             'passed'       => ini_get('short_open_tag') != false,
-            'code'         => '# '.php_ini_loaded_file ()."\n<br />short_open_tag = On",
-            'description'  => 'We use short_open_tag, since it\'ll be <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">always enabled as of PHP 5.4</a>. Please edit your configuration file.',
+            'description'  => 'Set <code>short_open_tag = On</code> in <code>'.php_ini_loaded_file ().'</code>.<br /><em>Why? Because <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">since PHP 5.4 short_open_tag is always on</a>.</em>',
             'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
         ),
         'directive.magic_quotes_gpc' => array(
-            'title'        => 'PHP configuration directive magic_quotes_gpc = Off',
+            'title'        => 'PHP configuration directive ‘magic_quotes_gpc’ must be off',
             'passed'       => ini_get('magic_quotes_gpc') == false,
-            'code'         => '# '.php_ini_loaded_file ()."\n<br />magic_quotes_gpc = Off",
-            'description'  => 'It\'s <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">deprecated in PHP 5.3 and has been removed in PHP 5.4</a>. Please edit your configuration file.',
+            'description'  => 'Set <code>magic_quotes_gpc = Off</code> in <code>'.php_ini_loaded_file ().'</code>.<br /><em>Why? Because <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">magic_quotes_gpc is deprecated in PHP 5.3 and removed in PHP 5.4</a>.</em>',
             'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
         ),
         'folder.config.writeable' => array(
-            'title'        => 'APPPATH/config/ must be writeable ',
+            'title'        => 'APPPATH/config/ must be writeable (temporarily, to write the db.php and crypt.php config files)',
             'passed'       => is_writeable(APPPATH.'config'),
             'command_line' => 'chmod a+w '.APPPATH.'config',
-            'description'  => 'This is required temporarily to write the db.php and crypt.php config files',
             'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
         ),
 
@@ -524,8 +528,7 @@ if ($step > 0) {
         ),
 
         'public.htdocs.writeable' => array(
-            'title'        => 'DOCROOT/htdocs/ must be writeable',
-            'description'  => 'The symbolic link htdocs/novius-os doesn\'t exists, so we need to be able to create it.',
+            'title'        => 'DOCROOT/htdocs/ must be writeable (to create the symbolic link htdocs/novius-os)',
             'passed'       => is_writeable(DOCROOT.'htdocs'),
             'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
             'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
@@ -553,8 +556,7 @@ if ($step > 0) {
         ),
 
         'public.static.writeable' => array(
-            'title'        => 'DOCROOT/static/ must be writeable',
-            'description'  => 'The symbolic link static/novius-os/ doesn\'t exists, so we need to be able to create it.',
+            'title'        => 'DOCROOT/static/ must be writeable (to create the symbolic link static/novius-os)',
             'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
             'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
             'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
@@ -708,7 +710,7 @@ if ($step == 1) {
         // Warnings validates but display informations
         ?>
         <h3>All tests passed. Your server is compatible with Novius OS.</h3>
-        <p><a id="show_tests" href="#">Get the test results</a>.</p>
+        <p><a id="show_tests" href="#">Show the test results</a>.</p>
         <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
 
         <a href="install.php?step=2"><button>Perfect, proceed to step 2 ‘Set up the database’</button></a>
@@ -717,26 +719,31 @@ if ($step == 1) {
         ?>
         <h3>Some tests have failed</h3>
         <?= Test::results('error') ?>
-        <p>All the other tests passed. <a id="show_tests" href="#">Get the full test results</a>.</p>
+        <p>All the other tests passed. <a id="show_tests" href="#">Show the full test results</a>.</p>
         <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
 
         <h3 id="recap">Let’s fix this</h3>
+        <p>Here is your to-do list:</p>
+        <ul id="todo">
         <?php
         $recap_with_description = Test::recap(false);
         if (!empty($recap_with_description)) {
-            echo '<ul><li>' . implode('</li><li>', $recap_with_description) . '</li></ul>';
+            ?>
+            <li><?= implode('</li><li>', $recap_with_description) ?></li>
+            <?php
         }
 
         $recap_with_command_line = Test::recap(true);
         if (!empty($recap_with_command_line)) {
             ?>
-            <p>Copy and run the following commands:<br />
-                <em>(Linux commands. You have to adapt them if you’re on a different OS, sorry about that.)</em></p>
-            <textarea style="width: 800px; height: 80px;"><?= implode("\n", $recap_with_command_line); ?></textarea>
+            <li>Open a terminal, copy and run the following commands:<br />
+            <textarea style="width: 800px; height: 80px;"><?= implode("\n", $recap_with_command_line); ?></textarea><br />
+            <em>Unix commands. You may have to adapt them to your OS.</em></li>
             <?php
         }
         ?>
-        <p><a href="install.php?step=1"><button>OK, I’ve fixed the problems, re-run the tests</button></a></p>
+        </ul>
+        <p><a href="install.php?step=1"><button>I’m done, all problems fixed, re-run the tests</button></a></p>
         <?php
     }
     ?>
@@ -1129,10 +1136,10 @@ if ($step == 5) {
     <h3 style="margin-top: 4em;">Cleaning up</h3>
     <p>If you prefer to leave things clean and tidy, you may now:</p>
     <ul>
-        <li>Remove writing permissions for the <code>local/config/</code> folder (if you changed it during step 1),</li>
-        <li>Remove or rename this install.php file.</li>
+        <li>Remove or rename this install.php file,</li>
+        <li>Remove writing permissions for the <code>local/config/</code> folder (if you changed it during step 1).</li>
     </ul>
-    <p>These two operations as Linux commands:</p>
+    <p>These two operations as Unix commands:</p>
     <textarea style="width:800px; height: 60px;"><?php
     echo 'rm ', NOSROOT, "public/htdocs/install.php\n";
     echo 'chmod og-w ', NOSROOT, "local/config\n";
