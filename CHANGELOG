@@ -6,6 +6,7 @@ Novius OS framework CHANGELOG
 Breaking changes:
 - Due to a security fix: now you need to add ``'isSafeHtml' => true`` in the HTML column of your dataset.
 - Refactoring : CRUD, callback success called after item save in modification (like creation)
+- Methods ->url() and ->urlResized() of Attachment class now return absolutes URLs. They take a optional parameter for return relative URLs.
 
 - Appdesk optimized: now inspector only load with one ajax request. Added view key to inspector configuration.$
 - i18n: the default dictionary 'app::default' will now be used when none is configured with Nos\I18n::current_dictionary().
@@ -36,6 +37,11 @@ Breaking changes:
 - Bugfix : Change interclassement on all columns use like a slug
 - Add Events 404.mediaFound and 404.attachmentFound
 - Change in tabs opening position: tab added without index now is added at selected + 1, except when the selected is appstab, adds the new tab at the end
+- You can now transform (crop, rotate, rounded, watermark, resize, shrink, grayscale, border) Media and Attachment images by an API
+- Add a "Renew media's cache" action in Media appdesk toolbar, visible for expert users
+- Add a "nos.deprecated" event for catch deprecated log
+- Change Model_Media API: deprecating all snake_case methods.
+- Deprecating delete_from_disk and delete_public_cache methods of Model_Folder. Use deleteFromDisk and deleteCache instead.
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
