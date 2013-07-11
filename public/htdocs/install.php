@@ -7,6 +7,10 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
  */
+
+if (empty($base_url)) {
+	$base_url = '';
+}
 ob_start();
 ?>
 <!DOCTYPE html>
@@ -16,7 +20,7 @@ ob_start();
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Novius OS - Install wizard</title>
     <meta name="robots" content="noindex,nofollow">
-    <link rel="shortcut icon" href="static/novius-os/admin/novius-os/img/noviusos.ico">
+    <link rel="shortcut icon" href="<?php echo $base_url ?>static/novius-os/admin/novius-os/img/noviusos.ico">
 
     <style type="text/css">
         html {
@@ -24,7 +28,7 @@ ob_start();
         }
         body {
             /* On step 1, this asset will probably return an HTTP status 404 Not Found */
-            background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/default.jpg");
+            background: #ddd url("<?php echo $base_url ?>static/novius-os/admin/novius-os/img/wallpapers/default.jpg");
             background-size: cover;
             font-family: franklin gothic medium,arial,verdana,helvetica,sans-serif;
         }
@@ -237,7 +241,7 @@ ob_start();
 <body>
 
 <h1 id="header">
-    <img src="install/logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS install wizard
+    <img src="<?php echo $base_url ?>install/logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS install wizard
 </h1>
 <div id="blank_slate">
 <?php
@@ -428,6 +432,11 @@ if ($step > 0) {
     $session_save_path = \Arr::get(\Config::load('session'), 'file.path');
 
     Test::register(array(
+        'directive.rewrite_module' => array(
+            'title'        => 'Server ‘rewrite_module’ must be enabled',
+            'passed'       => $base_url == '',
+            'description'  => 'Enable ‘rewrite_module’ in your server configuration (probably Apache).',
+        ),
         'requirements.gd_is_installed' => array(
             'title'        => 'GD is required',
             'passed'       => function_exists("gd_info"),
@@ -602,15 +611,20 @@ if ($step > 0) {
         }
     }
 
-    Test::reset();
 
-    Test::run('requirements.gd_is_installed');
+    Test::reset();
+	
+    Test::run('directive.rewrite_module');
 
     Test::separator();
 
     Test::run('directive.short_open_tag');
     Test::run('directive.magic_quotes_gpc');
 
+    Test::separator();
+
+    Test::run('requirements.gd_is_installed');
+	
     Test::separator();
 
     Test::run('public.htaccess.removed');
