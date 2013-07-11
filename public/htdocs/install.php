@@ -711,16 +711,16 @@ if ($step == 1) {
         ?>
         <h3>All tests passed. Your server is compatible with Novius OS.</h3>
         <p><a id="show_tests" href="#">Show the test results</a>.</p>
-        <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
+        <div id="tests" style="display:none;"><?php echo Test::results('success') ?></div>
 
         <a href="install.php?step=2"><button>Perfect, proceed to step 2 ‘Set up the database’</button></a>
         <?php
     } else {
         ?>
         <h3>Some tests have failed</h3>
-        <?= Test::results('error') ?>
+        <?php echo Test::results('error') ?>
         <p>All the other tests passed. <a id="show_tests" href="#">Show the full test results</a>.</p>
-        <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
+        <div id="tests" style="display:none;"><?php echo Test::results(array('warning', 'success')) ?></div>
 
         <h3 id="recap">Let’s fix this</h3>
         <p>Here is your to-do list:</p>
@@ -729,7 +729,7 @@ if ($step == 1) {
         $recap_with_description = Test::recap(false);
         if (!empty($recap_with_description)) {
             ?>
-            <li><?= implode('</li><li>', $recap_with_description) ?></li>
+            <li><?php echo implode('</li><li>', $recap_with_description) ?></li>
             <?php
         }
 
@@ -737,7 +737,7 @@ if ($step == 1) {
         if (!empty($recap_with_command_line)) {
             ?>
             <li>Open a terminal, copy and run the following commands:<br />
-            <textarea style="width: 800px; height: 80px;"><?= implode("\n", $recap_with_command_line); ?></textarea><br />
+            <textarea style="width: 800px; height: 80px;"><?php echo implode("\n", $recap_with_command_line); ?></textarea><br />
             <em>Unix commands. You may have to adapt them to your OS.</em></li>
             <?php
         }
@@ -837,7 +837,7 @@ if ($step == 2) {
 
             $message = $e->getMessage();
             ?>
-            <p class="error" title="<?= htmlspecialchars($message) ?>">
+            <p class="error" title="<?php echo htmlspecialchars($message) ?>">
                 <strong>There’s must be an error</strong> in the details you provided, as we can’t connect the database. Please double-check and try again.
             </p>
             <?php
@@ -855,12 +855,12 @@ if ($step == 2) {
     <form action="" method="POST">
         <p>
             <label for="hostname">MySQL server:</label>
-            <input type="text" name="hostname" id="hostname" placeholder="Server address" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" />
+            <input type="text" name="hostname" id="hostname" placeholder="Server address" value="<?php echo Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" />
             <em>A common server address is <a href="#" onclick="document.getElementById('hostname').value='localhost';">localhost</a>.</em>
         </p>
         <p>
             <label for="username">MySQL username:</label>
-            <input type="text" name="username" id="username" placeholder="Username" value="<?= Input::post('username', \Arr::get($db, 'username', '')) ?>"  />
+            <input type="text" name="username" id="username" placeholder="Username" value="<?php echo Input::post('username', \Arr::get($db, 'username', '')) ?>"  />
         </p>
         <p>
             <label for="password">MySQL password:</label>
@@ -868,7 +868,7 @@ if ($step == 2) {
         </p>
         <p>
             <label for="database">Database name:</label>
-            <input type="text" name="database" id="database" placeholder="Database" value="<?= Input::post('database', \Arr::get($db, 'database', '')) ?>"  />
+            <input type="text" name="database" id="database" placeholder="Database" value="<?php echo Input::post('database', \Arr::get($db, 'database', '')) ?>"  />
         </p>
         <p><button type="submit">Save and proceed to step 3 ‘Create the first user account’</button></p>
     </form>
@@ -928,17 +928,17 @@ if ($step == 3) {
     <form action="" method="POST">
         <p>
             <label for="name">Name:</label>
-            <input type="text" name="name" id="name" placeholder="Name" size="30" value="<?= Input::post('name', '') ?>" />
+            <input type="text" name="name" id="name" placeholder="Name" size="30" value="<?php echo Input::post('name', '') ?>" />
             <em>If you’re on first name terms, you can leave this field blank…</em>
         </p>
         <p>
             <label for="firstname">First name:</label>
-            <input type="text" name="firstname" id="firstname" placeholder="Firstname" size="30" value="<?= Input::post('firstname', '') ?>" />
+            <input type="text" name="firstname" id="firstname" placeholder="Firstname" size="30" value="<?php echo Input::post('firstname', '') ?>" />
             <em>… but do provide a first name.</em>
         </p>
         <p>
             <label for="email">Email:</label>
-            <input type="email" name="email" id="email" placeholder="Email (used for login)" size="30" value="<?= Input::post('email', '') ?>" />
+            <input type="email" name="email" id="email" placeholder="Email (used for login)" size="30" value="<?php echo Input::post('email', '') ?>" />
         </p>
         <p>
             <label for="password">Password:</label>
@@ -1054,8 +1054,8 @@ if ($step == 4) {
         $flag = \Nos\Tools_Context::flag('main::'.$locale);
         ?>
                 <li>
-                    <input type="checkbox" name="languages[]" value="<?= $locale ?>" id="lang_<?= $locale ?>" <?= !empty($locales[$locale]) ? 'checked' : '' ?>>
-                    <label for="lang_<?= $locale ?>"><?= $flag ?> <?= isset($available[$locale]) ? $available[$locale].' ('.$locale.')' : $locale ?></label>
+                    <input type="checkbox" name="languages[]" value="<?php echo $locale ?>" id="lang_<?php echo $locale ?>" <?php echo !empty($locales[$locale]) ? 'checked' : '' ?>>
+                    <label for="lang_<?php echo $locale ?>"><?php echo $flag ?> <?php echo isset($available[$locale]) ? $available[$locale].' ('.$locale.')' : $locale ?></label>
                 </li>
         <?php
     }
