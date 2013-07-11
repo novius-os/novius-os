@@ -498,26 +498,26 @@ if ($step > 0) {
         'folder.data.config.writeable' => array(
             'title'           => 'APPPATH/data/config/ must be writeable',
             'passed'          => is_writeable($folder_data.'config'),
-            'command_line'	  => array('chmod a+w '.$folder_data.'config'),
+            'command_line'    => array('chmod a+w '.$folder_data.'config'),
             'run_only_if'     => is_dir($folder_data.'config'),
         ),
 
         'folder.data.media.writeable' => array(
             'title'           => 'APPPATH/data/media/ must be writeable',
             'passed'          => is_writeable($folder_data.'media'),
-            'command_line'	  => array('chmod a+w '.$folder_data.'media'),
+            'command_line'    => array('chmod a+w '.$folder_data.'media'),
             'run_only_if'     => is_dir($folder_data.'media'),
         ),
 
         'folder.metadata.writeable' => array(
             'title'           => 'APPPATH/metadata/ must be writeable',
             'passed'          => is_writeable(APPPATH.'metadata'),
-            'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
+            'command_line'    => 'chmod a+w '.APPPATH.'metadata',
         ),
 
         'public.htaccess.removed' => array(
             'title'        => 'DOCROOT/.htaccess must be removed',
-            'passed'       => !is_file(DOCROOT.'.htaccess'),
+            'passed'       => !is_file(DOCROOT.'.htaccess') || !rename(DOCROOT.'.htaccess', DOCROOT.'.htaccess.old'),
             'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
             'run_only_if'  => is_file(NOSROOT.'.htaccess'),
         ),
@@ -592,6 +592,19 @@ if ($step > 0) {
             'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
         ),
 
+        'public.static.nos.create' => array(
+            'title'        => 'We can’t create the DOCROOT/static/novius-os symbolic link',
+            'passed'       => \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os'),
+            'description'  => 'Please restart your server with the ‘Run as administrator’ option.',
+            'run_only_if'  => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static'),
+        ),
+        'public.htdocs.nos.create' => array(
+            'title'        => 'We can’t create the DOCROOT/htdocs/novius-os symbolic link',
+            'passed'       => \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os'),
+            // No description because it would be a dupliate with the public/static/novius-os symbolic link (which should have failed too).
+            'run_only_if'  => !file_exists(DOCROOT.'htdocs'.DS.'novius-os') && is_writeable(DOCROOT.'htdocs'),
+        ),
+
         'logs.fuel' => array(
             'title'        => 'logs/fuel must be writeable',
             'passed'       => is_writeable(NOSROOT.'logs/fuel'),
@@ -600,17 +613,6 @@ if ($step > 0) {
     ));
 
     ?><div><?php
-
-    if ($step == 1) {
-
-        if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-            \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os');
-        }
-        if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-            \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os');
-        }
-    }
-
 
     Test::reset();
 
@@ -700,6 +702,10 @@ if ($step > 0) {
     Test::run('public.static.writeable');
     Test::run('public.static.apps.writeable');
 
+    Test::separator();
+
+    Test::run('public.htdocs.nos.create');
+    Test::run('public.static.nos.create');
     Test::separator();
 
     Test::run('public.htdocs.nos.valid');
