@@ -517,7 +517,7 @@ if ($step > 0) {
 
         'public.htaccess.removed' => array(
             'title'        => 'DOCROOT/.htaccess must be removed',
-            'passed'       => !is_file(DOCROOT.'.htaccess') || !rename(DOCROOT.'.htaccess', DOCROOT.'.htaccess.old'),
+            'passed'       => !is_file(DOCROOT.'.htaccess') || (is_file(NOSROOT.'.htaccess') && !rename(DOCROOT.'.htaccess', DOCROOT.'.htaccess.old')),
             'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
             'run_only_if'  => is_file(NOSROOT.'.htaccess'),
         ),
@@ -594,13 +594,13 @@ if ($step > 0) {
 
         'public.static.nos.create' => array(
             'title'        => 'We can’t create the DOCROOT/static/novius-os symbolic link',
-            'passed'       => \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os'),
+            'passed'       => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static') && \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os'),
             'description'  => 'Please restart your server with the ‘Run as administrator’ option.',
             'run_only_if'  => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static'),
         ),
         'public.htdocs.nos.create' => array(
             'title'        => 'We can’t create the DOCROOT/htdocs/novius-os symbolic link',
-            'passed'       => \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os'),
+            'passed'       => !file_exists(DOCROOT.'htdocs'.DS.'novius-os') && is_writeable(DOCROOT.'htdocs') && \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os'),
             // No description because it would be a dupliate with the public/static/novius-os symbolic link (which should have failed too).
             'run_only_if'  => !file_exists(DOCROOT.'htdocs'.DS.'novius-os') && is_writeable(DOCROOT.'htdocs'),
         ),
