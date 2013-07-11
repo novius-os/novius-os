@@ -9,7 +9,7 @@
  */
 
 if (empty($base_url)) {
-	$base_url = '';
+    $base_url = '';
 }
 ob_start();
 ?>
@@ -613,7 +613,7 @@ if ($step > 0) {
 
 
     Test::reset();
-	
+
     Test::run('directive.rewrite_module');
 
     Test::separator();
@@ -624,7 +624,7 @@ if ($step > 0) {
     Test::separator();
 
     Test::run('requirements.gd_is_installed');
-	
+
     Test::separator();
 
     Test::run('public.htaccess.removed');
