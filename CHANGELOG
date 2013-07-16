@@ -11,9 +11,14 @@ Novius OS framework CHANGELOG
 - Bugfix : Behaviour publishable when not using publication_start and publication_end
 - Bugfix : Prevent from caching OS tab content
 - Bugfix : In wysiwyg, IE9 set simple quote for tag attribute, not well parse when detecting enhancer
+- Bugfix : Bugfix: Response::json() set content-type to text/plain for no-ajax request. For browser receive pseudo ajax request for file transport using iframe.
+- Bugfix : Wysiwyg for img[usemap] and linked deleted when editing a media.
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
+
+Form:
+- Bugfix : form open tag not auto-closed anymore
 
 Thank for : @romunovius, @Victor ALBERT, @Foine
 
