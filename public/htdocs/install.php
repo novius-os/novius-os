@@ -7,6 +7,10 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link http://www.novius-os.org
  */
+
+if (empty($base_url)) {
+    $base_url = '';
+}
 ob_start();
 ?>
 <!DOCTYPE html>
@@ -16,7 +20,7 @@ ob_start();
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Novius OS - Install wizard</title>
     <meta name="robots" content="noindex,nofollow">
-    <link rel="shortcut icon" href="static/novius-os/admin/novius-os/img/noviusos.ico">
+    <link rel="shortcut icon" href="<?php echo $base_url ?>static/novius-os/admin/novius-os/img/noviusos.ico">
 
     <style type="text/css">
         html {
@@ -24,7 +28,7 @@ ob_start();
         }
         body {
             /* On step 1, this asset will probably return an HTTP status 404 Not Found */
-            background: #ddd url("static/novius-os/admin/novius-os/img/wallpapers/default.jpg");
+            background: #ddd url("<?php echo $base_url ?>static/novius-os/admin/novius-os/img/wallpapers/default.jpg");
             background-size: cover;
             font-family: franklin gothic medium,arial,verdana,helvetica,sans-serif;
         }
@@ -237,7 +241,7 @@ ob_start();
 <body>
 
 <h1 id="header">
-    <img src="install/logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS install wizard
+    <img src="<?php echo $base_url ?>install/logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS install wizard
 </h1>
 <div id="blank_slate">
 <?php
@@ -428,6 +432,11 @@ if ($step > 0) {
     $session_save_path = \Arr::get(\Config::load('session'), 'file.path');
 
     Test::register(array(
+        'directive.rewrite_module' => array(
+            'title'        => 'Server ‘rewrite_module’ must be enabled',
+            'passed'       => $base_url == '',
+            'description'  => 'Enable ‘rewrite_module’ in your server configuration (probably Apache).',
+        ),
         'requirements.gd_is_installed' => array(
             'title'        => 'GD is required',
             'passed'       => function_exists("gd_info"),
@@ -489,26 +498,26 @@ if ($step > 0) {
         'folder.data.config.writeable' => array(
             'title'           => 'APPPATH/data/config/ must be writeable',
             'passed'          => is_writeable($folder_data.'config'),
-            'command_line'	  => array('chmod a+w '.$folder_data.'config'),
+            'command_line'    => array('chmod a+w '.$folder_data.'config'),
             'run_only_if'     => is_dir($folder_data.'config'),
         ),
 
         'folder.data.media.writeable' => array(
             'title'           => 'APPPATH/data/media/ must be writeable',
             'passed'          => is_writeable($folder_data.'media'),
-            'command_line'	  => array('chmod a+w '.$folder_data.'media'),
+            'command_line'    => array('chmod a+w '.$folder_data.'media'),
             'run_only_if'     => is_dir($folder_data.'media'),
         ),
 
         'folder.metadata.writeable' => array(
             'title'           => 'APPPATH/metadata/ must be writeable',
             'passed'          => is_writeable(APPPATH.'metadata'),
-            'command_line'	  => 'chmod a+w '.APPPATH.'metadata',
+            'command_line'    => 'chmod a+w '.APPPATH.'metadata',
         ),
 
         'public.htaccess.removed' => array(
             'title'        => 'DOCROOT/.htaccess must be removed',
-            'passed'       => !is_file(DOCROOT.'.htaccess'),
+            'passed'       => !is_file(DOCROOT.'.htaccess') || (is_file(NOSROOT.'.htaccess') && !rename(DOCROOT.'.htaccess', DOCROOT.'.htaccess.old')),
             'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
             'run_only_if'  => is_file(NOSROOT.'.htaccess'),
         ),
@@ -583,6 +592,19 @@ if ($step > 0) {
             'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
         ),
 
+        'public.static.nos.create' => array(
+            'title'        => 'We can’t create the DOCROOT/static/novius-os symbolic link',
+            'passed'       => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static') && \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os'),
+            'description'  => 'Please restart your server with the ‘Run as administrator’ option.',
+            'run_only_if'  => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static'),
+        ),
+        'public.htdocs.nos.create' => array(
+            'title'        => 'We can’t create the DOCROOT/htdocs/novius-os symbolic link',
+            'passed'       => !file_exists(DOCROOT.'htdocs'.DS.'novius-os') && is_writeable(DOCROOT.'htdocs') && \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os'),
+            // No description because it would be a dupliate with the public/static/novius-os symbolic link (which should have failed too).
+            'run_only_if'  => !file_exists(DOCROOT.'htdocs'.DS.'novius-os') && is_writeable(DOCROOT.'htdocs'),
+        ),
+
         'logs.fuel' => array(
             'title'        => 'logs/fuel must be writeable',
             'passed'       => is_writeable(NOSROOT.'logs/fuel'),
@@ -592,24 +614,18 @@ if ($step > 0) {
 
     ?><div><?php
 
-    if ($step == 1) {
-
-        if (!file_exists(DOCROOT.'htdocs'.DS.'novius-os')) {
-            \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os');
-        }
-        if (!file_exists(DOCROOT.'static'.DS.'novius-os')) {
-            \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os');
-        }
-    }
-
     Test::reset();
 
-    Test::run('requirements.gd_is_installed');
+    Test::run('directive.rewrite_module');
 
     Test::separator();
 
     Test::run('directive.short_open_tag');
     Test::run('directive.magic_quotes_gpc');
+
+    Test::separator();
+
+    Test::run('requirements.gd_is_installed');
 
     Test::separator();
 
@@ -688,6 +704,10 @@ if ($step > 0) {
 
     Test::separator();
 
+    Test::run('public.htdocs.nos.create');
+    Test::run('public.static.nos.create');
+    Test::separator();
+
     Test::run('public.htdocs.nos.valid');
     Test::run('public.static.nos.valid');
 
@@ -711,16 +731,16 @@ if ($step == 1) {
         ?>
         <h3>All tests passed. Your server is compatible with Novius OS.</h3>
         <p><a id="show_tests" href="#">Show the test results</a>.</p>
-        <div id="tests" style="display:none;"><?= Test::results('success') ?></div>
+        <div id="tests" style="display:none;"><?php echo Test::results('success') ?></div>
 
         <a href="install.php?step=2"><button>Perfect, proceed to step 2 ‘Set up the database’</button></a>
         <?php
     } else {
         ?>
         <h3>Some tests have failed</h3>
-        <?= Test::results('error') ?>
+        <?php echo Test::results('error') ?>
         <p>All the other tests passed. <a id="show_tests" href="#">Show the full test results</a>.</p>
-        <div id="tests" style="display:none;"><?= Test::results(array('warning', 'success')) ?></div>
+        <div id="tests" style="display:none;"><?php echo Test::results(array('warning', 'success')) ?></div>
 
         <h3 id="recap">Let’s fix this</h3>
         <p>Here is your to-do list:</p>
@@ -729,7 +749,7 @@ if ($step == 1) {
         $recap_with_description = Test::recap(false);
         if (!empty($recap_with_description)) {
             ?>
-            <li><?= implode('</li><li>', $recap_with_description) ?></li>
+            <li><?php echo implode('</li><li>', $recap_with_description) ?></li>
             <?php
         }
 
@@ -737,7 +757,7 @@ if ($step == 1) {
         if (!empty($recap_with_command_line)) {
             ?>
             <li>Open a terminal, copy and run the following commands:<br />
-            <textarea style="width: 800px; height: 80px;"><?= implode("\n", $recap_with_command_line); ?></textarea><br />
+            <textarea style="width: 800px; height: 80px;"><?php echo implode("\n", $recap_with_command_line); ?></textarea><br />
             <em>Unix commands. You may have to adapt them to your OS.</em></li>
             <?php
         }
@@ -837,7 +857,7 @@ if ($step == 2) {
 
             $message = $e->getMessage();
             ?>
-            <p class="error" title="<?= htmlspecialchars($message) ?>">
+            <p class="error" title="<?php echo htmlspecialchars($message) ?>">
                 <strong>There’s must be an error</strong> in the details you provided, as we can’t connect the database. Please double-check and try again.
             </p>
             <?php
@@ -855,12 +875,12 @@ if ($step == 2) {
     <form action="" method="POST">
         <p>
             <label for="hostname">MySQL server:</label>
-            <input type="text" name="hostname" id="hostname" placeholder="Server address" value="<?= Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" />
+            <input type="text" name="hostname" id="hostname" placeholder="Server address" value="<?php echo Input::post('hostname', \Arr::get($db, 'hostname', '')) ?>" />
             <em>A common server address is <a href="#" onclick="document.getElementById('hostname').value='localhost';">localhost</a>.</em>
         </p>
         <p>
             <label for="username">MySQL username:</label>
-            <input type="text" name="username" id="username" placeholder="Username" value="<?= Input::post('username', \Arr::get($db, 'username', '')) ?>"  />
+            <input type="text" name="username" id="username" placeholder="Username" value="<?php echo Input::post('username', \Arr::get($db, 'username', '')) ?>"  />
         </p>
         <p>
             <label for="password">MySQL password:</label>
@@ -868,7 +888,7 @@ if ($step == 2) {
         </p>
         <p>
             <label for="database">Database name:</label>
-            <input type="text" name="database" id="database" placeholder="Database" value="<?= Input::post('database', \Arr::get($db, 'database', '')) ?>"  />
+            <input type="text" name="database" id="database" placeholder="Database" value="<?php echo Input::post('database', \Arr::get($db, 'database', '')) ?>"  />
         </p>
         <p><button type="submit">Save and proceed to step 3 ‘Create the first user account’</button></p>
     </form>
@@ -928,17 +948,17 @@ if ($step == 3) {
     <form action="" method="POST">
         <p>
             <label for="name">Name:</label>
-            <input type="text" name="name" id="name" placeholder="Name" size="30" value="<?= Input::post('name', '') ?>" />
+            <input type="text" name="name" id="name" placeholder="Name" size="30" value="<?php echo Input::post('name', '') ?>" />
             <em>If you’re on first name terms, you can leave this field blank…</em>
         </p>
         <p>
             <label for="firstname">First name:</label>
-            <input type="text" name="firstname" id="firstname" placeholder="Firstname" size="30" value="<?= Input::post('firstname', '') ?>" />
+            <input type="text" name="firstname" id="firstname" placeholder="Firstname" size="30" value="<?php echo Input::post('firstname', '') ?>" />
             <em>… but do provide a first name.</em>
         </p>
         <p>
             <label for="email">Email:</label>
-            <input type="email" name="email" id="email" placeholder="Email (used for login)" size="30" value="<?= Input::post('email', '') ?>" />
+            <input type="email" name="email" id="email" placeholder="Email (used for login)" size="30" value="<?php echo Input::post('email', '') ?>" />
         </p>
         <p>
             <label for="password">Password:</label>
@@ -1054,8 +1074,8 @@ if ($step == 4) {
         $flag = \Nos\Tools_Context::flag('main::'.$locale);
         ?>
                 <li>
-                    <input type="checkbox" name="languages[]" value="<?= $locale ?>" id="lang_<?= $locale ?>" <?= !empty($locales[$locale]) ? 'checked' : '' ?>>
-                    <label for="lang_<?= $locale ?>"><?= $flag ?> <?= isset($available[$locale]) ? $available[$locale].' ('.$locale.')' : $locale ?></label>
+                    <input type="checkbox" name="languages[]" value="<?php echo $locale ?>" id="lang_<?php echo $locale ?>" <?php echo !empty($locales[$locale]) ? 'checked' : '' ?>>
+                    <label for="lang_<?php echo $locale ?>"><?php echo $flag ?> <?php echo isset($available[$locale]) ? $available[$locale].' ('.$locale.')' : $locale ?></label>
                 </li>
         <?php
     }
