@@ -71,6 +71,7 @@ Thank for : @Fumito Mizuno
 - Bugfix : In wysiwyg, IE9 set simple quote for tag attribute, not well parse when detecting enhancer
 - Bugfix : Bugfix: Response::json() set content-type to text/plain for no-ajax request. For browser receive pseudo ajax request for file transport using iframe.
 - Bugfix : Wysiwyg for img[usemap] and linked deleted when editing a media.
+- Bugfix : In wijdialog. Case of double modal dialog, the browser stop javascript with an ERROR on close click. Must preventDefault before all other code execution
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
