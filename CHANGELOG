@@ -43,6 +43,7 @@ Breaking changes:
 - Change Model_Media API: deprecating all snake_case methods.
 - Deprecating delete_from_disk and delete_public_cache methods of Model_Folder. Use deleteFromDisk and deleteCache instead.
 - Front: "is_preview" is true only when you are logged in
+- All URLs are now urlencoded when use in a href or in a redirection
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
