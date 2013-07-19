@@ -44,6 +44,7 @@ Breaking changes:
 - Deprecating delete_from_disk and delete_public_cache methods of Model_Folder. Use deleteFromDisk and deleteCache instead.
 - Front: "is_preview" is true only when you are logged in
 - All URLs are now urlencoded when use in a href or in a redirection
+- Deprecated : Model_Page->link(), please use Model_Page->htmlAnchor() instead
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
