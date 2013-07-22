@@ -75,6 +75,7 @@ Thank for : @Fumito Mizuno
 - Bugfix : Bugfix: Response::json() set content-type to text/plain for no-ajax request. For browser receive pseudo ajax request for file transport using iframe.
 - Bugfix : Wysiwyg for img[usemap] and linked deleted when editing a media.
 - Bugfix : In wijdialog. Case of double modal dialog, the browser stop javascript with an ERROR on close click. Must preventDefault before all other code execution
+- Bugfix : In appdesk, pageIndex is not reinitialized when the search is changed
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
