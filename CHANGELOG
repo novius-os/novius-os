@@ -79,6 +79,7 @@ Thank for : @Fumito Mizuno
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
+- Bugfix : in slideshow administration, generate a PHP Notice if has restricted field
 
 Form:
 - Bugfix : form open tag not auto-closed anymore
