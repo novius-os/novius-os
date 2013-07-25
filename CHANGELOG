@@ -78,7 +78,7 @@ Thank for : @Fumito Mizuno
 - Bugfix : In appdesk, pageIndex is not reinitialized when the search is changed
 - Bugfix : In appdesk, i18n key was processed, triggering javascript bugs when "columns" key was present.
 - Bugfix : In attachment, when set() without the filename parameter, use the basename (filename + extension) of the file
-- Defense for Clickjacking attack
+- Add a defense for Clickjacking attack in admin
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
