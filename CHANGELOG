@@ -76,6 +76,8 @@ Thank for : @Fumito Mizuno
 - Bugfix : Wysiwyg for img[usemap] and linked deleted when editing a media.
 - Bugfix : In wijdialog. Case of double modal dialog, the browser stop javascript with an ERROR on close click. Must preventDefault before all other code execution
 - Bugfix : In appdesk, pageIndex is not reinitialized when the search is changed
+- Bugfix : In appdesk, i18n key was processed, triggering javascript bugs when "columns" key was present.
+- Bugfix : In attachment, when set() without the filename parameter, use the basename (filename + extension) of the file
 
 Slideshow :
 - Bugfix : remove link on a slide doesn't works
