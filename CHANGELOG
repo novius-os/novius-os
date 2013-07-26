@@ -46,7 +46,7 @@ Breaking changes:
 - Front: "is_preview" is true only when you are logged in
 - All URLs are now urlencoded when use in a href or in a redirection
 - Deprecated : Model_Page->link(), please use Model_Page->htmlAnchor() instead
-- Add a temp directory in local/data, assign to temp_dir config key by default
+- Add a temp directory in local/data, assign to novius-os.temp_dir config key by default
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
