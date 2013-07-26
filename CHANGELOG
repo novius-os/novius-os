@@ -21,6 +21,7 @@ Breaking changes:
 - Enhancer : Wrap front display in a div with classes "noviusos_enhancer" and the enhancer name (noviusos_blog, noviusos_news, noviusos_slideshow, noviusos_form)
 - treeGrid : add an option for initial depth
 - Add wysiwyg config mechanism, with a wysiwygOptions event registrable by behaviour (and use by twinnable), and wysiwyg config sample file
+- Add friendly slug config mechanism, with a friendlySlug event registrable by behaviour (and use by twinnable), and friendly_slug config sample file
 - OsTabs : add reload method in API
 - Behaviour Twinnable : add findMainOrContext(), hasCommonFields(), isCommonField() methods.
 - 4 new relation types : twinnable_belongs_to, twinnable_has_one, twinnable_has_many, twinnable_many_many
