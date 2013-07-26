@@ -509,6 +509,13 @@ if ($step > 0) {
             'run_only_if'     => is_dir($folder_data.'media'),
         ),
 
+        'folder.data.tmp' => array(
+            'title'           => 'APPPATH/data/temp/ must exist',
+            'passed'          => is_dir($folder_data.'temp'),
+            'command_line'    => array('mkdir '.$folder_data.'temp'),
+            'run_only_if'     => !is_dir($folder_data),
+        ),
+
         'folder.metadata.writeable' => array(
             'title'           => 'APPPATH/metadata/ must be writeable',
             'passed'          => is_writeable(APPPATH.'metadata'),
@@ -662,9 +669,17 @@ if ($step > 0) {
 
     Test::separator();
 
-    Test::run('folder.data.writeable');
+    if (Test::run('folder.data.writeable')) {
+        $dir  = APPPATH.'data'.DS.'temp';
+        if (!is_dir($dir)) {
+            File::create_dir(APPPATH.'data', 'temp');
+            clearstatcache(true, $dir);
+        }
+
+    }
     Test::run('folder.data.config.writeable');
     Test::run('folder.data.media.writeable');
+    Test::run('folder.data.tmp');
 
     Test::separator();
 
