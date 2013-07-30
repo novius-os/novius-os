@@ -47,6 +47,7 @@ Breaking changes:
 - All URLs are now urlencoded when use in a href or in a redirection
 - Deprecated : Model_Page->link(), please use Model_Page->htmlAnchor() instead
 - Add a temp directory in local/data, assign to novius-os.temp_dir config key by default
+- Increased media / page titles and urls size
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
