@@ -56,6 +56,9 @@ Blog & news applications:
 - Comments can now be moderated from the appdesk.
 - Emails are sent when new comments are posted.
 
+Form application:
+- New 'message' view for the confirmation
+
 Vendors:
 - jQuery 1.9.1
 - jQuery UI 1.10.3
