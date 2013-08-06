@@ -48,6 +48,7 @@ Breaking changes:
 - Deprecated : Model_Page->link(), please use Model_Page->htmlAnchor() instead
 - Add a temp directory in local/data, assign to novius-os.temp_dir config key by default
 - Increased media / page titles and urls size
+- New method delete_cache_pages() in the Urlenhancer behaviour
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
