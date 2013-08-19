@@ -49,6 +49,7 @@ Breaking changes:
 - Add a temp directory in local/data, assign to novius-os.temp_dir config key by default
 - Increased media / page titles and urls size
 - New method delete_cache_pages() in the Urlenhancer behaviour
+- Add an event admin.loginFail. Deprecating event user_login, change by admin.loginSuccess
 
 Blog & news applications:
 - thumbnail is now configurable (size & link):
