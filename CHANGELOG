@@ -3,71 +3,89 @@ Novius OS framework CHANGELOG
 ?: version Chiba 2
 ==================================
 
+New features:
+
+* Windows support (Vista and upper).
+* Better install wizard (UI, more tests, choose of languages)
+* Advanced permissions for all natives applications.
+* Comments application:
+    * Administration interface
+    * Emails are sent when new comments are posted, to post author and others commenters.
+
+Developer
+---------
+
 Breaking changes:
-- Due to a security fix: now you need to add ``'isSafeHtml' => true`` in the HTML column of your dataset.
-- Refactoring : CRUD, callback success called after item save in modification (like creation)
-- Methods ->url() and ->urlResized() of Attachment class now return absolutes URLs. They take a optional parameter for return relative URLs.
 
-- Appdesk optimized: now inspector only load with one ajax request. Added view key to inspector configuration.$
-- i18n: the default dictionary 'app::default' will now be used when none is configured with Nos\I18n::current_dictionary().
-- refactoring behaviour implementation (behaviour can catch model events)
-- Enhancer popup: ability to define a 'layout' + 'fields' configuration instead of a view, much like the CRUD
-- Added Date Time renderer to manage both date and time in the same input
-- Added align key on action configuration
-- Removing of uses of wijdropdown, wijtextbox, wijcheckbox and wijradio in back-office
-- Using .ui-priority-primary instead .primary on button and .title on textbox
-- Improve model properties cache : just one request columns from db by thread
-- Enhancer : add the possible key "valid_container", which is callable. Can restrict the enhancer availability depending on container.
-- Enhancer : Wrap front display in a div with classes "noviusos_enhancer" and the enhancer name (noviusos_blog, noviusos_news, noviusos_slideshow, noviusos_form)
-- treeGrid : add an option for initial depth
-- Add wysiwyg config mechanism, with a wysiwygOptions event registrable by behaviour (and use by twinnable), and wysiwyg config sample file
-- Add friendly slug config mechanism, with a friendlySlug event registrable by behaviour (and use by twinnable), and friendly_slug config sample file
-- OsTabs : add reload method in API
-- Behaviour Twinnable : add findMainOrContext(), hasCommonFields(), isCommonField() methods.
-- 4 new relation types : twinnable_belongs_to, twinnable_has_one, twinnable_has_many, twinnable_many_many
-- Model now can have fields, medias and WYSIWYGs common to all contexts.
-- Model class : add addRelation, configModel, getApplication() methods.
-- Deprecated : get_url_model($item, $params) in enhancer front controller, please use getURLEnhanced($params) and $item in a key "item" of $params.
-- Now custom cellFormatters are allowed in appdesks
-- Two new keys in appdesks : css and notify
-- Set home page not allowed in multi-context view
-- Delete or unpublish the home page is not allowed
-- In Nos::parse_wysiwyg(), replace anchors by URL#anchor only in front.
-- Media : add filesize, display filesize and dimensions in appdesk preview and CRUD form
-- Refactoring Model_Media->get_img_tag() and get_img_tag_resized(), uses HTML::img() for returning a tag with attributs
-- Bugfix : Change interclassement on all columns use like a slug
-- Add Events 404.mediaFound and 404.attachmentFound
-- Change in tabs opening position: tab added without index now is added at selected + 1, except when the selected is appstab, adds the new tab at the end
-- You can now transform (crop, rotate, rounded, watermark, resize, shrink, grayscale, border) Media and Attachment images by an API
-- Add a "Renew media's cache" action in Media appdesk toolbar, visible for expert users
-- Add a "nos.deprecated" event for catch deprecated log
-- Change Model_Media API: deprecating all snake_case methods.
-- Deprecating delete_from_disk and delete_public_cache methods of Model_Folder. Use deleteFromDisk and deleteCache instead.
-- Front: "is_preview" is true only when you are logged in
-- All URLs are now urlencoded when use in a href or in a redirection
-- Deprecated : Model_Page->link(), please use Model_Page->htmlAnchor() instead
-- Add a temp directory in local/data, assign to novius-os.temp_dir config key by default
-- Increased media / page titles and urls size
-- New method delete_cache_pages() in the Urlenhancer behaviour
-- Add an event admin.loginFail. Deprecating event user_login, change by admin.loginSuccess
+* Model: If a column of a 'dataset' contains HTML, you must also set 'isSafeHtml' => true if you don't want that it to be encoded (for security reasons).
+* CRUD: For item updating, the callback function 'success' is called after 'save' (not before), like for creating.
+* Attachment: Methods ->url() and ->urlResized() return absolute URLs. They accept an optional parameter for the return of relative URLs.
+* Comments: Comments are now contextable. Migration tries to guess context of existing comments, but if you've implement comments on a not contextable model, migration can't do nothing: set yourself context if you want to see those comments in new administration interface.
+* Blog/News: Thumbnail is now configurable (size & link).
+    * Default thumbnail size changed from 200 everywhere to 120 in the listing and 200 on the item.
+    * Thumbnail can now be clicked to go on the item page (set thumbnail.front.list.link_to_item = false to restore old behaviour).
 
-Blog & news applications:
-- thumbnail is now configurable (size & link):
-    - default thumbnail size changed from 200 everywhere to 120 in the listing and 200 on the item.
-    - thumbnail can now be clicked to go on the item page (set ``thumbnail.front.list.link_to_item = false`` to restore old behaviour).
-- Comments can now be moderated from the appdesk.
-- Emails are sent when new comments are posted.
+Vendors update:
 
-Form application:
-- New 'message' view for the confirmation
+* FuelPHP 1.6
+* jQuery 1.9.1
+* jQuery UI 1.10.3
+* Wijmo 2013v1.4
+* require.js 2.1.6
 
-Vendors:
-- jQuery 1.9.1
-- jQuery UI 1.10.3
-- Wijmo 2013v1.4
-- require.js 2.1.6
+Improvements:
 
-Thank for : @Fumito Mizuno
+* i18n: Default dictionary 'app::default' is used if no dictionary is set with Nos\I18n::current_dictionary().
+* DB: Change interclassement on all columns use like a slug.
+* ORM: Improvement of the model properties' cache mechanism, just one request of 'columns' from DB by thread.
+* ORM: 4 new relation types, twinnable_belongs_to, twinnable_has_one, twinnable_has_many, twinnable_many_many.
+* ORM: Model class, new addRelation(), configModel(), getApplication() methods.
+* Behaviour: New behaviour author, use by Page, Media, Blog/News, Slideshow, Form.
+* Behaviour: Refactoring behaviour implementation (behaviours can intercept model events).
+* Behaviour Twinnable: Models now can have fields, medias and WYSIWYGs common to all contexts.
+* Behaviour Twinnable: new findMainOrContext(), hasCommonFields(), isCommonField() methods.
+* Behaviour URLEnhancer: New methods deleteCacheEnhancer() and deleteCacheItem().
+* Behaviour URLEnhancer: Delete front's cache of the item on deleting and updating.
+* Enhancer: In popup configuration, new ability to define a 'layout' and 'fields' configuration instead of a view, much like the CRUD.
+* Enhancer: In enhancer configuration, new possible key 'valid_container', which is callable. Can restrict the enhancer availability depending on container.
+* Enhancer: In front displaying, output is wrap in a div with classes 'noviusos_enhancer' and the enhancer name ('noviusos_blog', 'noviusos_news', 'noviusos_slideshow', 'noviusos_form')
+* Renderer: New datetime picker renderer to manage both date and time in the same input.
+* WYSIWYG: New WYSIWYG configuration mechanism, with a 'wysiwygOptions' event registrable by behaviour (and use by twinnable), and 'wysiwyg' config sample file.
+* WYSIWYG: In Nos::parse_wysiwyg(), replacing anchors by URL#anchor only in front.
+* SEO: New friendly slug configuration mechanism, with a 'friendlySlug' event registrable by behaviour (and use by twinnable), and 'friendly_slug' config sample file.
+* OsTabs: New reload method in API.
+* OsTabs: Change in tabs opening position. Tab added without index now is added at 'selected + 1', except when the selected is desktop, adds the new tab at the end.
+* Appdesk: Two new keys, 'css' and 'notify' in appdesk configuration.
+* Appdesk: Ability to ignore a cellFormatter based on a column value.
+* Appdesk: Now custom cellFormatters are allowed in appdesks.
+* Grid: New 'align' key on actions configuration.
+* Grid: New option for the initial opening depth on tree grid.
+* UI: Using '.ui-priority-primary' instead '.primary' on button and '.title' on textbox inputs.
+* UI: Use browser native select, checkbox and radio, no more use of Wijmo widget for those inputs.
+* Page: Set home page not allowed in multi-context view.
+* Page: Delete or unpublish the home page is not allowed.
+* Page: Increased title and url fields size.
+* Media: New field 'filesize'. Display 'filesize' and dimensions in appdesk preview and CRUD form.
+* Media: Refactoring get_img_tag() and get_img_tag_resized() methods of Model_Media, uses HTML::img() for returning a tag with attributs.
+* Media: You can now transform (crop, rotate, rounded, watermark, resize, shrink, grayscale, border) Media and Attachment images by an Toolkit_Image API.
+* Media: New "Renew media's cache" action in Media appdesk toolbar, visible for expert users.
+* Media: Increased title and url fields size.
+* Comments: New API for use of noviusos_comments application.
+* Form: New 'message' view for the confirmation.
+* Misc: New events '404.mediaFound', '404.attachmentFound', 'admin.loginFail' and 'nos.deprecated'.
+* Misc: All URLs are now urlencoded when use in a href or in a redirection.
+* Misc: New 'temp' directory in local/data, assign to 'novius-os.temp_dir' config key by default.
+* Front: 'is_preview' is true only when you are logged in.
+
+Deprecated:
+
+* Enhancer: get_url_model($item, $params) in enhancer front controller is deprecated, please use getURLEnhanced($params) and $item in a key 'item' of $params.
+* Media: Change Model_Media API, deprecating all snake_case methods.
+* Media: Deprecating delete_from_disk() and delete_public_cache() methods of Model_Folder. Use deleteFromDisk() and deleteCache() instead.
+* Page: Model_Page->link() is deprecated, please use Model_Page->htmlAnchor() instead.
+* Misc: Event 'user_login' is deprecated, please use 'admin.loginSuccess' instead.
+
+Thank for : Fumito Mizuno, Julien Guyomard
 
 ?: version Chiba 1.?
 =================================
