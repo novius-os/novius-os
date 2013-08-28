@@ -18,24 +18,6 @@ $htaccess = '';
 $htaccess_save = false;
 $htaccess_move = false;
 
-$file = $document_root.$nos_dir.'.htaccess.shared-hosting';
-$handle = fopen($file, 'r');
-if ($handle) {
-    $content = fread($handle, filesize($file));
-    fclose($handle);
-
-    $htaccess = str_replace('novius-os-install-dir/', $nos_dir, $content);
-
-    $file = $document_root.$nos_dir.'.htaccess';
-    if (is_writable($document_root.$nos_dir)) {
-        $handle = fopen($file, 'w');
-        if ($handle) {
-            $htaccess_save = fwrite($handle, $htaccess);
-            fclose($handle);
-        }
-    }
-}
-
 $public = $document_root.$nos_dir.'public'.DIRECTORY_SEPARATOR;
 $file = $public.'.htaccess';
 $htaccess_move = !file_exists($file);
@@ -43,8 +25,29 @@ if (!$htaccess_move && is_writable($file) && is_writable($public)) {
     $htaccess_move = rename($file, $public.'.htaccess.old');
 }
 
+// Don't create the new .htaccess file if the rename failed
+if ($htaccess_move) {
+    $file = $document_root.$nos_dir.'.htaccess.shared-hosting';
+    $handle = fopen($file, 'r');
+    if ($handle) {
+        $content = fread($handle, filesize($file));
+        fclose($handle);
+
+        $htaccess = str_replace('novius-os-install-dir/', $nos_dir, $content);
+
+        $file = $document_root.$nos_dir.'.htaccess';
+        if (is_writable($document_root.$nos_dir)) {
+            $handle = fopen($file, 'w');
+            if ($handle) {
+                $htaccess_save = fwrite($handle, $htaccess);
+                fclose($handle);
+            }
+        }
+    }
+}
+
 if ($htaccess_save && $htaccess_move) {
-    header('Location: install.php');
+    header('Location: /'.$nos_dir.'install.php');
     exit();
 }
 ?>
@@ -186,7 +189,7 @@ if ($htaccess_save && $htaccess_move) {
 <div id="blank_slate">
     <h1>Novius OS Shared Hosting</h1>
 <?php
-if (!$htaccess_save) {
+if ($htaccess_move && !$htaccess_save) {
     echo '<h2>Create a .htaccess file in the Novius OS\'s directory</h2>';
 
     echo '<p>Create a file name <code>.htaccess</code> and write this code in it :</p>';
@@ -199,8 +202,17 @@ if (!$htaccess_move) {
     echo '<h2>Rename invalid .htaccess file in the Novius OS\'s public directory</h2>';
     echo '<p>Rename <code>', $nos_dir, 'public'.DIRECTORY_SEPARATOR.'.htaccess</code> file by <code>', $nos_dir, 'public'.DIRECTORY_SEPARATOR.'.htaccess.old</code>.</p>';
 }
-?>
+
+if (!$htaccess_move || !$htaccess_save) {
+    ?>
+    <p><a href="index.php"><button>It's done, refresh this page</button></a></p>
+    <?php
+} else {
+    ?>
     <p><a href="install.php"><button>Go to the install wizard</button></a></p>
+    <?php
+}
+?>
 </div>
 </body>
 </html>
