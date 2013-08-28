@@ -204,7 +204,7 @@ if (!$htaccess_move) {
 }
 
 if (!$htaccess_move || !$htaccess_save) {
-?>
+    ?>
     <p><a href="index.php"><button>It's done, refresh this page</button></a></p>
     <?php
 } else {
