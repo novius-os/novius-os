@@ -202,8 +202,17 @@ if (!$htaccess_move) {
     echo '<h2>Rename invalid .htaccess file in the Novius OS\'s public directory</h2>';
     echo '<p>Rename <code>', $nos_dir, 'public'.DIRECTORY_SEPARATOR.'.htaccess</code> file by <code>', $nos_dir, 'public'.DIRECTORY_SEPARATOR.'.htaccess.old</code>.</p>';
 }
+
+if (!$htaccess_move || !$htaccess_save) {
 ?>
+    <p><a href="index.php"><button>It's done, refresh this page</button></a></p>
+    <?php
+} else {
+    ?>
     <p><a href="install.php"><button>Go to the install wizard</button></a></p>
+    <?php
+}
+?>
 </div>
 </body>
 </html>
