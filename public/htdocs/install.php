@@ -241,7 +241,7 @@ ob_start();
 <body>
 
 <h1 id="header">
-    <img src="<?php echo $base_url ?>install/logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS install wizard
+    <img src="<?php echo $base_url ?>logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS install wizard
 </h1>
 <div id="blank_slate">
 <?php
