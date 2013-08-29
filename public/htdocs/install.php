@@ -1186,6 +1186,6 @@ if ($step == 5) {
 
 ?>
 </div></div>
-<div id="version">Version Chiba 1.0.1 - May 17, 2013 </div>
+<div id="version">Version Chiba 2 - August 29, 2013 </div>
 </body>
 </html>

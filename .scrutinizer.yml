@@ -1,5 +1,5 @@
 tools:
     php_code_sniffer:
-        command: wget -O /tmp/noviusos.xml http://raw.github.com/novius-os/ci/rel/chiba2/phpcs/ruleset.xml;phpcs -n
+        command: wget -O /tmp/noviusos.xml http://raw.github.com/novius-os/ci/master/chiba2/phpcs/ruleset.xml;phpcs -n
         config:
             standard:   /tmp/noviusos.xml

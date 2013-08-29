@@ -10,7 +10,7 @@
 
 return array(
     'name'    => 'Simple Twitter share',
-    'version' => 'chiba.1',
+    'version' => 'chiba.2',
     'provider' => array(
         'name' => 'Novius OS',
     ),
