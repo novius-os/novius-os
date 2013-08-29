@@ -85,7 +85,7 @@ Deprecated:
 * Page: Model_Page->link() is deprecated, please use Model_Page->htmlAnchor() instead.
 * Misc: Event 'user_login' is deprecated, please use 'admin.loginSuccess' instead.
 
-Thank for : Fumito Mizuno, Julien Guyomard
+Thank for: Fumito Mizuno, Julien Guyomard
 
 ?: version Chiba 1.?
 =================================
@@ -113,7 +113,7 @@ Slideshow :
 Form:
 - Bugfix : form open tag not auto-closed anymore
 
-Thank for : @romunovius, @Victor ALBERT, @Foine, @ounziw
+Thank for: @romunovius, @Victor ALBERT, @Foine, @ounziw
 
 May 17, 2013: version Chiba 1.0.1
 =================================
@@ -126,7 +126,7 @@ May 17, 2013: version Chiba 1.0.1
 
 Form: Minors bugfix and improvement
 
-Thank for : @Fumito Mizuno, @Victor ALBERT, @Pierrinho
+Thank for: @Fumito Mizuno, @Victor ALBERT, @Pierrinho
 
 April 25, 2013: version Chiba 1
 ===============================
@@ -188,7 +188,7 @@ Slideshow:
 Blog / News:
 - Display related posts of authors
 
-Thank for : @Fumito Mizuno, @JayPS, @Victor ALBERT, @Pierrinho
+Thank for: @Fumito Mizuno, @JayPS, @Victor ALBERT, @Pierrinho
 
 
 ?: version 0.2.0.3
@@ -239,7 +239,7 @@ Slideshow:
 - Bugfix: front of slideshow javascript
 - Bugfix: front in IE8, in onreadystatechange event, readyState is not 'complete' but 'loaded'
 
-Thank for : @Julien Guyomard, @Pierre Vion and @Foine
+Thank for: @Julien Guyomard, @Pierre Vion and @Foine
 
 
 February 26, 2013: version 0.2.0.1
@@ -281,7 +281,7 @@ Blog / News:
 Slideshow:
 - Bugfix: bad icon URLs when not installed on root domain
 
-Thank for : @Victor Albert, @Pierre Vion, @JayPS, @FredDubois, @Foine, @Yves Stadler
+Thank for: @Victor Albert, @Pierre Vion, @JayPS, @FredDubois, @Foine, @Yves Stadler
 
 
 January 31, 2013: version 0.2
@@ -315,7 +315,7 @@ January 31, 2013: version 0.2
 - Time picker renderer can be use outside a fieldset
 - Many UI improvements and bugfixes
 
-Thank for : @JayPS, @Shaoshiva,  @Victor Albert, @Julien Guyomard
+Thank for: @JayPS, @Shaoshiva,  @Victor Albert, @Julien Guyomard
 
 December 20, 2012: version 0.1.5
 ===============================
