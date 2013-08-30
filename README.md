@@ -8,8 +8,10 @@ Novius OS is **built with the MVC framework, FuelPHP**. “FuelPHP is a simple, 
 
 ## Requirements
 
-* Novius OS requires PHP 5.3+, a SQL database and Apache’s mod_rewrite enabled.
-* We only support LAMP and WAMP. Nonetheless Novius OS can theoretically run on Mac, Nginx and/or PostgreSQL.
+* Novius OS requires PHP 5.3+, a SQL database and an HTTP server.
+* Fully tested on LAMP (Ubuntu) and WAMP (Apache’s mod_rewrite enabled).
+* Community tested on Nginx and Raspberry Pi.
+* Can theoretically run on Mac and/or PostgreSQL.
 
 ## Installation
 
