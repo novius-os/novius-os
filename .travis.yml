@@ -32,3 +32,4 @@ script:
   - sudo service apache2 reload
   - cd ci/scripts
   - ./travis.sh
+
