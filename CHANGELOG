@@ -104,6 +104,7 @@ Thank for: Fumito Mizuno, Julien Guyomard
 - Bugfix : In appdesk, pageIndex is not reinitialized when the search is changed
 - Bugfix : In appdesk, i18n key was processed, triggering javascript bugs when "columns" key was present.
 - Bugfix : In attachment, when set() without the filename parameter, use the basename (filename + extension) of the file
+- Bugfix : Bad option in convert command
 - Add a defense for Clickjacking attack in admin
 
 Slideshow :
@@ -113,7 +114,7 @@ Slideshow :
 Form:
 - Bugfix : form open tag not auto-closed anymore
 
-Thank for: @romunovius, @Victor ALBERT, @Foine, @ounziw
+Thank for: @romunovius, @Victor ALBERT, @Foine, @ounziw, @jguyomard
 
 May 17, 2013: version Chiba 1.0.1
 =================================
