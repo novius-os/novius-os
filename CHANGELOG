@@ -6,6 +6,7 @@ Novius OS framework CHANGELOG
 - Bugfix: Toolkit_image->parse($url) checks url match in absolute but it's passed in relative. Image's media transformed return a 403 if you're not connected to back-office.
 - Improvement: The configuration of button 'save' no more required in CRUD fields settings.
 - Improvement: In Model, when use cache_model_properties, add possibility to set a callback (check_property_callback, see local/config/config.php.sample) to check if it's a potential unknow property, and avoid a show field sql request
+- Improvement: Refactoring templates_basic, better code pooling between top and left menu template
 
 
 August 29, 2013: version Chiba 2
