@@ -5,11 +5,11 @@ Novius OS framework CHANGELOG
 
 - Bugfix : Toolkit_image->parse($url) checks url match in absolute but it's passed in relative. Image's media transformed return a 403 if you're not connected to back-office.
 - Bugfix : Fix on media permission; when updating a user, his writing rights on medias were disabled.
-* Improvement: The configuration of button 'save' no more required in CRUD fields settings.
-* Improvement: In Model, when use cache_model_properties, add possibility to set a callback (check_property_callback, see local/config/config.php.sample) to check if it's a potential unknow property, and avoid a show field sql request
+* Improvement: The configuration of button 'save' is no more required in CRUD fields settings.
+* Improvement: In Models, when use cache_model_properties, new possibility to set a callback (check_property_callback, see local/config/config.php.sample) to check if property is a potential unknow column, and avoid a "show field" SQL request.
 * Improvement: Factorization of code for user password strength validation.
 * Improvement: Factorization of code between inspector model and modeltree for process config input.query
-* Improvement: New class Nos\Renderer for factorizing code between all renderer.
+* Improvement: New class Nos\Renderer for factorizing code between all renderers.
     * Deprecated: Method set_renderer_options of Renderer_Selector is deprecated, use setRendererOptions instead.
 
 Media:
@@ -22,7 +22,7 @@ Templates basic:
 
 Slideshow:
 
-* Refactoring configuration and organization. Widget for diplay slideshow in front are manage by a formats config for better extendable.
+* Refactoring configuration and organization. Widgets for displaying slideshow in front are manage by a formats config for better extendable.
     * Deprecated: The struture of slideshow config file have changed
     * Deprecated: The use of view.index in Controller_Slideshow config file is deprecated, use view key of your format in slideshow config file instead.
     * Deprecated: The config file noviusos_slideshow::flexslider is deprecated, please use noviusos_slideshow::formats/flexslider instead
