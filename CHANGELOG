@@ -29,6 +29,9 @@ Slideshow:
     * Deprecated: The view noviusos_slideshow::slideshow_js is deprecated, please use noviusos_slideshow::flexslider/javascript instead
     * Deprecated: The view noviusos_slideshow::slideshow is deprecated, please use noviusos_slideshow::flexslider/slideshow instead
 
+Blog/News and Comments:
+
+* Better clean-up of front-cache when a post or a comment is inserted, updated or deleted.
 
 August 29, 2013: version Chiba 2
 ==================================
