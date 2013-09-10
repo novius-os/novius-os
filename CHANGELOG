@@ -11,6 +11,10 @@ Novius OS framework CHANGELOG
 * Improvement: New class Nos\Renderer for factorizing code between all renderer.
     * Deprecated: Method set_renderer_options of Renderer_Selector is deprecated, use setRendererOptions instead.
 
+Media:
+
+* Include mass upload feature from https://github.com/novius/novius_mediamassupload
+
 Templates basic:
 
 * Refactoring templates_basic, better code factorization between top and left menu template
