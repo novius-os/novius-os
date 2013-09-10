@@ -7,6 +7,8 @@ Novius OS framework CHANGELOG
 * Improvement: The configuration of button 'save' no more required in CRUD fields settings.
 * Improvement: In Model, when use cache_model_properties, add possibility to set a callback (check_property_callback, see local/config/config.php.sample) to check if it's a potential unknow property, and avoid a show field sql request
 * Improvement: Refactoring templates_basic, better code pooling between top and left menu template
+* Improvement: Factorization of code for user password strength validation.
+* Improvement: Factorization of code between inspector model and modeltree for process config input.query
 * Improvement: New class Nos\Renderer for factorizing code between all renderer.
     * Method set_renderer_options of Renderer_Selector is deprecated, use setRendererOptions instead.
 
