@@ -22,7 +22,7 @@ return array(
         //'cache' => true,
         //'cache_duration_page' => \Fuel::$env !== \Fuel::PRODUCTION ? 3600 : 600,
         //'cache_duration_function' => \Fuel::$env !== \Fuel::PRODUCTION ? 3600 : 600,
-        //'cache_model_properties' => false,
+        //'cache_model_properties' => false, // Can be true or array('check_property_callback' => function($class, $property) { return true; })
 
         /*'users' => array(
             'enable_roles' => true,
