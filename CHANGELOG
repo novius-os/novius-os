@@ -3,7 +3,7 @@ Novius OS framework CHANGELOG
 ?: version Chiba 2.1
 =================================
 - Bugfix : Toolkit_image->parse($url) checks url match in absolute but it's passed in relative. Image's media transformed return a 403 if you're not connected to back-office.
-
+- Bugfix : Fix on media permission; when updating a user, his writing rights on medias were disabled.
 
 August 29, 2013: version Chiba 2
 ==================================
