@@ -138,6 +138,7 @@ Thank for: Fumito Mizuno, Julien Guyomard
 - Bugfix : In appdesk, i18n key was processed, triggering javascript bugs when "columns" key was present.
 - Bugfix : In attachment, when set() without the filename parameter, use the basename (filename + extension) of the file
 - Bugfix : Bad option in convert command
+- Bugfix : in media popup for pick an image, extension inspector not hide
 - Add a defense for Clickjacking attack in admin
 
 Slideshow :
