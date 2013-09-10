@@ -3,7 +3,8 @@ Novius OS framework CHANGELOG
 ?: version Chiba 2.1
 =================================
 
-* Bugfix: Toolkit_image->parse($url) checks url match in absolute but it's passed in relative. Image's media transformed return a 403 if you're not connected to back-office.
+- Bugfix : Toolkit_image->parse($url) checks url match in absolute but it's passed in relative. Image's media transformed return a 403 if you're not connected to back-office.
+- Bugfix : Fix on media permission; when updating a user, his writing rights on medias were disabled.
 * Improvement: The configuration of button 'save' no more required in CRUD fields settings.
 * Improvement: In Model, when use cache_model_properties, add possibility to set a callback (check_property_callback, see local/config/config.php.sample) to check if it's a potential unknow property, and avoid a show field sql request
 * Improvement: Factorization of code for user password strength validation.
