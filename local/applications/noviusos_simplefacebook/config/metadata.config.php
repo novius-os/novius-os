@@ -10,7 +10,7 @@
 
 return array(
     'name'    => 'Simple Facebook share',
-    'version' => 'chiba.2',
+    'version' => 'chiba.2.1',
     'provider' => array(
         'name' => 'Novius OS',
     ),
