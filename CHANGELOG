@@ -1,5 +1,39 @@
 Novius OS framework CHANGELOG
 
+September 11, 2013: version Chiba 2.1
+=====================================
+
+* Bugfix : Toolkit_image->parse($url) checks url match in absolute but it's passed in relative. Image's media transformed return a 403 if you're not connected to back-office.
+* Bugfix : Fix on media permission; when updating a user, his writing rights on medias were disabled.
+* Bugfix : My account tab parameters are replaced by user CRUD when saving
+* Improvement: The configuration of button 'save' is no more required in CRUD fields settings.
+* Improvement: In Models, when use cache_model_properties, new possibility to set a callback (check_property_callback, see local/config/config.php.sample) to check if property is a potential unknow column, and avoid a "show field" SQL request.
+* Improvement: Factorization of code for user password strength validation.
+* Improvement: Factorization of code between inspector model and modeltree for process config input.query
+* Improvement: New class Nos\Renderer for factorizing code between all renderers.
+    * Deprecated: Method set_renderer_options of Renderer_Selector is deprecated, use setRendererOptions instead.
+
+Media:
+
+* Include mass upload feature from https://github.com/novius/novius_mediamassupload
+
+Templates basic:
+
+* Refactoring templates_basic, better code factorization between top and left menu template
+
+Slideshow:
+
+* Refactoring configuration and organization. Widgets for displaying slideshow in front are manage by a formats config for better extendable.
+    * Deprecated: The struture of slideshow config file have changed
+    * Deprecated: The use of view.index in Controller_Slideshow config file is deprecated, use view key of your format in slideshow config file instead.
+    * Deprecated: The config file noviusos_slideshow::flexslider is deprecated, please use noviusos_slideshow::formats/flexslider instead
+    * Deprecated: The view noviusos_slideshow::slideshow_js is deprecated, please use noviusos_slideshow::flexslider/javascript instead
+    * Deprecated: The view noviusos_slideshow::slideshow is deprecated, please use noviusos_slideshow::flexslider/slideshow instead
+
+Blog/News and Comments:
+
+* Better clean-up of front-cache when a post or a comment is inserted, updated or deleted.
+
 August 29, 2013: version Chiba 2
 ==================================
 
@@ -104,6 +138,8 @@ Thank for: Fumito Mizuno, Julien Guyomard
 - Bugfix : In appdesk, pageIndex is not reinitialized when the search is changed
 - Bugfix : In appdesk, i18n key was processed, triggering javascript bugs when "columns" key was present.
 - Bugfix : In attachment, when set() without the filename parameter, use the basename (filename + extension) of the file
+- Bugfix : Bad option in convert command
+- Bugfix : in media popup for pick an image, extension inspector not hide
 - Add a defense for Clickjacking attack in admin
 
 Slideshow :
@@ -113,7 +149,7 @@ Slideshow :
 Form:
 - Bugfix : form open tag not auto-closed anymore
 
-Thank for: @romunovius, @Victor ALBERT, @Foine, @ounziw
+Thank for: @romunovius, @Victor ALBERT, @Foine, @ounziw, @jguyomard
 
 May 17, 2013: version Chiba 1.0.1
 =================================

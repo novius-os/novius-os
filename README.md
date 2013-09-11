@@ -4,12 +4,14 @@ Novius OS is an **Open Source PHP Content Management System designed as an appli
 
 Novius OS is **built with the MVC framework, FuelPHP**. “FuelPHP is a simple, flexible, community driven PHP 5.3+ framework, based on the best ideas of other frameworks, with a fresh start!” Novius OS HTML5 interface is **powered by jQuery UI** and the Wijmo library.
 
-* Current version: Novius OS Chiba 2
+* Current version: Novius OS Chiba 2.1
 
 ## Requirements
 
-* Novius OS requires PHP 5.3+, a SQL database and Apache’s mod_rewrite enabled.
-* We only support LAMP and WAMP. Nonetheless Novius OS can theoretically run on Mac, Nginx and/or PostgreSQL.
+* Novius OS requires PHP 5.3+, a SQL database and an HTTP server.
+* Fully tested on LAMP (Ubuntu) and WAMP (Apache’s mod_rewrite enabled).
+* Community tested on Nginx and Raspberry Pi.
+* Can theoretically run on Mac and/or PostgreSQL.
 
 ## Installation
 

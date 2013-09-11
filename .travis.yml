@@ -24,14 +24,12 @@ before_script:
   - sudo chmod +x ci/scripts/travis.sh
 script:
   - cd ci/scripts
-  - ./init.sh
   - ./travis.sh
   - sudo cp ../data/contexts.config.php ../../local/config/
-  - ./init.sh
   - ./travis.sh
   - cd ../../
   - cat ci/data/virtualhost-prod | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo service apache2 reload
   - cd ci/scripts
-  - ./init.sh
   - ./travis.sh
+
