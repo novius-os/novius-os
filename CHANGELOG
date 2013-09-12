@@ -3,6 +3,7 @@ Novius OS framework CHANGELOG
 ?: version Chiba 2.?
 =====================================
 
+* Bugfix : when the user switched from a unique choice field to a multiple choice field, the mandatory checkbox were hidden but still checked, causing issues on front.
 * Remove unused and obsolete method Fieldset->readonly_context()
 
 September 11, 2013: version Chiba 2.1
