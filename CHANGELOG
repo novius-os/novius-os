@@ -1,5 +1,10 @@
 Novius OS framework CHANGELOG
 
+?: version Chiba 2.?
+=====================================
+
+* Remove unused and obsolete method Fieldset->readonly_context()
+
 September 11, 2013: version Chiba 2.1
 =====================================
 
