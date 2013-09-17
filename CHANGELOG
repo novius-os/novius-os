@@ -3,7 +3,9 @@ Novius OS framework CHANGELOG
 ?: version Chiba 2.?
 =====================================
 
-* Bugfix : when the user switched from a unique choice field to a multiple choice field, the mandatory checkbox were hidden but still checked, causing issues on front.
+* Bugfix: when the user switched from a unique choice field to a multiple choice field, the mandatory checkbox were hidden but still checked, causing issues on front.
+* Bugfix: In RequireJs setting, re-introduce alias for wijmo widgets dropdown, radio, checkbox, textbox.
+* Bugfix: in freindly slug configuration compilation for javascript execution, the lowercase rule was remove
 * Remove unused and obsolete method Fieldset->readonly_context()
 
 September 11, 2013: version Chiba 2.1
