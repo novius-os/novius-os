@@ -6,6 +6,8 @@ Novius OS framework CHANGELOG
 * Bugfix: when the user switched from a unique choice field to a multiple choice field, the mandatory checkbox were hidden but still checked, causing issues on front.
 * Bugfix: In RequireJs setting, re-introduce alias for wijmo widgets dropdown, radio, checkbox, textbox.
 * Bugfix: in freindly slug configuration compilation for javascript execution, the lowercase rule was remove
+* Bugfix: move install in shared-hosting case to install.php
+* Bugfix: in install in shared-hosting case, if on windows, not write \ in .htaccess
 * Remove unused and obsolete method Fieldset->readonly_context()
 
 Form:
