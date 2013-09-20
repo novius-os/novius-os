@@ -8,6 +8,7 @@ Novius OS framework CHANGELOG
 * Bugfix: in freindly slug configuration compilation for javascript execution, the lowercase rule was remove
 * Bugfix: move install in shared-hosting case to install.php
 * Bugfix: in install in shared-hosting case, if on windows, not write \ in .htaccess
+* Bugfix: now the virtual_path behaviour take into account the maximum size of the virtual_name field when checking for its unicity.
 * Remove unused and obsolete method Fieldset->readonly_context()
 
 Form:
