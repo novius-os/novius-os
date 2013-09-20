@@ -9,7 +9,7 @@
  */
 
 $document_root = rtrim(realpath($_SERVER['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-$nos_dir = trim(substr(realpath($_SERVER['SCRIPT_FILENAME']), strlen($document_root), -10), DIRECTORY_SEPARATOR);
+$nos_dir = trim(substr(realpath($_SERVER['SCRIPT_FILENAME']), strlen($document_root), -12), DIRECTORY_SEPARATOR);
 if (!empty($nos_dir)) {
     $nos_dir .= DIRECTORY_SEPARATOR;
 }
