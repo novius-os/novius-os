@@ -1,3 +1,5 @@
+before_commands:
+    - 'wget -O /tmp/noviusos.xml http://raw.github.com/novius-os/ci/master/chiba2/phpcs/ruleset.xml'
 filter:
     excluded_paths:
         - 'logs/**'
@@ -5,8 +7,8 @@ filter:
         - 'local/metadata/**'
 tools:
     php_code_sniffer:
+        command: 'phpcs -n'
         config:
-            standard: 'PSR2'
-            sniffs: { generic: { formatting: { space_after_cast_sniff: true }, functions: { opening_function_brace_bsd_allman_sniff: true }, naming_conventions: { camel_caps_function_name_sniff: false } }, pear: { functions: { function_call_signature_sniff: false }, classes: { class_declaration_sniff: true } }, squiz: { scope: { member_var_scope_sniff: true }, classes: { lowercase_class_keywords_sniff: true, valid_class_name_sniff: false } }, psr1: { files: { side_effects_sniff: false }, classes: { class_declaration_sniff: false } }, psr2: { namespaces: { namespace_declaration_sniff: true } } }
+            standard: /tmp/noviusos.xml
     php_cpd: true
     php_pdepend: true
