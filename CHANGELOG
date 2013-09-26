@@ -10,6 +10,7 @@ Novius OS framework CHANGELOG
 * Bugfix: in install in shared-hosting case, if on windows, not write \ in .htaccess
 * Bugfix: now the virtual_path behaviour take into account the maximum size of the virtual_name field when checking for its unicity.
 * Bugfix: Fieldset->isExpert() throw error if user is not expert and field had to fieldset after build
+* Bugfix: bugfix on get_enhancer_content on $args decode
 * Remove unused and obsolete method Fieldset->readonly_context()
 
 Form:
