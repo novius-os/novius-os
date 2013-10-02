@@ -21,6 +21,8 @@ Form:
 * Bugfix: Bad tab format of the awnsers appdesk (no label and 32 pixel icon size)
 * Improve layout of the answer email
 
+Blog/News:
+Bugfix: regression due to ORM when saving categories relation of a post
 
 September 11, 2013: version Chiba 2.1
 =====================================
