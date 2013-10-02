@@ -17,7 +17,6 @@ Novius OS framework CHANGELOG
 * Bugfix: patch for the profiler when displaying  EXPLAIN queries containing accent
 * Remove unused and obsolete method Fieldset->readonly_context()
 * Improvement: Class Nos\Renderer_Date_Picker was factorized into Nos\Renderer_Datetime_Picker
-    * Deprecated: Class Nos\Renderer_Date_Picker is deprecated, use Nos\Renderer_Datetime_Picker instead
 
 Form:
 * Bugfix: Bad tab format of the awnsers appdesk (no label and 32 pixel icon size)
