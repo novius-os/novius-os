@@ -15,6 +15,7 @@ Novius OS framework CHANGELOG
 * Bugfix: bootstrap theme for tinyMCE, add automatic scrollbar on ButtonMenu
 * Bugfix: nosAction window.open fails on IE9 and less if url is relative
 * Bugfix: patch for the profiler when displaying  EXPLAIN queries containing accent
+* Bugfix: regression in media renderer, standalone case, after refactor with Nos\Renderer
 * Remove unused and obsolete method Fieldset->readonly_context()
 
 Form:
