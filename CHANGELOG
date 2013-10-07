@@ -1,6 +1,6 @@
 Novius OS framework CHANGELOG
 
-?: version Chiba 2.?
+?: version Chiba 2.2
 =====================================
 
 * Bugfix: when the user switched from a unique choice field to a multiple choice field, the mandatory checkbox were hidden but still checked, causing issues on front.
@@ -20,6 +20,10 @@ Novius OS framework CHANGELOG
 * Bugfix: the sharing panel don't open
 * Remove unused and obsolete method Fieldset->readonly_context()
 * Improvement: Class Nos\Renderer_Date_Picker was factorized into Nos\Renderer_Datetime_Picker
+* Improvement: Media and folders deletions are manage by models, not by CRUD controller
+* Improvement: In the i18n class, adding addPriorityDictionary and addPriorityMessages methods
+* Improvement:  FuelPHP tasks have been adapted to Novius OS. Tasks namespace now depends on application namespaces allowing two tasks with similar names in many applications.
+                A related application, novius_taskmanager, has been implemented in order to allow tasks execution from an url.
 
 Form:
 * Bugfix: Bad tab format of the awnsers appdesk (no label and 32 pixel icon size)
