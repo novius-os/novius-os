@@ -23,6 +23,7 @@ Novius OS framework CHANGELOG
 
 Form:
 * Bugfix: Bad tab format of the awnsers appdesk (no label and 32 pixel icon size)
+* Bugfix: Bad parameters for event noviusos_form::after_submission
 * Improve layout of the answer email
 
 Blog/News:
