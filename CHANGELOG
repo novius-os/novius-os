@@ -19,6 +19,7 @@ Novius OS framework CHANGELOG
 * Bugfix: regression in media renderer, standalone case, after refactor with Nos\Renderer
 * Bugfix: the sharing panel don't open
 * Bugfix: Bad textbox style in wysiwyg media popup when fields are enabled
+* Bugfix: in wysiwyg, when changing an image, sizes are changed but not the url
 * Remove unused and obsolete method Fieldset->readonly_context()
 
 Form:
