@@ -18,6 +18,8 @@ Novius OS framework CHANGELOG
 * Bugfix: when there was a media link on a media, the media url was partly replaced
 * Bugfix: regression in media renderer, standalone case, after refactor with Nos\Renderer
 * Bugfix: the sharing panel don't open
+* Bugfix: Bad textbox style in wysiwyg media popup when fields are enabled
+* Bugfix: in wysiwyg, when changing an image, sizes are changed but not the url
 * Remove unused and obsolete method Fieldset->readonly_context()
 * Improvement: Class Nos\Renderer_Date_Picker was factorized into Nos\Renderer_Datetime_Picker
 * Improvement: Media and folders deletions are manage by models, not by CRUD controller
@@ -27,6 +29,7 @@ Novius OS framework CHANGELOG
 
 Form:
 * Bugfix: Bad tab format of the awnsers appdesk (no label and 32 pixel icon size)
+* Bugfix: Bad parameters for event noviusos_form::after_submission
 * Improve layout of the answer email
 
 Blog/News:
