@@ -2,6 +2,10 @@ Novius OS framework CHANGELOG
 
 ?: version Chiba 2.?
 =====================================
+* Update Wijmo 2013v1.4 to 2013v2.15 (http://wijmo.com/wiki/index.php/Version_Histories)
+
+?: version Chiba 2.?
+=====================================
 
 * Bugfix: when the user switched from a unique choice field to a multiple choice field, the mandatory checkbox were hidden but still checked, causing issues on front.
 * Bugfix: In RequireJs setting, re-introduce alias for wijmo widgets dropdown, radio, checkbox, textbox.
