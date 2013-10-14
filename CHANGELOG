@@ -1,5 +1,11 @@
 Novius OS framework CHANGELOG
 
+?: version Chiba 2.?
+===================================
+
+* Bugfix: Fixed task execution on refine with local and nos namespaces
+
+
 October 14, 2013: version Chiba 2.2
 ===================================
 
