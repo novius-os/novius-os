@@ -20,6 +20,8 @@ Novius OS framework CHANGELOG
 * Bugfix: the sharing panel don't open
 * Bugfix: Bad textbox style in wysiwyg media popup when fields are enabled
 * Bugfix: in wysiwyg, when changing an image, sizes are changed but not the url
+* Bugfix: support for more than 10 contexts
+* Bugfix : if call model::relations(null), must return false not all relations
 * Remove unused and obsolete method Fieldset->readonly_context()
 * Improvement: Class Nos\Renderer_Date_Picker was factorized into Nos\Renderer_Datetime_Picker
 * Improvement: Media and folders deletions are manage by models, not by CRUD controller
@@ -34,6 +36,8 @@ Form:
 
 Blog/News:
 Bugfix: regression due to ORM when saving categories relation of a post
+
+Thank for: JayPS
 
 September 11, 2013: version Chiba 2.1
 =====================================
