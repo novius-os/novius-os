@@ -5,6 +5,7 @@ Novius OS framework CHANGELOG
 
 * Bugfix: Fixed task execution on refine with local and nos namespaces
 * Bugfix: Back-office fails when a tab with a numeric label is opened
+* Bugfix : wysiwyg, skin bootstrap, background color for active button
 
 ORM:
 * Add through_where parameter in many_many relation configuration
