@@ -14,6 +14,7 @@ ORM:
 
 Form:
 * Bugfix: Answer export fails when too many answer.
+* Bugfix: form name is html encoded in answer email subject
 * Adding a "replyto" field to sent emails if an email is present in the answer. Depends on the add_replyto_to_first_email config key of noviusos_form.config.php file. Default true.
 
 Thank for: JayPS
