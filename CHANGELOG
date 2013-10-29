@@ -8,6 +8,7 @@ Novius OS framework CHANGELOG
 * Bugfix: wysiwyg, skin bootstrap, background color for active button
 * Bugfix: Fixed virtualname, there was a notice when using setups inside setups
 * Bugfix: Don't create cache for POST request
+* Bugfix: BlogNews - pagination didn't take into account categories
 
 ORM:
 * Add through_where parameter in many_many relation configuration
