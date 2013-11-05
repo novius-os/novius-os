@@ -8,7 +8,8 @@ Novius OS framework CHANGELOG
 * Bugfix: wysiwyg, skin bootstrap, background color for active button
 * Bugfix: Fixed virtualname, there was a notice when using setups inside setups
 * Bugfix: Don't create cache for POST request
-* Bugfix: BlogNews - pagination didn't take into account categories
+* Bugfix: unobtrusive javascript error when click a context menu of a tab
+* Bugfix: Firefox 24 remove HTMLCommandElement implementation, update test for menu context support (https://developer.mozilla.org/en-US/docs/Site_Compatibility_for_Firefox_24)
 
 ORM:
 * Add through_where parameter in many_many relation configuration
@@ -21,7 +22,10 @@ Form:
 AppWizard:
 * Bugfix: now column can contain numbers
 
-Thank for: JayPS
+BlogNews:
+* Bugfix: pagination didn't take into account categories
+
+Thank for: JayPS, Foine
 
 October 14, 2013: version Chiba 2.2
 ===================================
