@@ -21,6 +21,7 @@ Form:
 
 AppWizard:
 * Bugfix: now column can contain numbers
+* Bugfix: added missing relations declarations
 
 BlogNews:
 * Bugfix: pagination didn't take into account categories
