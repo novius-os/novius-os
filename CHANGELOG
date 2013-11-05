@@ -18,6 +18,9 @@ Form:
 * Bugfix: form name is html encoded in answer email subject
 * Adding a "replyto" field to sent emails if an email is present in the answer. Depends on the add_replyto_to_first_email config key of noviusos_form.config.php file. Default true.
 
+AppWizard:
+* Bugfix: now column can contain numbers
+
 Thank for: JayPS
 
 October 14, 2013: version Chiba 2.2
