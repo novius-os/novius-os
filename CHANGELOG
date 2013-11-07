@@ -1,6 +1,6 @@
 Novius OS framework CHANGELOG
 
-?: version Chiba 2.?
+?: version Chiba 3
 ===================================
 
 * Bugfix: Fixed task execution on refine with local and nos namespaces
@@ -10,6 +10,7 @@ Novius OS framework CHANGELOG
 * Bugfix: Don't create cache for POST request
 * Bugfix: unobtrusive javascript error when click a context menu of a tab
 * Bugfix: Firefox 24 remove HTMLCommandElement implementation, update test for menu context support (https://developer.mozilla.org/en-US/docs/Site_Compatibility_for_Firefox_24)
+* I18n : add plural mechanism and implement plural translation
 
 ORM:
 * Add through_where parameter in many_many relation configuration
