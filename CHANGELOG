@@ -28,7 +28,10 @@ AppWizard:
 BlogNews:
 * Bugfix: pagination didn't take into account categories
 
-Thank for: JayPS, Foine
+Slideshow:
+* Bugfix: Change \Config::load() to \Config::loadConfiguration in order to easily extend the application
+
+Thank for: JayPS, Foine, vrcAlbert
 
 October 14, 2013: version Chiba 2.2
 ===================================
