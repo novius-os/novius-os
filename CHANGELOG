@@ -11,6 +11,7 @@ Novius OS framework CHANGELOG
 * Bugfix: unobtrusive javascript error when click a context menu of a tab
 * Bugfix: Firefox 24 remove HTMLCommandElement implementation, update test for menu context support (https://developer.mozilla.org/en-US/docs/Site_Compatibility_for_Firefox_24)
 * Bugfix: Now logging errors when occuring during an HMVC request
+* Improvement: Improve Toolkit_Image->sizes(), not loading image
 
 ORM:
 * Add through_where parameter in many_many relation configuration
