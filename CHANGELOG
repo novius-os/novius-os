@@ -12,6 +12,7 @@ Novius OS framework CHANGELOG
 * Bugfix: Firefox 24 remove HTMLCommandElement implementation, update test for menu context support (https://developer.mozilla.org/en-US/docs/Site_Compatibility_for_Firefox_24)
 * Bugfix: Now logging errors when occuring during an HMVC request
 * Bugfix: add scrollbar on wijmenu displaying contexts, in case of many contexts
+* Bugfix: in layout_standard view, for fields in subtitle zone, use placeholder if is set
 * Improvement: Improve Toolkit_Image->sizes(), not loading image
 * Exclude some items from config in Profiler
 
@@ -22,6 +23,7 @@ Form:
 * Bugfix: Answer export fails when too many answer.
 * Bugfix: form name is html encoded in answer email subject
 * Adding a "replyto" field to sent emails if an email is present in the answer. Depends on the add_replyto_to_first_email config key of noviusos_form.config.php file. Default true.
+* Form CRUD: move submit email field on the top of the page
 
 AppWizard:
 * Bugfix: now column can contain numbers
