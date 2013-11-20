@@ -15,6 +15,7 @@ Novius OS framework CHANGELOG
 * Bugfix: in layout_standard view, for fields in subtitle zone, use placeholder if is set
 * Bugfix: (FuelPHP core) on _resize when using BC Math and on some locales (as french), _resize always tried to generate images with width = 0 and height = 0
 * Bugfix: In Tools_url::encodePath(), if url not have a path part
+* Bugfix: in layout_standard, in subtitle, don't had a <td> if field begin by a td
 * Remove PHP Notice if publication_start_property not set in behaviour publishable
 * Improvement: Improve Toolkit_Image->sizes(), not loading image
 * Exclude some items from config in Profiler
