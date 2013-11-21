@@ -19,6 +19,7 @@ Novius OS framework CHANGELOG
 * Bugfix: inspector tree radio and chackbox, reloadEvent don't listen context if contextChange is false
 * Bugfix: an uninitialized variable cause a notice in method url() of behaviour URLEnhancer
 * Bugfix: permission, nos::permissions displayed twice, generate duplicate insert when save or note remove permission
+* Bugfix: renderer datetimepicker can not be set to null
 * Remove PHP Notice if publication_start_property not set in behaviour publishable
 * Improvement: Improve Toolkit_Image->sizes(), not loading image
 * Exclude some items from config in Profiler
