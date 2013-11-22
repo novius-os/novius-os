@@ -26,6 +26,7 @@ Novius OS framework CHANGELOG
 * Exclude some items from config in Profiler
 * Wysiwyg image popup: add fields border, align, vspace and hspace to easily update style
 * Improve javascript for context common fields, now none support input can implement their own process
+* Improve javascript for context common fields, work also on not input fields
 * Implement context common fields on virtual name renderer
 
 ORM:
