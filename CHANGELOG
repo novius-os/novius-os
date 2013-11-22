@@ -25,6 +25,8 @@ Novius OS framework CHANGELOG
 * Improvement: Improve Toolkit_Image->sizes(), not loading image
 * Exclude some items from config in Profiler
 * Wysiwyg image popup: add fields border, align, vspace and hspace to easily update style
+* Improve javascript for context common fields, now none support input can implement their own process
+* Implement context common fields on virtual name renderer
 
 ORM:
 * Add through_where parameter in many_many relation configuration
