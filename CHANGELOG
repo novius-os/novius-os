@@ -20,6 +20,7 @@ Novius OS framework CHANGELOG
 * Bugfix: an uninitialized variable cause a notice in method url() of behaviour URLEnhancer
 * Bugfix: permission, nos::permissions displayed twice, generate duplicate insert when save or note remove permission
 * Bugfix: renderer datetimepicker can not be set to null
+* Bugfix: Install fails in PHP 5.5. Extend Config_Php, invalidate opcode cache for file will be loaded if already loaded.
 * Renderer datetimepicker : add option null_allowed, default false
 * Remove PHP Notice if publication_start_property not set in behaviour publishable
 * Improvement: Improve Toolkit_Image->sizes(), not loading image
