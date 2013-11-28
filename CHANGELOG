@@ -1,5 +1,10 @@
 Novius OS framework CHANGELOG
 
+?: version ?
+============
+
+* UI: Remove javascript ref to css class ui-dafault-state for textbox enabling by checkbox (title menu on page, virtual name on media)
+
 November 28, 2013: version Chiba 2.3
 ====================================
 
