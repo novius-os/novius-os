@@ -1,3 +1,8 @@
+language: php
+php:
+  - 5.5
+  - 5.4
+  - 5.3
 services:
   - mysql
 notifications:
@@ -7,20 +12,25 @@ notifications:
     on_success: change
     on_failure: always
 before_install:
-  - BRANCH=$(echo `git for-each-ref --format='%(objectname) %(refname:short)' refs/heads | awk "/^$(git rev-parse HEAD)/ {print \$2}"` | cut -d" " -f2);
   - git submodule update --init --recursive
   - git clone git://github.com/novius-os/ci.git
   - cd ci
-  - echo $BRANCH
-  - git checkout $BRANCH
+  - echo $TRAVIS_BRANCH
+  - git checkout $TRAVIS_BRANCH; echo "In case branch does not exist for ci repository, echo return OK"
   - cd ..
-  - travis_retry sudo apt-get update
-  - travis_retry sudo apt-get install -y --force-yes apache2 php5 libapache2-mod-php5 php5-mysql php5-gd php-pear
-  - sudo a2enmod rewrite
-  - cat ci/data/virtualhost-dev | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
-  - sudo service apache2 reload
-  - sudo sh -c 'echo "127.0.0.1 novius-os" >> /etc/hosts'
 before_script:
+  - echo 'short_open_tag="1"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  # enable php-fpm
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  # configure apache virtual hosts
+  - sudo cp -f ci/data/virtualhost-dev /etc/apache2/sites-available/default
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)/public?g" --in-place /etc/apache2/sites-available/default
+  - sudo service apache2 restart
+  - sudo sh -c 'echo "127.0.0.1 novius-os" >> /etc/hosts'
   - sudo chmod +x ci/scripts/travis.sh
 script:
   - cd ci/scripts
@@ -28,8 +38,8 @@ script:
   - sudo cp ../data/contexts.config.php ../../local/config/
   - ./travis.sh
   - cd ../../
-  - cat ci/data/virtualhost-prod | sed -e "s,PATH,`pwd`/public,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
+  - sudo cp -f ci/data/virtualhost-prod /etc/apache2/sites-available/default
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)/public?g" --in-place /etc/apache2/sites-available/default
   - sudo service apache2 reload
   - cd ci/scripts
   - ./travis.sh
-

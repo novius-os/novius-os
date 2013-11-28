@@ -1,13 +1,6 @@
-before_commands:
-    - 'wget -O /tmp/noviusos.xml http://raw.github.com/novius-os/ci/master/chiba2/phpcs/ruleset.xml'
+inherit: true
 filter:
     excluded_paths:
         - 'logs/**'
         - 'local/config/**'
         - 'local/metadata/**'
-tools:
-    php_code_sniffer:
-        command: 'phpcs -n'
-        config:
-            standard: /tmp/noviusos.xml
-    php_cpd: true

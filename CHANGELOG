@@ -1,5 +1,97 @@
 Novius OS framework CHANGELOG
 
+November 28, 2013: version Chiba 2.3
+====================================
+
+* Bugfix: Fixed task execution on refine with local and nos namespaces
+* Bugfix: Back-office fails when a tab with a numeric label is opened
+* Bugfix: wysiwyg, skin bootstrap, background color for active button
+* Bugfix: Fixed virtualname, there was a notice when using setups inside setups
+* Bugfix: Don't create cache for POST request
+* Bugfix: unobtrusive javascript error when click a context menu of a tab
+* Bugfix: Firefox 24 remove HTMLCommandElement implementation, update test for menu context support (https://developer.mozilla.org/en-US/docs/Site_Compatibility_for_Firefox_24)
+* Bugfix: Now logging errors when occuring during an HMVC request
+* Bugfix: add scrollbar on wijmenu displaying contexts, in case of many contexts
+* Bugfix: in layout_standard view, for fields in subtitle zone, use placeholder if is set
+* Bugfix: (FuelPHP core) on _resize when using BC Math and on some locales (as french), _resize always tried to generate images with width = 0 and height = 0
+* Bugfix: In Tools_url::encodePath(), if url not have a path part
+* Bugfix: in layout_standard, in subtitle, don't had a <td> if field begin by a td
+* Bugfix: inspector tree radio and chackbox, reloadEvent don't listen context if contextChange is false
+* Bugfix: an uninitialized variable cause a notice in method url() of behaviour URLEnhancer
+* Bugfix: permission, nos::permissions displayed twice, generate duplicate insert when save or note remove permission
+* Bugfix: renderer datetimepicker can not be set to null
+* Bugfix: Install fails in PHP 5.5. Extend Config_Php, invalidate opcode cache when save
+* Renderer datetimepicker : add option null_allowed, default false
+* Remove PHP Notice if publication_start_property not set in behaviour publishable
+* Improvement: Improve Toolkit_Image->sizes(), not loading image
+* Exclude some items from config in Profiler
+* Wysiwyg image popup: add fields border, align, vspace and hspace to easily update style
+* Improve javascript for context common fields, now none support input can implement their own process
+* Improve javascript for context common fields, work also on not input fields
+* Implement context common fields on virtual name renderer
+* Profiler: new methods markDeltaStart() and markDeltaStop() to study time durations
+
+ORM:
+* Add through_where parameter in many_many relation configuration
+
+Form:
+* Bugfix: Answer export fails when too many answer.
+* Bugfix: form name is html encoded in answer email subject
+* Adding a "replyto" field to sent emails if an email is present in the answer. Depends on the add_replyto_to_first_email config key of noviusos_form.config.php file. Default true.
+* Form CRUD: move submit email field on the top of the page
+
+AppWizard:
+* Bugfix: now column can contain numbers
+* Bugfix: added missing relations declarations
+* Improvement: added check on local/applications folder permission
+
+BlogNews:
+* Bugfix: pagination didn't take into account categories
+
+Slideshow:
+* Bugfix: Change \Config::load() to \Config::loadConfiguration in order to easily extend the application
+
+Thank for: JayPS, Foine, vrcAlbert, shaoshiva
+
+October 14, 2013: version Chiba 2.2
+===================================
+
+* Bugfix: In RequireJs settings, re-introduce alias for wijmo widgets dropdown, radio, checkbox, textbox.
+* Bugfix: In the compilation of the friendly slug configuration for javascript execution, the lowercase rule is removed.
+* Bugfix: Install, move install in shared-hosting case to install.php
+* Bugfix: Install, in shared-hosting case, if on Windows, not write backslashes in .htaccess
+* Bugfix: Now the virtual_path behaviour take into account the maximum size of the virtual_name field when checking for its unicity.
+* Bugfix: Fieldset->isExpert() throw an error if user is not expert and a field added to fieldset after build
+* Bugfix: $args decode in get_enhancer_content
+* Bugfix: In pages, when saving deep arrays on enhancers parameters
+* Bugfix: nosAction window.open fails on IE9 and less if url is relative
+* Bugfix: Patch for the profiler when displaying  EXPLAIN queries containing accent
+* Bugfix: Regression in media renderer, standalone case, after refactor with Nos\Renderer
+* Bugfix: The sharing panel don't open
+* Bugfix: WYSIWYG, add automatic scrollbar on ButtonMenu in bootstrap theme
+* Bugfix: WYSIWYG, when there was a media link on a media, the media url was partly replaced
+* Bugfix: WYSIWYG, bad textbox style in media popup when fields are enabled
+* Bugfix: WYSIWYG, when changing an image, sizes are changed but not the url
+* Bugfix: UI support for more than 10 contexts
+* Bugfix: If call model::relations(null), must return false not all relations
+* Remove unused and obsolete method Fieldset->readonly_context()
+* Improvement: Class Nos\Renderer_Date_Picker was factorized into Nos\Renderer_Datetime_Picker
+* Improvement: Media and folders deletions are manage by models, not by CRUD controller
+* Improvement: In the i18n class, adding addPriorityDictionary and addPriorityMessages methods
+* Improvement:  FuelPHP tasks have been adapted to Novius OS. Tasks namespace now depends on application namespaces allowing two tasks with similar names in many applications.
+                A related application, novius_taskmanager, has been implemented in order to allow tasks execution from an url.
+
+Form:
+* Bugfix: When the user switched from a unique choice field to a multiple choice field, the mandatory checkbox were hidden but still checked, causing issues on front.
+* Bugfix: Bad tab format of the awnsers appdesk (no label and 32 pixels icon size)
+* Bugfix: Bad parameters for event noviusos_form::after_submission
+* Improve layout of the answer email
+
+Blog/News:
+Bugfix: Regression due to ORM when saving categories relation of a post
+
+Thank for: JayPS
+
 September 11, 2013: version Chiba 2.1
 =====================================
 
