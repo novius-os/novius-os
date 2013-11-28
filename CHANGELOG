@@ -29,6 +29,7 @@ Novius OS framework CHANGELOG
 * Improve javascript for context common fields, now none support input can implement their own process
 * Improve javascript for context common fields, work also on not input fields
 * Implement context common fields on virtual name renderer
+* Profiler: new methods markDeltaStart() and markDeltaStop() to study time durations
 
 ORM:
 * Add through_where parameter in many_many relation configuration
