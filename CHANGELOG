@@ -1,7 +1,7 @@
 Novius OS framework CHANGELOG
 
-?: version Chiba 2.?
-===================================
+November 28, 2013: version Chiba 2.3
+====================================
 
 * Bugfix: Fixed task execution on refine with local and nos namespaces
 * Bugfix: Back-office fails when a tab with a numeric label is opened
