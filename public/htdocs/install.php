@@ -371,7 +371,7 @@ class Test
     public static function recap($command_line = true)
     {
         $recap = array();
-        foreach (static::$tests as $name => $data) {
+        foreach (static::$tests as $data) {
             if (!empty($data['is_error'])) {
                 if (isset($data['command_line_relative']) || isset($data['command_line'])) {
                     if ($command_line) {
@@ -384,7 +384,7 @@ class Test
                             $recap[] = $c;
                         }
                     }
-                } else if (!$command_line && isset($data['description'])) {
+                } elseif (!$command_line && isset($data['description'])) {
                     $recap[] = $data['description'];
                 }
             }
@@ -453,20 +453,22 @@ if ($step > 0) {
         'directive.short_open_tag' => array(
             'title'        => 'PHP configuration directive ‘short_open_tag’ must be on',
             'passed'       => ini_get('short_open_tag') != false,
-            'description'  => 'Set <code>short_open_tag = On</code> in <code>'.php_ini_loaded_file ().'</code>.<br /><em>Why? Because <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">since PHP 5.4 short_open_tag is always on</a>.</em>',
+            'description'  => 'Set <code>short_open_tag = On</code> in <code>'.php_ini_loaded_file().
+                '</code>.<br /><em>Why? Because <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">since PHP 5.4 short_open_tag is always on</a>.</em>',
             'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
         ),
         'directive.magic_quotes_gpc' => array(
             'title'        => 'PHP configuration directive ‘magic_quotes_gpc’ must be off',
             'passed'       => ini_get('magic_quotes_gpc') == false,
-            'description'  => 'Set <code>magic_quotes_gpc = Off</code> in <code>'.php_ini_loaded_file ().'</code>.<br /><em>Why? Because <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">magic_quotes_gpc is deprecated in PHP 5.3 and removed in PHP 5.4</a>.</em>',
+            'description'  => 'Set <code>magic_quotes_gpc = Off</code> in <code>'.php_ini_loaded_file().'</code>.<br /><em>Why? Because <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">magic_quotes_gpc is deprecated in PHP 5.3 and removed in PHP 5.4</a>.</em>',
             'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
         ),
         'folder.config.writeable' => array(
             'title'        => 'APPPATH/config/ must be writeable (temporarily, to write the db.php and crypt.php config files)',
             'passed'       => is_writeable(APPPATH.'config'),
             'command_line' => 'chmod a+w '.APPPATH.'config',
-            'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
+            'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or
+                !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
         ),
 
         'folder.cache.writeable' => array(
@@ -524,7 +526,8 @@ if ($step > 0) {
 
         'public.htaccess.removed' => array(
             'title'        => 'DOCROOT/.htaccess must be removed',
-            'passed'       => !is_file(DOCROOT.'.htaccess') || (is_file(NOSROOT.'.htaccess') && !rename(DOCROOT.'.htaccess', DOCROOT.'.htaccess.old')),
+            'passed'       => !is_file(DOCROOT.'.htaccess')
+                || (is_file(NOSROOT.'.htaccess') && !rename(DOCROOT.'.htaccess', DOCROOT.'.htaccess.old')),
             'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
             'run_only_if'  => is_file(NOSROOT.'.htaccess'),
         ),
@@ -546,7 +549,12 @@ if ($step > 0) {
         'public.htdocs.writeable' => array(
             'title'        => 'DOCROOT/htdocs/ must be writeable (to create the symbolic link htdocs/novius-os)',
             'passed'       => is_writeable(DOCROOT.'htdocs'),
-            'command_line' => array('chmod a+w '.DOCROOT.'htdocs', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ').' '.DOCROOT.'htdocs'.DS.'novius-os'),
+            'command_line' => array(
+                'chmod a+w '.DOCROOT.'htdocs',
+                '# or',
+                'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs ')
+                .' '.DOCROOT.'htdocs'.DS.'novius-os'
+            ),
             'run_only_if'  => is_dir(DOCROOT.'htdocs') && !file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
         ),
 
@@ -574,7 +582,12 @@ if ($step > 0) {
         'public.static.writeable' => array(
             'title'        => 'DOCROOT/static/ must be writeable (to create the symbolic link static/novius-os)',
             'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
-            'command_line' => array('chmod a+w '.DOCROOT.'static', '# or', 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os'),
+            'command_line' => array(
+                'chmod a+w '.DOCROOT.'static',
+                '# or',
+                'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static')
+                .' '.DOCROOT.'static'.DS.'novius-os'
+            ),
             'run_only_if'  => is_dir(DOCROOT.'static') && !file_exists(DOCROOT.'static'.DS.'novius-os'),
         ),
 
@@ -587,28 +600,35 @@ if ($step > 0) {
 
         'public.htdocs.nos.valid' => array(
             'title'        => 'DOCROOT/htdocs/novius-os must link to NOSPATH/htdocs',
-            'passed'       => \File::is_link(DOCROOT.'htdocs'.DS.'novius-os') && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
-            'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs').' '.DOCROOT.'htdocs'.DS.'novius-os',
+            'passed'       => \File::is_link(DOCROOT.'htdocs'.DS.'novius-os')
+                && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
+            'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs')
+                .' '.DOCROOT.'htdocs'.DS.'novius-os',
             'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
         ),
 
         'public.static.nos.valid' => array(
             'title'        => 'DOCROOT/static/novius-os must link to NOSPATH/static',
-            'passed'       => \File::is_link(DOCROOT.'static'.DS.'novius-os') && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
-            'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static').' '.DOCROOT.'static'.DS.'novius-os',
+            'passed'       => \File::is_link(DOCROOT.'static'.DS.'novius-os')
+                && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
+            'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static')
+                .' '.DOCROOT.'static'.DS.'novius-os',
             'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
         ),
 
         'public.static.nos.create' => array(
             'title'        => 'We can’t create the DOCROOT/static/novius-os symbolic link',
-            'passed'       => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static') && \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os'),
+            'passed'       => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static')
+                && \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os'),
             'description'  => 'Please restart your server with the ‘Run as administrator’ option.',
             'run_only_if'  => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static'),
         ),
         'public.htdocs.nos.create' => array(
             'title'        => 'We can’t create the DOCROOT/htdocs/novius-os symbolic link',
-            'passed'       => !file_exists(DOCROOT.'htdocs'.DS.'novius-os') && is_writeable(DOCROOT.'htdocs') && \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os'),
-            // No description because it would be a dupliate with the public/static/novius-os symbolic link (which should have failed too).
+            'passed'       => !file_exists(DOCROOT.'htdocs'.DS.'novius-os') && is_writeable(DOCROOT.'htdocs')
+                && \File::relativeSymlink(NOVIUSOS_PATH.'htdocs', DOCROOT.'htdocs'.DS.'novius-os'),
+            // No description because it would be a duplicate with
+            // the public/static/novius-os symbolic link (which should have failed too).
             'run_only_if'  => !file_exists(DOCROOT.'htdocs'.DS.'novius-os') && is_writeable(DOCROOT.'htdocs'),
         ),
 
@@ -661,7 +681,11 @@ if ($step > 0) {
             }
 
             if (!empty($config)) {
-                File::create(APPPATH.'config'.DS, 'config.php', '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($config, true)).";\n");
+                File::create(
+                    APPPATH.'config'.DS,
+                    'config.php',
+                    '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($config, true)).";\n"
+                );
             }
         }
 
@@ -689,7 +713,15 @@ if ($step > 0) {
 
     if (Test::run('folder.metadata.writeable')) {
         $dir  = APPPATH.'metadata'.DS;
-        $files = array('app_installed.php', 'templates.php', 'enhancers.php', 'launchers.php', 'app_dependencies.php', 'app_namespaces.php', 'data_catchers.php');
+        $files = array(
+            'app_installed.php',
+            'templates.php',
+            'enhancers.php',
+            'launchers.php',
+            'app_dependencies.php',
+            'app_namespaces.php',
+            'data_catchers.php'
+        );
         foreach ($files as $file) {
             if (!is_file($dir.$file)) {
                 File::create($dir, $file, '<?'.'php return array();');
@@ -857,7 +889,8 @@ if ($step == 2) {
                 $content = preg_replace(
                     "`'active' => '".Fuel::$env."'`Uu",
                     "'active' => Fuel::\$env",
-                    $content);
+                    $content
+                );
 
                 ftruncate($handle, 0);
                 rewind($handle);
@@ -1059,7 +1092,11 @@ if ($step == 4) {
                 $contexts['contexts']['main::'.$locale] = array();
             }
 
-            File::update(APPPATH.'config'.DS, 'contexts.config.php', '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($contexts, true)).";\n");
+            File::update(
+                APPPATH.'config'.DS,
+                'contexts.config.php',
+                '<?'."php \n\nreturn ".str_replace('  ', '    ', var_export($contexts, true)).";\n"
+            );
         } catch (\Exception $e) {
             echo '<p class="error">Error : '.$e->getMessage().'</p>';
         }
