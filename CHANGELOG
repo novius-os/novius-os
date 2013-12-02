@@ -2,11 +2,12 @@ Novius OS framework CHANGELOG
 
 ?: version D?
 =====================================
+
 * Update Wijmo 2013v1.4 to 2013v2.15, expect for wijgrid to 2013v2.9 (http://wijmo.com/wiki/index.php/Version_Histories)
 * I18n : add plural mechanism and implement plural translation
 
-?: version ?
-============
+December 2, 2013: version Chiba 2.3.1
+=====================================
 
 * UI: Remove javascript ref to css class ui-default-state for textbox enabling by checkbox (title menu on page, virtual name on media)
 * When inserting during a pick process, picks automatically the new item (media, page)
