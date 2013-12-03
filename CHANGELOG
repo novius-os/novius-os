@@ -1,11 +1,17 @@
 Novius OS framework CHANGELOG
 
+
 ?: version D?
 =====================================
 
 * Add langs Russian and Interlingue
 * Update Wijmo 2013v1.4 to 2013v2.15, expect for wijgrid to 2013v2.9 (http://wijmo.com/wiki/index.php/Version_Histories)
 * I18n : add plural mechanism and implement plural translation
+
+December 3, 2013: version Chiba 2.3.2
+=====================================
+
+*  Fix XSS in profiler
 
 December 2, 2013: version Chiba 2.3.1
 =====================================
