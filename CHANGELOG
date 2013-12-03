@@ -1,5 +1,10 @@
 Novius OS framework CHANGELOG
 
+December 3, 2013: version Chiba 2.3.2
+=====================================
+
+*  Fix XSS in profiler
+
 December 2, 2013: version Chiba 2.3.1
 =====================================
 
