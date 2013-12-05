@@ -1,5 +1,14 @@
 Novius OS framework CHANGELOG
 
+?: version Chiba 2.?
+====================
+
+Slideshow:
+
+* Allow to add link or script tags in image_fields
+
+Thank for: vrcAlbert
+
 December 3, 2013: version Chiba 2.3.2
 =====================================
 
