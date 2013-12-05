@@ -3,6 +3,8 @@ Novius OS framework CHANGELOG
 ?: version Chiba 2.?
 ====================
 
+* Renderer selector for pages can now send multiple pages using checkboxes
+
 Slideshow:
 
 * Allow to add link or script tags in image_fields
