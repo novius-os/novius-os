@@ -11,6 +11,7 @@ Novius OS framework CHANGELOG
 ====================
 
 * Renderer selector for pages can now send multiple pages using checkboxes
+* Improve 404, allow to use novius_ftplite app to add custom robots.txt (favicon or humans.txt)
 
 Slideshow:
 
