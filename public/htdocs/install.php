@@ -429,7 +429,7 @@ if ($step == 0) {
 if ($step > 0) {
     $folder_data = is_dir(APPPATH.'data'.DS) ? realpath(APPPATH.'data').DS : APPPATH.'data'.DS;
 
-    $session_save_path = \Arr::get(\Config::load('session'), 'file.path');
+    $session_save_path = \Arr::get(\Config::load('session', true), 'file.path');
 
     Test::register(array(
         'directive.rewrite_module' => array(
