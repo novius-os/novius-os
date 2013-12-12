@@ -3,26 +3,47 @@ Novius OS framework CHANGELOG
 ?: version D?
 =====================================
 
-* Add langs Russian and Interlingue
-* Update Wijmo 2013v1.4 to 2013v2.15, expect for wijgrid to 2013v2.9 (http://wijmo.com/wiki/index.php/Version_Histories)
-* I18n : add plural mechanism and implement plural translation
+New features:
 * Russian translations
+* Interlingue (Occidental) translations
 * Japanese translations updated
 
-Thank for: Fumito Mizuno, Vadim Oparin
+Breaking changes:
+* FuelPHP 1.7.1
+* Wijmo 2013v3.20
+
+Vendors update:
+* FuelPHP 1.7.1
+* Wijmo 2013v3.20
+* jQuery 1.10.2
+* require.js 2.1.9
+* TinyMCE 3.5.10
+* JQuery.cookie 1.4
+* JQuery.form 3.46.0-2013.11.21
+* JQuery.validation 1.11.1
+* JQuery.mousewheel 3.1.6
+* JQuery.datetimepicker 1.4.3
+
+
+Improvements:
+
+* I18n : add plural mechanism and implement plural translation
+* Renderer: Selector for pages can now send multiple pages using checkboxes
+* WYSIWYG: Refactoring TinyMCE Novius OS specific features. Explode all features in plugins, much more modular.
+* 404: allow to use novius_ftplite app to add custom robots.txt (favicon or humans.txt)
+* Behaviour: All aliases in ``where`` and ``order_by`` options of ``find()`` work whatever the level where the alias is used and even in chaining methods.
+  Concern: ``context`` in ``Contextable``, ``published`` in ``Publishable``, ``default_sort`` in ``Sortable``, ``parent`` in ``Tree`` and ``context_main`` in ``Twinnable``.
+
+Thank for: Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 
 ?: version Chiba 2.?
 ====================
 
-* Renderer selector for pages can now send multiple pages using checkboxes
-* Improve 404, allow to use novius_ftplite app to add custom robots.txt (favicon or humans.txt)
 * Bugfix: regression, take modifications of cache_path in event front.start into account
 
 Slideshow:
 
 * Allow to add link or script tags in image_fields
-
-Thank for: vrcAlbert, jay3
 
 December 3, 2013: version Chiba 2.3.2
 =====================================
