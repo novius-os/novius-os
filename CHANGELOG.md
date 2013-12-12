@@ -1,18 +1,17 @@
-Novius OS framework CHANGELOG
+# Novius OS framework CHANGELOG
 
-?: version D?
-=====================================
+## version D (?)
 
-New features:
+###New features:
 * Russian translations
 * Interlingue (Occidental) translations
 * Japanese translations updated
 
-Breaking changes:
+###Breaking changes:
 * FuelPHP 1.7.1
 * Wijmo 2013v3.20
 
-Vendors update:
+###Vendors update:
 * FuelPHP 1.7.1
 * Wijmo 2013v3.20
 * jQuery 1.10.2
@@ -25,40 +24,40 @@ Vendors update:
 * JQuery.datetimepicker 1.4.3
 
 
-Improvements:
-
+###Improvements:
 * I18n : add plural mechanism and implement plural translation
-* Renderer: Selector for pages can now send multiple pages using checkboxes
 * WYSIWYG: Refactoring TinyMCE Novius OS specific features. Explode all features in plugins, much more modular.
-* 404: allow to use novius_ftplite app to add custom robots.txt (favicon or humans.txt)
 * Behaviour: All aliases in ``where`` and ``order_by`` options of ``find()`` work whatever the level where the alias is used and even in chaining methods.
   Concern: ``context`` in ``Contextable``, ``published`` in ``Publishable``, ``default_sort`` in ``Sortable``, ``parent`` in ``Tree`` and ``context_main`` in ``Twinnable``.
 
-Thank for: Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
+###Thank for: 
 
-?: version Chiba 2.?
-====================
+Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 
+
+## ?: version Chiba 2.?
+
+* Renderer: Selector for pages can now send multiple pages using checkboxes
+* 404: allow to use novius_ftplite app to add custom robots.txt (favicon or humans.txt)
 * Bugfix: regression, take modifications of cache_path in event front.start into account
 
-Slideshow:
+### Slideshow:
 
 * Allow to add link or script tags in image_fields
 
-December 3, 2013: version Chiba 2.3.2
-=====================================
+
+## December 3, 2013: version Chiba 2.3.2
 
 *  Fix XSS in profiler
 
-December 2, 2013: version Chiba 2.3.1
-=====================================
+
+## December 2, 2013: version Chiba 2.3.1
 
 * UI: Remove javascript ref to css class ui-default-state for textbox enabling by checkbox (title menu on page, virtual name on media)
 * When inserting during a pick process, picks automatically the new item (media, page)
 * Fix a regression due to temporary removal of sensible config items in profiler display (images resized fails if profiler displayed)
 
-November 28, 2013: version Chiba 2.3
-====================================
+## November 28, 2013: version Chiba 2.3
 
 * Bugfix: Fixed task execution on refine with local and nos namespaces
 * Bugfix: Back-office fails when a tab with a numeric label is opened
@@ -88,30 +87,30 @@ November 28, 2013: version Chiba 2.3
 * Implement context common fields on virtual name renderer
 * Profiler: new methods markDeltaStart() and markDeltaStop() to study time durations
 
-ORM:
+### ORM:
 * Add through_where parameter in many_many relation configuration
 
-Form:
+### Form:
 * Bugfix: Answer export fails when too many answer.
 * Bugfix: form name is html encoded in answer email subject
 * Adding a "replyto" field to sent emails if an email is present in the answer. Depends on the add_replyto_to_first_email config key of noviusos_form.config.php file. Default true.
 * Form CRUD: move submit email field on the top of the page
 
-AppWizard:
+### AppWizard:
 * Bugfix: now column can contain numbers
 * Bugfix: added missing relations declarations
 * Improvement: added check on local/applications folder permission
 
-BlogNews:
+### BlogNews:
 * Bugfix: pagination didn't take into account categories
 
-Slideshow:
+### Slideshow:
 * Bugfix: Change \Config::load() to \Config::loadConfiguration in order to easily extend the application
 
-Thank for: JayPS, Foine, vrcAlbert, shaoshiva
+### Thank for: 
+JayPS, Foine, vrcAlbert, shaoshiva
 
-October 14, 2013: version Chiba 2.2
-===================================
+## October 14, 2013: version Chiba 2.2
 
 * Bugfix: In RequireJs settings, re-introduce alias for wijmo widgets dropdown, radio, checkbox, textbox.
 * Bugfix: In the compilation of the friendly slug configuration for javascript execution, the lowercase rule is removed.
@@ -138,19 +137,19 @@ October 14, 2013: version Chiba 2.2
 * Improvement:  FuelPHP tasks have been adapted to Novius OS. Tasks namespace now depends on application namespaces allowing two tasks with similar names in many applications.
                 A related application, novius_taskmanager, has been implemented in order to allow tasks execution from an url.
 
-Form:
+### Form:
 * Bugfix: When the user switched from a unique choice field to a multiple choice field, the mandatory checkbox were hidden but still checked, causing issues on front.
 * Bugfix: Bad tab format of the awnsers appdesk (no label and 32 pixels icon size)
 * Bugfix: Bad parameters for event noviusos_form::after_submission
 * Improve layout of the answer email
 
-Blog/News:
+### Blog/News:
 Bugfix: Regression due to ORM when saving categories relation of a post
 
-Thank for: JayPS
+### Thank for: 
+JayPS
 
-September 11, 2013: version Chiba 2.1
-=====================================
+## September 11, 2013: version Chiba 2.1
 
 * Bugfix : Toolkit_image->parse($url) checks url match in absolute but it's passed in relative. Image's media transformed return a 403 if you're not connected to back-office.
 * Bugfix : Fix on media permission; when updating a user, his writing rights on medias were disabled.
@@ -162,15 +161,15 @@ September 11, 2013: version Chiba 2.1
 * Improvement: New class Nos\Renderer for factorizing code between all renderers.
     * Deprecated: Method set_renderer_options of Renderer_Selector is deprecated, use setRendererOptions instead.
 
-Media:
+### Media:
 
 * Include mass upload feature from https://github.com/novius/novius_mediamassupload
 
-Templates basic:
+### Templates basic:
 
 * Refactoring templates_basic, better code factorization between top and left menu template
 
-Slideshow:
+### Slideshow:
 
 * Refactoring configuration and organization. Widgets for displaying slideshow in front are manage by a formats config for better extendable.
     * Deprecated: The struture of slideshow config file have changed
@@ -179,14 +178,13 @@ Slideshow:
     * Deprecated: The view noviusos_slideshow::slideshow_js is deprecated, please use noviusos_slideshow::flexslider/javascript instead
     * Deprecated: The view noviusos_slideshow::slideshow is deprecated, please use noviusos_slideshow::flexslider/slideshow instead
 
-Blog/News and Comments:
+### Blog/News and Comments:
 
 * Better clean-up of front-cache when a post or a comment is inserted, updated or deleted.
 
-August 29, 2013: version Chiba 2
-==================================
+## August 29, 2013: version Chiba 2
 
-New features:
+### New features:
 
 * Windows support (Vista and upper).
 * Better install wizard (UI, more tests, choose of languages)
@@ -195,10 +193,7 @@ New features:
     * Administration interface
     * Emails are sent when new comments are posted, to post author and others commenters.
 
-Developer
----------
-
-Breaking changes:
+### Breaking changes:
 
 * Model: If a column of a 'dataset' contains HTML, you must also set 'isSafeHtml' => true if you don't want that it to be encoded (for security reasons).
 * CRUD: For item updating, the callback function 'success' is called after 'save' (not before), like for creating.
@@ -208,7 +203,7 @@ Breaking changes:
     * Default thumbnail size changed from 200 everywhere to 120 in the listing and 200 on the item.
     * Thumbnail can now be clicked to go on the item page (set thumbnail.front.list.link_to_item = false to restore old behaviour).
 
-Vendors update:
+### Vendors update:
 
 * FuelPHP 1.6
 * jQuery 1.9.1
@@ -216,7 +211,7 @@ Vendors update:
 * Wijmo 2013v1.4
 * require.js 2.1.6
 
-Improvements:
+### Improvements:
 
 * i18n: Default dictionary 'app::default' is used if no dictionary is set with Nos\I18n::current_dictionary().
 * DB: Change interclassement on all columns containing a slug.
@@ -260,7 +255,7 @@ Improvements:
 * Misc: New 'temp' directory in local/data, assign to 'novius-os.temp_dir' config key by default.
 * Front: 'is_preview' is true only when you are logged in.
 
-Deprecated:
+### Deprecated:
 
 * Enhancer: get_url_model($item, $params) in enhancer front controller is deprecated, please use getURLEnhanced($params) and $item in a key 'item' of $params.
 * Media: Change Model_Media API, deprecating all snake_case methods.
@@ -268,10 +263,11 @@ Deprecated:
 * Page: Model_Page->link() is deprecated, please use Model_Page->htmlAnchor() instead.
 * Misc: Event 'user_login' is deprecated, please use 'admin.loginSuccess' instead.
 
-Thank for: Fumito Mizuno, Julien Guyomard
+### Thank for: 
+Fumito Mizuno, Julien Guyomard
 
-?: version Chiba 1.?
-=================================
+## ?: version Chiba 1.?
+
 - Bugfix : In behaviour sortable, in event before_query, order_by can be string...
 - Bugfix : Attachment->url() trims the end of the filename
 - Bugfix : Fieldset::defaultComplete when error option is callable
@@ -291,17 +287,17 @@ Thank for: Fumito Mizuno, Julien Guyomard
 - Bugfix : in media popup for pick an image, extension inspector not hide
 - Add a defense for Clickjacking attack in admin
 
-Slideshow :
+### Slideshow :
 - Bugfix : remove link on a slide doesn't works
 - Bugfix : in slideshow administration, generate a PHP Notice if has restricted field
 
-Form:
+### Form:
 - Bugfix : form open tag not auto-closed anymore
 
-Thank for: @romunovius, @Victor ALBERT, @Foine, @ounziw, @jguyomard
+### Thank for: 
+@romunovius, @Victor ALBERT, @Foine, @ounziw, @jguyomard
 
-May 17, 2013: version Chiba 1.0.1
-=================================
+## May 17, 2013: version Chiba 1.0.1
 
 - Improvement : Class Pagination, every page number surrounded by the same class
 - Bugfix : Selecting custom dates in inspector dates do nothing
@@ -309,12 +305,13 @@ May 17, 2013: version Chiba 1.0.1
 - Bugfix : On wysiwyg in enhancers
 - Bugfix : i18n class don't trigger event on load file
 
-Form: Minors bugfix and improvement
+### Form: 
+Minors bugfix and improvement
 
-Thank for: @Fumito Mizuno, @Victor ALBERT, @Pierrinho
+### Thank for: 
+@Fumito Mizuno, @Victor ALBERT, @Pierrinho
 
-April 25, 2013: version Chiba 1
-===============================
+## April 25, 2013: version Chiba 1
 
 - New feature: Behaviour_Publishable now allows to choose publication start & end dates
 - DB Config : installation now sets the active configuration depending on the current Fuel::$env value
@@ -329,7 +326,7 @@ April 25, 2013: version Chiba 1
 - Crud->save() now returns dispatch event in the array form
 - Renamed configuration directive 'use_xsendfile' to 'novius-os.use_xsendfile'
 
-Deprecated:
+### Deprecated:
 - Moved Nos\Renderer_Media to Nos\Media\Renderer_Media.
 - Launchers configuration: the 'url' key is deprecated. Use 'action' instead.
 - The 'widget' key is deprecated in renderer configuration. Use the 'renderer' key and update the class name.
@@ -337,12 +334,12 @@ Deprecated:
 - \Config::extendable_load() is deprecated. Renamed to \Config::loadConfiguration().
 - Orm_Behaviour_Publishable configuration: the 'publication_bool_property' key is deprecated. Use 'publication_state_property' instead.
 
-Permissions:
+### Permissions:
 - Ability to define per-application permissions with a configuration file
 - New API to check permissions for a user, or a specific role
 - Ability to enable multi-roles on the users with the novius-os.users.enable_roles configuration
 
-Front improvements:
+### Front improvements:
 - Profiling is activated by default on front in the DEVELOPMENT environment
 - Setting config novius-os.cache by default always at true
 - Setting configs novius-os.cache_duration_page and novius-os.cache_duration_function at 600 by default, except in PRODUCTION at 3600
@@ -354,12 +351,12 @@ Front improvements:
 - Bugfix: if set, use page_cache_duration of the page
 
 
-Models properties:
+### Models properties:
 - Add a config for fuelphp cache, add local/cache/fuelphp directory, add check for it in install process
 - All models (core and native apps) now defines the $_properties
 - Implement a cache mechanism on models properties, using fuelphp cache. Attempt to auto-refresh when an unknown properties is called.
 
-Vendors:
+### Vendors:
 - jQuery 1.8.3
 - jQuery UI 1.9.2
 - Wijmo 2.3.7
@@ -367,17 +364,17 @@ Vendors:
 - require.js 2.1.4
 - FuelPHP and packages 1.5
 
-Slideshow:
+### Slideshow:
 - add HTML5 progress bar
 
-Blog / News:
+### Blog / News:
 - Display related posts of authors
 
-Thank for: @Fumito Mizuno, @JayPS, @Victor ALBERT, @Pierrinho
+### Thank for: 
+@Fumito Mizuno, @JayPS, @Victor ALBERT, @Pierrinho
 
 
-?: version 0.2.0.3
-==================================
+## ?: version 0.2.0.3
 
 - Bugfix : front controller, getUrl() returns a bad URL for secondary contexts
 - Bugfix : Model::set() generate a NOTICE in PHP 5.4 if property name is an array
@@ -390,8 +387,7 @@ Thank for: @Fumito Mizuno, @JayPS, @Victor ALBERT, @Pierrinho
 - Bugfix : IE, bad background color in inspector grid tr hover
 - Bugfix : Template, mediaprint.css replace by print.css
 
-March 21, 2013: version 0.2.0.2
-==================================
+## March 21, 2013: version 0.2.0.2
 
 - Adding 4 events in 404 entry
 - Standalone build of the wysiwyg renderer.
@@ -417,18 +413,18 @@ March 21, 2013: version 0.2.0.2
 - Bugfix : Update links to documentation in blank slate front
 - Bugfix : In appdesk, grid not trigger selectionChanged when is reloading and has a selected item
 
-Blog / News:
+### Blog / News:
 - Bugfix : &nbsp; form i18n not decode for RSS title and description
 
-Slideshow:
+### Slideshow:
 - Bugfix: front of slideshow javascript
 - Bugfix: front in IE8, in onreadystatechange event, readyState is not 'complete' but 'loaded'
 
-Thank for: @Julien Guyomard, @Pierre Vion and @Foine
+### Thank for:
+@Julien Guyomard, @Pierre Vion and @Foine
 
 
-February 26, 2013: version 0.2.0.1
-==================================
+## February 26, 2013: version 0.2.0.1
 
 - Front: if access to a page which is external link, redirect
 - $.nosFormUI: Add notransform filter on checkbox
@@ -447,30 +443,30 @@ February 26, 2013: version 0.2.0.1
 - Bugfix: Crud form, enter in a field close the tab
 - And many others minor fixes
 
-AppWizard:
+### AppWizard:
 - Add the type 'image'
 - Add URL enhancer
 - Translations
 
-Form:
+### Form:
 - Bugfix: layout becomes all messed up when putting 2 4-width fields on the same line at the bottom
 - Bugfix: cannot move a date field just after adding it
 - Bugfix: captcha always checked
 - Bugfix: front with pagination fail if no captcha
 
-Blog / News:
+### Blog / News:
 - Bugfix: post save fails when root category is selected
 - Bugfix: categories inspector won't load when just one context
 - Bugfix: bad icon URLs when not installed on root domain
 
-Slideshow:
+### Slideshow:
 - Bugfix: bad icon URLs when not installed on root domain
 
-Thank for: @Victor Albert, @Pierre Vion, @JayPS, @FredDubois, @Foine, @Yves Stadler
+### Thank for: 
+@Victor Albert, @Pierre Vion, @JayPS, @FredDubois, @Foine, @Yves Stadler
 
 
-January 31, 2013: version 0.2
-===============================
+## January 31, 2013: version 0.2
 
 - Rename lang, lang_common_id, lan_is_main columns. Replace lang by context. Resize lang columns. And all variables
 - Rename behabiour Translatable by Twinnable and all variables
@@ -500,29 +496,25 @@ January 31, 2013: version 0.2
 - Time picker renderer can be use outside a fieldset
 - Many UI improvements and bugfixes
 
-Thank for: @JayPS, @Shaoshiva,  @Victor Albert, @Julien Guyomard
+### Thank for: 
+@JayPS, @Shaoshiva,  @Victor Albert, @Julien Guyomard
 
-December 20, 2012: version 0.1.5
-===============================
+## December 20, 2012: version 0.1.5
 
-Core
-----
+### Core
 * Bugfix: Front - remove href when internal page no longer exists (thanks @vrcAlbert)
 * Bugfix: Fixed recursive deletion for pages and Tree behaviour
 * Bugfix: nosTabsOpen if not 3 tabs in tray (due to permissions)
 * Bugfix: '&' in virtualname prevents from reaching the page
 * Bugfix: Front - Multiple js_inline and css_inline (thanks @jguyomard)
 
-Blog & News
------------
+### Blog & News
 * Bugfix: check if author of post, exist before call fullname method
 * Bugfix: remove load of comments in blognews bootstrap
 
-November 26, 2012: version 0.1.4
-===============================
+## November 26, 2012: version 0.1.4
 
-Core
-----
+### Core
 * Bugfix: Front post-processing has to run before the cache is written
 * Bugfix: Widget_Media with mode=all (server side)
 * Bugfix: Bahaviour sortable not completely effective
@@ -530,12 +522,10 @@ Core
 * Bugfix: regression 0.1.3, can't insert enhancer in wysiwyg
 
 
-Install
--------
+### Install
 * Bugfix: Added test on public/media (is writeable)
 
-Blog & News
------------
+### Blog & News
 * Bugfix: Use nosLang passed by wysiwyg for widget category in popup ehancer
 * Bugfix: Front View : don't filter object, use htmlentities on each echo
 * Bugfix: get_all method for Model_Post for front, case multiples categories query and fetch all related
@@ -543,23 +533,18 @@ Blog & News
 * Bugfix: enhancer popup not reselected category selected
 
 
-November 7, 2012: version 0.1.3
-===============================
+## November 7, 2012: version 0.1.3
 
-Core
-----
+### Core
 * Bugfix: Inspector tree in crud form don't use lang
 
-Blog & News
------------
+### Blog & News
 * Bugfix: CRUD function form_item rename in from_item.
 
 
-October 22, 2012: version 0.1.2
-===============================
+## October 22, 2012: version 0.1.2
 
-Core
-----
+### Core
 * Refactoring: CRUD function form_item rename in from_item.
 * Refactoring: Novius OS can now be install in a sub-directory of a shared hosting, even if public is not the DOCUMENT_ROOT.
 * Refactoring: Install process improvement, doesn't need to create directories anymore. Only changing files permissions.
@@ -569,16 +554,13 @@ Core
 * Bugfix: BD request for Appdesk json test if LIMIT is not negative
 * Bugfix: CRUD's toolbar buttons not reloaded when event is delete the current item
 
-Blog & News
------------
+### Blog & News
 * Bugfix: Blog and News stories, bad namespace and url for inspector's date.
 
 
-October 3, 2012: version 0.1.1
-==============================
+## October 3, 2012: version 0.1.1
 
-Core
-----
+### Core
 * Bugfix: non-image media now displays properly in front-office
 * Page: the boxes 'URL' and 'SEO' are now hidden when editing an external link
 * RSS: removed data catchers, replaced with a Tools_RSS class (Blog and News applications were updated accordingly)
@@ -588,17 +570,14 @@ Core
 * Installation: now checks the directive short_open_tag is active
 * DB cleanup: removed unused columns
 
-Comments
---------
+### Comments
 * Better spam checking management (in addition to RE-Captcha)
 
-Blog & News
------------
+### Blog & News
 * Re-added the visualisation count stat for post items
 * Bugfix for main list pagination
 
 
-September 20, 2012: version 0.1
-===============================
+## September 20, 2012: version 0.1
 
 * Initial release
