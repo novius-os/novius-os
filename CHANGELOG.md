@@ -30,7 +30,10 @@
 * Behaviour: All aliases in ``where`` and ``order_by`` options of ``find()`` work whatever the level where the alias is used and even in chaining methods.
   Concern: ``context`` in ``Contextable``, ``published`` in ``Publishable``, ``default_sort`` in ``Sortable``, ``parent`` in ``Tree`` and ``context_main`` in ``Twinnable``.
 
-###Thank for: 
+### Deprecated:
+* Some i18n keys of CRUD config for plural forms
+
+###Thank for:
 
 Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 
@@ -108,7 +111,7 @@ Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 ### Slideshow:
 * Bugfix: Change \Config::load() to \Config::loadConfiguration in order to easily extend the application
 
-### Thank for: 
+### Thank for:
 JayPS, Foine, vrcAlbert, shaoshiva
 
 ## October 14, 2013: version Chiba 2.2
@@ -147,7 +150,7 @@ JayPS, Foine, vrcAlbert, shaoshiva
 ### Blog/News:
 Bugfix: Regression due to ORM when saving categories relation of a post
 
-### Thank for: 
+### Thank for:
 JayPS
 
 ## September 11, 2013: version Chiba 2.1
@@ -264,7 +267,7 @@ JayPS
 * Page: Model_Page->link() is deprecated, please use Model_Page->htmlAnchor() instead.
 * Misc: Event 'user_login' is deprecated, please use 'admin.loginSuccess' instead.
 
-### Thank for: 
+### Thank for:
 Fumito Mizuno, Julien Guyomard
 
 ## ?: version Chiba 1.?
@@ -295,7 +298,7 @@ Fumito Mizuno, Julien Guyomard
 ### Form:
 - Bugfix : form open tag not auto-closed anymore
 
-### Thank for: 
+### Thank for:
 @romunovius, @Victor ALBERT, @Foine, @ounziw, @jguyomard
 
 ## May 17, 2013: version Chiba 1.0.1
@@ -306,10 +309,10 @@ Fumito Mizuno, Julien Guyomard
 - Bugfix : On wysiwyg in enhancers
 - Bugfix : i18n class don't trigger event on load file
 
-### Form: 
+### Form:
 Minors bugfix and improvement
 
-### Thank for: 
+### Thank for:
 @Fumito Mizuno, @Victor ALBERT, @Pierrinho
 
 ## April 25, 2013: version Chiba 1
@@ -371,7 +374,7 @@ Minors bugfix and improvement
 ### Blog / News:
 - Display related posts of authors
 
-### Thank for: 
+### Thank for:
 @Fumito Mizuno, @JayPS, @Victor ALBERT, @Pierrinho
 
 
@@ -463,7 +466,7 @@ Minors bugfix and improvement
 ### Slideshow:
 - Bugfix: bad icon URLs when not installed on root domain
 
-### Thank for: 
+### Thank for:
 @Victor Albert, @Pierre Vion, @JayPS, @FredDubois, @Foine, @Yves Stadler
 
 
@@ -497,7 +500,7 @@ Minors bugfix and improvement
 - Time picker renderer can be use outside a fieldset
 - Many UI improvements and bugfixes
 
-### Thank for: 
+### Thank for:
 @JayPS, @Shaoshiva,  @Victor Albert, @Julien Guyomard
 
 ## December 20, 2012: version 0.1.5
