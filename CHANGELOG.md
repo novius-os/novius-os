@@ -44,6 +44,8 @@ Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 * 404: allow to use novius_ftplite app to add custom robots.txt (favicon or humans.txt)
 * Bugfix: regression, take modifications of cache_path in event front.start into account
 * Bugfix: in popup enhancer that use fields config, open and close form with fieldset methods (call build_append and build_js_validation)
+* Bugfix: update url_enhanced when changing the virtual_path of one ancestor of an url_enhanced page
+* Bugfix: case of a checkbox in common field, when disabled CRUD always save it like unchecked
 
 ### Slideshow:
 
