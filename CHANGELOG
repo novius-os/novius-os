@@ -9,6 +9,7 @@ Novius OS framework CHANGELOG
 * Bugfix: in popup enhancer that use fields config, open and close form with fieldset methods (call build_append and build_js_validation)
 * Bugfix: update url_enhanced when changing the virtual_path of one ancestor of an url_enhanced page
 * Bugfix: case of a checkbox in common field, when disabled CRUD always save it like unchecked
+* Bugfix: add TinyMCE IE11 compatibility
 
 Slideshow:
 
