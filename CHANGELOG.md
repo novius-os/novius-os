@@ -29,6 +29,7 @@
 * WYSIWYG: Refactoring TinyMCE Novius OS specific features. Explode all features in plugins, much more modular.
 * Behaviour: All aliases in ``where`` and ``order_by`` options of ``find()`` work whatever the level where the alias is used and even in chaining methods.
   Concern: ``context`` in ``Contextable``, ``published`` in ``Publishable``, ``default_sort`` in ``Sortable``, ``parent`` in ``Tree`` and ``context_main`` in ``Twinnable``.
+* Migration: Add a incremental ID and a execution date in migration table
 
 ### Deprecated:
 * Some i18n keys of CRUD config for plural forms
