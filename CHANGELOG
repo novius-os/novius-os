@@ -12,6 +12,7 @@ Novius OS framework CHANGELOG
 * Bugfix: add TinyMCE IE11 compatibility
 * Bugfix: In Appdesk. abort previous search requests before send the new one
 * Bugfix : Renderer_Date_Picker and Renderer_Datetime_Picker don't ignore value attribute in standalone (::renderer()) case
+* Bugfix : invert cache duration (600s in developpement, 3600s in production)
 
 Slideshow:
 
