@@ -10,6 +10,7 @@ Novius OS framework CHANGELOG
 * Bugfix: update url_enhanced when changing the virtual_path of one ancestor of an url_enhanced page
 * Bugfix: case of a checkbox in common field, when disabled CRUD always save it like unchecked
 * Bugfix: add TinyMCE IE11 compatibility
+* Bugfix: In Appdesk. abort previous search requests before send the new one
 
 Slideshow:
 
