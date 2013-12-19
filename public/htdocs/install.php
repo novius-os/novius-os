@@ -902,7 +902,7 @@ if ($step == 2) {
             exit();
 
         } catch (\Database_Exception $e) {
-
+            \Log::error($e->getCode().' - '.$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
             $message = $e->getMessage();
             ?>
             <p class="error" title="<?php echo htmlspecialchars($message) ?>">
