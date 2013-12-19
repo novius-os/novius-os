@@ -18,7 +18,11 @@ Slideshow:
 
 * Allow to add link or script tags in image_fields
 
-Thank for: vrcAlbert, jay3, jguyomard
+Form:
+
+* Bugfix : Warning if event noviusos_form::data_validation return nothing
+
+Thank for: vrcAlbert, jay3, jguyomard, Foine
 
 December 3, 2013: version Chiba 2.3.2
 =====================================
