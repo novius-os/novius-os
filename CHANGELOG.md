@@ -30,6 +30,7 @@
 * Behaviour: All aliases in ``where`` and ``order_by`` options of ``find()`` work whatever the level where the alias is used and even in chaining methods.
   Concern: ``context`` in ``Contextable``, ``published`` in ``Publishable``, ``default_sort`` in ``Sortable``, ``parent`` in ``Tree`` and ``context_main`` in ``Twinnable``.
 * Migration: Add a incremental ID and a execution date in migration table
+* App manager: disabled buttons after click. Can't call same action two times
 
 ### Deprecated:
 * Some i18n keys of CRUD config for plural forms
