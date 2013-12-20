@@ -1223,6 +1223,6 @@ if ($step == 5) {
 
 ?>
 </div></div>
-<div id="version">Version Chiba 2.3.2 - December 3, 2013 </div>
+<div id="version">Version Chiba 2.3.3 - December 20, 2013 </div>
 </body>
 </html>

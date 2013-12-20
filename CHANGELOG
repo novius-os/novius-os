@@ -1,26 +1,26 @@
 Novius OS framework CHANGELOG
 
-?: version Chiba 2.?
-====================
+December 20, 2013: version Chiba 2.3.3
+======================================
 
-* Renderer selector for pages can now send multiple pages using checkboxes
-* Improve 404, allow to use novius_ftplite app to add custom robots.txt (favicon or humans.txt)
-* Bugfix: regression, take modifications of cache_path in event front.start into account
-* Bugfix: in popup enhancer that use fields config, open and close form with fieldset methods (call build_append and build_js_validation)
-* Bugfix: update url_enhanced when changing the virtual_path of one ancestor of an url_enhanced page
-* Bugfix: case of a checkbox in common field, when disabled CRUD always save it like unchecked
-* Bugfix: add TinyMCE IE11 compatibility
-* Bugfix: In Appdesk. abort previous search requests before send the new one
-* Bugfix : Renderer_Date_Picker and Renderer_Datetime_Picker don't ignore value attribute in standalone (::renderer()) case
-* Bugfix : invert cache duration (600s in developpement, 3600s in production)
+* Page's Renderer_Selector now accepts checkboxes, not only radiobuttons
+* Improving of 404, allowing to use novius_ftplite app to add custom robots.txt (favicon or humans.txt)
+* Bugfix: regression, the event front.start takes into account modifications of cache_path
+* Bugfix: in popups enhancer that use fields config, opening and closing the form with fieldset methods (calling of build_append and build_js_validation)
+* Bugfix: updating url_enhanced file when changing the virtual_path of one ancestor of an url_enhanced page
+* Bugfix: case of a checkbox in common fields, when is disabled, CRUD always saves it like unchecked
+* Bugfix: adding WYSIWYG's IE11 compatibility
+* Bugfix: In Appdesk, aborting previous search request before send the new one
+* Bugfix : Renderer_Date_Picker and Renderer_Datetime_Picker ignore value attribute in standalone case ::renderer()
+* Bugfix : inverting cache duration (600s in developpement, 3600s in production)
 
 Slideshow:
 
-* Allow to add link or script tags in image_fields
+* Allowing to add link or script tags in image_fields
 
 Form:
 
-* Bugfix : Warning if event noviusos_form::data_validation return nothing
+* Bugfix : the event noviusos_form::data_validation makes a warning if it returns nothing
 
 Thank for: vrcAlbert, jay3, jguyomard, Foine
 
