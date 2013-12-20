@@ -31,6 +31,7 @@
   Concern: ``context`` in ``Contextable``, ``published`` in ``Publishable``, ``default_sort`` in ``Sortable``, ``parent`` in ``Tree`` and ``context_main`` in ``Twinnable``.
 * Migration: Add a incremental ID and a execution date in migration table
 * App manager: disabled buttons after click. Can't call same action two times
+* Add a generic Renderer::renderer() method for all renderers that extended Renderer
 
 ### Deprecated:
 * Some i18n keys of CRUD config for plural forms
