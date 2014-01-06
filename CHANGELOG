@@ -1,5 +1,10 @@
 Novius OS framework CHANGELOG
 
+?: version Chiba 2.?
+======================================
+
+* Considers cache dirty if cache duration changes
+
 December 20, 2013: version Chiba 2.3.3
 ======================================
 
