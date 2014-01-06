@@ -4,6 +4,7 @@
 
 ###New features:
 * Russian translations
+* Spanish translations
 * Interlingue (Occidental) translations
 * Japanese translations updated
 
