@@ -36,6 +36,7 @@
 
 ### Deprecated:
 * Some i18n keys of CRUD config for plural forms
+* ``Nos::hmvc()`` API is simplified, second argument can be just an array, not an array with an ``args`` key containing an array
 
 ###Thank for:
 Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
