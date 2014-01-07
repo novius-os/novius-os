@@ -42,6 +42,17 @@
 Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 
 
+## ?: version Chiba 2.?
+
+* Considers cache dirty if cache duration changes
+
+### Form:
+
+* Bugfix : blank lines in the submit emails field are excluded before sending email. Blank lines can be added by a pre-process event.
+
+### Thank for:
+jay3
+
 ## December 20, 2013: version Chiba 2.3.3
 
 * Page's Renderer_Selector now accepts checkboxes, not only radiobuttons
