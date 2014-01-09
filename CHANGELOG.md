@@ -3,6 +3,8 @@
 ## version D (?)
 
 ###New features:
+* Applications can extend multiple applications
+* The extend application mechanism works also for views and lang files, not only for config files
 * Russian translations
 * Spanish translations
 * Interlingue (Occidental) translations
@@ -35,8 +37,12 @@
 * Add a generic Renderer::renderer() method for all renderers that extended Renderer
 
 ### Deprecated:
-* Some i18n keys of CRUD config for plural forms
-* ``Nos::hmvc()`` API is simplified, second argument can be just an array, not an array with an ``args`` key containing an array
+* Some i18n keys of CRUD config for plural forms.
+* ``Nos::hmvc()`` API is simplified, second argument can be just an array, not an array with an ``args`` key containing an array.
+* The method ``\Config::loadConfiguration()``. Use ``\Config::load()``.
+* The scope ``public`` of the method ``\Nos\Application::applicationRequiredFromMetadata()`` is deprecated (will become protected)
+* In metadata files, the ``extends`` key containing an array with an ``application`` key
+* Config files extended by application extending mechanism must be defined in a subdirectory apps/applcation_name/
 
 ###Thank for:
 Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
