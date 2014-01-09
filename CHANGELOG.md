@@ -45,13 +45,14 @@ Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 ## ?: version Chiba 2.?
 
 * Considers cache dirty if cache duration changes
+* Bugfix : Relation Orm_Twinnable_ManyMany, preserve relation when a deleted model still has twins
 
 ### Form:
 
 * Bugfix : blank lines in the submit emails field are excluded before sending email. Blank lines can be added by a pre-process event.
 
 ### Thank for:
-jay3
+jay3, vrcAlber
 
 ## December 20, 2013: version Chiba 2.3.3
 
