@@ -13,6 +13,7 @@
 ###Breaking changes:
 * FuelPHP 1.7.1
 * Wijmo 2013v3.20
+* End of support for config key migrations.enabled_types.metadata
 
 ###Vendors update:
 * FuelPHP 1.7.1
@@ -42,7 +43,7 @@
 * The method ``\Config::loadConfiguration()``. Use ``\Config::load()``.
 * The scope ``public`` of the method ``\Nos\Application::applicationRequiredFromMetadata()`` is deprecated (will become protected)
 * In metadata files, the ``extends`` key containing an array with an ``application`` key
-* Config files extended by application extending mechanism must be defined in a subdirectory apps/applcation_name/
+* Config files extended by application extending mechanism must be defined in a subdirectory apps/application_name/
 
 ###Thank for:
 Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
