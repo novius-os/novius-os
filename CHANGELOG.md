@@ -52,6 +52,7 @@ Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 ## ?: version Chiba 2.?
 
 * Considers cache dirty if cache duration changes
+* Add a lock mechanism on images resized generation
 * Bugfix : Relation Orm_Twinnable_ManyMany, preserve relation when a deleted model still has twins
 
 ### Form:
