@@ -54,6 +54,7 @@ Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 * Considers cache dirty if cache duration changes
 * Add a lock mechanism on images resized generation
 * Bugfix : Relation Orm_Twinnable_ManyMany, preserve relation when a deleted model still has twins
+* Bugfix : in ostabs.dispatchEvent(), case of tab opened not at the end. Index is in a data, not that of panels array. Comparaison with selected fails
 
 ### Form:
 
