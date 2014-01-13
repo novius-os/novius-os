@@ -5,13 +5,14 @@ Novius OS framework CHANGELOG
 
 * Considers cache dirty if cache duration changes
 * Add a lock mechanism on images resized generation
-* Bugfix : Relation Orm_Twinnable_ManyMany, preserve relation when a deleted model still has twins
-* Bugfix : in ostabs.dispatchEvent(), case of tab opened not at the end. Index is in a data, not that of panels array. Comparaison with selected fails
+* Bugfix: Relation Orm_Twinnable_ManyMany, preserve relation when a deleted model still has twins
+* Bugfix: in ostabs.dispatchEvent(), case of tab opened not at the end. Index is in a data, not that of panels array. Comparaison with selected fails
+* Bugfix: patch for WYSIWYG's IE11 compatibility
 
 Form:
 
-* Bugfix : blank lines in the submit emails field are excluded before sending email. Blank lines can be added by a pre-process event.
-* Bugfix : if long label in answer fields, grid is truncated. Add auto scroll mode.
+* Bugfix: blank lines in the submit emails field are excluded before sending email. Blank lines can be added by a pre-process event.
+* Bugfix: if long label in answer fields, grid is truncated. Add auto scroll mode.
 
 Thank for: jay3, vrcAlber
 
