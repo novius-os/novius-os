@@ -30,6 +30,7 @@
 
 ###Improvements:
 * I18n : add plural mechanism and implement plural translation
+* Messages in step 1 of the installation wizard
 * WYSIWYG: Refactoring TinyMCE Novius OS specific features. Explode all features in plugins, much more modular.
 * Behaviour: All aliases in ``where`` and ``order_by`` options of ``find()`` work whatever the level where the alias is used and even in chaining methods.
   Concern: ``context`` in ``Contextable``, ``published`` in ``Publishable``, ``default_sort`` in ``Sortable``, ``parent`` in ``Tree`` and ``context_main`` in ``Twinnable``.

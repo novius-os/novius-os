@@ -256,6 +256,7 @@ require_once $_SERVER['NOS_ROOT'].DIRECTORY_SEPARATOR.'novius-os'.DIRECTORY_SEPA
 Fuel::$profiling = false;
 
 define('NOVIUSOS_PATH', realpath(DOCROOT.'..'.DS.'novius-os').DS);
+define('OS_WIN_XP', defined('PHP_WINDOWS_VERSION_MAJOR') && PHP_WINDOWS_VERSION_MAJOR < 6);
 
 class Test
 {
@@ -373,7 +374,7 @@ class Test
         $recap = array();
         foreach (static::$tests as $data) {
             if (!empty($data['is_error'])) {
-                if (isset($data['command_line_relative']) || isset($data['command_line'])) {
+                if (isset($data['command_line_relative']) || !empty($data['command_line'])) {
                     if ($command_line) {
                         $cmd = (array) \Arr::get($data, 'command_line_relative', $data['command_line']);
                         if (!empty($cmd[1]) && $cmd[1] == '# or') {
@@ -384,7 +385,7 @@ class Test
                             $recap[] = $c;
                         }
                     }
-                } elseif (!$command_line && isset($data['description'])) {
+                } elseif (!$command_line && !empty($data['description'])) {
                     $recap[] = $data['description'];
                 }
             }
@@ -447,6 +448,7 @@ if ($step > 0) {
         'session_path.writeable' => array(
             'title'        => 'Session directory must be writeable',
             'passed'       => is_writable($session_save_path),
+            'description'  => OS_WIN ? 'Give write permission to all users on '.$session_save_path : null,
             'command_line' => 'chmod a+w '.$session_save_path,
         ),
 
@@ -466,6 +468,7 @@ if ($step > 0) {
         'folder.config.writeable' => array(
             'title'        => 'APPPATH/config/ must be writeable (temporarily, to write the db.php and crypt.php config files)',
             'passed'       => is_writeable(APPPATH.'config'),
+            'description'  => OS_WIN ? 'Give write permission to all users on APPPATH/config/' : null,
             'command_line' => 'chmod a+w '.APPPATH.'config',
             'run_only_if'  => !file_exists(APPPATH.'config'.DS.'db.config.php') or
                 !file_exists(APPPATH.'config'.DS.'crypt.config.php'),
@@ -474,19 +477,22 @@ if ($step > 0) {
         'folder.cache.writeable' => array(
             'title'        => 'APPPATH/cache/ must be writeable',
             'passed'       => is_writeable(APPPATH.'cache'),
+            'description'  => OS_WIN ? 'Give write permission to all users on APPPATH/cache/' : null,
             'command_line' => 'chmod a+w '.APPPATH.'cache',
         ),
 
         'folder.cache.media.writeable' => array(
-            'title'        => 'APPPATH/cache/media must be writeable',
+            'title'        => 'APPPATH/cache/media/ must be writeable',
             'passed'       => is_writeable(APPPATH.'cache'.DS.'media'),
+            'description'  => OS_WIN ? 'Give write permission to all users on APPPATH/cache/media/' : null,
             'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'media',
             'run_only_if'  => is_dir(APPPATH.'cache'.DS.'media'),
         ),
 
         'folder.cache.fuelphp.writeable' => array(
-            'title'        => 'APPPATH/cache/fuelphp must be writeable',
+            'title'        => 'APPPATH/cache/fuelphp/ must be writeable',
             'passed'       => is_writeable(APPPATH.'cache'.DS.'fuelphp'),
+            'description'  => OS_WIN ? 'Give write permission to all users on APPPATH/cache/fuelphp/' : null,
             'command_line' => 'chmod a+w '.APPPATH.'cache'.DS.'fuelphp',
             'run_only_if'  => is_dir(APPPATH.'cache'.DS.'fuelphp'),
         ),
@@ -494,40 +500,46 @@ if ($step > 0) {
         'folder.data.writeable' => array(
             'title'        => 'APPPATH/data/ must be writeable',
             'passed'       => is_writeable($folder_data),
+            'description'  => OS_WIN ? 'Give write permission to all users on APPPATH/data/' : null,
             'command_line' => 'chmod a+w '.$folder_data,
         ),
 
         'folder.data.config.writeable' => array(
-            'title'           => 'APPPATH/data/config/ must be writeable',
-            'passed'          => is_writeable($folder_data.'config'),
-            'command_line'    => array('chmod a+w '.$folder_data.'config'),
-            'run_only_if'     => is_dir($folder_data.'config'),
+            'title'        => 'APPPATH/data/config/ must be writeable',
+            'passed'       => is_writeable($folder_data.'config'),
+            'description'  => OS_WIN ? 'Give write permission to all users on APPPATH/data/config/' : null,
+            'command_line' => 'chmod a+w '.$folder_data.'config',
+            'run_only_if'  => is_dir($folder_data.'config'),
         ),
 
         'folder.data.media.writeable' => array(
-            'title'           => 'APPPATH/data/media/ must be writeable',
-            'passed'          => is_writeable($folder_data.'media'),
-            'command_line'    => array('chmod a+w '.$folder_data.'media'),
-            'run_only_if'     => is_dir($folder_data.'media'),
+            'title'        => 'APPPATH/data/media/ must be writeable',
+            'passed'       => is_writeable($folder_data.'media'),
+            'description'  => OS_WIN ? 'Give write permission to all users on APPPATH/data/media/' : null,
+            'command_line' => 'chmod a+w '.$folder_data.'media',
+            'run_only_if'  => is_dir($folder_data.'media'),
         ),
 
         'folder.data.tmp' => array(
-            'title'           => 'APPPATH/data/temp/ must exist',
-            'passed'          => is_dir($folder_data.'temp'),
-            'command_line'    => array('mkdir '.$folder_data.'temp'),
-            'run_only_if'     => !is_dir($folder_data),
+            'title'        => 'APPPATH/data/temp/ must exist',
+            'passed'       => is_dir($folder_data.'temp'),
+            'description'  => OS_WIN ? 'Create a directory APPPATH/data/temp/' : null,
+            'command_line' => 'mkdir '.$folder_data.'temp',
+            'run_only_if'  => !is_dir($folder_data),
         ),
 
         'folder.metadata.writeable' => array(
-            'title'           => 'APPPATH/metadata/ must be writeable',
-            'passed'          => is_writeable(APPPATH.'metadata'),
-            'command_line'    => 'chmod a+w '.APPPATH.'metadata',
+            'title'        => 'APPPATH/metadata/ must be writeable',
+            'passed'       => is_writeable(APPPATH.'metadata'),
+            'description'  => OS_WIN ? 'Give write permission to all users on APPPATH/metadata/' : null,
+            'command_line' => 'chmod a+w '.APPPATH.'metadata',
         ),
 
         'public.htaccess.removed' => array(
             'title'        => 'DOCROOT/.htaccess must be removed',
             'passed'       => !is_file(DOCROOT.'.htaccess')
                 || (is_file(NOSROOT.'.htaccess') && !rename(DOCROOT.'.htaccess', DOCROOT.'.htaccess.old')),
+            'description'  => OS_WIN ? 'Rename '.DOCROOT.'.htaccess to '.DOCROOT.'.htaccess.old' : null,
             'command_line' => 'mv '.DOCROOT.'.htaccess '.DOCROOT.'.htaccess.old',
             'run_only_if'  => is_file(NOSROOT.'.htaccess'),
         ),
@@ -535,13 +547,15 @@ if ($step > 0) {
         'public.cache.writeable' => array(
             'title'        => 'DOCROOT/cache/ must be writeable',
             'passed'       => is_writeable(DOCROOT.'cache'),
+            'description'  => OS_WIN ? 'Give write permission to all users on DOCROOT/cache/' : null,
             'command_line' => 'chmod a+w '.DOCROOT.'cache',
             'run_only_if'  => is_dir(DOCROOT.'cache'),
         ),
 
         'public.cache.media.writeable' => array(
-            'title'        => 'DOCROOT/cache/media must be writeable',
+            'title'        => 'DOCROOT/cache/media/ must be writeable',
             'passed'       => is_writeable(DOCROOT.'cache'.DS.'media'),
+            'description'  => OS_WIN ? 'Give write permission to all users on DOCROOT/cache/media/' : null,
             'command_line' => 'chmod a+w '.DOCROOT.'cache'.DS.'media',
             'run_only_if'  => is_dir(DOCROOT.'cache'.DS.'media'),
         ),
@@ -549,6 +563,7 @@ if ($step > 0) {
         'public.htdocs.writeable' => array(
             'title'        => 'DOCROOT/htdocs/ must be writeable (to create the symbolic link htdocs/novius-os)',
             'passed'       => is_writeable(DOCROOT.'htdocs'),
+            'description'  => OS_WIN ? 'Give write permission to all users on DOCROOT/htdocs/' : null,
             'command_line' => array(
                 'chmod a+w '.DOCROOT.'htdocs',
                 '# or',
@@ -561,6 +576,7 @@ if ($step > 0) {
         'public.media.writeable' => array(
             'title'        => 'DOCROOT/media/ must be writeable',
             'passed'       => is_writeable(DOCROOT.'media'),
+            'description'  => OS_WIN ? 'Give write permission to all users on DOCROOT/media/' : null,
             'command_line' => 'chmod a+w '.DOCROOT.'media',
             'run_only_if'  => is_dir(DOCROOT.'media'),
         ),
@@ -568,13 +584,15 @@ if ($step > 0) {
         'public.data.writeable' => array(
             'title'        => 'DOCROOT/data/ must be writeable',
             'passed'       => is_writeable(DOCROOT.'data'),
+            'description'  => OS_WIN ? 'Give write permission to all users on DOCROOT/data/' : null,
             'command_line' => 'chmod a+w '.DOCROOT.'data',
             'run_only_if'  => is_dir(DOCROOT.'data'),
         ),
 
         'public.htdocs.apps.writeable' => array(
-            'title'        => 'DOCROOT/htdocs/apps must be writeable',
+            'title'        => 'DOCROOT/htdocs/apps/ must be writeable',
             'passed'       => is_writeable(DOCROOT.'htdocs'.DS.'apps'),
+            'description'  => OS_WIN ? 'Give write permission to all users on DOCROOT/htdocs/apps/' : null,
             'command_line' => 'chmod a+w '.DOCROOT.'htdocs'.DS.'apps',
             'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'apps'),
         ),
@@ -582,6 +600,7 @@ if ($step > 0) {
         'public.static.writeable' => array(
             'title'        => 'DOCROOT/static/ must be writeable (to create the symbolic link static/novius-os)',
             'passed'       => is_dir(DOCROOT.'static') && is_writeable(DOCROOT.'static'),
+            'description'  => OS_WIN ? 'Give write permission to all users on DOCROOT/static/' : null,
             'command_line' => array(
                 'chmod a+w '.DOCROOT.'static',
                 '# or',
@@ -592,8 +611,9 @@ if ($step > 0) {
         ),
 
         'public.static.apps.writeable' => array(
-            'title'        => 'DOCROOT/static/apps must be writeable',
+            'title'        => 'DOCROOT/static/apps/ must be writeable',
             'passed'       => is_dir(DOCROOT.'static'.DS.'apps') && is_writeable(DOCROOT.'static'.DS.'apps'),
+            'description'  => OS_WIN ? 'Give write permission to all users on DOCROOT/static/apps/' : null,
             'command_line' => 'chmod a+w '.DOCROOT.'static'.DS.'apps',
             'run_only_if'  => file_exists(DOCROOT.'static'.DS.'apps'),
         ),
@@ -602,6 +622,7 @@ if ($step > 0) {
             'title'        => 'DOCROOT/htdocs/novius-os must link to NOSPATH/htdocs',
             'passed'       => \File::is_link(DOCROOT.'htdocs'.DS.'novius-os')
                 && realpath(DOCROOT.'htdocs'.DS.'novius-os') == NOVIUSOS_PATH.'htdocs',
+            'description'  => OS_WIN ? 'Change DOCROOT/htdocs/novius-os for linked to NOSPATH/htdocs' : null,
             'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'htdocs', NOVIUSOS_PATH.'htdocs')
                 .' '.DOCROOT.'htdocs'.DS.'novius-os',
             'run_only_if'  => file_exists(DOCROOT.'htdocs'.DS.'novius-os'),
@@ -611,6 +632,7 @@ if ($step > 0) {
             'title'        => 'DOCROOT/static/novius-os must link to NOSPATH/static',
             'passed'       => \File::is_link(DOCROOT.'static'.DS.'novius-os')
                 && realpath(DOCROOT.'static'.DS.'novius-os') == NOVIUSOS_PATH.'static',
+            'description'  => OS_WIN ? 'Change DOCROOT/static/novius-os for linked to NOSPATH/static' : null,
             'command_line' => 'ln -s '.Nos\Tools_File::relativePath(DOCROOT.'static', NOVIUSOS_PATH.'static')
                 .' '.DOCROOT.'static'.DS.'novius-os',
             'run_only_if'  => file_exists(DOCROOT.'static'.DS.'novius-os'),
@@ -620,7 +642,10 @@ if ($step > 0) {
             'title'        => 'We can’t create the DOCROOT/static/novius-os symbolic link',
             'passed'       => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static')
                 && \File::relativeSymlink(NOVIUSOS_PATH.'static', DOCROOT.'static'.DS.'novius-os'),
-            'description'  => 'Please restart your server with the ‘Run as administrator’ option.',
+            'description'  =>
+                OS_WIN_XP ?
+                'Sorry, symlinks are not supported natively by your OS (Windows XP).' :
+                'Please restart your server with the ‘Run as administrator’ option.',
             'run_only_if'  => !file_exists(DOCROOT.'static'.DS.'novius-os') && is_writeable(DOCROOT.'static'),
         ),
         'public.htdocs.nos.create' => array(
@@ -633,8 +658,9 @@ if ($step > 0) {
         ),
 
         'logs.fuel' => array(
-            'title'        => 'logs/fuel must be writeable',
+            'title'        => 'logs/fuel/ must be writeable',
             'passed'       => is_writeable(NOSROOT.'logs/fuel'),
+            'description'  => OS_WIN ? 'Give write permission to all users on logs/fuel/' : null,
             'command_line' => 'chmod a+w '.NOSROOT.'logs/fuel',
         ),
     ));
@@ -783,9 +809,10 @@ if ($step == 1) {
         <a href="install.php?step=2"><button>Perfect, proceed to step 2 ‘Set up the database’</button></a>
         <?php
     } else {
+        $errors = Test::results('error');
         ?>
         <h3>Some tests have failed</h3>
-        <?php echo Test::results('error') ?>
+        <?php echo $errors ?>
         <p>All the other tests passed. <a id="show_tests" href="#">Show the full test results</a>.</p>
         <div id="tests" style="display:none;"><?php echo Test::results(array('warning', 'success')) ?></div>
 
@@ -794,18 +821,38 @@ if ($step == 1) {
         <ul id="todo">
         <?php
         $recap_with_description = Test::recap(false);
+        $recap_with_description = implode('</li><li>', $recap_with_description);
         if (!empty($recap_with_description)) {
             ?>
-            <li><?php echo implode('</li><li>', $recap_with_description) ?></li>
+            <li><?php echo $recap_with_description ?></li>
             <?php
         }
 
-        $recap_with_command_line = Test::recap(true);
-        if (!empty($recap_with_command_line)) {
+        if (!OS_WIN) {
+            $recap_with_command_line = Test::recap(true);
+            $recap_with_command_line = implode("\n", $recap_with_command_line);
+            if (!empty($recap_with_command_line)) {
+                ?>
+                <li>Open a terminal, copy and run the following commands:<br />
+                <textarea style="width: 800px; height: 80px;"><?php echo $recap_with_command_line ?></textarea><br />
+                <em>Unix commands. You may have to adapt them to your OS.</em>
+                </li>
+                <?php
+            }
+        }
+        $recap_glossary = '';
+        if (strpos($errors.$recap_with_description, 'APPPATH') !== -1) {
+            $recap_glossary .= '<code>APPPATH</code><em>: '.APPPATH.'</em><br />';
+        }
+        if (strpos($errors.$recap_with_description, 'DOCROOT') !== -1) {
+            $recap_glossary .= '<code>DOCROOT</code><em>: '.DOCROOT.'</em><br />';
+        }
+        if (!OS_WIN && strpos($recap_with_description, 'chmod a+w') !== -1) {
+            $recap_glossary .= '<code>chmod a+w</code><em>: Write permission for all users</em><br />';
+        }
+        if (!empty($recap_glossary)) {
             ?>
-            <li>Open a terminal, copy and run the following commands:<br />
-            <textarea style="width: 800px; height: 80px;"><?php echo implode("\n", $recap_with_command_line); ?></textarea><br />
-            <em>Unix commands. You may have to adapt them to your OS.</em></li>
+            <li><?php echo $recap_glossary ?></li>
             <?php
         }
         ?>
