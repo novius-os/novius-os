@@ -50,13 +50,18 @@
 Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 
 
-## ?: version Chiba 2.?
+## January 20, 2014: version Chiba 2.4
 
 * Considers cache dirty if cache duration changes
 * Add a lock mechanism on images resized generation
+* Init all relation types to empty in models
 * Bugfix: Relation Orm_Twinnable_ManyMany, preserve relation when a deleted model still has twins
 * Bugfix: in ostabs.dispatchEvent(), case of tab opened not at the end. Index is in a data, not that of panels array. Comparaison with selected fails
 * Bugfix: patch for WYSIWYG's IE11 compatibility
+* Bugfix: if a metadata value contains two consecutive spaces, this metadata always marked as dirty
+* Bugfix: Config_Php save when apc enabled
+* Bugfix: App manager refresh all metadata save metadatas with labels translated
+* Bugfix: Model_User->checkPermission() don't work due to a typo
 
 ### Form:
 
@@ -64,7 +69,7 @@ Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 * Bugfix: if long label in answer fields, grid is truncated. Add auto scroll mode.
 
 ### Thank for:
-jay3, vrcAlber
+jay3, vrcAlber, Unibozu
 
 ## December 20, 2013: version Chiba 2.3.3
 
