@@ -19,7 +19,7 @@ Form:
 * Bugfix: blank lines in the submit emails field are excluded before sending email. Blank lines can be added by a pre-process event.
 * Bugfix: if long label in answer fields, grid is truncated. Add auto scroll mode.
 
-Thank for: jay3, vrcAlber, Unibozu
+Thank for: jay3, vrcAlbert, Unibozu
 
 December 20, 2013: version Chiba 2.3.3
 ======================================
