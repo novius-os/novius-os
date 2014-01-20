@@ -46,8 +46,8 @@
 * In metadata files, the ``extends`` key containing an array with an ``application`` key
 * Config files extended by application extending mechanism must be defined in a subdirectory apps/application_name/
 
-###Thank for:
-Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
+###Thank to:
+@ounziw, Vadim Oparin, @vrcAlbert, @jay3
 
 
 ## January 20, 2014: version Chiba 2.4
@@ -68,8 +68,8 @@ Fumito Mizuno, Vadim Oparin, vrcAlbert, jay3
 * Bugfix: blank lines in the submit emails field are excluded before sending email. Blank lines can be added by a pre-process event.
 * Bugfix: if long label in answer fields, grid is truncated. Add auto scroll mode.
 
-### Thank for:
-jay3, vrcAlber, Unibozu
+### Thank to:
+@jay3, @vrcAlbert, @Unibozu
 
 ## December 20, 2013: version Chiba 2.3.3
 
@@ -92,8 +92,8 @@ jay3, vrcAlber, Unibozu
 
 * Bugfix : the event noviusos_form::data_validation makes a warning if it returns nothing
 
-### Thank for:
-vrcAlbert, jay3, jguyomard, Foine
+### Thank to:
+@vrcAlbert, @jay3, @jguyomard, @Foine
 
 ## December 3, 2013: version Chiba 2.3.2
 
@@ -156,8 +156,8 @@ vrcAlbert, jay3, jguyomard, Foine
 ### Slideshow:
 * Bugfix: Change \Config::load() to \Config::loadConfiguration in order to easily extend the application
 
-### Thank for:
-JayPS, Foine, vrcAlbert, shaoshiva
+### Thank to:
+@jay3, @Foine, @vrcAlbert, @shaoshiva
 
 ## October 14, 2013: version Chiba 2.2
 
@@ -195,8 +195,8 @@ JayPS, Foine, vrcAlbert, shaoshiva
 ### Blog/News:
 Bugfix: Regression due to ORM when saving categories relation of a post
 
-### Thank for:
-JayPS
+### Thank to:
+@jay3
 
 ## September 11, 2013: version Chiba 2.1
 
@@ -312,8 +312,8 @@ JayPS
 * Page: Model_Page->link() is deprecated, please use Model_Page->htmlAnchor() instead.
 * Misc: Event 'user_login' is deprecated, please use 'admin.loginSuccess' instead.
 
-### Thank for:
-Fumito Mizuno, Julien Guyomard
+### Thank to:
+@ounziw, @jguyomard
 
 ## ?: version Chiba 1.?
 
@@ -343,8 +343,8 @@ Fumito Mizuno, Julien Guyomard
 ### Form:
 - Bugfix : form open tag not auto-closed anymore
 
-### Thank for:
-@romunovius, @Victor ALBERT, @Foine, @ounziw, @jguyomard
+### Thank to:
+@romunovius, @vrcAlbert, @Foine, @ounziw, @jguyomard
 
 ## May 17, 2013: version Chiba 1.0.1
 
@@ -357,8 +357,8 @@ Fumito Mizuno, Julien Guyomard
 ### Form:
 Minors bugfix and improvement
 
-### Thank for:
-@Fumito Mizuno, @Victor ALBERT, @Pierrinho
+### Thank to:
+@ounziw, @vrcAlbert, @Pierrinho
 
 ## April 25, 2013: version Chiba 1
 
@@ -419,8 +419,8 @@ Minors bugfix and improvement
 ### Blog / News:
 - Display related posts of authors
 
-### Thank for:
-@Fumito Mizuno, @JayPS, @Victor ALBERT, @Pierrinho
+### Thank to:
+@ounziw, @jay3, @vrcAlbert, @Pierrinho
 
 
 ## ?: version 0.2.0.3
@@ -469,8 +469,8 @@ Minors bugfix and improvement
 - Bugfix: front of slideshow javascript
 - Bugfix: front in IE8, in onreadystatechange event, readyState is not 'complete' but 'loaded'
 
-### Thank for:
-@Julien Guyomard, @Pierre Vion and @Foine
+### Thank to:
+@jguyomard, @Pierrinho and @Foine
 
 
 ## February 26, 2013: version 0.2.0.1
@@ -511,8 +511,8 @@ Minors bugfix and improvement
 ### Slideshow:
 - Bugfix: bad icon URLs when not installed on root domain
 
-### Thank for:
-@Victor Albert, @Pierre Vion, @JayPS, @FredDubois, @Foine, @Yves Stadler
+### Thank to:
+@vrcAlbert, @Pierrinho, @jay3, @FredDubois, @Foine, @mvy
 
 
 ## January 31, 2013: version 0.2
@@ -545,8 +545,8 @@ Minors bugfix and improvement
 - Time picker renderer can be use outside a fieldset
 - Many UI improvements and bugfixes
 
-### Thank for:
-@JayPS, @Shaoshiva,  @Victor Albert, @Julien Guyomard
+### Thank to:
+@jay3, @Shaoshiva,  @vrcAlbert, @jguyomard
 
 ## December 20, 2012: version 0.1.5
 
