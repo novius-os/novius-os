@@ -4,6 +4,7 @@ Novius OS framework CHANGELOG
 ===================
 
 * Bugfix: In Twinnable::findMainOrContext(), $context parameter can be an array
+* Bugfix: Renderer_Time_Picker, js_init() is a static function
 
 
 January 20, 2014: version Chiba 2.4
