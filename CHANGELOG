@@ -1,5 +1,11 @@
 Novius OS framework CHANGELOG
 
+?: version Chiba ?
+===================
+
+* Bugfix: In Twinnable::findMainOrContext(), $context parameter can be an array
+
+
 January 20, 2014: version Chiba 2.4
 ======================================
 
