@@ -51,6 +51,10 @@
 ###Thank to:
 @ounziw, Vadim Oparin, @vrcAlbert, @jay3
 
+## ?: version Chiba ?
+
+* Bugfix: In Twinnable::findMainOrContext(), $context parameter can be an array
+
 
 ## January 20, 2014: version Chiba 2.4
 
