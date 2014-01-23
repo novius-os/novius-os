@@ -434,7 +434,7 @@ if ($step > 0) {
 
     Test::register(array(
         'directive.htaccess_allow' => array(
-            'title'        => 'Your server not allow .htaccess file',
+            'title'        => 'Your server does not allow .htaccess file',
             'passed'       => empty($base_url) || !empty($_SERVER['HTACCESSALLOW']),
             'description'  => 'If your server uses Apache, check that configuration have '.
                 '<code>AllowOverride All</code> for the Novius-OS directory.',
