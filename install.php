@@ -35,12 +35,23 @@ if ($htaccess_move) {
 
         $htaccess = str_replace('novius-os-install-dir/', str_replace('\\', '/', $nos_dir), $content);
 
-        $file = $document_root.$nos_dir.'.htaccess';
-        if (is_writable($document_root.$nos_dir)) {
-            $handle = fopen($file, 'w');
+        if (file_exists($document_root.$nos_dir.'.htaccess')) {
+            $file = $document_root.$nos_dir.'.htaccess';
+            $handle = fopen($file, 'r');
             if ($handle) {
-                $htaccess_save = fwrite($handle, $htaccess);
+                $content = fread($handle, filesize($file));
                 fclose($handle);
+
+                $htaccess_save = trim($htaccess) == trim($content);
+            }
+        } else {
+            $file = $document_root.$nos_dir.'.htaccess';
+            if (is_writable($document_root.$nos_dir)) {
+                $handle = fopen($file, 'w');
+                if ($handle) {
+                    $htaccess_save = fwrite($handle, $htaccess);
+                    fclose($handle);
+                }
             }
         }
     }
@@ -198,13 +209,13 @@ if ($htaccess_save && $htaccess_move) {
 
         echo '<p>Create a file name <code>.htaccess</code> and write this code in it :</p>';
         echo '<pre><code style="width:800px;">', htmlspecialchars($htaccess), '</code></pre>';
-        echo '<p>Upload this file in the Novius OS\'s directory of your hosting server (<code>', $nos_dir, '</code>).</p>';
+        echo '<p>Upload this file in the Novius OS\'s directory of your hosting server (<code>', $nos_dir, '</code>, beside CHANGELOG.md file).</p>';
     }
 
     if (!$htaccess_move) {
 
         echo '<h2>Rename invalid .htaccess file in the Novius OS\'s public directory</h2>';
-        echo '<p>Rename <code>', $nos_dir, 'public'.DIRECTORY_SEPARATOR.'.htaccess</code> file by <code>', $nos_dir, 'public'.DIRECTORY_SEPARATOR.'.htaccess.old</code>.</p>';
+        echo '<p>Rename <code>', 'public'.DIRECTORY_SEPARATOR.'.htaccess</code> file by <code>', 'public'.DIRECTORY_SEPARATOR.'.htaccess.old</code>.</p>';
     }
     ?>
     <p><a href="install.php"><button>It's done, refresh this page</button></a></p>

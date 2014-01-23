@@ -433,10 +433,17 @@ if ($step > 0) {
     $session_save_path = \Arr::get(\Config::load('session', true), 'file.path');
 
     Test::register(array(
+        'directive.htaccess_allow' => array(
+            'title'        => 'Your server not allow .htaccess file',
+            'passed'       => empty($base_url) || !empty($_SERVER['HTACCESSALLOW']),
+            'description'  => 'If your server uses Apache, check that configuration have '.
+                '<code>AllowOverride All</code> for the Novius-OS directory.',
+        ),
         'directive.rewrite_module' => array(
             'title'        => 'Server ‘rewrite_module’ must be enabled',
             'passed'       => $base_url == '',
             'description'  => 'Enable ‘rewrite_module’ in your server configuration (probably Apache).',
+            'run_only_if'  => empty($base_url) || !empty($_SERVER['HTACCESSALLOW']),
         ),
         'requirements.gd_is_installed' => array(
             'title'        => 'GD is required',
@@ -456,13 +463,15 @@ if ($step > 0) {
             'title'        => 'PHP configuration directive ‘short_open_tag’ must be on',
             'passed'       => ini_get('short_open_tag') != false,
             'description'  => 'Set <code>short_open_tag = On</code> in <code>'.php_ini_loaded_file().
-                '</code>.<br /><em>Why? Because <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">since PHP 5.4 short_open_tag is always on</a>.</em>',
+                '</code>.<br /><em>Why? Because <a href="http://php.net/manual/en/ini.core.php#ini.short-open-tag">'.
+                'since PHP 5.4 short_open_tag is always on</a>.</em>',
             'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
         ),
         'directive.magic_quotes_gpc' => array(
             'title'        => 'PHP configuration directive ‘magic_quotes_gpc’ must be off',
             'passed'       => ini_get('magic_quotes_gpc') == false,
-            'description'  => 'Set <code>magic_quotes_gpc = Off</code> in <code>'.php_ini_loaded_file().'</code>.<br /><em>Why? Because <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">magic_quotes_gpc is deprecated in PHP 5.3 and removed in PHP 5.4</a>.</em>',
+            'description'  => 'Set <code>magic_quotes_gpc = Off</code> in <code>'.php_ini_loaded_file().'</code>.'.
+                '<br /><em>Why? Because <a href="http://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc">magic_quotes_gpc is deprecated in PHP 5.3 and removed in PHP 5.4</a>.</em>',
             'run_only_if'  => version_compare(PHP_VERSION, '5.4.0', '<'),
         ),
         'folder.config.writeable' => array(
@@ -669,6 +678,7 @@ if ($step > 0) {
 
     Test::reset();
 
+    Test::run('directive.htaccess_allow');
     Test::run('directive.rewrite_module');
 
     Test::separator();

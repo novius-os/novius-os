@@ -10,6 +10,8 @@ Options +FollowSymLinks -Indexes
 # Replace novius-os-install-dir by the real Novius OS installed directory
 ErrorDocument 404 /novius-os-install-dir/public/htdocs/novius-os/404.php
 
+SetEnv HTACCESSALLOW true
+
 <IfModule mod_version.c>
     <IfVersion >= 2.4>
         DirectoryIndex disabled
