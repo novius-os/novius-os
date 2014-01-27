@@ -39,6 +39,7 @@
 * Add a generic Renderer::renderer() method for all renderers that extended Renderer
 * Blog/News: Add a specific title for author posts list
 * Blog/News: Change page_title and meta title for category, tag and author posts list
+* Comments: The comment context can be passed by parameter in API
 
 ### Deprecated:
 * Some i18n keys of CRUD config for plural forms.
