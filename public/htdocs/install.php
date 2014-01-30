@@ -924,6 +924,9 @@ if ($step == 2) {
             Config::load($config, 'db'); // set config inside db and reload the cache
             \View::redirect('errors'.DS.'php_error', NOSPATH.'views/errors/empty.view.php');
 
+
+            set_time_limit(60);
+
             // Check credentials
             $old_level = error_reporting(0);
             Migrate::latest('nos', 'package');
