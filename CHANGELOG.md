@@ -55,6 +55,7 @@
 
 ## ?: version Chiba ?
 
+* Exception messages will no longer be replace by a common message in PRODUCTION environment for fieldset complete process
 * Bugfix: In Twinnable::findMainOrContext(), $context parameter can be an array
 * Bugfix: Renderer_Time_Picker, js_init() is a static function
 * Bugfix: in 404.php, remove a warning log if REDIRECT_QUERY_STRING not setted in $_SERVER
