@@ -56,11 +56,13 @@
 ## ?: version Chiba ?
 
 * Exception messages will no longer be replace by a common message in PRODUCTION environment for fieldset complete process
+* Adding a "check all" on the CRUD delete popup when twinnable
 * Bugfix: In Twinnable::findMainOrContext(), $context parameter can be an array
 * Bugfix: Renderer_Time_Picker, js_init() is a static function
 * Bugfix: in 404.php, remove a warning log if REDIRECT_QUERY_STRING not setted in $_SERVER
 * Bugfix: Cascade save of Attachment relation fails on new model item
 * Bugfix: Increase maximum execution time for install migrations to prevent PHP timeout
+* Bugfix: confirmationDialog will now be centered verticaly
 
 
 ## January 20, 2014: version Chiba 2.4
