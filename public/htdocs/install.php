@@ -20,7 +20,7 @@ ob_start();
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Novius OS - Install wizard</title>
     <meta name="robots" content="noindex,nofollow">
-    <link rel="shortcut icon" href="<?php echo $base_url ?>static/novius-os/admin/novius-os/img/noviusos.ico">
+    <link rel="shortcut icon" href="<?php echo $base_url ?>static/novius-os/admin/novius-os/img/favicon/favicon.ico">
 
     <style type="text/css">
         html {
@@ -241,7 +241,7 @@ ob_start();
 <body>
 
 <h1 id="header">
-    <img src="<?php echo $base_url ?>logo-64x80.png" width="80" height="64" alt="Novius OS Logo"> Novius OS install wizard
+    <img src="<?php echo $base_url ?>logo-80x74.png" width="80" height="74" alt="Novius OS Logo"> Novius OS install wizard
 </h1>
 <div id="blank_slate">
 <?php
