@@ -29,6 +29,7 @@
 
 
 ###Improvements:
+* Integration of the Novius OS new logo
 * I18n : add plural mechanism and implement plural translation
 * Messages in step 1 of the installation wizard
 * WYSIWYG: Refactoring TinyMCE Novius OS specific features. Explode all features in plugins, much more modular.
@@ -51,7 +52,7 @@
 * Config files extended by application extending mechanism must be defined in a subdirectory apps/application_name/
 
 ###Thank to:
-@ounziw, Vadim Oparin, @vrcAlbert, @jay3
+@ounziw, Vadim Oparin, @vrcAlbert, @jay3, @jguyomard
 
 ## ?: version Chiba ?
 
