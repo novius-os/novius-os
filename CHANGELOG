@@ -12,6 +12,7 @@ Novius OS framework CHANGELOG
 * Bugfix: Increase maximum execution time for install migrations to prevent PHP timeout
 * Bugfix: confirmationDialog will now be centered verticaly
 
+Thanks for: Pierrinho 
 
 January 20, 2014: version Chiba 2.4
 ======================================
