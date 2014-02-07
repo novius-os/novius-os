@@ -64,7 +64,10 @@
 * Bugfix: Cascade save of Attachment relation fails on new model item
 * Bugfix: Increase maximum execution time for install migrations to prevent PHP timeout
 * Bugfix: confirmationDialog will now be centered verticaly
+* Bugfix: Update ui.css of the bootstrap theme of tinyMCE for custom styles readability
 
+### Thanks to:
+@Pierrinho
 
 ## January 20, 2014: version Chiba 2.4
 
