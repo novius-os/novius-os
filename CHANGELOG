@@ -12,6 +12,7 @@ Novius OS framework CHANGELOG
 * Bugfix: Increase maximum execution time for install migrations to prevent PHP timeout
 * Bugfix: confirmationDialog will now be centered verticaly
 * Bugfix: Update ui.css of the bootstrap theme of tinyMCE for custom styles readability
+* Bugfix: Relation twinnable many many cleans with id, not with common ids
 
 Thanks for: Pierrinho
 
