@@ -1,5 +1,9 @@
 # Novius OS framework CHANGELOG
 
+## ?: version Dubrovka ?
+
+* Bugfix: in the relation twinnable manymany, if join_on, wrong alias on fallback join
+
 ## February 10, 2014: version Dubrovka
 
 ### New features:
