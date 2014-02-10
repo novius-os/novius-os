@@ -54,7 +54,7 @@
 ### Thank to:
 @ounziw, Vadim Oparin, @vrcAlbert, @jay3, @jguyomard
 
-## ?: version Chiba ?
+## February 10, 2014: version Chiba 2.4.1
 
 * Exception messages will no longer be replace by a common message in PRODUCTION environment for fieldset complete process
 * Adding a "check all" on the CRUD delete popup when twinnable
