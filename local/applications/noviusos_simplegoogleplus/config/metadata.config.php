@@ -10,7 +10,7 @@
 
 return array(
     'name'    => 'Simple Google+ share',
-    'version' => 'chiba.2.4',
+    'version' => 'dubrovka',
     'provider' => array(
         'name' => 'Novius OS',
     ),

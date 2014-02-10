@@ -1,10 +1,10 @@
-# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/chiba2)](https://travis-ci.org/novius-os/novius-os)
+# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/dubrovka)](https://travis-ci.org/novius-os/novius-os)
 
 Novius OS is an **Open Source PHP Content Management System designed as an applications platform**, hence the ‘OS’ suffix. You tailor Novius OS to your content through the creation of custom applications. Your well-structured content is to ready to be published to any channel—present and future.
 
 Novius OS is **built with the MVC framework, FuelPHP**. “FuelPHP is a simple, flexible, community driven PHP 5.3+ framework, based on the best ideas of other frameworks, with a fresh start!” Novius OS HTML5 interface is **powered by jQuery UI** and the Wijmo library.
 
-* Current version: Novius OS Chiba 2.4
+* Current version: Novius OS Dubrovka
 
 ## Requirements
 
@@ -16,12 +16,12 @@ Novius OS is **built with the MVC framework, FuelPHP**. “FuelPHP is a simple, 
 ## Installation
 
 (This is the quick install procedure. Command line access to the server with sudo admin rights
-and Git are required. [Alternative methods](http://docs.novius-os.org/en/chiba.2/install/install.html) are available.)
+and Git are required. [Alternative methods](http://docs.novius-os.org/en/dubrovka/install/install.html) are available.)
 
 Open a terminal and run:
 ```bash
 cd /var/www
-sudo wget http://raw.github.com/novius-os/ci/master/chiba2/tools/install.sh && sh install.sh
+sudo wget http://raw.github.com/novius-os/ci/master/dubrovka/tools/install.sh && sh install.sh
 ```
 
 Once the installation completes:

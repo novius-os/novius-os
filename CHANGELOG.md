@@ -1,6 +1,6 @@
 # Novius OS framework CHANGELOG
 
-## version D (?)
+## February 10, 2014: version Dubrovka
 
 ###New features:
 * Applications can extend multiple applications
