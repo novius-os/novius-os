@@ -2,7 +2,7 @@
 
 ## February 10, 2014: version Dubrovka
 
-###New features:
+### New features:
 * Applications can extend multiple applications
 * The extend application mechanism works also for views and lang files, not only for config files
 * Russian translations
@@ -10,12 +10,12 @@
 * Interlingue (Occidental) translations
 * Japanese translations updated
 
-###Breaking changes:
+### Breaking changes:
 * FuelPHP 1.7.1
 * Wijmo 2013v3.20
 * End of support for config key migrations.enabled_types.metadata
 
-###Vendors update:
+### Vendors update:
 * FuelPHP 1.7.1
 * Wijmo 2013v3.20
 * jQuery 1.10.2
@@ -28,7 +28,7 @@
 * JQuery.datetimepicker 1.4.3
 
 
-###Improvements:
+### Improvements:
 * Integration of the Novius OS new logo
 * I18n : add plural mechanism and implement plural translation
 * Messages in step 1 of the installation wizard
@@ -51,7 +51,7 @@
 * In metadata files, the ``extends`` key containing an array with an ``application`` key
 * Config files extended by application extending mechanism must be defined in a subdirectory apps/application_name/
 
-###Thank to:
+### Thank to:
 @ounziw, Vadim Oparin, @vrcAlbert, @jay3, @jguyomard
 
 ## ?: version Chiba ?
@@ -65,6 +65,7 @@
 * Bugfix: Increase maximum execution time for install migrations to prevent PHP timeout
 * Bugfix: confirmationDialog will now be centered verticaly
 * Bugfix: Update ui.css of the bootstrap theme of tinyMCE for custom styles readability
+* Bugfix: Relation twinnable many many cleans with id, not with common ids
 
 ### Thanks to:
 @Pierrinho
