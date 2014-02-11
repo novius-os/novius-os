@@ -3,6 +3,7 @@
 ## ?: version Dubrovka ?
 
 * Bugfix: in the relation twinnable manymany, if join_on, wrong alias on fallback join
+* Bugfix: in method get() of relation twinnable has many, condition on key_to missing
 
 ## February 10, 2014: version Dubrovka
 
