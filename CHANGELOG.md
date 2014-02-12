@@ -7,6 +7,10 @@
 * Bugfix: position of close button of tags in searchbar of appdesk
 * Improve layout of searchbar in appdesk
 
+### Comments:
+
+* Bugfix: in sorting_callback, in appdesk when sort by comments count
+
 ## February 10, 2014: version Dubrovka
 
 ### New features:
