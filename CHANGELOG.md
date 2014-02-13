@@ -6,6 +6,7 @@
 * Bugfix: in method get() of relation twinnable has many, condition on key_to missing
 * Bugfix: position of close button of tags in searchbar of appdesk
 * Bugfix: use rawurlencode in Tools_Url::encodePath(), space must be encode with %20 not +
+* Bugfix: in nosOnShow, set display block only if element is display none. Case of tag-it, input supposed hidden by css but is visible
 * Improve layout of searchbar in appdesk
 
 ### Comments:
