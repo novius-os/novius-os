@@ -5,7 +5,12 @@
 * Bugfix: in the relation twinnable manymany, if join_on, wrong alias on fallback join
 * Bugfix: in method get() of relation twinnable has many, condition on key_to missing
 * Bugfix: position of close button of tags in searchbar of appdesk
+* Bugfix: use rawurlencode in Tools_Url::encodePath(), space must be encode with %20 not +
 * Improve layout of searchbar in appdesk
+
+### Comments:
+
+* Bugfix: in sorting_callback, in appdesk when sort by comments count
 
 ## February 10, 2014: version Dubrovka
 
