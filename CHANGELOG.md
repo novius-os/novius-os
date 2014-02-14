@@ -9,6 +9,7 @@
 * Bugfix: in nosOnShow, set display block only if element is display none. Case of tag-it, input supposed hidden by css but is visible
 * Bugfix: in Tools_File::send(). Double call to fuel-shotdown event
 * Bugfix: no CSS in Wysiwyg dialog
+* Bugfix: in page CRUD, when switching the template, images in WYSIWYG are broken
 * Improve layout of searchbar in appdesk
 
 ### Comments:
