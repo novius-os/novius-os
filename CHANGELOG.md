@@ -10,6 +10,7 @@
 * Bugfix: in Tools_File::send(). Double call to fuel-shotdown event
 * Bugfix: no CSS in Wysiwyg dialog
 * Bugfix: in page CRUD, when switching the template, images in WYSIWYG are broken
+* Bugfix: in share panel, checkboxes to enable fields don't work
 * Improve layout of searchbar in appdesk
 
 ### Comments:
