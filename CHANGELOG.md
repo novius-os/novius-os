@@ -12,6 +12,7 @@
 * Bugfix: in page CRUD, when switching the template, images in WYSIWYG are broken
 * Bugfix: in share panel, checkboxes to enable fields don't work
 * Improve layout of searchbar in appdesk
+* Improve twinnable manymany join(), add main_context condition
 
 ### Comments:
 
