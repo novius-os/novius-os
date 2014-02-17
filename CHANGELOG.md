@@ -2,8 +2,9 @@
 
 ## ?: version Dubrovka ?
 
-* Bugfix: in the relation twinnable manymany, if join_on, wrong alias on fallback join
-* Bugfix: in method get() of relation twinnable has many, condition on key_to missing
+* Bugfix: in the relation twinnable manymany. If join_on, wrong alias on fallback join
+* Bugfix: in the relation twinnable manymany. Preserve relation when a deleted model still has twins
+* Bugfix: in the relation twinnable hasmany. In method get(), condition on key_to missing
 * Bugfix: position of close button of tags in searchbar of appdesk
 * Bugfix: use rawurlencode in Tools_Url::encodePath(), space must be encode with %20 not +
 * Bugfix: in nosOnShow, set display block only if element is display none. Case of tag-it, input supposed hidden by css but is visible
@@ -14,6 +15,9 @@
 * Improve layout of searchbar in appdesk
 * Improve twinnable manymany join(), add main_context condition
 * Improve Appdesk performance. Refactoring javascript, use wijsplitter only if need, improving resize.
+
+### Thank to:
+@vrcAlbert
 
 ### Comments:
 
