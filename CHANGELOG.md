@@ -13,6 +13,7 @@
 * Bugfix: in share panel, checkboxes to enable fields don't work
 * Improve layout of searchbar in appdesk
 * Improve twinnable manymany join(), add main_context condition
+* Improve Appdesk performance. Refactoring javascript, use wijsplitter only if need, improving resize.
 
 ### Comments:
 
