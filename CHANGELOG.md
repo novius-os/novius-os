@@ -1,5 +1,11 @@
 # Novius OS framework CHANGELOG
 
+## Feature new_crud_appdesk
+
+* background on body and sies always visible
+* new tray bar with new fullscreen feature
+* toolbar at bottom
+
 ## ?: version Dubrovka ?
 
 * Bugfix: in the relation twinnable manymany, if join_on, wrong alias on fallback join
