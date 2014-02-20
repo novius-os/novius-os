@@ -16,10 +16,11 @@
 * Improve layout of searchbar in appdesk
 * Improve twinnable manymany join(), add main_context condition
 * Improve Appdesk performance. Refactoring javascript, use wijsplitter only if need, improving resize.
+* Improve behaviour twinnable, avoid to save twins if not needed
 * Front Controller, method to add JS inline in head detects the use of tag script
 
 ### Thank to:
-@vrcAlbert, @Foine
+@vrcAlbert, @Foine, @jay3
 
 ### Comments:
 
