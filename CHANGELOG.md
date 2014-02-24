@@ -19,6 +19,10 @@
 * Improve behaviour twinnable, avoid to save twins if not needed
 * Front Controller, method to add JS inline in head detects the use of tag script
 
+### Fuel:
+
+* Bugfix: ``html_tag()``, escape double quotes inside property value
+
 ### Thank to:
 @vrcAlbert, @Foine, @jay3
 
