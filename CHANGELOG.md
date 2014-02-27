@@ -17,7 +17,8 @@
 * Improve twinnable manymany join(), add main_context condition
 * Improve Appdesk performance. Refactoring javascript, use wijsplitter only if need, improving resize.
 * Improve behaviour twinnable, avoid to save twins if not needed
-* Front Controller, method to add JS inline in head detects the use of tag script
+* Front Controller: Method to add JS inline in head detects the use of tag script
+* Appdesk: Add config key multiContextHide on inspector
 
 ### Blog and News:
 
