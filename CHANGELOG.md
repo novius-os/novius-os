@@ -18,7 +18,8 @@
 * Improve Appdesk performance. Refactoring javascript, use wijsplitter only if need, improving resize.
 * Improve behaviour twinnable, avoid to save twins if not needed
 * Front Controller: Method to add JS inline in head detects the use of tag script
-* Appdesk: Add config key multiContextHide on inspector
+* Appdesk: Add config key ``multiContextHide`` on inspector
+* Behaviour sortable: Add config key ``sort_twins``, default to true
 
 ### Blog and News:
 
