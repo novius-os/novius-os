@@ -19,6 +19,10 @@
 * Improve behaviour twinnable, avoid to save twins if not needed
 * Front Controller, method to add JS inline in head detects the use of tag script
 
+### Blog and News:
+
+* Bugfix: The model post sets is own ``$_behaviours``, not uses that of blog/news. Makes possible the simultaneous use of blog and news.
+
 ### Fuel:
 
 * Bugfix: ``html_tag()``, escape double quotes inside property value
