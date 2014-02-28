@@ -5,6 +5,7 @@
 * background on body and sies always visible
 * new tray bar with new fullscreen feature
 * toolbar at bottom
+* Appstab: launchers are draggable, not only sortable
 
 ## ?: version Dubrovka ?
 
