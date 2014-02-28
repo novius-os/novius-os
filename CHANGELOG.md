@@ -25,6 +25,10 @@
 
 * Bugfix: The model post sets is own ``$_behaviours``, not uses that of blog/news. Makes possible the simultaneous use of blog and news.
 
+### Comments:
+
+* Bugfix: in sorting_callback, in appdesk when sort by comments count
+
 ### Fuel:
 
 * Bugfix: ``html_tag()``, escape double quotes inside property value
@@ -32,9 +36,6 @@
 ### Thank to:
 @vrcAlbert, @Foine, @jay3
 
-### Comments:
-
-* Bugfix: in sorting_callback, in appdesk when sort by comments count
 
 ## February 10, 2014: version Dubrovka
 
