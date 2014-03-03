@@ -13,6 +13,7 @@
 * Bugfix: in page CRUD, when switching the template, images in WYSIWYG are broken
 * Bugfix: in share panel, checkboxes to enable fields don't work
 * Bugfix: Tools_File::send() forces the download and it's used to send media in 404
+* Bugfix: in CRUD blankslate, when clicking on a sub-menu of the button 'Translate from..', the two forms of the tab are submitted
 * Improve layout of searchbar in appdesk
 * Improve twinnable manymany join(), add main_context condition
 * Improve Appdesk performance. Refactoring javascript, use wijsplitter only if need, improving resize.
