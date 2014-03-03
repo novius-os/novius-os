@@ -30,6 +30,10 @@
 
 * Bugfix: in sorting_callback, in appdesk when sort by comments count
 
+### Slideshow:
+
+* Bugfix: always display the 'link to a page' in the admin slide.
+
 ### Fuel:
 
 * Bugfix: ``html_tag()``, escape double quotes inside property value
