@@ -9,8 +9,9 @@
 
 ## ?: version Dubrovka ?
 
-* Bugfix: in the relation twinnable manymany, if join_on, wrong alias on fallback join
-* Bugfix: in method get() of relation twinnable has many, condition on key_to missing
+* Bugfix: in the relation twinnable manymany. If join_on, wrong alias on fallback join
+* Bugfix: in the relation twinnable manymany. Preserve relation when a deleted model still has twins
+* Bugfix: in the relation twinnable hasmany. In method get(), condition on key_to missing
 * Bugfix: position of close button of tags in searchbar of appdesk
 * Bugfix: use rawurlencode in Tools_Url::encodePath(), space must be encode with %20 not +
 * Bugfix: in nosOnShow, set display block only if element is display none. Case of tag-it, input supposed hidden by css but is visible
@@ -18,13 +19,35 @@
 * Bugfix: no CSS in Wysiwyg dialog
 * Bugfix: in page CRUD, when switching the template, images in WYSIWYG are broken
 * Bugfix: in share panel, checkboxes to enable fields don't work
+* Bugfix: Tools_File::send() forces the download and it's used to send media in 404
+* Bugfix: in CRUD blankslate, when clicking on a sub-menu of the button 'Translate from..', the two forms of the tab are submitted
 * Improve layout of searchbar in appdesk
 * Improve twinnable manymany join(), add main_context condition
 * Improve Appdesk performance. Refactoring javascript, use wijsplitter only if need, improving resize.
+* Improve behaviour twinnable, avoid to save twins if not needed
+* Front Controller: Method to add JS inline in head detects the use of tag script
+* Appdesk: Add config key ``multiContextHide`` on inspector
+* Behaviour sortable: Add config key ``sort_twins``, default to true
+
+### Blog and News:
+
+* Bugfix: The model post sets is own ``$_behaviours``, not uses that of blog/news. Makes possible the simultaneous use of blog and news.
 
 ### Comments:
 
 * Bugfix: in sorting_callback, in appdesk when sort by comments count
+
+### Slideshow:
+
+* Bugfix: always display the 'link to a page' in the admin slide.
+
+### Fuel:
+
+* Bugfix: ``html_tag()``, escape double quotes inside property value
+
+### Thank to:
+@vrcAlbert, @Foine, @jay3
+
 
 ## February 10, 2014: version Dubrovka
 
