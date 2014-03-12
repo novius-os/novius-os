@@ -3,6 +3,11 @@
 ## Waiting version
 
 * Bugfix: remove a notice in enhancer popup controller
+* Improved methods of ``Tools_Enhancer``, they take into consideration the state of publication and transmit the parameters of the enhancer to the method ``getUrlEnhanced()``
+
+### Blog /News
+
+* ``getUrlEnhanced()`` method return false if post is not in categories of the enhancer
 
 ### Form
 
