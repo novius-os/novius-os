@@ -4,6 +4,10 @@
 
 * Bugfix: remove a notice in enhancer popup controller
 
+### Form
+
+* Bugfix: when answer grid contains file and large label
+
 ## March 6, 2014: version 4.1 (Dubrovka)
 
 ### New features and improvements
