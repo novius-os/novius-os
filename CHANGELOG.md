@@ -1,5 +1,9 @@
 # Novius OS framework CHANGELOG
 
+## Waiting version
+
+* Bugfix: remove a notice in enhancer popup controller
+
 ## March 6, 2014: version 4.1 (Dubrovka)
 
 ### New features and improvements
