@@ -1,4 +1,4 @@
-# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/dubrovka)](https://travis-ci.org/novius-os/novius-os)
+# Novius OS [![Build Status](https://travis-ci.org/novius-os/novius-os.png?branch=master/dubrovka)](https://travis-ci.org/novius-os/novius-os) [![Gitter chat](https://badges.gitter.im/novius-os.png)](https://gitter.im/novius-os)
 
 Novius OS is an **Open Source PHP Content Management System designed as an applications platform**, hence the ‘OS’ suffix. You tailor Novius OS to your content through the creation of custom applications. Your well-structured content is to ready to be published to any channel—present and future.
 
