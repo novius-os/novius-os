@@ -3,6 +3,7 @@
 ## Waiting version
 
 * Bugfix: remove a notice in enhancer popup controller
+* Bugfix: on lazy load on ``Orm_Twinnable_HasMany`` relation
 * Improved methods of ``Tools_Enhancer``, they take into consideration the state of publication and transmit the parameters of the enhancer to the method ``getUrlEnhanced()``
 
 ### Blog /News
@@ -12,6 +13,10 @@
 ### Form
 
 * Bugfix: when answer grid contains file and large label
+
+### Thank to:
+
+@shaoshiva
 
 ## March 6, 2014: version 4.1 (Dubrovka)
 
