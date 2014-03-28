@@ -20,6 +20,7 @@ before_install:
   - cd ..
 before_script:
   - echo 'short_open_tag="1"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sudo apt-get update -qq
   - sudo apt-get install apache2 libapache2-mod-fastcgi
   # enable php-fpm
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
