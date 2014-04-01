@@ -17,6 +17,10 @@
 * Bugfix: when answer grid contains file and large label
 * Bugfix: captcha calculated and displayed whitout cache
 
+### App wizard
+
+* Bugfix: force at least one category name
+
 ### Thank to:
 
 @shaoshiva, @Foine
