@@ -5,7 +5,10 @@
 * Bugfix: remove a notice in enhancer popup controller
 * Bugfix: on lazy load on ``Orm_Twinnable_HasMany`` relation
 * Bugfix: on the twinnable many many relation save()
-* BugFix: no highlight cells in grid. Add ``nosCellsSelected`` option in ``noslistgrid``.
+* Bugfix: no highlight cells in grid. Add ``nosCellsSelected`` option in ``noslistgrid``.
+* Bugfix: on twinnable relations ``delete()``, deleting only after the delete of the last twin
+* Bugfix: shared wysiwygs and medias are lost when deleting a twin
+* Twinnable relations accept ``model_to`` not twinnable
 * Improved methods of ``Tools_Enhancer``, they take into consideration the state of publication and transmit the parameters of the enhancer to the method ``getUrlEnhanced()``
 
 ### Blog /News
