@@ -9,6 +9,7 @@
 * Bugfix: on twinnable relations ``delete()``, deleting only after the delete of the last twin
 * Bugfix: on twinnable relations ``save()``, create duplicate entries or deleting relations in some cases
 * Bugfix: shared wysiwygs and medias are lost when deleting a twin
+* Bugfix: remove a notice in 404 if the requested file have no extension
 * Twinnable relations accept ``model_to`` not twinnable
 * Improved methods of ``Tools_Enhancer``, they take into consideration the state of publication and transmit the parameters of the enhancer to the method ``getUrlEnhanced()``
 
