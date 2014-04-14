@@ -12,6 +12,7 @@
 * Bugfix: remove a notice in 404 if the requested file have no extension
 * Twinnable relations accept ``model_to`` not twinnable
 * Improved methods of ``Tools_Enhancer``, they take into consideration the state of publication and transmit the parameters of the enhancer to the method ``getUrlEnhanced()``
+* Adding event ``admin.launchers`` to add/remove launchers
 
 ### Blog /News
 
@@ -28,7 +29,7 @@
 
 ### Thank to:
 
-@shaoshiva, @Foine
+@shaoshiva, @Foine, @jguyomard
 
 ## March 6, 2014: version 4.1 (Dubrovka)
 
