@@ -13,6 +13,7 @@
 * Twinnable relations accept ``model_to`` not twinnable
 * Improved methods of ``Tools_Enhancer``, they take into consideration the state of publication and transmit the parameters of the enhancer to the method ``getUrlEnhanced()``
 * Adding event ``admin.launchers`` to add/remove launchers
+* New constant ``PUBLIC_DIR`` that contains the name of the public directory. Initialized to ``public`` by default if not set.
 
 ### Blog /News
 
@@ -31,7 +32,7 @@
 
 ### Thank to:
 
-@shaoshiva, @Foine, @jguyomard
+@shaoshiva, @Foine, @jguyomard, @ounziw
 
 ## March 6, 2014: version 4.1 (Dubrovka)
 
