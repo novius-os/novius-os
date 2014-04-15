@@ -22,6 +22,8 @@
 
 * Bugfix: when answer grid contains file and large label
 * Bugfix: captcha calculated and displayed whitout cache
+* Bugfix: jQuery and Modernizr are loaded only if they not already are
+* Vendors update: Webshims 1.12.5
 
 ### App wizard
 
