@@ -1,6 +1,6 @@
 # Novius OS framework CHANGELOG
 
-## Waiting version
+## April 16, 2014: version 4.2 (Dubrovka)
 
 * Bugfix: remove a notice in enhancer popup controller
 * Bugfix: on lazy load on ``Orm_Twinnable_HasMany`` relation

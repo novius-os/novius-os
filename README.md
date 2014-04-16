@@ -4,7 +4,7 @@ Novius OS is an **Open Source PHP Content Management System designed as an appli
 
 Novius OS is **built with the MVC framework, FuelPHP**. “FuelPHP is a simple, flexible, community driven PHP 5.3+ framework, based on the best ideas of other frameworks, with a fresh start!” Novius OS HTML5 interface is **powered by jQuery UI** and the Wijmo library.
 
-* Current version: Novius OS 4.1 (Dubrovka)
+* Current version: Novius OS 4.2 (Dubrovka)
 
 ## Requirements
 
