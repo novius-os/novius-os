@@ -1030,7 +1030,15 @@ if ($step == 3) {
 
             // Authorize available apps
             $role = reset($user->roles);
-            foreach (array('noviusos_page', 'noviusos_media', 'noviusos_user', 'noviusos_appmanager', 'noviusos_templates_basic') as $app) {
+            $permissions = array(
+                'noviusos_page',
+                'noviusos_media',
+                'noviusos_user',
+                'noviusos_appmanager',
+                'noviusos_template_variation',
+                'noviusos_templates_basic',
+            );
+            foreach ($permissions as $app) {
                 $access = Nos\User\Model_Permission::forge();
                 $access->perm_role_id      = $role->role_id;
                 $access->perm_name         = 'nos::access';
