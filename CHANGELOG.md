@@ -1,15 +1,82 @@
 # Novius OS framework CHANGELOG
 
-## ?: version Dubrovka ?
+## April 16, 2014: version 4.2 (Dubrovka)
 
-* Bugfix: in the relation twinnable manymany, if join_on, wrong alias on fallback join
-* Bugfix: in method get() of relation twinnable has many, condition on key_to missing
-* Bugfix: position of close button of tags in searchbar of appdesk
-* Improve layout of searchbar in appdesk
+* Bugfix: remove a notice in enhancer popup controller
+* Bugfix: on lazy load on ``Orm_Twinnable_HasMany`` relation
+* Bugfix: on the twinnable many many relation save()
+* Bugfix: no highlight cells in grid. Add ``nosCellsSelected`` option in ``noslistgrid``.
+* Bugfix: on twinnable relations ``delete()``, deleting only after the delete of the last twin
+* Bugfix: on twinnable relations ``save()``, create duplicate entries or deleting relations in some cases
+* Bugfix: shared wysiwygs and medias are lost when deleting a twin
+* Bugfix: remove a notice in 404 if the requested file have no extension
+* Twinnable relations accept ``model_to`` not twinnable
+* Improved methods of ``Tools_Enhancer``, they take into consideration the state of publication and transmit the parameters of the enhancer to the method ``getUrlEnhanced()``
+* Adding event ``admin.launchers`` to add/remove launchers
+* New constant ``PUBLIC_DIR`` that contains the name of the public directory. Initialized to ``public`` by default if not set.
 
-### Comments:
+### Blog /News
 
-* Bugfix: in sorting_callback, in appdesk when sort by comments count
+* ``getUrlEnhanced()`` method return false if post is not in categories of the enhancer
+
+### Form
+
+* Bugfix: when answer grid contains file and large label
+* Bugfix: captcha calculated and displayed whitout cache
+* Bugfix: jQuery and Modernizr are loaded only if they not already are
+* Vendors update: Webshims 1.12.5
+
+### App wizard
+
+* Bugfix: force at least one category name
+
+### Thank to:
+
+@shaoshiva, @Foine, @jguyomard, @ounziw
+
+## March 6, 2014: version 4.1 (Dubrovka)
+
+### New features and improvements
+
+* **Front Controller**:
+    * New methods ``setItemDisplayed()`` and ``getItemDisplayed()``.
+    * ``setItemDisplayed()`` set automatically ``title``, ``h1``, ``meta_description`` and ``meta_keywords``.
+    * ``setItemDisplayed()`` triggers the event ``front.setItemDisplayed``.
+    * New ``setH1()`` method.
+    * ``setTitle()``, ``setH1()``, ``setMetaDescription()``, ``setMetaKeywords()`` methods take a template by second parameter (the default template can be set by config). The page's property is available in the template with a placeholder.
+    * The method ``addJavascriptInline()`` detects the use of tag ``<script>``.
+* **Appdesk**:
+    * The search bar layout is improved
+    * New possible config key ``multiContextHide`` for inspectors
+    * Performance improved with a javascript refactoring: use of ``wijsplitter`` only if need.
+    * Improving the resize process.
+* **Relation Twinnable_ManyMany**: Improving of the ``join()`` method. Adding the ``main_context`` condition.
+* **Behaviour Twinnable**: Improving performance of save operation by avoiding to save twins if not needed.
+* **Behaviour sortable**: Add config key ``sort_twins``, default to true.
+
+### Bugfixes:
+
+* **Relation Twinnable_Manymany**: Wrong alias on fallback ``join_on``.
+* **Relation Twinnable_Manymany**: Preserve relation when a deleted model still has twins.
+* **Relation Twinnable_Hasmany**: In method get(), condition on ``key_to`` missing.
+* **Appdesk**: Position of the close buttons of tags in search bar.
+* **nosOnShow()**: Set display block only if element is display none. Bug in case of tag-it, input supposed hidden by css but made visible by ``nosOnShow``.
+* **Tools_Url::encodePath()**: Use the ``rawurlencode()`` function, space must be encode with ``%20`` not ``+``.
+* **Tools_File::send()**: Double call to ``fuel-shutdown`` event.
+* **Tools_File::send()**: Forces the download, incompatible with its use to send media in the 404.
+* **WYSIWYG**: No CSS in popup dialogs.
+* **Page CRUD**: When switching the template, images in WYSIWYG are broken.
+* **Share panel**: Checkboxes to enable fields don't work.
+* **CRUD blankslate**: When clicking on a sub-menu of the button 'Translate from..', the two forms of the tab are submitted.
+* **Blog and News**: The model post sets is own ``$_behaviours``, not uses that of blog/news. Fix makes possible the simultaneous use of blog and news.
+* **Comments**: In Appdesk ``sorting_callback``, when sort by comments count.
+* **Slideshow**: Always display the 'link to a page' in the admin slide.
+* **FuelPHP**: ``html_tag()``, escape double quotes inside property value.
+
+### Thank to:
+
+@vrcAlbert, @Foine, @jay3
+
 
 ## February 10, 2014: version Dubrovka
 
