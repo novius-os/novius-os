@@ -3,7 +3,8 @@
 ## Waiting version: 4.? (Dubrovka)
 
 * CSRF token with customisation
-* Bugfix: Behaviour URLEnhancer. Method url() search good url if current url enhancer not allowed to display the item
+* Bugfix: Behaviour URLEnhancer. Method ``url()`` search good url if current url enhancer not allowed to display the item
+* Bugfix: ``front.pageFound`` event is triggered twice on generating cache
 
 ### Blog /News
 
