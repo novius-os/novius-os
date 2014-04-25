@@ -1,5 +1,10 @@
 # Novius OS framework CHANGELOG
 
+## Waiting version: version 4.?
+
+* CSRF token with customisation
+
+
 ## April 16, 2014: version 4.2 (Dubrovka)
 
 * Bugfix: remove a notice in enhancer popup controller
