@@ -1,13 +1,13 @@
 # Novius OS framework CHANGELOG
 
-## waiting version 4.? (Dubrovka)
+## Waiting version: 4.? (Dubrovka)
 
+* CSRF token with customisation
 * Bugfix: Behaviour URLEnhancer. Method url() search good url if current url enhancer not allowed to display the item
 
 ### Blog /News
 
 * ``getUrlEnhanced()`` method return false if category is not in categories of the enhancer
-
 
 ## April 16, 2014: version 4.2 (Dubrovka)
 
