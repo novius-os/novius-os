@@ -10,6 +10,11 @@
 
 * ``getUrlEnhanced()`` method return false if category is not in categories of the enhancer
 
+### Form
+
+* Select and radio fields don't have a default value checked anymore
+* Text fields (single and multi-line) can now be pre-populated based on Request parameters
+
 ## April 16, 2014: version 4.2 (Dubrovka)
 
 * Bugfix: remove a notice in enhancer popup controller
