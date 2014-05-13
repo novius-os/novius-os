@@ -5,6 +5,8 @@
 * CSRF token with customisation
 * Bugfix: Behaviour URLEnhancer. Method ``url()`` search good url if current url enhancer not allowed to display the item
 * Bugfix: ``front.pageFound`` event is triggered twice on generating cache
+* Bugfix: ``items`` method of appdesk controller uses ``model::query()`` to retrieve a query instance, and then use before_query mechanism
+* Bugfix: Behaviour publishable. Adding alias ``published`` for ``orderby`` in ``before_query`` method
 
 ### Blog /News
 
