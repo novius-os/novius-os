@@ -15,6 +15,14 @@
 * Select and radio fields don't have a default value checked anymore
 * Text fields (single and multi-line) can now be pre-populated based on Request parameters
 
+### App wizard
+
+* Update the generated controller class in order to use the setItemDisplayed method
+
+### Thank to:
+
+@Foine
+
 ## April 16, 2014: version 4.2 (Dubrovka)
 
 * Bugfix: remove a notice in enhancer popup controller
