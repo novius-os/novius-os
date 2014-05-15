@@ -9,6 +9,9 @@
 * toolbar at bottom
 * Appstab: launchers are draggable, not only sortable
 
+### Deprecated:
+* Methods Nos::parse_wysiwyg(), Nos::parse_enhancers() and Nos::get_enhrancer_content(), replace by Tools_Wysiwyg::parse(), Tools_Wysiwyg::parseEnhancers() and Tools_Enhancer::content()
+
 ## April 16, 2014: version 4.2 (Dubrovka)
 
 * Bugfix: remove a notice in enhancer popup controller
