@@ -2,12 +2,22 @@
 
 ## ?: version 5 (E)
 
+### New features:
+
+* Model accept providers
+* Wysiwygs and Medias becomes native providers
+* New shared_wysiwygs_context and shared_medias_context providers
+
 ### Feature new_crud_appdesk
 
 * background on body and sies always visible
 * new tray bar with new fullscreen feature
 * toolbar at bottom
 * Appstab: launchers are draggable, not only sortable
+
+### Breaking changes:
+* All shared Wysiwygs and Medias context must be access with providers shared_wysiwygs_context and shared_medias_context
+* Variable shared_wysiwygs_context and shared_medias_context must not be declared in model
 
 ### Deprecated:
 * Methods Nos::parse_wysiwyg(), Nos::parse_enhancers() and Nos::get_enhrancer_content(), replace by Tools_Wysiwyg::parse(), Tools_Wysiwyg::parseEnhancers() and Tools_Enhancer::content()
