@@ -7,6 +7,7 @@
 * Model accept providers
 * Wysiwygs and Medias becomes native providers
 * New shared_wysiwygs_context and shared_medias_context providers
+* Renderer_Select_Model
 
 ### Feature new_crud_appdesk
 
@@ -21,6 +22,7 @@
 
 ### Deprecated:
 * Methods Nos::parse_wysiwyg(), Nos::parse_enhancers() and Nos::get_enhrancer_content(), replace by Tools_Wysiwyg::parse(), Tools_Wysiwyg::parseEnhancers() and Tools_Enhancer::content()
+* Nos:parse_wysiwyg(), Nos:parse_enhancers() and Nos:get_enhancer_content()
 
 ## April 16, 2014: version 4.2 (Dubrovka)
 
