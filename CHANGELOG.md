@@ -8,6 +8,7 @@
 * Bugfix: ``items`` method of appdesk controller uses ``model::query()`` to retrieve a query instance, and then use before_query mechanism
 * Bugfix: Behaviour publishable. Adding alias ``published`` for ``orderby`` in ``before_query`` method
 * Bugfix: In media permission, isMediaInRestrictedFolder(), check folder exist before access his property
+* Bugfix: on folder delete, children and medias have a folder_id and are not delete in BD
 
 ### Blog /News
 
