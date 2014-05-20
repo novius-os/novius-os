@@ -24,6 +24,34 @@
 * Methods Nos::parse_wysiwyg(), Nos::parse_enhancers() and Nos::get_enhrancer_content(), replace by Tools_Wysiwyg::parse(), Tools_Wysiwyg::parseEnhancers() and Tools_Enhancer::content()
 * Nos:parse_wysiwyg(), Nos:parse_enhancers() and Nos:get_enhancer_content()
 
+## Waiting version: 4.? (Dubrovka)
+
+* CSRF token with customisation
+* Bugfix: Behaviour URLEnhancer. Method ``url()`` search good url if current url enhancer not allowed to display the item
+* Bugfix: ``front.pageFound`` event is triggered twice on generating cache
+* Bugfix: ``items`` method of appdesk controller uses ``model::query()`` to retrieve a query instance, and then use before_query mechanism
+* Bugfix: Behaviour publishable. Adding alias ``published`` for ``orderby`` in ``before_query`` method
+* Bugfix: In media permission, isMediaInRestrictedFolder(), check folder exist before access his property
+* Bugfix: on folder delete, children and medias have a folder_id and are not delete in BD
+* Bugfix: In CRUD delete popup confirmation button
+
+### Blog /News
+
+* ``getUrlEnhanced()`` method return false if category is not in categories of the enhancer
+
+### Form
+
+* Select and radio fields don't have a default value checked anymore
+* Text fields (single and multi-line) can now be pre-populated based on Request parameters
+
+### App wizard
+
+* Update the generated controller class in order to use the setItemDisplayed method
+
+### Thank to:
+
+@Foine
+
 ## April 16, 2014: version 4.2 (Dubrovka)
 
 * Bugfix: remove a notice in enhancer popup controller
