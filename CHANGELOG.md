@@ -9,6 +9,7 @@
 * Bugfix: Behaviour publishable. Adding alias ``published`` for ``orderby`` in ``before_query`` method
 * Bugfix: In media permission, isMediaInRestrictedFolder(), check folder exist before access his property
 * Bugfix: on folder delete, children and medias have a folder_id and are not delete in BD
+* Bugfix: In CRUD delete popup confirmation button
 
 ### Blog /News
 
