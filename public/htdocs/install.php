@@ -1088,7 +1088,7 @@ if ($step == 3) {
     </form>
 
     <link rel="stylesheet" href="static/novius-os/admin/vendor/jquery/jquery-password_strength/jquery.password_strength.css" media="all" />
-    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="static/novius-os/admin/vendor/jquery/jquery-password_strength/jquery.password_strength.min.js"></script>
     <script type="text/javascript">
         $(function() {
