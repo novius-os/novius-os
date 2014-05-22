@@ -1205,7 +1205,7 @@ if ($step == 4) {
         <p><a href="install.php?step=5"><button type="button">I’m done, finish the installation</button></a></p>
     </form>
 
-    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="static/novius-os/admin/vendor/jquery/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="static/novius-os/admin/vendor/jquery-ui/minified/jquery.ui.core.min.js"></script>
     <script type="text/javascript" src="static/novius-os/admin/vendor/jquery-ui/minified/jquery.ui.widget.min.js"></script>
     <script type="text/javascript" src="static/novius-os/admin/vendor/jquery-ui/minified/jquery.ui.mouse.min.js"></script>
