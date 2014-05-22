@@ -34,6 +34,7 @@
 * Bugfix: In media permission, isMediaInRestrictedFolder(), check folder exist before access his property
 * Bugfix: on folder delete, children and medias have a folder_id and are not delete in BD
 * Bugfix: In CRUD delete popup confirmation button
+* Bugfix: In last step of install wizard, wrong jquery url
 
 ### Blog /News
 
