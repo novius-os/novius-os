@@ -1037,6 +1037,7 @@ if ($step == 3) {
                 'noviusos_appmanager',
                 'noviusos_template_variation',
                 'noviusos_templates_basic',
+                'noviusos_menu',
             );
             foreach ($permissions as $app) {
                 $access = Nos\User\Model_Permission::forge();
