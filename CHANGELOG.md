@@ -35,6 +35,8 @@
 * Bugfix: on folder delete, children and medias have a folder_id and are not delete in BD
 * Bugfix: In CRUD delete popup confirmation button
 * Bugfix: In last step of install wizard, wrong jquery url
+* Bugfix: in wysiwyg, link to media become externe link
+* Bugfix: wysiwyg link popup, the domain is display twice for media url
 
 ### Blog /News
 
