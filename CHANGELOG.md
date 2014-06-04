@@ -128,6 +128,7 @@
 * FuelPHP 1.7.1
 * Wijmo 2013v3.20
 * End of support for config key migrations.enabled_types.metadata
+* Event to extend metadata config must listen the file with a starting ``!``
 
 ### Vendors update:
 * FuelPHP 1.7.1
