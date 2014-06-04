@@ -13,6 +13,7 @@
 * Bugfix: In last step of install wizard, wrong jquery url
 * Bugfix: in wysiwyg, link to media become externe link
 * Bugfix: wysiwyg link popup, the domain is display twice for media url
+* Bugfix: Class 'FrontCache' not found in front controller when changing the page cache duration
 
 ### Blog /News
 
@@ -29,7 +30,7 @@
 
 ### Thank to:
 
-@Foine
+@Foine, @Pierrinho
 
 ## April 16, 2014: version 4.2 (Dubrovka)
 
