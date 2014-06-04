@@ -8,6 +8,7 @@
 * Wysiwygs and Medias becomes native providers
 * New shared_wysiwygs_context and shared_medias_context providers
 * Renderer_Select_Model
+* Renderer_Item_Picker
 
 ### Feature new_crud_appdesk
 
