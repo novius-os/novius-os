@@ -16,6 +16,7 @@
 * Bugfix: Class 'FrontCache' not found in front controller when changing the page cache duration
 * Bugfix: event ``front.pageFound`` is trigger twice in some cases with ``suffixHandlers``.
 * Bugfix: wysiwyg enhancer preview display lost block container
+* Bugfix: addJavascriptInline also check if inserted code begin with ``<script>``
 
 ### Blog /News
 
