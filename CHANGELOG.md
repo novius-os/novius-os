@@ -17,6 +17,7 @@
 * Bugfix: event ``front.pageFound`` is trigger twice in some cases with ``suffixHandlers``.
 * Bugfix: wysiwyg enhancer preview display lost block container
 * Bugfix: addJavascriptInline also check if inserted code begin with ``<script>``
+* Bugfix: in front cache ``addSuffixHandler()``, use ``array_unique`` with ``SORT_REGULAR``
 
 ### Blog /News
 
