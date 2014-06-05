@@ -38,6 +38,11 @@
 * Bugfix: In last step of install wizard, wrong jquery url
 * Bugfix: in wysiwyg, link to media become externe link
 * Bugfix: wysiwyg link popup, the domain is display twice for media url
+* Bugfix: Class 'FrontCache' not found in front controller when changing the page cache duration
+* Bugfix: event ``front.pageFound`` is trigger twice in some cases with ``suffixHandlers``.
+* Bugfix: wysiwyg enhancer preview display lost block container
+* Bugfix: addJavascriptInline also check if inserted code begin with ``<script>``
+* Bugfix: in front cache ``addSuffixHandler()``, use ``array_unique`` with ``SORT_REGULAR``
 
 ### Blog /News
 
@@ -54,7 +59,7 @@
 
 ### Thank to:
 
-@Foine
+@Foine, @Pierrinho
 
 ## April 16, 2014: version 4.2 (Dubrovka)
 
@@ -148,6 +153,7 @@
 * FuelPHP 1.7.1
 * Wijmo 2013v3.20
 * End of support for config key migrations.enabled_types.metadata
+* Event to extend metadata config must listen the file with a starting ``!``
 
 ### Vendors update:
 * FuelPHP 1.7.1
