@@ -1,6 +1,6 @@
 # Novius OS framework CHANGELOG
 
-## ?: version 5 (E)
+## ?: version 5 (Elche)
 
 ### New features:
 
