@@ -25,3 +25,6 @@
 [submodule "local/applications/noviusos_slideshow"]
 	path = local/applications/noviusos_slideshow
 	url = git://github.com/novius-os/noviusos_slideshow.git
+[submodule "local/applications/noviusos_template_bootstrap"]
+	path = local/applications/noviusos_template_bootstrap
+	url = git://github.com/novius-os/noviusos_template_bootstrap.git

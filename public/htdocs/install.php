@@ -936,8 +936,8 @@ if ($step == 2) {
             Nos\Application::installNativeApplications();
 
             // Install templates
-            \Module::load('noviusos_templates_basic');
-            $application = Nos\Application::forge('noviusos_templates_basic');
+            \Module::load('noviusos_template_bootstrap');
+            $application = Nos\Application::forge('noviusos_template_bootstrap');
             $application->install(false);
 
             Config::save('local::db', $config);
@@ -1036,7 +1036,7 @@ if ($step == 3) {
                 'noviusos_user',
                 'noviusos_appmanager',
                 'noviusos_template_variation',
-                'noviusos_templates_basic',
+                'noviusos_template_bootstrap',
                 'noviusos_menu',
             );
             foreach ($permissions as $app) {
