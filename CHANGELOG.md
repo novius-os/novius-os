@@ -18,6 +18,7 @@
 * Bugfix: wysiwyg enhancer preview display lost block container
 * Bugfix: addJavascriptInline also check if inserted code begin with ``<script>``
 * Bugfix: in front cache ``addSuffixHandler()``, use ``array_unique`` with ``SORT_REGULAR``
+* Bugfix: The plural translation function n__() always returned the singular form
 
 ### Blog /News
 
@@ -34,7 +35,7 @@
 
 ### Thank to:
 
-@Foine, @Pierrinho
+@Foine, @Pierrinho, @shaoshiva
 
 ## April 16, 2014: version 4.2 (Dubrovka)
 
