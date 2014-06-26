@@ -22,6 +22,7 @@
 * Bugfix: Filter argument for the preview view set to false
 * Bugfix: set local in rebuild cache
 * Bugfix: Notice in relation twinnable manymany ``save``
+* Bugfix: in behaviour virtualpath in case of uniqueness by context
 
 ### Blog /News
 
