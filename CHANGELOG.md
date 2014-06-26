@@ -21,6 +21,7 @@
 * Bugfix: The plural translation function n__() always returned the singular form
 * Bugfix: Filter argument for the preview view set to false
 * Bugfix: set local in rebuild cache
+* Bugfix: Notice in relation twinnable manymany ``save``
 
 ### Blog /News
 
