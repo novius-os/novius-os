@@ -23,6 +23,7 @@
 * Bugfix: set local in rebuild cache
 * Bugfix: Notice in relation twinnable manymany ``save``
 * Bugfix: in behaviour virtualpath in case of uniqueness by context
+* Bugfix: Front Controller ``getContext`` method don't work after cache
 
 ### Blog /News
 
