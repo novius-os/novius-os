@@ -45,6 +45,11 @@
 * Bugfix: addJavascriptInline also check if inserted code begin with ``<script>``
 * Bugfix: in front cache ``addSuffixHandler()``, use ``array_unique`` with ``SORT_REGULAR``
 * Bugfix: The plural translation function n__() always returned the singular form
+* Bugfix: Filter argument for the preview view set to false
+* Bugfix: set local in rebuild cache
+* Bugfix: Notice in relation twinnable manymany ``save``
+* Bugfix: in behaviour virtualpath in case of uniqueness by context
+* Bugfix: Front Controller ``getContext`` method don't work after cache
 
 ### Blog /News
 
@@ -61,7 +66,7 @@
 
 ### Thank to:
 
-@Foine, @Pierrinho, @shaoshiva
+@Foine, @Pierrinho, @shaoshiva, @FredDubois
 
 ## April 16, 2014: version 4.2 (Dubrovka)
 
