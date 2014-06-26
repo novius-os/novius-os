@@ -19,6 +19,7 @@
 * Bugfix: addJavascriptInline also check if inserted code begin with ``<script>``
 * Bugfix: in front cache ``addSuffixHandler()``, use ``array_unique`` with ``SORT_REGULAR``
 * Bugfix: The plural translation function n__() always returned the singular form
+* Bugfix: Filter argument for the preview view set to false
 
 ### Blog /News
 
