@@ -28,6 +28,8 @@
 
 ## Waiting version: 4.? (Dubrovka)
 
+* Media: In Appdesk, add path to distinguish medias with same name in different folders
+* Appdesk: New event for behaviours to alter the grid query configuration
 * CSRF token with customisation
 * Bugfix: Behaviour URLEnhancer. Method ``url()`` search good url if current url enhancer not allowed to display the item
 * Bugfix: ``front.pageFound`` event is triggered twice on generating cache
@@ -50,6 +52,7 @@
 * Bugfix: Notice in relation twinnable manymany ``save``
 * Bugfix: in behaviour virtualpath in case of uniqueness by context
 * Bugfix: Front Controller ``getContext`` method don't work after cache
+* Bugfix: Make a specific cache for 404 errors
 
 ### Blog /News
 
@@ -66,7 +69,7 @@
 
 ### Thank to:
 
-@Foine, @Pierrinho, @shaoshiva, @FredDubois
+@Foine, @Pierrinho, @shaoshiva, @FredDubois, @jay3
 
 ## April 16, 2014: version 4.2 (Dubrovka)
 
