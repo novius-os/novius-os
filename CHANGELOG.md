@@ -24,6 +24,7 @@
 * Bugfix: Notice in relation twinnable manymany ``save``
 * Bugfix: in behaviour virtualpath in case of uniqueness by context
 * Bugfix: Front Controller ``getContext`` method don't work after cache
+* Bugfix: Make a specific cache for 404 errors
 
 ### Blog /News
 
