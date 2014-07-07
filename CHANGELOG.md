@@ -69,6 +69,7 @@
 * Bugfix: in behaviour virtualpath in case of uniqueness by context
 * Bugfix: Front Controller ``getContext`` method don't work after cache
 * Bugfix: Make a specific cache for 404 errors
+* Bugfix: In front controller, move uniqueness checks in add methods for css and js, array_unique with SORT_REGULAR throw Fatal exception in some case
 
 ### Blog /News
 
