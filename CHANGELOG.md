@@ -42,7 +42,7 @@
 ### Deprecated:
 * Methods Nos::parse_wysiwyg(), Nos::parse_enhancers() and Nos::get_enhrancer_content(), replace by Tools_Wysiwyg::parse(), Tools_Wysiwyg::parseEnhancers() and Tools_Enhancer::content()
 
-## Waiting version: 4.3 (Dubrovka)
+## July 08, 2014: version 4.3 (Dubrovka)
 
 * Media: In Appdesk, add path to distinguish medias with same name in different folders
 * Appdesk: New event for behaviours to alter the grid query configuration
