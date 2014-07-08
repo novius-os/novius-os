@@ -1,6 +1,6 @@
 # Novius OS framework CHANGELOG
 
-## Waiting version: 4.? (Dubrovka)
+## july 08, 2014: version 4.3 (Dubrovka)
 
 * Media: In Appdesk, add path to distinguish medias with same name in different folders
 * Appdesk: New event for behaviours to alter the grid query configuration
