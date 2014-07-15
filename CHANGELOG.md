@@ -3,7 +3,7 @@
 ## ?: version 5.? (Elche)
 
 * Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
-
+* Bugfix: In ``Tools_Wysiwyg::parse_medias()``, if a img is wrapped in an anchor
 
 ## July 08, 2014: version 5 (Elche)
 
