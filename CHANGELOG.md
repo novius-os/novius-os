@@ -4,9 +4,10 @@
 
 * Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
 * Bugfix: In ``Tools_Wysiwyg::parse_medias()``, if a img is wrapped in an anchor
+* Bugfix: In template variation, buttons visualise and duplicate have disappeared
 
 ### Form:
-* Bugfix: In mail view, when several fields have the same label... 
+* Bugfix: In mail view, when several fields have the same label...
 
 ### Template Bootstrap:
 * Bugfix: Correcting inline style & bootstrap structure
