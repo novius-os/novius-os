@@ -8,6 +8,9 @@
 ### Form:
 * Bugfix: In mail view, when several fields have the same label... 
 
+### Template Bootstrap:
+* Bugfix: Correcting inline style & bootstrap structure
+
 ## July 08, 2014: version 5 (Elche)
 
 ### New features:
