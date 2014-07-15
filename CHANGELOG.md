@@ -5,6 +5,9 @@
 * Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
 * Bugfix: In ``Tools_Wysiwyg::parse_medias()``, if a img is wrapped in an anchor
 
+### Form:
+* Bugfix: In mail view, when several fields have the same label... 
+
 ## July 08, 2014: version 5 (Elche)
 
 ### New features:
