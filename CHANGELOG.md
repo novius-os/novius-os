@@ -11,6 +11,7 @@
 
 ### Template Bootstrap:
 * Bugfix: Correcting inline style & bootstrap structure
+* Bugfix: Correcting css bug in the navbar
 
 ## July 08, 2014: version 5 (Elche)
 
