@@ -1,5 +1,10 @@
 # Novius OS framework CHANGELOG
 
+## ?: version 5.? (Elche)
+
+* Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
+
+
 ## July 08, 2014: version 5 (Elche)
 
 ### New features:
