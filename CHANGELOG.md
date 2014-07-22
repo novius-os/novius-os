@@ -14,6 +14,9 @@
 * Bugfix: Correcting inline style & bootstrap structure
 * Bugfix: Correcting css bug in the navbar
 
+### Wijmo:
+* Bugfix: Wijpager widjet don't work with the list grid widget : regression from Wijmo.
+
 ## July 08, 2014: version 5 (Elche)
 
 ### New features:
