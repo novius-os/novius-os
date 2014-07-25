@@ -1,5 +1,13 @@
 # Novius OS framework CHANGELOG
 
+## ?: version 4.? (Dubrovka)
+
+* Bugfix: Fix for plural i18n
+
+### New features:
+
+* Twinnable relations now allow to fix a context instead of using the one on the current model.
+
 ## july 08, 2014: version 4.3 (Dubrovka)
 
 * Media: In Appdesk, add path to distinguish medias with same name in different folders
