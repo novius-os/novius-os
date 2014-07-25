@@ -61,6 +61,14 @@
 ### Deprecated:
 * Methods Nos::parse_wysiwyg(), Nos::parse_enhancers() and Nos::get_enhrancer_content(), replace by Tools_Wysiwyg::parse(), Tools_Wysiwyg::parseEnhancers() and Tools_Enhancer::content()
 
+## ?: version 4.? (Dubrovka)
+
+* Bugfix: Fix for plural i18n
+
+### New features:
+
+* Twinnable relations now allow to fix a context instead of using the one on the current model.
+
 ## July 08, 2014: version 4.3 (Dubrovka)
 
 * Media: In Appdesk, add path to distinguish medias with same name in different folders
