@@ -6,6 +6,8 @@
 * Bugfix: In ``Tools_Wysiwyg::parse_medias()``, if a img is wrapped in an anchor
 * Bugfix: In template variation, buttons visualise and duplicate have disappeared
 * Bugfix: In nosOnShow, sub element explicitly hidden are displayed
+* Bugfix: Inspector model didn't work when a context key is defined in the common config of the model
+* Bugfix: Regression for nosAjaxForm that wasn't trigger with custom layout (no fieldset)
 
 ### Form:
 * Bugfix: In mail view, when several fields have the same label...
