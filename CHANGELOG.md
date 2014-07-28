@@ -64,6 +64,7 @@
 ## ?: version 4.? (Dubrovka)
 
 * Bugfix: Fix for plural i18n
+* Bugfix: Remove "create_from_id" from saved datas
 
 ### New features:
 
