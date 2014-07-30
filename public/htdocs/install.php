@@ -1292,6 +1292,6 @@ if ($step == 5) {
 
 ?>
 </div></div>
-<div id="version">Version 5.0 (Elche) - July 08, 2014 </div>
+<div id="version">Version 5.0.1 (Elche) - July 30, 2014 </div>
 </body>
 </html>
