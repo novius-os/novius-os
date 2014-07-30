@@ -21,6 +21,9 @@
 ### Wijmo:
 * Bugfix: Wijpager widjet don't work with the list grid widget : regression from Wijmo.
 
+### New features:
+* Twinnable relations now allow to fix a context instead of using the one on the current model.
+
 ## July 08, 2014: version 5 (Elche)
 
 ### New features:
@@ -62,10 +65,6 @@
 
 ### Deprecated:
 * Methods Nos::parse_wysiwyg(), Nos::parse_enhancers() and Nos::get_enhrancer_content(), replace by Tools_Wysiwyg::parse(), Tools_Wysiwyg::parseEnhancers() and Tools_Enhancer::content()
-
-### New features:
-
-* Twinnable relations now allow to fix a context instead of using the one on the current model.
 
 ## July 08, 2014: version 4.3 (Dubrovka)
 
