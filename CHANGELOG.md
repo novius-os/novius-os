@@ -24,6 +24,10 @@
 ### New features:
 * Twinnable relations now allow to fix a context instead of using the one on the current model.
 
+### Thank to:
+
+@ounziw, @jguyomard, @shaoshiva, @vrcAlbert
+
 ## July 08, 2014: version 5 (Elche)
 
 ### New features:
