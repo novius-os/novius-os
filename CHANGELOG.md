@@ -22,6 +22,7 @@
 * Bugfix: Wijpager widjet don't work with the list grid widget : regression from Wijmo.
 
 ### New features:
+* Japanese translations
 * Twinnable relations now allow to fix a context instead of using the one on the current model.
 
 ### Thank to:
