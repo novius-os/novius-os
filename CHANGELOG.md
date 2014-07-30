@@ -1,6 +1,6 @@
 # Novius OS framework CHANGELOG
 
-## ?: version 5.? (Elche)
+## July 30, 2014: version 5.0.1 (Elche)
 
 * Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
 * Bugfix: In ``Tools_Wysiwyg::parse_medias()``, if a img is wrapped in an anchor
@@ -8,6 +8,8 @@
 * Bugfix: In nosOnShow, sub element explicitly hidden are displayed
 * Bugfix: Inspector model didn't work when a context key is defined in the common config of the model
 * Bugfix: Regression for nosAjaxForm that wasn't trigger with custom layout (no fieldset)
+* Bugfix: Fix for plural i18n
+* Bugfix: Remove "create_from_id" from saved datas
 
 ### Form:
 * Bugfix: In mail view, when several fields have the same label...
@@ -60,11 +62,6 @@
 
 ### Deprecated:
 * Methods Nos::parse_wysiwyg(), Nos::parse_enhancers() and Nos::get_enhrancer_content(), replace by Tools_Wysiwyg::parse(), Tools_Wysiwyg::parseEnhancers() and Tools_Enhancer::content()
-
-## ?: version 4.? (Dubrovka)
-
-* Bugfix: Fix for plural i18n
-* Bugfix: Remove "create_from_id" from saved datas
 
 ### New features:
 
