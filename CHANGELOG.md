@@ -1,5 +1,11 @@
 # Novius OS framework CHANGELOG
 
+## ??: version ??? (Elche)
+
+### Deprecated:
+
+* Commons configurations now take all the model path's to be defined.
+
 ## July 30, 2014: version 5.0.1 (Elche)
 
 * Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
