@@ -3,6 +3,7 @@
 ## ?: version 4.? (Dubrovka)
 
 * Bugfix: Fix for plural i18n
+* Bugfix: Invalidate opcode cache if cache file are updated or deleted
 
 ### New features:
 
