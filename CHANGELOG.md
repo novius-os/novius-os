@@ -1,5 +1,10 @@
 # Novius OS framework CHANGELOG
 
+## ??: version ??? (Elche)
+
+### New features:
+* You can now set nOS specific fields like providers by passing them into an array
+
 ## July 30, 2014: version 5.0.1 (Elche)
 
 * Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
