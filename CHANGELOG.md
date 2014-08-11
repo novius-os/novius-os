@@ -5,6 +5,14 @@
 ### Template Bootstrap:
 * When jumbotron_display is false, no HTML output (thanks to @ounziw)
 
+### From Dubrovka:
+* Bugfix: Invalidate opcode cache if cache file are updated or deleted
+
+### From Chiba 2:
+#### Improvment:
+* Force browsers to renew their cache when an image is updated.
+* No browsers cache when a preview is requested.
+
 ## July 30, 2014: version 5.0.1 (Elche)
 
 * Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
