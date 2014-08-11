@@ -5,6 +5,10 @@
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
 
+### From Chiba 2 :
+* Bugfix : Browser is forced to renew thier cache when an image is updated
+* Bugfix : Do not use the browser cache when a preview is asked
+
 ## July 30, 2014: version 5.0.1 (Elche)
 
 * Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
