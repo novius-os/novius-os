@@ -1,5 +1,10 @@
 # Novius OS framework CHANGELOG
 
+## ???: version ???
+
+### Template Bootstrap:
+* When jumbotron_display is false, no HTML output (thanks to @ounziw)
+
 ## July 30, 2014: version 5.0.1 (Elche)
 
 * Bugfix: In require JS config paths, if use assets minified and a path not initialized in paths-min
