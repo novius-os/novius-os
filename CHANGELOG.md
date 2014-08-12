@@ -2,13 +2,16 @@
 
 ## ???: version ???
 
+### New features:
+* You can now set nOS specific fields like providers by passing them into an array
+
 ### Template Bootstrap:
 * When jumbotron_display is false, no HTML output (thanks to @ounziw)
 
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
 
-### From Chiba 2:
+### From Chiba 2 :
 #### Improvment:
 * Force browsers to renew their cache when an image is updated.
 * No browsers cache when a preview is requested.
