@@ -2,12 +2,13 @@
 
 ## ???: version ???
 
+* Bugfix: Indentation of menus wasn't displayed correctly in BO
+
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
 
 ### Deprecated:
 * Commons configurations now take all the model path's to be defined.
-
 
 ### Template Bootstrap:
 * When jumbotron_display is false, no HTML output (thanks to @ounziw)
