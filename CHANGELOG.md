@@ -13,6 +13,9 @@
 ### Template Bootstrap:
 * When jumbotron_display is false, no HTML output (thanks to @ounziw)
 
+### Slideshow :
+* Add events to allow customize image fields
+
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
 
