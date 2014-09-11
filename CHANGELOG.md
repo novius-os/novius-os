@@ -3,6 +3,7 @@
 ## ???: version ???
 
 * Bugfix: Indentation of menus wasn't displayed correctly in BO
+* Bugfix: Fix a notice for UrlEnhancer that returned empty content
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
@@ -23,6 +24,7 @@
 #### Improvment:
 * Force browsers to renew their cache when an image is updated.
 * No browsers cache when a preview is requested.
+* It's possible to use a callback to retrieve the title property of a model for his virtual name (thanks @vrcAlbert)
 
 ## July 30, 2014: version 5.0.1 (Elche)
 
