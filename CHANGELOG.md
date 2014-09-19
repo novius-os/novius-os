@@ -6,6 +6,7 @@
 * Bugfix: Fix a notice for UrlEnhancer that returned empty content
 * Bugfix: Improvement on the nosDesktop widget: application's position will no longer be saved on the window's resizing (thanks to @felixgilles)
 * Bugfix: Broken link when an item is created for this link.
+* Bugfix: Missing method to enable translation into menu application (thanks to @ounziw).
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
