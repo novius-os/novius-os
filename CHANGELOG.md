@@ -8,6 +8,7 @@
 * Bugfix: Broken link when an item is created for this link.
 * Bugfix: Missing method to enable translation into menu application (thanks to @ounziw).
 * Bugfix: Appdesk could show items from a non-authorized context.
+* Bugfix: Check into medias and wysiwygs if an item has common fields.
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
