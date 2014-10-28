@@ -27,6 +27,8 @@
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
 * Bugfix: Old "twinnable many many" relations were leave in base when deleting items
+#### Improvment:
+* Add possibility to override contexts, locales and sites in an appdesk config (thanks @shaoshiva)
 
 ### From Chiba 2 :
 #### Improvment:
