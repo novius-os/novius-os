@@ -9,9 +9,11 @@
 * Bugfix: Missing method to enable translation into menu application (thanks to @ounziw).
 * Bugfix: Appdesk could show items from a non-authorized context.
 * Bugfix: Check into medias and wysiwygs if an item has common fields.
+* Bugfix: Menu items views could use a not set eav.
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
+* Allow to call enhancer previews thanks to an hmvc call
 
 ### Deprecated:
 * Commons configurations now take all the model path's to be defined.
