@@ -33,6 +33,7 @@
 * Force browsers to renew their cache when an image is updated.
 * No browsers cache when a preview is requested.
 * It's possible to use a callback to retrieve the title property of a model for his virtual name (thanks @vrcAlbert)
+* Allow to custom the title_item method thanks to config (thanks @vrcAlbert)
 
 ## July 30, 2014: version 5.0.1 (Elche)
 
