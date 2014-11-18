@@ -26,6 +26,7 @@
 
 ### Blognews:
 * Bugfix: Categories can now be used as an item menu
+* Bugfix: Posts relations are fetch only if config for each relation is enable
 
 ### Form:
 * Improvment: Better captcha view (thanks to Pierrinho)
