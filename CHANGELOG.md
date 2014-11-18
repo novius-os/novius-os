@@ -27,6 +27,9 @@
 ### Blognews:
 * Bugfix: Categories can now be used as an item menu
 
+### Form:
+* Improvment: Better captcha view (thanks to Pierrinho)
+
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
 * Bugfix: Old "twinnable many many" relations were leave in base when deleting items
