@@ -14,6 +14,7 @@
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
 * Allow to call enhancer previews thanks to an hmvc call
+* The "main_context" condition is now available for every twinnable relations
 
 ### Deprecated:
 * Commons configurations now take all the model path's to be defined.
