@@ -10,6 +10,7 @@
 * Bugfix: Appdesk could show items from a non-authorized context.
 * Bugfix: Check into medias and wysiwygs if an item has common fields.
 * Bugfix: Menu items views could use a not set eav.
+* Bugfix: "Twinnable has many" relations weren't retrieved the good items into the relation
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
