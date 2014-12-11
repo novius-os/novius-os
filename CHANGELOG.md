@@ -11,11 +11,15 @@
 * Bugfix: Check into medias and wysiwygs if an item has common fields.
 * Bugfix: Menu items views could use a not set eav.
 * Bugfix: "Twinnable has many" relations weren't retrieved the good items into the relation
+* Bugfix: When we have a start date and an end date, published() didn't work (thanks @GPascal)
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
 * Allow to call enhancer previews thanks to an hmvc call
 * The "main_context" condition is now available for every twinnable relations
+* Having same context can become a priority on belongs_to, has_one & has_many twinnable relations (thanks @vrcAlbert)
+* Allow to use renderer in crud's subtitle (thanks @vrcAlbert)
+* Allow to change Crud response when saving by using an Event (thanks @vrcAlbert)
 
 ### Deprecated:
 * Commons configurations now take all the model path's to be defined.
@@ -32,6 +36,7 @@
 
 ### Form:
 * Improvment: Better captcha view (thanks to Pierrinho)
+* Improvment: Increasing maximum number of form fields (thanks to @smeeckaert)
 
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
