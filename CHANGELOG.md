@@ -26,6 +26,7 @@
 
 ### Template Bootstrap:
 * When jumbotron_display is false, no HTML output (thanks to @ounziw)
+* Bugfix: Fix typo (thanks to @kenjis)
 
 ### Slideshow :
 * Add events to allow customize image fields
@@ -34,9 +35,13 @@
 * Bugfix: Categories can now be used as an item menu
 * Bugfix: Posts relations are fetch only if config for each relation is enable
 
+### Appwizard:
+* Bugfix : improving the extensibility on View::forge (thanks to @sdrdis and @kenjis)
+
 ### Form:
 * Improvment: Better captcha view (thanks to Pierrinho)
 * Improvment: Increasing maximum number of form fields (thanks to @smeeckaert)
+* Bugfix: Browser invalidate cache for the new feature (thanks to @smeeckaert)
 
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
