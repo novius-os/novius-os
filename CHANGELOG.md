@@ -42,6 +42,7 @@
 * Improvment: Better captcha view (thanks to Pierrinho)
 * Improvment: Increasing maximum number of form fields (thanks to @smeeckaert)
 * Bugfix: Browser invalidate cache for the new feature (thanks to @smeeckaert)
+* Improvment: Better management of mail attachment (thanks to @smeeckaert)
 
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
