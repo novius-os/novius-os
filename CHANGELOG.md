@@ -44,6 +44,7 @@
 * Improvment: Increasing maximum number of form fields (thanks to @smeeckaert)
 * Bugfix: Browser invalidate cache for the new feature (thanks to @smeeckaert)
 * Improvment: Better management of mail attachment (thanks to @smeeckaert)
+* New feature: It's now possible to add conditionnal fields when expert mode is activated (thanks to @ounziw)
 
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
