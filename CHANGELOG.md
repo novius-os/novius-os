@@ -13,6 +13,7 @@
 * Bugfix: "Twinnable has many" relations weren't retrieved the good items into the relation
 * Bugfix: When we have a start date and an end date, published() didn't work (thanks @GPascal)
 * Bugfix: Use conditions to retrieve relations in every case (thanks @Meroje)
+* Bugfix: Populate fieldset with array doesn't work with field that end with `[]`
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
