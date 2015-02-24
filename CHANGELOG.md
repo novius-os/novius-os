@@ -52,6 +52,9 @@
 * Bugfix: Loading proper dictionnary file in captcha (thanks to @smeeckaert)
 * Bugfix: Conditionnal fields can now be mandatory
 
+### ORM:
+* Features : Add cache support for Fuel's Query class (thanks to @meroje)
+
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
 * Bugfix: Old "twinnable many many" relations were leave in base when deleting items
