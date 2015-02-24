@@ -50,6 +50,7 @@
 * Improvment: Better management of mail attachment (thanks to @smeeckaert)
 * New feature: It's now possible to add conditionnal fields when expert mode is activated (thanks to @ounziw)
 * Bugfix: Loading proper dictionnary file in captcha (thanks to @smeeckaert)
+* Bugfix: Conditionnal fields can now be mandatory
 
 ### From Dubrovka:
 * Bugfix: Invalidate opcode cache if cache file are updated or deleted
