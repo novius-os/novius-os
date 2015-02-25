@@ -27,6 +27,9 @@
 * Allow to use renderer in crud's subtitle (thanks @vrcAlbert)
 * Allow to change Crud response when saving by using an Event (thanks @vrcAlbert)
 
+### Improvments:
+* Re-written urls methods provide by the url enhancer into a model are now take in count in every case
+
 ### Deprecated:
 * Commons configurations now take all the model path's to be defined.
 
