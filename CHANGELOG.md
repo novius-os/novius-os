@@ -29,6 +29,7 @@
 
 ### Improvments:
 * Re-written urls methods provide by the url enhancer into a model are now take in count in every case
+* Selected media is now selected when the media selector is open (thanks @vrcAlbert)
 
 ### Deprecated:
 * Commons configurations now take all the model path's to be defined.
