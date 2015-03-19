@@ -57,6 +57,7 @@
 * New feature: It's now possible to add conditionnal fields when expert mode is activated (thanks to @ounziw)
 * Bugfix: Loading proper dictionnary file in captcha (thanks to @smeeckaert)
 * Bugfix: Conditionnal fields can now be mandatory
+* Bugfix: Conditionnal fields are now perfectly hide and show.
 
 ### ORM:
 * Features : Add cache support for Fuel's Query class (thanks to @meroje)
