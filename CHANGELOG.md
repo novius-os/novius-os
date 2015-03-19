@@ -47,6 +47,7 @@
 
 ### Appwizard:
 * Bugfix : improving the extensibility on View::forge (thanks to @sdrdis and @kenjis)
+* Improvment : expanders can be expanded by default (thanks to @vrcAlbert)
 
 ### Form:
 * Improvment: Better captcha view (thanks to Pierrinho)
