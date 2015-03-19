@@ -18,6 +18,7 @@
 * Bugfix: Prevents an error when getting the main_controller without any main request (thanks to @shaoshiva)
 * Bugfix: Prevents some side effects when asking for files or media in cache (thanks to @vrcAlbert)
 * Bugfix: Prevent the friendly slug config not to be loaded when the Virtual Name behaviour is used (thanks to @vrcAlbert)
+* Bugfix: Prevents some buggy UTF-16 conversion when minifying the vendor js file (thanks to @shaoshiva)
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
@@ -26,6 +27,8 @@
 * Having same context can become a priority on belongs_to, has_one & has_many twinnable relations (thanks @vrcAlbert)
 * Allow to use renderer in crud's subtitle (thanks @vrcAlbert)
 * Allow to change Crud response when saving by using an Event (thanks @vrcAlbert)
+* Better management of launchers icon on Novius OS desktop (thanks to @shaoshiva)
+* New orderable 'published_at' parameters for the publishable behaviour (thanks to @meroje)
 
 ### Improvments:
 * Re-written urls methods provide by the url enhancer into a model are now take in count in every case
