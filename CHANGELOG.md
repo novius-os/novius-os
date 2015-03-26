@@ -20,6 +20,7 @@
 * Bugfix: Prevent the friendly slug config not to be loaded when the Virtual Name behaviour is used (thanks to @vrcAlbert)
 * Bugfix: Prevents some buggy UTF-16 conversion when minifying the vendor js file (thanks to @shaoshiva)
 * Bugfix: Resolve the tr_TR local php problem
+* Bugfix: Click on first inspector item wasn't take in count
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
