@@ -30,10 +30,12 @@
 * Allow to change Crud response when saving by using an Event (thanks @vrcAlbert)
 * Better management of launchers icon on Novius OS desktop (thanks to @shaoshiva)
 * New orderable 'published_at' parameters for the publishable behaviour (thanks to @meroje)
+* New event before wysiwygs parsing (thanks to @smeeckaert)
 
 ### Improvments:
 * Re-written urls methods provide by the url enhancer into a model are now take in count in every case
 * Selected media is now selected when the media selector is open (thanks @vrcAlbert)
+* The model used in the Tag renderer can now be twinable or contextable
 
 ### Deprecated:
 * Commons configurations now take all the model path's to be defined.
