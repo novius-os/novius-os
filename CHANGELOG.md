@@ -54,6 +54,7 @@
 ### Appwizard:
 * Bugfix : improving the extensibility on View::forge (thanks to @sdrdis and @kenjis)
 * Improvment : expanders can be expanded by default (thanks to @vrcAlbert)
+* Improvment : database table for generated twinnable models now have an index on context and common id column
 
 ### Form:
 * Improvment: Better captcha view (thanks to Pierrinho)
