@@ -31,11 +31,15 @@
 * Better management of launchers icon on Novius OS desktop (thanks to @shaoshiva)
 * New orderable 'published_at' parameters for the publishable behaviour (thanks to @meroje)
 * New event before wysiwygs parsing (thanks to @smeeckaert)
+* New event before translation to improve the translation API
+* Inspector tree can now be used just to sort models (thanks to @GPascal)
 
 ### Improvments:
 * Re-written urls methods provide by the url enhancer into a model are now take in count in every case
 * Selected media is now selected when the media selector is open (thanks @vrcAlbert)
 * The model used in the Tag renderer can now be twinable or contextable
+* Allow custom id column into appdesk (thanks to @meroje)
+* Update of the composer's ClassLoader (thanks to @meroje)
 
 ### Deprecated:
 * Commons configurations now take all the model path's to be defined.
@@ -46,6 +50,7 @@
 
 ### Slideshow :
 * Add events to allow customize image fields
+* Add flexslider 2.3 as a new slideshow format (thanks to @smeeckaert)
 
 ### Blognews:
 * Bugfix: Categories can now be used as an item menu
@@ -54,6 +59,7 @@
 ### Appwizard:
 * Bugfix : improving the extensibility on View::forge (thanks to @sdrdis and @kenjis)
 * Improvment : expanders can be expanded by default (thanks to @vrcAlbert)
+* Improvment : context fields now have index in database (thanks to @vrcAlbert)
 
 ### Form:
 * Improvment: Better captcha view (thanks to Pierrinho)
