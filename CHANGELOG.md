@@ -23,6 +23,8 @@
 * Bugfix: Click on first inspector item wasn't take in count
 * Bugfix: Image add into wysiwygs weren't allways resized
 * Bugfix: Url enhancers are not include in data when they are into an hidden wysiwyg
+* Bugfix: Use the good DB connection every time (thanks to @meroje)
+* Bugfix: Attachment versions doesn't take in count the file change
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
@@ -36,6 +38,7 @@
 * New event before wysiwygs parsing (thanks to @smeeckaert)
 * New event before translation to improve the translation API
 * Inspector tree can now be used just to sort models (thanks to @GPascal)
+* Add an event after the authentication check (thanks to @meroje)
 
 ### Improvments:
 * Re-written urls methods provide by the url enhancer into a model are now take in count in every case
@@ -43,9 +46,17 @@
 * The model used in the Tag renderer can now be twinable or contextable
 * Allow custom id column into appdesk (thanks to @meroje)
 * Update of the composer's ClassLoader (thanks to @meroje)
+* Array type fields can now be populate in fieldset (thanks to @smeeckaert)
 
 ### Deprecated:
 * Commons configurations now take all the model path's to be defined.
+
+### Pages
+* Bugfix: Set correct sort for duplicated pages (thanks to @smeeckaert)
+
+### Medias
+* Bugfix: Folder creation in the mass upload controller (thanks to @shaoshiva)
+* Bugfix: Create folder if not exists when moving folder (thanks to @smeeckaert)
 
 ### Template Bootstrap:
 * When jumbotron_display is false, no HTML output (thanks to @ounziw)
@@ -58,6 +69,9 @@
 ### Blognews:
 * Bugfix: Categories can now be used as an item menu
 * Bugfix: Posts relations are fetch only if config for each relation is enable
+
+### News:
+* Bugfix: Category item menu were broken (thanks to @Pierrinho)
 
 ### Appwizard:
 * Bugfix : improving the extensibility on View::forge (thanks to @sdrdis and @kenjis)
