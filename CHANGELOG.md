@@ -25,6 +25,10 @@
 * Bugfix: Url enhancers are not include in data when they are into an hidden wysiwyg
 * Bugfix: Use the good DB connection every time (thanks to @meroje)
 * Bugfix: Attachment versions doesn't take in count the file change
+* Bugfix: Prevent echoing uncache strings when already uncached (PR 187)
+* Bugfix: Fix warning when template not found (PR 136)
+* Bugfix: Update Menu Enhancer (PR 188)
+* Bugfix: Update Enhancer Config (PR 189)
 
 ### New features:
 * You can now set nOS specific fields like providers by passing them into an array
