@@ -1,3 +1,4 @@
+dist: precise
 language: php
 php:
   - 5.5
@@ -30,8 +31,8 @@ before_script:
   # configure apache virtual hosts
   - sudo cp -f ci/data/virtualhost-dev /etc/apache2/sites-available/default
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)/public?g" --in-place /etc/apache2/sites-available/default
-  - sudo service apache2 restart
   - sudo sh -c 'echo "127.0.0.1 novius-os" >> /etc/hosts'
+  - sudo service apache2 restart
   - sudo chmod +x ci/scripts/travis.sh
 script:
   - cd ci/scripts
